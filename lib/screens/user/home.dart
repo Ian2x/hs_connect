@@ -42,7 +42,7 @@ class Home extends StatelessWidget {
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
-          
+          BottomNavigationBarItem(icon: Icon(Icons.ac_unit)),
         ],
 
       ),
