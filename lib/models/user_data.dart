@@ -1,8 +1,16 @@
-class Group {
-  final String group;
+class UserGroup {
+  // userGroup = name of group
+  final String groupId;
   bool public;
 
-  Group({required this.group, required this.public});
+  UserGroup({required this.groupId, required this.public});
+
+  Map<String, dynamic> asMap() {
+    return {
+      'groupId': groupId,
+      'public': public,
+    };
+  }
 }
 /*
 List<Group> convertToGroupList(List<dynamic> list) {
@@ -17,7 +25,7 @@ class UserData {
   final String? county;
   final String? state;
   final String? country;
-  List<dynamic> groups;
+  List<UserGroup> userGroups;
   String imageURL;
   int score;
 
@@ -28,7 +36,7 @@ class UserData {
       this.county = '',
       this.state = '',
       this.country = '',
-      this.groups = const [],
+      this.userGroups = const [],
       this.imageURL = '',
       this.score = 0});
 }

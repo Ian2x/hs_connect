@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/user_data.dart';
-import 'package:hs_connect/screens/user/profile_form.dart';
+import 'package:hs_connect/screens/home/profile_form.dart';
 import 'package:hs_connect/services/userInfo_database.dart';
 import 'package:provider/provider.dart';
 
@@ -14,16 +14,8 @@ class Profile extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
 
-    void popProfile() {
-      print("popping profile");
-      Navigator.pop(context);
-    }
-
     if (user.uid == profileId) {
-      return StreamProvider<UserData>.value(
-          value: UserInfoDatabaseService().userData,
-          initialData: UserData(userId: '', displayedName: '', domain: ''),
-          child: Scaffold(
+      return Scaffold(
             backgroundColor: Colors.brown[50],
             appBar: AppBar(
               title: Text('Your Profile'),
@@ -31,9 +23,9 @@ class Profile extends StatelessWidget {
               elevation: 0.0,
             ),
             body: Container(
-              child: ProfileForm(popProfile: popProfile),
+              child: ProfileForm(),
             ),
-          ));
+          );
     }
     return Container(child: Text('someone else'));
   }

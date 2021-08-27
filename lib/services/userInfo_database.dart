@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/user_data.dart';
+import 'package:hs_connect/services/groups_database.dart';
 
 class UserInfoDatabaseService {
   final String? userId;
@@ -11,13 +13,18 @@ class UserInfoDatabaseService {
       FirebaseFirestore.instance.collection('userInfo');
 
   Future initUserData(String domain, String username) async {
+
+    final GroupsDatabaseService _groupDatabaseService = GroupsDatabaseService();
+
+    await _groupDatabaseService.newGroup(accessRestrictions: AccessRestrictions(domain: domain, county: null, state: null, country: null), name: domain, userId: '');
+
     return await userInfoCollection.doc(userId).set({
       'displayedName': username,
       'domain': domain,
       'county': '<county>',
       'state': '<state>',
       'country': '<country>',
-      'groups': [],
+      'userGroups': [UserGroup(userGroup: domain, public: true).asMap()],
       'imageURL': '<imageURL>',
       'score': 0,
     });
@@ -38,30 +45,34 @@ class UserInfoDatabaseService {
         .catchError(onError);
   }
 
-  // get other use from userId
+  // get other users from userId
   Future getUserData({required String userId}) async {
     final snapshot = await userInfoCollection.doc(userId).get();
     return _userDataFromSnapshot(snapshot);
   }
 
-  // user data from snapshot
-  UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
-    return UserData(
-      userId: userId!,
-      displayedName: snapshot.get('displayedName'),
-      domain: snapshot.get('domain'),
-      county: snapshot.get('county'),
-      state: snapshot.get('state'),
-      country: snapshot.get('country'),
-      groups: snapshot.get('groups'),
-      //  as List<Group>,//  as <Group>[],//snapshot.get('groups'),
-      imageURL: snapshot.get('imageURL'),
-      score: snapshot.get('score'),
-    );
+  // home data from snapshot
+  UserData? _userDataFromSnapshot(DocumentSnapshot snapshot) {
+
+    if(snapshot.exists) {
+      return UserData(
+        userId: userId!,
+        displayedName: snapshot.get('displayedName'),
+        domain: snapshot.get('domain'),
+        county: snapshot.get('county'),
+        state: snapshot.get('state'),
+        country: snapshot.get('country'),
+        userGroups: snapshot.get('userGroups').map<UserGroup>((userGroup) => UserGroup(userGroup: userGroup['userGroup'], public: userGroup['public'])).toList(),
+        imageURL: snapshot.get('imageURL'),
+        score: snapshot.get('score'),
+      );
+    } else {
+      return null;
+    }
   }
 
-  // get user doc stream
-  Stream<UserData> get userData {
+  // get home doc stream
+  Stream<UserData?> get userData {
     return userInfoCollection
         .doc(userId)
         .snapshots()

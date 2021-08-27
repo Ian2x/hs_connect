@@ -4,12 +4,12 @@ import 'package:hs_connect/services/userInfo_database.dart';
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // auth change user stream
+  // auth change home stream
   Stream<User?> get user {
     return _auth.authStateChanges();
   }
 
-  // Create user for email verification purposes
+  // Create home for email verification purposes
   Future createEmailUser(String email) async {
     try {
       UserCredential userCredential =
@@ -35,7 +35,7 @@ class AuthService {
       User? user = userCredential.user;
 
       if (user == null || user.email == null) return null;
-      // create a document for the user with the uid
+      // create a document for the home with the uid
       await UserInfoDatabaseService(userId: user.uid)
           .initUserData(domain, username);
 

@@ -43,7 +43,7 @@ class _WaitVerificationState extends State<WaitVerification> {
     return Scaffold(
       body: Center(
         child: Text(
-            'An email has been sent to ${user!.email} please verify'),
+            'An email has been sent to ${user!.email}, please press the link to verify. This may take a few seconds...'),
       ),
     );
   }
