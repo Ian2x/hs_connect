@@ -20,16 +20,17 @@ class GroupsDatabaseService {
       String? image = '',
       Function(void) onValue = defaultFunc,
       Function onError = defaultFunc}) async {
-    print('in group database file');
-    QuerySnapshot document = await groupsCollection
+    QuerySnapshot docs = await groupsCollection
         .where('name', isEqualTo: name)
         .where('accessRestrictions', isEqualTo: accessRestrictions.asMap())
         .get();
-    if (document.size > 0) {
-      return 'Group already exists';
+    if (docs.size > 0) {
+      return docs.docs.first.id;
     } else {
-      return await groupsCollection
-          .add({
+      DocumentReference docRef = await groupsCollection.doc();
+      final docId = docRef.id;
+      await groupsCollection.doc(docId)
+          .set({
             'accessRestrictions': accessRestrictions.asMap(),
             'name': name,
             'userId': userId,
@@ -37,36 +38,26 @@ class GroupsDatabaseService {
           })
           .then(onValue)
           .catchError(onError);
+      return docId;
     }
   }
 
-  // home data from snapshot
-  UserData? _userDataFromSnapshot(DocumentSnapshot snapshot) {
-    if(snapshot.exists) {
-      return UserData(
-        userId: userId!,
-        displayedName: snapshot.get('displayedName'),
-        domain: snapshot.get('domain'),
-        county: snapshot.get('county'),
-        state: snapshot.get('state'),
-        country: snapshot.get('country'),
-        userGroups: snapshot.get('groups'),
-        //  as List<Group>,//  as <Group>[],//snapshot.get('groups'),
-        imageURL: snapshot.get('imageURL'),
-        score: snapshot.get('score'),
-      );
-    } else {
-      return null;
-    }
+  // get group data from groupId
+  Future<Group?> group({required String groupId}) async {
+    await groupsCollection.doc(groupId).get().then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        return documentSnapshot.data();
+      } else {
+        return null;
+      }
+    });
   }
 
-  // get home doc stream
-  Stream<UserData?> get userData {
-    return groupsCollection
-        .doc(userId)
-        .snapshots()
-        .map(_userDataFromSnapshot);
+  // for converting userGroups to Groups, must be wrapped in FutureBuilder (see post_form for reference)
+  Future<QuerySnapshot<Object?>> getGroups({required List<UserGroup> userGroups}) async {
+    return groupsCollection.where(FieldPath.documentId, whereIn: userGroups.map((userGroup) {return userGroup.groupId;}).toList()).get();
   }
+
 }
 
 

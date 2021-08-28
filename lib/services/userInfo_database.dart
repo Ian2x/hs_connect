@@ -16,7 +16,8 @@ class UserInfoDatabaseService {
 
     final GroupsDatabaseService _groupDatabaseService = GroupsDatabaseService();
 
-    await _groupDatabaseService.newGroup(accessRestrictions: AccessRestrictions(domain: domain, county: null, state: null, country: null), name: domain, userId: '');
+    // Create domain group if not already created
+    final docId = await _groupDatabaseService.newGroup(accessRestrictions: AccessRestrictions(domain: domain, county: null, state: null, country: null), name: domain, userId: '');
 
     return await userInfoCollection.doc(userId).set({
       'displayedName': username,
@@ -24,7 +25,7 @@ class UserInfoDatabaseService {
       'county': '<county>',
       'state': '<state>',
       'country': '<country>',
-      'userGroups': [UserGroup(userGroup: domain, public: true).asMap()],
+      'userGroups': [UserGroup(groupId: docId, public: true).asMap()],
       'imageURL': '<imageURL>',
       'score': 0,
     });
@@ -62,13 +63,18 @@ class UserInfoDatabaseService {
         county: snapshot.get('county'),
         state: snapshot.get('state'),
         country: snapshot.get('country'),
-        userGroups: snapshot.get('userGroups').map<UserGroup>((userGroup) => UserGroup(userGroup: userGroup['userGroup'], public: userGroup['public'])).toList(),
+        userGroups: snapshot.get('userGroups').map<UserGroup>((userGroup) => UserGroup(groupId: userGroup['groupId'], public: userGroup['public'])).toList(),
         imageURL: snapshot.get('imageURL'),
         score: snapshot.get('score'),
       );
     } else {
       return null;
     }
+  }
+
+  // get Users from list of userIds, must be wrapped in FutureBuilder to use
+  Future<QuerySnapshot<Object?>> getUsers({required List<String> userIds}) async {
+    return userInfoCollection.where(FieldPath.documentId, whereIn: userIds).get();
   }
 
   // get home doc stream

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hs_connect/models/user_data.dart';
+import 'package:hs_connect/screens/home/feed_view.dart';
 import 'package:hs_connect/screens/home/profile.dart';
 import 'package:hs_connect/services/auth.dart';
 import 'package:flutter/material.dart';
@@ -49,6 +50,7 @@ class _HomeState extends State<Home> {
             )
           ],
         ),
+        body: FeedView(),
         bottomNavigationBar: BottomNavigationBar(
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
