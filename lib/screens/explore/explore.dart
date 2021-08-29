@@ -1,29 +1,36 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hs_connect/models/user_data.dart';
-import 'package:hs_connect/screens/explore/explore.dart';
+import 'package:hs_connect/screens/explore/new_group/new_group.dart';
+import 'package:hs_connect/screens/explore/new_group/new_group_form.dart';
 import 'package:hs_connect/screens/home/home.dart';
-import 'package:hs_connect/screens/new_post/post_form.dart';
-import 'package:provider/provider.dart';
+import 'package:hs_connect/screens/new_post/new_post.dart';
 
-class NewPost extends StatelessWidget {
-  const NewPost({Key? key}) : super(key: key);
+class Explore extends StatelessWidget {
+  const Explore({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User?>(context);
-    final userData = Provider.of<UserData?>(context);
-
     return Scaffold(
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
-        title: Text('Create a new post'),
+        title: Text('Explore'),
         backgroundColor: Colors.brown[400],
         elevation: 0.0,
-
+        actions: <Widget>[
+          TextButton.icon(
+            icon: Icon(Icons.settings),
+            label: Text('Make a group'),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => NewGroup()),
+              );
+            },
+          )
+        ]
       ),
       body: Container(
-        child: PostForm(),
+        child: Text('Explore page'),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
@@ -47,7 +54,13 @@ class NewPost extends StatelessWidget {
               padding: EdgeInsets.zero,
               constraints: BoxConstraints(),
               icon: const Icon(Icons.add, size: 18.0),
-              onPressed: () { },
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => NewPost()),
+                );
+              },
             ),
             label: 'Post',
           ),
@@ -56,17 +69,11 @@ class NewPost extends StatelessWidget {
               padding: EdgeInsets.zero,
               constraints: BoxConstraints(),
               icon: const Icon(Icons.search_rounded, size: 18.0),
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Explore()),
-                );
-              },
+              onPressed: () {},
             ),
             label: 'Explore',
           ),
-        ],
+        ]
       ),
     );
   }

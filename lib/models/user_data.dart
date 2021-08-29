@@ -22,9 +22,9 @@ class UserData {
   final String userId;
   String displayedName;
   final String domain;
-  final String? county;
-  final String? state;
-  final String? country;
+  final String county;
+  final String state;
+  final String country;
   List<UserGroup> userGroups;
   String imageURL;
   int score;
@@ -33,9 +33,9 @@ class UserData {
       {required this.userId,
       required this.displayedName,
       required this.domain,
-      this.county = '',
-      this.state = '',
-      this.country = '',
+      this.county = '<county>',
+      this.state = '<state>',
+      this.country = '<country>',
       this.userGroups = const [],
       this.imageURL = '',
       this.score = 0});

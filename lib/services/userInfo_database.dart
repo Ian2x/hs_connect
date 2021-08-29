@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/group.dart';
+import 'package:hs_connect/models/known_domain.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/services/groups_database.dart';
+import 'package:hs_connect/services/known_domains_database.dart';
 
 class UserInfoDatabaseService {
   final String? userId;
@@ -15,18 +17,30 @@ class UserInfoDatabaseService {
   Future initUserData(String domain, String username) async {
 
     final GroupsDatabaseService _groupDatabaseService = GroupsDatabaseService();
+    final KnownDomainsDatabaseService _knownDomainsDatabaseService = KnownDomainsDatabaseService();
+
 
     // Create domain group if not already created
-    final docId = await _groupDatabaseService.newGroup(accessRestrictions: AccessRestrictions(domain: domain, county: null, state: null, country: null), name: domain, userId: '');
+    final docId = await _groupDatabaseService.newGroup(accessRestrictions: AccessRestriction(restrictionType: 'domain', restriction: domain), name: domain, userId: '');
+    // Find domain info (county, state, country)
+    final KnownDomain? kd = await _knownDomainsDatabaseService.getKnownDomain(domain: domain);
+    print("kd below");
+    print(await _knownDomainsDatabaseService.getKnownDomain(domain: domain));
+    print(kd);
+    if(kd!=null) {
+      print(kd.county);
+      print(kd.state);
+      print(kd.country);
+    }
 
     return await userInfoCollection.doc(userId).set({
       'displayedName': username,
       'domain': domain,
-      'county': '<county>',
-      'state': '<state>',
-      'country': '<country>',
+      'county': kd!=null ? kd.county : null,
+      'state': kd!=null ? kd.state : null,
+      'country': kd!=null ? kd.country : null,
       'userGroups': [UserGroup(groupId: docId, public: true).asMap()],
-      'imageURL': '<imageURL>',
+      'imageURL': '',
       'score': 0,
     });
   }

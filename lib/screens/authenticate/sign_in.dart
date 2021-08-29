@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/services/auth.dart';
+import 'package:hs_connect/services/known_domains_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/loading.dart';
 

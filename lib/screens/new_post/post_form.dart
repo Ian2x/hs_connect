@@ -48,17 +48,6 @@ class _PostFormState extends State<PostForm> {
 
     final userData = Provider.of<UserData?>(context);
 
-    void handleError(err) {
-      setState(() {
-        error = 'ERROR: failed to create new post';
-      });
-    }
-
-    void handleValue(val) {
-      loading = false;
-      Navigator.pop(context);
-    }
-
     if (userData == null) {
       // Don't expect to be here, but just in case
       return Loading();

@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hs_connect/models/user_data.dart';
-import 'package:hs_connect/screens/home/feed_view.dart';
-import 'package:hs_connect/screens/home/profile.dart';
+import 'package:hs_connect/screens/explore/explore.dart';
+import 'package:hs_connect/screens/home/feeds/domain_feed.dart';
+import 'package:hs_connect/screens/home/feeds/home_feed.dart';
+import 'package:hs_connect/screens/home/feeds/og_feed.dart';
+import 'package:hs_connect/screens/home/profile/profile.dart';
 import 'package:hs_connect/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/services/userInfo_database.dart';
@@ -21,75 +24,106 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User?>(context);
 
-    return Scaffold(
-        backgroundColor: Colors.brown[50],
-        appBar: AppBar(
-          title: Text('HS Connect'),
-          backgroundColor: Colors.brown[400],
-          elevation: 0.0,
-          actions: <Widget>[
-            TextButton.icon(
-              icon: Icon(Icons.person),
-              label: Text('Logout'),
-              onPressed: () async {
-                await _auth.signOut();
-              },
-            ),
-            TextButton.icon(
-              icon: Icon(Icons.settings),
-              label: Text('Profile'),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Profile(profileId: user!.uid)),
-                );
-              },
-            )
-          ],
-        ),
-        body: FeedView(),
-        bottomNavigationBar: BottomNavigationBar(
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: IconButton(
-                padding: EdgeInsets.zero,
-                constraints: BoxConstraints(),
-                icon: const Icon(Icons.school, size: 18.0),
-                onPressed: () {
-                  Navigator.popUntil(context, ModalRoute.withName('/'));
+    final user = Provider.of<User?>(context);
+    final userData = Provider.of<UserData?>(context);
+
+    return DefaultTabController(
+      initialIndex: 1,
+      length: 3,
+      child: Scaffold(
+          backgroundColor: Colors.brown[50],
+          appBar: AppBar(
+            title: Text('HS Connect'),
+            backgroundColor: Colors.brown[400],
+            elevation: 0.0,
+            actions: <Widget>[
+              TextButton.icon(
+                icon: Icon(Icons.person),
+                label: Text('Logout'),
+                onPressed: () async {
+                  await _auth.signOut();
                 },
               ),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: IconButton(
-                padding: EdgeInsets.zero,
-                constraints: BoxConstraints(),
-                icon: const Icon(Icons.add, size: 18.0),
+              TextButton.icon(
+                icon: Icon(Icons.settings),
+                label: Text('Profile'),
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => NewPost()),
+                        builder: (context) => Profile(profileId: user!.uid)),
                   );
                 },
+              )
+            ],
+            bottom: TabBar(
+              tabs: <Widget>[
+                Tab(
+                  text: userData != null ? userData.domain : 'domain',
+                ),
+                Tab(
+                  text: 'Home'
+                ),
+                Tab(
+                  text: 'Trending'
+                )
+              ],
+            )
+          ),
+          body: TabBarView(
+            children: <Widget>[
+              DomainFeed(),
+              HomeFeed(),
+              Container(),
+            ]
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: IconButton(
+                  padding: EdgeInsets.zero,
+                  constraints: BoxConstraints(),
+                  icon: const Icon(Icons.school, size: 18.0),
+                  onPressed: () {
+                    Navigator.popUntil(context, ModalRoute.withName('/'));
+                  },
+                ),
+                label: 'Home',
               ),
-              label: 'Post',
-            ),
-            BottomNavigationBarItem(
-              icon: IconButton(
-                padding: EdgeInsets.zero,
-                constraints: BoxConstraints(),
-                icon: const Icon(Icons.search_rounded, size: 18.0),
-                onPressed: () {},
+              BottomNavigationBarItem(
+                icon: IconButton(
+                  padding: EdgeInsets.zero,
+                  constraints: BoxConstraints(),
+                  icon: const Icon(Icons.add, size: 18.0),
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NewPost()),
+                    );
+                  },
+                ),
+                label: 'Post',
               ),
-              label: 'Explore',
-            ),
-          ],
+              BottomNavigationBarItem(
+                icon: IconButton(
+                  padding: EdgeInsets.zero,
+                  constraints: BoxConstraints(),
+                  icon: const Icon(Icons.search_rounded, size: 18.0),
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Explore()),
+                    );
+                  },
+                ),
+                label: 'Explore',
+              ),
+            ],
+          ),
         ),
-      );
+    );
   }
 }

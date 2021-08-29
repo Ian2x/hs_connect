@@ -8,8 +8,9 @@ class PostsDatabaseService {
   final String? userId;
 
   String? groupId;
+  List<String>? groupsId;
 
-  PostsDatabaseService({this.userId, this.groupId});
+  PostsDatabaseService({this.userId, this.groupId, this.groupsId});
 
   void setGroupId({required String groupId}) {
     this.groupId = groupId;
@@ -40,12 +41,6 @@ class PostsDatabaseService {
   // home data from snapshot
   Post? _postFromDocument(QueryDocumentSnapshot document) {
     if (document.exists) {
-      print("IN STREAM {");
-      print(document.id);
-      print(document['createdAt'].toString());
-      print((document['likes'] as List).map((item) => item as String).toList());
-      // print(document['likes'] as List<String>);
-      // (map['categories'] as List)?.map((item) => item as String)?.toList();
       final temp = Post(
         postId: document.id,
         userId: document['userId'],
@@ -56,50 +51,18 @@ class PostsDatabaseService {
         likes: (document['likes'] as List).map((item) => item as String).toList(),
         dislikes: (document['dislikes'] as List).map((item) => item as String).toList(),//document['dislikes'],
       );
-      print(temp);
-      print("} OUT STREAM");
       return temp;
     } else {
       return null;
     }
   }
 
-  Stream<List<Post?>> get groupPosts {
+  Stream<List<Post?>> get singleGroupPosts {
     return postsCollection.where('groupId', isEqualTo: groupId).snapshots().map((snapshot) => snapshot.docs.map(_postFromDocument).toList());
   }
-/*
-  // get other use from userId
-  Future getUserData({required String userId}) async {
-    final snapshot = await postsCollection.doc(userId).get();
-    return _userDataFromSnapshot(snapshot);
+
+  Stream<List<Post?>> get multiGroupPosts {
+    return postsCollection.where('groupId', whereIn: groupsId).snapshots().map((snapshot) => snapshot.docs.map(_postFromDocument).toList());
   }
 
-  // home data from snapshot
-  UserData? _userDataFromSnapshot(DocumentSnapshot snapshot) {
-    if(snapshot.exists) {
-      return UserData(
-        userId: userId!,
-        displayedName: snapshot.get('displayedName'),
-        domain: snapshot.get('domain'),
-        county: snapshot.get('county'),
-        state: snapshot.get('state'),
-        country: snapshot.get('country'),
-        userGroups: snapshot.get('groups'),
-        //  as List<Group>,//  as <Group>[],//snapshot.get('groups'),
-        imageURL: snapshot.get('imageURL'),
-        score: snapshot.get('score'),
-      );
-    } else {
-      return null;
-    }
-  }
-
-  // get home doc stream
-  Stream<UserData?> get userData {
-    return postsCollection
-        .doc(userId)
-        .snapshots()
-        .map(_userDataFromSnapshot);
-  }
-   */
 }

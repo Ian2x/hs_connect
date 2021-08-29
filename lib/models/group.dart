@@ -1,22 +1,19 @@
-class AccessRestrictions {
-  final String? domain;
-  final String? county;
-  final String? state;
-  final String? country;
+class AccessRestriction {
+  final String restrictionType; // domain, county, state, or country
+  final String restriction;
 
-  AccessRestrictions({
-    required this.domain,
-    required this.county,
-    required this.state,
-    required this.country,
+  AccessRestriction({
+    required this.restrictionType,
+    required this.restriction,
   });
+
+  @override
+  bool operator ==(Object other) => other is AccessRestriction && other.restriction == restriction && other.restrictionType == restrictionType;
 
   Map<String, String?> asMap() {
     return {
-      'domain': domain,
-      'county': county,
-      'state': state,
-      'country': country,
+      'restrictionType': restrictionType,
+      'restriction': restriction,
     };
   }
 }
@@ -26,7 +23,7 @@ class Group {
   final String userId;
   String name;
   String? image;
-  final AccessRestrictions accessRestrictions;
+  final AccessRestriction accessRestrictions;
 
   Group({
     required this.groupId,
