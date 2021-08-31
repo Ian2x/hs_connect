@@ -36,6 +36,7 @@ class _PostFormState extends State<PostForm> {
   }
 
   // form values
+  String _title = '';
   String _text = '';
   String? _imageURL;
   String _groupId = '';
@@ -64,6 +65,20 @@ class _PostFormState extends State<PostForm> {
                     Text(
                       'Create a new post',
                       style: TextStyle(fontSize: 18.0),
+                    ),
+                    SizedBox(height: 20.0),
+                    Text('Post title'),
+                    TextFormField(
+                      initialValue: '',
+                      decoration: textInputDecoration,
+                      validator: (val) {
+                        if (val == null) return 'Error: null value';
+                        if (val.isEmpty)
+                          return 'Can\'t create an empty post';
+                        else
+                          return null;
+                      },
+                      onChanged: (val) => setState(() => _title = val),
                     ),
                     SizedBox(height: 20.0),
                     Text('Post text'),
@@ -112,6 +127,7 @@ class _PostFormState extends State<PostForm> {
                           if (_formKey.currentState != null && _formKey.currentState!.validate()) {
                             setState(() => loading = true);
                             await PostsDatabaseService(userId: user.uid).newPost(
+                              title: _title,
                               text: _text,
                               imageURL: _imageURL,
                               groupId: _groupId,

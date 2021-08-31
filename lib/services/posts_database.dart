@@ -19,7 +19,7 @@ class PostsDatabaseService {
   // collection reference
   final CollectionReference postsCollection = FirebaseFirestore.instance.collection('posts');
 
-  Future newPost({required String text,
+  Future newPost({required String title, required String text,
     required String? imageURL,
     required String groupId,
     Function(void) onValue = defaultFunc,
@@ -28,6 +28,7 @@ class PostsDatabaseService {
         .add({
       'userId': userId,
       'groupId': groupId,
+      'title': title,
       'text': text,
       'image': imageURL == null || imageURL == '' ? '' : imageURL,
       'createdAt': DateTime.now(),
@@ -41,17 +42,17 @@ class PostsDatabaseService {
   // home data from snapshot
   Post? _postFromDocument(QueryDocumentSnapshot document) {
     if (document.exists) {
-      final temp = Post(
+      return Post(
         postId: document.id,
         userId: document['userId'],
         groupId: document['groupId'],
         image: document['image'],
+        title: document['title'],
         text: document['text'],
         createdAt: document['createdAt'].toString(),
         likes: (document['likes'] as List).map((item) => item as String).toList(),
         dislikes: (document['dislikes'] as List).map((item) => item as String).toList(),//document['dislikes'],
       );
-      return temp;
     } else {
       return null;
     }

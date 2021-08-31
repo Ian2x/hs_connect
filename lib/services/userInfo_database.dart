@@ -63,15 +63,14 @@ class UserInfoDatabaseService {
   // get other users from userId
   Future getUserData({required String userId}) async {
     final snapshot = await userInfoCollection.doc(userId).get();
-    return _userDataFromSnapshot(snapshot);
+    return _userDataFromSnapshot(snapshot, overrideUserId: userId);
   }
 
   // home data from snapshot
-  UserData? _userDataFromSnapshot(DocumentSnapshot snapshot) {
-
+  UserData? _userDataFromSnapshot(DocumentSnapshot snapshot, {String? overrideUserId}) {
     if(snapshot.exists) {
       return UserData(
-        userId: userId!,
+        userId: overrideUserId!=null ? overrideUserId : userId!,
         displayedName: snapshot.get('displayedName'),
         domain: snapshot.get('domain'),
         county: snapshot.get('county'),

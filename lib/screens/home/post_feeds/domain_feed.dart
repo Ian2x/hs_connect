@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/user_data.dart';
-import 'package:hs_connect/screens/home/feeds/post_view/post_card.dart';
+import 'package:hs_connect/screens/home/post_view/post_card.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/loading.dart';
 import 'package:provider/provider.dart';
@@ -51,6 +51,7 @@ class _DomainFeedState extends State<DomainFeed> {
                 postId: posts[index].postId,
                 userId: posts[index].userId,
                 groupId: posts[index].groupId,
+                title: posts[index].title,
                 text: posts[index].text,
                 image: posts[index].image,
                 createdAt: posts[index].createdAt,

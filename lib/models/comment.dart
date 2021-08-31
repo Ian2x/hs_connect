@@ -1,8 +1,8 @@
 class Comment {
   final String commentId;
+  final String? replyToId;
   final String postId;
   final String userId;
-  final String groupId;
   String text;
   String? image;
   final String createdAt;
@@ -11,9 +11,9 @@ class Comment {
 
   Comment({
     required this.commentId,
+    required this.replyToId,
     required this.postId,
     required this.userId,
-    required this.groupId,
     required this.text,
     required this.image,
     required this.createdAt,
