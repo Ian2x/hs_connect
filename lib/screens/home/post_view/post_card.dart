@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/user_data.dart';
+import 'package:hs_connect/screens/home/post_view/delete_post.dart';
 import 'package:hs_connect/screens/home/post_view/post_page.dart';
+import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/userInfo_database.dart';
 
 class PostCard extends StatefulWidget {
@@ -37,6 +39,8 @@ class PostCard extends StatefulWidget {
 class _PostCardState extends State<PostCard> {
   UserInfoDatabaseService _userInfoDatabaseService = UserInfoDatabaseService();
 
+  PostsDatabaseService _posts = PostsDatabaseService();
+
   bool liked = false;
   bool disliked = false;
   String username = '<Loading user name...>';
@@ -70,28 +74,41 @@ class _PostCardState extends State<PostCard> {
   Widget build(BuildContext context) {
     return Card(
         child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-      ListTile(
-        title: Text(widget.title),
-        subtitle: Text(username),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => PostPage(
-                        postInfo: Post(
-                      postId: widget.postId,
-                      userId: widget.userId,
-                      groupId: widget.groupId,
-                      title: widget.title,
-                      text: widget.text,
-                      image: widget.image,
-                      createdAt: widget.createdAt,
-                      likes: widget.likes,
-                      dislikes: widget.dislikes,
-                    ))),
-          );
+      Dismissible(
+        key: ValueKey(widget.postId),
+        child: ListTile(
+          title: Text(widget.title),
+          subtitle: Text(username),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PostPage(
+                          postInfo: Post(
+                        postId: widget.postId,
+                        userId: widget.userId,
+                        groupId: widget.groupId,
+                        title: widget.title,
+                        text: widget.text,
+                        image: widget.image,
+                        createdAt: widget.createdAt,
+                        likes: widget.likes,
+                        dislikes: widget.dislikes,
+                      ))),
+            );
+          },
+          trailing: DeletePost(postUserId: widget.userId, postId: widget.postId, currUserId: widget.currUserId),
+        ),
+        // CAN DELETE POST EITHER VIA DELETE POST BUTTON OR DISMISSAL, PROBABLY CHOOSE ONE OR THE OTHER EVENTUALLY
+        onDismissed: (DismissDirection direction) async {
+          /*
+          setState(() async {
+            await _posts.deletePost(postId: widget.postId, userId: widget.currUserId);
+          });
+           */
+          await _posts.deletePost(postId: widget.postId, userId: widget.currUserId);
         },
-      ),
+      )
     ]));
   }
 }

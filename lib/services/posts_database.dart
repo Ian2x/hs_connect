@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/post.dart';
+import 'package:hs_connect/services/comments_database.dart';
 
 
 void defaultFunc(dynamic parameter) {}
@@ -38,6 +39,31 @@ class PostsDatabaseService {
         .then(onValue)
         .catchError(onError);
   }
+
+  Future deletePost({required String postId, required String userId}) async {
+    final checkAuth = await postsCollection.doc(postId).get();
+    if(checkAuth.exists) {
+      if (userId==checkAuth.get('userId')) {
+        // delete post's comments
+
+        await FirebaseFirestore.instance.collection('comments').get().then((snapshot) async {
+          List<DocumentSnapshot> allDocs = snapshot.docs;
+          List<DocumentSnapshot> filteredDocs = await allDocs.where(
+                  (document) => document.get('postId') == postId
+          ).toList();
+          for (DocumentSnapshot ds in filteredDocs){
+            await ds.reference.delete();
+          }
+        });
+
+
+        // delete post
+        return await postsCollection.doc(postId).delete();
+      };
+    }
+    return null;
+  }
+
 
   // home data from snapshot
   Post? _postFromDocument(QueryDocumentSnapshot document) {

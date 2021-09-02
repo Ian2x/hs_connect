@@ -34,7 +34,6 @@ class _DomainFeedState extends State<DomainFeed> {
       builder: (context, snapshot) {
         print(snapshot.connectionState);
         if (!snapshot.hasData) {
-          print('no data :/');
           return Loading();
         } else {
           final posts = (snapshot.data as List<Post?>).map((post) => post!).toList();

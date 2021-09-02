@@ -15,7 +15,9 @@ import 'package:provider/provider.dart';
 
 class CommentForm extends StatefulWidget {
   final String postId;
-  const CommentForm({Key? key, required this.postId}) : super(key: key);
+  final String? replyToId;
+
+  const CommentForm({Key? key, required this.postId, String? this.replyToId}) : super(key: key);
 
   @override
   _CommentFormState createState() => _CommentFormState();
@@ -34,14 +36,11 @@ class _CommentFormState extends State<CommentForm> {
 
   void handleValue(val) {
     loading = false;
-    Navigator.pop(context);
   }
 
   // form values
-  String _replyToId = '';
   String _text = '';
   String? _imageURL;
-  String _groupId = '';
   String error = '';
   bool loading = false;
 
@@ -59,15 +58,21 @@ class _CommentFormState extends State<CommentForm> {
         key: _formKey,
         child: Column(
           children: <Widget>[
-            Text(
-              'Comment',
-              style: TextStyle(fontSize: 18.0),
-            ),
-            SizedBox(height: 20.0),
-            Text('text...'),
             TextFormField(
               initialValue: '',
-              decoration: textInputDecoration,
+              decoration: messageInputDecoration(onPressed: () async {
+                if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+                  setState(() => loading = true);
+                  await CommentsDatabaseService(userId: user.uid).newComment(
+                    postId: widget.postId,
+                    replyToId: widget.replyToId,
+                    text: _text,
+                    imageURL: _imageURL,
+                    onValue: handleValue,
+                    onError: handleError,
+                  );
+                }
+              }),
               validator: (val) {
                 if (val == null) return 'Error: null value';
                 if (val.isEmpty)
@@ -77,42 +82,6 @@ class _CommentFormState extends State<CommentForm> {
               },
               onChanged: (val) => setState(() => _text = val),
             ),
-            SizedBox(height: 20.0),
-            Text('(optional) Image URL'),
-            TextFormField(
-              initialValue: '',
-              decoration: textInputDecoration,
-              validator: (val) {
-                if (val == null)
-                  return 'Error: null value';
-                else
-                  return null;
-              },
-              onChanged: (val) => setState(() => _imageURL = val),
-            ),
-            SizedBox(height: 20.0),
-            ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.pink[400],
-                ),
-                onPressed: () async {
-                  if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-                    setState(() => loading = true);
-                    await CommentsDatabaseService(userId: user.uid).newComment(
-                      postId: widget.postId,
-                      replyToId: '<work in progress>',
-                      text: _text,
-                      imageURL: _imageURL,
-                      onValue: handleValue,
-                      onError: handleError,
-                    );
-                  }
-                },
-                child: Text(
-                  'Make post',
-                  style: TextStyle(color: Colors.white),
-                )),
-            SizedBox(height: 12.0),
             Text(
               error,
               style: TextStyle(color: Colors.red, fontSize: 14.0),

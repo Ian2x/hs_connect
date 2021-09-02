@@ -30,12 +30,10 @@ class _FeedViewState extends State<FeedView> {
       builder: (context, snapshot) {
         print(snapshot.connectionState);
         if (!snapshot.hasData) {
-          print('no data :/');
           return Loading();
         } else {
 
         final posts = (snapshot.data as List<Post?>).map((post) => post!).toList();
-        // print(posts.map((post) => post!.image));
 
         return Column(
           mainAxisSize: MainAxisSize.min,

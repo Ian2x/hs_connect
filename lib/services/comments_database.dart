@@ -39,6 +39,41 @@ class CommentsDatabaseService {
         .catchError(onError);
   }
 
+  Future deleteComment({required String commentId, required String userId}) async {
+    final checkAuth = await commentsCollection.doc(commentId).get();
+    if(checkAuth.exists) {
+      if (userId==checkAuth.get('userId')) {
+        return await commentsCollection.doc(commentId).delete();
+      };
+    }
+    return null;
+  }
+
+  Future likeComment({required String commentId, required String userId}) async {
+    // remove dislike if disliked
+    await commentsCollection.doc(commentId).update({'dislikes': FieldValue.arrayRemove([userId])});
+    // like comment
+    return await commentsCollection.doc(commentId).update({'likes': FieldValue.arrayUnion([userId])});
+  }
+
+  Future unLikeComment({required String commentId, required String userId}) async {
+    // remove like
+    await commentsCollection.doc(commentId).update({'likes': FieldValue.arrayRemove([userId])});
+  }
+
+
+  Future dislikeComment({required String commentId, required String userId}) async {
+    // remove like if liked
+    await commentsCollection.doc(commentId).update({'likes': FieldValue.arrayRemove([userId])});
+    // dislike comment
+    return await commentsCollection.doc(commentId).update({'dislikes': FieldValue.arrayUnion([userId])});
+  }
+
+  Future unDislikeComment({required String commentId, required String userId}) async {
+    // remove like
+    await commentsCollection.doc(commentId).update({'dislikes': FieldValue.arrayRemove([userId])});
+  }
+
   // home data from snapshot
   Comment? _commentFromDocument(QueryDocumentSnapshot document) {
     if (document.exists) {
@@ -59,7 +94,7 @@ class CommentsDatabaseService {
   }
 
   Stream<List<Comment?>> get postComments {
-    return commentsCollection.where('postId', isEqualTo: postId).snapshots().map((snapshot) => snapshot.docs.map(_commentFromDocument).toList());
+    return commentsCollection.where('postId', isEqualTo: postId).orderBy('createdAt', descending: false).snapshots().map((snapshot) => snapshot.docs.map(_commentFromDocument).toList());
   }
 
 }

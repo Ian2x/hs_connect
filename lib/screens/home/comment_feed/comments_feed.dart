@@ -5,6 +5,7 @@ import 'package:hs_connect/models/comment.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/screens/home/comment_view/comment_card.dart';
+import 'package:hs_connect/screens/home/comment_view/comment_form.dart';
 import 'package:hs_connect/screens/home/post_view/post_card.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
@@ -42,26 +43,33 @@ class _CommentsFeedState extends State<CommentsFeed> {
           final comments = (snapshot.data as List<Comment?>).map((comment) => comment!).toList();
           // print(posts.map((post) => post!.image));
 
-          return ListView.builder(
-            itemCount: comments.length,
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            itemBuilder: (BuildContext context, int index) {
-              // when scroll up/down, fires once
-              return Center(
-                  child: CommentCard(
-                    commentId: comments[index].commentId,
-                    replyToId: comments[index].replyToId,
-                    postId: comments[index].postId,
-                    userId: comments[index].userId,
-                    text: comments[index].text,
-                    image: comments[index].image,
-                    createdAt: comments[index].createdAt,
-                    likes: comments[index].likes,
-                    dislikes: comments[index].dislikes,
-                    currUserId: user.uid,
-                  ));
-            },
+          return Flexible(
+            //height: 200.0,
+            child: ListView.builder(
+              itemCount: comments.length+1,
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemBuilder: (BuildContext context, int index) {
+                // when scroll up/down, fires once
+                if(index==comments.length) {
+                  return CommentForm(postId: widget.postId);
+                } else {
+                  return Center(
+                      child: CommentCard(
+                        commentId: comments[index].commentId,
+                        replyToId: comments[index].replyToId,
+                        postId: comments[index].postId,
+                        userId: comments[index].userId,
+                        text: comments[index].text,
+                        image: comments[index].image,
+                        createdAt: comments[index].createdAt,
+                        likes: comments[index].likes,
+                        dislikes: comments[index].dislikes,
+                        currUserId: user.uid,
+                      ));
+                }
+              },
+            ),
           );
         }
       },

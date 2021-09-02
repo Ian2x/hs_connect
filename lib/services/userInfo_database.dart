@@ -24,14 +24,6 @@ class UserInfoDatabaseService {
     final docId = await _groupDatabaseService.newGroup(accessRestrictions: AccessRestriction(restrictionType: 'domain', restriction: domain), name: domain, userId: '');
     // Find domain info (county, state, country)
     final KnownDomain? kd = await _knownDomainsDatabaseService.getKnownDomain(domain: domain);
-    print("kd below");
-    print(await _knownDomainsDatabaseService.getKnownDomain(domain: domain));
-    print(kd);
-    if(kd!=null) {
-      print(kd.county);
-      print(kd.state);
-      print(kd.country);
-    }
 
     return await userInfoCollection.doc(userId).set({
       'displayedName': username,

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/user_data.dart';
+import 'package:hs_connect/screens/home/home.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/userInfo_database.dart';
@@ -33,6 +34,9 @@ class _PostFormState extends State<PostForm> {
   void handleValue(val) {
     loading = false;
     Navigator.pop(context);
+    Navigator.push(context,
+      MaterialPageRoute(
+          builder: (context) => Home()),);
   }
 
   // form values
@@ -66,7 +70,7 @@ class _PostFormState extends State<PostForm> {
                       'Create a new post',
                       style: TextStyle(fontSize: 18.0),
                     ),
-                    SizedBox(height: 20.0),
+                    SizedBox(height: 5.0),
                     Text('Post title'),
                     TextFormField(
                       initialValue: '',
@@ -80,7 +84,7 @@ class _PostFormState extends State<PostForm> {
                       },
                       onChanged: (val) => setState(() => _title = val),
                     ),
-                    SizedBox(height: 20.0),
+                    SizedBox(height: 5.0),
                     Text('Post text'),
                     TextFormField(
                       initialValue: '',
@@ -94,7 +98,7 @@ class _PostFormState extends State<PostForm> {
                       },
                       onChanged: (val) => setState(() => _text = val),
                     ),
-                    SizedBox(height: 20.0),
+                    SizedBox(height: 5.0),
                     Text('(optional) Image URL'),
                     TextFormField(
                       initialValue: '',
@@ -107,7 +111,7 @@ class _PostFormState extends State<PostForm> {
                       },
                       onChanged: (val) => setState(() => _imageURL = val),
                     ),
-                    SizedBox(height: 20.0),
+                    SizedBox(height: 5.0),
                     DropdownButtonFormField<String>(
                       decoration: textInputDecoration,
                       value: _groupId != '' ? _groupId : null,
@@ -118,6 +122,12 @@ class _PostFormState extends State<PostForm> {
                         );
                       }).toList(),
                       onChanged: (val) => setState(() => _groupId = val!),
+                      validator: (val) {
+                        if (val == null)
+                          return 'Must select an access restriction';
+                        else
+                          return null;
+                      }
                     ),
                     ElevatedButton(
                         style: ElevatedButton.styleFrom(

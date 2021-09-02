@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/user_data.dart';
+import 'package:hs_connect/screens/home/comment_view/comment_form.dart';
+import 'package:hs_connect/screens/home/comment_view/dislike_comment.dart';
+import 'package:hs_connect/screens/home/comment_view/like_comment.dart';
+import 'package:hs_connect/screens/home/comment_view/like_dislike_comment.dart';
+import 'package:hs_connect/screens/home/post_view/delete_post.dart';
 import 'package:hs_connect/screens/home/post_view/post_page.dart';
+import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/services/userInfo_database.dart';
 
 class CommentCard extends StatefulWidget {
@@ -37,6 +43,8 @@ class CommentCard extends StatefulWidget {
 class _CommentCardState extends State<CommentCard> {
   UserInfoDatabaseService _userInfoDatabaseService = UserInfoDatabaseService();
 
+  CommentsDatabaseService _comments = CommentsDatabaseService();
+
   bool liked = false;
   bool disliked = false;
   String username = '<Loading user name...>';
@@ -68,12 +76,22 @@ class _CommentCardState extends State<CommentCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-          ListTile(
-            title: Text(widget.text),
-            subtitle: Text(username),
-          ),
-        ]));
+    return Dismissible(
+      key: ValueKey(widget.commentId),
+      child: Card(
+          child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+            ListTile(
+              title: Text(widget.text),
+              subtitle: Text(username),
+              trailing: LikeDislikeComment(commentId: widget.commentId, currUserId: widget.currUserId, likes: widget.likes, dislikes: widget.dislikes),
+            ),
+            CommentForm(postId: widget.postId, replyToId: widget.commentId),
+          ])),
+      onDismissed: (DismissDirection direction) {
+        setState(() {
+          _comments.deleteComment(commentId: widget.commentId, userId: widget.currUserId);
+        });
+      },
+    );
   }
 }
