@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../main.dart';
+
 
 class OGnavbar extends StatefulWidget {
   const OGnavbar({Key? key}) : super(key: key);
@@ -29,9 +29,11 @@ class _OGnavbarState extends State<OGnavbar> {
                 constraints: BoxConstraints(),
                 icon: const Icon(Icons.school, size: 18.0),
                 onPressed: (){
+                  /*
                   Navigator.push(context, new MaterialPageRoute(
                       builder: (context) => new MainScreen())
-                  );
+
+                   */
                 },
               ),
               label: 'Home',
