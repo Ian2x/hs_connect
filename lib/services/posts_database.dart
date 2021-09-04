@@ -85,11 +85,17 @@ class PostsDatabaseService {
   }
 
   Stream<List<Post?>> get singleGroupPosts {
-    return postsCollection.where('groupId', isEqualTo: groupId).snapshots().map((snapshot) => snapshot.docs.map(_postFromDocument).toList());
+    return postsCollection.where('groupId', isEqualTo: groupId).orderBy('createdAt', descending: false).snapshots().map((snapshot) => snapshot.docs.map(_postFromDocument).toList());
   }
 
   Stream<List<Post?>> get multiGroupPosts {
-    return postsCollection.where('groupId', whereIn: groupsId).snapshots().map((snapshot) => snapshot.docs.map(_postFromDocument).toList());
+    return postsCollection.where('groupId', whereIn: groupsId).orderBy('createdAt', descending: false).snapshots().map((snapshot) => snapshot.docs.map(_postFromDocument).toList());
+  }
+
+  Future test() async {
+
+    final test = await postsCollection.where('groupId', whereIn: groupsId).get();
+    return test.docs;
   }
 
 }

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/screens/home/post_view/delete_post.dart';
 import 'package:hs_connect/screens/home/post_view/post_page.dart';
+import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/userInfo_database.dart';
 
@@ -39,11 +41,14 @@ class PostCard extends StatefulWidget {
 class _PostCardState extends State<PostCard> {
   UserInfoDatabaseService _userInfoDatabaseService = UserInfoDatabaseService();
 
+  GroupsDatabaseService _groups = GroupsDatabaseService();
+
   PostsDatabaseService _posts = PostsDatabaseService();
 
   bool liked = false;
   bool disliked = false;
   String username = '<Loading user name...>';
+  String groupName = '<Loading group name...>';
 
   @override
   void initState() {
@@ -60,6 +65,7 @@ class _PostCardState extends State<PostCard> {
     // find username for userId
     // _userInfoDatabaseService.userId = widget.userId;
     getUsername();
+    getGroupName();
     super.initState();
   }
 
@@ -67,6 +73,13 @@ class _PostCardState extends State<PostCard> {
     final UserData? fetchUsername = await _userInfoDatabaseService.getUserData(userId: widget.userId);
     setState(() {
       username = fetchUsername != null ? fetchUsername.displayedName : '<Failed to retrieve user name>';
+    });
+  }
+
+  void getGroupName() async {
+    final Group? fetchGroupName = await _groups.getGroupData(groupId: widget.groupId);
+    setState(() {
+      groupName = fetchGroupName != null ? fetchGroupName.name : '<Failed to retrieve group name>';
     });
   }
 
@@ -78,7 +91,7 @@ class _PostCardState extends State<PostCard> {
         key: ValueKey(widget.postId),
         child: ListTile(
           title: Text(widget.title),
-          subtitle: Text(username),
+          subtitle: Text(username+' in '+groupName),
           onTap: () {
             Navigator.push(
               context,

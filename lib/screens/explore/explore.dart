@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/screens/explore/new_group/new_group.dart';
 import 'package:hs_connect/screens/explore/new_group/new_group_form.dart';
 import 'package:hs_connect/screens/home/home.dart';
+import 'package:hs_connect/screens/home/post_feeds/trending_feed.dart';
 import 'package:hs_connect/screens/new_post/new_post.dart';
+import 'package:hs_connect/services/groups_database.dart';
 
 class Explore extends StatelessWidget {
   const Explore({Key? key}) : super(key: key);
@@ -30,7 +32,10 @@ class Explore extends StatelessWidget {
         ]
       ),
       body: Container(
-        child: Text('Explore page'),
+        child: Column(children: <Widget>[
+          Text('Explore page'),
+          TrendingFeed(),
+        ]),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[

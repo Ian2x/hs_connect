@@ -52,6 +52,10 @@ class UserInfoDatabaseService {
         .catchError(onError);
   }
 
+  Future joinGroup({required String userId, required String groupId, required bool public}) async {
+    return await userInfoCollection.doc(userId).update({'userGroups': FieldValue.arrayUnion([{'groupId': groupId, 'public': public}])});
+  }
+
   // get other users from userId
   Future getUserData({required String userId}) async {
     final snapshot = await userInfoCollection.doc(userId).get();

@@ -116,6 +116,7 @@ class _PostFormState extends State<PostForm> {
                       decoration: textInputDecoration,
                       value: _groupId != '' ? _groupId : null,
                       items: groups.map((group) {
+                        print(group);
                         return DropdownMenuItem(
                           value: group.id,
                           child: Text('${group['name']}'),

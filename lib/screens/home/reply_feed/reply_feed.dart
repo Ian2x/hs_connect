@@ -3,25 +3,29 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/comment.dart';
 import 'package:hs_connect/models/post.dart';
+import 'package:hs_connect/models/reply.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/screens/home/comment_view/comment_card.dart';
 import 'package:hs_connect/screens/home/comment_view/comment_form.dart';
 import 'package:hs_connect/screens/home/post_view/post_card.dart';
+import 'package:hs_connect/screens/home/reply_view/reply_card.dart';
+import 'package:hs_connect/screens/home/reply_view/reply_form.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
+import 'package:hs_connect/services/replies_database.dart';
 import 'package:hs_connect/shared/loading.dart';
 import 'package:provider/provider.dart';
 
-class CommentsFeed extends StatefulWidget {
-  final String postId;
-  const CommentsFeed({Key? key, required this.postId}) : super(key: key);
+class RepliesFeed extends StatefulWidget {
+  final String commentId;
+  const RepliesFeed({Key? key, required this.commentId}) : super(key: key);
 
   @override
-  _CommentsFeedState createState() => _CommentsFeedState();
+  _RepliesFeedState createState() => _RepliesFeedState();
 }
 
-class _CommentsFeedState extends State<CommentsFeed> {
-  //String groupId = '';
+class _RepliesFeedState extends State<RepliesFeed> {
+  // String groupId = '';
 
   @override
   Widget build(BuildContext context) {
@@ -30,40 +34,39 @@ class _CommentsFeedState extends State<CommentsFeed> {
 
     if (userData == null) return Loading();
 
-    CommentsDatabaseService _comments = CommentsDatabaseService(postId: widget.postId);
+    RepliesDatabaseService _replies = RepliesDatabaseService(commentId: widget.commentId);
 
     return StreamBuilder(
-      stream: _comments.postComments,
+      stream: _replies.commentReplies,
       builder: (context, snapshot) {
         print(snapshot.connectionState);
         if (!snapshot.hasData) {
-          print('no data :/');
           return Loading();
         } else {
-          final comments = (snapshot.data as List<Comment?>).map((comment) => comment!).toList();
+          final replies = (snapshot.data as List<Reply?>).map((reply) => reply!).toList();
           // print(posts.map((post) => post!.image));
 
           return Flexible(
             //height: 200.0,
             child: ListView.builder(
-              itemCount: comments.length+1,
+              itemCount: replies.length+1,
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               itemBuilder: (BuildContext context, int index) {
                 // when scroll up/down, fires once
-                if(index==comments.length) {
-                  return CommentForm(postId: widget.postId);
+                if(index==replies.length) {
+                  return ReplyForm(commentId: widget.commentId);
                 } else {
                   return Center(
-                      child: CommentCard(
-                        commentId: comments[index].commentId,
-                        postId: comments[index].postId,
-                        userId: comments[index].userId,
-                        text: comments[index].text,
-                        image: comments[index].image,
-                        createdAt: comments[index].createdAt,
-                        likes: comments[index].likes,
-                        dislikes: comments[index].dislikes,
+                      child: ReplyCard(
+                        replyId: replies[index].replyId,
+                        commentId: replies[index].commentId,
+                        userId: replies[index].userId,
+                        text: replies[index].text,
+                        image: replies[index].image,
+                        createdAt: replies[index].createdAt,
+                        likes: replies[index].likes,
+                        dislikes: replies[index].dislikes,
                         currUserId: user.uid,
                       ));
                 }

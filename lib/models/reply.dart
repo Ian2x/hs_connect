@@ -1,6 +1,6 @@
-class Comment {
+class Reply {
+  final String replyId;
   final String commentId;
-  final String postId;
   final String userId;
   String text;
   String? image;
@@ -8,9 +8,9 @@ class Comment {
   List<String> likes;
   List<String> dislikes;
 
-  Comment({
+  Reply({
+    required this.replyId,
     required this.commentId,
-    required this.postId,
     required this.userId,
     required this.text,
     required this.image,

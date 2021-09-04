@@ -4,6 +4,7 @@ import 'package:hs_connect/screens/explore/explore.dart';
 import 'package:hs_connect/screens/home/post_feeds/domain_feed.dart';
 import 'package:hs_connect/screens/home/post_feeds/home_feed.dart';
 import 'package:hs_connect/screens/home/post_feeds/og_feed.dart';
+import 'package:hs_connect/screens/home/post_feeds/trending_feed.dart';
 import 'package:hs_connect/screens/home/profile/profile.dart';
 import 'package:hs_connect/services/auth.dart';
 import 'package:flutter/material.dart';
@@ -75,7 +76,7 @@ class _HomeState extends State<Home> {
             children: <Widget>[
               DomainFeed(),
               HomeFeed(),
-              Container(),
+              TrendingFeed(),
             ]
           ),
           bottomNavigationBar: BottomNavigationBar(

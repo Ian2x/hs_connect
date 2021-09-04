@@ -20,7 +20,7 @@ class _HomeFeedState extends State<HomeFeed> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
+    final user = Provider.of<User?>(context);
     final userData = Provider.of<UserData?>(context);
 
     if (userData == null) return Loading();
@@ -42,7 +42,9 @@ class _HomeFeedState extends State<HomeFeed> {
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) {
               // when scroll up/down, fires once
-              return Center(
+              if (user==null) {
+                return Loading();
+              } else return Center(
                 child: PostCard(
                   postId: posts[index].postId,
                   userId: posts[index].userId,
