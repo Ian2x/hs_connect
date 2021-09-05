@@ -9,6 +9,7 @@ import 'package:hs_connect/screens/home/profile/profile.dart';
 import 'package:hs_connect/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/services/userInfo_database.dart';
+import 'package:hs_connect/shared/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:hs_connect/screens/new_post/new_post.dart';
 
@@ -76,7 +77,7 @@ class _HomeState extends State<Home> {
             children: <Widget>[
               DomainFeed(),
               HomeFeed(),
-              TrendingFeed(),
+              userData!=null ? TrendingFeed() : Loading(),
             ]
           ),
           bottomNavigationBar: BottomNavigationBar(

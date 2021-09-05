@@ -22,9 +22,9 @@ class UserData {
   final String userId;
   String displayedName;
   final String domain;
-  final String county;
-  final String state;
-  final String country;
+  final String? county;
+  final String? state;
+  final String? country;
   List<UserGroup> userGroups;
   String imageURL;
   int score;

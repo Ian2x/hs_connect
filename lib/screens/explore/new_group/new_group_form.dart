@@ -52,10 +52,16 @@ class _NewGroupFormState extends State<NewGroupForm> {
 
       final List<AccessRestriction> accessOptions = [
         AccessRestriction(restrictionType: 'domain', restriction: userData.domain),
-        AccessRestriction(restrictionType: 'county', restriction: userData.county),
-        AccessRestriction(restrictionType: 'state', restriction: userData.state),
-        AccessRestriction(restrictionType: 'country', restriction: userData.country),
       ];
+      if(userData.county!=null) {
+        accessOptions.add(AccessRestriction(restrictionType: 'county', restriction: userData.county!));
+      }
+      if(userData.state!=null) {
+        accessOptions.add(AccessRestriction(restrictionType: 'state', restriction: userData.state!));
+      }
+      if(userData.country!=null) {
+        accessOptions.add(AccessRestriction(restrictionType: 'country', restriction: userData.country!));
+      }
 
       return Form(
         key: _formKey,

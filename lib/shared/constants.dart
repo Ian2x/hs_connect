@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+const daysTrending = 2;
+
 const textInputDecoration = InputDecoration(
   fillColor: Colors.white,
   filled: true,

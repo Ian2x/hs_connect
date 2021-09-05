@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
@@ -15,7 +16,7 @@ class PostCard extends StatefulWidget {
   final String title;
   final String text;
   final String? image;
-  final String createdAt;
+  final Timestamp createdAt;
   List<String> likes;
   List<String> dislikes;
   final String currUserId;

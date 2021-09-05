@@ -75,7 +75,7 @@ class PostsDatabaseService {
         image: document['image'],
         title: document['title'],
         text: document['text'],
-        createdAt: document['createdAt'].toString(),
+        createdAt: document['createdAt'],//.toString(),
         likes: (document['likes'] as List).map((item) => item as String).toList(),
         dislikes: (document['dislikes'] as List).map((item) => item as String).toList(),//document['dislikes'],
       );
@@ -92,10 +92,10 @@ class PostsDatabaseService {
     return postsCollection.where('groupId', whereIn: groupsId).orderBy('createdAt', descending: false).snapshots().map((snapshot) => snapshot.docs.map(_postFromDocument).toList());
   }
 
-  Future test() async {
+  Future getMultiGroupPosts() async {
 
-    final test = await postsCollection.where('groupId', whereIn: groupsId).get();
-    return test.docs;
+    final snapshot = await postsCollection.where('groupId', whereIn: groupsId).get();
+    return snapshot.docs.map(_postFromDocument).toList();
   }
 
 }

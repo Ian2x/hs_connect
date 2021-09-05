@@ -5,9 +5,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hs_connect/models/group.dart';
+import 'package:hs_connect/models/idRanking.dart';
+import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/userInfo_database.dart';
+import 'package:hs_connect/shared/constants.dart';
 
 void defaultFunc(dynamic parameter) {}
 
@@ -97,47 +100,51 @@ class GroupsDatabaseService {
         .get();
   }
 
-  Future<List<Group>?> getTrendingGroups(
-      {required String domain, required String county, required String state, required String country}) async {
+  Future getTrendingGroups(
+      {required String domain, required String? county, required String? state, required String? country}) async {
     SplayTreeMap groupScores = new SplayTreeMap();
     // get all group ids
     final domainGroups = await groupsCollection.where('accessRestrictions', isEqualTo: AccessRestriction(restrictionType: 'domain', restriction: domain).asMap()).get();
-    final countyGroups = await groupsCollection.where('county', isEqualTo: AccessRestriction(restrictionType: 'county', restriction: county).asMap()).get();
-    final stateGroups = await groupsCollection.where('state', isEqualTo: AccessRestriction(restrictionType: 'state', restriction: state).asMap()).get();
-    final countryGroups = await groupsCollection.where('country', isEqualTo: AccessRestriction(restrictionType: 'country', restriction: country).asMap()).get();
+    final countyGroups = county!=null ? await groupsCollection.where('county', isEqualTo: AccessRestriction(restrictionType: 'county', restriction: county).asMap()).get() : null;
+    final stateGroups = state!=null ? await groupsCollection.where('state', isEqualTo: AccessRestriction(restrictionType: 'state', restriction: state).asMap()).get() : null;
+    final countryGroups = country!=null ? await groupsCollection.where('country', isEqualTo: AccessRestriction(restrictionType: 'country', restriction: country).asMap()).get(): null;
     final domainGroupsIds = domainGroups.docs.map((group) {
       return group.id;
     }).toList();
-    final countyGroupsIds = countyGroups.docs.map((group) {
+    final countyGroupsIds = countyGroups!=null ? countyGroups.docs.map((group) {
       return group.id;
-    }).toList();
-    final stateGroupsIds = stateGroups.docs.map((group) {
+    }).toList() : <String>[];
+    final stateGroupsIds = stateGroups!=null ? stateGroups.docs.map((group) {
       return group.id;
-    }).toList();
-    final countryGroupsIds = countryGroups.docs.map((group) {
+    }).toList() : <String>[];
+    final countryGroupsIds = countryGroups!=null ? countryGroups.docs.map((group) {
       return group.id;
-    }).toList();
-    print(domainGroupsIds);
-    print(countyGroupsIds);
-    print(stateGroupsIds);
-    print(countryGroupsIds);
+    }).toList() : <String>[];
     // collect post information for each group
     PostsDatabaseService _posts = PostsDatabaseService(groupsId: domainGroupsIds + countyGroupsIds + stateGroupsIds + countryGroupsIds);
 
-    // final allPosts = await _posts.multiGroupPosts;
-    final allPosts = await _posts.test();
-    print("========");
-    print(allPosts)
-    // print(allPosts.map((ele) {print(ele.toList());}));
-    // print(allPosts.forEach((element) {print(element.first!.groupId);}));
-    /*
-    await FirebaseFirestore.instance
 
-        .collection('posts')
-        .where('groupId', whereIn: domainGroupsIds + countyGroupsIds + stateGroupsIds + countryGroupIds)
-        .snapshots()
-        .map((snapshot) => snapshot.docs.map(_posts._postFromDocument).toList());
-    */
+    final List<Post?> allPosts = await _posts.getMultiGroupPosts();
+
+    final List<Post?> filteredPosts = allPosts.where((post) => post!=null && DateTime.now().difference(post.createdAt.toDate()).compareTo(Duration(days: 3))==-1).toList();
+
+    // print(filteredPosts.length);
+
+    filteredPosts.forEach((post) {
+      groupScores.update(post!.groupId, (value) => value+1, ifAbsent: () => 1);
+    });
+
+    // print(groupScores);
+    List<idRanking> groupScoresList = groupScores.entries.map((ele) => idRanking(id: ele.key, count: ele.value)).toList();
+    groupScoresList.sort(idRankingCompare);
+
+    return groupsCollection
+        .where(FieldPath.documentId,
+        whereIn: groupScoresList.map((idRanking) {
+          return idRanking.id;
+        }).toList())
+        .get();
+
     return null;
   }
 }
