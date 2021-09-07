@@ -38,6 +38,7 @@ class GroupsDatabaseService {
     } else {
       DocumentReference docRef = await groupsCollection.doc();
       final docId = docRef.id;
+
       await groupsCollection
           .doc(docId)
           .set({
@@ -121,6 +122,7 @@ class GroupsDatabaseService {
       return group.id;
     }).toList() : <String>[];
     // collect post information for each group
+    print(domainGroupsIds + countyGroupsIds + stateGroupsIds + countryGroupsIds);
     PostsDatabaseService _posts = PostsDatabaseService(groupsId: domainGroupsIds + countyGroupsIds + stateGroupsIds + countryGroupsIds);
 
 
@@ -128,7 +130,6 @@ class GroupsDatabaseService {
 
     final List<Post?> filteredPosts = allPosts.where((post) => post!=null && DateTime.now().difference(post.createdAt.toDate()).compareTo(Duration(days: 3))==-1).toList();
 
-    // print(filteredPosts.length);
 
     filteredPosts.forEach((post) {
       groupScores.update(post!.groupId, (value) => value+1, ifAbsent: () => 1);

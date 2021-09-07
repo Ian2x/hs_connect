@@ -101,7 +101,7 @@ class _PostFormState extends State<PostForm> {
                     SizedBox(height: 5.0),
                     Text('(optional) Image URL'),
                     TextFormField(
-                      initialValue: '',
+                      initialValue: 'https://food.fnr.sndimg.com/content/dam/images/food/fullset/2012/11/2/0/DV1510H_fried-chicken-recipe-10_s4x3.jpg.rend.hgtvcom.616.462.suffix/1568222255998.jpeg',
                       decoration: textInputDecoration,
                       validator: (val) {
                         if (val == null)
@@ -116,7 +116,6 @@ class _PostFormState extends State<PostForm> {
                       decoration: textInputDecoration,
                       value: _groupId != '' ? _groupId : null,
                       items: groups.map((group) {
-                        print(group);
                         return DropdownMenuItem(
                           value: group.id,
                           child: Text('${group['name']}'),
@@ -135,6 +134,10 @@ class _PostFormState extends State<PostForm> {
                           primary: Colors.pink[400],
                         ),
                         onPressed: () async {
+                          print(_imageURL);
+                          print(Uri.parse(_imageURL!));
+
+                          /*
                           if (_formKey.currentState != null && _formKey.currentState!.validate()) {
                             setState(() => loading = true);
                             await PostsDatabaseService(userId: user.uid).newPost(
@@ -146,12 +149,14 @@ class _PostFormState extends State<PostForm> {
                               onError: handleError,
                             );
                           }
+                           */
                         },
                         child: Text(
                           'Make post',
                           style: TextStyle(color: Colors.white),
                         )),
                     SizedBox(height: 12.0),
+                    Image.network('https://food.fnr.sndimg.com/content/dam/images/food/fullset/2012/11/2/0/DV1510H_fried-chicken-recipe-10_s4x3.jpg.rend.hgtvcom.616.462.suffix/1568222255998.jpeg'),
                     Text(
                       error,
                       style: TextStyle(color: Colors.red, fontSize: 14.0),

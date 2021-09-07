@@ -64,10 +64,7 @@ class _TrendingGroupsFeedState extends State<TrendingGroupsFeed> {
               */
 
               final posts = snapshot.data.docs.map((docSnapshot) {
-                print(docSnapshot.get("name"));
-                print(docSnapshot.get("userId"));
-                print(docSnapshot.get("accessRestrictions"));
-                Group(
+                return Group(
                     groupId: docSnapshot.id,
                     userId: docSnapshot.get("userId"),
                     name: docSnapshot.get("name"),
@@ -78,8 +75,6 @@ class _TrendingGroupsFeedState extends State<TrendingGroupsFeed> {
                     )
                 );
               }).toList();
-
-
 
               // final posts = (snapshot.data as List<Group?>).map((group) => group!).toList();
 

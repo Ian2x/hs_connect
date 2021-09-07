@@ -4,6 +4,7 @@ import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/screens/home/post_view/delete_post.dart';
+import 'package:hs_connect/screens/home/post_view/like_dislike_post.dart';
 import 'package:hs_connect/screens/home/post_view/post_page.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
@@ -58,7 +59,7 @@ class _PostCardState extends State<PostCard> {
       setState(() {
         liked = true;
       });
-    } else if (widget.likes.contains(widget.currUserId)) {
+    } else if (widget.dislikes.contains(widget.currUserId)) {
       setState(() {
         disliked = true;
       });
@@ -92,7 +93,10 @@ class _PostCardState extends State<PostCard> {
         key: ValueKey(widget.postId),
         child: ListTile(
           title: Text(widget.title),
-          subtitle: Text(username+' in '+groupName),
+          subtitle: Column(children: <Widget>[
+            Text(username + ' in ' + groupName),
+            LikeDislikePost(currUserId: widget.currUserId, postId: widget.postId, likes: widget.likes, dislikes: widget.dislikes)
+          ]),
           onTap: () {
             Navigator.push(
               context,
@@ -115,11 +119,6 @@ class _PostCardState extends State<PostCard> {
         ),
         // CAN DELETE POST EITHER VIA DELETE POST BUTTON OR DISMISSAL, PROBABLY CHOOSE ONE OR THE OTHER EVENTUALLY
         onDismissed: (DismissDirection direction) async {
-          /*
-          setState(() async {
-            await _posts.deletePost(postId: widget.postId, userId: widget.currUserId);
-          });
-           */
           await _posts.deletePost(postId: widget.postId, userId: widget.currUserId);
         },
       )

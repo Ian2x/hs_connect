@@ -10,6 +10,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  /*
+  const firebaseConfig = {
+    apiKey: '<your-api-key>',
+    authDomain: '<your-auth-domain>',
+    databaseURL: '<your-database-url>',
+    storageBucket: '<your-storage-bucket-url>'
+  };
+   */
   await Firebase.initializeApp();
   runApp(MyApp());
 }

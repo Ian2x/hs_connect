@@ -23,7 +23,6 @@ class _TrendingFeedState extends State<TrendingFeed> {
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
     final userData = Provider.of<UserData?>(context);
-
     if (userData == null) return Loading();
     return TrendingGroupsFeed(domain: userData.domain, county: userData.county, state: userData.state, country: userData.country);
   }

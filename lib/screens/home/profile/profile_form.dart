@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hs_connect/models/user_data.dart';
+import 'package:hs_connect/screens/home/profile/profile_pic_picker.dart';
+import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/services/userInfo_database.dart';
 import 'package:hs_connect/shared/loading.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +49,9 @@ class _ProfileFormState extends State<ProfileForm> {
           ? Loading()
           : Form(
         key: _formKey,
-        child: Column(
+        child: ListView(
+          shrinkWrap: true,
+          padding: EdgeInsets.all(15.0),
           children: <Widget>[
             Text(
               'Update your profile.',
@@ -84,6 +88,7 @@ class _ProfileFormState extends State<ProfileForm> {
                   primary: Colors.pink[400],
                 ),
                 onPressed: () async {
+                  /*
                   if (_formKey.currentState != null &&
                       _formKey.currentState!.validate()) {
                     setState(() => loading = true);
@@ -96,6 +101,9 @@ class _ProfileFormState extends State<ProfileForm> {
                       onError: handleError,
                     );
                   }
+                  */
+                  ImageStorage temp = ImageStorage();
+                  temp.listExample();
                 },
                 child: Text(
                   'Update',
@@ -105,7 +113,8 @@ class _ProfileFormState extends State<ProfileForm> {
             Text(
               error,
               style: TextStyle(color: Colors.red, fontSize: 14.0),
-            )
+            ),
+            ProfilePicPicker(),
           ],
         ),
       );

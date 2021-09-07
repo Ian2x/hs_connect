@@ -4,6 +4,7 @@ import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/screens/home/comment_view/comment_form.dart';
 import 'package:hs_connect/screens/home/comment_view/like_dislike_comment.dart';
 import 'package:hs_connect/screens/home/post_view/delete_post.dart';
+import 'package:hs_connect/screens/home/post_view/like_dislike_post.dart';
 import 'package:hs_connect/screens/home/post_view/post_page.dart';
 import 'package:hs_connect/screens/home/reply_feed/reply_feed.dart';
 import 'package:hs_connect/screens/home/reply_view/reply_form.dart';
@@ -23,15 +24,15 @@ class CommentCard extends StatefulWidget {
 
   CommentCard(
       {Key? key,
-        required this.commentId,
-        required this.postId,
-        required this.userId,
-        required this.text,
-        required this.image,
-        required this.createdAt,
-        required this.likes,
-        required this.dislikes,
-        required this.currUserId})
+      required this.commentId,
+      required this.postId,
+      required this.userId,
+      required this.text,
+      required this.image,
+      required this.createdAt,
+      required this.likes,
+      required this.dislikes,
+      required this.currUserId})
       : super(key: key);
 
   @override
@@ -78,14 +79,17 @@ class _CommentCardState extends State<CommentCard> {
       key: ValueKey(widget.commentId),
       child: Card(
           child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-            ListTile(
-              title: Text(widget.text),
-              subtitle: Text(username),
-              trailing: LikeDislikeComment(commentId: widget.commentId, currUserId: widget.currUserId, likes: widget.likes, dislikes: widget.dislikes),
-            ),
-            ReplyForm(commentId: widget.commentId),
-            RepliesFeed(commentId: widget.commentId),
-          ])),
+        ListTile(
+          title: Text(widget.text),
+          subtitle: Text(username),
+          trailing: LikeDislikeComment(
+              commentId: widget.commentId,
+              currUserId: widget.currUserId,
+              likes: widget.likes,
+              dislikes: widget.dislikes),
+        ),
+        RepliesFeed(commentId: widget.commentId),
+      ])),
       onDismissed: (DismissDirection direction) {
         setState(() {
           _comments.deleteComment(commentId: widget.commentId, userId: widget.currUserId);

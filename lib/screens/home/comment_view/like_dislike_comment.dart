@@ -30,7 +30,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
       likeStatus = widget.likes.contains(widget.currUserId);
       dislikeStatus = widget.dislikes.contains(widget.currUserId);
       likeCount = widget.likes.length;
-      dislikeCount = widget.likes.length;
+      dislikeCount = widget.dislikes.length;
     });
     super.initState();
   }

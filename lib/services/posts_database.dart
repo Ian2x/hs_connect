@@ -65,6 +65,33 @@ class PostsDatabaseService {
   }
 
 
+
+  Future likePost({required String postId, required String userId}) async {
+    // remove dislike if disliked
+    await postsCollection.doc(postId).update({'dislikes': FieldValue.arrayRemove([userId])});
+    // like comment
+    return await postsCollection.doc(postId).update({'likes': FieldValue.arrayUnion([userId])});
+  }
+
+  Future unLikePost({required String postId, required String userId}) async {
+    // remove like
+    await postsCollection.doc(postId).update({'likes': FieldValue.arrayRemove([userId])});
+  }
+
+  Future dislikePost({required String postId, required String userId}) async {
+    // remove like if liked
+    await postsCollection.doc(postId).update({'likes': FieldValue.arrayRemove([userId])});
+    // dislike comment
+    return await postsCollection.doc(postId).update({'dislikes': FieldValue.arrayUnion([userId])});
+  }
+
+  Future unDislikePost({required String postId, required String userId}) async {
+    // remove like
+    await postsCollection.doc(postId).update({'dislikes': FieldValue.arrayRemove([userId])});
+  }
+
+
+
   // home data from snapshot
   Post? _postFromDocument(QueryDocumentSnapshot document) {
     if (document.exists) {
@@ -85,11 +112,11 @@ class PostsDatabaseService {
   }
 
   Stream<List<Post?>> get singleGroupPosts {
-    return postsCollection.where('groupId', isEqualTo: groupId).orderBy('createdAt', descending: false).snapshots().map((snapshot) => snapshot.docs.map(_postFromDocument).toList());
+    return postsCollection.where('groupId', isEqualTo: groupId).orderBy('createdAt', descending: true).snapshots().map((snapshot) => snapshot.docs.map(_postFromDocument).toList());
   }
 
   Stream<List<Post?>> get multiGroupPosts {
-    return postsCollection.where('groupId', whereIn: groupsId).orderBy('createdAt', descending: false).snapshots().map((snapshot) => snapshot.docs.map(_postFromDocument).toList());
+    return postsCollection.where('groupId', whereIn: groupsId).orderBy('createdAt', descending: true).snapshots().map((snapshot) => snapshot.docs.map(_postFromDocument).toList());
   }
 
   Future getMultiGroupPosts() async {
