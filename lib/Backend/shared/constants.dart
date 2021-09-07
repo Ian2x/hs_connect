@@ -11,7 +11,6 @@ const textInputDecoration = InputDecoration(
   ),
 );
 
-
 typedef voidFunction = void Function();
 InputDecoration messageInputDecoration({required voidFunction onPressed}) {
   return InputDecoration(

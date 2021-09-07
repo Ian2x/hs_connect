@@ -7,9 +7,9 @@ import 'package:hs_connect/Backend/screens/home/post_feeds/og_feed.dart';
 import 'package:hs_connect/Backend/screens/home/profile/profile.dart';
 import 'package:hs_connect/Backend/services/auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hs_connect/Backend/services/userInfo_database.dart';
 import 'package:provider/provider.dart';
-import 'package:hs_connect/Backend/screens/new_post/new_post.dart';
+import 'package:hs_connect/Tools/HexColor.dart';
+import 'package:hs_connect/Widgets/OGnavbar.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -32,10 +32,10 @@ class _HomeState extends State<Home> {
       initialIndex: 1,
       length: 3,
       child: Scaffold(
-          backgroundColor: Colors.brown[50],
+        backgroundColor: HexColor("#000000"),
           appBar: AppBar(
             title: Text('HS Connect'),
-            backgroundColor: Colors.brown[400],
+            backgroundColor: HexColor("#000000"),
             elevation: 0.0,
             actions: <Widget>[
               TextButton.icon(
@@ -71,6 +71,7 @@ class _HomeState extends State<Home> {
               ],
             )
           ),
+
           body: TabBarView(
             children: <Widget>[
               DomainFeed(),
@@ -78,51 +79,8 @@ class _HomeState extends State<Home> {
               Container(),
             ]
           ),
-          bottomNavigationBar: BottomNavigationBar(
-            items: <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: IconButton(
-                  padding: EdgeInsets.zero,
-                  constraints: BoxConstraints(),
-                  icon: const Icon(Icons.school, size: 18.0),
-                  onPressed: () {
-                    Navigator.popUntil(context, ModalRoute.withName('/'));
-                  },
-                ),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: IconButton(
-                  padding: EdgeInsets.zero,
-                  constraints: BoxConstraints(),
-                  icon: const Icon(Icons.add, size: 18.0),
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => NewPost()),
-                    );
-                  },
-                ),
-                label: 'Post',
-              ),
-              BottomNavigationBarItem(
-                icon: IconButton(
-                  padding: EdgeInsets.zero,
-                  constraints: BoxConstraints(),
-                  icon: const Icon(Icons.search_rounded, size: 18.0),
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Explore()),
-                    );
-                  },
-                ),
-                label: 'Explore',
-              ),
-            ],
-          ),
+
+          bottomNavigationBar: OGnavbar(),
         ),
     );
   }

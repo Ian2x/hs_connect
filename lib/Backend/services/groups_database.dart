@@ -42,6 +42,7 @@ class GroupsDatabaseService {
     }
   }
 
+
   // get group data from groupId
   Future<Group?> group({required String groupId}) async {
     await groupsCollection.doc(groupId).get().then((DocumentSnapshot documentSnapshot) {

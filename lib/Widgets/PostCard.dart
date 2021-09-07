@@ -21,114 +21,137 @@ class _PostCardState extends State<PostCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
-        margin: EdgeInsets.fromLTRB(0.0,0.0,0.0, 5.0),
-        color: Colors.white,
-        elevation: 0.3,
-        child: Container(
-                child: Padding(
-                    padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 3.0),
-                    child: Column(
-                        children: <Widget>[
-                          //COMMUNITY ROW
-                          Row(
-                              children: <Widget>[
-                              Icon(Icons.account_circle),
-                              SizedBox(width:10),
-                              Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget> [
-                                    Text(
-                                      widget.userPost.community,
-                                      style: TextStyle(
-                                        fontSize: 10.0,
-                                        color: Colors.black,
-                                        fontFamily: 'Poppins-Regular',
-                                      ),
-                                    ),
-                                    Text(
-                                      widget.userPost.user,
-                                      style: TextStyle(
-                                        fontSize: 10.0,
-                                        color: Colors.grey,
-                                        fontFamily: 'Poppins-Regular',
-                                      ),
-                                    ),
-                                  ]
-                              )
-                            ]
-                          ),
+    return GestureDetector(
 
-                          SizedBox(height: 5.0),
+      onTap: () {
 
-                          //TEXT ROW
-                          Row(
-                              children: <Widget>[
-                                    Text(
-                                        widget.userPost.header,
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => PostPage(
+                  postInfo: Post(
+                    postId: widget.postId,
+                    userId: widget.userId,
+                    groupId: widget.groupId,
+                    title: widget.title,
+                    text: widget.text,
+                    image: widget.image,
+                    createdAt: widget.createdAt,
+                    likes: widget.likes,
+                    dislikes: widget.dislikes,
+                  ))),
+        );
+      },
+
+      child: Card(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
+          margin: EdgeInsets.fromLTRB(0.0,0.0,0.0, 5.0),
+          color: Colors.white,
+          elevation: 0.3,
+          child: Container(
+                  child: Padding(
+                      padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 3.0),
+                      child: Column(
+                          children: <Widget>[
+                            //COMMUNITY ROW
+                            Row(
+                                children: <Widget>[
+                                Icon(Icons.account_circle),
+                                SizedBox(width:10),
+                                Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget> [
+                                      Text(
+                                        groupName,
                                         style: TextStyle(
-                                          fontSize: 12.0,
+                                          fontSize: 10.0,
                                           color: Colors.black,
-                                        )
-                                    )
-                              ]
-                          ),
-
-                          //SizedBox(height: 3.0),
-
-                          //TEXT ROW
-                          Row(
-                              children: <Widget>[
-                                Expanded (
-                                    child: Text(
-                                        widget.userPost.text,
+                                          fontFamily: 'Poppins-Regular',
+                                        ),
+                                      ),
+                                      Text(
+                                        username,
                                         style: TextStyle(
                                           fontSize: 10.0,
                                           color: Colors.grey,
-                                        )
-                                    )
+                                          fontFamily: 'Poppins-Regular',
+                                        ),
+                                      ),
+                                    ]
                                 )
-
                               ]
-                          ),
+                            ),
 
-                          SizedBox(height: 2.0),
+                            SizedBox(height: 5.0),
 
-                          //ICON ROW
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                IconButton(
-                                  padding: EdgeInsets.zero,
-                                  constraints: BoxConstraints(),
-                                  icon: const Icon(Icons.share, size: 13.0),
-                                  tooltip: 'Share post',
-                                  onPressed: () {
-                                    setState(() {
-                                      //TODO: Go to new Screen
-                                    });
-                                  },
-                                ),
-                                IconButton(
-                                  padding: EdgeInsets.zero,
-                                  constraints: BoxConstraints(),
-                                  icon: const Icon(Icons.comment, size: 13.0),
-                                  tooltip: 'Share post',
-                                  onPressed: () {
-                                    setState(() {
-                                      //TODO: Go to new Screen
-                                    });
-                                  },
-                                ),
-                                voteCounter(),
-                              ]
-                          ),
-                        ]
-                    )
-                )
-        )
-      );
+                            //TEXT ROW
+                            Row(
+                                children: <Widget>[
+                                      Text(
+                                          widget.title,
+                                          style: TextStyle(
+                                            fontSize: 12.0,
+                                            color: Colors.black,
+                                          )
+                                      )
+                                ]
+                            ),
+
+                            //SizedBox(height: 3.0),
+
+                            //TEXT ROW
+                            Row(
+                                children: <Widget>[
+                                  Expanded (
+                                      child: Text(
+                                          widget.text,
+                                          style: TextStyle(
+                                            fontSize: 10.0,
+                                            color: Colors.grey,
+                                          )
+                                      )
+                                  )
+
+                                ]
+                            ),
+
+                            SizedBox(height: 2.0),
+
+                            //ICON ROW
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  IconButton(
+                                    padding: EdgeInsets.zero,
+                                    constraints: BoxConstraints(),
+                                    icon: const Icon(Icons.share, size: 13.0),
+                                    tooltip: 'Share post',
+                                    onPressed: () {
+                                      setState(() {
+                                        //TODO: Go to new Screen
+                                      });
+                                    },
+                                  ),
+                                  IconButton(
+                                    padding: EdgeInsets.zero,
+                                    constraints: BoxConstraints(),
+                                    icon: const Icon(Icons.comment, size: 13.0),
+                                    tooltip: 'Share post',
+                                    onPressed: () {
+                                      setState(() {
+                                        //TODO: Go to new Screen
+                                      });
+                                    },
+                                  ),
+                                  voteCounter(),
+                                ]
+                            ),
+                          ]
+                      )
+                  )
+          )
+        ),
+    );
     }
 
 }
