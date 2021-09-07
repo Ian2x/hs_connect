@@ -66,7 +66,7 @@ class _PostCardState extends State<PostCard> {
                                         style: TextStyle(
                                           fontSize: 10.0,
                                           color: Colors.black,
-                                          fontFamily: 'Poppins-Regular',
+                                          fontFamily: 'Segoe UI',
                                         ),
                                       ),
                                       Text(
@@ -74,7 +74,7 @@ class _PostCardState extends State<PostCard> {
                                         style: TextStyle(
                                           fontSize: 10.0,
                                           color: Colors.grey,
-                                          fontFamily: 'Poppins-Regular',
+                                          fontFamily: 'Segoe UI',
                                         ),
                                       ),
                                     ]

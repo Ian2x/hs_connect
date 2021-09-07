@@ -7,6 +7,7 @@ import 'package:hs_connect/Backend/screens/home/post_view/post_page.dart';
 import 'package:hs_connect/Backend/services/posts_database.dart';
 import 'package:hs_connect/Backend/services/userInfo_database.dart';
 import 'package:hs_connect/Backend/services/groups_database.dart';
+import 'package:hs_connect/Tools/HexColor.dart';
 
 class PostCard extends StatefulWidget {
   final String postId;
@@ -47,7 +48,7 @@ class _PostCardState extends State<PostCard> {
   bool liked = false;
   bool disliked = false;
   String username = '<Loading user name...>';
-  String groupName = '<Loading user name...>';
+  String groupName = '<Loading group name...>';
 
 
   @override
@@ -88,7 +89,6 @@ class _PostCardState extends State<PostCard> {
     return GestureDetector(
 
       onTap: () {
-
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -109,8 +109,8 @@ class _PostCardState extends State<PostCard> {
 
       child: Card(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
-          margin: EdgeInsets.fromLTRB(0.0,0.0,0.0, 5.0),
-          color: Colors.white,
+          margin: EdgeInsets.fromLTRB(0.0,5.0,0.0, 5.0), //margin for SPACING
+          color: HexColor("#292929"),
           elevation: 0.3,
           child: Container(
               child: Padding(
@@ -120,7 +120,7 @@ class _PostCardState extends State<PostCard> {
                         //COMMUNITY ROW
                         Row(
                             children: <Widget>[
-                              Icon(Icons.account_circle),
+                              Icon(Icons.account_circle, size:40, color:Colors.white),
                               SizedBox(width:10),
                               Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -128,17 +128,17 @@ class _PostCardState extends State<PostCard> {
                                     Text(
                                       groupName,
                                       style: TextStyle(
-                                        fontSize: 10.0,
-                                        color: Colors.black,
-                                        fontFamily: 'Poppins-Regular',
+                                        fontSize: 15.0,
+                                        color: HexColor("#DADDDF"),
+                                        fontFamily: 'Segoe UI',
                                       ),
                                     ),
                                     Text(
                                       username,
                                       style: TextStyle(
-                                        fontSize: 10.0,
-                                        color: Colors.grey,
-                                        fontFamily: 'Poppins-Regular',
+                                        fontSize: 12.0,
+                                        color: HexColor("#DADDDF"),
+                                        fontFamily: 'Segoe UI',
                                       ),
                                     ),
                                   ]
@@ -148,14 +148,16 @@ class _PostCardState extends State<PostCard> {
 
                         SizedBox(height: 5.0),
 
-                        //TEXT ROW
+                        //TITLE ROW
                         Row(
                             children: <Widget>[
                               Text(
                                   widget.title,
                                   style: TextStyle(
-                                    fontSize: 12.0,
-                                    color: Colors.black,
+                                    fontSize: 15.0,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Segoe UI",
                                   )
                               )
                             ]
@@ -171,7 +173,7 @@ class _PostCardState extends State<PostCard> {
                                       widget.text,
                                       style: TextStyle(
                                         fontSize: 10.0,
-                                        color: Colors.grey,
+                                        color: Colors.white,
                                       )
                                   )
                               )

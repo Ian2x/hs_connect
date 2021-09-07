@@ -63,7 +63,7 @@ class _UserProfileState extends State<UserProfile> {
                       style: TextStyle(
                         fontSize:23,
                         color: Colors.white,
-                        fontFamily: 'Inter-Regular',
+                        fontFamily: 'Segoe UI',
                         fontWeight: FontWeight.bold,
                         )
                   ),
@@ -85,7 +85,7 @@ class _UserProfileState extends State<UserProfile> {
                           style: TextStyle(
                             fontSize:14,
                             color: Colors.white60,
-                            fontFamily: 'Inter-Regular',
+                            fontFamily: 'Segoe UI',
                           )
                         ),
                       ],
@@ -108,7 +108,7 @@ class _UserProfileState extends State<UserProfile> {
                      style:TextStyle(
                      fontSize:20,
                        color: Colors.white,
-                       fontFamily: 'Inter-Medium',
+                       fontFamily: 'Segoe UI',
                        fontWeight:FontWeight.bold,
                      )
                    ),

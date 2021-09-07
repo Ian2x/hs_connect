@@ -45,7 +45,7 @@ class _GroupTileState extends State<GroupTile> {
                           style:TextStyle(
                             fontSize:15,
                             color: Colors.white70,
-                            fontFamily: 'Inter-Regular',
+                            fontFamily: 'Segoe UI',
                             fontWeight:FontWeight.bold,
                           )
                       ),
