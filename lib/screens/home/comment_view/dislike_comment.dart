@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hs_connect/Backend/services/comments_database.dart';
-import 'package:hs_connect/Backend/services/posts_database.dart';
+import 'package:hs_connect/services/comments_database.dart';
+import 'package:hs_connect/services/posts_database.dart';
 
 class DislikeComment extends StatefulWidget {
   final String currUserId;

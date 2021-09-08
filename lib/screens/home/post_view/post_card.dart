@@ -1,14 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:hs_connect/Backend/models/post.dart';
-import 'package:hs_connect/Backend/models/user_data.dart';
-import 'package:hs_connect/Backend/models/group.dart';
-import 'package:hs_connect/Backend/screens/home/post_view/delete_post.dart';
-import 'package:hs_connect/Backend/screens/home/post_view/post_page.dart';
-import 'package:hs_connect/Backend/services/posts_database.dart';
-import 'package:hs_connect/Backend/services/userInfo_database.dart';
-import 'package:hs_connect/Backend/services/groups_database.dart';
+import 'package:hs_connect/models/group.dart';
+import 'package:hs_connect/models/post.dart';
+import 'package:hs_connect/models/user_data.dart';
+import 'package:hs_connect/screens/home/post_view/delete_post.dart';
+import 'package:hs_connect/screens/home/post_view/like_dislike_post.dart';
+import 'package:hs_connect/screens/home/post_view/post_page.dart';
+import 'package:hs_connect/services/groups_database.dart';
+import 'package:hs_connect/services/posts_database.dart';
+import 'package:hs_connect/services/userInfo_database.dart';
 import 'package:hs_connect/Tools/HexColor.dart';
-import 'package:hs_connect/Widgets/voteCounter.dart';
 
 class PostCard extends StatefulWidget {
   final String postId;
@@ -17,7 +18,7 @@ class PostCard extends StatefulWidget {
   final String title;
   final String text;
   final String? image;
-  final String createdAt;
+  final Timestamp createdAt;
   List<String> likes;
   List<String> dislikes;
   final String currUserId; //ID of current user
@@ -213,7 +214,7 @@ class _PostCardState extends State<PostCard> {
                                   });
                                 },
                               ),
-                              voteCounter(),
+                              LikeDislikePost(currUserId: widget.currUserId, postId: widget.postId, likes: widget.likes, dislikes: widget.dislikes),
                             ]
                         ),
                       ]

@@ -47,17 +47,17 @@ class _DomainFeedState extends State<DomainFeed> {
               // when scroll up/down, fires once
               return Center(
                   child: PostCard(
-                postId: posts[index].postId,
-                userId: posts[index].userId,
-                groupId: posts[index].groupId,
-                title: posts[index].title,
-                text: posts[index].text,
-                image: posts[index].image,
-                createdAt: posts[index].createdAt,
-                likes: posts[index].likes,
-                dislikes: posts[index].dislikes,
-                currUserId: user.uid,
-              ));
+                    postId: posts[index].postId,
+                    userId: posts[index].userId,
+                    groupId: posts[index].groupId,
+                    title: posts[index].title,
+                    text: posts[index].text,
+                    image: posts[index].image,
+                    createdAt: posts[index].createdAt,
+                    likes: posts[index].likes,
+                    dislikes: posts[index].dislikes,
+                    currUserId: user.uid,
+                  ));
             },
           );
         }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hs_connect/Backend/screens/explore/explore.dart';
+import 'package:hs_connect/screens/explore/explore.dart';
 
-import 'package:hs_connect/Backend/screens/new_post/new_post.dart';
+import 'package:hs_connect/screens/new_post/new_post.dart';
 import 'package:hs_connect/Tools/HexColor.dart';
 
 class OGnavbar extends StatefulWidget {

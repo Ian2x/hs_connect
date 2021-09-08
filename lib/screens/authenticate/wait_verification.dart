@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hs_connect/Backend/screens/authenticate/register_user.dart';
-import 'package:hs_connect/Backend/services/auth.dart';
+import 'package:hs_connect/screens/authenticate/register_user.dart';
+import 'package:hs_connect/services/auth.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
 

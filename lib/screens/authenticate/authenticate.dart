@@ -1,5 +1,5 @@
-import 'package:hs_connect/Backend/screens/authenticate/register_email.dart';
-import 'package:hs_connect/Backend/screens/authenticate/sign_in.dart';
+import 'package:hs_connect/screens/authenticate/register_email.dart';
+import 'package:hs_connect/screens/authenticate/sign_in.dart';
 import 'package:flutter/material.dart';
 
 class Authenticate extends StatefulWidget {

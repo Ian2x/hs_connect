@@ -1,14 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-<<<<<<< HEAD:lib/Backend/screens/home/profile/profile.dart
-import 'package:hs_connect/Backend/models/user_data.dart';
-import 'package:hs_connect/Backend/screens/home/profile/profile_form.dart';
-import 'package:hs_connect/Backend/services/userInfo_database.dart';
-=======
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/screens/home/profile/profile_form.dart';
 import 'package:hs_connect/services/userInfo_database.dart';
->>>>>>> Ian's-Branch:lib/screens/home/profile/profile.dart
 import 'package:provider/provider.dart';
 
 class Profile extends StatelessWidget {
@@ -22,16 +16,16 @@ class Profile extends StatelessWidget {
 
     if (user.uid == profileId) {
       return Scaffold(
-            backgroundColor: Colors.brown[50],
-            appBar: AppBar(
-              title: Text('Your Profile'),
-              backgroundColor: Colors.brown[400],
-              elevation: 0.0,
-            ),
-            body: Container(
-              child: ProfileForm(),
-            ),
-          );
+        backgroundColor: Colors.brown[50],
+        appBar: AppBar(
+          title: Text('Your Profile'),
+          backgroundColor: Colors.brown[400],
+          elevation: 0.0,
+        ),
+        body: Container(
+          child: ProfileForm(),
+        ),
+      );
     }
     return Container(child: Text('someone else'));
   }
