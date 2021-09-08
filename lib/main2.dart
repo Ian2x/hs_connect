@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:hs_connect/Backend/models/user_data.dart';
-import 'package:hs_connect/Backend/screens/home/home.dart';
-import 'package:hs_connect/Backend/screens/wrapper.dart';
-import 'package:hs_connect/Backend/services/auth.dart';
-import 'package:hs_connect/Backend/services/userInfo_database.dart';
+import 'package:hs_connect/models/user_data.dart';
+import 'package:hs_connect/screens/home/home.dart';
+import 'package:hs_connect/screens/wrapper.dart';
+import 'package:hs_connect/services/auth.dart';
+import 'package:hs_connect/services/userInfo_database.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
