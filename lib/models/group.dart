@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 class AccessRestriction {
   final String restrictionType; // domain, county, state, or country
   final String restriction;
@@ -15,6 +17,11 @@ class AccessRestriction {
       'restrictionType': restrictionType,
       'restriction': restriction,
     };
+  }
+
+  // CURRENTLY NOT WORKING
+  static AccessRestriction hashmapToAR({required HashMap hashMap}) {
+    return AccessRestriction(restriction: hashMap['restriction'], restrictionType: hashMap['restrictionType']);
   }
 }
 

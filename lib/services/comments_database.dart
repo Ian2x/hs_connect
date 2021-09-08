@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:hs_connect/Backend/models/comment.dart';
-import 'package:hs_connect/Backend/models/post.dart';
+import 'package:hs_connect/models/comment.dart';
+import 'package:hs_connect/models/post.dart';
 
 
 void defaultFunc(dynamic parameter) {}
@@ -19,7 +19,7 @@ class CommentsDatabaseService {
   // collection reference
   final CollectionReference commentsCollection = FirebaseFirestore.instance.collection('comments');
 
-  Future newComment({required String? replyToId, required String text,
+  Future newComment({required String text,
     required String? imageURL,
     required String postId,
     Function(void) onValue = defaultFunc,
@@ -28,7 +28,6 @@ class CommentsDatabaseService {
         .add({
       'userId': userId,
       'postId': postId,
-      'replyToId': replyToId,
       'text': text,
       'image': imageURL == null || imageURL == '' ? '' : imageURL,
       'createdAt': DateTime.now(),
@@ -61,7 +60,6 @@ class CommentsDatabaseService {
     await commentsCollection.doc(commentId).update({'likes': FieldValue.arrayRemove([userId])});
   }
 
-
   Future dislikeComment({required String commentId, required String userId}) async {
     // remove like if liked
     await commentsCollection.doc(commentId).update({'likes': FieldValue.arrayRemove([userId])});
@@ -79,7 +77,6 @@ class CommentsDatabaseService {
     if (document.exists) {
       return Comment(
         commentId: document.id,
-        replyToId: document['replyToId'],
         postId: document['postId'],
         userId: document['userId'],
         text: document['text'],

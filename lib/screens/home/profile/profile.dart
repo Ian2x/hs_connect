@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hs_connect/Backend/models/user_data.dart';
-import 'package:hs_connect/Backend/screens/home/profile/profile_form.dart';
-import 'package:hs_connect/Backend/services/userInfo_database.dart';
+import 'package:hs_connect/models/user_data.dart';
+import 'package:hs_connect/screens/home/profile/profile_form.dart';
+import 'package:hs_connect/services/userInfo_database.dart';
 import 'package:provider/provider.dart';
 
 class Profile extends StatelessWidget {

@@ -2,18 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/screens/home/comment_view/comment_form.dart';
-import 'package:hs_connect/screens/home/comment_view/like_dislike_comment.dart';
 import 'package:hs_connect/screens/home/post_view/delete_post.dart';
-import 'package:hs_connect/screens/home/post_view/like_dislike_post.dart';
 import 'package:hs_connect/screens/home/post_view/post_page.dart';
-import 'package:hs_connect/screens/home/reply_feed/reply_feed.dart';
-import 'package:hs_connect/screens/home/reply_view/reply_form.dart';
+import 'package:hs_connect/screens/home/reply_view/like_dislike_reply.dart';
 import 'package:hs_connect/services/comments_database.dart';
+import 'package:hs_connect/services/replies_database.dart';
 import 'package:hs_connect/services/userInfo_database.dart';
 
-class CommentCard extends StatefulWidget {
+class ReplyCard extends StatefulWidget {
+  final String replyId;
   final String commentId;
-  final String postId;
   final String userId;
   final String text;
   final String? image;
@@ -22,27 +20,27 @@ class CommentCard extends StatefulWidget {
   List<String> dislikes;
   final String currUserId;
 
-  CommentCard(
+  ReplyCard(
       {Key? key,
-      required this.commentId,
-      required this.postId,
-      required this.userId,
-      required this.text,
-      required this.image,
-      required this.createdAt,
-      required this.likes,
-      required this.dislikes,
-      required this.currUserId})
+        required this.replyId,
+        required this.commentId,
+        required this.userId,
+        required this.text,
+        required this.image,
+        required this.createdAt,
+        required this.likes,
+        required this.dislikes,
+        required this.currUserId})
       : super(key: key);
 
   @override
-  _CommentCardState createState() => _CommentCardState();
+  _ReplyCardState createState() => _ReplyCardState();
 }
 
-class _CommentCardState extends State<CommentCard> {
+class _ReplyCardState extends State<ReplyCard> {
   UserInfoDatabaseService _userInfoDatabaseService = UserInfoDatabaseService();
 
-  CommentsDatabaseService _comments = CommentsDatabaseService();
+  RepliesDatabaseService _replies = RepliesDatabaseService();
 
   bool liked = false;
   bool disliked = false;
@@ -79,20 +77,15 @@ class _CommentCardState extends State<CommentCard> {
       key: ValueKey(widget.commentId),
       child: Card(
           child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-        ListTile(
-          title: Text(widget.text),
-          subtitle: Text(username),
-          trailing: LikeDislikeComment(
-              commentId: widget.commentId,
-              currUserId: widget.currUserId,
-              likes: widget.likes,
-              dislikes: widget.dislikes),
-        ),
-        RepliesFeed(commentId: widget.commentId),
-      ])),
+            ListTile(
+              title: Text(widget.text),
+              subtitle: Text(username),
+              trailing: LikeDislikeReply(replyId: widget.replyId, currUserId: widget.currUserId, likes: widget.likes, dislikes: widget.dislikes),
+            ),
+          ])),
       onDismissed: (DismissDirection direction) {
         setState(() {
-          _comments.deleteComment(commentId: widget.commentId, userId: widget.currUserId);
+          _replies.deleteReply(replyId: widget.replyId, userId: widget.currUserId);
         });
       },
     );

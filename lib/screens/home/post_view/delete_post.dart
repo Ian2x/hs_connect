@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hs_connect/Backend/services/posts_database.dart';
+import 'package:hs_connect/services/posts_database.dart';
 
 class DeletePost extends StatefulWidget {
   final String currUserId;
@@ -20,7 +20,10 @@ class _DeletePostState extends State<DeletePost> {
   Widget build(BuildContext context) {
 
   if(widget.currUserId!=widget.postUserId) {
-    return Container();
+    return Container(
+      height: 0.0,
+      width: 0.0,
+    );
   } else {
     return IconButton(
       icon: Icon(Icons.delete),

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:hs_connect/Backend/models/known_domain.dart';
+import 'package:hs_connect/models/known_domain.dart';
 
 class KnownDomainsDatabaseService {
   // collection reference

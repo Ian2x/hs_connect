@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hs_connect/Backend/services/comments_database.dart';
-import 'package:hs_connect/Backend/services/posts_database.dart';
+import 'package:hs_connect/services/comments_database.dart';
+import 'package:hs_connect/services/posts_database.dart';
 
 class LikeDislikeComment extends StatefulWidget {
   final String currUserId;
@@ -30,7 +30,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
       likeStatus = widget.likes.contains(widget.currUserId);
       dislikeStatus = widget.dislikes.contains(widget.currUserId);
       likeCount = widget.likes.length;
-      dislikeCount = widget.likes.length;
+      dislikeCount = widget.dislikes.length;
     });
     super.initState();
   }
@@ -158,8 +158,8 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
 /*
 
 import 'package:flutter/material.dart';
-import 'package:hs_connect/Backend/services/comments_database.dart';
-import 'package:hs_connect/Backend/services/posts_database.dart';
+import 'package:hs_connect/services/comments_database.dart';
+import 'package:hs_connect/services/posts_database.dart';
 
 class DislikeComment extends StatefulWidget {
   final String currUserId;

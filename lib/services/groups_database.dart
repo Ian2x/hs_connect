@@ -4,13 +4,13 @@ import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:hs_connect/Backend/models/group.dart';
-import 'package:hs_connect/Backend/models/idRanking.dart';
-import 'package:hs_connect/Backend/models/post.dart';
-import 'package:hs_connect/Backend/models/user_data.dart';
-import 'package:hs_connect/Backend/services/posts_database.dart';
-import 'package:hs_connect/Backend/services/userInfo_database.dart';
-import 'package:hs_connect/Backend/shared/constants.dart';
+import 'package:hs_connect/models/group.dart';
+import 'package:hs_connect/models/idRanking.dart';
+import 'package:hs_connect/models/post.dart';
+import 'package:hs_connect/models/user_data.dart';
+import 'package:hs_connect/services/posts_database.dart';
+import 'package:hs_connect/services/userInfo_database.dart';
+import 'package:hs_connect/shared/constants.dart';
 
 void defaultFunc(dynamic parameter) {}
 
@@ -24,11 +24,11 @@ class GroupsDatabaseService {
 
   Future newGroup(
       {required AccessRestriction accessRestrictions,
-        required String name,
-        required String userId,
-        String? image = '',
-        Function(void) onValue = defaultFunc,
-        Function onError = defaultFunc}) async {
+      required String name,
+      required String userId,
+      String? image = '',
+      Function(void) onValue = defaultFunc,
+      Function onError = defaultFunc}) async {
     QuerySnapshot docs = await groupsCollection
         .where('name', isEqualTo: name)
         .where('accessRestrictions', isEqualTo: accessRestrictions.asMap())
@@ -42,11 +42,11 @@ class GroupsDatabaseService {
       await groupsCollection
           .doc(docId)
           .set({
-        'accessRestrictions': accessRestrictions.asMap(),
-        'name': name,
-        'userId': userId,
-        'image': image,
-      })
+            'accessRestrictions': accessRestrictions.asMap(),
+            'name': name,
+            'userId': userId,
+            'image': image,
+          })
           .then(onValue)
           .catchError(onError);
       UserInfoDatabaseService _users = UserInfoDatabaseService();
@@ -73,7 +73,7 @@ class GroupsDatabaseService {
         accessRestrictions: AccessRestriction(
             restriction: accessRestrictions['restriction'],
             restrictionType: accessRestrictions[
-            'restrictionType']), //AccessRestriction.hashmapToAR(hashMap: snapshot.get('accessRestrictions') as HashMap<String, dynamic>),
+                'restrictionType']), //AccessRestriction.hashmapToAR(hashMap: snapshot.get('accessRestrictions') as HashMap<String, dynamic>),
       );
     } else {
       return null;
@@ -95,9 +95,9 @@ class GroupsDatabaseService {
   Future<QuerySnapshot<Object?>> getGroups({required List<UserGroup> userGroups}) async {
     return groupsCollection
         .where(FieldPath.documentId,
-        whereIn: userGroups.map((userGroup) {
-          return userGroup.groupId;
-        }).toList())
+            whereIn: userGroups.map((userGroup) {
+              return userGroup.groupId;
+            }).toList())
         .get();
   }
 

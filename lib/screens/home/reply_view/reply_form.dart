@@ -7,22 +7,23 @@ import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
+import 'package:hs_connect/services/replies_database.dart';
 import 'package:hs_connect/services/userInfo_database.dart';
 import 'package:hs_connect/shared/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:provider/provider.dart';
 
-class CommentForm extends StatefulWidget {
-  final String postId;
+class ReplyForm extends StatefulWidget {
+  final String commentId;
 
-  const CommentForm({Key? key, required this.postId}) : super(key: key);
+  const ReplyForm({Key? key, required this.commentId}) : super(key: key);
 
   @override
-  _CommentFormState createState() => _CommentFormState();
+  _ReplyFormState createState() => _ReplyFormState();
 }
 
-class _CommentFormState extends State<CommentForm> {
+class _ReplyFormState extends State<ReplyForm> {
   final _formKey = GlobalKey<FormState>();
 
   void handleError(err) {
@@ -60,8 +61,8 @@ class _CommentFormState extends State<CommentForm> {
               decoration: messageInputDecoration(onPressed: () async {
                 if (_formKey.currentState != null && _formKey.currentState!.validate()) {
                   setState(() => loading = true);
-                  await CommentsDatabaseService(userId: user.uid).newComment(
-                    postId: widget.postId,
+                  await RepliesDatabaseService(userId: user.uid).newReply(
+                    commentId: widget.commentId,
                     text: _text,
                     imageURL: _imageURL,
                     onValue: handleValue,
@@ -72,7 +73,7 @@ class _CommentFormState extends State<CommentForm> {
               validator: (val) {
                 if (val == null) return 'Error: null value';
                 if (val.isEmpty)
-                  return 'Can\'t create an empty comment';
+                  return 'Can\'t create an empty reply';
                 else
                   return null;
               },

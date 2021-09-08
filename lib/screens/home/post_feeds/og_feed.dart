@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hs_connect/Backend/models/post.dart';
-import 'package:hs_connect/Backend/services/posts_database.dart';
-import 'package:hs_connect/Backend/shared/loading.dart';
+import 'package:hs_connect/models/post.dart';
+import 'package:hs_connect/services/posts_database.dart';
+import 'package:hs_connect/shared/loading.dart';
 import 'package:provider/provider.dart';
 
 class FeedView extends StatefulWidget {

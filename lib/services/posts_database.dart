@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:hs_connect/Backend/models/post.dart';
-import 'package:hs_connect/Backend/services/comments_database.dart';
+import 'package:hs_connect/models/post.dart';
+import 'package:hs_connect/services/comments_database.dart';
 
 
 void defaultFunc(dynamic parameter) {}
@@ -65,6 +65,33 @@ class PostsDatabaseService {
   }
 
 
+
+  Future likePost({required String postId, required String userId}) async {
+    // remove dislike if disliked
+    await postsCollection.doc(postId).update({'dislikes': FieldValue.arrayRemove([userId])});
+    // like comment
+    return await postsCollection.doc(postId).update({'likes': FieldValue.arrayUnion([userId])});
+  }
+
+  Future unLikePost({required String postId, required String userId}) async {
+    // remove like
+    await postsCollection.doc(postId).update({'likes': FieldValue.arrayRemove([userId])});
+  }
+
+  Future dislikePost({required String postId, required String userId}) async {
+    // remove like if liked
+    await postsCollection.doc(postId).update({'likes': FieldValue.arrayRemove([userId])});
+    // dislike comment
+    return await postsCollection.doc(postId).update({'dislikes': FieldValue.arrayUnion([userId])});
+  }
+
+  Future unDislikePost({required String postId, required String userId}) async {
+    // remove like
+    await postsCollection.doc(postId).update({'dislikes': FieldValue.arrayRemove([userId])});
+  }
+
+
+
   // home data from snapshot
   Post? _postFromDocument(QueryDocumentSnapshot document) {
     if (document.exists) {
@@ -75,7 +102,7 @@ class PostsDatabaseService {
         image: document['image'],
         title: document['title'],
         text: document['text'],
-        createdAt: document['createdAt'].toString(),
+        createdAt: document['createdAt'],//.toString(),
         likes: (document['likes'] as List).map((item) => item as String).toList(),
         dislikes: (document['dislikes'] as List).map((item) => item as String).toList(),//document['dislikes'],
       );
@@ -85,11 +112,17 @@ class PostsDatabaseService {
   }
 
   Stream<List<Post?>> get singleGroupPosts {
-    return postsCollection.where('groupId', isEqualTo: groupId).snapshots().map((snapshot) => snapshot.docs.map(_postFromDocument).toList());
+    return postsCollection.where('groupId', isEqualTo: groupId).orderBy('createdAt', descending: true).snapshots().map((snapshot) => snapshot.docs.map(_postFromDocument).toList());
   }
 
   Stream<List<Post?>> get multiGroupPosts {
-    return postsCollection.where('groupId', whereIn: groupsId).snapshots().map((snapshot) => snapshot.docs.map(_postFromDocument).toList());
+    return postsCollection.where('groupId', whereIn: groupsId).orderBy('createdAt', descending: true).snapshots().map((snapshot) => snapshot.docs.map(_postFromDocument).toList());
+  }
+
+  Future getMultiGroupPosts() async {
+
+    final snapshot = await postsCollection.where('groupId', whereIn: groupsId).get();
+    return snapshot.docs.map(_postFromDocument).toList();
   }
 
 }

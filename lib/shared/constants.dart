@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+const daysTrending = 2;
+
 const textInputDecoration = InputDecoration(
   fillColor: Colors.white,
   filled: true,
@@ -10,6 +12,7 @@ const textInputDecoration = InputDecoration(
       borderSide: BorderSide(color: Colors.pink, width: 2.0)
   ),
 );
+
 
 typedef voidFunction = void Function();
 InputDecoration messageInputDecoration({required voidFunction onPressed}) {

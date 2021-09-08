@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ianeric.hs_connect">
-   <application
+    <application
         android:label="hs_connect"
         android:icon="@mipmap/ic_launcher">
         <activity

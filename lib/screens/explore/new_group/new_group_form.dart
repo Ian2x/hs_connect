@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hs_connect/Backend/models/group.dart';
-import 'package:hs_connect/Backend/models/user_data.dart';
-import 'package:hs_connect/Backend/services/groups_database.dart';
-import 'package:hs_connect/Backend/shared/constants.dart';
-import 'package:hs_connect/Backend/shared/loading.dart';
+import 'package:hs_connect/models/group.dart';
+import 'package:hs_connect/models/user_data.dart';
+import 'package:hs_connect/services/groups_database.dart';
+import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/loading.dart';
 import 'package:provider/provider.dart';
 
 class AccessOption {
@@ -52,10 +52,16 @@ class _NewGroupFormState extends State<NewGroupForm> {
 
       final List<AccessRestriction> accessOptions = [
         AccessRestriction(restrictionType: 'domain', restriction: userData.domain),
-        AccessRestriction(restrictionType: 'county', restriction: userData.county),
-        AccessRestriction(restrictionType: 'state', restriction: userData.state),
-        AccessRestriction(restrictionType: 'country', restriction: userData.country),
       ];
+      if(userData.county!=null) {
+        accessOptions.add(AccessRestriction(restrictionType: 'county', restriction: userData.county!));
+      }
+      if(userData.state!=null) {
+        accessOptions.add(AccessRestriction(restrictionType: 'state', restriction: userData.state!));
+      }
+      if(userData.country!=null) {
+        accessOptions.add(AccessRestriction(restrictionType: 'country', restriction: userData.country!));
+      }
 
       return Form(
         key: _formKey,

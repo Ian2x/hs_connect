@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:hs_connect/Backend/models/group.dart';
-import 'package:hs_connect/Backend/models/known_domain.dart';
-import 'package:hs_connect/Backend/models/user_data.dart';
-import 'package:hs_connect/Backend/services/groups_database.dart';
-import 'package:hs_connect/Backend/services/known_domains_database.dart';
+import 'package:hs_connect/models/group.dart';
+import 'package:hs_connect/models/known_domain.dart';
+import 'package:hs_connect/models/user_data.dart';
+import 'package:hs_connect/services/groups_database.dart';
+import 'package:hs_connect/services/known_domains_database.dart';
 
 class UserInfoDatabaseService {
   final String? userId;
@@ -50,6 +50,10 @@ class UserInfoDatabaseService {
         })
         .then(onValue)
         .catchError(onError);
+  }
+
+  Future joinGroup({required String userId, required String groupId, required bool public}) async {
+    return await userInfoCollection.doc(userId).update({'userGroups': FieldValue.arrayUnion([{'groupId': groupId, 'public': public}])});
   }
 
   // get other users from userId

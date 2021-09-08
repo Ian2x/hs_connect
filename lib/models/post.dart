@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Post {
   final String postId;
   final String userId;
@@ -5,7 +7,7 @@ class Post {
   String title;
   String text;
   String? image;
-  final String createdAt;
+  final Timestamp createdAt;
   List<String> likes;
   List<String> dislikes;
 

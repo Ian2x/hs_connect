@@ -1,11 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hs_connect/Backend/models/user_data.dart';
-import 'package:hs_connect/Backend/screens/explore/explore.dart';
-import 'package:hs_connect/Backend/screens/home/home.dart';
-import 'package:hs_connect/Backend/screens/new_post/post_form.dart';
+import 'package:hs_connect/models/user_data.dart';
+import 'package:hs_connect/screens/explore/explore.dart';
+import 'package:hs_connect/screens/home/home.dart';
+import 'package:hs_connect/screens/new_post/post_form.dart';
 import 'package:provider/provider.dart';
-import 'package:hs_connect/Widgets/OGnavbar.dart';
 
 class NewPost extends StatelessWidget {
   const NewPost({Key? key}) : super(key: key);
@@ -26,7 +25,49 @@ class NewPost extends StatelessWidget {
       body: Container(
         child: PostForm(),
       ),
-      bottomNavigationBar: OGnavbar(),
+      bottomNavigationBar: BottomNavigationBar(
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: IconButton(
+              padding: EdgeInsets.zero,
+              constraints: BoxConstraints(),
+              icon: const Icon(Icons.school, size: 18.0),
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Home()),
+                );
+              },
+            ),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: IconButton(
+              padding: EdgeInsets.zero,
+              constraints: BoxConstraints(),
+              icon: const Icon(Icons.add, size: 18.0),
+              onPressed: () { },
+            ),
+            label: 'Post',
+          ),
+          BottomNavigationBarItem(
+            icon: IconButton(
+              padding: EdgeInsets.zero,
+              constraints: BoxConstraints(),
+              icon: const Icon(Icons.search_rounded, size: 18.0),
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Explore()),
+                );
+              },
+            ),
+            label: 'Explore',
+          ),
+        ],
+      ),
     );
   }
 }
