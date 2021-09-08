@@ -32,10 +32,10 @@ class _HomeState extends State<Home> {
       initialIndex: 1,
       length: 3,
       child: Scaffold(
-        backgroundColor: HexColor("#000000"),
+        backgroundColor: HexColor("#121212"),
           appBar: AppBar(
             title: Text('HS Connect'),
-            backgroundColor: HexColor("#000000"),
+            backgroundColor: HexColor("#121212"),
             elevation: 0.0,
             actions: <Widget>[
               TextButton.icon(

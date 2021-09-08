@@ -8,10 +8,11 @@ import 'package:hs_connect/Backend/services/posts_database.dart';
 import 'package:hs_connect/Backend/services/userInfo_database.dart';
 import 'package:hs_connect/Backend/services/groups_database.dart';
 import 'package:hs_connect/Tools/HexColor.dart';
+import 'package:hs_connect/Widgets/voteCounter.dart';
 
 class PostCard extends StatefulWidget {
   final String postId;
-  final String userId;
+  final String userId;  //ID of author
   final String groupId;
   final String title;
   final String text;
@@ -19,7 +20,7 @@ class PostCard extends StatefulWidget {
   final String createdAt;
   List<String> likes;
   List<String> dislikes;
-  final String currUserId;
+  final String currUserId; //ID of current user
 
   PostCard(
       {Key? key,
@@ -131,6 +132,7 @@ class _PostCardState extends State<PostCard> {
                                         fontSize: 15.0,
                                         color: HexColor("#DADDDF"),
                                         fontFamily: 'Segoe UI',
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                     Text(
@@ -156,8 +158,8 @@ class _PostCardState extends State<PostCard> {
                                   style: TextStyle(
                                     fontSize: 15.0,
                                     color: Colors.white,
-                                    fontWeight: FontWeight.bold,
                                     fontFamily: "Segoe UI",
+                                    fontWeight: FontWeight.bold,
                                   )
                               )
                             ]
@@ -188,6 +190,7 @@ class _PostCardState extends State<PostCard> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               IconButton(
+                                color: Colors.white,
                                 padding: EdgeInsets.zero,
                                 constraints: BoxConstraints(),
                                 icon: const Icon(Icons.share, size: 13.0),
@@ -199,6 +202,7 @@ class _PostCardState extends State<PostCard> {
                                 },
                               ),
                               IconButton(
+                                color: Colors.white,
                                 padding: EdgeInsets.zero,
                                 constraints: BoxConstraints(),
                                 icon: const Icon(Icons.comment, size: 13.0),
@@ -209,7 +213,7 @@ class _PostCardState extends State<PostCard> {
                                   });
                                 },
                               ),
-                              //voteCounter(),
+                              voteCounter(),
                             ]
                         ),
                       ]

@@ -67,20 +67,20 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: Poppins
-      fonts:
-        - asset: fonts/Poppins-Light.ttf
-        - asset: fonts/Poppins-Medium.ttf
-    - family: Inter
-      fonts:
-        - asset: fonts/Inter-Medium.ttf
-        - asset: fonts/Inter-Regular.ttf
-    - family: Segoe UI
-      fonts:
-        - asset: fonts/Segoe UI.ttf
-        - asset: fonts/Segoe UI Bold.ttf
-        - asset: fonts/Segoe UI Bold Italic.ttf
-        - asset: fonts/Segoe UI Italic.ttf
+  - family: Poppins
+    fonts:
+      - asset: fonts/Poppins-Light.ttf
+      - asset: fonts/Poppins-Medium.ttf
+  - family: Inter
+    fonts:
+      - asset: fonts/Inter-Medium.ttf
+      - asset: fonts/Inter-Regular.ttf
+  - family: Segoe UI
+    fonts:
+      - asset: fonts/Segoe UI.ttf
+      - asset: fonts/Segoe UI Bold.ttf
+      - asset: fonts/Segoe UI Bold Italic.ttf
+      - asset: fonts/Segoe UI Italic.ttf
 
 
 

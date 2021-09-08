@@ -24,7 +24,7 @@ class _OGnavbarState extends State<OGnavbar> {
           ],
         ),
         child:  BottomNavigationBar(
-          backgroundColor: HexColor("#000000"),
+          backgroundColor: HexColor("#121212"),
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: IconButton(
