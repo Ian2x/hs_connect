@@ -26,7 +26,7 @@ class UserData {
   final String? state;
   final String? country;
   List<UserGroup> userGroups;
-  String imageURL;
+  String? imageURL;
   int score;
 
   UserData(
@@ -37,6 +37,6 @@ class UserData {
       this.state = '<state>',
       this.country = '<country>',
       this.userGroups = const [],
-      this.imageURL = '',
+      this.imageURL = null,
       this.score = 0});
 }

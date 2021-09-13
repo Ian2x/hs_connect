@@ -32,24 +32,35 @@ class UserInfoDatabaseService {
       'state': kd!=null ? kd.state : null,
       'country': kd!=null ? kd.country : null,
       'userGroups': [UserGroup(groupId: docId, public: true).asMap()],
-      'imageURL': '',
+      'imageURL': null,
       'score': 0,
     });
   }
 
   Future updateProfile(
       {required String displayedName,
-      required String imageURL,
+      required String? imageURL,
       required Function(void) onValue,
       required Function onError}) async {
-    return await userInfoCollection
-        .doc(userId)
-        .update({
-          'displayedName': displayedName,
-          'imageURL': imageURL,
-        })
-        .then(onValue)
-        .catchError(onError);
+
+    if(imageURL!=null) {
+      return await userInfoCollection
+          .doc(userId)
+          .update({
+        'displayedName': displayedName,
+        'imageURL': imageURL,
+      })
+          .then(onValue)
+          .catchError(onError);
+    } else {
+      return await userInfoCollection
+          .doc(userId)
+          .update({
+        'displayedName': displayedName,
+      })
+          .then(onValue)
+          .catchError(onError);
+    }
   }
 
   Future joinGroup({required String userId, required String groupId, required bool public}) async {

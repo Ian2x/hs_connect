@@ -13,8 +13,9 @@ class Profile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
+    final userData = Provider.of<UserData?>(context);
 
-    if (user.uid == profileId) {
+    if (user.uid == profileId && userData!=null) {
       return Scaffold(
             backgroundColor: Colors.brown[50],
             appBar: AppBar(
@@ -23,7 +24,7 @@ class Profile extends StatelessWidget {
               elevation: 0.0,
             ),
             body: Container(
-              child: ProfileForm(),
+              child: ProfileForm(currDisplayName: userData.displayedName, currImageURL: userData.imageURL,),
             ),
           );
     }

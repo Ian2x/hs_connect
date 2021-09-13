@@ -27,7 +27,7 @@ class RepliesDatabaseService {
       'userId': userId,
       'commentId': commentId,
       'text': text,
-      'image': imageURL == null || imageURL == '' ? '' : imageURL,
+      'image': imageURL,
       'createdAt': DateTime.now(),
       'likes': List<String>.empty(),
       'dislikes': List<String>.empty(),

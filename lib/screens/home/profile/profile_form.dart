@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/screens/home/profile/profile_pic_picker.dart';
@@ -9,7 +11,10 @@ import 'package:hs_connect/shared/constants.dart';
 import 'package:provider/provider.dart';
 
 class ProfileForm extends StatefulWidget {
-  const ProfileForm({Key? key}) : super(key: key);
+  const ProfileForm({Key? key, required this.currDisplayName, required this.currImageURL}) : super(key: key);
+
+  final String currDisplayName;
+  final String? currImageURL;
 
   @override
   _ProfileFormState createState() => _ProfileFormState();
@@ -20,9 +25,20 @@ class _ProfileFormState extends State<ProfileForm> {
 
   // form values
   String? _displayedName;
-  String? _imageURL;
+  String? _initialImageURL;
   String error = '';
   bool loading = false;
+
+  ImageStorage _images = ImageStorage();
+
+  String? newFileURL;
+  File? newFile;
+
+  @override
+  void initState() {
+    _displayedName = widget.currDisplayName;
+    _initialImageURL = widget.currImageURL;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +53,14 @@ class _ProfileFormState extends State<ProfileForm> {
     }
 
     void handleValue(val) {
-      loading = false;
+      setState(() => loading = false);
       Navigator.pop(context);
+    }
+
+    void setPic(File newFile2) {
+      setState(() {
+        newFile = newFile2;
+      });
     }
 
     if (userData == null) {
@@ -71,39 +93,33 @@ class _ProfileFormState extends State<ProfileForm> {
               onChanged: (val) =>
                   setState(() => _displayedName = val),
             ),
-            SizedBox(height: 20.0),
-            TextFormField(
-              initialValue: userData.imageURL,
-              decoration: textInputDecoration,
-              validator: (val) {
-                if (val == null)
-                  return 'Error: null value';
-                else
-                  return null;
-              },
-              onChanged: (val) => setState(() => _imageURL = val),
-            ),
+            ProfilePicPicker(width: profilePicWidth, height: profilePicHeight, setPic: setPic, initialImageURL: _initialImageURL,),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary: Colors.pink[400],
                 ),
                 onPressed: () async {
-                  /*
                   if (_formKey.currentState != null &&
                       _formKey.currentState!.validate()) {
+
                     setState(() => loading = true);
+
+                    if (newFile!=null) {
+                      // upload newFile
+                      final downloadURL = await _images.uploadProfilePic(file: newFile!, oldImageURL: _initialImageURL);
+                      setState(() {
+                        newFileURL = downloadURL;
+                      });
+                    }
+
                     await UserInfoDatabaseService(userId: user.uid)
                         .updateProfile(
-                      displayedName:
-                      _displayedName ?? userData.displayedName,
-                      imageURL: _imageURL ?? userData.imageURL,
+                      displayedName: _displayedName ?? userData.displayedName,
+                      imageURL: newFileURL, // _initialImageURL ?? userData.imageURL,
                       onValue: handleValue,
                       onError: handleError,
                     );
                   }
-                  */
-                  ImageStorage temp = ImageStorage();
-                  temp.listExample();
                 },
                 child: Text(
                   'Update',
@@ -114,7 +130,6 @@ class _ProfileFormState extends State<ProfileForm> {
               error,
               style: TextStyle(color: Colors.red, fontSize: 14.0),
             ),
-            ProfilePicPicker(),
           ],
         ),
       );

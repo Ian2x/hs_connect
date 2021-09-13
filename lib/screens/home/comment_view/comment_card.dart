@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/user_data.dart';
@@ -10,6 +12,8 @@ import 'package:hs_connect/screens/home/reply_feed/reply_feed.dart';
 import 'package:hs_connect/screens/home/reply_view/reply_form.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/services/userInfo_database.dart';
+import 'package:flutter/foundation.dart';
+
 
 class CommentCard extends StatefulWidget {
   final String commentId;
@@ -50,6 +54,7 @@ class _CommentCardState extends State<CommentCard> {
 
   @override
   void initState() {
+    print(widget.image);
     // initialize liked/disliked
     if (widget.likes.contains(widget.currUserId)) {
       setState(() {
@@ -59,6 +64,7 @@ class _CommentCardState extends State<CommentCard> {
       setState(() {
         disliked = true;
       });
+
     }
     // find username for userId
     // _userInfoDatabaseService.userId = widget.userId;
@@ -75,6 +81,7 @@ class _CommentCardState extends State<CommentCard> {
 
   @override
   Widget build(BuildContext context) {
+
     return Dismissible(
       key: ValueKey(widget.commentId),
       child: Card(
@@ -82,12 +89,18 @@ class _CommentCardState extends State<CommentCard> {
         ListTile(
           title: Text(widget.text),
           subtitle: Text(username),
-          trailing: LikeDislikeComment(
+          trailing:
+          LikeDislikeComment(
               commentId: widget.commentId,
               currUserId: widget.currUserId,
               likes: widget.likes,
               dislikes: widget.dislikes),
+
         ),
+        widget.image!=null ? Semantics(
+          label: 'new_profile_pic_picked_image',
+          child: Image.network(widget.image!) // kIsWeb ? Image.network(widget.image!) : Image.file(File(widget.image!)),
+        ) : Container(),
         RepliesFeed(commentId: widget.commentId),
       ])),
       onDismissed: (DismissDirection direction) {

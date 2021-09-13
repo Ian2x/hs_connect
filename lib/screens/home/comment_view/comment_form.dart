@@ -1,17 +1,22 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/user_data.dart';
+import 'package:hs_connect/screens/home/comment_view/comment_pic_picker.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
+import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/services/userInfo_database.dart';
 import 'package:hs_connect/shared/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/foundation.dart';
+
 
 class CommentForm extends StatefulWidget {
   final String postId;
@@ -35,17 +40,30 @@ class _CommentFormState extends State<CommentForm> {
     loading = false;
   }
 
+  String? newFileURL;
+  File? newFile;
+
   // form values
   String _text = '';
-  String? _imageURL;
   String error = '';
   bool loading = false;
+
+  ImageStorage _images = ImageStorage();
+
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
 
     final userData = Provider.of<UserData?>(context);
+
+
+
+    void setPic(File newFile2) {
+      setState(() {
+        newFile = newFile2;
+      });
+    }
 
     if (userData == null) {
       // Don't expect to be here, but just in case
@@ -59,16 +77,26 @@ class _CommentFormState extends State<CommentForm> {
               initialValue: '',
               decoration: messageInputDecoration(onPressed: () async {
                 if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+
                   setState(() => loading = true);
+
+                  if (newFile!=null) {
+                    // upload newFile
+                    final downloadURL = await _images.uploadImage(file: newFile!);
+                    setState(() {
+                      newFileURL = downloadURL;
+                    });
+                  }
+
                   await CommentsDatabaseService(userId: user.uid).newComment(
                     postId: widget.postId,
                     text: _text,
-                    imageURL: _imageURL,
+                    imageURL: newFileURL,
                     onValue: handleValue,
                     onError: handleError,
                   );
                 }
-              }),
+              }, setPic: setPic),
               validator: (val) {
                 if (val == null) return 'Error: null value';
                 if (val.isEmpty)
@@ -78,6 +106,10 @@ class _CommentFormState extends State<CommentForm> {
               },
               onChanged: (val) => setState(() => _text = val),
             ),
+            newFile!=null ? Semantics(
+        label: 'new_profile_pic_picked_image',
+        child: kIsWeb ? Image.network(newFile!.path) : Image.file(File(newFile!.path)),
+      ) : Container(),
             Text(
               error,
               style: TextStyle(color: Colors.red, fontSize: 14.0),

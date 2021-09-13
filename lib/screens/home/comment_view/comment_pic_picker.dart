@@ -11,21 +11,20 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class ProfilePicPicker extends StatefulWidget {
-  ProfilePicPicker({Key? key, this.width, this.height, this.quality, required this.setPic, this.initialImageURL})
+class CommentPicPicker extends StatefulWidget {
+  CommentPicPicker({Key? key, this.width, this.height, this.quality, required this.setPic})
       : super(key: key);
 
   final double? width;
   final double? height;
   final int? quality;
   final Function setPic; // set state in profile form
-  final String? initialImageURL;
 
   @override
-  _ProfilePicPickerState createState() => _ProfilePicPickerState();
+  _CommentPicPickerState createState() => _CommentPicPickerState();
 }
 
-class _ProfilePicPickerState extends State<ProfilePicPicker> {
+class _CommentPicPickerState extends State<CommentPicPicker> {
   XFile? _imageFile;
 
   dynamic _pickImageError;
@@ -46,9 +45,9 @@ class _ProfilePicPickerState extends State<ProfilePicPicker> {
         _imageFile = pickedFile;
       });
       if (_imageFile != null) {
-        widget.setPic(File(_imageFile!.path));
+        widget.setPic(File(_imageFile!.path), _imageFile!.path);
       } else {
-        widget.setPic(null);
+        widget.setPic(null, null);
       }
     } catch (e) {
       setState(() {
@@ -57,14 +56,14 @@ class _ProfilePicPickerState extends State<ProfilePicPicker> {
     }
   }
 
-  Widget _previewImages() {
+  Widget? _previewImages() {
     final Text? retrieveError = _getRetrieveErrorWidget();
     if (retrieveError != null) {
       return retrieveError;
     }
     if (_imageFile != null) {
       return Semantics(
-        label: 'new_profile_pic_picked_image',
+        label: 'comment_pic_picked_image',
         child: kIsWeb ? Image.network(_imageFile!.path) : Image.file(File(_imageFile!.path)),
       );
     } else if (_pickImageError != null) {
@@ -72,17 +71,10 @@ class _ProfilePicPickerState extends State<ProfilePicPicker> {
         'Pick image error: $_pickImageError',
         textAlign: TextAlign.center,
       );
-    } else if (widget.initialImageURL != null) {
-      return Image.network(widget.initialImageURL!);
-    } else {
-      return const Text(
-        'You have not yet picked an image.',
-        textAlign: TextAlign.center,
-      );
     }
   }
 
-  Widget _handlePreview() {
+  Widget? _handlePreview() {
     return _previewImages();
   }
 
@@ -117,7 +109,7 @@ class _ProfilePicPickerState extends State<ProfilePicPicker> {
                   textAlign: TextAlign.center,
                 );
               case ConnectionState.done:
-                return _handlePreview();
+                return Container(child: _handlePreview());
               default:
                 if (snapshot.hasError) {
                   return Text(

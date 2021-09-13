@@ -69,7 +69,7 @@ class _ReplyFormState extends State<ReplyForm> {
                     onError: handleError,
                   );
                 }
-              }),
+              }, setPic: () {}),
               validator: (val) {
                 if (val == null) return 'Error: null value';
                 if (val.isEmpty)
