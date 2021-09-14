@@ -79,7 +79,7 @@ class _PostCardState extends State<PostCard> {
   }
 
   void getGroupName() async {
-    final Group? fetchGroupName = await _GroupsDatabaseService.group(groupId: widget.groupId);
+    final Group? fetchGroupName = await _GroupsDatabaseService.getGroupData(groupId: widget.groupId);
     setState(() {
       groupName = fetchGroupName != null ? fetchGroupName.name : '<Failed to retrieve user name>';
     });
@@ -110,7 +110,7 @@ class _PostCardState extends State<PostCard> {
       },
 
       child: Card(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0)),
           margin: EdgeInsets.fromLTRB(0.0,5.0,0.0, 5.0), //margin for SPACING
           color: HexColor("#292929"),
           elevation: 0.3,
@@ -157,7 +157,7 @@ class _PostCardState extends State<PostCard> {
                               Text(
                                   widget.title,
                                   style: TextStyle(
-                                    fontSize: 15.0,
+                                    fontSize: 20.0,
                                     color: Colors.white,
                                     fontFamily: "Segoe UI",
                                     fontWeight: FontWeight.bold,
@@ -166,7 +166,7 @@ class _PostCardState extends State<PostCard> {
                             ]
                         ),
 
-                        //SizedBox(height: 3.0),
+                        SizedBox(height: 5.0),
 
                         //TEXT ROW
                         Row(
