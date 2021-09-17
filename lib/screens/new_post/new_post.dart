@@ -20,7 +20,6 @@ class NewPost extends StatelessWidget {
         title: Text('Create a new post'),
         backgroundColor: Colors.brown[400],
         elevation: 0.0,
-
       ),
       body: Container(
         child: PostForm(),
@@ -35,8 +34,7 @@ class NewPost extends StatelessWidget {
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => Home()),
+                  MaterialPageRoute(builder: (context) => Home()),
                 );
               },
             ),
@@ -47,7 +45,7 @@ class NewPost extends StatelessWidget {
               padding: EdgeInsets.zero,
               constraints: BoxConstraints(),
               icon: const Icon(Icons.add, size: 18.0),
-              onPressed: () { },
+              onPressed: () {},
             ),
             label: 'Post',
           ),
@@ -59,8 +57,7 @@ class NewPost extends StatelessWidget {
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => Explore()),
+                  MaterialPageRoute(builder: (context) => Explore()),
                 );
               },
             ),

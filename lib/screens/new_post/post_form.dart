@@ -42,7 +42,6 @@ class _PostFormState extends State<PostForm> {
   // form values
   String _title = '';
   String _text = '';
-  String? _imageURL;
   String _groupId = '';
   String error = '';
   bool loading = false;
@@ -62,106 +61,91 @@ class _PostFormState extends State<PostForm> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final groups = (snapshot.data as QuerySnapshot).docs.toList();
-              return Form(
-                key: _formKey,
-                child: Column(
-                  children: <Widget>[
-                    Text(
-                      'Create a new post',
-                      style: TextStyle(fontSize: 18.0),
-                    ),
-                    SizedBox(height: 5.0),
-                    Text('Post title'),
-                    TextFormField(
-                      initialValue: '',
-                      decoration: textInputDecoration,
-                      validator: (val) {
-                        if (val == null) return 'Error: null value';
-                        if (val.isEmpty)
-                          return 'Can\'t create an empty post';
-                        else
-                          return null;
-                      },
-                      onChanged: (val) => setState(() => _title = val),
-                    ),
-                    SizedBox(height: 5.0),
-                    Text('Post text'),
-                    TextFormField(
-                      initialValue: '',
-                      decoration: textInputDecoration,
-                      validator: (val) {
-                        if (val == null) return 'Error: null value';
-                        if (val.isEmpty)
-                          return 'Can\'t create an empty post';
-                        else
-                          return null;
-                      },
-                      onChanged: (val) => setState(() => _text = val),
-                    ),
-                    SizedBox(height: 5.0),
-                    Text('(optional) Image URL'),
-                    TextFormField(
-                      initialValue: 'https://food.fnr.sndimg.com/content/dam/images/food/fullset/2012/11/2/0/DV1510H_fried-chicken-recipe-10_s4x3.jpg.rend.hgtvcom.616.462.suffix/1568222255998.jpeg',
-                      decoration: textInputDecoration,
-                      validator: (val) {
-                        if (val == null)
-                          return 'Error: null value';
-                        else
-                          return null;
-                      },
-                      onChanged: (val) => setState(() => _imageURL = val),
-                    ),
-                    SizedBox(height: 5.0),
-                    DropdownButtonFormField<String>(
-                      decoration: textInputDecoration,
-                      value: _groupId != '' ? _groupId : null,
-                      items: groups.map((group) {
-                        return DropdownMenuItem(
-                          value: group.id,
-                          child: Text('${group['name']}'),
-                        );
-                      }).toList(),
-                      onChanged: (val) => setState(() => _groupId = val!),
-                      validator: (val) {
-                        if (val == null)
-                          return 'Must select an access restriction';
-                        else
-                          return null;
-                      }
-                    ),
-                    ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.pink[400],
-                        ),
-                        onPressed: () async {
-                          print(_imageURL);
-                          print(Uri.parse(_imageURL!));
-
-                          /*
-                          if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-                            setState(() => loading = true);
-                            await PostsDatabaseService(userId: user.uid).newPost(
-                              title: _title,
-                              text: _text,
-                              imageURL: _imageURL,
-                              groupId: _groupId,
-                              onValue: handleValue,
-                              onError: handleError,
-                            );
-                          }
-                           */
+              return SingleChildScrollView(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: <Widget>[
+                      Text(
+                        'Create a new post',
+                        style: TextStyle(fontSize: 18.0),
+                      ),
+                      SizedBox(height: 5.0),
+                      Text('Post title'),
+                      TextFormField(
+                        initialValue: '',
+                        decoration: textInputDecoration,
+                        validator: (val) {
+                          if (val == null) return 'Error: null value';
+                          if (val.isEmpty)
+                            return 'Can\'t create an empty post';
+                          else
+                            return null;
                         },
-                        child: Text(
-                          'Make post',
-                          style: TextStyle(color: Colors.white),
-                        )),
-                    SizedBox(height: 12.0),
-                    Image.network('https://food.fnr.sndimg.com/content/dam/images/food/fullset/2012/11/2/0/DV1510H_fried-chicken-recipe-10_s4x3.jpg.rend.hgtvcom.616.462.suffix/1568222255998.jpeg'),
-                    Text(
-                      error,
-                      style: TextStyle(color: Colors.red, fontSize: 14.0),
-                    )
-                  ],
+                        onChanged: (val) => setState(() => _title = val),
+                      ),
+                      SizedBox(height: 5.0),
+                      Text('Post text'),
+                      TextFormField(
+                        initialValue: '',
+                        decoration: textInputDecoration,
+                        validator: (val) {
+                          if (val == null) return 'Error: null value';
+                          if (val.isEmpty)
+                            return 'Can\'t create an empty post';
+                          else
+                            return null;
+                        },
+                        onChanged: (val) => setState(() => _text = val),
+                      ),
+                      SizedBox(height: 5.0),
+                      DropdownButtonFormField<String>(
+                        decoration: textInputDecoration,
+                        value: _groupId != '' ? _groupId : null,
+                        items: groups.map((group) {
+                          return DropdownMenuItem(
+                            value: group.id,
+                            child: Text('${group['name']}'),
+                          );
+                        }).toList(),
+                        onChanged: (val) => setState(() => _groupId = val!),
+                        validator: (val) {
+                          if (val == null)
+                            return 'Must select an access restriction';
+                          else
+                            return null;
+                        }
+                      ),
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.pink[400],
+                          ),
+                          onPressed: () async {
+                            /*
+                            if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+                              setState(() => loading = true);
+                              await PostsDatabaseService(userId: user.uid).newPost(
+                                title: _title,
+                                text: _text,
+                                imageURL: _imageURL,
+                                groupId: _groupId,
+                                onValue: handleValue,
+                                onError: handleError,
+                              );
+                            }
+                             */
+                          },
+                          child: Text(
+                            'Make post',
+                            style: TextStyle(color: Colors.white),
+                          )),
+                      SizedBox(height: 12.0),
+                      Text(
+                        error,
+                        style: TextStyle(color: Colors.red, fontSize: 14.0),
+                      )
+                    ],
+                  ),
                 ),
               );
             } else {

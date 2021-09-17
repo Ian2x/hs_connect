@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/user_data.dart';
-import 'package:hs_connect/screens/home/comment_view/comment_form.dart';
-import 'package:hs_connect/screens/home/post_view/delete_post.dart';
-import 'package:hs_connect/screens/home/post_view/post_page.dart';
 import 'package:hs_connect/screens/home/reply_view/like_dislike_reply.dart';
-import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/services/replies_database.dart';
 import 'package:hs_connect/services/userInfo_database.dart';
 
@@ -22,15 +17,15 @@ class ReplyCard extends StatefulWidget {
 
   ReplyCard(
       {Key? key,
-        required this.replyId,
-        required this.commentId,
-        required this.userId,
-        required this.text,
-        required this.image,
-        required this.createdAt,
-        required this.likes,
-        required this.dislikes,
-        required this.currUserId})
+      required this.replyId,
+      required this.commentId,
+      required this.userId,
+      required this.text,
+      required this.image,
+      required this.createdAt,
+      required this.likes,
+      required this.dislikes,
+      required this.currUserId})
       : super(key: key);
 
   @override
@@ -77,12 +72,20 @@ class _ReplyCardState extends State<ReplyCard> {
       key: ValueKey(widget.commentId),
       child: Card(
           child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-            ListTile(
-              title: Text(widget.text),
-              subtitle: Text(username),
-              trailing: LikeDislikeReply(replyId: widget.replyId, currUserId: widget.currUserId, likes: widget.likes, dislikes: widget.dislikes),
-            ),
-          ])),
+        ListTile(
+          title: Text(widget.text),
+          subtitle: Text(username),
+          trailing: LikeDislikeReply(
+              replyId: widget.replyId,
+              currUserId: widget.currUserId,
+              likes: widget.likes,
+              dislikes: widget.dislikes),
+        ),
+            widget.image!=null ? Semantics(
+                label: 'new_profile_pic_picked_image',
+                child: Image.network(widget.image!) // kIsWeb ? Image.network(widget.image!) : Image.file(File(widget.image!)),
+            ) : Container(),
+      ])),
       onDismissed: (DismissDirection direction) {
         setState(() {
           _replies.deleteReply(replyId: widget.replyId, userId: widget.currUserId);
@@ -91,3 +94,35 @@ class _ReplyCardState extends State<ReplyCard> {
     );
   }
 }
+
+/*
+
+return Dismissible(
+      key: ValueKey(widget.commentId),
+      child: Card(
+          child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+        ListTile(
+          title: Text(widget.text),
+          subtitle: Text(username),
+          trailing:
+          LikeDislikeComment(
+              commentId: widget.commentId,
+              currUserId: widget.currUserId,
+              likes: widget.likes,
+              dislikes: widget.dislikes),
+
+        ),
+        widget.image!=null ? Semantics(
+          label: 'new_profile_pic_picked_image',
+          child: Image.network(widget.image!) // kIsWeb ? Image.network(widget.image!) : Image.file(File(widget.image!)),
+        ) : Container(),
+        RepliesFeed(commentId: widget.commentId),
+      ])),
+      onDismissed: (DismissDirection direction) {
+        setState(() {
+          _comments.deleteComment(commentId: widget.commentId, userId: widget.currUserId);
+        });
+      },
+    );
+
+ */
