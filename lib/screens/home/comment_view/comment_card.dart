@@ -105,7 +105,7 @@ class _CommentCardState extends State<CommentCard> {
       ])),
       onDismissed: (DismissDirection direction) {
         setState(() {
-          _comments.deleteComment(commentId: widget.commentId, userId: widget.currUserId);
+          _comments.deleteComment(commentId: widget.commentId, userId: widget.currUserId, image: widget.image);
         });
       },
     );

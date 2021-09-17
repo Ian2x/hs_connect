@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/comment.dart';
 import 'package:hs_connect/models/post.dart';
+import 'package:hs_connect/services/storage/image_storage.dart';
 
 
 void defaultFunc(dynamic parameter) {}
@@ -11,6 +12,8 @@ class CommentsDatabaseService {
   String? postId;
 
   CommentsDatabaseService({this.userId, this.postId});
+
+  ImageStorage _images = ImageStorage();
 
   void setPostId({required String postid}) {
     this.postId = postId;
@@ -38,11 +41,14 @@ class CommentsDatabaseService {
         .catchError(onError);
   }
 
-  Future deleteComment({required String commentId, required String userId}) async {
+  Future deleteComment({required String commentId, required String userId, String? image}) async {
     final checkAuth = await commentsCollection.doc(commentId).get();
     if(checkAuth.exists) {
       if (userId==checkAuth.get('userId')) {
-        return await commentsCollection.doc(commentId).delete();
+        await commentsCollection.doc(commentId).delete();
+        if (image!=null) {
+          return await _images.deleteImage(imageURL: image);
+        }
       };
     }
     return null;

@@ -11,7 +11,7 @@ import 'package:hs_connect/services/userInfo_database.dart';
 
 class GroupCard extends StatefulWidget {
   final String groupId;
-  final String userId;
+  final String? userId;
   final String name;
   final String? image;
   final AccessRestriction accessRestrictions;
@@ -20,9 +20,9 @@ class GroupCard extends StatefulWidget {
   GroupCard(
       {Key? key,
         required this.groupId,
-        required this.userId,
+        this.userId,
         required this.name,
-        required this.image,
+        this.image,
         required this.accessRestrictions,
         required this.currUserId})
       : super(key: key);
@@ -46,14 +46,23 @@ class _GroupCardState extends State<GroupCard> {
     // find username for userId
     // _userInfoDatabaseService.userId = widget.userId;
     getUsername();
+    groupName = widget.name;
     super.initState();
+    print("a group image:");
+    print(widget.image);
   }
 
   void getUsername() async {
-    final UserData? fetchUsername = await _userInfoDatabaseService.getUserData(userId: widget.userId);
-    setState(() {
-      username = fetchUsername != null ? fetchUsername.displayedName : '<Failed to retrieve user name>';
-    });
+    if (widget.userId!=null) {
+      final UserData? fetchUsername = await _userInfoDatabaseService.getUserData(userId: widget.userId!);
+      setState(() {
+        username = fetchUsername != null ? fetchUsername.displayedName : '<Failed to retrieve user name>';
+      });
+    } else {
+      setState(() {
+        username = '';
+      });
+    }
   }
 
   @override
@@ -62,7 +71,7 @@ class _GroupCardState extends State<GroupCard> {
         child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
             ListTile(
               title: Text(widget.name),
-              subtitle: Text(username+' made '+groupName),
+              subtitle: username!='' ? Text(username+' made the group '+groupName) : Text('(domain group)'),
               onTap: () { },
             ),
         ]));

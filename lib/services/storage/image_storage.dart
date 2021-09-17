@@ -45,6 +45,12 @@ class ImageStorage {
     return await snapshot.ref.getDownloadURL();
   }
 
+  Future deleteImage({required String imageURL}) async {
+    final index = imageURL.indexOf("images%2F") + "images%2F".length;
+    final imagePath = imageURL.substring(index, index+36);
+    await imagesRef.child(imagePath).delete();
+  }
+
   Future uploadProfilePic({required File file, required String? oldImageURL}) async {
 
     SettableMetadata metadata =

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hs_connect/models/user_data.dart';
-import 'package:hs_connect/screens/home/profile/profile_pic_picker.dart';
+import 'package:hs_connect/shared/pic_picker.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/services/userInfo_database.dart';
 import 'package:hs_connect/shared/loading.dart';
@@ -93,7 +93,7 @@ class _ProfileFormState extends State<ProfileForm> {
               onChanged: (val) =>
                   setState(() => _displayedName = val),
             ),
-            ProfilePicPicker(width: profilePicWidth, height: profilePicHeight, setPic: setPic, initialImageURL: _initialImageURL,),
+            PicPicker(width: profilePicWidth, height: profilePicHeight, setPic: setPic, initialImageURL: _initialImageURL,),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary: Colors.pink[400],

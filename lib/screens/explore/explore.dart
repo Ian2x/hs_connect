@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/screens/explore/new_group/new_group.dart';
+import 'package:hs_connect/screens/explore/new_group/new_group_2.dart';
 import 'package:hs_connect/screens/explore/new_group/new_group_form.dart';
 import 'package:hs_connect/screens/home/home.dart';
 import 'package:hs_connect/screens/new_post/new_post.dart';
@@ -24,7 +25,7 @@ class Explore extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => NewGroup()),
+                    builder: (context) => NewGroup2()),
               );
             },
           )

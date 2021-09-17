@@ -21,7 +21,7 @@ class UserInfoDatabaseService {
 
 
     // Create domain group if not already created
-    final docId = await _groupDatabaseService.newGroup(accessRestrictions: AccessRestriction(restrictionType: 'domain', restriction: domain), name: domain, userId: '');
+    final docId = await _groupDatabaseService.newGroup(accessRestrictions: AccessRestriction(restrictionType: 'domain', restriction: domain), name: domain, userId: null);
     // Find domain info (county, state, country)
     final KnownDomain? kd = await _knownDomainsDatabaseService.getKnownDomain(domain: domain);
 

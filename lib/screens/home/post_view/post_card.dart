@@ -95,6 +95,7 @@ class _PostCardState extends State<PostCard> {
           title: Text(widget.title),
           subtitle: Column(children: <Widget>[
             Text(username + ' in ' + groupName),
+            widget.image != null ? Image.network(widget.image!): Container(),
             LikeDislikePost(currUserId: widget.currUserId, postId: widget.postId, likes: widget.likes, dislikes: widget.dislikes)
           ]),
           onTap: () {
@@ -115,11 +116,11 @@ class _PostCardState extends State<PostCard> {
                       ))),
             );
           },
-          trailing: DeletePost(postUserId: widget.userId, postId: widget.postId, currUserId: widget.currUserId),
+          trailing: DeletePost(postUserId: widget.userId, postId: widget.postId, currUserId: widget.currUserId, image: widget.image),
         ),
         // CAN DELETE POST EITHER VIA DELETE POST BUTTON OR DISMISSAL, PROBABLY CHOOSE ONE OR THE OTHER EVENTUALLY
         onDismissed: (DismissDirection direction) async {
-          await _posts.deletePost(postId: widget.postId, userId: widget.currUserId);
+          await _posts.deletePost(postId: widget.postId, userId: widget.currUserId, image: widget.image);
         },
       )
     ]));

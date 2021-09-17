@@ -9,22 +9,24 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:hs_connect/shared/loading.dart';
 import 'package:image_picker/image_picker.dart';
 
-class CommentPicPicker extends StatefulWidget {
-  CommentPicPicker({Key? key, this.width, this.height, this.quality, required this.setPic})
+class PicPicker extends StatefulWidget {
+  PicPicker({Key? key, this.width, this.height, this.quality, required this.setPic, this.initialImageURL})
       : super(key: key);
 
   final double? width;
   final double? height;
   final int? quality;
   final Function setPic; // set state in profile form
+  final String? initialImageURL;
 
   @override
-  _CommentPicPickerState createState() => _CommentPicPickerState();
+  _PicPickerState createState() => _PicPickerState();
 }
 
-class _CommentPicPickerState extends State<CommentPicPicker> {
+class _PicPickerState extends State<PicPicker> {
   XFile? _imageFile;
 
   dynamic _pickImageError;
@@ -45,9 +47,9 @@ class _CommentPicPickerState extends State<CommentPicPicker> {
         _imageFile = pickedFile;
       });
       if (_imageFile != null) {
-        widget.setPic(File(_imageFile!.path), _imageFile!.path);
+        widget.setPic(File(_imageFile!.path));
       } else {
-        widget.setPic(null, null);
+        widget.setPic(null);
       }
     } catch (e) {
       setState(() {
@@ -56,14 +58,14 @@ class _CommentPicPickerState extends State<CommentPicPicker> {
     }
   }
 
-  Widget? _previewImages() {
+  Widget _previewImages() {
     final Text? retrieveError = _getRetrieveErrorWidget();
     if (retrieveError != null) {
       return retrieveError;
     }
     if (_imageFile != null) {
       return Semantics(
-        label: 'comment_pic_picked_image',
+        label: 'new_profile_pic_picked_image',
         child: kIsWeb ? Image.network(_imageFile!.path) : Image.file(File(_imageFile!.path)),
       );
     } else if (_pickImageError != null) {
@@ -71,10 +73,17 @@ class _CommentPicPickerState extends State<CommentPicPicker> {
         'Pick image error: $_pickImageError',
         textAlign: TextAlign.center,
       );
+    } else if (widget.initialImageURL != null) {
+      return Image.network(widget.initialImageURL!);
+    } else {
+      return const Text(
+        'Pick an image?',
+        textAlign: TextAlign.center,
+      );
     }
   }
 
-  Widget? _handlePreview() {
+  Widget _handlePreview() {
     return _previewImages();
   }
 
@@ -95,6 +104,7 @@ class _CommentPicPickerState extends State<CommentPicPicker> {
 
   @override
   Widget build(BuildContext context) {
+    print("rebuilding");
     return Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
       Center(
         child: !kIsWeb && defaultTargetPlatform == TargetPlatform.android
@@ -104,12 +114,15 @@ class _CommentPicPickerState extends State<CommentPicPicker> {
             switch (snapshot.connectionState) {
               case ConnectionState.none:
               case ConnectionState.waiting:
+                return Loading();
+                /*
                 return const Text(
-                  'You have not yet picked an image.',
+                  'You have not yet picked an image.oooooooooooooooooo',
                   textAlign: TextAlign.center,
                 );
+                */
               case ConnectionState.done:
-                return Container(child: _handlePreview());
+                return _handlePreview();
               default:
                 if (snapshot.hasError) {
                   return Text(

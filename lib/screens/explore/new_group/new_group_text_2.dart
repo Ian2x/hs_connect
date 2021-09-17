@@ -16,14 +16,14 @@ class AccessOption {
   AccessOption();
 }
 
-class NewGroupForm extends StatefulWidget {
-  const NewGroupForm({Key? key}) : super(key: key);
+class NewGroupText2 extends StatefulWidget {
+  const NewGroupText2({Key? key}) : super(key: key);
 
   @override
-  _NewGroupFormState createState() => _NewGroupFormState();
+  _NewGroupText2State createState() => _NewGroupText2State();
 }
 
-class _NewGroupFormState extends State<NewGroupForm> {
+class _NewGroupText2State extends State<NewGroupText2> {
   final _formKey = GlobalKey<FormState>();
 
   void handleError(err) {
@@ -43,23 +43,11 @@ class _NewGroupFormState extends State<NewGroupForm> {
   String error = '';
   bool loading = false;
 
-  String? newFileURL;
-  File? newFile;
-
-  ImageStorage _images = ImageStorage();
-
-
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
 
     final userData = Provider.of<UserData?>(context);
-
-    void setPic(File newFile2) {
-      setState(() {
-        newFile = newFile2;
-      });
-    }
 
     if (userData == null) {
       // Don't expect to be here, but just in case
@@ -115,41 +103,6 @@ class _NewGroupFormState extends State<NewGroupForm> {
                 validator: (value) => value == null ? 'Must select access restrictions' : null,
                 onChanged: (val) => setState(() => _accessRestriction = val!),
               ),
-              PicPicker(setPic: setPic, height: groupPicHeight, width: groupPicWidth),
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.pink[400],
-                  ),
-                  onPressed: () async {
-
-                    if (newFile != null) {
-                      // upload newFile
-                      final downloadURL = await _images.uploadImage(file: newFile!);
-                      setState(() {
-                        newFileURL = downloadURL;
-                      });
-                    }
-
-                    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-                      setState(() => loading = true);
-                      await GroupsDatabaseService().newGroup(
-                        accessRestrictions: _accessRestriction!,
-                        name: _name,
-                        userId: user.uid,
-                        image: newFileURL,
-                        onValue: handleValue,
-                        onError: handleError,
-                      );
-
-
-                    }
-
-
-                  },
-                  child: Text(
-                    'Make group',
-                    style: TextStyle(color: Colors.white),
-                  )),
               SizedBox(height: 12.0),
               Text(
                 error,

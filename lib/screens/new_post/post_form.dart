@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,10 +8,12 @@ import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/screens/home/home.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
+import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/services/userInfo_database.dart';
 import 'package:hs_connect/shared/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/pic_picker.dart';
 import 'package:provider/provider.dart';
 
 class PostForm extends StatefulWidget {
@@ -39,6 +42,9 @@ class _PostFormState extends State<PostForm> {
           builder: (context) => Home()),);
   }
 
+  String? newFileURL;
+  File? newFile;
+
   // form values
   String _title = '';
   String _text = '';
@@ -46,11 +52,19 @@ class _PostFormState extends State<PostForm> {
   String error = '';
   bool loading = false;
 
+  ImageStorage _images = ImageStorage();
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
 
     final userData = Provider.of<UserData?>(context);
+
+    void setPic(File newFile2) {
+      setState(() {
+        newFile = newFile2;
+      });
+    }
 
     if (userData == null) {
       // Don't expect to be here, but just in case
@@ -116,24 +130,33 @@ class _PostFormState extends State<PostForm> {
                             return null;
                         }
                       ),
+                      PicPicker(setPic: setPic),
                       ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             primary: Colors.pink[400],
                           ),
                           onPressed: () async {
-                            /*
+
+                            if (newFile != null) {
+                              // upload newFile
+                              final downloadURL = await _images.uploadImage(file: newFile!);
+                              setState(() {
+                                newFileURL = downloadURL;
+                              });
+                            }
+
                             if (_formKey.currentState != null && _formKey.currentState!.validate()) {
                               setState(() => loading = true);
                               await PostsDatabaseService(userId: user.uid).newPost(
                                 title: _title,
                                 text: _text,
-                                imageURL: _imageURL,
+                                imageURL: newFileURL,
                                 groupId: _groupId,
                                 onValue: handleValue,
                                 onError: handleError,
                               );
                             }
-                             */
+
                           },
                           child: Text(
                             'Make post',

@@ -27,7 +27,7 @@ class AccessRestriction {
 
 class Group {
   final String groupId;
-  final String userId;
+  final String? userId;
   String name;
   String? image;
   final AccessRestriction accessRestrictions;

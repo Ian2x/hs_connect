@@ -38,8 +38,6 @@ class _TrendingGroupsFeedState extends State<TrendingGroupsFeed> {
               domain: widget.domain, county: widget.county, state: widget.state, country: widget.country),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
             if (snapshot.hasData) {
-              print(snapshot.data.docs);
-
               /*
               List<Group> posts = [];
 
@@ -95,7 +93,6 @@ class _TrendingGroupsFeedState extends State<TrendingGroupsFeed> {
                   ));
                 },
               );
-              return Container();
             } else {
               return Loading();
             }

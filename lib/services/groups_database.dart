@@ -25,8 +25,8 @@ class GroupsDatabaseService {
   Future newGroup(
       {required AccessRestriction accessRestrictions,
       required String name,
-      required String userId,
-      String? image = '',
+      String? userId,
+      String? image,
       Function(void) onValue = defaultFunc,
       Function onError = defaultFunc}) async {
     QuerySnapshot docs = await groupsCollection
@@ -50,7 +50,9 @@ class GroupsDatabaseService {
           .then(onValue)
           .catchError(onError);
       UserInfoDatabaseService _users = UserInfoDatabaseService();
-      await _users.joinGroup(userId: userId, groupId: docId, public: true);
+      if (userId!=null) {
+        await _users.joinGroup(userId: userId, groupId: docId, public: true);
+      }
       return docId;
     }
   }
@@ -122,7 +124,6 @@ class GroupsDatabaseService {
       return group.id;
     }).toList() : <String>[];
     // collect post information for each group
-    print(domainGroupsIds + countyGroupsIds + stateGroupsIds + countryGroupsIds);
     PostsDatabaseService _posts = PostsDatabaseService(groupsId: domainGroupsIds + countyGroupsIds + stateGroupsIds + countryGroupsIds);
 
 

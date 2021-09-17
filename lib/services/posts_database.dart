@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/services/comments_database.dart';
+import 'package:hs_connect/services/storage/image_storage.dart';
 
 
 void defaultFunc(dynamic parameter) {}
@@ -12,6 +13,8 @@ class PostsDatabaseService {
   List<String>? groupsId;
 
   PostsDatabaseService({this.userId, this.groupId, this.groupsId});
+
+  ImageStorage _images = ImageStorage();
 
   void setGroupId({required String groupId}) {
     this.groupId = groupId;
@@ -40,12 +43,12 @@ class PostsDatabaseService {
         .catchError(onError);
   }
 
-  Future deletePost({required String postId, required String userId}) async {
+  Future deletePost({required String postId, required String userId, String? image}) async {
     final checkAuth = await postsCollection.doc(postId).get();
     if(checkAuth.exists) {
       if (userId==checkAuth.get('userId')) {
-        // delete post's comments
 
+        // delete post's comments
         await FirebaseFirestore.instance.collection('comments').get().then((snapshot) async {
           List<DocumentSnapshot> allDocs = snapshot.docs;
           List<DocumentSnapshot> filteredDocs = await allDocs.where(
@@ -57,8 +60,14 @@ class PostsDatabaseService {
         });
 
 
+
         // delete post
-        return await postsCollection.doc(postId).delete();
+        await postsCollection.doc(postId).delete();
+
+        // delete image
+        if (image!=null) {
+          return await _images.deleteImage(imageURL: image);
+        }
       };
     }
     return null;

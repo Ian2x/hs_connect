@@ -7,6 +7,9 @@ const daysTrending = 2;
 const double profilePicWidth = 400;
 const double profilePicHeight = 400;
 
+const double groupPicWidth = 400;
+const double groupPicHeight = 400;
+
 
 const textInputDecoration = InputDecoration(
   fillColor: Colors.white,
