@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/user_data.dart';
@@ -8,6 +9,7 @@ import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/loading.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:hs_connect/shared/pic_picker.dart';
 
@@ -16,14 +18,14 @@ class AccessOption {
   AccessOption();
 }
 
-class NewGroupText2 extends StatefulWidget {
-  const NewGroupText2({Key? key}) : super(key: key);
+class NewGroupForm extends StatefulWidget {
+  const NewGroupForm({Key? key}) : super(key: key);
 
   @override
-  _NewGroupText2State createState() => _NewGroupText2State();
+  _NewGroupFormState createState() => _NewGroupFormState();
 }
 
-class _NewGroupText2State extends State<NewGroupText2> {
+class _NewGroupFormState extends State<NewGroupForm> {
   final _formKey = GlobalKey<FormState>();
 
   void handleError(err) {
@@ -42,6 +44,12 @@ class _NewGroupText2State extends State<NewGroupText2> {
   AccessRestriction? _accessRestriction = null;
   String error = '';
   bool loading = false;
+
+  String? newFileURL;
+  File? newFile;
+
+  ImageStorage _images = ImageStorage();
+
 
   @override
   Widget build(BuildContext context) {
@@ -103,6 +111,69 @@ class _NewGroupText2State extends State<NewGroupText2> {
                 validator: (value) => value == null ? 'Must select access restrictions' : null,
                 onChanged: (val) => setState(() => _accessRestriction = val!),
               ),
+              FloatingActionButton(
+                onPressed: () async {
+                  try {
+                    final pickedFile = await ImagePicker().pickImage(
+                      source: ImageSource.gallery,
+                    );
+                    if (pickedFile != null) {
+                      setState(() {
+                        newFile = File(pickedFile.path);
+                      });
+                    } else {
+                      setState(() {
+                        newFile = null;
+                      });
+                    }
+                  } catch (e) {
+                    print(e);
+                  }
+                },
+                heroTag: 'image0',
+                tooltip: 'Pick Image from gallery',
+                child: const Icon(Icons.photo),
+              ),
+              newFile != null
+                  ? Semantics(
+                label: 'new_profile_pic_picked_image',
+                child: kIsWeb ? Image.network(newFile!.path) : Image.file(File(newFile!.path)),
+              )
+                  : Container(),
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.pink[400],
+                  ),
+                  onPressed: () async {
+
+                    if (newFile != null) {
+                      // upload newFile
+                      final downloadURL = await _images.uploadImage(file: newFile!);
+                      setState(() {
+                        newFileURL = downloadURL;
+                      });
+                    }
+
+                    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+                      setState(() => loading = true);
+                      await GroupsDatabaseService().newGroup(
+                        accessRestrictions: _accessRestriction!,
+                        name: _name,
+                        userId: user.uid,
+                        image: newFileURL,
+                        onValue: handleValue,
+                        onError: handleError,
+                      );
+
+
+                    }
+
+
+                  },
+                  child: Text(
+                    'Make group',
+                    style: TextStyle(color: Colors.white),
+                  )),
               SizedBox(height: 12.0),
               Text(
                 error,

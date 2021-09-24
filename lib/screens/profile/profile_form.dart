@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/shared/pic_picker.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
@@ -8,6 +9,7 @@ import 'package:hs_connect/services/userInfo_database.dart';
 import 'package:hs_connect/shared/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class ProfileForm extends StatefulWidget {
@@ -57,12 +59,6 @@ class _ProfileFormState extends State<ProfileForm> {
       Navigator.pop(context);
     }
 
-    void setPic(File newFile2) {
-      setState(() {
-        newFile = newFile2;
-      });
-    }
-
     if (userData == null) {
       // Don't expect to be here, but just in case
       return Loading();
@@ -93,7 +89,44 @@ class _ProfileFormState extends State<ProfileForm> {
               onChanged: (val) =>
                   setState(() => _displayedName = val),
             ),
-            PicPicker(width: profilePicWidth, height: profilePicHeight, setPic: setPic, initialImageURL: _initialImageURL,),
+            FloatingActionButton(
+              onPressed: () async {
+                try {
+                  final pickedFile = await ImagePicker().pickImage(
+                    source: ImageSource.gallery,
+                  );
+                  if (pickedFile != null) {
+                    setState(() {
+                      newFile = File(pickedFile.path);
+                    });
+                  } else {
+                    setState(() {
+                      newFile = null;
+                    });
+                  }
+                } catch (e) {
+                  print(e);
+                }
+              },
+              heroTag: 'image0',
+              tooltip: 'Pick Image from gallery',
+              child: const Icon(Icons.photo),
+            ),
+            newFile != null ?
+              Semantics(
+                label: 'new_profile_pic_picked_image',
+                child: kIsWeb ? Image.network(newFile!.path) : Image.file(File(newFile!.path)),
+              )
+            :
+              _initialImageURL != null ?
+                Semantics(
+                  label: 'initial_profile_pic_image',
+                  child: Image.network(_initialImageURL!),
+                )
+              :
+                Container(),
+
+
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary: Colors.pink[400],

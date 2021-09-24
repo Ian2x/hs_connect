@@ -1,20 +1,32 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hs_connect/screens/explore/new_group/new_group.dart';
-import 'package:hs_connect/screens/explore/new_group/new_group_2.dart';
-import 'package:hs_connect/screens/explore/new_group/new_group_form.dart';
+import 'package:hs_connect/models/user_data.dart';
+import 'package:hs_connect/screens/profile/profile.dart';
+import 'package:hs_connect/screens/search/new_group/new_group.dart';
+import 'package:hs_connect/screens/search/new_group/new_group_form.dart';
 import 'package:hs_connect/screens/home/home.dart';
 import 'package:hs_connect/screens/new_post/new_post.dart';
 import 'package:hs_connect/services/groups_database.dart';
+import 'package:hs_connect/shared/loading.dart';
+import 'package:provider/provider.dart';
 
-class Explore extends StatelessWidget {
-  const Explore({Key? key}) : super(key: key);
+class GroupSearch extends StatelessWidget {
+  const GroupSearch({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
+    final user = Provider.of<User?>(context);
+    final userData = Provider.of<UserData?>(context);
+
+    if (user==null || userData==null) {
+      return Loading();
+    }
+
     return Scaffold(
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
-        title: Text('Explore'),
+        title: Text('Group Search Bar... '),
         backgroundColor: Colors.brown[400],
         elevation: 0.0,
         actions: <Widget>[
@@ -25,7 +37,7 @@ class Explore extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => NewGroup2()),
+                    builder: (context) => NewGroup()),
               );
             },
           )
@@ -38,7 +50,9 @@ class Explore extends StatelessWidget {
         ]),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
+          type: BottomNavigationBarType.fixed,
+          currentIndex: 1,
+          items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: IconButton(
               padding: EdgeInsets.zero,
@@ -47,12 +61,22 @@ class Explore extends StatelessWidget {
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => Home()),
+                  MaterialPageRoute(builder: (context) => Home()),
                 );
               },
             ),
             label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: IconButton(
+              padding: EdgeInsets.zero,
+              constraints: BoxConstraints(),
+              icon: const Icon(Icons.search_rounded, size: 18.0),
+              onPressed: () {
+
+              },
+            ),
+            label: 'Search',
           ),
           BottomNavigationBarItem(
             icon: IconButton(
@@ -69,14 +93,21 @@ class Explore extends StatelessWidget {
             ),
             label: 'Post',
           ),
+
           BottomNavigationBarItem(
             icon: IconButton(
               padding: EdgeInsets.zero,
               constraints: BoxConstraints(),
               icon: const Icon(Icons.search_rounded, size: 18.0),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Profile(profileId: user.uid)),
+                );
+              },
             ),
-            label: 'Explore',
+            label: 'Profile',
           ),
         ]
       ),

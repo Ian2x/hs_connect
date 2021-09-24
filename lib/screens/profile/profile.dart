@@ -1,92 +1,59 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:hs_connect/models/user_data.dart';
-import 'package:hs_connect/screens/search/group_search.dart';
-import 'package:hs_connect/screens/home/post_feeds/domain_feed.dart';
-import 'package:hs_connect/screens/home/post_feeds/home_feed.dart';
-import 'package:hs_connect/screens/home/post_feeds/og_feed.dart';
-import 'package:hs_connect/screens/home/post_feeds/trending_feed.dart';
-import 'package:hs_connect/screens/profile/profile.dart';
-import 'package:hs_connect/services/auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hs_connect/services/userInfo_database.dart';
-import 'package:hs_connect/shared/loading.dart';
-import 'package:provider/provider.dart';
+import 'package:hs_connect/models/user_data.dart';
+import 'package:hs_connect/screens/authenticate/authenticate.dart';
+import 'package:hs_connect/screens/home/home.dart';
 import 'package:hs_connect/screens/new_post/new_post.dart';
+import 'package:hs_connect/screens/profile/profile_form.dart';
+import 'package:hs_connect/screens/search/group_search.dart';
+import 'package:hs_connect/services/auth.dart';
+import 'package:hs_connect/services/userInfo_database.dart';
+import 'package:provider/provider.dart';
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+class Profile extends StatelessWidget {
+  final profileId;
 
-  @override
-  _HomeState createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
+  Profile({Key? key, required this.profileId}) : super(key: key);
 
   final AuthService _auth = AuthService();
 
   @override
   Widget build(BuildContext context) {
+    if (_auth.user == null) {
+      return Authenticate();
+    }
 
     final user = Provider.of<User?>(context);
     final userData = Provider.of<UserData?>(context);
 
-    if(userData==null || user==null) {
-      return Loading();
+    // unnecessary?
+    if (user==null) {
+      return Authenticate();
     }
 
-    return DefaultTabController(
-      initialIndex: 1,
-      length: 3,
-      child: Scaffold(
-          backgroundColor: Colors.brown[50],
-          appBar: AppBar(
-            title: Text('HS Connect'),
-            backgroundColor: Colors.brown[400],
-            elevation: 0.0,
-            actions: <Widget>[
-              TextButton.icon(
-                icon: Icon(Icons.person),
-                label: Text('Logout'),
-                onPressed: () async {
-                  await _auth.signOut();
-                },
-              ),
-              TextButton.icon(
-                icon: Icon(Icons.settings),
-                label: Text('Profile'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Profile(profileId: user.uid)),
-                  );
-                },
-              )
-            ],
-            bottom: TabBar(
-              tabs: <Widget>[
-                Tab(
-                  text: userData != null ? userData.domain : 'domain',
+    if (user!=null && user.uid == profileId && userData!=null) {
+      return Scaffold(
+            backgroundColor: Colors.brown[50],
+            appBar: AppBar(
+              title: Text('Your Profile'),
+              actions: <Widget>[
+                TextButton.icon(
+                  icon: Icon(Icons.person),
+                  label: Text('Logout'),
+                  onPressed: () async {
+                    await _auth.signOut();
+                  },
                 ),
-                Tab(
-                  text: 'Home'
-                ),
-                Tab(
-                  text: 'Trending'
-                )
               ],
-            )
-          ),
-          body: TabBarView(
-            children: <Widget>[
-              DomainFeed(),
-              HomeFeed(),
-              userData!=null ? TrendingFeed() : Loading(),
-            ]
-          ),
-          bottomNavigationBar: BottomNavigationBar(
+              backgroundColor: Colors.brown[400],
+              elevation: 0.0,
+            ),
+            body: Container(
+              child: ProfileForm(currDisplayName: userData.displayedName, currImageURL: userData.imageURL,),
+            ),
+        bottomNavigationBar: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
-            currentIndex: 0,
+            currentIndex: 3,
             items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: IconButton(
@@ -94,7 +61,10 @@ class _HomeState extends State<Home> {
                   constraints: BoxConstraints(),
                   icon: const Icon(Icons.school, size: 18.0),
                   onPressed: () {
-
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => Home()),
+                    );
                   },
                 ),
                 label: 'Home',
@@ -145,10 +115,10 @@ class _HomeState extends State<Home> {
                 ),
                 label: 'Profile',
               ),
-
-            ],
-          ),
+            ]
         ),
-    );
+          );
+    }
+    return Container(child: Text('someone else'));
   }
 }
