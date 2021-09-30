@@ -10,6 +10,7 @@ import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/userInfo_database.dart';
 
+
 class PostCard extends StatefulWidget {
   final String postId;
   final String userId;
@@ -51,6 +52,7 @@ class _PostCardState extends State<PostCard> {
   bool disliked = false;
   String username = '<Loading user name...>';
   String groupName = '<Loading group name...>';
+  Image groupImage = Image(image: AssetImage('assets/masonic-G.png'));
 
   @override
   void initState() {
@@ -96,7 +98,9 @@ class _PostCardState extends State<PostCard> {
           subtitle: Column(children: <Widget>[
             Text(username + ' in ' + groupName),
             widget.image != null ? Image.network(widget.image!): Container(),
-            LikeDislikePost(currUserId: widget.currUserId, postId: widget.postId, likes: widget.likes, dislikes: widget.dislikes)
+            LikeDislikePost(currUserId: widget.currUserId, postId: widget.postId, likes: widget.likes, dislikes: widget.dislikes),
+            groupImage
+
           ]),
           onTap: () {
             Navigator.push(
