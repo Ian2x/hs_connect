@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/screens/home/post_view/post_card.dart';
+import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/loading.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +21,24 @@ class SpecificGroupFeed extends StatefulWidget {
 }
 
 class _SpecificGroupFeedState extends State<SpecificGroupFeed> {
+
+  GroupsDatabaseService _groups = GroupsDatabaseService();
+
+  String groupName = '<Loading group name...>';
+
+  @override
+  void initState() {
+    getGroupName();
+    super.initState();
+  }
+
+  void getGroupName() async {
+    final Group? fetchGroupName = await _groups.getGroupData(groupId: widget.groupId);
+    setState(() {
+      groupName = fetchGroupName != null ? fetchGroupName.name : '<Failed to retrieve group name>';
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
@@ -28,39 +48,47 @@ class _SpecificGroupFeedState extends State<SpecificGroupFeed> {
 
     PostsDatabaseService _posts = PostsDatabaseService(groupId: widget.groupId);
 
-    return StreamBuilder(
-      stream: _posts.singleGroupPosts,
-      builder: (context, snapshot) {
-        print(snapshot.connectionState);
-        if (!snapshot.hasData) {
-          return Loading();
-        } else {
-          final posts = (snapshot.data as List<Post?>).map((post) => post!).toList();
-          // print(posts.map((post) => post!.image));
+    return Scaffold(
+      backgroundColor: Colors.brown[50],
+      appBar: AppBar(
+        title: Text(groupName),
+        backgroundColor: Colors.brown[400],
+        elevation: 0.0,
+      ),
+      body: StreamBuilder(
+        stream: _posts.singleGroupPosts,
+        builder: (context, snapshot) {
+          print(snapshot.connectionState);
+          if (!snapshot.hasData) {
+            return Loading();
+          } else {
+            final posts = (snapshot.data as List<Post?>).map((post) => post!).toList();
+            // print(posts.map((post) => post!.image));
 
-          return ListView.builder(
-            itemCount: posts.length,
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            itemBuilder: (BuildContext context, int index) {
-              // when scroll up/down, fires once
-              return Center(
-                  child: PostCard(
-                    postId: posts[index].postId,
-                    userId: posts[index].userId,
-                    groupId: posts[index].groupId,
-                    title: posts[index].title,
-                    text: posts[index].text,
-                    image: posts[index].image,
-                    createdAt: posts[index].createdAt,
-                    likes: posts[index].likes,
-                    dislikes: posts[index].dislikes,
-                    currUserId: user.uid,
-                  ));
-            },
-          );
-        }
-      },
+            return ListView.builder(
+              itemCount: posts.length,
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemBuilder: (BuildContext context, int index) {
+                // when scroll up/down, fires once
+                return Center(
+                    child: PostCard(
+                      postId: posts[index].postId,
+                      userId: posts[index].userId,
+                      groupId: posts[index].groupId,
+                      title: posts[index].title,
+                      text: posts[index].text,
+                      image: posts[index].image,
+                      createdAt: posts[index].createdAt,
+                      likes: posts[index].likes,
+                      dislikes: posts[index].dislikes,
+                      currUserId: user.uid,
+                    ));
+              },
+            );
+          }
+        },
+      ),
     );
   }
 }

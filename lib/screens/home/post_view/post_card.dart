@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/user_data.dart';
+import 'package:hs_connect/screens/home/post_feeds/specific_group_feed.dart';
 import 'package:hs_connect/screens/home/post_view/delete_post.dart';
 import 'package:hs_connect/screens/home/post_view/like_dislike_post.dart';
 import 'package:hs_connect/screens/home/post_view/post_page.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/userInfo_database.dart';
-
 
 class PostCard extends StatefulWidget {
   final String postId;
@@ -52,7 +52,7 @@ class _PostCardState extends State<PostCard> {
   bool disliked = false;
   String username = '<Loading user name...>';
   String groupName = '<Loading group name...>';
-  Image groupImage = Image(image: AssetImage('assets/masonic-G.png'));
+  Image groupImage = Image(image: AssetImage('assets/masonic-G.png'), height: 20, width: 20);
 
   @override
   void initState() {
@@ -87,6 +87,16 @@ class _PostCardState extends State<PostCard> {
     });
   }
 
+  void openSpecificGroupFeed() async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => SpecificGroupFeed(
+            groupId: widget.groupId,
+              )),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -94,13 +104,18 @@ class _PostCardState extends State<PostCard> {
       Dismissible(
         key: ValueKey(widget.postId),
         child: ListTile(
-          title: Text(widget.title),
+          title: Row(children: <Widget>[
+            IconButton(
+              icon: groupImage,
+              onPressed: openSpecificGroupFeed,
+            ),
+            Text(widget.title),
+          ]),
           subtitle: Column(children: <Widget>[
             Text(username + ' in ' + groupName),
-            widget.image != null ? Image.network(widget.image!): Container(),
-            LikeDislikePost(currUserId: widget.currUserId, postId: widget.postId, likes: widget.likes, dislikes: widget.dislikes),
-            groupImage
-
+            widget.image != null ? Image.network(widget.image!) : Container(),
+            LikeDislikePost(
+                currUserId: widget.currUserId, postId: widget.postId, likes: widget.likes, dislikes: widget.dislikes),
           ]),
           onTap: () {
             Navigator.push(
@@ -120,7 +135,8 @@ class _PostCardState extends State<PostCard> {
                       ))),
             );
           },
-          trailing: DeletePost(postUserId: widget.userId, postId: widget.postId, currUserId: widget.currUserId, image: widget.image),
+          trailing: DeletePost(
+              postUserId: widget.userId, postId: widget.postId, currUserId: widget.currUserId, image: widget.image),
         ),
         // CAN DELETE POST EITHER VIA DELETE POST BUTTON OR DISMISSAL, PROBABLY CHOOSE ONE OR THE OTHER EVENTUALLY
         onDismissed: (DismissDirection direction) async {
