@@ -18,18 +18,18 @@ class _OGnavbarState extends State<OGnavbar> {
       decoration: BoxDecoration(
         boxShadow: [
             BoxShadow(
-              color: HexColor("#111111"),
+              color: HexColor("#FFFFFF"),
               spreadRadius: 1.0,
             ),
           ],
         ),
         child:  BottomNavigationBar(
-          backgroundColor: HexColor("#121212"),
+          backgroundColor: HexColor("#FFFFFF"),
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: IconButton(
                 padding: EdgeInsets.zero,
-                color: Colors.white,
+                color: Colors.black,
                 constraints: BoxConstraints(),
                 icon: const Icon(Icons.school, size: 18.0),
                 onPressed: () {
@@ -41,7 +41,7 @@ class _OGnavbarState extends State<OGnavbar> {
             BottomNavigationBarItem(
               icon: IconButton(
                 padding: EdgeInsets.zero,
-                color: Colors.white,
+                color: Colors.black,
                 constraints: BoxConstraints(),
                 icon: const Icon(Icons.add, size: 18.0),
                 onPressed: () {
@@ -57,7 +57,7 @@ class _OGnavbarState extends State<OGnavbar> {
             BottomNavigationBarItem(
               icon: IconButton(
                 padding: EdgeInsets.zero,
-                color: Colors.white,
+                color: Colors.black,
                 constraints: BoxConstraints(),
                 icon: const Icon(Icons.search_rounded, size: 18.0),
                 onPressed: () {

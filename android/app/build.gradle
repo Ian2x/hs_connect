@@ -36,7 +36,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.ianeric.hs_connect"
+        applicationId "com.ericsapp.hs_connect"
         minSdkVersion 25
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()

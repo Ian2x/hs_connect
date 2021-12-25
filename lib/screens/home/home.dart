@@ -32,22 +32,37 @@ class _HomeState extends State<Home> {
       initialIndex: 1,
       length: 3,
       child: Scaffold(
-        backgroundColor: HexColor("#121212"),
+        backgroundColor: HexColor("#C4C4C4"),
           appBar: AppBar(
-            title: Text('HS Connect'),
-            backgroundColor: HexColor("#121212"),
+            backgroundColor: HexColor("#FFFFFF"),
             elevation: 0.0,
+            title: Text('HS Connect',
+                style:
+                  TextStyle(
+                    color: Colors.black,
+                  )
+            ),
             actions: <Widget>[
               TextButton.icon(
                 icon: Icon(Icons.person),
-                label: Text('Logout'),
+                label: Text('Logout',
+                    style:
+                      TextStyle(
+                        color:Colors.black,
+                      )
+                ),
                 onPressed: () async {
                   await _auth.signOut();
                 },
               ),
               TextButton.icon(
                 icon: Icon(Icons.settings),
-                label: Text('Profile'),
+                label: Text('Profile',
+                    style:
+                    TextStyle(
+                      color:Colors.black,
+                    )
+                ),
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -63,10 +78,20 @@ class _HomeState extends State<Home> {
                   text: userData != null ? userData.domain : 'domain',
                 ),
                 Tab(
-                  text: 'Home'
+                  icon: Text("Feed",
+                    style:
+                      TextStyle(
+                        color: Colors.black,
+                      )
+                  )
                 ),
                 Tab(
-                  text: 'Trending'
+                    icon: Text("Trending",
+                        style:
+                        TextStyle(
+                          color: Colors.black,
+                        )
+                    )
                 )
               ],
             )
