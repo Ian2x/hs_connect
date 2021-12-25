@@ -63,14 +63,16 @@ class _TrendingGroupsFeedState extends State<TrendingGroupsFeed> {
 
               final posts = snapshot.data.docs.map((docSnapshot) {
                 return Group(
-                    groupId: docSnapshot.id,
-                    userId: docSnapshot.get("userId"),
+                    groupRef: docSnapshot.id,
+                    userRef: docSnapshot.get("userId"),
                     name: docSnapshot.get("name"),
                     image: docSnapshot.get("image"),
                     accessRestrictions: AccessRestriction(
                         restrictionType: docSnapshot.get("accessRestrictions")["restrictionType"],
                         restriction: docSnapshot.get("accessRestrictions")["restriction"]
-                    )
+                    ),
+                    createdAt: docSnapshot.get('createdAt'),
+                    numPosts: docSnapshot.get('numPosts'),
                 );
               }).toList();
 
@@ -84,12 +86,12 @@ class _TrendingGroupsFeedState extends State<TrendingGroupsFeed> {
                   // when scroll up/down, fires once
                   return Center(
                       child: GroupCard(
-                    groupId: posts[index].groupId,
-                    userId: posts[index].userId,
+                    groupRef: posts[index].groupRef,
+                    userRef: posts[index].userRef,
                     name: posts[index].name,
                     image: posts[index].image,
                     accessRestrictions: posts[index].accessRestrictions,
-                    currUserId: userData.userId,
+                    currUserRef: userData.userRef,
                   ));
                 },
               );

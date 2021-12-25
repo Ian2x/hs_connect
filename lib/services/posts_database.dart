@@ -7,17 +7,17 @@ import 'package:hs_connect/services/storage/image_storage.dart';
 void defaultFunc(dynamic parameter) {}
 
 class PostsDatabaseService {
-  final String? userId;
+  final DocumentReference? userRef;
 
-  String? groupId;
-  List<String>? groupsId;
+  DocumentReference? groupRef;
+  List<DocumentReference>? groupsRefs;
 
-  PostsDatabaseService({this.userId, this.groupId, this.groupsId});
+  PostsDatabaseService({this.userRef, this.groupRef, this.groupsRefs});
 
   ImageStorage _images = ImageStorage();
 
-  void setGroupId({required String groupId}) {
-    this.groupId = groupId;
+  void setGroupRef({required DocumentReference groupRef}) {
+    this.groupRef = groupRef;
   }
 
   // collection reference
@@ -25,13 +25,13 @@ class PostsDatabaseService {
 
   Future newPost({required String title, required String text,
     required String? imageURL,
-    required String groupId,
+    required String groupRef,
     Function(void) onValue = defaultFunc,
     Function onError = defaultFunc}) async {
     return await postsCollection
         .add({
-      'userId': userId,
-      'groupId': groupId,
+      'userRef': userRef,
+      'groupRef': groupRef,
       'title': title,
       'text': text,
       'image': imageURL,
@@ -43,16 +43,16 @@ class PostsDatabaseService {
         .catchError(onError);
   }
 
-  Future deletePost({required String postId, required String userId, String? image}) async {
-    final checkAuth = await postsCollection.doc(postId).get();
+  Future deletePost({required DocumentReference postRef, required DocumentReference userRef, String? image}) async {
+    final checkAuth = await postRef.get();
     if(checkAuth.exists) {
-      if (userId==checkAuth.get('userId')) {
+      if (userRef==checkAuth.get('userRef')) {
 
         // delete post's comments
         await FirebaseFirestore.instance.collection('comments').get().then((snapshot) async {
           List<DocumentSnapshot> allDocs = snapshot.docs;
           List<DocumentSnapshot> filteredDocs = await allDocs.where(
-                  (document) => document.get('postId') == postId
+                  (document) => document.get('postRef') == postRef
           ).toList();
           for (DocumentSnapshot ds in filteredDocs){
             await ds.reference.delete();
@@ -62,7 +62,7 @@ class PostsDatabaseService {
 
 
         // delete post
-        await postsCollection.doc(postId).delete();
+        await postRef.delete();
 
         // delete image
         if (image!=null) {
@@ -75,28 +75,28 @@ class PostsDatabaseService {
 
 
 
-  Future likePost({required String postId, required String userId}) async {
+  Future likePost({required DocumentReference postRef, required DocumentReference userRef}) async {
     // remove dislike if disliked
-    await postsCollection.doc(postId).update({'dislikes': FieldValue.arrayRemove([userId])});
+    await postRef.update({'dislikes': FieldValue.arrayRemove([userRef])});
     // like comment
-    return await postsCollection.doc(postId).update({'likes': FieldValue.arrayUnion([userId])});
+    return await postRef.update({'likes': FieldValue.arrayUnion([userRef])});
   }
 
-  Future unLikePost({required String postId, required String userId}) async {
+  Future unLikePost({required DocumentReference postRef, required DocumentReference userRef}) async {
     // remove like
-    await postsCollection.doc(postId).update({'likes': FieldValue.arrayRemove([userId])});
+    await postRef.update({'likes': FieldValue.arrayRemove([userRef])});
   }
 
-  Future dislikePost({required String postId, required String userId}) async {
+  Future dislikePost({required DocumentReference postRef, required DocumentReference userRef}) async {
     // remove like if liked
-    await postsCollection.doc(postId).update({'likes': FieldValue.arrayRemove([userId])});
+    await postRef.update({'likes': FieldValue.arrayRemove([userRef])});
     // dislike comment
-    return await postsCollection.doc(postId).update({'dislikes': FieldValue.arrayUnion([userId])});
+    return await postRef.update({'dislikes': FieldValue.arrayUnion([userRef])});
   }
 
-  Future unDislikePost({required String postId, required String userId}) async {
+  Future unDislikePost({required DocumentReference postRef, required DocumentReference userRef}) async {
     // remove like
-    await postsCollection.doc(postId).update({'dislikes': FieldValue.arrayRemove([userId])});
+    await postRef.update({'dislikes': FieldValue.arrayRemove([userRef])});
   }
 
 
@@ -105,13 +105,14 @@ class PostsDatabaseService {
   Post? _postFromDocument(QueryDocumentSnapshot document) {
     if (document.exists) {
       return Post(
-        postId: document.id,
-        userId: document['userId'],
-        groupId: document['groupId'],
-        image: document['image'],
+        postRef: document.reference,
+        userRef: document['userRef'],
+        groupRef: document['groupRef'],
+        media: document['image'],
         title: document['title'],
         text: document['text'],
         createdAt: document['createdAt'],//.toString(),
+        numComments: document['numComments'],
         likes: (document['likes'] as List).map((item) => item as String).toList(),
         dislikes: (document['dislikes'] as List).map((item) => item as String).toList(),//document['dislikes'],
       );
@@ -121,16 +122,16 @@ class PostsDatabaseService {
   }
 
   Stream<List<Post?>> get singleGroupPosts {
-    return postsCollection.where('groupId', isEqualTo: groupId).orderBy('createdAt', descending: true).snapshots().map((snapshot) => snapshot.docs.map(_postFromDocument).toList());
+    return postsCollection.where('groupRef', isEqualTo: groupRef).orderBy('createdAt', descending: true).snapshots().map((snapshot) => snapshot.docs.map(_postFromDocument).toList());
   }
 
   Stream<List<Post?>> get multiGroupPosts {
-    return postsCollection.where('groupId', whereIn: groupsId).orderBy('createdAt', descending: true).snapshots().map((snapshot) => snapshot.docs.map(_postFromDocument).toList());
+    return postsCollection.where('groupRef', whereIn: groupsRefs).orderBy('createdAt', descending: true).snapshots().map((snapshot) => snapshot.docs.map(_postFromDocument).toList());
   }
 
   Future getMultiGroupPosts() async {
 
-    final snapshot = await postsCollection.where('groupId', whereIn: groupsId).get();
+    final snapshot = await postsCollection.where('groupRef', whereIn: groupsRefs).get();
     return snapshot.docs.map(_postFromDocument).toList();
   }
 

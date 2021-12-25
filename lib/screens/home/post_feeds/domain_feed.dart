@@ -27,7 +27,7 @@ class _DomainFeedState extends State<DomainFeed> {
 
     // _posts.setGroupId(groupId: 'QwUEy7kgi0J8DMCJIxvA');
 
-    PostsDatabaseService _posts = PostsDatabaseService(groupId: userData.userGroups[0].groupId);
+    PostsDatabaseService _posts = PostsDatabaseService(groupRef: userData.userGroups[0].groupRef);
 
     return StreamBuilder(
       stream: _posts.singleGroupPosts,
@@ -47,16 +47,17 @@ class _DomainFeedState extends State<DomainFeed> {
               // when scroll up/down, fires once
               return Center(
                   child: PostCard(
-                postId: posts[index].postId,
-                userId: posts[index].userId,
-                groupId: posts[index].groupId,
+                postRef: posts[index].postRef,
+                userRef: posts[index].userRef,
+                groupRef: posts[index].groupRef,
                 title: posts[index].title,
                 text: posts[index].text,
-                image: posts[index].image,
+                image: posts[index].media,
                 createdAt: posts[index].createdAt,
                 likes: posts[index].likes,
                 dislikes: posts[index].dislikes,
-                currUserId: user.uid,
+                currUserRef: userData.userRef,
+                numComments: posts[index].numComments,
               ));
             },
           );

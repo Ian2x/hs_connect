@@ -17,9 +17,9 @@ import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart';
 
 class CommentForm extends StatefulWidget {
-  final String postId;
+  final DocumentReference postRef;
 
-  const CommentForm({Key? key, required this.postId}) : super(key: key);
+  const CommentForm({Key? key, required this.postRef}) : super(key: key);
 
   @override
   _CommentFormState createState() => _CommentFormState();
@@ -83,8 +83,8 @@ class _CommentFormState extends State<CommentForm> {
                         });
                       }
 
-                      await CommentsDatabaseService(userId: user.uid).newComment(
-                        postId: widget.postId,
+                      await CommentsDatabaseService(userRef: userData.userRef).newComment(
+                        postRef: widget.postRef,
                         text: _text,
                         imageURL: newFileURL,
                         onValue: handleValue,

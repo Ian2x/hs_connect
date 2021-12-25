@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hs_connect/models/user_data.dart';
@@ -11,9 +12,9 @@ import 'package:hs_connect/shared/constants.dart';
 import 'package:provider/provider.dart';
 
 class ReplyForm extends StatefulWidget {
-  final String commentId;
+  final DocumentReference commentRef;
 
-  const ReplyForm({Key? key, required this.commentId}) : super(key: key);
+  const ReplyForm({Key? key, required this.commentRef}) : super(key: key);
 
   @override
   _ReplyFormState createState() => _ReplyFormState();
@@ -77,8 +78,8 @@ class _ReplyFormState extends State<ReplyForm> {
                     });
                   }
 
-                  await RepliesDatabaseService(userId: user.uid).newReply(
-                    commentId: widget.commentId,
+                  await RepliesDatabaseService(userRef: userData.userRef).newReply(
+                    commentRef: widget.commentRef,
                     text: _text,
                     imageURL: newFileURL,
                     onValue: handleValue,

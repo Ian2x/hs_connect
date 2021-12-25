@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/user_data.dart';
@@ -16,27 +17,27 @@ import 'package:flutter/foundation.dart';
 
 
 class CommentCard extends StatefulWidget {
-  final String commentId;
-  final String postId;
-  final String userId;
+  final DocumentReference commentRef;
+  final DocumentReference postRef;
+  final DocumentReference userRef;
   final String text;
   final String? image;
   final String createdAt;
   List<String> likes;
   List<String> dislikes;
-  final String currUserId;
+  final DocumentReference currUserRef;
 
   CommentCard(
       {Key? key,
-      required this.commentId,
-      required this.postId,
-      required this.userId,
+      required this.commentRef,
+      required this.postRef,
+      required this.userRef,
       required this.text,
       required this.image,
       required this.createdAt,
       required this.likes,
       required this.dislikes,
-      required this.currUserId})
+      required this.currUserRef})
       : super(key: key);
 
   @override
@@ -56,11 +57,11 @@ class _CommentCardState extends State<CommentCard> {
   void initState() {
     print(widget.image);
     // initialize liked/disliked
-    if (widget.likes.contains(widget.currUserId)) {
+    if (widget.likes.contains(widget.currUserRef)) {
       setState(() {
         liked = true;
       });
-    } else if (widget.likes.contains(widget.currUserId)) {
+    } else if (widget.likes.contains(widget.currUserRef)) {
       setState(() {
         disliked = true;
       });
@@ -73,7 +74,7 @@ class _CommentCardState extends State<CommentCard> {
   }
 
   void getUsername() async {
-    final UserData? fetchUsername = await _userInfoDatabaseService.getUserData(userId: widget.userId);
+    final UserData? fetchUsername = await _userInfoDatabaseService.getUserData(userRef: widget.userRef);
     setState(() {
       username = fetchUsername != null ? fetchUsername.displayedName : '<Failed to retrieve user name>';
     });
@@ -83,7 +84,7 @@ class _CommentCardState extends State<CommentCard> {
   Widget build(BuildContext context) {
 
     return Dismissible(
-      key: ValueKey(widget.commentId),
+      key: ValueKey(widget.commentRef),
       child: Card(
           child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
         ListTile(
@@ -91,8 +92,8 @@ class _CommentCardState extends State<CommentCard> {
           subtitle: Text(username),
           trailing:
           LikeDislikeComment(
-              commentId: widget.commentId,
-              currUserId: widget.currUserId,
+              commentRef: widget.commentRef,
+              currUserRef: widget.currUserRef,
               likes: widget.likes,
               dislikes: widget.dislikes),
 
@@ -101,11 +102,11 @@ class _CommentCardState extends State<CommentCard> {
           label: 'new_profile_pic_picked_image',
           child: Image.network(widget.image!) // kIsWeb ? Image.network(widget.image!) : Image.file(File(widget.image!)),
         ) : Container(),
-        RepliesFeed(commentId: widget.commentId),
+        RepliesFeed(commentRef: widget.commentRef),
       ])),
       onDismissed: (DismissDirection direction) {
         setState(() {
-          _comments.deleteComment(commentId: widget.commentId, userId: widget.currUserId, image: widget.image);
+          _comments.deleteComment(commentRef: widget.commentRef, userRef: widget.currUserRef, image: widget.image);
         });
       },
     );

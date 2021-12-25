@@ -1,20 +1,24 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Comment {
-  final String commentId;
-  final String postId;
-  final String userId;
+  final DocumentReference commentRef;
+  final DocumentReference postRef;
+  final DocumentReference userRef;
   String text;
-  String? image;
+  String? media;
   final String createdAt;
+  int numReplies;
   List<String> likes;
   List<String> dislikes;
 
   Comment({
-    required this.commentId,
-    required this.postId,
-    required this.userId,
+    required this.commentRef,
+    required this.postRef,
+    required this.userRef,
     required this.text,
-    required this.image,
+    required this.media,
     required this.createdAt,
+    required this.numReplies,
     required this.likes,
     required this.dislikes,
   });

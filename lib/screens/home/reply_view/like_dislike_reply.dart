@@ -1,14 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/services/replies_database.dart';
 
 class LikeDislikeReply extends StatefulWidget {
-  final String currUserId;
-  final String replyId;
+  final DocumentReference currUserRef;
+  final DocumentReference replyRef;
   final List<String> likes;
   final List<String> dislikes;
 
   const LikeDislikeReply(
-      {Key? key, required this.currUserId, required this.replyId, required this.likes, required this.dislikes})
+      {Key? key, required this.currUserRef, required this.replyRef, required this.likes, required this.dislikes})
       : super(key: key);
 
   @override
@@ -26,8 +27,8 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
   @override
   void initState() {
     setState(() {
-      likeStatus = widget.likes.contains(widget.currUserId);
-      dislikeStatus = widget.dislikes.contains(widget.currUserId);
+      likeStatus = widget.likes.contains(widget.currUserRef);
+      dislikeStatus = widget.dislikes.contains(widget.currUserRef);
       likeCount = widget.likes.length;
       dislikeCount = widget.dislikes.length;
     });
@@ -45,7 +46,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
               iconSize: 20.0,
               icon: Icon(Icons.thumb_up),
               onPressed: () {
-                _replies.unLikeReply(replyId: widget.replyId, userId: widget.currUserId);
+                _replies.unLikeReply(replyRef: widget.replyRef, userRef: widget.currUserRef);
                 setState(() {
                   likeCount-=1;
                   likeStatus = false;
@@ -57,7 +58,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
               iconSize: 20.0,
               icon: Icon(Icons.thumb_up_outlined),
               onPressed: () {
-                _replies.likeReply(replyId: widget.replyId, userId: widget.currUserId);
+                _replies.likeReply(replyRef: widget.replyRef, userRef: widget.currUserRef);
                 setState(() {
                   likeCount+=1;
                   if(dislikeStatus==true) dislikeCount-=1;
@@ -75,7 +76,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
               iconSize: 20.0,
               icon: Icon(Icons.thumb_down),
               onPressed: () {
-                _replies.unDislikeReply(replyId: widget.replyId, userId: widget.currUserId);
+                _replies.unDislikeReply(replyRef: widget.replyRef, userRef: widget.currUserRef);
                 setState(() {
                   dislikeCount-=1;
                   dislikeStatus = false;
@@ -87,7 +88,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
               iconSize: 20.0,
               icon: Icon(Icons.thumb_down_outlined),
               onPressed: () {
-                _replies.dislikeReply(replyId: widget.replyId, userId: widget.currUserId);
+                _replies.dislikeReply(replyRef: widget.replyRef, userRef: widget.currUserRef);
                 setState(() {
                   dislikeCount+=1;
                   if(likeStatus==true) likeCount-=1;

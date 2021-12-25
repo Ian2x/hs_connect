@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
+// Calculate trending by activity within past 2 days
 const daysTrending = 2;
 
 const double profilePicWidth = 400;

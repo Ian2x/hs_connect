@@ -1,15 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
 
 class LikeDislikeComment extends StatefulWidget {
-  final String currUserId;
-  final String commentId;
+  final DocumentReference currUserRef;
+  final DocumentReference commentRef;
   final List<String> likes;
   final List<String> dislikes;
 
   const LikeDislikeComment(
-      {Key? key, required this.currUserId, required this.commentId, required this.likes, required this.dislikes})
+      {Key? key, required this.currUserRef, required this.commentRef, required this.likes, required this.dislikes})
       : super(key: key);
 
   @override
@@ -27,8 +28,8 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
   @override
   void initState() {
     setState(() {
-      likeStatus = widget.likes.contains(widget.currUserId);
-      dislikeStatus = widget.dislikes.contains(widget.currUserId);
+      likeStatus = widget.likes.contains(widget.currUserRef);
+      dislikeStatus = widget.dislikes.contains(widget.currUserRef);
       likeCount = widget.likes.length;
       dislikeCount = widget.dislikes.length;
     });
@@ -46,7 +47,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               iconSize: 20.0,
               icon: Icon(Icons.thumb_up),
               onPressed: () {
-                _comments.unLikeComment(commentId: widget.commentId, userId: widget.currUserId);
+                _comments.unLikeComment(commentRef: widget.commentRef, userRef: widget.currUserRef);
                 setState(() {
                   likeCount-=1;
                   likeStatus = false;
@@ -58,7 +59,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               iconSize: 20.0,
               icon: Icon(Icons.thumb_up_outlined),
               onPressed: () {
-                _comments.likeComment(commentId: widget.commentId, userId: widget.currUserId);
+                _comments.likeComment(commentRef: widget.commentRef, userRef: widget.currUserRef);
                 setState(() {
                   likeCount+=1;
                   if(dislikeStatus==true) dislikeCount-=1;
@@ -76,7 +77,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               iconSize: 20.0,
               icon: Icon(Icons.thumb_down),
               onPressed: () {
-                _comments.unDislikeComment(commentId: widget.commentId, userId: widget.currUserId);
+                _comments.unDislikeComment(commentRef: widget.commentRef, userRef: widget.currUserRef);
                 setState(() {
                   dislikeCount-=1;
                   dislikeStatus = false;
@@ -88,7 +89,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               iconSize: 20.0,
               icon: Icon(Icons.thumb_down_outlined),
               onPressed: () {
-                _comments.dislikeComment(commentId: widget.commentId, userId: widget.currUserId);
+                _comments.dislikeComment(commentRef: widget.commentRef, userRef: widget.currUserRef);
                 setState(() {
                   dislikeCount+=1;
                   if(likeStatus==true) likeCount-=1;
@@ -134,7 +135,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
         iconSize: 20.0,
         icon: Icon(Icons.thumb_up),
         onPressed: () {
-          _comments.unLikeComment(commentId: widget.commentId, userId: widget.currUserId);
+          _comments.unLikeComment(commentRef: widget.commentRef, userRef: widget.currUserRef);
           setState(() {
             likeStatus = false;
           });
@@ -145,7 +146,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
         iconSize: 20.0,
         icon: Icon(Icons.thumb_up_outlined),
         onPressed: () {
-          _comments.likeComment(commentId: widget.commentId, userId: widget.currUserId);
+          _comments.likeComment(commentRef: widget.commentRef, userRef: widget.currUserRef);
           setState(() {
             likeStatus = true;
           });

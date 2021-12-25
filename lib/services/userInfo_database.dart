@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/known_domain.dart';
 import 'package:hs_connect/models/user_data.dart';
@@ -7,8 +8,18 @@ import 'package:hs_connect/services/known_domains_database.dart';
 
 class UserInfoDatabaseService {
   final String? userId;
+  DocumentReference? userRef;
 
-  UserInfoDatabaseService({this.userId});
+  UserInfoDatabaseService({this.userId}) {
+    setUserRef(userId);
+  }
+
+  void setUserRef(String? userId) async {
+    if (userId!=null) {
+      final temp = await userInfoCollection.doc(userId).get();
+      this.userRef = temp.reference;
+    }
+  }
 
   // collection reference
   final CollectionReference userInfoCollection =
@@ -21,7 +32,7 @@ class UserInfoDatabaseService {
 
 
     // Create domain group if not already created
-    final docId = await _groupDatabaseService.newGroup(accessRestrictions: AccessRestriction(restrictionType: 'domain', restriction: domain), name: domain, userId: null);
+    final docRef = await _groupDatabaseService.newGroup(accessRestrictions: AccessRestriction(restrictionType: 'domain', restriction: domain), name: domain, userRef: null);
     // Find domain info (county, state, country)
     final KnownDomain? kd = await _knownDomainsDatabaseService.getKnownDomain(domain: domain);
 
@@ -31,7 +42,7 @@ class UserInfoDatabaseService {
       'county': kd!=null ? kd.county : null,
       'state': kd!=null ? kd.state : null,
       'country': kd!=null ? kd.country : null,
-      'userGroups': [UserGroup(groupId: docId, public: true).asMap()],
+      'userGroups': [UserGroup(groupRef: docRef, public: true).asMap()],
       'imageURL': null,
       'score': 0,
     });
@@ -42,8 +53,6 @@ class UserInfoDatabaseService {
       required String? imageURL,
       required Function(void) onValue,
       required Function onError}) async {
-
-    if(imageURL!=null) {
       return await userInfoCollection
           .doc(userId)
           .update({
@@ -52,39 +61,31 @@ class UserInfoDatabaseService {
       })
           .then(onValue)
           .catchError(onError);
-    } else {
-      return await userInfoCollection
-          .doc(userId)
-          .update({
-        'displayedName': displayedName,
-      })
-          .then(onValue)
-          .catchError(onError);
-    }
   }
 
-  Future joinGroup({required String userId, required String groupId, required bool public}) async {
-    return await userInfoCollection.doc(userId).update({'userGroups': FieldValue.arrayUnion([{'groupId': groupId, 'public': public}])});
+  Future joinGroup({required DocumentReference userRef, required DocumentReference groupRef, required bool public}) async {
+    return await userRef.update({'userGroups': FieldValue.arrayUnion([{'groupRef': groupRef, 'public': public}])});
   }
 
-  // get other users from userId
-  Future getUserData({required String userId}) async {
-    final snapshot = await userInfoCollection.doc(userId).get();
-    return _userDataFromSnapshot(snapshot, overrideUserId: userId);
+  // get other users from userRef
+  Future getUserData({required DocumentReference userRef}) async {
+    final snapshot = await userRef.get();
+    return _userDataFromSnapshot(snapshot, overrideUserRef: userRef);
   }
 
   // home data from snapshot
-  UserData? _userDataFromSnapshot(DocumentSnapshot snapshot, {String? overrideUserId}) {
+  UserData? _userDataFromSnapshot(DocumentSnapshot snapshot, {DocumentReference? overrideUserRef}) {
     if(snapshot.exists) {
+
       return UserData(
-        userId: overrideUserId!=null ? overrideUserId : userId!,
+        userRef: overrideUserRef!=null ? overrideUserRef : userRef!,
         displayedName: snapshot.get('displayedName'),
         domain: snapshot.get('domain'),
         county: snapshot.get('county'),
         state: snapshot.get('state'),
         country: snapshot.get('country'),
-        userGroups: snapshot.get('userGroups').map<UserGroup>((userGroup) => UserGroup(groupId: userGroup['groupId'], public: userGroup['public'])).toList(),
-        imageURL: snapshot.get('imageURL'),
+        userGroups: snapshot.get('userGroups').map<UserGroup>((userGroup) => UserGroup(groupRef: userGroup['groupRef'], public: userGroup['public'])).toList(),
+        image: snapshot.get('imageURL'),
         score: snapshot.get('score'),
       );
     } else {
@@ -92,9 +93,9 @@ class UserInfoDatabaseService {
     }
   }
 
-  // get Users from list of userIds, must be wrapped in FutureBuilder to use
-  Future<QuerySnapshot<Object?>> getUsers({required List<String> userIds}) async {
-    return userInfoCollection.where(FieldPath.documentId, whereIn: userIds).get();
+  // get Users from list of userRefs, must be wrapped in FutureBuilder to use
+  Future<QuerySnapshot<Object?>> getUsers({required List<DocumentReference> userRefs}) async {
+    return userInfoCollection.where(FieldPath.documentId, whereIn: userRefs.map((userRef) {return userRef.id;}).toList()).get();
   }
 
   // get home doc stream

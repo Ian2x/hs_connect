@@ -145,7 +145,7 @@ class _ProfileFormState extends State<ProfileForm> {
                       });
                     }
 
-                    await UserInfoDatabaseService(userId: user.uid)
+                    await UserInfoDatabaseService(userId: userData.userRef.id)
                         .updateProfile(
                       displayedName: _displayedName ?? userData.displayedName,
                       imageURL: newFileURL, // _initialImageURL ?? userData.imageURL,

@@ -147,11 +147,11 @@ class _PostFormState extends State<PostForm> {
 
                             if (_formKey.currentState != null && _formKey.currentState!.validate()) {
                               setState(() => loading = true);
-                              await PostsDatabaseService(userId: user.uid).newPost(
+                              await PostsDatabaseService(userRef: userData.userRef).newPost(
                                 title: _title,
                                 text: _text,
                                 imageURL: newFileURL,
-                                groupId: _groupId,
+                                groupRef: _groupId,
                                 onValue: handleValue,
                                 onError: handleError,
                               );

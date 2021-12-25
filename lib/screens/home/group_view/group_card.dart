@@ -10,21 +10,21 @@ import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/userInfo_database.dart';
 
 class GroupCard extends StatefulWidget {
-  final String groupId;
-  final String? userId;
+  final DocumentReference groupRef;
+  final DocumentReference? userRef;
   final String name;
   final String? image;
   final AccessRestriction accessRestrictions;
-  final String currUserId;
+  final DocumentReference currUserRef;
 
   GroupCard(
       {Key? key,
-        required this.groupId,
-        this.userId,
+        required this.groupRef,
+        this.userRef,
         required this.name,
         this.image,
         required this.accessRestrictions,
-        required this.currUserId})
+        required this.currUserRef})
       : super(key: key);
 
   @override
@@ -53,8 +53,8 @@ class _GroupCardState extends State<GroupCard> {
   }
 
   void getUsername() async {
-    if (widget.userId!=null) {
-      final UserData? fetchUsername = await _userInfoDatabaseService.getUserData(userId: widget.userId!);
+    if (widget.userRef!=null) {
+      final UserData? fetchUsername = await _userInfoDatabaseService.getUserData(userRef: widget.userRef!);
       setState(() {
         username = fetchUsername != null ? fetchUsername.displayedName : '<Failed to retrieve user name>';
       });

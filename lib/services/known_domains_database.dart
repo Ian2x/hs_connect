@@ -5,7 +5,7 @@ class KnownDomainsDatabaseService {
   // collection reference
   final CollectionReference knownDomainsCollection = FirebaseFirestore.instance.collection('knownDomains');
 
-  // get group data from groupId
+  // get group data from groupRef
   Future<KnownDomain?> getKnownDomain({required String domain}) async {
     final DocumentSnapshot documentSnapshot = await knownDomainsCollection.doc(domain).get();
     if (documentSnapshot.exists) {

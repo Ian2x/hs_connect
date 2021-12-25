@@ -3,9 +3,10 @@ import 'dart:async';
 import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hs_connect/models/group.dart';
-import 'package:hs_connect/models/idRanking.dart';
+import 'package:hs_connect/models/refRanking.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/services/posts_database.dart';
@@ -15,9 +16,9 @@ import 'package:hs_connect/shared/constants.dart';
 void defaultFunc(dynamic parameter) {}
 
 class GroupsDatabaseService {
-  final String? userId;
+  final DocumentReference? userRef;
 
-  GroupsDatabaseService({this.userId});
+  GroupsDatabaseService({this.userRef});
 
   // collection reference
   final CollectionReference groupsCollection = FirebaseFirestore.instance.collection('groups');
@@ -25,7 +26,7 @@ class GroupsDatabaseService {
   Future newGroup(
       {required AccessRestriction accessRestrictions,
       required String name,
-      String? userId,
+      DocumentReference? userRef,
       String? image,
       Function(void) onValue = defaultFunc,
       Function onError = defaultFunc}) async {
@@ -34,57 +35,60 @@ class GroupsDatabaseService {
         .where('accessRestrictions', isEqualTo: accessRestrictions.asMap())
         .get();
     if (docs.size > 0) {
-      return docs.docs.first.id;
+      return docs.docs.first.reference;
     } else {
-      DocumentReference docRef = await groupsCollection.doc();
-      final docId = docRef.id;
+      DocumentReference newGroupRef = await groupsCollection.doc();
 
-      await groupsCollection
-          .doc(docId)
+      await newGroupRef
           .set({
-            'accessRestrictions': accessRestrictions.asMap(),
+            'userRef': userRef,
             'name': name,
-            'userId': userId,
             'image': image,
+            'accessRestrictions': accessRestrictions.asMap(),
+            'createdAt': DateTime.now(),
+            'numPosts': 0,
           })
           .then(onValue)
           .catchError(onError);
-      UserInfoDatabaseService _users = UserInfoDatabaseService();
-      if (userId!=null) {
-        await _users.joinGroup(userId: userId, groupId: docId, public: true);
+      if (userRef != null) {
+        UserInfoDatabaseService _users = UserInfoDatabaseService(userId: userRef.id);
+        await _users.joinGroup(userRef: userRef, groupRef: newGroupRef, public: true);
       }
-      return docId;
+      return newGroupRef;
     }
   }
 
   // get group data
-  Future getGroupData({required String groupId}) async {
-    final snapshot = await groupsCollection.doc(groupId).get();
-    return _groupDataFromSnapshot(snapshot, groupId: groupId);
+  Future getGroupData({required DocumentReference groupRef}) async {
+    final snapshot = await groupRef.get();
+    return _groupDataFromSnapshot(snapshot: snapshot, groupRef: groupRef);
   }
 
   // home data from snapshot
-  Group? _groupDataFromSnapshot(DocumentSnapshot snapshot, {required String groupId}) {
+  Group? _groupDataFromSnapshot({required DocumentSnapshot snapshot, required DocumentReference groupRef}) {
     if (snapshot.exists) {
       final accessRestrictions = snapshot.get('accessRestrictions');
       return Group(
-        groupId: groupId,
-        userId: snapshot.get('userId'),
+        groupRef: groupRef,
+        userRef: snapshot.get('userRef'),
         name: snapshot.get('name'),
         image: snapshot.get('image'),
+        // AccessRestriction.mapToAR(map: snapshot.get('accessRestrictions') as Map<String, dynamic>),
         accessRestrictions: AccessRestriction(
             restriction: accessRestrictions['restriction'],
             restrictionType: accessRestrictions[
-                'restrictionType']), //AccessRestriction.hashmapToAR(hashMap: snapshot.get('accessRestrictions') as HashMap<String, dynamic>),
+                'restrictionType']),
+        createdAt: snapshot.get('createdAt'),
+        numPosts: snapshot.get('numPosts'),
       );
     } else {
       return null;
     }
   }
 
-  // get group data from groupId
-  Future<Group?> group({required String groupId}) async {
-    await groupsCollection.doc(groupId).get().then((DocumentSnapshot documentSnapshot) {
+  // get group data from groupRef
+  Future<Group?> group({required DocumentReference groupRef}) async {
+    await groupRef.get().then((DocumentSnapshot documentSnapshot) {
       if (documentSnapshot.exists) {
         return documentSnapshot.data();
       } else {
@@ -98,55 +102,77 @@ class GroupsDatabaseService {
     return groupsCollection
         .where(FieldPath.documentId,
             whereIn: userGroups.map((userGroup) {
-              return userGroup.groupId;
+              return userGroup.groupRef.id;
             }).toList())
         .get();
   }
 
-  Future getTrendingGroups(
+  Future<QuerySnapshot<Object?>> getTrendingGroups(
       {required String domain, required String? county, required String? state, required String? country}) async {
     SplayTreeMap groupScores = new SplayTreeMap();
-    // get all group ids
-    final domainGroups = await groupsCollection.where('accessRestrictions', isEqualTo: AccessRestriction(restrictionType: 'domain', restriction: domain).asMap()).get();
-    final countyGroups = county!=null ? await groupsCollection.where('county', isEqualTo: AccessRestriction(restrictionType: 'county', restriction: county).asMap()).get() : null;
-    final stateGroups = state!=null ? await groupsCollection.where('state', isEqualTo: AccessRestriction(restrictionType: 'state', restriction: state).asMap()).get() : null;
-    final countryGroups = country!=null ? await groupsCollection.where('country', isEqualTo: AccessRestriction(restrictionType: 'country', restriction: country).asMap()).get(): null;
-    final domainGroupsIds = domainGroups.docs.map((group) {
-      return group.id;
+    // get all group refs
+    final domainGroups = await groupsCollection
+        .where('accessRestrictions',
+            isEqualTo: AccessRestriction(restrictionType: 'domain', restriction: domain).asMap())
+        .get();
+    final countyGroups = county != null
+        ? await groupsCollection
+            .where('county', isEqualTo: AccessRestriction(restrictionType: 'county', restriction: county).asMap())
+            .get()
+        : null;
+    final stateGroups = state != null
+        ? await groupsCollection
+            .where('state', isEqualTo: AccessRestriction(restrictionType: 'state', restriction: state).asMap())
+            .get()
+        : null;
+    final countryGroups = country != null
+        ? await groupsCollection
+            .where('country', isEqualTo: AccessRestriction(restrictionType: 'country', restriction: country).asMap())
+            .get()
+        : null;
+    final domainGroupsRefs = domainGroups.docs.map((group) {
+      return group.reference;
     }).toList();
-    final countyGroupsIds = countyGroups!=null ? countyGroups.docs.map((group) {
-      return group.id;
-    }).toList() : <String>[];
-    final stateGroupsIds = stateGroups!=null ? stateGroups.docs.map((group) {
-      return group.id;
-    }).toList() : <String>[];
-    final countryGroupsIds = countryGroups!=null ? countryGroups.docs.map((group) {
-      return group.id;
-    }).toList() : <String>[];
+    final countyGroupsRefs = countyGroups != null
+        ? countyGroups.docs.map((group) {
+            return group.reference;
+          }).toList()
+        : <DocumentReference>[];
+    final stateGroupsRefs = stateGroups != null
+        ? stateGroups.docs.map((group) {
+            return group.reference;
+          }).toList()
+        : <DocumentReference>[];
+    final countryGroupsRefs = countryGroups != null
+        ? countryGroups.docs.map((group) {
+            return group.reference;
+          }).toList()
+        : <DocumentReference>[];
     // collect post information for each group
-    PostsDatabaseService _posts = PostsDatabaseService(groupsId: domainGroupsIds + countyGroupsIds + stateGroupsIds + countryGroupsIds);
-
+    PostsDatabaseService _posts =
+        PostsDatabaseService(groupsRefs: domainGroupsRefs + countyGroupsRefs + stateGroupsRefs + countryGroupsRefs);
 
     final List<Post?> allPosts = await _posts.getMultiGroupPosts();
 
-    final List<Post?> filteredPosts = allPosts.where((post) => post!=null && DateTime.now().difference(post.createdAt.toDate()).compareTo(Duration(days: 3))==-1).toList();
-
+    final List<Post?> filteredPosts = allPosts
+        .where((post) =>
+            post != null && DateTime.now().difference(post.createdAt.toDate()).compareTo(Duration(days: 3)) == -1)
+        .toList();
 
     filteredPosts.forEach((post) {
-      groupScores.update(post!.groupId, (value) => value+1, ifAbsent: () => 1);
+      groupScores.update(post!.groupRef, (value) => value + 1, ifAbsent: () => 1);
     });
 
     // print(groupScores);
-    List<idRanking> groupScoresList = groupScores.entries.map((ele) => idRanking(id: ele.key, count: ele.value)).toList();
-    groupScoresList.sort(idRankingCompare);
+    List<refRanking> groupScoresList =
+        groupScores.entries.map((ele) => refRanking(ref: ele.key, count: ele.value)).toList();
+    groupScoresList.sort(refRankingCompare);
 
     return groupsCollection
         .where(FieldPath.documentId,
-        whereIn: groupScoresList.map((idRanking) {
-          return idRanking.id;
-        }).toList())
+            whereIn: groupScoresList.map((refRanking) {
+              return refRanking.ref.id;
+            }).toList())
         .get();
-
-    return null;
   }
 }

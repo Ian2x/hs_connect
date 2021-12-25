@@ -21,14 +21,18 @@ class _WrapperState extends State<Wrapper> {
   Widget build(BuildContext context) {
 
     final user = Provider.of<User?>(context);
+    final userData = Provider.of<UserData?>(context);
 
+    print(user == null || !user.email!.endsWith('@ianeric.com'));
+    print(user);
+    print(userData);
 
     if (user == null || !user.email!.endsWith('@ianeric.com')) {
+      print("AUTHENTICATE");
       return Authenticate();
     } else {
+      print("HOME");
       return Home();
     }
-
-    return Authenticate();
   }
 }

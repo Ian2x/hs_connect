@@ -23,7 +23,7 @@ class PostPage extends StatelessWidget {
               children: <Widget>[
                 Text(postInfo.text),
                 SizedBox(height: 10.0),
-                CommentsFeed(postId: postInfo.postId),
+                CommentsFeed(postRef: postInfo.postRef),
                 // SizedBox(height: 20.0),
                 // CommentForm(postId: postInfo.postId),
               ]

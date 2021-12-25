@@ -7,34 +7,40 @@ import 'package:hs_connect/screens/home/post_feeds/specific_group_feed.dart';
 import 'package:hs_connect/screens/home/post_view/delete_post.dart';
 import 'package:hs_connect/screens/home/post_view/like_dislike_post.dart';
 import 'package:hs_connect/screens/home/post_view/post_page.dart';
+import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/userInfo_database.dart';
+import 'package:timeago/timeago.dart' as timeago;
+
+
 
 class PostCard extends StatefulWidget {
-  final String postId;
-  final String userId;
-  final String groupId;
+  final DocumentReference postRef;
+  final DocumentReference userRef;
+  final DocumentReference groupRef;
   final String title;
   final String text;
   final String? image;
   final Timestamp createdAt;
   List<String> likes;
   List<String> dislikes;
-  final String currUserId;
+  int numComments;
+  final DocumentReference currUserRef;
 
   PostCard(
       {Key? key,
-      required this.postId,
-      required this.userId,
-      required this.groupId,
+      required this.postRef,
+      required this.userRef,
+      required this.groupRef,
       required this.title,
       required this.text,
       required this.image,
       required this.createdAt,
       required this.likes,
       required this.dislikes,
-      required this.currUserId})
+      required this.numComments,
+      required this.currUserRef})
       : super(key: key);
 
   @override
@@ -47,21 +53,24 @@ class _PostCardState extends State<PostCard> {
   GroupsDatabaseService _groups = GroupsDatabaseService();
 
   PostsDatabaseService _posts = PostsDatabaseService();
+  CommentsDatabaseService _comments = CommentsDatabaseService();
+
 
   bool liked = false;
   bool disliked = false;
   String username = '<Loading user name...>';
   String groupName = '<Loading group name...>';
   Image groupImage = Image(image: AssetImage('assets/masonic-G.png'), height: 20, width: 20);
+  String commentsCount = '?';
 
   @override
   void initState() {
     // initialize liked/disliked
-    if (widget.likes.contains(widget.currUserId)) {
+    if (widget.likes.contains(widget.currUserRef)) {
       setState(() {
         liked = true;
       });
-    } else if (widget.dislikes.contains(widget.currUserId)) {
+    } else if (widget.dislikes.contains(widget.currUserRef)) {
       setState(() {
         disliked = true;
       });
@@ -70,21 +79,33 @@ class _PostCardState extends State<PostCard> {
     // _userInfoDatabaseService.userId = widget.userId;
     getUsername();
     getGroupName();
+    getCommentsCount();
     super.initState();
   }
 
   void getUsername() async {
-    final UserData? fetchUsername = await _userInfoDatabaseService.getUserData(userId: widget.userId);
+    final UserData? fetchUsername = await _userInfoDatabaseService.getUserData(userRef: widget.userRef);
     setState(() {
       username = fetchUsername != null ? fetchUsername.displayedName : '<Failed to retrieve user name>';
     });
   }
 
   void getGroupName() async {
-    final Group? fetchGroupName = await _groups.getGroupData(groupId: widget.groupId);
+    final Group? fetchGroupName = await _groups.getGroupData(groupRef: widget.groupRef);
     setState(() {
       groupName = fetchGroupName != null ? fetchGroupName.name : '<Failed to retrieve group name>';
     });
+  }
+
+  void getCommentsCount() async {
+    /*
+    final int? fetchCommentsCount = await _comments.postNumComments(postRef: widget.postRef);
+    print(fetchCommentsCount);
+    print("LOOK ABOVE");
+    setState(() {
+      commentsCount = fetchCommentsCount != null ? fetchCommentsCount.toString() : '?';
+    });
+     */
   }
 
   void openSpecificGroupFeed() async {
@@ -92,17 +113,17 @@ class _PostCardState extends State<PostCard> {
       context,
       MaterialPageRoute(
           builder: (context) => SpecificGroupFeed(
-            groupId: widget.groupId,
+            groupRef: widget.groupRef,
               )),
     );
   }
-
   @override
   Widget build(BuildContext context) {
+
     return Card(
         child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
       Dismissible(
-        key: ValueKey(widget.postId),
+        key: ValueKey(widget.postRef),
         child: ListTile(
           title: Row(children: <Widget>[
             IconButton(
@@ -112,10 +133,13 @@ class _PostCardState extends State<PostCard> {
             Text(widget.title),
           ]),
           subtitle: Column(children: <Widget>[
-            Text(username + ' in ' + groupName),
+            Text(username + ' in ' + groupName + '      ' + timeago.format(widget.createdAt.toDate())),
             widget.image != null ? Image.network(widget.image!) : Container(),
-            LikeDislikePost(
-                currUserId: widget.currUserId, postId: widget.postId, likes: widget.likes, dislikes: widget.dislikes),
+            Row(children: <Widget>[
+              Text(commentsCount),
+              LikeDislikePost(
+                  currUserRef: widget.currUserRef, postRef: widget.postRef, likes: widget.likes, dislikes: widget.dislikes),
+            ])
           ]),
           onTap: () {
             Navigator.push(
@@ -123,24 +147,25 @@ class _PostCardState extends State<PostCard> {
               MaterialPageRoute(
                   builder: (context) => PostPage(
                           postInfo: Post(
-                        postId: widget.postId,
-                        userId: widget.userId,
-                        groupId: widget.groupId,
+                        postRef: widget.postRef,
+                        userRef: widget.userRef,
+                        groupRef: widget.groupRef,
                         title: widget.title,
                         text: widget.text,
-                        image: widget.image,
+                        media: widget.image,
                         createdAt: widget.createdAt,
                         likes: widget.likes,
                         dislikes: widget.dislikes,
+                        numComments: widget.numComments,
                       ))),
             );
           },
           trailing: DeletePost(
-              postUserId: widget.userId, postId: widget.postId, currUserId: widget.currUserId, image: widget.image),
+              postUserRef: widget.userRef, postRef: widget.postRef, currUserRef: widget.currUserRef, image: widget.image),
         ),
         // CAN DELETE POST EITHER VIA DELETE POST BUTTON OR DISMISSAL, PROBABLY CHOOSE ONE OR THE OTHER EVENTUALLY
         onDismissed: (DismissDirection direction) async {
-          await _posts.deletePost(postId: widget.postId, userId: widget.currUserId, image: widget.image);
+          await _posts.deletePost(postRef: widget.postRef, userRef: widget.currUserRef, image: widget.image);
         },
       )
     ]));

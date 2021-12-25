@@ -7,16 +7,16 @@ import 'package:hs_connect/services/storage/image_storage.dart';
 void defaultFunc(dynamic parameter) {}
 
 class CommentsDatabaseService {
-  final String? userId;
+  final DocumentReference? userRef;
 
-  String? postId;
+  DocumentReference? postRef;
 
-  CommentsDatabaseService({this.userId, this.postId});
+  CommentsDatabaseService({this.userRef, this.postRef});
 
   ImageStorage _images = ImageStorage();
 
-  void setPostId({required String postid}) {
-    this.postId = postId;
+  void setPostRef({required DocumentReference postRef}) {
+    this.postRef = postRef;
   }
 
   // collection reference
@@ -24,13 +24,13 @@ class CommentsDatabaseService {
 
   Future newComment({required String text,
     required String? imageURL,
-    required String postId,
+    required DocumentReference postRef,
     Function(void) onValue = defaultFunc,
     Function onError = defaultFunc}) async {
     return await commentsCollection
         .add({
-      'userId': userId,
-      'postId': postId,
+      'userRef': userRef,
+      'postREf': postRef,
       'text': text,
       'image': imageURL,
       'createdAt': DateTime.now(),
@@ -41,11 +41,11 @@ class CommentsDatabaseService {
         .catchError(onError);
   }
 
-  Future deleteComment({required String commentId, required String userId, String? image}) async {
-    final checkAuth = await commentsCollection.doc(commentId).get();
+  Future deleteComment({required DocumentReference commentRef, required DocumentReference userRef, String? image}) async {
+    final checkAuth = await commentRef.get();
     if(checkAuth.exists) {
-      if (userId==checkAuth.get('userId')) {
-        await commentsCollection.doc(commentId).delete();
+      if (userRef==checkAuth.get('userRef')) {
+        await commentRef.delete();
         if (image!=null) {
           return await _images.deleteImage(imageURL: image);
         }
@@ -54,50 +54,56 @@ class CommentsDatabaseService {
     return null;
   }
 
-  Future likeComment({required String commentId, required String userId}) async {
+  Future likeComment({required DocumentReference commentRef, required DocumentReference userRef}) async {
     // remove dislike if disliked
-    await commentsCollection.doc(commentId).update({'dislikes': FieldValue.arrayRemove([userId])});
+    await commentRef.update({'dislikes': FieldValue.arrayRemove([userRef])});
     // like comment
-    return await commentsCollection.doc(commentId).update({'likes': FieldValue.arrayUnion([userId])});
+    return await commentRef.update({'likes': FieldValue.arrayUnion([userRef])});
   }
 
-  Future unLikeComment({required String commentId, required String userId}) async {
+  Future unLikeComment({required DocumentReference commentRef, required DocumentReference userRef}) async {
     // remove like
-    await commentsCollection.doc(commentId).update({'likes': FieldValue.arrayRemove([userId])});
+    await commentRef.update({'likes': FieldValue.arrayRemove([userRef])});
   }
 
-  Future dislikeComment({required String commentId, required String userId}) async {
+  Future dislikeComment({required DocumentReference commentRef, required DocumentReference userRef}) async {
     // remove like if liked
-    await commentsCollection.doc(commentId).update({'likes': FieldValue.arrayRemove([userId])});
+    await commentRef.update({'likes': FieldValue.arrayRemove([userRef])});
     // dislike comment
-    return await commentsCollection.doc(commentId).update({'dislikes': FieldValue.arrayUnion([userId])});
+    return await commentRef.update({'dislikes': FieldValue.arrayUnion([userRef])});
   }
 
-  Future unDislikeComment({required String commentId, required String userId}) async {
+  Future unDislikeComment({required DocumentReference commentRef, required DocumentReference userRef}) async {
     // remove like
-    await commentsCollection.doc(commentId).update({'dislikes': FieldValue.arrayRemove([userId])});
+    await commentRef.update({'dislikes': FieldValue.arrayRemove([userRef])});
   }
 
   // home data from snapshot
   Comment? _commentFromDocument(QueryDocumentSnapshot document) {
     if (document.exists) {
       return Comment(
-        commentId: document.id,
-        postId: document['postId'],
-        userId: document['userId'],
+        commentRef: document.reference,
+        postRef: document['postRef'],
+        userRef: document['userRef'],
         text: document['text'],
-        image: document['image'],
+        media: document['image'],
         createdAt: document['createdAt'].toString(),
+        numReplies: document['numReplies'],
         likes: (document['likes'] as List).map((item) => item as String).toList(),
-        dislikes: (document['dislikes'] as List).map((item) => item as String).toList(),//document['dislikes'],
+        dislikes: (document['dislikes'] as List).map((item) => item as String).toList(),
       );
     } else {
       return null;
     }
   }
 
+  Future<int> postNumComments({required DocumentReference postREf}) async {
+    final data = await commentsCollection.where('postRef', isEqualTo: postRef).get();
+    return data.size;
+  }
+
   Stream<List<Comment?>> get postComments {
-    return commentsCollection.where('postId', isEqualTo: postId).orderBy('createdAt', descending: false).snapshots().map((snapshot) => snapshot.docs.map(_commentFromDocument).toList());
+    return commentsCollection.where('postRef', isEqualTo: postRef).orderBy('createdAt', descending: false).snapshots().map((snapshot) => snapshot.docs.map(_commentFromDocument).toList());
   }
 
 }

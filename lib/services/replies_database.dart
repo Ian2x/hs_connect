@@ -5,16 +5,16 @@ import 'package:hs_connect/services/storage/image_storage.dart';
 void defaultFunc(dynamic parameter) {}
 
 class RepliesDatabaseService {
-  final String? userId;
+  final DocumentReference? userRef;
 
-  String? commentId;
+  DocumentReference? commentRef;
 
-  RepliesDatabaseService({this.userId, this.commentId});
+  RepliesDatabaseService({this.userRef, this.commentRef});
 
   ImageStorage _images = ImageStorage();
 
-  void setCommentId({required String commentId}) {
-    this.commentId = commentId;
+  void setCommentRef({required DocumentReference commentRef}) {
+    this.commentRef = commentRef;
   }
 
   // collection reference
@@ -22,13 +22,13 @@ class RepliesDatabaseService {
 
   Future newReply({required String text,
     required String? imageURL,
-    required String commentId,
+    required DocumentReference commentRef,
     Function(void) onValue = defaultFunc,
     Function onError = defaultFunc}) async {
     return await repliesCollection
         .add({
-      'userId': userId,
-      'commentId': commentId,
+      'userRef': userRef,
+      'commentRef': commentRef,
       'text': text,
       'image': imageURL,
       'createdAt': DateTime.now(),
@@ -39,11 +39,11 @@ class RepliesDatabaseService {
         .catchError(onError);
   }
 
-  Future deleteReply({required String replyId, required String userId, String? image}) async {
-    final checkAuth = await repliesCollection.doc(replyId).get();
+  Future deleteReply({required DocumentReference replyRef, required DocumentReference userRef, String? image}) async {
+    final checkAuth = await replyRef.get();
     if(checkAuth.exists) {
-      if (userId==checkAuth.get('userId')) {
-        await repliesCollection.doc(replyId).delete();
+      if (userRef==checkAuth.get('userRef')) {
+        await replyRef.delete();
         if (image!=null) {
           return await _images.deleteImage(imageURL: image);
         }
@@ -52,40 +52,41 @@ class RepliesDatabaseService {
     return null;
   }
 
-  Future likeReply({required String replyId, required String userId}) async {
+  Future likeReply({required DocumentReference replyRef, required DocumentReference userRef}) async {
     // remove dislike if disliked
-    await repliesCollection.doc(replyId).update({'dislikes': FieldValue.arrayRemove([userId])});
+    await replyRef.update({'dislikes': FieldValue.arrayRemove([userRef])});
     // like comment
-    return await repliesCollection.doc(replyId).update({'likes': FieldValue.arrayUnion([userId])});
+    return await replyRef.update({'likes': FieldValue.arrayUnion([userRef])});
   }
 
-  Future unLikeReply({required String replyId, required String userId}) async {
+  Future unLikeReply({required DocumentReference replyRef, required DocumentReference userRef}) async {
     // remove like
-    await repliesCollection.doc(replyId).update({'likes': FieldValue.arrayRemove([userId])});
+    await replyRef.update({'likes': FieldValue.arrayRemove([userRef])});
   }
 
 
-  Future dislikeReply({required String replyId, required String userId}) async {
+  Future dislikeReply({required DocumentReference replyRef, required DocumentReference userRef}) async {
     // remove like if liked
-    await repliesCollection.doc(replyId).update({'likes': FieldValue.arrayRemove([userId])});
+    await replyRef.update({'likes': FieldValue.arrayRemove([userRef])});
     // dislike comment
-    return await repliesCollection.doc(replyId).update({'dislikes': FieldValue.arrayUnion([userId])});
+    return await replyRef.update({'dislikes': FieldValue.arrayUnion([userRef])});
   }
 
-  Future unDislikeReply({required String replyId, required String userId}) async {
+  Future unDislikeReply({required DocumentReference replyRef, required DocumentReference userRef}) async {
     // remove like
-    await repliesCollection.doc(replyId).update({'dislikes': FieldValue.arrayRemove([userId])});
+    await replyRef.update({'dislikes': FieldValue.arrayRemove([userRef])});
   }
 
   // home data from snapshot
   Reply? _replyFromDocument(QueryDocumentSnapshot document) {
     if (document.exists) {
       return Reply(
-        replyId: document.id,
-        commentId: document['commentId'],
-        userId: document['userId'],
+        replyRef: document.reference,
+        commentRef: document['commentRef'],
+        postRef: document['postRef'],
+        userRef: document['userRef'],
         text: document['text'],
-        image: document['image'],
+        media: document['image'],
         createdAt: document['createdAt'].toString(),
         likes: (document['likes'] as List).map((item) => item as String).toList(),
         dislikes: (document['dislikes'] as List).map((item) => item as String).toList(),//document['dislikes'],
@@ -96,7 +97,7 @@ class RepliesDatabaseService {
   }
 
   Stream<List<Reply?>> get commentReplies {
-    return repliesCollection.where('commentId', isEqualTo: commentId).orderBy('createdAt', descending: false).snapshots().map((snapshot) => snapshot.docs.map(_replyFromDocument).toList());
+    return repliesCollection.where('commentRef', isEqualTo: commentRef).orderBy('createdAt', descending: false).snapshots().map((snapshot) => snapshot.docs.map(_replyFromDocument).toList());
   }
 
 }

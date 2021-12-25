@@ -159,7 +159,7 @@ class _NewGroupFormState extends State<NewGroupForm> {
                       await GroupsDatabaseService().newGroup(
                         accessRestrictions: _accessRestriction!,
                         name: _name,
-                        userId: user.uid,
+                        userRef: userData.userRef,
                         image: newFileURL,
                         onValue: handleValue,
                         onError: handleError,

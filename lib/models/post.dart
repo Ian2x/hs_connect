@@ -1,24 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Post {
-  final String postId;
-  final String userId;
-  final String groupId;
+  final DocumentReference postRef;
+  final DocumentReference groupRef;
+  final DocumentReference userRef;
   String title;
   String text;
-  String? image;
+  String? media;
   final Timestamp createdAt;
+  int numComments;
   List<String> likes;
   List<String> dislikes;
 
   Post({
-    required this.postId,
-    required this.userId,
-    required this.groupId,
+    required this.postRef,
+    required this.groupRef,
+    required this.userRef,
     required this.title,
     required this.text,
-    required this.image,
+    required this.media,
     required this.createdAt,
+    required this.numComments,
     required this.likes,
     required this.dislikes,
   });

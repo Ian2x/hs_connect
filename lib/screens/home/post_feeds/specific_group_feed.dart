@@ -12,9 +12,9 @@ import 'package:provider/provider.dart';
 
 class SpecificGroupFeed extends StatefulWidget {
 
-  final String groupId;
+  final DocumentReference groupRef;
 
-  const SpecificGroupFeed({Key? key, required this.groupId}) : super(key: key);
+  const SpecificGroupFeed({Key? key, required this.groupRef}) : super(key: key);
 
   @override
   _SpecificGroupFeedState createState() => _SpecificGroupFeedState();
@@ -33,7 +33,7 @@ class _SpecificGroupFeedState extends State<SpecificGroupFeed> {
   }
 
   void getGroupName() async {
-    final Group? fetchGroupName = await _groups.getGroupData(groupId: widget.groupId);
+    final Group? fetchGroupName = await _groups.getGroupData(groupRef: widget.groupRef);
     setState(() {
       groupName = fetchGroupName != null ? fetchGroupName.name : '<Failed to retrieve group name>';
     });
@@ -46,7 +46,7 @@ class _SpecificGroupFeedState extends State<SpecificGroupFeed> {
 
     if (userData == null) return Loading();
 
-    PostsDatabaseService _posts = PostsDatabaseService(groupId: widget.groupId);
+    PostsDatabaseService _posts = PostsDatabaseService(groupRef: widget.groupRef);
 
     return Scaffold(
       backgroundColor: Colors.brown[50],
@@ -73,16 +73,17 @@ class _SpecificGroupFeedState extends State<SpecificGroupFeed> {
                 // when scroll up/down, fires once
                 return Center(
                     child: PostCard(
-                      postId: posts[index].postId,
-                      userId: posts[index].userId,
-                      groupId: posts[index].groupId,
+                      postRef: posts[index].postRef,
+                      userRef: posts[index].userRef,
+                      groupRef: posts[index].groupRef,
                       title: posts[index].title,
                       text: posts[index].text,
-                      image: posts[index].image,
+                      image: posts[index].media,
                       createdAt: posts[index].createdAt,
                       likes: posts[index].likes,
                       dislikes: posts[index].dislikes,
-                      currUserId: user.uid,
+                      currUserRef: userData.userRef,
+                      numComments: posts[index].numComments,
                     ));
               },
             );

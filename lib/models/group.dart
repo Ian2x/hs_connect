@@ -1,4 +1,4 @@
-import 'dart:collection';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AccessRestriction {
   final String restrictionType; // domain, county, state, or country
@@ -19,24 +19,28 @@ class AccessRestriction {
     };
   }
 
-  // CURRENTLY NOT WORKING
-  static AccessRestriction hashmapToAR({required HashMap hashMap}) {
-    return AccessRestriction(restriction: hashMap['restriction'], restrictionType: hashMap['restrictionType']);
+  // CURRENTLY NOT WORKING? SEE GROUPS_DATABASE
+  static AccessRestriction mapToAR({required Map map}) {
+    return AccessRestriction(restriction: map['restriction'], restrictionType: map['restrictionType']);
   }
 }
 
 class Group {
-  final String groupId;
-  final String? userId;
+  final DocumentReference groupRef;
+  final DocumentReference? userRef;
   String name;
   String? image;
   final AccessRestriction accessRestrictions;
+  final Timestamp createdAt;
+  int numPosts;
 
   Group({
-    required this.groupId,
-    required this.userId,
+    required this.groupRef,
+    required this.userRef,
     required this.name,
     required this.image,
     required this.accessRestrictions,
+    required this.createdAt,
+    required this.numPosts,
   });
 }

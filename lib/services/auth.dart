@@ -36,9 +36,8 @@ class AuthService {
 
       if (user == null || user.email == null) return null;
       // create a document for the home with the uid
-      await UserInfoDatabaseService(userId: user.uid)
-          .initUserData(domain, username);
-
+      final _userInfoDatabaseService = UserInfoDatabaseService(userId: user.uid);
+      await _userInfoDatabaseService.initUserData(domain, username);
       return user;
     } catch (e) {
       print(e.toString());

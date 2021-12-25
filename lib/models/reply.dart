@@ -1,19 +1,23 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Reply {
-  final String replyId;
-  final String commentId;
-  final String userId;
+  final DocumentReference replyRef;
+  final DocumentReference commentRef;
+  final DocumentReference postRef;
+  final DocumentReference userRef;
   String text;
-  String? image;
+  String? media;
   final String createdAt;
   List<String> likes;
   List<String> dislikes;
 
   Reply({
-    required this.replyId,
-    required this.commentId,
-    required this.userId,
+    required this.replyRef,
+    required this.commentRef,
+    required this.postRef,
+    required this.userRef,
     required this.text,
-    required this.image,
+    required this.media,
     required this.createdAt,
     required this.likes,
     required this.dislikes,

@@ -25,7 +25,7 @@ class _HomeFeedState extends State<HomeFeed> {
 
     if (userData == null) return Loading();
 
-    PostsDatabaseService _posts = PostsDatabaseService(groupsId: userData.userGroups.map((userGroup) => userGroup.groupId).toList());
+    PostsDatabaseService _posts = PostsDatabaseService(groupsRefs: userData.userGroups.map((userGroup) => userGroup.groupRef).toList());
 
     return StreamBuilder(
       stream: _posts.multiGroupPosts,
@@ -46,16 +46,17 @@ class _HomeFeedState extends State<HomeFeed> {
                 return Loading();
               } else return Center(
                 child: PostCard(
-                  postId: posts[index].postId,
-                  userId: posts[index].userId,
-                  groupId: posts[index].groupId,
+                  postRef: posts[index].postRef,
+                  userRef: posts[index].userRef,
+                  groupRef: posts[index].groupRef,
                   title: posts[index].title,
                   text: posts[index].text,
-                  image: posts[index].image,
+                  image: posts[index].media,
                   createdAt: posts[index].createdAt,
                   likes: posts[index].likes,
                   dislikes: posts[index].dislikes,
-                  currUserId: user.uid,
+                  currUserRef: userData.userRef,
+                  numComments: posts[index].numComments,
                 )
               );
             },

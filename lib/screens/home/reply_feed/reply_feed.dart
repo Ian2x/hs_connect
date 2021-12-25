@@ -17,8 +17,8 @@ import 'package:hs_connect/shared/loading.dart';
 import 'package:provider/provider.dart';
 
 class RepliesFeed extends StatefulWidget {
-  final String commentId;
-  const RepliesFeed({Key? key, required this.commentId}) : super(key: key);
+  final DocumentReference commentRef;
+  const RepliesFeed({Key? key, required this.commentRef}) : super(key: key);
 
   @override
   _RepliesFeedState createState() => _RepliesFeedState();
@@ -34,7 +34,7 @@ class _RepliesFeedState extends State<RepliesFeed> {
 
     if (userData == null) return Loading();
 
-    RepliesDatabaseService _replies = RepliesDatabaseService(commentId: widget.commentId);
+    RepliesDatabaseService _replies = RepliesDatabaseService(commentRef: widget.commentRef);
 
     return StreamBuilder(
       stream: _replies.commentReplies,
@@ -55,19 +55,19 @@ class _RepliesFeedState extends State<RepliesFeed> {
               itemBuilder: (BuildContext context, int index) {
                 // when scroll up/down, fires once
                 if(index==replies.length) {
-                  return ReplyForm(commentId: widget.commentId);
+                  return ReplyForm(commentRef: widget.commentRef);
                 } else {
                   return Center(
                       child: ReplyCard(
-                        replyId: replies[index].replyId,
-                        commentId: replies[index].commentId,
-                        userId: replies[index].userId,
+                        replyRef: replies[index].replyRef,
+                        commentRef: replies[index].commentRef,
+                        userRef: replies[index].userRef,
                         text: replies[index].text,
-                        image: replies[index].image,
+                        image: replies[index].media,
                         createdAt: replies[index].createdAt,
                         likes: replies[index].likes,
                         dislikes: replies[index].dislikes,
-                        currUserId: user.uid,
+                        currUserRef: userData.userRef,
                       ));
                 }
               },
