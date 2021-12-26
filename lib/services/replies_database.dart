@@ -21,7 +21,7 @@ class RepliesDatabaseService {
   final CollectionReference repliesCollection = FirebaseFirestore.instance.collection('replies');
 
   Future newReply({required String text,
-    required String? imageURL,
+    required String? mediaURL,
     required DocumentReference commentRef,
     Function(void) onValue = defaultFunc,
     Function onError = defaultFunc}) async {
@@ -30,7 +30,7 @@ class RepliesDatabaseService {
       'userRef': userRef,
       'commentRef': commentRef,
       'text': text,
-      'image': imageURL,
+      'media': mediaURL,
       'createdAt': DateTime.now(),
       'likes': List<String>.empty(),
       'dislikes': List<String>.empty(),
@@ -39,13 +39,13 @@ class RepliesDatabaseService {
         .catchError(onError);
   }
 
-  Future deleteReply({required DocumentReference replyRef, required DocumentReference userRef, String? image}) async {
+  Future deleteReply({required DocumentReference replyRef, required DocumentReference userRef, String? media}) async {
     final checkAuth = await replyRef.get();
     if(checkAuth.exists) {
       if (userRef==checkAuth.get('userRef')) {
         await replyRef.delete();
-        if (image!=null) {
-          return await _images.deleteImage(imageURL: image);
+        if (media!=null) {
+          return await _images.deleteImage(imageURL: media);
         }
       };
     }
@@ -86,10 +86,10 @@ class RepliesDatabaseService {
         postRef: document['postRef'],
         userRef: document['userRef'],
         text: document['text'],
-        media: document['image'],
+        media: document['media'],
         createdAt: document['createdAt'].toString(),
-        likes: (document['likes'] as List).map((item) => item as String).toList(),
-        dislikes: (document['dislikes'] as List).map((item) => item as String).toList(),//document['dislikes'],
+        likes: (document['likes'] as List).map((item) => item as DocumentReference).toList(),
+        dislikes: (document['dislikes'] as List).map((item) => item as DocumentReference).toList(),//document['dislikes'],
       );
     } else {
       return null;

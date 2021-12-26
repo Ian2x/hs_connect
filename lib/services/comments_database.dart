@@ -41,13 +41,13 @@ class CommentsDatabaseService {
         .catchError(onError);
   }
 
-  Future deleteComment({required DocumentReference commentRef, required DocumentReference userRef, String? image}) async {
+  Future deleteComment({required DocumentReference commentRef, required DocumentReference userRef, String? media}) async {
     final checkAuth = await commentRef.get();
     if(checkAuth.exists) {
       if (userRef==checkAuth.get('userRef')) {
         await commentRef.delete();
-        if (image!=null) {
-          return await _images.deleteImage(imageURL: image);
+        if (media!=null) {
+          return await _images.deleteImage(imageURL: media);
         }
       };
     }
@@ -89,8 +89,8 @@ class CommentsDatabaseService {
         media: document['image'],
         createdAt: document['createdAt'].toString(),
         numReplies: document['numReplies'],
-        likes: (document['likes'] as List).map((item) => item as String).toList(),
-        dislikes: (document['dislikes'] as List).map((item) => item as String).toList(),
+        likes: (document['likes'] as List).map((item) => item as DocumentReference).toList(),
+        dislikes: (document['dislikes'] as List).map((item) => item as DocumentReference).toList(),
       );
     } else {
       return null;

@@ -21,10 +21,10 @@ class PostCard extends StatefulWidget {
   final DocumentReference groupRef;
   final String title;
   final String text;
-  final String? image;
+  final String? media;
   final Timestamp createdAt;
-  List<String> likes;
-  List<String> dislikes;
+  List<DocumentReference> likes;
+  List<DocumentReference> dislikes;
   int numComments;
   final DocumentReference currUserRef;
 
@@ -35,7 +35,7 @@ class PostCard extends StatefulWidget {
       required this.groupRef,
       required this.title,
       required this.text,
-      required this.image,
+      required this.media,
       required this.createdAt,
       required this.likes,
       required this.dislikes,
@@ -134,7 +134,7 @@ class _PostCardState extends State<PostCard> {
           ]),
           subtitle: Column(children: <Widget>[
             Text(username + ' in ' + groupName + '      ' + timeago.format(widget.createdAt.toDate())),
-            widget.image != null ? Image.network(widget.image!) : Container(),
+            widget.media != null ? Image.network(widget.media!) : Container(),
             Row(children: <Widget>[
               Text(commentsCount),
               LikeDislikePost(
@@ -152,7 +152,7 @@ class _PostCardState extends State<PostCard> {
                         groupRef: widget.groupRef,
                         title: widget.title,
                         text: widget.text,
-                        media: widget.image,
+                        media: widget.media,
                         createdAt: widget.createdAt,
                         likes: widget.likes,
                         dislikes: widget.dislikes,
@@ -161,11 +161,11 @@ class _PostCardState extends State<PostCard> {
             );
           },
           trailing: DeletePost(
-              postUserRef: widget.userRef, postRef: widget.postRef, currUserRef: widget.currUserRef, image: widget.image),
+              postUserRef: widget.userRef, postRef: widget.postRef, currUserRef: widget.currUserRef, media: widget.media),
         ),
         // CAN DELETE POST EITHER VIA DELETE POST BUTTON OR DISMISSAL, PROBABLY CHOOSE ONE OR THE OTHER EVENTUALLY
         onDismissed: (DismissDirection direction) async {
-          await _posts.deletePost(postRef: widget.postRef, userRef: widget.currUserRef, image: widget.image);
+          await _posts.deletePost(postRef: widget.postRef, userRef: widget.currUserRef, media: widget.media);
         },
       )
     ]));

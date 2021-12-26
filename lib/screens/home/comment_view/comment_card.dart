@@ -21,10 +21,10 @@ class CommentCard extends StatefulWidget {
   final DocumentReference postRef;
   final DocumentReference userRef;
   final String text;
-  final String? image;
+  final String? media;
   final String createdAt;
-  List<String> likes;
-  List<String> dislikes;
+  List<DocumentReference> likes;
+  List<DocumentReference> dislikes;
   final DocumentReference currUserRef;
 
   CommentCard(
@@ -33,7 +33,7 @@ class CommentCard extends StatefulWidget {
       required this.postRef,
       required this.userRef,
       required this.text,
-      required this.image,
+      required this.media,
       required this.createdAt,
       required this.likes,
       required this.dislikes,
@@ -55,7 +55,6 @@ class _CommentCardState extends State<CommentCard> {
 
   @override
   void initState() {
-    print(widget.image);
     // initialize liked/disliked
     if (widget.likes.contains(widget.currUserRef)) {
       setState(() {
@@ -98,15 +97,15 @@ class _CommentCardState extends State<CommentCard> {
               dislikes: widget.dislikes),
 
         ),
-        widget.image!=null ? Semantics(
+        widget.media!=null ? Semantics(
           label: 'new_profile_pic_picked_image',
-          child: Image.network(widget.image!) // kIsWeb ? Image.network(widget.image!) : Image.file(File(widget.image!)),
+          child: Image.network(widget.media!) // kIsWeb ? Image.network(widget.image!) : Image.file(File(widget.image!)),
         ) : Container(),
         RepliesFeed(commentRef: widget.commentRef),
       ])),
       onDismissed: (DismissDirection direction) {
         setState(() {
-          _comments.deleteComment(commentRef: widget.commentRef, userRef: widget.currUserRef, image: widget.image);
+          _comments.deleteComment(commentRef: widget.commentRef, userRef: widget.currUserRef, media: widget.media);
         });
       },
     );

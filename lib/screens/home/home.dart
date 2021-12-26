@@ -30,9 +30,10 @@ class _HomeState extends State<Home> {
     final userData = Provider.of<UserData?>(context);
 
     if(userData==null || user==null) {
+      print("HELLO");
       return Loading();
     }
-
+    print("GOOD");
     return DefaultTabController(
       initialIndex: 1,
       length: 3,

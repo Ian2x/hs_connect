@@ -150,8 +150,8 @@ class _PostFormState extends State<PostForm> {
                               await PostsDatabaseService(userRef: userData.userRef).newPost(
                                 title: _title,
                                 text: _text,
-                                imageURL: newFileURL,
-                                groupRef: _groupId,
+                                mediaURL: newFileURL,
+                                groupRef: FirebaseFirestore.instance.collection('groups').doc(_groupId),
                                 onValue: handleValue,
                                 onError: handleError,
                               );

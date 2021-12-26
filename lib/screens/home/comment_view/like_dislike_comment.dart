@@ -6,8 +6,8 @@ import 'package:hs_connect/services/posts_database.dart';
 class LikeDislikeComment extends StatefulWidget {
   final DocumentReference currUserRef;
   final DocumentReference commentRef;
-  final List<String> likes;
-  final List<String> dislikes;
+  final List<DocumentReference> likes;
+  final List<DocumentReference> dislikes;
 
   const LikeDislikeComment(
       {Key? key, required this.currUserRef, required this.commentRef, required this.likes, required this.dislikes})

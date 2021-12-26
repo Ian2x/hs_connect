@@ -7,19 +7,18 @@ import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/known_domains_database.dart';
 
 class UserInfoDatabaseService {
-  final String? userId;
   DocumentReference? userRef;
 
-  UserInfoDatabaseService({this.userId}) {
-    setUserRef(userId);
+  UserInfoDatabaseService({this.userRef}) {
   }
-
+  /*
   void setUserRef(String? userId) async {
     if (userId!=null) {
       final temp = await userInfoCollection.doc(userId).get();
       this.userRef = temp.reference;
     }
   }
+  */
 
   // collection reference
   final CollectionReference userInfoCollection =
@@ -36,7 +35,7 @@ class UserInfoDatabaseService {
     // Find domain info (county, state, country)
     final KnownDomain? kd = await _knownDomainsDatabaseService.getKnownDomain(domain: domain);
 
-    return await userInfoCollection.doc(userId).set({
+    return await userRef!.set({
       'displayedName': username,
       'domain': domain,
       'county': kd!=null ? kd.county : null,
@@ -53,8 +52,7 @@ class UserInfoDatabaseService {
       required String? imageURL,
       required Function(void) onValue,
       required Function onError}) async {
-      return await userInfoCollection
-          .doc(userId)
+      return await userRef!
           .update({
         'displayedName': displayedName,
         'imageURL': imageURL,
@@ -76,7 +74,6 @@ class UserInfoDatabaseService {
   // home data from snapshot
   UserData? _userDataFromSnapshot(DocumentSnapshot snapshot, {DocumentReference? overrideUserRef}) {
     if(snapshot.exists) {
-
       return UserData(
         userRef: overrideUserRef!=null ? overrideUserRef : userRef!,
         displayedName: snapshot.get('displayedName'),
@@ -101,7 +98,7 @@ class UserInfoDatabaseService {
   // get home doc stream
   Stream<UserData?> get userData {
     return userInfoCollection
-        .doc(userId)
+        .doc(userRef!=null ? userRef!.id : null)
         .snapshots()
         .map(_userDataFromSnapshot);
   }

@@ -63,7 +63,7 @@ class _RepliesFeedState extends State<RepliesFeed> {
                         commentRef: replies[index].commentRef,
                         userRef: replies[index].userRef,
                         text: replies[index].text,
-                        image: replies[index].media,
+                        media: replies[index].media,
                         createdAt: replies[index].createdAt,
                         likes: replies[index].likes,
                         dislikes: replies[index].dislikes,

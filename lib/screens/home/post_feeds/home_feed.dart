@@ -32,6 +32,7 @@ class _HomeFeedState extends State<HomeFeed> {
       builder: (context, snapshot) {
         print(snapshot.connectionState);
         if (!snapshot.hasData) {
+          print("1");
           return Loading();
         } else {
           final posts = (snapshot.data as List<Post?>).map((post) => post!).toList();
@@ -51,7 +52,7 @@ class _HomeFeedState extends State<HomeFeed> {
                   groupRef: posts[index].groupRef,
                   title: posts[index].title,
                   text: posts[index].text,
-                  image: posts[index].media,
+                  media: posts[index].media,
                   createdAt: posts[index].createdAt,
                   likes: posts[index].likes,
                   dislikes: posts[index].dislikes,

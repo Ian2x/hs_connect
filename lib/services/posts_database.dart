@@ -24,8 +24,8 @@ class PostsDatabaseService {
   final CollectionReference postsCollection = FirebaseFirestore.instance.collection('posts');
 
   Future newPost({required String title, required String text,
-    required String? imageURL,
-    required String groupRef,
+    required String? mediaURL,
+    required DocumentReference groupRef,
     Function(void) onValue = defaultFunc,
     Function onError = defaultFunc}) async {
     return await postsCollection
@@ -34,8 +34,9 @@ class PostsDatabaseService {
       'groupRef': groupRef,
       'title': title,
       'text': text,
-      'image': imageURL,
+      'media': mediaURL,
       'createdAt': DateTime.now(),
+      'numComments': 0,
       'likes': List<String>.empty(),
       'dislikes': List<String>.empty(),
     })
@@ -43,7 +44,7 @@ class PostsDatabaseService {
         .catchError(onError);
   }
 
-  Future deletePost({required DocumentReference postRef, required DocumentReference userRef, String? image}) async {
+  Future deletePost({required DocumentReference postRef, required DocumentReference userRef, String? media}) async {
     final checkAuth = await postRef.get();
     if(checkAuth.exists) {
       if (userRef==checkAuth.get('userRef')) {
@@ -65,8 +66,8 @@ class PostsDatabaseService {
         await postRef.delete();
 
         // delete image
-        if (image!=null) {
-          return await _images.deleteImage(imageURL: image);
+        if (media!=null) {
+          return await _images.deleteImage(imageURL: media);
         }
       };
     }
@@ -104,18 +105,27 @@ class PostsDatabaseService {
   // home data from snapshot
   Post? _postFromDocument(QueryDocumentSnapshot document) {
     if (document.exists) {
-      return Post(
+      print("GOOD!!!");
+      print(document.reference);
+      print(document['userRef']);
+      print(document['groupRef']);
+      print("a");
+      final temp = Post(
         postRef: document.reference,
         userRef: document['userRef'],
         groupRef: document['groupRef'],
-        media: document['image'],
+        media: document['media'],
         title: document['title'],
         text: document['text'],
         createdAt: document['createdAt'],//.toString(),
         numComments: document['numComments'],
-        likes: (document['likes'] as List).map((item) => item as String).toList(),
-        dislikes: (document['dislikes'] as List).map((item) => item as String).toList(),//document['dislikes'],
+        likes: (document['likes'] as List).map((item) => item as DocumentReference).toList(),
+        dislikes: (document['dislikes'] as List).map((item) => item as DocumentReference).toList(),//document['dislikes'],
       );
+      print('b');
+      print(temp);
+      if(temp==null) print('wow');
+      return temp;
     } else {
       return null;
     }
@@ -126,6 +136,8 @@ class PostsDatabaseService {
   }
 
   Stream<List<Post?>> get multiGroupPosts {
+    print(groupsRefs);
+    print("ABOVE");
     return postsCollection.where('groupRef', whereIn: groupsRefs).orderBy('createdAt', descending: true).snapshots().map((snapshot) => snapshot.docs.map(_postFromDocument).toList());
   }
 

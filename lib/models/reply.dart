@@ -8,8 +8,8 @@ class Reply {
   String text;
   String? media;
   final String createdAt;
-  List<String> likes;
-  List<String> dislikes;
+  List<DocumentReference> likes;
+  List<DocumentReference> dislikes;
 
   Reply({
     required this.replyRef,

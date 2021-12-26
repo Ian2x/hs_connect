@@ -10,10 +10,10 @@ class ReplyCard extends StatefulWidget {
   final DocumentReference commentRef;
   final DocumentReference userRef;
   final String text;
-  final String? image;
+  final String? media;
   final String createdAt;
-  List<String> likes;
-  List<String> dislikes;
+  List<DocumentReference> likes;
+  List<DocumentReference> dislikes;
   final DocumentReference currUserRef;
 
   ReplyCard(
@@ -22,7 +22,7 @@ class ReplyCard extends StatefulWidget {
       required this.commentRef,
       required this.userRef,
       required this.text,
-      required this.image,
+      required this.media,
       required this.createdAt,
       required this.likes,
       required this.dislikes,
@@ -82,14 +82,14 @@ class _ReplyCardState extends State<ReplyCard> {
               likes: widget.likes,
               dislikes: widget.dislikes),
         ),
-            widget.image!=null ? Semantics(
+            widget.media!=null ? Semantics(
                 label: 'new_profile_pic_picked_image',
-                child: Image.network(widget.image!) // kIsWeb ? Image.network(widget.image!) : Image.file(File(widget.image!)),
+                child: Image.network(widget.media!) // kIsWeb ? Image.network(widget.image!) : Image.file(File(widget.image!)),
             ) : Container(),
       ])),
       onDismissed: (DismissDirection direction) {
         setState(() {
-          _replies.deleteReply(replyRef: widget.replyRef, userRef: widget.currUserRef, image: widget.image);
+          _replies.deleteReply(replyRef: widget.replyRef, userRef: widget.currUserRef, media: widget.media);
         });
       },
     );

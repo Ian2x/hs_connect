@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hs_connect/services/userInfo_database.dart';
 
@@ -36,7 +37,7 @@ class AuthService {
 
       if (user == null || user.email == null) return null;
       // create a document for the home with the uid
-      final _userInfoDatabaseService = UserInfoDatabaseService(userId: user.uid);
+      final _userInfoDatabaseService = UserInfoDatabaseService(userRef: FirebaseFirestore.instance.collection('userInfo').doc(user.uid));
       await _userInfoDatabaseService.initUserData(domain, username);
       return user;
     } catch (e) {

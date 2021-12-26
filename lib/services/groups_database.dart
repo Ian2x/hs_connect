@@ -51,7 +51,7 @@ class GroupsDatabaseService {
           .then(onValue)
           .catchError(onError);
       if (userRef != null) {
-        UserInfoDatabaseService _users = UserInfoDatabaseService(userId: userRef.id);
+        UserInfoDatabaseService _users = UserInfoDatabaseService(userRef: userRef);
         await _users.joinGroup(userRef: userRef, groupRef: newGroupRef, public: true);
       }
       return newGroupRef;

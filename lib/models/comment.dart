@@ -8,8 +8,8 @@ class Comment {
   String? media;
   final String createdAt;
   int numReplies;
-  List<String> likes;
-  List<String> dislikes;
+  List<DocumentReference> likes;
+  List<DocumentReference> dislikes;
 
   Comment({
     required this.commentRef,

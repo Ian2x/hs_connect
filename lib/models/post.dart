@@ -9,8 +9,8 @@ class Post {
   String? media;
   final Timestamp createdAt;
   int numComments;
-  List<String> likes;
-  List<String> dislikes;
+  List<DocumentReference> likes;
+  List<DocumentReference> dislikes;
 
   Post({
     required this.postRef,

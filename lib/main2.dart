@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:hs_connect/models/user_data.dart';
@@ -24,35 +25,7 @@ class _Main2State extends State<Main2> {
     final user = Provider.of<User?>(context);
 
     return StreamProvider<UserData?>.value(
-      value: UserInfoDatabaseService(userId: user!=null ? user.uid : null).userData,
-      initialData: null,
-      child: MaterialApp(
-        home: Wrapper(),
-      ),
-    );
-
-
-
-
-
-    // final user = Provider.of<User?>(context);
-    /*
-    final _userInfoDatabaseService = UserInfoDatabaseService();
-    if (user!=null) {
-      _userInfoDatabaseService.setUserRef(user.uid);
-    }
-    */
-    UserInfoDatabaseService _userInfoDatabaseService;
-    if (user!=null) {
-      print("option 1");
-      _userInfoDatabaseService = UserInfoDatabaseService(userId: user.uid);
-    } else {
-      print("option 2");
-      _userInfoDatabaseService = UserInfoDatabaseService();
-    }
-
-    return StreamProvider<UserData?>.value(
-      value: UserInfoDatabaseService(userId: user!=null ? user.uid : null).userData,
+      value: UserInfoDatabaseService(userRef: user!=null ? FirebaseFirestore.instance.collection('userInfo').doc(user.uid) : null).userData,
       initialData: null,
       child: MaterialApp(
         home: Wrapper(),

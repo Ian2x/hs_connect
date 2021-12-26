@@ -41,7 +41,6 @@ class _CommentsFeedState extends State<CommentsFeed> {
           return Loading();
         } else {
           final comments = (snapshot.data as List<Comment?>).map((comment) => comment!).toList();
-          // print(posts.map((post) => post!.image));
 
           return Flexible(
             //height: 200.0,
@@ -60,7 +59,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
                         postRef: comments[index].postRef,
                         userRef: comments[index].userRef,
                         text: comments[index].text,
-                        image: comments[index].media,
+                        media: comments[index].media,
                         createdAt: comments[index].createdAt,
                         likes: comments[index].likes,
                         dislikes: comments[index].dislikes,

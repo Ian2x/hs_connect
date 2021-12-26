@@ -81,7 +81,7 @@ class _ReplyFormState extends State<ReplyForm> {
                   await RepliesDatabaseService(userRef: userData.userRef).newReply(
                     commentRef: widget.commentRef,
                     text: _text,
-                    imageURL: newFileURL,
+                    mediaURL: newFileURL,
                     onValue: handleValue,
                     onError: handleError,
                   );
