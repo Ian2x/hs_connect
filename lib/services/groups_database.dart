@@ -151,23 +151,27 @@ class GroupsDatabaseService {
     // collect post information for each group
     PostsDatabaseService _posts =
         PostsDatabaseService(groupsRefs: domainGroupsRefs + countyGroupsRefs + stateGroupsRefs + countryGroupsRefs);
-
+    print(domainGroupsRefs + countyGroupsRefs + stateGroupsRefs + countryGroupsRefs);
     final List<Post?> allPosts = await _posts.getMultiGroupPosts();
-
+    print(allPosts);
+    print("LOKI ABOVE");
     final List<Post?> filteredPosts = allPosts
         .where((post) =>
             post != null && DateTime.now().difference(post.createdAt.toDate()).compareTo(Duration(days: 3)) == -1)
         .toList();
-
+    print(filteredPosts);
     filteredPosts.forEach((post) {
+      print("look");
+      print(post!.groupRef);
       groupScores.update(post!.groupRef, (value) => value + 1, ifAbsent: () => 1);
+
     });
 
-    // print(groupScores);
+    print(groupScores);
     List<refRanking> groupScoresList =
         groupScores.entries.map((ele) => refRanking(ref: ele.key, count: ele.value)).toList();
     groupScoresList.sort(refRankingCompare);
-
+    print(groupScoresList);
     return groupsCollection
         .where(FieldPath.documentId,
             whereIn: groupScoresList.map((refRanking) {
