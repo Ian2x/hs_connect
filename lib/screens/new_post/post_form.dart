@@ -10,10 +10,10 @@ import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/services/userInfo_database.dart';
-import 'package:hs_connect/shared/loading.dart';
+import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/pic_picker.dart';
+import 'package:hs_connect/shared/widgets/pic_picker.dart';
 import 'package:provider/provider.dart';
 
 class PostForm extends StatefulWidget {

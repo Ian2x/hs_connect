@@ -7,7 +7,7 @@ import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/screens/home/group_view/group_card.dart';
 import 'package:hs_connect/services/groups_database.dart';
-import 'package:hs_connect/shared/loading.dart';
+import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
 class TrendingGroupsFeed extends StatefulWidget {

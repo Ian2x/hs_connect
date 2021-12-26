@@ -1,49 +1,45 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hs_connect/models/user_data.dart';
+
+import 'package:hs_connect/screens/new_post/new_post.dart';
 import 'package:hs_connect/screens/profile/profile.dart';
 import 'package:hs_connect/screens/search/group_search.dart';
-import 'package:hs_connect/screens/home/home.dart';
-import 'package:hs_connect/screens/new_post/post_form.dart';
-import 'package:hs_connect/shared/widgets/loading.dart';
+import 'package:hs_connect/shared/tools/hexcolor.dart';
 import 'package:provider/provider.dart';
 
-class NewPost extends StatelessWidget {
-  const NewPost({Key? key}) : super(key: key);
+class navbar extends StatefulWidget {
+  const navbar({Key? key}) : super(key: key);
 
+  @override
+  _navbarState createState() => _navbarState();
+}
+
+class _navbarState extends State<navbar> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User?>(context);
-    final userData = Provider.of<UserData?>(context);
-
-    if (user==null || userData==null) {
-      return Loading();
-    }
-
-    return Scaffold(
-      backgroundColor: Colors.brown[50],
-      appBar: AppBar(
-        title: Text('Create a new post'),
-        backgroundColor: Colors.brown[400],
-        elevation: 0.0,
+    return Container(
+      decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+                color: HexColor("#FFFFFF"),
+                spreadRadius: 1.0
+            )
+          ]
       ),
-      body: Container(
-        child: PostForm(),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
+      child: BottomNavigationBar(
+        backgroundColor: HexColor("#FFFFFF"),
         type: BottomNavigationBarType.fixed,
-        currentIndex: 2,
+        currentIndex: 0,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: IconButton(
               padding: EdgeInsets.zero,
+              color: Colors.black,
               constraints: BoxConstraints(),
               icon: const Icon(Icons.school, size: 18.0),
               onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => Home()),
-                );
+
               },
             ),
             label: 'Home',
@@ -51,6 +47,7 @@ class NewPost extends StatelessWidget {
           BottomNavigationBarItem(
             icon: IconButton(
               padding: EdgeInsets.zero,
+              color: Colors.black,
               constraints: BoxConstraints(),
               icon: const Icon(Icons.search_rounded, size: 18.0),
               onPressed: () {
@@ -66,9 +63,15 @@ class NewPost extends StatelessWidget {
           BottomNavigationBarItem(
             icon: IconButton(
               padding: EdgeInsets.zero,
+              color: Colors.black,
               constraints: BoxConstraints(),
               icon: const Icon(Icons.add, size: 18.0),
               onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => NewPost()),
+                );
               },
             ),
             label: 'Post',
@@ -77,18 +80,20 @@ class NewPost extends StatelessWidget {
           BottomNavigationBarItem(
             icon: IconButton(
               padding: EdgeInsets.zero,
+              color: Colors.black,
               constraints: BoxConstraints(),
               icon: const Icon(Icons.search_rounded, size: 18.0),
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => Profile(profileId: user.uid)),
+                      builder: (context) => Profile(profileId: user!.uid)),
                 );
               },
             ),
             label: 'Profile',
           ),
+
         ],
       ),
     );

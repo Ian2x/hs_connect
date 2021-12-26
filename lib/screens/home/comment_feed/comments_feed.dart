@@ -9,7 +9,7 @@ import 'package:hs_connect/screens/home/comment_view/comment_form.dart';
 import 'package:hs_connect/screens/home/post_view/post_card.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
-import 'package:hs_connect/shared/loading.dart';
+import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
 class CommentsFeed extends StatefulWidget {

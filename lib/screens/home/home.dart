@@ -8,7 +8,9 @@ import 'package:hs_connect/screens/profile/profile.dart';
 import 'package:hs_connect/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/services/userInfo_database.dart';
-import 'package:hs_connect/shared/loading.dart';
+import 'package:hs_connect/shared/tools/hexcolor.dart';
+import 'package:hs_connect/shared/widgets/loading.dart';
+import 'package:hs_connect/shared/widgets/navbar.dart';
 import 'package:provider/provider.dart';
 import 'package:hs_connect/screens/new_post/new_post.dart';
 
@@ -36,22 +38,37 @@ class _HomeState extends State<Home> {
       initialIndex: 1,
       length: 3,
       child: Scaffold(
-          backgroundColor: Colors.brown[50],
+          backgroundColor: HexColor("#C4C4C4"),
           appBar: AppBar(
-            title: Text('HS Connect'),
-            backgroundColor: Colors.brown[400],
+            title: Text('HS Connect',
+              style:
+                TextStyle(
+                  color: Colors.black,
+                )
+            ),
+            backgroundColor: HexColor("#FFFFFF"),
             elevation: 0.0,
             actions: <Widget>[
               TextButton.icon(
                 icon: Icon(Icons.person),
-                label: Text('Logout'),
+                label: Text('Logout',
+                    style:
+                    TextStyle(
+                      color: Colors.black,
+                    )
+                ),
                 onPressed: () async {
                   await _auth.signOut();
                 },
               ),
               TextButton.icon(
                 icon: Icon(Icons.settings),
-                label: Text('Profile'),
+                label: Text('Profile',
+                    style:
+                    TextStyle(
+                      color: Colors.black,
+                    )
+                ),
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -64,13 +81,28 @@ class _HomeState extends State<Home> {
             bottom: TabBar(
               tabs: <Widget>[
                 Tab(
-                  text: userData != null ? userData.domain : 'domain',
+                  icon: Text(userData.domain,
+                    style:
+                    TextStyle(
+                      color: Colors.black,
+                    )
+                  )
                 ),
                 Tab(
-                  text: 'Home'
+                  icon: Text("Home",
+                      style:
+                      TextStyle(
+                        color: Colors.black,
+                      )
+                  )
                 ),
                 Tab(
-                  text: 'Trending'
+                  icon: Text("Trending",
+                      style:
+                      TextStyle(
+                        color: Colors.black,
+                      )
+                  )
                 )
               ],
             )
@@ -82,70 +114,7 @@ class _HomeState extends State<Home> {
               userData!=null ? TrendingFeed() : Loading(),
             ]
           ),
-          bottomNavigationBar: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            currentIndex: 0,
-            items: <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: IconButton(
-                  padding: EdgeInsets.zero,
-                  constraints: BoxConstraints(),
-                  icon: const Icon(Icons.school, size: 18.0),
-                  onPressed: () {
-
-                  },
-                ),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: IconButton(
-                  padding: EdgeInsets.zero,
-                  constraints: BoxConstraints(),
-                  icon: const Icon(Icons.search_rounded, size: 18.0),
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => GroupSearch()),
-                    );
-                  },
-                ),
-                label: 'Search',
-              ),
-              BottomNavigationBarItem(
-                icon: IconButton(
-                  padding: EdgeInsets.zero,
-                  constraints: BoxConstraints(),
-                  icon: const Icon(Icons.add, size: 18.0),
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => NewPost()),
-                    );
-                  },
-                ),
-                label: 'Post',
-              ),
-
-              BottomNavigationBarItem(
-                icon: IconButton(
-                  padding: EdgeInsets.zero,
-                  constraints: BoxConstraints(),
-                  icon: const Icon(Icons.search_rounded, size: 18.0),
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Profile(profileId: user.uid)),
-                    );
-                  },
-                ),
-                label: 'Profile',
-              ),
-
-            ],
-          ),
+          bottomNavigationBar: navbar()
         ),
     );
   }

@@ -11,6 +11,7 @@ import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/userInfo_database.dart';
+import 'package:hs_connect/shared/tools/hexcolor.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 
@@ -108,6 +109,10 @@ class _PostCardState extends State<PostCard> {
   Widget build(BuildContext context) {
 
     return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0)),
+        margin: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
+        //color: HexColor("#292929"),
+        elevation: 0.3,
         child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
       Dismissible(
         key: ValueKey(widget.postRef),

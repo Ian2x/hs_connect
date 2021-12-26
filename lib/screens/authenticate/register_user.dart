@@ -4,7 +4,7 @@ import 'package:hs_connect/screens/home/home.dart';
 import 'package:hs_connect/screens/wrapper.dart';
 import 'package:hs_connect/services/auth.dart';
 import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/loading.dart';
+import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
 class RegisterUser extends StatefulWidget {

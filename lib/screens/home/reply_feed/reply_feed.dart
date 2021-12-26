@@ -13,7 +13,7 @@ import 'package:hs_connect/screens/home/reply_view/reply_form.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/replies_database.dart';
-import 'package:hs_connect/shared/loading.dart';
+import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
 class RepliesFeed extends StatefulWidget {

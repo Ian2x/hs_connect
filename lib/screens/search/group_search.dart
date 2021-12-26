@@ -7,7 +7,7 @@ import 'package:hs_connect/screens/search/new_group/new_group_form.dart';
 import 'package:hs_connect/screens/home/home.dart';
 import 'package:hs_connect/screens/new_post/new_post.dart';
 import 'package:hs_connect/services/groups_database.dart';
-import 'package:hs_connect/shared/loading.dart';
+import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
 class GroupSearch extends StatelessWidget {

@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/services/replies_database.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
-import 'package:hs_connect/shared/loading.dart';
+import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:provider/provider.dart';
