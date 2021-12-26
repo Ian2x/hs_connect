@@ -13,8 +13,9 @@ import 'package:provider/provider.dart';
 
 class ReplyForm extends StatefulWidget {
   final DocumentReference commentRef;
+  final DocumentReference postRef;
 
-  const ReplyForm({Key? key, required this.commentRef}) : super(key: key);
+  const ReplyForm({Key? key, required this.commentRef, required this.postRef}) : super(key: key);
 
   @override
   _ReplyFormState createState() => _ReplyFormState();
@@ -80,6 +81,7 @@ class _ReplyFormState extends State<ReplyForm> {
 
                   await RepliesDatabaseService(userRef: userData.userRef).newReply(
                     commentRef: widget.commentRef,
+                    postRef: widget.postRef,
                     text: _text,
                     mediaURL: newFileURL,
                     onValue: handleValue,

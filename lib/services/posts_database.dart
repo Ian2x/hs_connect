@@ -28,6 +28,9 @@ class PostsDatabaseService {
     required DocumentReference groupRef,
     Function(void) onValue = defaultFunc,
     Function onError = defaultFunc}) async {
+
+    groupRef.update({'numPosts': FieldValue.increment(1)});
+
     return await postsCollection
         .add({
       'userRef': userRef,
@@ -44,10 +47,12 @@ class PostsDatabaseService {
         .catchError(onError);
   }
 
-  Future deletePost({required DocumentReference postRef, required DocumentReference userRef, String? media}) async {
+  Future deletePost({required DocumentReference postRef, required DocumentReference groupRef, required DocumentReference userRef, String? media}) async {
     final checkAuth = await postRef.get();
     if(checkAuth.exists) {
       if (userRef==checkAuth.get('userRef')) {
+
+        groupRef.update({'numPosts': FieldValue.increment(-1)});
 
         // delete post's comments
         await FirebaseFirestore.instance.collection('comments').get().then((snapshot) async {
@@ -60,7 +65,16 @@ class PostsDatabaseService {
           }
         });
 
-
+        // delete post's replies
+        await FirebaseFirestore.instance.collection('replies').get().then((snapshot) async {
+          List<DocumentSnapshot> allDocs = snapshot.docs;
+          List<DocumentSnapshot> filteredDocs = await allDocs.where(
+                  (document) => document.get('postRef') == postRef
+          ).toList();
+          for (DocumentSnapshot ds in filteredDocs){
+            await ds.reference.delete();
+          }
+        });
 
         // delete post
         await postRef.delete();
@@ -105,12 +119,7 @@ class PostsDatabaseService {
   // home data from snapshot
   Post? _postFromDocument(QueryDocumentSnapshot document) {
     if (document.exists) {
-      print("GOOD!!!");
-      print(document.reference);
-      print(document['userRef']);
-      print(document['groupRef']);
-      print("a");
-      final temp = Post(
+      return Post(
         postRef: document.reference,
         userRef: document['userRef'],
         groupRef: document['groupRef'],
@@ -122,10 +131,6 @@ class PostsDatabaseService {
         likes: (document['likes'] as List).map((item) => item as DocumentReference).toList(),
         dislikes: (document['dislikes'] as List).map((item) => item as DocumentReference).toList(),//document['dislikes'],
       );
-      print('b');
-      print(temp);
-      if(temp==null) print('wow');
-      return temp;
     } else {
       return null;
     }
@@ -136,8 +141,6 @@ class PostsDatabaseService {
   }
 
   Stream<List<Post?>> get multiGroupPosts {
-    print(groupsRefs);
-    print("ABOVE");
     return postsCollection.where('groupRef', whereIn: groupsRefs).orderBy('createdAt', descending: true).snapshots().map((snapshot) => snapshot.docs.map(_postFromDocument).toList());
   }
 

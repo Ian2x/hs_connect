@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Comment {
   final DocumentReference commentRef;
   final DocumentReference postRef;
-  final DocumentReference userRef;
+  final DocumentReference? userRef;
   String text;
   String? media;
   final String createdAt;

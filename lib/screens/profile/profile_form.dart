@@ -56,7 +56,7 @@ class _ProfileFormState extends State<ProfileForm> {
 
     void handleValue(val) {
       setState(() => loading = false);
-      Navigator.pop(context);
+      // Navigator.pop(context);
     }
 
     if (userData == null) {

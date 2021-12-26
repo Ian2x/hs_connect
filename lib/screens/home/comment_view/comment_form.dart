@@ -86,7 +86,7 @@ class _CommentFormState extends State<CommentForm> {
                       await CommentsDatabaseService(userRef: userData.userRef).newComment(
                         postRef: widget.postRef,
                         text: _text,
-                        imageURL: newFileURL,
+                        mediaURL: newFileURL,
                         onValue: handleValue,
                         onError: handleError,
                       );

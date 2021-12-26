@@ -15,25 +15,25 @@ class CommentsDatabaseService {
 
   ImageStorage _images = ImageStorage();
 
-  void setPostRef({required DocumentReference postRef}) {
-    this.postRef = postRef;
-  }
-
   // collection reference
   final CollectionReference commentsCollection = FirebaseFirestore.instance.collection('comments');
 
   Future newComment({required String text,
-    required String? imageURL,
+    required String? mediaURL,
     required DocumentReference postRef,
     Function(void) onValue = defaultFunc,
     Function onError = defaultFunc}) async {
+
+    postRef.update({'numComments': FieldValue.increment(1)});
+
     return await commentsCollection
         .add({
       'userRef': userRef,
-      'postREf': postRef,
+      'postRef': postRef,
       'text': text,
-      'image': imageURL,
+      'media': mediaURL,
       'createdAt': DateTime.now(),
+      'numReplies': 0,
       'likes': List<String>.empty(),
       'dislikes': List<String>.empty(),
     })
@@ -41,11 +41,15 @@ class CommentsDatabaseService {
         .catchError(onError);
   }
 
-  Future deleteComment({required DocumentReference commentRef, required DocumentReference userRef, String? media}) async {
+  Future deleteComment({required DocumentReference commentRef, required DocumentReference postRef, required DocumentReference userRef, String? media}) async {
     final checkAuth = await commentRef.get();
     if(checkAuth.exists) {
       if (userRef==checkAuth.get('userRef')) {
-        await commentRef.delete();
+
+        postRef.update({'numComments': FieldValue.increment(-1)});
+
+        await commentRef.update({'likes': [], 'dislikes': [], 'media': null, 'userRef': null, 'text': '[Comment removed]'});
+
         if (media!=null) {
           return await _images.deleteImage(imageURL: media);
         }
@@ -86,7 +90,7 @@ class CommentsDatabaseService {
         postRef: document['postRef'],
         userRef: document['userRef'],
         text: document['text'],
-        media: document['image'],
+        media: document['media'],
         createdAt: document['createdAt'].toString(),
         numReplies: document['numReplies'],
         likes: (document['likes'] as List).map((item) => item as DocumentReference).toList(),
@@ -95,11 +99,6 @@ class CommentsDatabaseService {
     } else {
       return null;
     }
-  }
-
-  Future<int> postNumComments({required DocumentReference postREf}) async {
-    final data = await commentsCollection.where('postRef', isEqualTo: postRef).get();
-    return data.size;
   }
 
   Stream<List<Comment?>> get postComments {

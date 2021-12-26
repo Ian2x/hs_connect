@@ -8,7 +8,8 @@ import 'package:hs_connect/services/userInfo_database.dart';
 class ReplyCard extends StatefulWidget {
   final DocumentReference replyRef;
   final DocumentReference commentRef;
-  final DocumentReference userRef;
+  final DocumentReference postRef;
+  final DocumentReference? userRef;
   final String text;
   final String? media;
   final String createdAt;
@@ -20,6 +21,7 @@ class ReplyCard extends StatefulWidget {
       {Key? key,
       required this.replyRef,
       required this.commentRef,
+      required this.postRef,
       required this.userRef,
       required this.text,
       required this.media,
@@ -61,10 +63,16 @@ class _ReplyCardState extends State<ReplyCard> {
   }
 
   void getUsername() async {
-    final UserData? fetchUsername = await _userInfoDatabaseService.getUserData(userRef: widget.userRef);
-    setState(() {
-      username = fetchUsername != null ? fetchUsername.displayedName : '<Failed to retrieve user name>';
-    });
+    if (widget.userRef != null) {
+      final UserData? fetchUsername = await _userInfoDatabaseService.getUserData(userRef: widget.userRef!);
+      setState(() {
+        username = fetchUsername != null ? fetchUsername.displayedName : '<Failed to retrieve user name>';
+      });
+    } else {
+      setState(() {
+        username = '[Removed]';
+      });
+    }
   }
 
   @override
@@ -89,41 +97,9 @@ class _ReplyCardState extends State<ReplyCard> {
       ])),
       onDismissed: (DismissDirection direction) {
         setState(() {
-          _replies.deleteReply(replyRef: widget.replyRef, userRef: widget.currUserRef, media: widget.media);
+          _replies.deleteReply(replyRef: widget.replyRef, postRef: widget.postRef, userRef: widget.currUserRef, media: widget.media);
         });
       },
     );
   }
 }
-
-/*
-
-return Dismissible(
-      key: ValueKey(widget.commentId),
-      child: Card(
-          child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-        ListTile(
-          title: Text(widget.text),
-          subtitle: Text(username),
-          trailing:
-          LikeDislikeComment(
-              commentId: widget.commentId,
-              currUserId: widget.currUserId,
-              likes: widget.likes,
-              dislikes: widget.dislikes),
-
-        ),
-        widget.image!=null ? Semantics(
-          label: 'new_profile_pic_picked_image',
-          child: Image.network(widget.image!) // kIsWeb ? Image.network(widget.image!) : Image.file(File(widget.image!)),
-        ) : Container(),
-        RepliesFeed(commentId: widget.commentId),
-      ])),
-      onDismissed: (DismissDirection direction) {
-        setState(() {
-          _comments.deleteComment(commentId: widget.commentId, userId: widget.currUserId);
-        });
-      },
-    );
-
- */

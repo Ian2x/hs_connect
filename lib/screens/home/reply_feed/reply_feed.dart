@@ -18,7 +18,8 @@ import 'package:provider/provider.dart';
 
 class RepliesFeed extends StatefulWidget {
   final DocumentReference commentRef;
-  const RepliesFeed({Key? key, required this.commentRef}) : super(key: key);
+  final DocumentReference postRef;
+  const RepliesFeed({Key? key, required this.commentRef, required this.postRef}) : super(key: key);
 
   @override
   _RepliesFeedState createState() => _RepliesFeedState();
@@ -55,12 +56,13 @@ class _RepliesFeedState extends State<RepliesFeed> {
               itemBuilder: (BuildContext context, int index) {
                 // when scroll up/down, fires once
                 if(index==replies.length) {
-                  return ReplyForm(commentRef: widget.commentRef);
+                  return ReplyForm(commentRef: widget.commentRef, postRef: widget.postRef,);
                 } else {
                   return Center(
                       child: ReplyCard(
                         replyRef: replies[index].replyRef,
                         commentRef: replies[index].commentRef,
+                        postRef: replies[index].postRef,
                         userRef: replies[index].userRef,
                         text: replies[index].text,
                         media: replies[index].media,

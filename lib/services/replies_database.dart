@@ -13,22 +13,23 @@ class RepliesDatabaseService {
 
   ImageStorage _images = ImageStorage();
 
-  void setCommentRef({required DocumentReference commentRef}) {
-    this.commentRef = commentRef;
-  }
-
   // collection reference
   final CollectionReference repliesCollection = FirebaseFirestore.instance.collection('replies');
 
   Future newReply({required String text,
     required String? mediaURL,
     required DocumentReference commentRef,
+    required DocumentReference postRef,
     Function(void) onValue = defaultFunc,
     Function onError = defaultFunc}) async {
+
+    postRef.update({'numComments': FieldValue.increment(1)});
+
     return await repliesCollection
         .add({
       'userRef': userRef,
       'commentRef': commentRef,
+      'postRef': postRef,
       'text': text,
       'media': mediaURL,
       'createdAt': DateTime.now(),
@@ -39,11 +40,15 @@ class RepliesDatabaseService {
         .catchError(onError);
   }
 
-  Future deleteReply({required DocumentReference replyRef, required DocumentReference userRef, String? media}) async {
+  Future deleteReply({required DocumentReference replyRef, required DocumentReference postRef, required DocumentReference userRef, String? media}) async {
     final checkAuth = await replyRef.get();
     if(checkAuth.exists) {
       if (userRef==checkAuth.get('userRef')) {
-        await replyRef.delete();
+
+        postRef.update({'numComments': FieldValue.increment(-1)});
+
+        await replyRef.update({'likes': [], 'dislikes': [], 'media': null, 'userRef': null, 'text': '[Reply removed]'});
+
         if (media!=null) {
           return await _images.deleteImage(imageURL: media);
         }

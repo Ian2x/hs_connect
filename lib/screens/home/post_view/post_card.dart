@@ -61,7 +61,6 @@ class _PostCardState extends State<PostCard> {
   String username = '<Loading user name...>';
   String groupName = '<Loading group name...>';
   Image groupImage = Image(image: AssetImage('assets/masonic-G.png'), height: 20, width: 20);
-  String commentsCount = '?';
 
   @override
   void initState() {
@@ -79,7 +78,6 @@ class _PostCardState extends State<PostCard> {
     // _userInfoDatabaseService.userId = widget.userId;
     getUsername();
     getGroupName();
-    getCommentsCount();
     super.initState();
   }
 
@@ -95,17 +93,6 @@ class _PostCardState extends State<PostCard> {
     setState(() {
       groupName = fetchGroupName != null ? fetchGroupName.name : '<Failed to retrieve group name>';
     });
-  }
-
-  void getCommentsCount() async {
-    /*
-    final int? fetchCommentsCount = await _comments.postNumComments(postRef: widget.postRef);
-    print(fetchCommentsCount);
-    print("LOOK ABOVE");
-    setState(() {
-      commentsCount = fetchCommentsCount != null ? fetchCommentsCount.toString() : '?';
-    });
-     */
   }
 
   void openSpecificGroupFeed() async {
@@ -136,7 +123,7 @@ class _PostCardState extends State<PostCard> {
             Text(username + ' in ' + groupName + '      ' + timeago.format(widget.createdAt.toDate())),
             widget.media != null ? Image.network(widget.media!) : Container(),
             Row(children: <Widget>[
-              Text(commentsCount),
+              Text(widget.numComments.toString()),
               LikeDislikePost(
                   currUserRef: widget.currUserRef, postRef: widget.postRef, likes: widget.likes, dislikes: widget.dislikes),
             ])
@@ -161,11 +148,11 @@ class _PostCardState extends State<PostCard> {
             );
           },
           trailing: DeletePost(
-              postUserRef: widget.userRef, postRef: widget.postRef, currUserRef: widget.currUserRef, media: widget.media),
+              postUserRef: widget.userRef, postRef: widget.postRef, groupRef: widget.groupRef, currUserRef: widget.currUserRef, media: widget.media),
         ),
         // CAN DELETE POST EITHER VIA DELETE POST BUTTON OR DISMISSAL, PROBABLY CHOOSE ONE OR THE OTHER EVENTUALLY
         onDismissed: (DismissDirection direction) async {
-          await _posts.deletePost(postRef: widget.postRef, userRef: widget.currUserRef, media: widget.media);
+          await _posts.deletePost(postRef: widget.postRef, userRef: widget.currUserRef, groupRef: widget.groupRef, media: widget.media);
         },
       )
     ]));

@@ -19,7 +19,7 @@ import 'package:flutter/foundation.dart';
 class CommentCard extends StatefulWidget {
   final DocumentReference commentRef;
   final DocumentReference postRef;
-  final DocumentReference userRef;
+  final DocumentReference? userRef;
   final String text;
   final String? media;
   final String createdAt;
@@ -73,10 +73,16 @@ class _CommentCardState extends State<CommentCard> {
   }
 
   void getUsername() async {
-    final UserData? fetchUsername = await _userInfoDatabaseService.getUserData(userRef: widget.userRef);
-    setState(() {
-      username = fetchUsername != null ? fetchUsername.displayedName : '<Failed to retrieve user name>';
-    });
+    if (widget.userRef != null) {
+      final UserData? fetchUsername = await _userInfoDatabaseService.getUserData(userRef: widget.userRef!);
+      setState(() {
+        username = fetchUsername != null ? fetchUsername.displayedName : '<Failed to retrieve user name>';
+      });
+    } else {
+      setState(() {
+        username = '[Removed]';
+      });
+    }
   }
 
   @override
@@ -101,11 +107,11 @@ class _CommentCardState extends State<CommentCard> {
           label: 'new_profile_pic_picked_image',
           child: Image.network(widget.media!) // kIsWeb ? Image.network(widget.image!) : Image.file(File(widget.image!)),
         ) : Container(),
-        RepliesFeed(commentRef: widget.commentRef),
+        RepliesFeed(commentRef: widget.commentRef, postRef: widget.postRef,),
       ])),
       onDismissed: (DismissDirection direction) {
         setState(() {
-          _comments.deleteComment(commentRef: widget.commentRef, userRef: widget.currUserRef, media: widget.media);
+          _comments.deleteComment(commentRef: widget.commentRef, userRef: widget.currUserRef, media: widget.media, postRef: widget.postRef);
         });
       },
     );

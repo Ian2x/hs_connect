@@ -23,15 +23,9 @@ class _WrapperState extends State<Wrapper> {
     final user = Provider.of<User?>(context);
     final userData = Provider.of<UserData?>(context);
 
-    print(user == null || !user.email!.endsWith('@ianeric.com'));
-    print(user);
-    print(userData);
-
-    if (user == null || !user.email!.endsWith('@ianeric.com')) {
-      print("AUTHENTICATE");
+    if (user == null || userData == null || !user.email!.endsWith('@ianeric.com')) {
       return Authenticate();
     } else {
-      print("HOME");
       return Home();
     }
   }
