@@ -66,25 +66,26 @@ class _RegisterEmailState extends State<RegisterEmail> {
                   onPressed: () async {
                     setState(() => loading = true);
                     dynamic result =  await _auth.createEmailUser(email);
-                    if (result == null) {
-                      setState(() {
-                        error = 'Each school email can only be used once. If you think this is a mistake, contact us at ___ for support.';
-                        loading = false;
-                      });
-                    } else {
+
+                    if (result is User?) {
                       final int tempIndex = email.lastIndexOf('@');
                       final String domain = email.substring(tempIndex);
                       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => WaitVerification(domain: domain)));
+                    } else if (result is FirebaseAuthException) {
+                      setState(() {
+                        String errorMsg = '';
+                        if (result.message != null) errorMsg += result.message!;
+                        errorMsg += 'If you think this is a mistake, please contact us at ___ for support. [Error Code: ' + result.code + ']';
+                        error = errorMsg;
+                        loading = false;
+                      });
+                    } else {
+                      setState(() {
+                        error = 'ERROR: [' + result.toString() + ']. Please contact us at ___ for support.';
+                        loading = false;
+                      });
                     }
-                    /*
-                    _auth.createEmailUser(email)
-                        .then((_){
-                          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => WaitVerification()));
-                        })
-                        .catchError(handleError);
-
-                     */
-                  },
+                  }
                 )
               ]),
           SizedBox(height: 12.0),

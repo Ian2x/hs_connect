@@ -14,7 +14,7 @@ class NewPost extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User?>(context);
-    final userData = Provider.of<UserData?>(context);
+    final userData = Provider.of<UserInfo?>(context);
 
     if (user==null || userData==null) {
       return Loading();

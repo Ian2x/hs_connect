@@ -26,6 +26,7 @@ class PostsDatabaseService {
   Future newPost({required String title, required String text,
     required String? mediaURL,
     required DocumentReference groupRef,
+    required List<String> tags,
     Function(void) onValue = defaultFunc,
     Function onError = defaultFunc}) async {
 
@@ -42,6 +43,8 @@ class PostsDatabaseService {
       'numComments': 0,
       'likes': List<String>.empty(),
       'dislikes': List<String>.empty(),
+      'reportedStatus': null,
+      'tags': tags,
     })
         .then(onValue)
         .catchError(onError);
@@ -126,10 +129,12 @@ class PostsDatabaseService {
         media: document['media'],
         title: document['title'],
         text: document['text'],
-        createdAt: document['createdAt'],//.toString(),
+        createdAt: document['createdAt'],
         numComments: document['numComments'],
         likes: (document['likes'] as List).map((item) => item as DocumentReference).toList(),
-        dislikes: (document['dislikes'] as List).map((item) => item as DocumentReference).toList(),//document['dislikes'],
+        dislikes: (document['dislikes'] as List).map((item) => item as DocumentReference).toList(),
+        reportedStatus: document['reportedStatus'],
+        tags: document['tags'],
       );
     } else {
       return null;

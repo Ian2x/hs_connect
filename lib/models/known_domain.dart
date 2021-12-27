@@ -3,5 +3,5 @@ class KnownDomain {
   final String state;
   final String country;
 
-  KnownDomain({this.county = '', this.state = '', this.country = ''});
+  KnownDomain({required this.county, required this.state, required this.country});
 }
