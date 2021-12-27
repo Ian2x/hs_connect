@@ -1,18 +1,12 @@
 import 'dart:async';
-import 'dart:async';
 import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/refRanking.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
-import 'package:hs_connect/shared/constants.dart';
 
 void defaultFunc(dynamic parameter) {}
 

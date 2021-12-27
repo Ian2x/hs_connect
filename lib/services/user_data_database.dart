@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/known_domain.dart';
 import 'package:hs_connect/models/message.dart';

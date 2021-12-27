@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/screens/profile/profile.dart';
 import 'package:hs_connect/screens/search/group_search.dart';
 import 'package:hs_connect/screens/home/home.dart';

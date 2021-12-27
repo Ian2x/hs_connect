@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/comment.dart';
-import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 
 

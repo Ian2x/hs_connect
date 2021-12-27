@@ -1,17 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hs_connect/models/comment.dart';
-import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/reply.dart';
 import 'package:hs_connect/models/user_data.dart';
-import 'package:hs_connect/screens/home/comment_view/comment_card.dart';
-import 'package:hs_connect/screens/home/comment_view/comment_form.dart';
-import 'package:hs_connect/screens/home/post_view/post_card.dart';
 import 'package:hs_connect/screens/home/reply_view/reply_card.dart';
 import 'package:hs_connect/screens/home/reply_view/reply_form.dart';
-import 'package:hs_connect/services/comments_database.dart';
-import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/replies_database.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';

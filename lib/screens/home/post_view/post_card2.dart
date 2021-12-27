@@ -1,19 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
-import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/screens/home/post_feeds/specific_group_feed.dart';
-import 'package:hs_connect/screens/home/post_view/delete_post.dart';
 import 'package:hs_connect/screens/home/post_view/like_dislike_post.dart';
-import 'package:hs_connect/screens/home/post_view/post_page.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/tools/hexcolor.dart';
-import 'package:timeago/timeago.dart' as timeago;
 import 'package:hs_connect/shared/tools/convertTime.dart';
 
 
