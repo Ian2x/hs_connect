@@ -7,13 +7,14 @@ import 'package:hs_connect/screens/home/post_view/delete_post.dart';
 import 'package:hs_connect/screens/home/post_view/post_page.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
-import 'package:hs_connect/services/userInfo_database.dart';
+import 'package:hs_connect/services/user_data_database.dart';
 
 class GroupCard extends StatefulWidget {
   final DocumentReference groupRef;
   final DocumentReference? userRef;
   final String name;
   final String? image;
+  final String? description;
   final AccessRestriction accessRestrictions;
   final DocumentReference currUserRef;
 
@@ -22,6 +23,7 @@ class GroupCard extends StatefulWidget {
         required this.groupRef,
         this.userRef,
         required this.name,
+        required this.description,
         this.image,
         required this.accessRestrictions,
         required this.currUserRef})
@@ -32,7 +34,7 @@ class GroupCard extends StatefulWidget {
 }
 
 class _GroupCardState extends State<GroupCard> {
-  UserInfoDatabaseService _userInfoDatabaseService = UserInfoDatabaseService();
+  UserDataDatabaseService _userInfoDatabaseService = UserDataDatabaseService();
 
   GroupsDatabaseService _groups = GroupsDatabaseService();
 

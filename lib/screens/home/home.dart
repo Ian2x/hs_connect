@@ -7,7 +7,7 @@ import 'package:hs_connect/screens/home/post_feeds/trending_feed.dart';
 import 'package:hs_connect/screens/profile/profile.dart';
 import 'package:hs_connect/services/auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hs_connect/services/userInfo_database.dart';
+import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/tools/hexcolor.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/navbar.dart';

@@ -35,6 +35,7 @@ class RepliesDatabaseService {
       'createdAt': DateTime.now(),
       'likes': List<String>.empty(),
       'dislikes': List<String>.empty(),
+      'reportedStatus': null,
     })
         .then(onValue)
         .catchError(onError);
@@ -95,6 +96,7 @@ class RepliesDatabaseService {
         createdAt: document['createdAt'].toString(),
         likes: (document['likes'] as List).map((item) => item as DocumentReference).toList(),
         dislikes: (document['dislikes'] as List).map((item) => item as DocumentReference).toList(),//document['dislikes'],
+        reportedStatus: document['reportedStatus'],
       );
     } else {
       return null;

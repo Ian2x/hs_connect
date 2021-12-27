@@ -5,15 +5,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/refRanking.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/services/posts_database.dart';
-import 'package:hs_connect/services/userInfo_database.dart';
+import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 
 void defaultFunc(dynamic parameter) {}
+
+int compareDocRef(dynamic dr1, dynamic dr2) {
+  return dr1.id.compareTo(dr2.id);
+}
 
 class GroupsDatabaseService {
   final DocumentReference? userRef;
@@ -26,8 +31,9 @@ class GroupsDatabaseService {
   Future newGroup(
       {required AccessRestriction accessRestrictions,
       required String name,
-      DocumentReference? userRef,
-      String? image,
+      required DocumentReference? creatorRef,
+      required String? image,
+      required String? description,
       Function(void) onValue = defaultFunc,
       Function onError = defaultFunc}) async {
     QuerySnapshot docs = await groupsCollection
@@ -41,18 +47,20 @@ class GroupsDatabaseService {
 
       await newGroupRef
           .set({
-            'userRef': userRef,
+            'creatorRef': creatorRef,
+            'moderatorRefs': [],
             'name': name,
             'image': image,
+            'description': description,
             'accessRestrictions': accessRestrictions.asMap(),
             'createdAt': DateTime.now(),
             'numPosts': 0,
           })
           .then(onValue)
           .catchError(onError);
-      if (userRef != null) {
-        UserInfoDatabaseService _users = UserInfoDatabaseService(userRef: userRef);
-        await _users.joinGroup(userRef: userRef, groupRef: newGroupRef, public: true);
+      if (creatorRef != null) {
+        UserDataDatabaseService _users = UserDataDatabaseService(userRef: creatorRef);
+        await _users.joinGroup(userRef: creatorRef, groupRef: newGroupRef, public: true);
       }
       return newGroupRef;
     }
@@ -70,9 +78,10 @@ class GroupsDatabaseService {
       final accessRestrictions = snapshot.get('accessRestrictions');
       return Group(
         groupRef: groupRef,
-        userRef: snapshot.get('userRef'),
+        creatorRef: snapshot.get('userRef'),
         name: snapshot.get('name'),
         image: snapshot.get('image'),
+        description: snapshot.get('description'),
         // AccessRestriction.mapToAR(map: snapshot.get('accessRestrictions') as Map<String, dynamic>),
         accessRestrictions: AccessRestriction(
             restriction: accessRestrictions['restriction'],
@@ -80,6 +89,7 @@ class GroupsDatabaseService {
                 'restrictionType']),
         createdAt: snapshot.get('createdAt'),
         numPosts: snapshot.get('numPosts'),
+        moderatorRefs: snapshot.get('moderatorRefs'),
       );
     } else {
       return null;
@@ -109,7 +119,8 @@ class GroupsDatabaseService {
 
   Future<QuerySnapshot<Object?>> getTrendingGroups(
       {required String domain, required String? county, required String? state, required String? country}) async {
-    SplayTreeMap groupScores = new SplayTreeMap();
+
+    SplayTreeMap groupScores = new SplayTreeMap(compareDocRef);
     // get all group refs
     final domainGroups = await groupsCollection
         .where('accessRestrictions',
@@ -151,27 +162,20 @@ class GroupsDatabaseService {
     // collect post information for each group
     PostsDatabaseService _posts =
         PostsDatabaseService(groupsRefs: domainGroupsRefs + countyGroupsRefs + stateGroupsRefs + countryGroupsRefs);
-    print(domainGroupsRefs + countyGroupsRefs + stateGroupsRefs + countryGroupsRefs);
     final List<Post?> allPosts = await _posts.getMultiGroupPosts();
-    print(allPosts);
-    print("LOKI ABOVE");
     final List<Post?> filteredPosts = allPosts
         .where((post) =>
             post != null && DateTime.now().difference(post.createdAt.toDate()).compareTo(Duration(days: 3)) == -1)
         .toList();
-    print(filteredPosts);
     filteredPosts.forEach((post) {
-      print("look");
-      print(post!.groupRef);
-      groupScores.update(post!.groupRef, (value) => value + 1, ifAbsent: () => 1);
-
+      if (post!= null) {
+        groupScores.update(post.groupRef, (value) => value + 1, ifAbsent: () => 1);
+      }
     });
 
-    print(groupScores);
     List<refRanking> groupScoresList =
         groupScores.entries.map((ele) => refRanking(ref: ele.key, count: ele.value)).toList();
     groupScoresList.sort(refRankingCompare);
-    print(groupScoresList);
     return groupsCollection
         .where(FieldPath.documentId,
             whereIn: groupScoresList.map((refRanking) {

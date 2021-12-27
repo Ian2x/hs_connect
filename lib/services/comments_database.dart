@@ -36,6 +36,7 @@ class CommentsDatabaseService {
       'numReplies': 0,
       'likes': List<String>.empty(),
       'dislikes': List<String>.empty(),
+      'reportedStatus': null,
     })
         .then(onValue)
         .catchError(onError);
@@ -95,6 +96,7 @@ class CommentsDatabaseService {
         numReplies: document['numReplies'],
         likes: (document['likes'] as List).map((item) => item as DocumentReference).toList(),
         dislikes: (document['dislikes'] as List).map((item) => item as DocumentReference).toList(),
+        reportedStatus: document['reportedStatus'],
       );
     } else {
       return null;

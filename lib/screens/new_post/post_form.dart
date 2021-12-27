@@ -9,7 +9,7 @@ import 'package:hs_connect/screens/home/home.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
-import 'package:hs_connect/services/userInfo_database.dart';
+import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/constants.dart';
@@ -50,6 +50,7 @@ class _PostFormState extends State<PostForm> {
   String _text = '';
   String _groupId = '';
   String error = '';
+  List<String> _tags = [];
   bool loading = false;
 
   ImageStorage _images = ImageStorage();
@@ -150,6 +151,7 @@ class _PostFormState extends State<PostForm> {
                               await PostsDatabaseService(userRef: userData.userRef).newPost(
                                 title: _title,
                                 text: _text,
+                                tags: _tags,
                                 mediaURL: newFileURL,
                                 groupRef: FirebaseFirestore.instance.collection('groups').doc(_groupId),
                                 onValue: handleValue,
