@@ -1,9 +1,5 @@
-import 'dart:collection';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
-import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/screens/home/group_view/group_card.dart';
 import 'package:hs_connect/services/groups_database.dart';

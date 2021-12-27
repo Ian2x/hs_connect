@@ -7,7 +7,6 @@ import 'package:hs_connect/screens/new_post/new_post.dart';
 import 'package:hs_connect/screens/profile/profile_form.dart';
 import 'package:hs_connect/screens/search/group_search.dart';
 import 'package:hs_connect/services/auth.dart';
-import 'package:hs_connect/services/user_data_database.dart';
 import 'package:provider/provider.dart';
 
 class Profile extends StatelessWidget {

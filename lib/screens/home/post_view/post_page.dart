@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/screens/home/comment_feed/comments_feed.dart';
-import 'package:hs_connect/screens/home/comment_view/comment_form.dart';
 
 class PostPage extends StatelessWidget {
   final Post postInfo;
