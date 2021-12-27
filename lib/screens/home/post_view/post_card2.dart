@@ -189,7 +189,7 @@ class _PostCard2State extends State<PostCard2> {
                     Row(
                       children: [
                         Text(
-                          convertTime(widget.createdAt: int),
+                          convertTime(widget.createdAt.millisecondsSinceEpoch),
                           style: TextStyle(
                             fontWeight:FontWeight.w500,
                             fontSize: 15.0,

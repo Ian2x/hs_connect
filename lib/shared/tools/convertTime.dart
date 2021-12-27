@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-Future<String> convertTime(int timestamp) async {
+String convertTime(int timestamp) {
   var now = DateTime.now();
   var format = DateFormat('HH:mm a');
   var date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);

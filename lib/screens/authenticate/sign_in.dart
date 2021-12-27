@@ -86,6 +86,8 @@ class _SignInState extends State<SignIn> {
                     print(password);
                     setState(() => loading = true);
                     dynamic result = await _auth.signInWithUsernameAndPassword(username, password);
+                    print(result);
+                    print("LOOK ABOVE");
                     if (!(result is User?)) {
                       setState(() {
                         error = 'Could not sign in with those credentials';

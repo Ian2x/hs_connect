@@ -25,7 +25,7 @@ class _Main2State extends State<Main2> {
     final user = Provider.of<User?>(context);
 
     return StreamProvider<UserData?>.value(
-      value: UserDataDatabaseService(userRef: user!=null ? FirebaseFirestore.instance.collection('userInfo').doc(user.uid) : null).userData,
+      value: UserDataDatabaseService(userRef: user!=null ? FirebaseFirestore.instance.collection('userData').doc(user.uid) : null).userData,
       initialData: null,
       child: MaterialApp(
         home: Wrapper(),
