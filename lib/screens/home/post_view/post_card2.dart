@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
+import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/screens/home/post_feeds/specific_group_feed.dart';
 import 'package:hs_connect/screens/home/post_view/delete_post.dart';
@@ -10,7 +11,7 @@ import 'package:hs_connect/screens/home/post_view/post_page.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
-import 'package:hs_connect/services/userInfo_database.dart';
+import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/tools/hexcolor.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:hs_connect/shared/tools/convertTime.dart';
@@ -29,6 +30,8 @@ class PostCard2 extends StatefulWidget {
   List<DocumentReference> dislikes;
   int numComments;
   final DocumentReference currUserRef;
+  final Report? reportedStatus;
+  final List<String> tags;
 
   PostCard2(
       {Key? key,
@@ -42,7 +45,9 @@ class PostCard2 extends StatefulWidget {
         required this.likes,
         required this.dislikes,
         required this.numComments,
-        required this.currUserRef})
+        required this.currUserRef,
+        required this.reportedStatus,
+        required this.tags})
       : super(key: key);
 
   @override
@@ -50,7 +55,7 @@ class PostCard2 extends StatefulWidget {
 }
 
 class _PostCard2State extends State<PostCard2> {
-  UserInfoDatabaseService _userInfoDatabaseService = UserInfoDatabaseService();
+  UserDataDatabaseService _userInfoDatabaseService = UserDataDatabaseService();
 
   GroupsDatabaseService _groups = GroupsDatabaseService();
 
