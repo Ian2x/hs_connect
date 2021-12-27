@@ -4,7 +4,7 @@ import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/screens/authenticate/authenticate.dart';
 import 'package:hs_connect/screens/authenticate/wait_verification.dart';
 import 'package:hs_connect/screens/home/home.dart';
-import 'package:hs_connect/services/userInfo_database.dart';
+import 'package:hs_connect/services/user_data_database.dart';
 import 'package:provider/provider.dart';
 
 
@@ -21,7 +21,7 @@ class _WrapperState extends State<Wrapper> {
   Widget build(BuildContext context) {
 
     final user = Provider.of<User?>(context);
-    final userData = Provider.of<UserData?>(context);
+    final userData = Provider.of<UserInfo?>(context);
 
     if (user == null || userData == null || !user.email!.endsWith('@ianeric.com')) {
       return Authenticate();

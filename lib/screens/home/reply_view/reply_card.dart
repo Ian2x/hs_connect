@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/screens/home/reply_view/like_dislike_reply.dart';
 import 'package:hs_connect/services/replies_database.dart';
-import 'package:hs_connect/services/userInfo_database.dart';
+import 'package:hs_connect/services/user_data_database.dart';
 
 class ReplyCard extends StatefulWidget {
   final DocumentReference replyRef;
@@ -36,7 +36,7 @@ class ReplyCard extends StatefulWidget {
 }
 
 class _ReplyCardState extends State<ReplyCard> {
-  UserInfoDatabaseService _userInfoDatabaseService = UserInfoDatabaseService();
+  UserDataDatabaseService _userInfoDatabaseService = UserDataDatabaseService();
 
   RepliesDatabaseService _replies = RepliesDatabaseService();
 

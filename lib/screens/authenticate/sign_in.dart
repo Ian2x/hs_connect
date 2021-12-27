@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/services/auth.dart';
 import 'package:hs_connect/services/known_domains_database.dart';
@@ -65,8 +66,8 @@ class _SignInState extends State<SignIn> {
                 obscureText: true,
                 validator: (val) {
                   if (val == null) return 'Error: null value';
-                  if (val.length < 6)
-                    return 'Enter a password 6+ chars long';
+                  if (val.length < 1)
+                    return 'Password is empty';
                   else
                     return null;
                 },
@@ -85,9 +86,7 @@ class _SignInState extends State<SignIn> {
                     print(password);
                     setState(() => loading = true);
                     dynamic result = await _auth.signInWithUsernameAndPassword(username, password);
-
-                    print(result);
-                    if (result == null) {
+                    if (!(result is User?)) {
                       setState(() {
                         error = 'Could not sign in with those credentials';
                         loading = false;

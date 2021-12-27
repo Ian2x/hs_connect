@@ -41,6 +41,7 @@ class _NewGroupFormState extends State<NewGroupForm> {
 
   // form values
   String _name = '';
+  String _description = '';
   AccessRestriction? _accessRestriction = null;
   String error = '';
   bool loading = false;
@@ -159,8 +160,9 @@ class _NewGroupFormState extends State<NewGroupForm> {
                       await GroupsDatabaseService().newGroup(
                         accessRestrictions: _accessRestriction!,
                         name: _name,
-                        userRef: userData.userRef,
+                        creatorRef: userData.userRef,
                         image: newFileURL,
+                        description: _description,
                         onValue: handleValue,
                         onError: handleError,
                       );

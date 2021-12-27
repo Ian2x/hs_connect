@@ -37,7 +37,7 @@ class _RegisterUserState extends State<RegisterUser> {
             appBar: AppBar(
               backgroundColor: Colors.brown[400],
               elevation: 0.0,
-              title: Text('Your email has been verified! Sign up now!'),
+              title: Text('Your email has been verified! Sign up now! [WARNING: DO NOT LEAVE THIS PAGE AS YOUR EMAIL CAN NOT BE RE-USED ANYMORE'),
             ),
             body: Container(
               padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
@@ -86,16 +86,28 @@ class _RegisterUserState extends State<RegisterUser> {
                           dynamic result =
                               await _auth.registerWithUsernameAndPassword(
                                   username, password, widget.domain);
-                          if (result == null) {
-                            setState(() {
-                              error =
-                                  'ERROR: something went wrong, possibly with username to email conversion';
-                              loading = false;
-                            });
-                          } else {
+
+                          if (result is User?) {
                             Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
                                     builder: (context) => Wrapper()));
+                          } else if (result is FirebaseAuthException && result.code == 'email-already-in-use'){
+                            setState(() {
+                              error =
+                              'Username already in use.';
+                              loading = false;
+                            });
+                          } else if (result is FirebaseAuthException) {
+                            String errorMsg = '';
+                            if (result.message != null) errorMsg += result.message!;
+                            errorMsg += 'If you think this is a mistake, please contact us at ___ for support. [Error Code: ' + result.code + ']';
+                            error = errorMsg;
+                            loading = false;
+                          } else {
+                            setState(() {
+                              error = 'ERROR: [' + result.toString() + ']. Please contact us at ___ for support.';
+                              loading = false;
+                            });
                           }
                         }
                       },

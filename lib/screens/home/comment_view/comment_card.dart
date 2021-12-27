@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/post.dart';
+import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/screens/home/comment_view/comment_form.dart';
 import 'package:hs_connect/screens/home/comment_view/like_dislike_comment.dart';
@@ -12,7 +13,7 @@ import 'package:hs_connect/screens/home/post_view/post_page.dart';
 import 'package:hs_connect/screens/home/reply_feed/reply_feed.dart';
 import 'package:hs_connect/screens/home/reply_view/reply_form.dart';
 import 'package:hs_connect/services/comments_database.dart';
-import 'package:hs_connect/services/userInfo_database.dart';
+import 'package:hs_connect/services/user_data_database.dart';
 import 'package:flutter/foundation.dart';
 
 
@@ -26,6 +27,7 @@ class CommentCard extends StatefulWidget {
   List<DocumentReference> likes;
   List<DocumentReference> dislikes;
   final DocumentReference currUserRef;
+  final Report? reportedStatus;
 
   CommentCard(
       {Key? key,
@@ -37,7 +39,9 @@ class CommentCard extends StatefulWidget {
       required this.createdAt,
       required this.likes,
       required this.dislikes,
-      required this.currUserRef})
+      required this.currUserRef,
+      required this.reportedStatus,
+      })
       : super(key: key);
 
   @override
@@ -45,7 +49,7 @@ class CommentCard extends StatefulWidget {
 }
 
 class _CommentCardState extends State<CommentCard> {
-  UserInfoDatabaseService _userInfoDatabaseService = UserInfoDatabaseService();
+  UserDataDatabaseService _userInfoDatabaseService = UserDataDatabaseService();
 
   CommentsDatabaseService _comments = CommentsDatabaseService();
 

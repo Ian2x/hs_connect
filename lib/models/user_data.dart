@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hs_connect/models/message.dart';
 
 class UserGroup {
   // userGroup = name of group
@@ -17,23 +18,28 @@ class UserGroup {
 
 class UserData {
   final DocumentReference userRef;
-  String displayedName;
+  final String displayedName;
   final String domain;
-  String? county;
-  String? state;
-  String? country;
-  List<UserGroup> userGroups;
-  String? image;
-  int score;
+  final String? county;
+  final String? state;
+  final String? country;
+  final List<UserGroup> userGroups;
+  final List<Message> messages;
+  final String? image;
+  final int score;
+  final int warnings;
 
-  UserData(
-      {required this.userRef,
-      required this.displayedName,
-      required this.domain,
-      this.county = '<county>',
-      this.state = '<state>',
-      this.country = '<country>',
-      this.userGroups = const [],
-      this.image = null,
-      this.score = 0});
+  UserData({
+    required this.userRef,
+    required this.displayedName,
+    required this.domain,
+    required this.county,
+    required this.state,
+    required this.country,
+    required this.userGroups,
+    required this.messages,
+    required this.image,
+    required this.score,
+    required this.warnings,
+  });
 }

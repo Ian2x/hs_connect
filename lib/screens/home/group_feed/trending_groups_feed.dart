@@ -61,36 +61,39 @@ class _TrendingGroupsFeedState extends State<TrendingGroupsFeed> {
               });
               */
 
-              final posts = snapshot.data.docs.map((docSnapshot) {
+              final groups = snapshot.data.docs.map((docSnapshot) {
                 return Group(
-                    groupRef: docSnapshot.id,
-                    userRef: docSnapshot.get("userId"),
+                    groupRef: docSnapshot.reference,
+                    creatorRef: docSnapshot.get("userRef"),
                     name: docSnapshot.get("name"),
                     image: docSnapshot.get("image"),
+                    description: docSnapshot.get("description"),
                     accessRestrictions: AccessRestriction(
                         restrictionType: docSnapshot.get("accessRestrictions")["restrictionType"],
                         restriction: docSnapshot.get("accessRestrictions")["restriction"]
                     ),
                     createdAt: docSnapshot.get('createdAt'),
                     numPosts: docSnapshot.get('numPosts'),
+                    moderatorRefs: docSnapshot.get('moderatorRefs'),
                 );
               }).toList();
 
               // final posts = (snapshot.data as List<Group?>).map((group) => group!).toList();
 
               return ListView.builder(
-                itemCount: posts.length,
+                itemCount: groups.length,
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 itemBuilder: (BuildContext context, int index) {
                   // when scroll up/down, fires once
                   return Center(
                       child: GroupCard(
-                    groupRef: posts[index].groupRef,
-                    userRef: posts[index].userRef,
-                    name: posts[index].name,
-                    image: posts[index].image,
-                    accessRestrictions: posts[index].accessRestrictions,
+                    groupRef: groups[index].groupRef,
+                    userRef: groups[index].creatorRef,
+                    name: groups[index].name,
+                    image: groups[index].image,
+                    description: groups[index].description,
+                    accessRestrictions: groups[index].accessRestrictions,
                     currUserRef: userData.userRef,
                   ));
                 },

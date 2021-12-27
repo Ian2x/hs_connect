@@ -64,6 +64,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
                         likes: comments[index].likes,
                         dislikes: comments[index].dislikes,
                         currUserRef: userData.userRef,
+                        reportedStatus: comments[index].reportedStatus,
                       ));
                 }
               },

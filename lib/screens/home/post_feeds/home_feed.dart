@@ -57,6 +57,8 @@ class _HomeFeedState extends State<HomeFeed> {
                   dislikes: posts[index].dislikes,
                   currUserRef: userData.userRef,
                   numComments: posts[index].numComments,
+                  reportedStatus: posts[index].reportedStatus,
+                  tags: posts[index].tags,
                 )
               );
             },
