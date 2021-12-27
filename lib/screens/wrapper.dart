@@ -21,8 +21,7 @@ class _WrapperState extends State<Wrapper> {
   Widget build(BuildContext context) {
 
     final user = Provider.of<User?>(context);
-    final userData = Provider.of<UserInfo?>(context);
-
+    final userData = Provider.of<UserData?>(context);
     if (user == null || userData == null || !user.email!.endsWith('@ianeric.com')) {
       return Authenticate();
     } else {

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/known_domain.dart';
+import 'package:hs_connect/models/message.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/known_domains_database.dart';
@@ -68,7 +69,7 @@ class UserDataDatabaseService {
   // home data from snapshot
   UserData? _userDataFromSnapshot(DocumentSnapshot snapshot, {DocumentReference? overrideUserRef}) {
     if(snapshot.exists) {
-      return UserData(
+      final temp = UserData(
         userRef: overrideUserRef!=null ? overrideUserRef : userRef!,
         displayedName: snapshot.get('displayedName'),
         domain: snapshot.get('domain'),
@@ -76,11 +77,12 @@ class UserDataDatabaseService {
         state: snapshot.get('state'),
         country: snapshot.get('country'),
         userGroups: snapshot.get('userGroups').map<UserGroup>((userGroup) => UserGroup(groupRef: userGroup['groupRef'], public: userGroup['public'])).toList(),
-        messages: snapshot.get('messages'),
+        messages: snapshot.get('messages').map<Message>((message) => Message(messageRef: message['messageRef'], sender: message['sender'], receiver: message['receiver'], text: message['text'], createdAt: message['createdAt'])).toList(),
         image: snapshot.get('imageURL'),
         score: snapshot.get('score'),
         warnings: snapshot.get('warnings'),
       );
+      return temp;
     } else {
       return null;
     }
@@ -92,10 +94,20 @@ class UserDataDatabaseService {
   }
 
   // get home doc stream
-  Stream<UserData?> get userData {
+  Stream<UserData?>? get userData {
+    if(userRef!=null) {
+      return userRef!
+          .snapshots()
+          .map(_userDataFromSnapshot);
+    } else {
+      return null;
+    }
+    /*
     return userDataCollection
         .doc(userRef!=null ? userRef!.id : null)
         .snapshots()
         .map(_userDataFromSnapshot);
+
+     */
   }
 }

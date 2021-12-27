@@ -49,7 +49,7 @@ class CommentCard extends StatefulWidget {
 }
 
 class _CommentCardState extends State<CommentCard> {
-  UserDataDatabaseService _userInfoDatabaseService = UserDataDatabaseService();
+  UserDataDatabaseService _userDataDatabaseService = UserDataDatabaseService();
 
   CommentsDatabaseService _comments = CommentsDatabaseService();
 
@@ -78,7 +78,7 @@ class _CommentCardState extends State<CommentCard> {
 
   void getUsername() async {
     if (widget.userRef != null) {
-      final UserData? fetchUsername = await _userInfoDatabaseService.getUserData(userRef: widget.userRef!);
+      final UserData? fetchUsername = await _userDataDatabaseService.getUserData(userRef: widget.userRef!);
       setState(() {
         username = fetchUsername != null ? fetchUsername.displayedName : '<Failed to retrieve user name>';
       });
