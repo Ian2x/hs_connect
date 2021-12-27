@@ -13,6 +13,7 @@ import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/userInfo_database.dart';
 import 'package:hs_connect/shared/tools/hexcolor.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:hs_connect/shared/tools/convertTime.dart';
 
 
 
@@ -144,7 +145,7 @@ class _PostCard2State extends State<PostCard2> {
                       style: TextStyle(
                         fontWeight:FontWeight.w500,
                         fontSize: 15.0,
-                        color: HexColor("#DADDDF"),
+                        color: HexColor("#222426"),
                         fontFamily: 'Segoe UI',
                       ),
                     ),
@@ -154,7 +155,7 @@ class _PostCard2State extends State<PostCard2> {
                       style: TextStyle(
                         fontWeight:FontWeight.bold,
                         fontSize: 15.0,
-                        color: HexColor("#DADDDF"),
+                        color: HexColor("#222426"),
                         fontFamily: 'Segoe UI',
                       ),
                     ),
@@ -164,7 +165,7 @@ class _PostCard2State extends State<PostCard2> {
                       style: TextStyle(
                         fontWeight:FontWeight.bold,
                         fontSize: 15.0,
-                        color: HexColor("#DADDDF"),
+                        color: HexColor("#222426"),
                         fontFamily: 'Segoe UI',
                       ),
                     ),
@@ -172,14 +173,46 @@ class _PostCard2State extends State<PostCard2> {
                     Text(
                       widget.text,
                       overflow: TextOverflow.ellipsis, // default is .clip
-                      maxLines: 2,
+                      maxLines: 3,
                       style: TextStyle(
                         fontWeight:FontWeight.bold,
                         fontSize: 15.0,
-                        color: HexColor("#DADDDF"),
+                        color: HexColor("#2F3031"),
                         fontFamily: 'Segoe UI',
                       ),
                     ),
+                    Row(
+                      children: [
+                        Text(
+                          convertTime(widget.createdAt: int),
+                          style: TextStyle(
+                            fontWeight:FontWeight.w500,
+                            fontSize: 15.0,
+                            color: HexColor("#2F3031"),
+                            fontFamily: 'Segoe UI',
+                          ),
+                        ),
+                        SizedBox(width:40),
+                        Icon(
+                          Icons.mode_comment_outlined,
+                          color: Colors.black,
+                          size: 15.0,
+                        ),
+                        Text(
+                          widget.numComments.toString(),
+                          style: TextStyle(
+                            fontWeight:FontWeight.w500,
+                            fontSize: 15.0,
+                            color: HexColor("#2F3031"),
+                            fontFamily: 'Segoe UI',
+                          ),
+                        ),
+                        SizedBox(width:40),
+                        LikeDislikePost(
+                            currUserRef: widget.currUserRef, postRef: widget.postRef, likes: widget.likes, dislikes: widget.dislikes
+                        ),
+                      ],
+                    )
                   ], //Column Children ARRAY
                 ),
               )

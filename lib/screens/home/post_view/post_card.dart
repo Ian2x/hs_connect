@@ -14,8 +14,6 @@ import 'package:hs_connect/services/userInfo_database.dart';
 import 'package:hs_connect/shared/tools/hexcolor.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-
-
 class PostCard extends StatefulWidget {
   final DocumentReference postRef;
   final DocumentReference userRef;
@@ -56,12 +54,12 @@ class _PostCardState extends State<PostCard> {
   PostsDatabaseService _posts = PostsDatabaseService();
   CommentsDatabaseService _comments = CommentsDatabaseService();
 
-
   bool liked = false;
   bool disliked = false;
   String username = '<Loading user name...>';
   String groupName = '<Loading group name...>';
-  Image groupImage = Image(image: AssetImage('assets/masonic-G.png'), height: 20, width: 20);
+  Image groupImage =
+      Image(image: AssetImage('assets/masonic-G.png'), height: 20, width: 20);
 
   @override
   void initState() {
@@ -83,16 +81,22 @@ class _PostCardState extends State<PostCard> {
   }
 
   void getUsername() async {
-    final UserData? fetchUsername = await _userInfoDatabaseService.getUserData(userRef: widget.userRef);
+    final UserData? fetchUsername =
+        await _userInfoDatabaseService.getUserData(userRef: widget.userRef);
     setState(() {
-      username = fetchUsername != null ? fetchUsername.displayedName : '<Failed to retrieve user name>';
+      username = fetchUsername != null
+          ? fetchUsername.displayedName
+          : '<Failed to retrieve user name>';
     });
   }
 
   void getGroupName() async {
-    final Group? fetchGroupName = await _groups.getGroupData(groupRef: widget.groupRef);
+    final Group? fetchGroupName =
+        await _groups.getGroupData(groupRef: widget.groupRef);
     setState(() {
-      groupName = fetchGroupName != null ? fetchGroupName.name : '<Failed to retrieve group name>';
+      groupName = fetchGroupName != null
+          ? fetchGroupName.name
+          : '<Failed to retrieve group name>';
     });
   }
 
@@ -101,65 +105,82 @@ class _PostCardState extends State<PostCard> {
       context,
       MaterialPageRoute(
           builder: (context) => SpecificGroupFeed(
-            groupRef: widget.groupRef,
+                groupRef: widget.groupRef,
               )),
     );
   }
+
   @override
   Widget build(BuildContext context) {
-
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0)),
         margin: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
         //color: HexColor("#292929"),
         elevation: 0.3,
         child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-      Dismissible(
-        key: ValueKey(widget.postRef),
-        child: ListTile(
-          title: Row(children: <Widget>[
-            IconButton(
-              icon: groupImage,
-              onPressed: openSpecificGroupFeed,
+          Dismissible(
+            key: ValueKey(widget.postRef),
+            child: ListTile(
+              title: Row(children: <Widget>[
+                IconButton(
+                  icon: groupImage,
+                  onPressed: openSpecificGroupFeed,
+                ),
+                Text(widget.title),
+              ]),
+              subtitle: Column(children: <Widget>[
+                Text(username +
+                    ' in ' +
+                    groupName +
+                    '      ' +
+                    timeago.format(widget.createdAt.toDate())),
+                widget.media != null
+                    ? Image.network(widget.media!)
+                    : Container(),
+                Row(children: <Widget>[
+                  Text(widget.numComments.toString()),
+                  LikeDislikePost(
+                      currUserRef: widget.currUserRef,
+                      postRef: widget.postRef,
+                      likes: widget.likes,
+                      dislikes: widget.dislikes),
+                ])
+              ]),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => PostPage(
+                              postInfo: Post(
+                            postRef: widget.postRef,
+                            userRef: widget.userRef,
+                            groupRef: widget.groupRef,
+                            title: widget.title,
+                            text: widget.text,
+                            media: widget.media,
+                            createdAt: widget.createdAt,
+                            likes: widget.likes,
+                            dislikes: widget.dislikes,
+                            numComments: widget.numComments,
+                          ))),
+                );
+              },
+              trailing: DeletePost(
+                  postUserRef: widget.userRef,
+                  postRef: widget.postRef,
+                  groupRef: widget.groupRef,
+                  currUserRef: widget.currUserRef,
+                  media: widget.media),
             ),
-            Text(widget.title),
-          ]),
-          subtitle: Column(children: <Widget>[
-            Text(username + ' in ' + groupName + '      ' + timeago.format(widget.createdAt.toDate())),
-            widget.media != null ? Image.network(widget.media!) : Container(),
-            Row(children: <Widget>[
-              Text(widget.numComments.toString()),
-              LikeDislikePost(
-                  currUserRef: widget.currUserRef, postRef: widget.postRef, likes: widget.likes, dislikes: widget.dislikes),
-            ])
-          ]),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => PostPage(
-                          postInfo: Post(
-                        postRef: widget.postRef,
-                        userRef: widget.userRef,
-                        groupRef: widget.groupRef,
-                        title: widget.title,
-                        text: widget.text,
-                        media: widget.media,
-                        createdAt: widget.createdAt,
-                        likes: widget.likes,
-                        dislikes: widget.dislikes,
-                        numComments: widget.numComments,
-                      ))),
-            );
-          },
-          trailing: DeletePost(
-              postUserRef: widget.userRef, postRef: widget.postRef, groupRef: widget.groupRef, currUserRef: widget.currUserRef, media: widget.media),
-        ),
-        // CAN DELETE POST EITHER VIA DELETE POST BUTTON OR DISMISSAL, PROBABLY CHOOSE ONE OR THE OTHER EVENTUALLY
-        onDismissed: (DismissDirection direction) async {
-          await _posts.deletePost(postRef: widget.postRef, userRef: widget.currUserRef, groupRef: widget.groupRef, media: widget.media);
-        },
-      )
-    ]));
+            // CAN DELETE POST EITHER VIA DELETE POST BUTTON OR DISMISSAL, PROBABLY CHOOSE ONE OR THE OTHER EVENTUALLY
+            onDismissed: (DismissDirection direction) async {
+              await _posts.deletePost(
+                  postRef: widget.postRef,
+                  userRef: widget.currUserRef,
+                  groupRef: widget.groupRef,
+                  media: widget.media);
+            },
+          )
+        ]));
   }
 }
