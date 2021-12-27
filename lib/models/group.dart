@@ -35,6 +35,7 @@ class Group {
   final AccessRestriction accessRestrictions;
   final Timestamp createdAt;
   final int numPosts;
+  final int numMembers;
 
   Group({
     required this.groupRef,
@@ -46,5 +47,6 @@ class Group {
     required this.accessRestrictions,
     required this.createdAt,
     required this.numPosts,
+    required this.numMembers,
   });
 }
