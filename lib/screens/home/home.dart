@@ -38,7 +38,7 @@ class _HomeState extends State<Home> {
       initialIndex: 1,
       length: 3,
       child: Scaffold(
-          backgroundColor: HexColor("#C4C4C4"),
+          backgroundColor: HexColor("#E9EDF0"),
           appBar: AppBar(
             title: Text('HS Connect',
               style:

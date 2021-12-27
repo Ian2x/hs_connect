@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/screens/home/post_view/post_card.dart';
+import 'package:hs_connect/screens/home/post_view/post_card2.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
@@ -45,7 +46,7 @@ class _HomeFeedState extends State<HomeFeed> {
               if (user==null) {
                 return Loading();
               } else return Center(
-                child: PostCard(
+                child: PostCard2(
                   postRef: posts[index].postRef,
                   userRef: posts[index].userRef,
                   groupRef: posts[index].groupRef,
