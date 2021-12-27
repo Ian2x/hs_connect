@@ -17,6 +17,8 @@ class GroupCard extends StatefulWidget {
   final String? description;
   final AccessRestriction accessRestrictions;
   final DocumentReference currUserRef;
+  final int numMembers;
+  final List<DocumentReference> moderatorRefs;
 
   GroupCard(
       {Key? key,
@@ -26,7 +28,10 @@ class GroupCard extends StatefulWidget {
         required this.description,
         this.image,
         required this.accessRestrictions,
-        required this.currUserRef})
+        required this.currUserRef,
+        required this.numMembers,
+        required this.moderatorRefs,
+      })
       : super(key: key);
 
   @override

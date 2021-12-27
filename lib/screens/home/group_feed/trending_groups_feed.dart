@@ -75,6 +75,7 @@ class _TrendingGroupsFeedState extends State<TrendingGroupsFeed> {
                     createdAt: docSnapshot.get('createdAt'),
                     numPosts: docSnapshot.get('numPosts'),
                     moderatorRefs: docSnapshot.get('moderatorRefs'),
+                    numMembers: docSnapshot.get('numMembers'),
                 );
               }).toList();
 
@@ -95,6 +96,9 @@ class _TrendingGroupsFeedState extends State<TrendingGroupsFeed> {
                     description: groups[index].description,
                     accessRestrictions: groups[index].accessRestrictions,
                     currUserRef: userData.userRef,
+                    numMembers: groups[index].numMembers,
+                    moderatorRefs: groups[index].moderatorRefs,
+
                   ));
                 },
               );

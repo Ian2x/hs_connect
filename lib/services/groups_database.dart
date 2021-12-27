@@ -55,11 +55,13 @@ class GroupsDatabaseService {
             'accessRestrictions': accessRestrictions.asMap(),
             'createdAt': DateTime.now(),
             'numPosts': 0,
+            'numMembers': 0,
           })
           .then(onValue)
           .catchError(onError);
       if (creatorRef != null) {
         UserDataDatabaseService _users = UserDataDatabaseService(userRef: creatorRef);
+        newGroupRef.update({'numMembers': FieldValue.increment(1)});
         await _users.joinGroup(userRef: creatorRef, groupRef: newGroupRef, public: true);
       }
       return newGroupRef;
@@ -90,6 +92,7 @@ class GroupsDatabaseService {
         createdAt: snapshot.get('createdAt'),
         numPosts: snapshot.get('numPosts'),
         moderatorRefs: snapshot.get('moderatorRefs'),
+        numMembers: snapshot.get('numMembers'),
       );
     } else {
       return null;
