@@ -11,6 +11,8 @@ import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/tools/hexcolor.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
+import 'package:timeago/timeago.dart' as timeago;
+
 
 
 
@@ -113,115 +115,121 @@ class _PostCard2State extends State<PostCard2> {
   @override
   Widget build(BuildContext context) {
 
-    return Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0)),
-        margin: EdgeInsets.fromLTRB(0.0, 1.0, 0.0, 0.0),
-        //color: HexColor("#292929"),
-        elevation: 0.0,
-        child: Container(
-        /*
-        constraints: BoxConstraints.expand(
-          height: Theme.of(context).textTheme.headline4!.fontSize! * 1.1 + 200.0,
-        ),
-        */
+    return GestureDetector(
+      onTap: (){
+        openSpecificGroupFeed;
+      },
+      child: Card(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0)),
+          margin: EdgeInsets.fromLTRB(0.0, 1.0, 0.0, 0.0),
+          //color: HexColor("#292929"),
+          elevation: 0.0,
+          child: Container(
+          /*
+          constraints: BoxConstraints.expand(
+            height: Theme.of(context).textTheme.headline4!.fontSize! * 1.1 + 200.0,
+          ),
+          */
 
-        padding: const EdgeInsets.all(8.0),
-        color: HexColor("FFFFFF"),
-        alignment: Alignment(-1.0,-1.0), //Aligned to Top Left
-          child: Row(
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Icon(Icons.account_circle, size:40, color:Colors.black),
-                  //Spacer(flex:3),
-                ],
-              ),
-              SizedBox(width: 10),
-              Flexible(  //Otherwise horizontal renderflew of row
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          padding: const EdgeInsets.all(8.0),
+          color: HexColor("FFFFFF"),
+          alignment: Alignment(-1.0,-1.0), //Aligned to Top Left
+            child: Row(
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      username + " • " + userDomain,
-                      style: TextStyle(
-                        fontWeight:FontWeight.w500,
-                        fontSize: 15.0,
-                        color: HexColor("#222426"),
-                        fontFamily: 'Segoe UI',
-                      ),
-                    ),
-                    SizedBox(height: 5),
-                    Text(
-                      groupName,
-                      style: TextStyle(
-                        fontWeight:FontWeight.bold,
-                        fontSize: 15.0,
-                        color: HexColor("#222426"),
-                        fontFamily: 'Segoe UI',
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(     //TODO: Need to figure out ways to ref
-                      widget.title,
-                      style: TextStyle(
-                        fontWeight:FontWeight.bold,
-                        fontSize: 15.0,
-                        color: HexColor("#222426"),
-                        fontFamily: 'Segoe UI',
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      widget.text,
-                      overflow: TextOverflow.ellipsis, // default is .clip
-                      maxLines: 3,
-                      style: TextStyle(
-                        fontWeight:FontWeight.bold,
-                        fontSize: 15.0,
-                        color: HexColor("#2F3031"),
-                        fontFamily: 'Segoe UI',
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          convertTime(widget.createdAt.millisecondsSinceEpoch),
-                          style: TextStyle(
-                            fontWeight:FontWeight.w500,
-                            fontSize: 15.0,
-                            color: HexColor("#2F3031"),
-                            fontFamily: 'Segoe UI',
-                          ),
-                        ),
-                        SizedBox(width:40),
-                        Icon(
-                          Icons.mode_comment_outlined,
-                          color: Colors.black,
-                          size: 15.0,
-                        ),
-                        Text(
-                          widget.numComments.toString(),
-                          style: TextStyle(
-                            fontWeight:FontWeight.w500,
-                            fontSize: 15.0,
-                            color: HexColor("#2F3031"),
-                            fontFamily: 'Segoe UI',
-                          ),
-                        ),
-                        SizedBox(width:40),
-                        LikeDislikePost(
-                            currUserRef: widget.currUserRef, postRef: widget.postRef, likes: widget.likes, dislikes: widget.dislikes
-                        ),
-                      ],
-                    )
-                  ], //Column Children ARRAY
+                    Icon(Icons.account_circle, size:40, color:Colors.black),
+                    //Spacer(),
+                  ],
                 ),
-              )
+                SizedBox(width: 10),
+                Flexible(  //Otherwise horizontal renderflew of row
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        username + " • " + userDomain,
+                        style: TextStyle(
+                          fontWeight:FontWeight.w500,
+                          fontSize: 15.0,
+                          color: HexColor("#222426"),
+                          fontFamily: 'Segoe UI',
+                        ),
+                      ),
+                      SizedBox(height: 5),
+                      Text(
+                        groupName,
+                        style: TextStyle(
+                          fontWeight:FontWeight.bold,
+                          fontSize: 15.0,
+                          color: HexColor("#222426"),
+                          fontFamily: 'Segoe UI',
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Text(     //TODO: Need to figure out ways to ref
+                        widget.title,
+                        style: TextStyle(
+                          fontWeight:FontWeight.bold,
+                          fontSize: 15.0,
+                          color: HexColor("#222426"),
+                          fontFamily: 'Segoe UI',
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        widget.text,
+                        overflow: TextOverflow.ellipsis, // default is .clip
+                        maxLines: 3,
+                        style: TextStyle(
+                          fontWeight:FontWeight.bold,
+                          fontSize: 15.0,
+                          color: HexColor("#2F3031"),
+                          fontFamily: 'Segoe UI',
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            //widget.createdAt.toString()
+                            convertTime(widget.createdAt.toDate()),
+                            style: TextStyle(
+                              fontWeight:FontWeight.w500,
+                              fontSize: 15.0,
+                              color: HexColor("#2F3031"),
+                              fontFamily: 'Segoe UI',
+                            ),
+                          ),
+                          Spacer(),
+                          Icon(
+                            Icons.mode_comment_outlined,
+                            color: Colors.black,
+                            size: 15.0,
+                          ),
+                          Text(
+                            widget.numComments.toString(),
+                            style: TextStyle(
+                              fontWeight:FontWeight.w500,
+                              fontSize: 15.0,
+                              color: HexColor("#2F3031"),
+                              fontFamily: 'Segoe UI',
+                            ),
+                          ),
+                          Spacer(),
+                          LikeDislikePost(
+                              currUserRef: widget.currUserRef, postRef: widget.postRef, likes: widget.likes, dislikes: widget.dislikes
+                          ),
+                        ],
+                      )
+                    ], //Column Children ARRAY
+                  ),
+                )
 
-            ],
+              ],
+            )
           )
-        )
+      ),
     );
   }
 }
