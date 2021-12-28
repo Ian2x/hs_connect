@@ -7,7 +7,6 @@ import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
-import 'package:hs_connect/shared/constants.dart';
 
 void defaultFunc(dynamic parameter) {}
 
@@ -57,6 +56,7 @@ class GroupsDatabaseService {
           .catchError(onError);
       if (creatorRef != null) {
         UserDataDatabaseService _users = UserDataDatabaseService(userRef: creatorRef);
+        newGroupRef.update({'numMembers': FieldValue.increment(1)});
         await _users.joinGroup(userRef: creatorRef, groupRef: newGroupRef, public: true);
       }
       return newGroupRef;
