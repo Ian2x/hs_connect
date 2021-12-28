@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/post.dart';
+import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 
 
@@ -121,7 +122,11 @@ class PostsDatabaseService {
   // home data from snapshot
   Post? _postFromDocument(QueryDocumentSnapshot document) {
     if (document.exists) {
-      return Post(
+      var report = document['reportedStatus'];
+      if(report!=null) {
+        report = Report(reporterRef: report['reporterRef'], text: report['text']);
+      }
+      final temp = Post(
         postRef: document.reference,
         userRef: document['userRef'],
         groupRef: document['groupRef'],
@@ -132,9 +137,10 @@ class PostsDatabaseService {
         numComments: document['numComments'],
         likes: (document['likes'] as List).map((item) => item as DocumentReference).toList(),
         dislikes: (document['dislikes'] as List).map((item) => item as DocumentReference).toList(),
-        reportedStatus: document['reportedStatus'],
-        tags: document['tags'],
+        reportedStatus: report,
+        tags: (document['tags'] as List).map((item) => item as String).toList(),
       );
+      return temp;
     } else {
       return null;
     }

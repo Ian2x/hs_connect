@@ -74,7 +74,7 @@ class GroupsDatabaseService {
       final accessRestrictions = snapshot.get('accessRestrictions');
       return Group(
         groupRef: groupRef,
-        creatorRef: snapshot.get('userRef'),
+        creatorRef: snapshot.get('creatorRef'),
         name: snapshot.get('name'),
         image: snapshot.get('image'),
         description: snapshot.get('description'),
@@ -85,7 +85,7 @@ class GroupsDatabaseService {
                 'restrictionType']),
         createdAt: snapshot.get('createdAt'),
         numPosts: snapshot.get('numPosts'),
-        moderatorRefs: snapshot.get('moderatorRefs'),
+        moderatorRefs: (snapshot.get('moderatorRefs') as List).map((item) => item as DocumentReference).toList(),
         numMembers: snapshot.get('numMembers'),
       );
     } else {
