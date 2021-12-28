@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/user_data.dart';
@@ -19,24 +18,20 @@ class _DomainFeedState extends State<DomainFeed> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
     final userData = Provider.of<UserData?>(context);
 
     if (userData == null) return Loading();
 
-    // _posts.setGroupId(groupId: 'QwUEy7kgi0J8DMCJIxvA');
-
-    PostsDatabaseService _posts = PostsDatabaseService(groupRef: userData.userGroups[0].groupRef);
+    PostsDatabaseService _posts = PostsDatabaseService(groupsRefs: [userData.userGroups[0].groupRef]);
 
     return StreamBuilder(
-      stream: _posts.singleGroupPosts,
+      stream: _posts.multiGroupPosts,
       builder: (context, snapshot) {
         print(snapshot.connectionState);
         if (!snapshot.hasData) {
           return Loading();
         } else {
           final posts = (snapshot.data as List<Post?>).map((post) => post!).toList();
-          // print(posts.map((post) => post!.image));
 
           return ListView.builder(
             itemCount: posts.length,

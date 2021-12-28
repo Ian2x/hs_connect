@@ -24,6 +24,7 @@ class RepliesDatabaseService {
     Function onError = defaultFunc}) async {
 
     postRef.update({'numComments': FieldValue.increment(1)});
+    commentRef.update({'numReplies': FieldValue.increment(1)});
 
     return await repliesCollection
         .add({
@@ -41,12 +42,13 @@ class RepliesDatabaseService {
         .catchError(onError);
   }
 
-  Future deleteReply({required DocumentReference replyRef, required DocumentReference postRef, required DocumentReference userRef, String? media}) async {
+  Future deleteReply({required DocumentReference replyRef, required DocumentReference commentRef, required DocumentReference postRef, required DocumentReference userRef, String? media}) async {
     final checkAuth = await replyRef.get();
     if(checkAuth.exists) {
       if (userRef==checkAuth.get('userRef')) {
 
         postRef.update({'numComments': FieldValue.increment(-1)});
+        commentRef.update({'numReplies': FieldValue.increment(1)});
 
         await replyRef.update({'likes': [], 'dislikes': [], 'media': null, 'userRef': null, 'text': '[Reply removed]'});
 

@@ -97,7 +97,7 @@ class _ReplyCardState extends State<ReplyCard> {
       ])),
       onDismissed: (DismissDirection direction) {
         setState(() {
-          _replies.deleteReply(replyRef: widget.replyRef, postRef: widget.postRef, userRef: widget.currUserRef, media: widget.media);
+          _replies.deleteReply(replyRef: widget.replyRef, commentRef: widget.commentRef, postRef: widget.postRef, userRef: widget.currUserRef, media: widget.media);
         });
       },
     );

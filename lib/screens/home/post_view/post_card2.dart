@@ -94,7 +94,6 @@ class _PostCard2State extends State<PostCard2> {
   }
 
   void getGroupName() async {
-    print("HI THERE");
     final Group? fetchGroupName = await _groups.getGroupData(groupRef: widget.groupRef);
     setState(() {
       groupName = fetchGroupName != null ? fetchGroupName.name : '<Failed to retrieve group name>';

@@ -34,29 +34,6 @@ class _TrendingGroupsFeedState extends State<TrendingGroupsFeed> {
               domain: widget.domain, county: widget.county, state: widget.state, country: widget.country),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
             if (snapshot.hasData) {
-              /*
-              List<Group> posts = [];
-
-
-              snapshot.data.docs.forEach((docSnapshot) {
-                print(docSnapshot.get('name'));
-                print(docSnapshot.get("userId"));
-                print(docSnapshot.id);
-                print(docSnapshot.get("image"));
-                print(docSnapshot.get("accessRestrictions"));
-                posts.add(Group(
-                    groupId: docSnapshot.id,
-                    userId: docSnapshot.get("userId"),
-                    name: docSnapshot.get("name"),
-                    image: docSnapshot.get("image"),
-                    accessRestrictions: AccessRestriction(
-                        restrictionType: docSnapshot.get("accessRestrictions")["restrictionType"],
-                        restriction: docSnapshot.get("accessRestrictions")["restriction"]
-                    )
-                ));
-              });
-              */
-
               final groups = snapshot.data.docs.map((docSnapshot) {
                 return Group(
                     groupRef: docSnapshot.reference,
@@ -74,8 +51,6 @@ class _TrendingGroupsFeedState extends State<TrendingGroupsFeed> {
                     numMembers: docSnapshot.get('numMembers'),
                 );
               }).toList();
-
-              // final posts = (snapshot.data as List<Group?>).map((group) => group!).toList();
 
               return ListView.builder(
                 itemCount: groups.length,

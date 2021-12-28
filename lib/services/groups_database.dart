@@ -30,6 +30,7 @@ class GroupsDatabaseService {
       required String? description,
       Function(void) onValue = defaultFunc,
       Function onError = defaultFunc}) async {
+
     QuerySnapshot docs = await groupsCollection
         .where('name', isEqualTo: name)
         .where('accessRestrictions', isEqualTo: accessRestrictions.asMap())
@@ -55,7 +56,6 @@ class GroupsDatabaseService {
           .catchError(onError);
       if (creatorRef != null) {
         UserDataDatabaseService _users = UserDataDatabaseService(userRef: creatorRef);
-        newGroupRef.update({'numMembers': FieldValue.increment(1)});
         await _users.joinGroup(userRef: creatorRef, groupRef: newGroupRef, public: true);
       }
       return newGroupRef;
@@ -78,11 +78,9 @@ class GroupsDatabaseService {
         name: snapshot.get('name'),
         image: snapshot.get('image'),
         description: snapshot.get('description'),
-        // AccessRestriction.mapToAR(map: snapshot.get('accessRestrictions') as Map<String, dynamic>),
         accessRestrictions: AccessRestriction(
             restriction: accessRestrictions['restriction'],
-            restrictionType: accessRestrictions[
-                'restrictionType']),
+            restrictionType: accessRestrictions['restrictionType']),
         createdAt: snapshot.get('createdAt'),
         numPosts: snapshot.get('numPosts'),
         moderatorRefs: (snapshot.get('moderatorRefs') as List).map((item) => item as DocumentReference).toList(),

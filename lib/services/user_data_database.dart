@@ -56,7 +56,13 @@ class UserDataDatabaseService {
   }
 
   Future joinGroup({required DocumentReference userRef, required DocumentReference groupRef, required bool public}) async {
+    groupRef.update({'numMembers': FieldValue.increment(1)});
     return await userRef.update({'userGroups': FieldValue.arrayUnion([{'groupRef': groupRef, 'public': public}])});
+  }
+
+  Future leaveGroup({required DocumentReference userRef, required DocumentReference groupRef, required bool public}) async {
+    groupRef.update({'numMembers': FieldValue.increment(-1)});
+    return await userRef.update({'userGroups': FieldValue.arrayRemove([{'groupRef': groupRef, 'public': public}])});
   }
 
   // get other users from userRef
@@ -101,12 +107,5 @@ class UserDataDatabaseService {
     } else {
       return null;
     }
-    /*
-    return userDataCollection
-        .doc(userRef!=null ? userRef!.id : null)
-        .snapshots()
-        .map(_userDataFromSnapshot);
-
-     */
   }
 }

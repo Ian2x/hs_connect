@@ -62,8 +62,6 @@ class _CommentCardState extends State<CommentCard> {
       });
 
     }
-    // find username for userId
-    // _userInfoDatabaseService.userId = widget.userId;
     getUsername();
     super.initState();
   }

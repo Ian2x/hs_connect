@@ -9,16 +9,11 @@ void defaultFunc(dynamic parameter) {}
 class PostsDatabaseService {
   final DocumentReference? userRef;
 
-  DocumentReference? groupRef;
   List<DocumentReference>? groupsRefs;
 
-  PostsDatabaseService({this.userRef, this.groupRef, this.groupsRefs});
+  PostsDatabaseService({this.userRef, this.groupsRefs});
 
   ImageStorage _images = ImageStorage();
-
-  void setGroupRef({required DocumentReference groupRef}) {
-    this.groupRef = groupRef;
-  }
 
   // collection reference
   final CollectionReference postsCollection = FirebaseFirestore.instance.collection('posts');
@@ -30,7 +25,6 @@ class PostsDatabaseService {
     Function(void) onValue = defaultFunc,
     Function onError = defaultFunc}) async {
 
-    groupRef.update({'numPosts': FieldValue.increment(1)});
 
     return await postsCollection
         .add({
@@ -146,16 +140,11 @@ class PostsDatabaseService {
     }
   }
 
-  Stream<List<Post?>> get singleGroupPosts {
-    return postsCollection.where('groupRef', isEqualTo: groupRef).orderBy('createdAt', descending: true).snapshots().map((snapshot) => snapshot.docs.map(_postFromDocument).toList());
-  }
-
   Stream<List<Post?>> get multiGroupPosts {
     return postsCollection.where('groupRef', whereIn: groupsRefs).orderBy('createdAt', descending: true).snapshots().map((snapshot) => snapshot.docs.map(_postFromDocument).toList());
   }
 
   Future getMultiGroupPosts() async {
-
     final snapshot = await postsCollection.where('groupRef', whereIn: groupsRefs).get();
     return snapshot.docs.map(_postFromDocument).toList();
   }

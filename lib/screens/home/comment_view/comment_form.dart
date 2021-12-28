@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
@@ -44,8 +43,6 @@ class _CommentFormState extends State<CommentForm> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
-
     final userData = Provider.of<UserData?>(context);
 
     void setPic(File newFile2) {

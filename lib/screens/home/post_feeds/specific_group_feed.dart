@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
@@ -41,12 +40,11 @@ class _SpecificGroupFeedState extends State<SpecificGroupFeed> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
     final userData = Provider.of<UserData?>(context);
 
     if (userData == null) return Loading();
 
-    PostsDatabaseService _posts = PostsDatabaseService(groupRef: widget.groupRef);
+    PostsDatabaseService _posts = PostsDatabaseService(groupsRefs: [widget.groupRef]);
 
     return Scaffold(
       backgroundColor: Colors.brown[50],
@@ -56,14 +54,13 @@ class _SpecificGroupFeedState extends State<SpecificGroupFeed> {
         elevation: 0.0,
       ),
       body: StreamBuilder(
-        stream: _posts.singleGroupPosts,
+        stream: _posts.multiGroupPosts,
         builder: (context, snapshot) {
           print(snapshot.connectionState);
           if (!snapshot.hasData) {
             return Loading();
           } else {
             final posts = (snapshot.data as List<Post?>).map((post) => post!).toList();
-            // print(posts.map((post) => post!.image));
 
             return ListView.builder(
               itemCount: posts.length,

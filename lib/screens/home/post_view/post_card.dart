@@ -56,7 +56,6 @@ class _PostCardState extends State<PostCard> {
   GroupsDatabaseService _groups = GroupsDatabaseService();
 
   PostsDatabaseService _posts = PostsDatabaseService();
-  CommentsDatabaseService _comments = CommentsDatabaseService();
 
   bool liked = false;
   bool disliked = false;
@@ -77,8 +76,6 @@ class _PostCardState extends State<PostCard> {
         disliked = true;
       });
     }
-    // find username for userId
-    // _userInfoDatabaseService.userId = widget.userId;
     getUsername();
     getGroupName();
     super.initState();
@@ -119,7 +116,6 @@ class _PostCardState extends State<PostCard> {
     return Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0)),
         margin: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
-        //color: HexColor("#292929"),
         elevation: 0.3,
         child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
           Dismissible(

@@ -19,7 +19,6 @@ class RepliesFeed extends StatefulWidget {
 }
 
 class _RepliesFeedState extends State<RepliesFeed> {
-  // String groupId = '';
 
   @override
   Widget build(BuildContext context) {
