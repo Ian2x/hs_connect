@@ -21,7 +21,6 @@ class _HomeFeedState extends State<HomeFeed> {
   Widget build(BuildContext context) {
     final user = Provider.of<User?>(context);
     final userData = Provider.of<UserData?>(context);
-
     if (userData == null) return Loading();
 
     PostsDatabaseService _posts = PostsDatabaseService(groupsRefs: userData.userGroups.map((userGroup) => userGroup.groupRef).toList());

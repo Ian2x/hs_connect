@@ -17,7 +17,7 @@ class GroupSearch extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final user = Provider.of<User?>(context);
-    final userData = Provider.of<UserInfo?>(context);
+    final userData = Provider.of<UserData?>(context);
 
     if (user==null || userData==null) {
       return Loading();
