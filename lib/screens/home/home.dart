@@ -108,7 +108,7 @@ class _HomeState extends State<Home> {
             children: <Widget>[
               DomainFeed(),
               HomeFeed(),
-              userData!=null ? TrendingFeed() : Loading(),
+              userData!=null ? TrendingFeed(country: userData.country, state: userData.state, county: userData.county, domain: userData.domain) : Loading(),
             ]
           ),
           bottomNavigationBar: navbar()

@@ -1,7 +1,11 @@
+import 'dart:collection';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
+import 'package:hs_connect/shared/constants.dart';
 
 
 void defaultFunc(dynamic parameter) {}
@@ -9,9 +13,9 @@ void defaultFunc(dynamic parameter) {}
 class PostsDatabaseService {
   final DocumentReference? userRef;
 
-  List<DocumentReference>? groupsRefs;
+  List<DocumentReference>? groupRefs;
 
-  PostsDatabaseService({this.userRef, this.groupsRefs});
+  PostsDatabaseService({this.userRef, this.groupRefs});
 
   ImageStorage _images = ImageStorage();
 
@@ -140,13 +144,21 @@ class PostsDatabaseService {
     }
   }
 
-  Stream<List<Post?>> get multiGroupPosts {
-    return postsCollection.where('groupRef', whereIn: groupsRefs).orderBy('createdAt', descending: true).snapshots().map((snapshot) => snapshot.docs.map(_postFromDocument).toList());
+  Stream<List<Post?>> get posts {
+    return postsCollection.where('groupRef', whereIn: groupRefs).orderBy('createdAt', descending: true).snapshots().map((snapshot) => snapshot.docs.map(_postFromDocument).toList());
   }
 
   Future getMultiGroupPosts() async {
-    final snapshot = await postsCollection.where('groupRef', whereIn: groupsRefs).get();
+    final snapshot = await postsCollection.where('groupRef', whereIn: groupRefs).get();
     return snapshot.docs.map(_postFromDocument).toList();
+  }
+
+  Stream<List<Post?>> get potentialTrendingPosts {
+    return postsCollection
+        .where('createdAt', isGreaterThan: Timestamp.fromDate(DateTime.now().subtract(new Duration(days: daysTrending))))
+        .where('groupRef', whereIn: groupRefs)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map(_postFromDocument).toList());
   }
 
 }

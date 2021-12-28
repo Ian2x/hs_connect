@@ -7,6 +7,7 @@ import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
+import 'package:hs_connect/shared/constants.dart';
 
 void defaultFunc(dynamic parameter) {}
 
@@ -68,6 +69,52 @@ class GroupsDatabaseService {
     return _groupDataFromSnapshot(snapshot: snapshot, groupRef: groupRef);
   }
 
+  Future getAllowableGroupRefs({required String domain, required String? county, required String? state, required String? country}) async {
+    // get all group refs
+    final domainGroupsFetch = groupsCollection
+        .where('accessRestrictions',
+        isEqualTo: AccessRestriction(restrictionType: 'domain', restriction: domain).asMap())
+        .get();
+    final countyGroupsFetch = county != null
+        ? groupsCollection
+        .where('county', isEqualTo: AccessRestriction(restrictionType: 'county', restriction: county).asMap())
+        .get()
+        : null;
+    final stateGroupsFetch = state != null
+        ? groupsCollection
+        .where('state', isEqualTo: AccessRestriction(restrictionType: 'state', restriction: state).asMap())
+        .get()
+        : null;
+    final countryGroupsFetch = country != null
+        ? groupsCollection
+        .where('country', isEqualTo: AccessRestriction(restrictionType: 'country', restriction: country).asMap())
+        .get()
+        : null;
+    final domainGroups = await domainGroupsFetch;
+    final countyGroups = await countyGroupsFetch;
+    final stateGroups = await stateGroupsFetch;
+    final countryGroups = await countryGroupsFetch;
+    final domainGroupsRefs = domainGroups.docs.map((group) {
+      return group.reference;
+    }).toList();
+    final countyGroupsRefs = countyGroups != null
+        ? countyGroups.docs.map((group) {
+      return group.reference;
+    }).toList()
+        : <DocumentReference>[];
+    final stateGroupsRefs = stateGroups != null
+        ? stateGroups.docs.map((group) {
+      return group.reference;
+    }).toList()
+        : <DocumentReference>[];
+    final countryGroupsRefs = countryGroups != null
+        ? countryGroups.docs.map((group) {
+      return group.reference;
+    }).toList()
+        : <DocumentReference>[];
+    return domainGroupsRefs + countyGroupsRefs + stateGroupsRefs + countryGroupsRefs;
+}
+
   // home data from snapshot
   Group? _groupDataFromSnapshot({required DocumentSnapshot snapshot, required DocumentReference groupRef}) {
     if (snapshot.exists) {
@@ -117,50 +164,14 @@ class GroupsDatabaseService {
 
     SplayTreeMap groupScores = new SplayTreeMap(compareDocRef);
     // get all group refs
-    final domainGroups = await groupsCollection
-        .where('accessRestrictions',
-            isEqualTo: AccessRestriction(restrictionType: 'domain', restriction: domain).asMap())
-        .get();
-    final countyGroups = county != null
-        ? await groupsCollection
-            .where('county', isEqualTo: AccessRestriction(restrictionType: 'county', restriction: county).asMap())
-            .get()
-        : null;
-    final stateGroups = state != null
-        ? await groupsCollection
-            .where('state', isEqualTo: AccessRestriction(restrictionType: 'state', restriction: state).asMap())
-            .get()
-        : null;
-    final countryGroups = country != null
-        ? await groupsCollection
-            .where('country', isEqualTo: AccessRestriction(restrictionType: 'country', restriction: country).asMap())
-            .get()
-        : null;
-    final domainGroupsRefs = domainGroups.docs.map((group) {
-      return group.reference;
-    }).toList();
-    final countyGroupsRefs = countyGroups != null
-        ? countyGroups.docs.map((group) {
-            return group.reference;
-          }).toList()
-        : <DocumentReference>[];
-    final stateGroupsRefs = stateGroups != null
-        ? stateGroups.docs.map((group) {
-            return group.reference;
-          }).toList()
-        : <DocumentReference>[];
-    final countryGroupsRefs = countryGroups != null
-        ? countryGroups.docs.map((group) {
-            return group.reference;
-          }).toList()
-        : <DocumentReference>[];
+    final allGroupsRefs = await getAllowableGroupRefs(domain: domain, county: county, state: state, country: country);
     // collect post information for each group
     PostsDatabaseService _posts =
-        PostsDatabaseService(groupsRefs: domainGroupsRefs + countyGroupsRefs + stateGroupsRefs + countryGroupsRefs);
+        PostsDatabaseService(groupRefs: allGroupsRefs);
     final List<Post?> allPosts = await _posts.getMultiGroupPosts();
     final List<Post?> filteredPosts = allPosts
         .where((post) =>
-            post != null && DateTime.now().difference(post.createdAt.toDate()).compareTo(Duration(days: 3)) == -1)
+            post != null && DateTime.now().difference(post.createdAt.toDate()).compareTo(Duration(days: daysTrending)) == -1)
         .toList();
     filteredPosts.forEach((post) {
       if (post!= null) {

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/user_data.dart';
@@ -6,21 +7,24 @@ import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
-class TrendingGroupsFeed extends StatefulWidget {
+class SuggestedGroups extends StatefulWidget {
   final String domain;
   final String? county;
   final String? state;
   final String? country;
 
-  const TrendingGroupsFeed(
+
+
+  const SuggestedGroups(
       {Key? key, required this.domain, required this.county, required this.state, required this.country})
       : super(key: key);
 
   @override
-  _TrendingGroupsFeedState createState() => _TrendingGroupsFeedState();
+  _SuggestedGroupsState createState() => _SuggestedGroupsState();
 }
 
-class _TrendingGroupsFeedState extends State<TrendingGroupsFeed> {
+class _SuggestedGroupsState extends State<SuggestedGroups> {
+
   @override
   Widget build(BuildContext context) {
     GroupsDatabaseService _groups = GroupsDatabaseService();
@@ -37,7 +41,7 @@ class _TrendingGroupsFeedState extends State<TrendingGroupsFeed> {
               final groups = snapshot.data.docs.map((docSnapshot) {
                 return Group(
                     groupRef: docSnapshot.reference,
-                    creatorRef: docSnapshot.get("userRef"),
+                    creatorRef: docSnapshot.get("creatorRef"),
                     name: docSnapshot.get("name"),
                     image: docSnapshot.get("image"),
                     description: docSnapshot.get("description"),
@@ -47,10 +51,11 @@ class _TrendingGroupsFeedState extends State<TrendingGroupsFeed> {
                     ),
                     createdAt: docSnapshot.get('createdAt'),
                     numPosts: docSnapshot.get('numPosts'),
-                    moderatorRefs: docSnapshot.get('moderatorRefs'),
+                    moderatorRefs: (docSnapshot.get('moderatorRefs') as List).map((item) => item as DocumentReference).toList(),
                     numMembers: docSnapshot.get('numMembers'),
                 );
               }).toList();
+              print(groups);
 
               return ListView.builder(
                 itemCount: groups.length,

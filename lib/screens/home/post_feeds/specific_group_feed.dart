@@ -44,7 +44,7 @@ class _SpecificGroupFeedState extends State<SpecificGroupFeed> {
 
     if (userData == null) return Loading();
 
-    PostsDatabaseService _posts = PostsDatabaseService(groupsRefs: [widget.groupRef]);
+    PostsDatabaseService _posts = PostsDatabaseService(groupRefs: [widget.groupRef]);
 
     return Scaffold(
       backgroundColor: Colors.brown[50],
@@ -54,7 +54,7 @@ class _SpecificGroupFeedState extends State<SpecificGroupFeed> {
         elevation: 0.0,
       ),
       body: StreamBuilder(
-        stream: _posts.multiGroupPosts,
+        stream: _posts.posts,
         builder: (context, snapshot) {
           print(snapshot.connectionState);
           if (!snapshot.hasData) {
