@@ -36,7 +36,7 @@ class RepliesDatabaseService {
       'createdAt': DateTime.now(),
       'likes': List<String>.empty(),
       'dislikes': List<String>.empty(),
-      'reportedStatus': null,
+      'reports': [],
     })
         .then(onValue)
         .catchError(onError);
@@ -86,19 +86,19 @@ class RepliesDatabaseService {
   }
 
   // home data from snapshot
-  Reply? _replyFromDocument(QueryDocumentSnapshot document) {
-    if (document.exists) {
+  Reply? _replyFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
+    if (querySnapshot.exists) {
       return Reply(
-        replyRef: document.reference,
-        commentRef: document['commentRef'],
-        postRef: document['postRef'],
-        userRef: document['userRef'],
-        text: document['text'],
-        media: document['media'],
-        createdAt: document['createdAt'],
-        likes: (document['likes'] as List).map((item) => item as DocumentReference).toList(),
-        dislikes: (document['dislikes'] as List).map((item) => item as DocumentReference).toList(),//document['dislikes'],
-        reportedStatus: document['reportedStatus'],
+        replyRef: querySnapshot.reference,
+        commentRef: querySnapshot['commentRef'],
+        postRef: querySnapshot['postRef'],
+        userRef: querySnapshot['userRef'],
+        text: querySnapshot['text'],
+        media: querySnapshot['media'],
+        createdAt: querySnapshot['createdAt'],
+        likes: (querySnapshot['likes'] as List).map((item) => item as DocumentReference).toList(),
+        dislikes: (querySnapshot['dislikes'] as List).map((item) => item as DocumentReference).toList(),//document['dislikes'],
+        reports: querySnapshot['reports'],
       );
     } else {
       return null;
@@ -106,7 +106,7 @@ class RepliesDatabaseService {
   }
 
   Stream<List<Reply?>> get commentReplies {
-    return repliesCollection.where('commentRef', isEqualTo: commentRef).orderBy('createdAt', descending: false).snapshots().map((snapshot) => snapshot.docs.map(_replyFromDocument).toList());
+    return repliesCollection.where('commentRef', isEqualTo: commentRef).orderBy('createdAt', descending: false).snapshots().map((snapshot) => snapshot.docs.map(_replyFromQuerySnapshot).toList());
   }
 
 }

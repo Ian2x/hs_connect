@@ -6,3 +6,5 @@ const double profilePicHeight = 400;
 
 const double groupPicWidth = 400;
 const double groupPicHeight = 400;
+
+const List<String> defaultTags = ['Relationships', 'Parties', 'Social', 'Memes', 'Classes', 'Advice', 'College'];

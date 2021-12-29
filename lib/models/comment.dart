@@ -11,7 +11,7 @@ class Comment {
   final int numReplies;
   final List<DocumentReference> likes;
   final List<DocumentReference> dislikes;
-  final DocumentReference? reportedStatus;
+  final List<DocumentReference> reports;
 
   Comment({
     required this.commentRef,
@@ -23,6 +23,6 @@ class Comment {
     required this.numReplies,
     required this.likes,
     required this.dislikes,
-    required this.reportedStatus,
+    required this.reports,
   });
 }

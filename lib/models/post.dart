@@ -12,7 +12,7 @@ class Post {
   final int numComments;
   final List<DocumentReference> likes;
   final List<DocumentReference> dislikes;
-  final DocumentReference? reportedStatus;
+  final List<DocumentReference> reports;
   final List<String> tags;
 
   Post({
@@ -26,7 +26,7 @@ class Post {
     required this.numComments,
     required this.likes,
     required this.dislikes,
-    required this.reportedStatus,
+    required this.reports,
     required this.tags,
   });
 }

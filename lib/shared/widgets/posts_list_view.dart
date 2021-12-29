@@ -23,7 +23,7 @@ ListView PostsListView({required List<Post> posts, required DocumentReference cu
           dislikes: posts[index].dislikes,
           currUserRef: currUserRef,
           numComments: posts[index].numComments,
-          reportedStatus: posts[index].reportedStatus,
+          reportedStatus: posts[index].reports,
           tags: posts[index].tags,
         ));
       });

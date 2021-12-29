@@ -41,7 +41,7 @@ class PostsDatabaseService {
       'numComments': 0,
       'likes': List<String>.empty(),
       'dislikes': List<String>.empty(),
-      'reportedStatus': null,
+      'reports': [],
       'tags': tags,
     })
         .then(onValue)
@@ -120,25 +120,21 @@ class PostsDatabaseService {
 
 
   // home data from snapshot
-  Post? _postFromQuerySnapshot(QueryDocumentSnapshot document) {
-    if (document.exists) {
-      var report = document['reportedStatus'];
-      if(report!=null) {
-        report = Report(entityRef: report['entityRef'], reporterRef: report['reporterRef'], text: report['text']);
-      }
+  Post? _postFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
+    if (querySnapshot.exists) {
       final temp = Post(
-        postRef: document.reference,
-        userRef: document['userRef'],
-        groupRef: document['groupRef'],
-        media: document['media'],
-        title: document['title'],
-        text: document['text'],
-        createdAt: document['createdAt'],
-        numComments: document['numComments'],
-        likes: (document['likes'] as List).map((item) => item as DocumentReference).toList(),
-        dislikes: (document['dislikes'] as List).map((item) => item as DocumentReference).toList(),
-        reportedStatus: report,
-        tags: (document['tags'] as List).map((item) => item as String).toList(),
+        postRef: querySnapshot.reference,
+        userRef: querySnapshot['userRef'],
+        groupRef: querySnapshot['groupRef'],
+        media: querySnapshot['media'],
+        title: querySnapshot['title'],
+        text: querySnapshot['text'],
+        createdAt: querySnapshot['createdAt'],
+        numComments: querySnapshot['numComments'],
+        likes: (querySnapshot['likes'] as List).map((item) => item as DocumentReference).toList(),
+        dislikes: (querySnapshot['dislikes'] as List).map((item) => item as DocumentReference).toList(),
+        reports: querySnapshot['reports'],
+        tags: (querySnapshot['tags'] as List).map((item) => item as String).toList(),
       );
       return temp;
     } else {

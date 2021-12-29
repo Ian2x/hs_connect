@@ -19,7 +19,7 @@ class CommentCard extends StatefulWidget {
   List<DocumentReference> likes;
   List<DocumentReference> dislikes;
   final DocumentReference currUserRef;
-  final DocumentReference? reportedStatus;
+  List<DocumentReference> reportedStatus;
 
   CommentCard(
       {Key? key,

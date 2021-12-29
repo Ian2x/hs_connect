@@ -11,7 +11,7 @@ class Reply {
   final Timestamp createdAt;
   final List<DocumentReference> likes;
   final List<DocumentReference> dislikes;
-  final DocumentReference? reportedStatus;
+  final List<DocumentReference> reports;
 
   Reply({
     required this.replyRef,
@@ -23,6 +23,6 @@ class Reply {
     required this.createdAt,
     required this.likes,
     required this.dislikes,
-    required this.reportedStatus,
+    required this.reports,
   });
 }

@@ -37,7 +37,7 @@ class CommentsDatabaseService {
       'numReplies': 0,
       'likes': List<String>.empty(),
       'dislikes': List<String>.empty(),
-      'reportedStatus': null,
+      'reports': [],
     })
         .then(onValue)
         .catchError(onError);
@@ -85,19 +85,19 @@ class CommentsDatabaseService {
   }
 
   // home data from snapshot
-  Comment? _commentFromQuerySnapshot(QueryDocumentSnapshot document) {
-    if (document.exists) {
+  Comment? _commentFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
+    if (querySnapshot.exists) {
       return Comment(
-        commentRef: document.reference,
-        postRef: document['postRef'],
-        userRef: document['userRef'],
-        text: document['text'],
-        media: document['media'],
-        createdAt: document['createdAt'],
-        numReplies: document['numReplies'],
-        likes: (document['likes'] as List).map((item) => item as DocumentReference).toList(),
-        dislikes: (document['dislikes'] as List).map((item) => item as DocumentReference).toList(),
-        reportedStatus: document['reportedStatus'],
+        commentRef: querySnapshot.reference,
+        postRef: querySnapshot['postRef'],
+        userRef: querySnapshot['userRef'],
+        text: querySnapshot['text'],
+        media: querySnapshot['media'],
+        createdAt: querySnapshot['createdAt'],
+        numReplies: querySnapshot['numReplies'],
+        likes: (querySnapshot['likes'] as List).map((item) => item as DocumentReference).toList(),
+        dislikes: (querySnapshot['dislikes'] as List).map((item) => item as DocumentReference).toList(),
+        reports: (querySnapshot['reports'] as List).map((item) => item as DocumentReference).toList(),
       );
     } else {
       return null;

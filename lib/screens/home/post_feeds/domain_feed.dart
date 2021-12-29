@@ -51,7 +51,7 @@ class _DomainFeedState extends State<DomainFeed> {
                 dislikes: posts[index].dislikes,
                 currUserRef: userData.userRef,
                 numComments: posts[index].numComments,
-                reportedStatus: posts[index].reportedStatus,
+                reportedStatus: posts[index].reports,
                 tags: posts[index].tags,
               ));
             },

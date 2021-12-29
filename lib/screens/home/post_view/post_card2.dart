@@ -26,7 +26,7 @@ class PostCard2 extends StatefulWidget {
   List<DocumentReference> dislikes;
   int numComments;
   final DocumentReference currUserRef;
-  final DocumentReference? reportedStatus;
+  List<DocumentReference> reportedStatus;
   final List<String> tags;
 
   PostCard2(
@@ -51,7 +51,7 @@ class PostCard2 extends StatefulWidget {
 }
 
 class _PostCard2State extends State<PostCard2> {
-  UserDataDatabaseService _userInfoDatabaseService = UserDataDatabaseService();
+  UserDataDatabaseService _userDataDatabaseService = UserDataDatabaseService();
 
   GroupsDatabaseService _groups = GroupsDatabaseService();
 
@@ -86,7 +86,7 @@ class _PostCard2State extends State<PostCard2> {
   }
 
   void getUserData() async {
-    final UserData? fetchUserData = await _userInfoDatabaseService.getUserData(userRef: widget.userRef);
+    final UserData? fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.userRef);
     setState(() {
       username = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
       userDomain = fetchUserData != null ? fetchUserData.domain : '<Failed to retrieve user domain>';

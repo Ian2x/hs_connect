@@ -66,10 +66,6 @@ class MessagesDatabaseService {
   // home data from snapshot
   Message? _messageFromDocument(QueryDocumentSnapshot document) {
     if (document.exists) {
-      var report = document['reportedStatus'];
-      if(report!=null) {
-        report = Report(entityRef: report['entityRef'], reporterRef: report['reporterRef'], text: report['text']);
-      }
       return Message(
         messageRef: document.reference,
         senderRef: document['senderRef'],
@@ -77,7 +73,7 @@ class MessagesDatabaseService {
         text: document['text'],
         isMedia: document['isMedia'],
         createdAt: document['createdAt'],
-        reportedStatus: report
+        reportedStatus: document['reportedStatus'],
       );
     } else {
       return null;
