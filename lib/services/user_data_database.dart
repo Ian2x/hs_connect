@@ -60,7 +60,7 @@ class UserDataDatabaseService {
   }
 
   // get other users from userRef
-  Future getUserData({required DocumentReference userRef}) async {
+  Future<UserData?> getUserData({required DocumentReference userRef}) async {
     final snapshot = await userRef.get();
     return _userDataFromSnapshot(snapshot, overrideUserRef: userRef);
   }

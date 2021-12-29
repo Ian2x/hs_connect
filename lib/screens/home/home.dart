@@ -10,6 +10,7 @@ import 'package:hs_connect/shared/tools/hexcolor.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/navbar.dart';
 import 'package:provider/provider.dart';
+import 'package:hs_connect/screens/profile/profile2.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -70,7 +71,7 @@ class _HomeState extends State<Home> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => Profile(profileId: user.uid)),
+                        builder: (context) => profile2(profilePersonRef: userData.userRef)),
                   );
                 },
               )
