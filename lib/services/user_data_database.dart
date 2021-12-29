@@ -16,7 +16,7 @@ class UserDataDatabaseService {
   final CollectionReference userDataCollection =
       FirebaseFirestore.instance.collection('userData');
 
-  Future initUserData(String domain, String username) async {
+  Future<void> initUserData(String domain, String username) async {
 
     final GroupsDatabaseService _groupDatabaseService = GroupsDatabaseService();
     final KnownDomainsDatabaseService _knownDomainsDatabaseService = KnownDomainsDatabaseService();
@@ -41,7 +41,7 @@ class UserDataDatabaseService {
     });
   }
 
-  Future updateProfile(
+  Future<void> updateProfile(
       {required String displayedName,
       required String? imageURL,
       required Function(void) onValue,
@@ -55,34 +55,47 @@ class UserDataDatabaseService {
           .catchError(onError);
   }
 
-  Future joinGroup({required DocumentReference userRef, required DocumentReference groupRef, required bool public}) async {
+  Future<void> joinGroup({required DocumentReference userRef, required DocumentReference groupRef, required bool public}) async {
     groupRef.update({'numMembers': FieldValue.increment(1)});
     return await userRef.update({'userGroups': FieldValue.arrayUnion([{'groupRef': groupRef, 'public': public}])});
   }
 
-  Future leaveGroup({required DocumentReference userRef, required DocumentReference groupRef, required bool public}) async {
+  Future<void> leaveGroup({required DocumentReference userRef, required DocumentReference groupRef, required bool public}) async {
     groupRef.update({'numMembers': FieldValue.increment(-1)});
     return await userRef.update({'userGroups': FieldValue.arrayRemove([{'groupRef': groupRef, 'public': public}])});
   }
 
   // get other users from userRef
-  Future getUserData({required DocumentReference userRef}) async {
+  Future<UserData?> getUserData({required DocumentReference userRef}) async {
     final snapshot = await userRef.get();
     return _userDataFromSnapshot(snapshot, overrideUserRef: userRef);
   }
 
   // home data from snapshot
   UserData? _userDataFromSnapshot(DocumentSnapshot snapshot, {DocumentReference? overrideUserRef}) {
-    if(snapshot.exists) {
+    if (snapshot.exists) {
       final temp = UserData(
-        userRef: overrideUserRef!=null ? overrideUserRef : userRef!,
+        userRef: overrideUserRef != null ? overrideUserRef : userRef!,
         displayedName: snapshot.get('displayedName'),
         domain: snapshot.get('domain'),
         county: snapshot.get('county'),
         state: snapshot.get('state'),
         country: snapshot.get('country'),
-        userGroups: snapshot.get('userGroups').map<UserGroup>((userGroup) => UserGroup(groupRef: userGroup['groupRef'], public: userGroup['public'])).toList(),
-        messages: snapshot.get('messages').map<Message>((message) => Message(messageRef: message['messageRef'], sender: message['sender'], receiver: message['receiver'], text: message['text'], createdAt: message['createdAt'])).toList(),
+        userGroups: snapshot
+            .get('userGroups')
+            .map<UserGroup>((userGroup) => UserGroup(groupRef: userGroup['groupRef'], public: userGroup['public']))
+            .toList(),
+        messages: snapshot
+            .get('messages')
+            .map<Message>((message) => Message(
+                messageRef: message['messageRef'],
+                senderRef: message['sender'],
+                receiverRef: message['receiver'],
+                text: message['text'],
+                createdAt: message['createdAt'],
+                isMedia: message['isMedia'],
+                reportedStatus: message['reportedStatus']))
+            .toList(),
         image: snapshot.get('imageURL'),
         score: snapshot.get('score'),
         warnings: snapshot.get('warnings'),
@@ -94,7 +107,7 @@ class UserDataDatabaseService {
   }
 
   // get Users from list of userRefs, must be wrapped in FutureBuilder to use
-  Future<QuerySnapshot<Object?>> getUsers({required List<DocumentReference> userRefs}) async {
+  Future<QuerySnapshot> getUsers({required List<DocumentReference> userRefs}) async {
     return userDataCollection.where(FieldPath.documentId, whereIn: userRefs.map((userRef) {return userRef.id;}).toList()).get();
   }
 

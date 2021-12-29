@@ -7,6 +7,7 @@ import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
+import 'package:hs_connect/shared/constants.dart';
 
 void defaultFunc(dynamic parameter) {}
 
@@ -22,7 +23,7 @@ class GroupsDatabaseService {
   // collection reference
   final CollectionReference groupsCollection = FirebaseFirestore.instance.collection('groups');
 
-  Future newGroup(
+  Future<DocumentReference> newGroup(
       {required AccessRestriction accessRestrictions,
       required String name,
       required DocumentReference? creatorRef,
@@ -64,12 +65,12 @@ class GroupsDatabaseService {
   }
 
   // get group data
-  Future getGroupData({required DocumentReference groupRef}) async {
+  Future<Group?> getGroupData({required DocumentReference groupRef}) async {
     final snapshot = await groupRef.get();
     return _groupDataFromSnapshot(snapshot: snapshot, groupRef: groupRef);
   }
 
-  Future getAllowableGroupRefs({required String domain, required String? county, required String? state, required String? country}) async {
+  Future<List<DocumentReference>> getAllowableGroupRefs({required String domain, required String? county, required String? state, required String? country}) async {
     // get all group refs
     final domainGroupsFetch = groupsCollection
         .where('accessRestrictions',
@@ -150,7 +151,7 @@ class GroupsDatabaseService {
   }
 
   // for converting userGroups to Groups, must be wrapped in FutureBuilder (see post_form for reference)
-  Future<QuerySnapshot<Object?>> getGroups({required List<UserGroup> userGroups}) async {
+  Future<QuerySnapshot> getGroups({required List<UserGroup> userGroups}) async {
     return groupsCollection
         .where(FieldPath.documentId,
             whereIn: userGroups.map((userGroup) {
@@ -159,7 +160,7 @@ class GroupsDatabaseService {
         .get();
   }
 
-  Future<QuerySnapshot<Object?>> getTrendingGroups(
+  Future<QuerySnapshot> getTrendingGroups(
       {required String domain, required String? county, required String? state, required String? country}) async {
 
     SplayTreeMap groupScores = new SplayTreeMap(compareDocRef);

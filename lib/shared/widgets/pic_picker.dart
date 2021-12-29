@@ -115,12 +115,6 @@ class _PicPickerState extends State<PicPicker> {
               case ConnectionState.none:
               case ConnectionState.waiting:
                 return Loading();
-                /*
-                return const Text(
-                  'You have not yet picked an image.oooooooooooooooooo',
-                  textAlign: TextAlign.center,
-                );
-                */
               case ConnectionState.done:
                 return _handlePreview();
               default:

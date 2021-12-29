@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
-import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/screens/home/post_feeds/specific_group_feed.dart';
 import 'package:hs_connect/screens/home/post_view/like_dislike_post.dart';
@@ -11,7 +10,6 @@ import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/tools/hexcolor.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 
 
@@ -28,7 +26,7 @@ class PostCard2 extends StatefulWidget {
   List<DocumentReference> dislikes;
   int numComments;
   final DocumentReference currUserRef;
-  final Report? reportedStatus;
+  final DocumentReference? reportedStatus;
   final List<String> tags;
 
   PostCard2(
@@ -229,6 +227,6 @@ class _PostCard2State extends State<PostCard2> {
             )
           )
       ),
-    )
+    );
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/screens/wrapper.dart';
 import 'package:hs_connect/services/auth.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/input_decorations.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 

@@ -12,7 +12,7 @@ class ReplyCard extends StatefulWidget {
   final DocumentReference? userRef;
   final String text;
   final String? media;
-  final String createdAt;
+  final Timestamp createdAt;
   List<DocumentReference> likes;
   List<DocumentReference> dislikes;
   final DocumentReference currUserRef;

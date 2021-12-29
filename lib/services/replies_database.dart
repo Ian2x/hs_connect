@@ -16,7 +16,7 @@ class RepliesDatabaseService {
   // collection reference
   final CollectionReference repliesCollection = FirebaseFirestore.instance.collection('replies');
 
-  Future newReply({required String text,
+  Future<DocumentReference> newReply({required String text,
     required String? mediaURL,
     required DocumentReference commentRef,
     required DocumentReference postRef,
@@ -42,7 +42,7 @@ class RepliesDatabaseService {
         .catchError(onError);
   }
 
-  Future deleteReply({required DocumentReference replyRef, required DocumentReference commentRef, required DocumentReference postRef, required DocumentReference userRef, String? media}) async {
+  Future<dynamic> deleteReply({required DocumentReference replyRef, required DocumentReference commentRef, required DocumentReference postRef, required DocumentReference userRef, String? media}) async {
     final checkAuth = await replyRef.get();
     if(checkAuth.exists) {
       if (userRef==checkAuth.get('userRef')) {
@@ -60,27 +60,27 @@ class RepliesDatabaseService {
     return null;
   }
 
-  Future likeReply({required DocumentReference replyRef, required DocumentReference userRef}) async {
+  Future<void> likeReply({required DocumentReference replyRef, required DocumentReference userRef}) async {
     // remove dislike if disliked
     await replyRef.update({'dislikes': FieldValue.arrayRemove([userRef])});
     // like comment
     return await replyRef.update({'likes': FieldValue.arrayUnion([userRef])});
   }
 
-  Future unLikeReply({required DocumentReference replyRef, required DocumentReference userRef}) async {
+  Future<void> unLikeReply({required DocumentReference replyRef, required DocumentReference userRef}) async {
     // remove like
     await replyRef.update({'likes': FieldValue.arrayRemove([userRef])});
   }
 
 
-  Future dislikeReply({required DocumentReference replyRef, required DocumentReference userRef}) async {
+  Future<void> dislikeReply({required DocumentReference replyRef, required DocumentReference userRef}) async {
     // remove like if liked
     await replyRef.update({'likes': FieldValue.arrayRemove([userRef])});
     // dislike comment
     return await replyRef.update({'dislikes': FieldValue.arrayUnion([userRef])});
   }
 
-  Future unDislikeReply({required DocumentReference replyRef, required DocumentReference userRef}) async {
+  Future<void> unDislikeReply({required DocumentReference replyRef, required DocumentReference userRef}) async {
     // remove like
     await replyRef.update({'dislikes': FieldValue.arrayRemove([userRef])});
   }
@@ -95,7 +95,7 @@ class RepliesDatabaseService {
         userRef: document['userRef'],
         text: document['text'],
         media: document['media'],
-        createdAt: document['createdAt'].toString(),
+        createdAt: document['createdAt'],
         likes: (document['likes'] as List).map((item) => item as DocumentReference).toList(),
         dislikes: (document['dislikes'] as List).map((item) => item as DocumentReference).toList(),//document['dislikes'],
         reportedStatus: document['reportedStatus'],

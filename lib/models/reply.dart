@@ -8,10 +8,10 @@ class Reply {
   final DocumentReference userRef;
   final String text;
   final String? media;
-  final String createdAt;
+  final Timestamp createdAt;
   final List<DocumentReference> likes;
   final List<DocumentReference> dislikes;
-  final Report? reportedStatus;
+  final DocumentReference? reportedStatus;
 
   Reply({
     required this.replyRef,

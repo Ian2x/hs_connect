@@ -27,7 +27,6 @@ class _DomainFeedState extends State<DomainFeed> {
     return StreamBuilder(
       stream: _posts.posts,
       builder: (context, snapshot) {
-        print(snapshot.connectionState);
         if (!snapshot.hasData) {
           return Loading();
         } else {

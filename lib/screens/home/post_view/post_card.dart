@@ -26,7 +26,7 @@ class PostCard extends StatefulWidget {
   List<DocumentReference> dislikes;
   int numComments;
   final DocumentReference currUserRef;
-  final Report? reportedStatus;
+  final DocumentReference? reportedStatus;
   final List<String> tags;
 
   PostCard(

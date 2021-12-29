@@ -19,7 +19,7 @@ class CommentsDatabaseService {
   // collection reference
   final CollectionReference commentsCollection = FirebaseFirestore.instance.collection('comments');
 
-  Future newComment({required String text,
+  Future<DocumentReference> newComment({required String text,
     required String? mediaURL,
     required DocumentReference postRef,
     Function(void) onValue = defaultFunc,
@@ -43,7 +43,7 @@ class CommentsDatabaseService {
         .catchError(onError);
   }
 
-  Future deleteComment({required DocumentReference commentRef, required DocumentReference postRef, required DocumentReference userRef, String? media}) async {
+  Future<dynamic> deleteComment({required DocumentReference commentRef, required DocumentReference postRef, required DocumentReference userRef, String? media}) async {
     final checkAuth = await commentRef.get();
     if(checkAuth.exists) {
       if (userRef==checkAuth.get('userRef')) {
@@ -60,32 +60,32 @@ class CommentsDatabaseService {
     return null;
   }
 
-  Future likeComment({required DocumentReference commentRef, required DocumentReference userRef}) async {
+  Future<void> likeComment({required DocumentReference commentRef, required DocumentReference userRef}) async {
     // remove dislike if disliked
     await commentRef.update({'dislikes': FieldValue.arrayRemove([userRef])});
     // like comment
     return await commentRef.update({'likes': FieldValue.arrayUnion([userRef])});
   }
 
-  Future unLikeComment({required DocumentReference commentRef, required DocumentReference userRef}) async {
+  Future<void> unLikeComment({required DocumentReference commentRef, required DocumentReference userRef}) async {
     // remove like
     await commentRef.update({'likes': FieldValue.arrayRemove([userRef])});
   }
 
-  Future dislikeComment({required DocumentReference commentRef, required DocumentReference userRef}) async {
+  Future<void> dislikeComment({required DocumentReference commentRef, required DocumentReference userRef}) async {
     // remove like if liked
     await commentRef.update({'likes': FieldValue.arrayRemove([userRef])});
     // dislike comment
     return await commentRef.update({'dislikes': FieldValue.arrayUnion([userRef])});
   }
 
-  Future unDislikeComment({required DocumentReference commentRef, required DocumentReference userRef}) async {
+  Future<void> unDislikeComment({required DocumentReference commentRef, required DocumentReference userRef}) async {
     // remove like
     await commentRef.update({'dislikes': FieldValue.arrayRemove([userRef])});
   }
 
   // home data from snapshot
-  Comment? _commentFromDocument(QueryDocumentSnapshot document) {
+  Comment? _commentFromQuerySnapshot(QueryDocumentSnapshot document) {
     if (document.exists) {
       return Comment(
         commentRef: document.reference,
@@ -93,7 +93,7 @@ class CommentsDatabaseService {
         userRef: document['userRef'],
         text: document['text'],
         media: document['media'],
-        createdAt: document['createdAt'].toString(),
+        createdAt: document['createdAt'],
         numReplies: document['numReplies'],
         likes: (document['likes'] as List).map((item) => item as DocumentReference).toList(),
         dislikes: (document['dislikes'] as List).map((item) => item as DocumentReference).toList(),
@@ -105,7 +105,7 @@ class CommentsDatabaseService {
   }
 
   Stream<List<Comment?>> get postComments {
-    return commentsCollection.where('postRef', isEqualTo: postRef).orderBy('createdAt', descending: false).snapshots().map((snapshot) => snapshot.docs.map(_commentFromDocument).toList());
+    return commentsCollection.where('postRef', isEqualTo: postRef).orderBy('createdAt', descending: false).snapshots().map((snapshot) => snapshot.docs.map(_commentFromQuerySnapshot).toList());
   }
 
 }

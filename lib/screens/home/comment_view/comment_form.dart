@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
+import 'package:hs_connect/shared/input_decorations.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/constants.dart';

@@ -7,6 +7,7 @@ import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/input_decorations.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';

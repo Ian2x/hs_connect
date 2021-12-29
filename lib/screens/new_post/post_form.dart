@@ -1,15 +1,18 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/screens/home/home.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
+import 'package:hs_connect/shared/input_decorations.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/widgets/pic_picker.dart';
+import 'package:hs_connect/shared/widgets/my_pic_picker.dart';
 import 'package:provider/provider.dart';
 
 class PostForm extends StatefulWidget {
@@ -57,9 +60,9 @@ class _PostFormState extends State<PostForm> {
 
     final userData = Provider.of<UserData?>(context);
 
-    void setPic(File newFile2) {
+    void setPic(File x) {
       setState(() {
-        newFile = newFile2;
+        newFile = x;
       });
     }
 
@@ -127,7 +130,13 @@ class _PostFormState extends State<PostForm> {
                             return null;
                         }
                       ),
-                      PicPicker(setPic: setPic),
+                      PicPickerButton(setPic: setPic),
+                      newFile != null ?
+                      Semantics(
+                        label: 'new_profile_pic_picked_image',
+                        child: kIsWeb ? Image.network(newFile!.path) : Image.file(File(newFile!.path)),
+                      )
+                          : Container(),
                       ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             primary: Colors.pink[400],

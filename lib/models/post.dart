@@ -12,7 +12,7 @@ class Post {
   final int numComments;
   final List<DocumentReference> likes;
   final List<DocumentReference> dislikes;
-  final Report? reportedStatus;
+  final DocumentReference? reportedStatus;
   final List<String> tags;
 
   Post({
