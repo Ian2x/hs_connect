@@ -15,11 +15,11 @@ class CommentCard extends StatefulWidget {
   final DocumentReference? userRef;
   final String text;
   final String? media;
-  final String createdAt;
+  final Timestamp createdAt;
   List<DocumentReference> likes;
   List<DocumentReference> dislikes;
   final DocumentReference currUserRef;
-  final Report? reportedStatus;
+  List<DocumentReference> reportedStatus;
 
   CommentCard(
       {Key? key,
@@ -62,8 +62,6 @@ class _CommentCardState extends State<CommentCard> {
       });
 
     }
-    // find username for userId
-    // _userInfoDatabaseService.userId = widget.userId;
     getUsername();
     super.initState();
   }

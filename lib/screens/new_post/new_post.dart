@@ -13,7 +13,6 @@ class NewPost extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("HERE");
 
     final user = Provider.of<User?>(context);
     final userData = Provider.of<UserData?>(context);

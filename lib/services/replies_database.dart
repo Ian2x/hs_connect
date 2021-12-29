@@ -16,7 +16,7 @@ class RepliesDatabaseService {
   // collection reference
   final CollectionReference repliesCollection = FirebaseFirestore.instance.collection('replies');
 
-  Future newReply({required String text,
+  Future<DocumentReference> newReply({required String text,
     required String? mediaURL,
     required DocumentReference commentRef,
     required DocumentReference postRef,
@@ -24,6 +24,7 @@ class RepliesDatabaseService {
     Function onError = defaultFunc}) async {
 
     postRef.update({'numComments': FieldValue.increment(1)});
+    commentRef.update({'numReplies': FieldValue.increment(1)});
 
     return await repliesCollection
         .add({
@@ -35,18 +36,19 @@ class RepliesDatabaseService {
       'createdAt': DateTime.now(),
       'likes': List<String>.empty(),
       'dislikes': List<String>.empty(),
-      'reportedStatus': null,
+      'reports': [],
     })
         .then(onValue)
         .catchError(onError);
   }
 
-  Future deleteReply({required DocumentReference replyRef, required DocumentReference postRef, required DocumentReference userRef, String? media}) async {
+  Future<dynamic> deleteReply({required DocumentReference replyRef, required DocumentReference commentRef, required DocumentReference postRef, required DocumentReference userRef, String? media}) async {
     final checkAuth = await replyRef.get();
     if(checkAuth.exists) {
       if (userRef==checkAuth.get('userRef')) {
 
         postRef.update({'numComments': FieldValue.increment(-1)});
+        commentRef.update({'numReplies': FieldValue.increment(1)});
 
         await replyRef.update({'likes': [], 'dislikes': [], 'media': null, 'userRef': null, 'text': '[Reply removed]'});
 
@@ -58,45 +60,45 @@ class RepliesDatabaseService {
     return null;
   }
 
-  Future likeReply({required DocumentReference replyRef, required DocumentReference userRef}) async {
+  Future<void> likeReply({required DocumentReference replyRef, required DocumentReference userRef}) async {
     // remove dislike if disliked
     await replyRef.update({'dislikes': FieldValue.arrayRemove([userRef])});
     // like comment
     return await replyRef.update({'likes': FieldValue.arrayUnion([userRef])});
   }
 
-  Future unLikeReply({required DocumentReference replyRef, required DocumentReference userRef}) async {
+  Future<void> unLikeReply({required DocumentReference replyRef, required DocumentReference userRef}) async {
     // remove like
     await replyRef.update({'likes': FieldValue.arrayRemove([userRef])});
   }
 
 
-  Future dislikeReply({required DocumentReference replyRef, required DocumentReference userRef}) async {
+  Future<void> dislikeReply({required DocumentReference replyRef, required DocumentReference userRef}) async {
     // remove like if liked
     await replyRef.update({'likes': FieldValue.arrayRemove([userRef])});
     // dislike comment
     return await replyRef.update({'dislikes': FieldValue.arrayUnion([userRef])});
   }
 
-  Future unDislikeReply({required DocumentReference replyRef, required DocumentReference userRef}) async {
+  Future<void> unDislikeReply({required DocumentReference replyRef, required DocumentReference userRef}) async {
     // remove like
     await replyRef.update({'dislikes': FieldValue.arrayRemove([userRef])});
   }
 
   // home data from snapshot
-  Reply? _replyFromDocument(QueryDocumentSnapshot document) {
-    if (document.exists) {
+  Reply? _replyFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
+    if (querySnapshot.exists) {
       return Reply(
-        replyRef: document.reference,
-        commentRef: document['commentRef'],
-        postRef: document['postRef'],
-        userRef: document['userRef'],
-        text: document['text'],
-        media: document['media'],
-        createdAt: document['createdAt'].toString(),
-        likes: (document['likes'] as List).map((item) => item as DocumentReference).toList(),
-        dislikes: (document['dislikes'] as List).map((item) => item as DocumentReference).toList(),//document['dislikes'],
-        reportedStatus: document['reportedStatus'],
+        replyRef: querySnapshot.reference,
+        commentRef: querySnapshot['commentRef'],
+        postRef: querySnapshot['postRef'],
+        userRef: querySnapshot['userRef'],
+        text: querySnapshot['text'],
+        media: querySnapshot['media'],
+        createdAt: querySnapshot['createdAt'],
+        likes: (querySnapshot['likes'] as List).map((item) => item as DocumentReference).toList(),
+        dislikes: (querySnapshot['dislikes'] as List).map((item) => item as DocumentReference).toList(),//document['dislikes'],
+        reports: querySnapshot['reports'],
       );
     } else {
       return null;
@@ -104,7 +106,7 @@ class RepliesDatabaseService {
   }
 
   Stream<List<Reply?>> get commentReplies {
-    return repliesCollection.where('commentRef', isEqualTo: commentRef).orderBy('createdAt', descending: false).snapshots().map((snapshot) => snapshot.docs.map(_replyFromDocument).toList());
+    return repliesCollection.where('commentRef', isEqualTo: commentRef).orderBy('createdAt', descending: false).snapshots().map((snapshot) => snapshot.docs.map(_replyFromQuerySnapshot).toList());
   }
 
 }

@@ -7,11 +7,11 @@ class Comment {
   final DocumentReference? userRef;
   final String text;
   final String? media;
-  final String createdAt;
+  final Timestamp createdAt;
   final int numReplies;
   final List<DocumentReference> likes;
   final List<DocumentReference> dislikes;
-  final Report? reportedStatus;
+  final List<DocumentReference> reports;
 
   Comment({
     required this.commentRef,
@@ -23,6 +23,6 @@ class Comment {
     required this.numReplies,
     required this.likes,
     required this.dislikes,
-    required this.reportedStatus,
+    required this.reports,
   });
 }

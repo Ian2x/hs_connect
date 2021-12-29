@@ -8,7 +8,6 @@ class NewGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
 
     return Scaffold(
       backgroundColor: Colors.brown[50],

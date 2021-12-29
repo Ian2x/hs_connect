@@ -4,10 +4,10 @@ import 'package:flutter/foundation.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/services/user_data_database.dart';
+import 'package:hs_connect/shared/input_decorations.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
-import 'package:hs_connect/shared/constants.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:hs_connect/shared/widgets/my_pic_picker.dart';
 import 'package:provider/provider.dart';
 
 class ProfileForm extends StatefulWidget {
@@ -87,29 +87,7 @@ class _ProfileFormState extends State<ProfileForm> {
               onChanged: (val) =>
                   setState(() => _displayedName = val),
             ),
-            FloatingActionButton(
-              onPressed: () async {
-                try {
-                  final pickedFile = await ImagePicker().pickImage(
-                    source: ImageSource.gallery,
-                  );
-                  if (pickedFile != null) {
-                    setState(() {
-                      newFile = File(pickedFile.path);
-                    });
-                  } else {
-                    setState(() {
-                      newFile = null;
-                    });
-                  }
-                } catch (e) {
-                  print(e);
-                }
-              },
-              heroTag: 'image0',
-              tooltip: 'Pick Image from gallery',
-              child: const Icon(Icons.photo),
-            ),
+            PicPickerButton(setPic: ((File? f) => setState(() {newFile = f;}))),
             newFile != null ?
               Semantics(
                 label: 'new_profile_pic_picked_image',

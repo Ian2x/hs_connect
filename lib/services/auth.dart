@@ -11,7 +11,7 @@ class AuthService {
   }
 
   // Create home for email verification purposes
-  Future createEmailUser(String email) async {
+  Future<dynamic> createEmailUser(String email) async {
     try {
       UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
@@ -24,7 +24,7 @@ class AuthService {
   }
 
   // register with username & password
-  Future registerWithUsernameAndPassword(
+  Future<dynamic> registerWithUsernameAndPassword(
       String username, String password, String domain) async {
     try {
       await _auth.signOut();
@@ -44,7 +44,7 @@ class AuthService {
   }
 
   // sign in with username & password
-  Future signInWithUsernameAndPassword(String username, String password) async {
+  Future<dynamic> signInWithUsernameAndPassword(String username, String password) async {
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
           email: '$username@ianeric.com', password: password);
@@ -56,7 +56,7 @@ class AuthService {
   }
 
   // sign out
-  Future signOut() async {
+  Future<dynamic> signOut() async {
     try {
       return await _auth.signOut();
     } catch (e) {

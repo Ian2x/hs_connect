@@ -26,7 +26,7 @@ class PostCard extends StatefulWidget {
   List<DocumentReference> dislikes;
   int numComments;
   final DocumentReference currUserRef;
-  final Report? reportedStatus;
+  List<DocumentReference> reportedStatus;
   final List<String> tags;
 
   PostCard(
@@ -51,12 +51,11 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> {
-  UserDataDatabaseService _userInfoDatabaseService = UserDataDatabaseService();
+  UserDataDatabaseService _userDataDatabaseService = UserDataDatabaseService();
 
   GroupsDatabaseService _groups = GroupsDatabaseService();
 
   PostsDatabaseService _posts = PostsDatabaseService();
-  CommentsDatabaseService _comments = CommentsDatabaseService();
 
   bool liked = false;
   bool disliked = false;
@@ -77,8 +76,6 @@ class _PostCardState extends State<PostCard> {
         disliked = true;
       });
     }
-    // find username for userId
-    // _userInfoDatabaseService.userId = widget.userId;
     getUsername();
     getGroupName();
     super.initState();
@@ -86,7 +83,7 @@ class _PostCardState extends State<PostCard> {
 
   void getUsername() async {
     final UserData? fetchUsername =
-        await _userInfoDatabaseService.getUserData(userRef: widget.userRef);
+        await _userDataDatabaseService.getUserData(userRef: widget.userRef);
     setState(() {
       username = fetchUsername != null
           ? fetchUsername.displayedName
@@ -119,7 +116,6 @@ class _PostCardState extends State<PostCard> {
     return Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0)),
         margin: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
-        //color: HexColor("#292929"),
         elevation: 0.3,
         child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
           Dismissible(
@@ -166,7 +162,7 @@ class _PostCardState extends State<PostCard> {
                             likes: widget.likes,
                             dislikes: widget.dislikes,
                             numComments: widget.numComments,
-                            reportedStatus: widget.reportedStatus,
+                            reports: widget.reportedStatus,
                             tags: widget.tags,
                           ))),
                 );

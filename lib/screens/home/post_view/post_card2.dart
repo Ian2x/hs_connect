@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
-import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/screens/home/post_feeds/specific_group_feed.dart';
 import 'package:hs_connect/screens/home/post_view/like_dislike_post.dart';
@@ -11,7 +10,6 @@ import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/tools/hexcolor.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 
 
@@ -28,7 +26,7 @@ class PostCard2 extends StatefulWidget {
   List<DocumentReference> dislikes;
   int numComments;
   final DocumentReference currUserRef;
-  final Report? reportedStatus;
+  List<DocumentReference> reportedStatus;
   final List<String> tags;
 
   PostCard2(
@@ -53,7 +51,7 @@ class PostCard2 extends StatefulWidget {
 }
 
 class _PostCard2State extends State<PostCard2> {
-  UserDataDatabaseService _userInfoDatabaseService = UserDataDatabaseService();
+  UserDataDatabaseService _userDataDatabaseService = UserDataDatabaseService();
 
   GroupsDatabaseService _groups = GroupsDatabaseService();
 
@@ -88,7 +86,7 @@ class _PostCard2State extends State<PostCard2> {
   }
 
   void getUserData() async {
-    final UserData? fetchUserData = await _userInfoDatabaseService.getUserData(userRef: widget.userRef);
+    final UserData? fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.userRef);
     setState(() {
       username = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
       userDomain = fetchUserData != null ? fetchUserData.domain : '<Failed to retrieve user domain>';
@@ -96,7 +94,6 @@ class _PostCard2State extends State<PostCard2> {
   }
 
   void getGroupName() async {
-    print("HI THERE");
     final Group? fetchGroupName = await _groups.getGroupData(groupRef: widget.groupRef);
     setState(() {
       groupName = fetchGroupName != null ? fetchGroupName.name : '<Failed to retrieve group name>';

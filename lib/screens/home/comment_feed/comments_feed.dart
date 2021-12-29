@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/comment.dart';
 import 'package:hs_connect/models/user_data.dart';
@@ -18,11 +17,9 @@ class CommentsFeed extends StatefulWidget {
 }
 
 class _CommentsFeedState extends State<CommentsFeed> {
-  //String groupId = '';
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
     final userData = Provider.of<UserData?>(context);
 
     if (userData == null) return Loading();
@@ -34,7 +31,6 @@ class _CommentsFeedState extends State<CommentsFeed> {
       builder: (context, snapshot) {
         print(snapshot.connectionState);
         if (!snapshot.hasData) {
-          print('no data :/');
           return Loading();
         } else {
           final comments = (snapshot.data as List<Comment?>).map((comment) => comment!).toList();
@@ -61,7 +57,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
                         likes: comments[index].likes,
                         dislikes: comments[index].dislikes,
                         currUserRef: userData.userRef,
-                        reportedStatus: comments[index].reportedStatus,
+                        reportedStatus: comments[index].reports,
                       ));
                 }
               },

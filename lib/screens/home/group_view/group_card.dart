@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/user_data.dart';
-import 'package:hs_connect/services/groups_database.dart';
-import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 
 class GroupCard extends StatefulWidget {
@@ -38,22 +36,14 @@ class GroupCard extends StatefulWidget {
 class _GroupCardState extends State<GroupCard> {
   UserDataDatabaseService _userInfoDatabaseService = UserDataDatabaseService();
 
-  GroupsDatabaseService _groups = GroupsDatabaseService();
-
-  PostsDatabaseService _posts = PostsDatabaseService();
-
   String username = '<Loading user name...>';
   String groupName = '<Loading group name...>';
 
   @override
   void initState() {
-    // find username for userId
-    // _userInfoDatabaseService.userId = widget.userId;
     getUsername();
     groupName = widget.name;
     super.initState();
-    print("a group image:");
-    print(widget.image);
   }
 
   void getUsername() async {

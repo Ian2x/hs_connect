@@ -12,7 +12,7 @@ class ReplyCard extends StatefulWidget {
   final DocumentReference? userRef;
   final String text;
   final String? media;
-  final String createdAt;
+  final Timestamp createdAt;
   List<DocumentReference> likes;
   List<DocumentReference> dislikes;
   final DocumentReference currUserRef;
@@ -97,7 +97,7 @@ class _ReplyCardState extends State<ReplyCard> {
       ])),
       onDismissed: (DismissDirection direction) {
         setState(() {
-          _replies.deleteReply(replyRef: widget.replyRef, postRef: widget.postRef, userRef: widget.currUserRef, media: widget.media);
+          _replies.deleteReply(replyRef: widget.replyRef, commentRef: widget.commentRef, postRef: widget.postRef, userRef: widget.currUserRef, media: widget.media);
         });
       },
     );

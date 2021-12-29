@@ -8,10 +8,10 @@ class Reply {
   final DocumentReference userRef;
   final String text;
   final String? media;
-  final String createdAt;
+  final Timestamp createdAt;
   final List<DocumentReference> likes;
   final List<DocumentReference> dislikes;
-  final Report? reportedStatus;
+  final List<DocumentReference> reports;
 
   Reply({
     required this.replyRef,
@@ -23,6 +23,6 @@ class Reply {
     required this.createdAt,
     required this.likes,
     required this.dislikes,
-    required this.reportedStatus,
+    required this.reports,
   });
 }
