@@ -9,14 +9,11 @@ import 'package:hs_connect/screens/search/group_search.dart';
 import 'package:hs_connect/services/auth.dart';
 import 'package:provider/provider.dart';
 import 'package:hs_connect/shared/widgets/navbar.dart';
-import 'package:hs_connect/screens/profile/userProfile.dart';
-import 'package:hs_connect/screens/profile/userFriend.dart';
-import 'package:hs_connect/shared/tools/hexcolor.dart';
 
-class Profile extends StatelessWidget {
+class userProfile extends StatelessWidget {
   final profileId;
 
-  Profile({Key? key, required this.profileId}) : super(key: key);
+  userProfile({Key? key, required this.profileId}) : super(key: key);
 
   final AuthService _auth = AuthService();
 
@@ -36,27 +33,26 @@ class Profile extends StatelessWidget {
 
     if (user!=null && user.uid == profileId && userData!=null) {
       return Scaffold(
-            backgroundColor: Colors.brown[50],
-            appBar: AppBar(
-              title: Text('Your Profile'),
-              actions: <Widget>[
-                TextButton.icon(
-                  icon: Icon(Icons.person),
-                  label: Text('Logout'),
-                  onPressed: () async {
-                    await _auth.signOut();
-                  },
-                ),
-              ],
-              backgroundColor: HexColor('FFFFFF'),
-              elevation: 0.0,
+        backgroundColor: Colors.brown[50],
+        appBar: AppBar(
+          title: Text('Your Profile'),
+          actions: <Widget>[
+            TextButton.icon(
+              icon: Icon(Icons.person),
+              label: Text('Logout'),
+              onPressed: () async {
+                await _auth.signOut();
+              },
             ),
-            body: Container(
-              color: HexColor('FFFFFF'),
-
-            ),
+          ],
+          backgroundColor: Colors.brown[400],
+          elevation: 0.0,
+        ),
+        body: Container(
+          child: ProfileForm(currDisplayName: userData.displayedName, currImageURL: userData.image,),
+        ),
         bottomNavigationBar: navbar(),
-          );
+      );
     } else {
 
     }

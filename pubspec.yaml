@@ -59,6 +59,13 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - assets/masonic-G.png
+    - assets/biker.jpg
+    - assets/Lawrenceville_School_seal.png
+    - assets/lville.jpeg
+    - assets/me.png
+    - assets/meme.jpg
+    - assets/uchicago.png
+    - assets/Yale.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
