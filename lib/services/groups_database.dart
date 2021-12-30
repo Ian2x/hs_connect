@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
-import 'package:hs_connect/models/refRanking.dart';
+import 'package:hs_connect/models/ref_ranking.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/services/posts_database.dart';
@@ -67,7 +68,7 @@ class GroupsDatabaseService {
   // get group data
   Future<Group?> getGroupData({required DocumentReference groupRef}) async {
     final snapshot = await groupRef.get();
-    return _groupDataFromSnapshot(snapshot: snapshot, groupRef: groupRef);
+    return _groupDataFromSnapshot(snapshot: snapshot);
   }
 
   Future<List<DocumentReference>> getAllowableGroupRefs({required String domain, required String? county, required String? state, required String? country}) async {
@@ -117,11 +118,11 @@ class GroupsDatabaseService {
 }
 
   // home data from snapshot
-  Group? _groupDataFromSnapshot({required DocumentSnapshot snapshot, required DocumentReference groupRef}) {
+  Group? _groupDataFromSnapshot({required DocumentSnapshot snapshot}) {
     if (snapshot.exists) {
       final accessRestrictions = snapshot.get('accessRestrictions');
-      return Group(
-        groupRef: groupRef,
+      final test = Group(
+        groupRef: snapshot.reference,
         creatorRef: snapshot.get('creatorRef'),
         name: snapshot.get('name'),
         image: snapshot.get('image'),
@@ -134,6 +135,7 @@ class GroupsDatabaseService {
         moderatorRefs: (snapshot.get('moderatorRefs') as List).map((item) => item as DocumentReference).toList(),
         numMembers: snapshot.get('numMembers'),
       );
+      return test;
     } else {
       return null;
     }
@@ -141,13 +143,8 @@ class GroupsDatabaseService {
 
   // get group data from groupRef
   Future<Group?> group({required DocumentReference groupRef}) async {
-    await groupRef.get().then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        return documentSnapshot.data();
-      } else {
-        return null;
-      }
-    });
+    final snapshot = await groupRef.get();
+    return _groupDataFromSnapshot(snapshot: snapshot);
   }
 
   // for converting userGroups to Groups, must be wrapped in FutureBuilder (see post_form for reference)
@@ -158,6 +155,11 @@ class GroupsDatabaseService {
               return userGroup.groupRef.id;
             }).toList())
         .get();
+  }
+
+  Future<List<Group?>> getAllowableGroups({required UserData userData}) async {
+    final allowableGroupRefs = await getAllowableGroupRefs(domain: userData.domain, county: userData.county, state: userData.state, country: userData.country);
+    return await Future.wait(allowableGroupRefs.map((item) async {return await group(groupRef: item);}));
   }
 
   Future<QuerySnapshot> getTrendingGroups(

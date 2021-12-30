@@ -19,14 +19,13 @@ class MessagesDatabaseService {
     required DocumentReference entityRef,
     required DocumentReference reporterRef,
     required String text,
-    required Timestamp createdAt,
   }) async {
     return await reportsCollection
         .add({
       'entityRef': entityRef,
       'reporterRef': reporterRef,
       'text': text,
-      'createdAt': createdAt,
+      'createdAt': DateTime.now(),
     });
   }
 
