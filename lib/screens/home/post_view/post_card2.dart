@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
+import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/screens/home/post_feeds/specific_group_feed.dart';
 import 'package:hs_connect/screens/home/post_view/like_dislike_post.dart';
+import 'package:hs_connect/screens/home/post_view/post_page.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
@@ -101,6 +103,7 @@ class _PostCard2State extends State<PostCard2> {
   }
 
   void openSpecificGroupFeed() async {
+    print("adsf");
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -114,7 +117,25 @@ class _PostCard2State extends State<PostCard2> {
 
     return GestureDetector(
       onTap: (){
-        openSpecificGroupFeed;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => PostPage(
+                  postInfo: Post(
+                    postRef: widget.postRef,
+                    userRef: widget.userRef,
+                    groupRef: widget.groupRef,
+                    title: widget.title,
+                    text: widget.text,
+                    media: widget.media,
+                    createdAt: widget.createdAt,
+                    likes: widget.likes,
+                    dislikes: widget.dislikes,
+                    numComments: widget.numComments,
+                    reports: widget.reportedStatus,
+                    tags: widget.tags,
+                  ))),
+        );
       },
       child: Card(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0)),

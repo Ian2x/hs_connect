@@ -121,6 +121,7 @@ class PostsDatabaseService {
   // home data from snapshot
   Post? _postFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
     if (querySnapshot.exists) {
+      print("a");
       final temp = Post(
         postRef: querySnapshot.reference,
         userRef: querySnapshot['userRef'],
@@ -135,6 +136,7 @@ class PostsDatabaseService {
         reports: (querySnapshot['reports'] as List).map((item) => item as DocumentReference).toList(),
         tags: (querySnapshot['tags'] as List).map((item) => item as String).toList(),
       );
+      print("b");
       return temp;
     } else {
       return null;

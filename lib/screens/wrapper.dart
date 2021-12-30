@@ -2,7 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/screens/authenticate/authenticate.dart';
+
 import 'package:hs_connect/screens/home/home.dart';
+import 'package:hs_connect/screens/home/home2.dart';
+
 import 'package:provider/provider.dart';
 
 
@@ -23,7 +26,7 @@ class _WrapperState extends State<Wrapper> {
     if (user == null || userData == null || !user.email!.endsWith('@ianeric.com')) {
       return Authenticate();
     } else {
-      return Home();
+      return Home2();
     }
   }
 }
