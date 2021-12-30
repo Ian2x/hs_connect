@@ -14,8 +14,6 @@ import 'package:hs_connect/shared/tools/hexcolor.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
 
 
-
-
 class PostCard2 extends StatefulWidget {
   final DocumentReference postRef;
   final DocumentReference userRef;
@@ -57,8 +55,6 @@ class _PostCard2State extends State<PostCard2> {
 
   GroupsDatabaseService _groups = GroupsDatabaseService();
 
-  PostsDatabaseService _posts = PostsDatabaseService();
-  CommentsDatabaseService _comments = CommentsDatabaseService();
 
 
   bool liked = false;
@@ -139,7 +135,7 @@ class _PostCard2State extends State<PostCard2> {
       },
       child: Card(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0)),
-          margin: EdgeInsets.fromLTRB(0.0, 1.0, 0.0, 0.0),
+          margin: EdgeInsets.fromLTRB(0.0, 3.0, 0.0, 0.0),
           //color: HexColor("#292929"),
           elevation: 0.0,
           child: Container(
@@ -158,6 +154,7 @@ class _PostCard2State extends State<PostCard2> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Icon(Icons.account_circle, size:40, color:Colors.black),
+
                     //Spacer(),
                   ],
                 ),
