@@ -46,8 +46,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
                 if(index==comments.length) {
                   return CommentForm(postRef: widget.postRef);
                 } else {
-                  return Center(
-                      child: CommentCard(
+                  return CommentCard(
                         commentRef: comments[index].commentRef,
                         postRef: comments[index].postRef,
                         userRef: comments[index].userRef,
@@ -58,7 +57,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
                         dislikes: comments[index].dislikes,
                         currUserRef: userData.userRef,
                         reportedStatus: comments[index].reports,
-                      ));
+                      );
                 }
               },
             ),

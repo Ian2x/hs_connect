@@ -60,7 +60,6 @@ class _CommentCardState extends State<CommentCard> {
       setState(() {
         disliked = true;
       });
-
     }
     getUsername();
     super.initState();
@@ -68,9 +67,12 @@ class _CommentCardState extends State<CommentCard> {
 
   void getUsername() async {
     if (widget.userRef != null) {
-      final UserData? fetchUsername = await _userDataDatabaseService.getUserData(userRef: widget.userRef!);
+      final UserData? fetchUsername = await _userDataDatabaseService
+          .getUserData(userRef: widget.userRef!);
       setState(() {
-        username = fetchUsername != null ? fetchUsername.displayedName : '<Failed to retrieve user name>';
+        username = fetchUsername != null
+            ? fetchUsername.displayedName
+            : '<Failed to retrieve user name>';
       });
     } else {
       setState(() {
@@ -81,33 +83,22 @@ class _CommentCardState extends State<CommentCard> {
 
   @override
   Widget build(BuildContext context) {
+    return Card(
+        child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+          ListTile(
+            title: Text(widget.text),
+            subtitle: Text(username),
+            trailing:
+            LikeDislikeComment(
+                commentRef: widget.commentRef,
+                currUserRef: widget.currUserRef,
+                likes: widget.likes,
+                dislikes: widget.dislikes),
 
-    return Dismissible(
-      key: ValueKey(widget.commentRef),
-      child: Card(
-          child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-        ListTile(
-          title: Text(widget.text),
-          subtitle: Text(username),
-          trailing:
-          LikeDislikeComment(
-              commentRef: widget.commentRef,
-              currUserRef: widget.currUserRef,
-              likes: widget.likes,
-              dislikes: widget.dislikes),
-
-        ),
-        widget.media!=null ? Semantics(
-          label: 'new_profile_pic_picked_image',
-          child: Image.network(widget.media!) // kIsWeb ? Image.network(widget.image!) : Image.file(File(widget.image!)),
-        ) : Container(),
-        RepliesFeed(commentRef: widget.commentRef, postRef: widget.postRef,),
-      ])),
-      onDismissed: (DismissDirection direction) {
-        setState(() {
-          _comments.deleteComment(commentRef: widget.commentRef, userRef: widget.currUserRef, media: widget.media, postRef: widget.postRef);
-        });
-      },
+          ),
+          //RepliesFeed(commentRef: widget.commentRef, postRef: widget.postRef,),
+        ]
+        )
     );
   }
 }
