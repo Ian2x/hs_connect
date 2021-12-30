@@ -23,6 +23,7 @@ class GroupsDatabaseService {
   // collection reference
   final CollectionReference groupsCollection = FirebaseFirestore.instance.collection('groups');
 
+
   Future<DocumentReference> newGroup(
       {required AccessRestriction accessRestrictions,
       required String name,
@@ -57,7 +58,6 @@ class GroupsDatabaseService {
           .catchError(onError);
       if (creatorRef != null) {
         UserDataDatabaseService _users = UserDataDatabaseService(userRef: creatorRef);
-        newGroupRef.update({'numMembers': FieldValue.increment(1)});
         await _users.joinGroup(userRef: creatorRef, groupRef: newGroupRef, public: true);
       }
       return newGroupRef;
@@ -120,6 +120,7 @@ class GroupsDatabaseService {
   Group? _groupDataFromSnapshot({required DocumentSnapshot snapshot, required DocumentReference groupRef}) {
     if (snapshot.exists) {
       final accessRestrictions = snapshot.get('accessRestrictions');
+      print(accessRestrictions.runtimeType);
       return Group(
         groupRef: groupRef,
         creatorRef: snapshot.get('creatorRef'),
