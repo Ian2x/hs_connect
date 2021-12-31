@@ -9,6 +9,7 @@ import 'package:hs_connect/screens/home/post_view/post_page.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
+import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/tools/hexcolor.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
@@ -62,7 +63,10 @@ class _PostCard2State extends State<PostCard2> {
   String userDomain = '<Loading user domain...>';
   String username = '<Loading user name...>';
   String groupName = '<Loading group name...>';
-  Image groupImage = Image(image: AssetImage('assets/masonic-G.png'), height: 20, width: 20);
+
+  ImageStorage _images = ImageStorage();
+
+
 
   @override
   void initState() {
@@ -147,24 +151,45 @@ class _PostCard2State extends State<PostCard2> {
               children: [
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Stack(
                       children: [
-                        Icon(Icons.account_circle, size:40, color:Colors.black),
+                        SizedBox(height:50,width:50),
+                        Positioned(
+                          bottom: 5,
+                          right: 5,
+                          child:
+                          Container(
+                              width: 40.0,
+                              height: 40.0,
+                              decoration: new BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: new DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image: new NetworkImage(
+                                          "https://i.imgur.com/BoN9kdC.png")
+                                  )
+                              )),
+                          //
+                        ),
                         Positioned(
                           bottom: 0,
-                          right: 4,
+                          right: 0,
                           child:
-                          Image.asset('assets/lville.jpeg',
-                            height: 20,
-                            width:20,
+                            Container(
+                              height:35,
+                              width:33,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image: NetworkImage('https://googleflutter.com/sample_image.jpg'),
+                                    fit: BoxFit.fill
+                                  ),
+                                border: Border.all(color: Colors.white,width: 3)
+                                ),
                           ),
-                          //BoxDecoration(
-                          // 	shape: BoxShape.circle,
-                          // 	image: DecorationImage(
-                          // 	  image: NetworkImage('https://googleflutter.com/sample_image.jpg'),
-                          // 	  fit: BoxFit.fill
-                          // 	),
+                          //
                         )
                       ],
                     ),
