@@ -24,6 +24,7 @@ class GroupsDatabaseService {
   // collection reference
   final CollectionReference groupsCollection = FirebaseFirestore.instance.collection('groups');
 
+
   Future<DocumentReference> newGroup(
       {required AccessRestriction accessRestrictions,
       required String name,

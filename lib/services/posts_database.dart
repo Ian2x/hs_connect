@@ -12,10 +12,10 @@ void defaultFunc(dynamic parameter) {}
 
 class PostsDatabaseService {
   final DocumentReference? userRef;
-
   List<DocumentReference>? groupRefs;
+  List<String>? searchTags;
 
-  PostsDatabaseService({this.userRef, this.groupRefs});
+  PostsDatabaseService({this.userRef, this.groupRefs, this.searchTags});
 
   ImageStorage _images = ImageStorage();
 
@@ -29,6 +29,7 @@ class PostsDatabaseService {
     Function(void) onValue = defaultFunc,
     Function onError = defaultFunc}) async {
 
+    groupRef.update({'numPosts': FieldValue.increment(1)});
 
     return await postsCollection
         .add({
@@ -48,11 +49,11 @@ class PostsDatabaseService {
         .catchError(onError);
   }
 
-  Future<dynamic> deletePost({required DocumentReference postRef, required DocumentReference groupRef, required DocumentReference userRef, String? media}) async {
+  Future<dynamic> deletePost(
+      {required DocumentReference postRef, required DocumentReference groupRef, required DocumentReference userRef, String? media}) async {
     final checkAuth = await postRef.get();
-    if(checkAuth.exists) {
-      if (userRef==checkAuth.get('userRef')) {
-
+    if (checkAuth.exists) {
+      if (userRef == checkAuth.get('userRef')) {
         groupRef.update({'numPosts': FieldValue.increment(-1)});
 
         // delete post's comments
@@ -61,7 +62,7 @@ class PostsDatabaseService {
           List<DocumentSnapshot> filteredDocs = await allDocs.where(
                   (document) => document.get('postRef') == postRef
           ).toList();
-          for (DocumentSnapshot ds in filteredDocs){
+          for (DocumentSnapshot ds in filteredDocs) {
             ds.reference.delete();
           }
         });
@@ -72,7 +73,7 @@ class PostsDatabaseService {
           List<DocumentSnapshot> filteredDocs = await allDocs.where(
                   (document) => document.get('postRef') == postRef
           ).toList();
-          for (DocumentSnapshot ds in filteredDocs){
+          for (DocumentSnapshot ds in filteredDocs) {
             ds.reference.delete();
           }
         });
@@ -90,14 +91,13 @@ class PostsDatabaseService {
         await delReplies;
         await delPost;
         // delete image
-        if (media!=null) {
+        if (media != null) {
           return await _images.deleteImage(imageURL: media);
         }
       };
     }
     return null;
   }
-
 
 
   Future<void> likePost({required DocumentReference postRef, required DocumentReference userRef}) async {
@@ -125,7 +125,6 @@ class PostsDatabaseService {
   }
 
 
-
   // home data from snapshot
   Post? _postFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
     if (querySnapshot.exists) {
@@ -150,7 +149,11 @@ class PostsDatabaseService {
   }
 
   Stream<List<Post?>> get posts {
-    return postsCollection.where('groupRef', whereIn: groupRefs).orderBy('createdAt', descending: true).snapshots().map((snapshot) => snapshot.docs.map(_postFromQuerySnapshot).toList());
+    return postsCollection
+        .where('groupRef', whereIn: groupRefs)
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map(_postFromQuerySnapshot).toList());
   }
 
   Future<List<Post?>> getMultiGroupPosts() async {
@@ -160,8 +163,16 @@ class PostsDatabaseService {
 
   Stream<List<Post?>> get potentialTrendingPosts {
     return postsCollection
-        .where('createdAt', isGreaterThan: Timestamp.fromDate(DateTime.now().subtract(new Duration(days: daysTrending))))
+        .where(
+        'createdAt', isGreaterThan: Timestamp.fromDate(DateTime.now().subtract(new Duration(days: daysTrending))))
         .where('groupRef', whereIn: groupRefs)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map(_postFromQuerySnapshot).toList());
+  }
+
+  Stream<List<Post?>> get tagPosts {
+    return postsCollection
+        .where('tags', arrayContainsAny: searchTags)
         .snapshots()
         .map((snapshot) => snapshot.docs.map(_postFromQuerySnapshot).toList());
   }

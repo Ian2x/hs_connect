@@ -49,7 +49,7 @@ class _PostFormState extends State<PostForm> {
   String _text = '';
   String _groupId = '';
   String error = '';
-  List<String> _tags = [];
+  String _tag = '';
   bool loading = false;
 
   ImageStorage _images = ImageStorage();
@@ -130,6 +130,18 @@ class _PostFormState extends State<PostForm> {
                             return null;
                         }
                       ),
+                      SizedBox(height: 5.0),
+                      DropdownButtonFormField<String>(
+                          decoration: textInputDecoration,
+                          value: _tag.isNotEmpty ? _tag : null,
+                          items: defaultTags.map((tag) {
+                            return DropdownMenuItem(
+                              value: tag,
+                              child: Text(tag),
+                            );
+                          }).toList(),
+                          onChanged: (val) => setState(() => _tag = val!),
+                      ),
                       PicPickerButton(setPic: setPic),
                       newFile != null ?
                       Semantics(
@@ -156,7 +168,7 @@ class _PostFormState extends State<PostForm> {
                               await PostsDatabaseService(userRef: userData.userRef).newPost(
                                 title: _title,
                                 text: _text,
-                                tags: _tags,
+                                tags: [_tag],
                                 mediaURL: newFileURL,
                                 groupRef: FirebaseFirestore.instance.collection('groups').doc(_groupId),
                                 onValue: handleValue,
