@@ -17,7 +17,7 @@ import 'package:hs_connect/shared/tools/hexcolor.dart';
 
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:hs_connect/screens/profile/profileWidget/profileForm_page.dart';
 import 'package:hs_connect/screens/profile/profileWidget/appbar_widget.dart';
 import 'package:hs_connect/screens/profile/profileWidget/button_widget.dart';
 import 'package:hs_connect/screens/profile/profileWidget/numbers_widget.dart';
@@ -37,6 +37,7 @@ class _profile2State extends State<profile2> {
   final AuthService _auth = AuthService();
 
   String profileUsername = '<Loading user name...>';
+  String? profileImage='<Loading Image URL>';
 
   UserDataDatabaseService _userInfoDatabaseService = UserDataDatabaseService();
 
@@ -46,12 +47,12 @@ class _profile2State extends State<profile2> {
     final UserData? fetchUserData = await _userInfoDatabaseService.getUserData(userRef: widget.profilePersonRef);
     setState(() {
       profileUsername = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
+      profileImage = fetchUserData != null ? fetchUserData.image : '<Failed to retrieve user name>';
     });
   }
 
   @override
   void initState() {
-
     getProfileUserData();
   }
 
@@ -111,7 +112,15 @@ class _profile2State extends State<profile2> {
 
   Widget buildUpgradeButton() => ButtonWidget(
     text: 'Edit Profile',
-    onClicked: () {},
+    onClicked: () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => profileForm_Page(
+          profileForm:(ProfileForm(currDisplayName: profileUsername, currImageURL: profileImage)),
+        )
+        )
+      );
+    },
   );
 
   Widget buildIconScroll() =>Container(
