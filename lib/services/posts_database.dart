@@ -80,6 +80,13 @@ class PostsDatabaseService {
 
         // delete post
         final delPost = postRef.delete();
+
+        // delete post's poll (if applicable)
+        final postData = await postRef.get();
+        if (postData.get('polls') != null) {
+          await (postData.get('polls') as DocumentReference).delete();
+        }
+
         await delComments;
         await delReplies;
         await delPost;
@@ -121,7 +128,6 @@ class PostsDatabaseService {
   // home data from snapshot
   Post? _postFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
     if (querySnapshot.exists) {
-      print("a");
       final temp = Post(
         postRef: querySnapshot.reference,
         userRef: querySnapshot['userRef'],
@@ -136,7 +142,6 @@ class PostsDatabaseService {
         reports: (querySnapshot['reports'] as List).map((item) => item as DocumentReference).toList(),
         tags: (querySnapshot['tags'] as List).map((item) => item as String).toList(),
       );
-      print("b");
       return temp;
     } else {
       return null;

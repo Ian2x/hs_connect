@@ -8,6 +8,7 @@ import 'package:hs_connect/screens/home/home.dart';
 import 'package:hs_connect/screens/new_post/new_post.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
+import 'package:hs_connect/shared/widgets/navbar.dart';
 import 'package:provider/provider.dart';
 
 class GroupSearch extends StatelessWidget {
@@ -49,68 +50,7 @@ class GroupSearch extends StatelessWidget {
           // TrendingFeed(),
         ]),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          currentIndex: 1,
-          items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: IconButton(
-              padding: EdgeInsets.zero,
-              constraints: BoxConstraints(),
-              icon: const Icon(Icons.school, size: 18.0),
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => Home()),
-                );
-              },
-            ),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: IconButton(
-              padding: EdgeInsets.zero,
-              constraints: BoxConstraints(),
-              icon: const Icon(Icons.search_rounded, size: 18.0),
-              onPressed: () {
-
-              },
-            ),
-            label: 'Search',
-          ),
-          BottomNavigationBarItem(
-            icon: IconButton(
-              padding: EdgeInsets.zero,
-              constraints: BoxConstraints(),
-              icon: const Icon(Icons.add, size: 18.0),
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => NewPost()),
-                );
-              },
-            ),
-            label: 'Post',
-          ),
-
-          BottomNavigationBarItem(
-            icon: IconButton(
-              padding: EdgeInsets.zero,
-              constraints: BoxConstraints(),
-              icon: const Icon(Icons.search_rounded, size: 18.0),
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Profile(profileId: user.uid)),
-                );
-              },
-            ),
-            label: 'Profile',
-          ),
-        ]
-      ),
+      bottomNavigationBar: navbar(),
     );
   }
 }
