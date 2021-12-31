@@ -1,11 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hs_connect/screens/home/home2.dart';
 
 import 'package:hs_connect/screens/new_post/new_post.dart';
 import 'package:hs_connect/screens/profile/profile.dart';
 import 'package:hs_connect/screens/search/group_search.dart';
 import 'package:hs_connect/shared/tools/hexcolor.dart';
 import 'package:provider/provider.dart';
+
+import '../no_animation_material_page_route.dart';
 
 class navbar extends StatefulWidget {
   const navbar({Key? key}) : super(key: key);
@@ -39,7 +42,11 @@ class _navbarState extends State<navbar> {
               constraints: BoxConstraints(),
               icon: const Icon(Icons.school, size: 18.0),
               onPressed: () {
-
+                Navigator.pushReplacement(
+                  context,
+                  NoAnimationMaterialPageRoute(
+                      builder: (context) => Home2()),
+                );
               },
             ),
             label: 'Home',
@@ -53,8 +60,8 @@ class _navbarState extends State<navbar> {
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => GroupSearch()),
+                  NoAnimationMaterialPageRoute(
+                      builder: (context) => Search()),
                 );
               },
             ),
@@ -69,14 +76,13 @@ class _navbarState extends State<navbar> {
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(
+                  NoAnimationMaterialPageRoute(
                       builder: (context) => NewPost()),
                 );
               },
             ),
             label: 'Post',
           ),
-
           BottomNavigationBarItem(
             icon: IconButton(
               padding: EdgeInsets.zero,
@@ -86,14 +92,13 @@ class _navbarState extends State<navbar> {
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(
+                  NoAnimationMaterialPageRoute(
                       builder: (context) => Profile(profileId: user!.uid)),
                 );
               },
             ),
             label: 'Profile',
           ),
-
         ],
       ),
     );

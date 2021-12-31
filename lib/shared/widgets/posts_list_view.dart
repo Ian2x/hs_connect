@@ -8,6 +8,7 @@ ListView PostsListView({required List<Post> posts, required DocumentReference cu
       itemCount: posts.length,
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
+      padding: EdgeInsets.zero,
       itemBuilder: (BuildContext context, int index) {
       // when scroll up/down, fires once
         return Center(
@@ -25,6 +26,7 @@ ListView PostsListView({required List<Post> posts, required DocumentReference cu
           numComments: posts[index].numComments,
           reportedStatus: posts[index].reports,
           tags: posts[index].tags,
-        ));
+        )
+        );
       });
 }

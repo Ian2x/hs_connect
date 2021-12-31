@@ -4,6 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/refRanking.dart';
 import 'package:hs_connect/models/post.dart';
+import 'package:hs_connect/models/refRanking.dart';
+import 'package:hs_connect/models/refRanking.dart';
+import 'package:hs_connect/models/refRanking.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
@@ -120,7 +123,6 @@ class GroupsDatabaseService {
   Group? _groupDataFromSnapshot({required DocumentSnapshot snapshot, required DocumentReference groupRef}) {
     if (snapshot.exists) {
       final accessRestrictions = snapshot.get('accessRestrictions');
-      print(accessRestrictions.runtimeType);
       return Group(
         groupRef: groupRef,
         creatorRef: snapshot.get('creatorRef'),

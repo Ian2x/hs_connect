@@ -99,7 +99,6 @@ class _PostCard2State extends State<PostCard2> {
   }
 
   void openSpecificGroupFeed() async {
-    print("adsf");
     Navigator.push(
       context,
       MaterialPageRoute(

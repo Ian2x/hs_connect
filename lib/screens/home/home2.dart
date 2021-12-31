@@ -44,6 +44,67 @@ class _Home2State extends State<Home2> with SingleTickerProviderStateMixin {
     }
     // this sliver app bar is only use to hide/show the tabBar, the AppBar
     // is invisible at all times. The to the user visible AppBar is below
+
+    return Scaffold(
+      backgroundColor: HexColor("#E9EDF0"),
+      body: NestedScrollView(
+        headerSliverBuilder:
+            (BuildContext context, bool innerBoxIsScrolled) {
+          return <Widget>[
+            SliverAppBar(
+              elevation: 0.0,
+              primary: true,
+              floating: true,
+              backgroundColor: HexColor('FFFFFF'),//.withOpacity(0.3),
+              snap: true,
+              pinned: false,
+              bottom: TabBar(
+                tabs: [
+                  Tab(
+                      icon: Text(userData.domain,
+                          style:
+                          TextStyle(
+                            color: Colors.black,
+                          )
+                      )
+                  ),
+                  Tab(
+                      icon: Text("Home",
+                          style:
+                          TextStyle(
+                            color: Colors.black,
+                          )
+                      )
+                  ),
+                  Tab(
+                      icon: Text("Trending",
+                          style:
+                          TextStyle(
+                            color: Colors.black,
+                          )
+                      )
+                  )
+
+                ],
+                controller: _tabController,
+              ),
+            ),
+          ];
+        },
+        body: TabBarView(
+          children: [
+            DomainFeed(),
+            HomeFeed(),
+            userData!=null ? TrendingFeed(country: userData.country, state: userData.state, county: userData.county, domain: userData.domain) : Loading(),
+          ],
+          controller: _tabController,
+          physics: new NeverScrollableScrollPhysics(),
+        ),
+
+      ),
+      bottomNavigationBar: navbar(),
+    );
+
     return Scaffold(
       backgroundColor: HexColor("#E9EDF0"),
       body: Stack(
