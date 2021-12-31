@@ -139,21 +139,35 @@ class _PostCard2State extends State<PostCard2> {
           //color: HexColor("#292929"),
           elevation: 0.0,
           child: Container(
-          /*
-          constraints: BoxConstraints.expand(
-            height: Theme.of(context).textTheme.headline4!.fontSize! * 1.1 + 200.0,
-          ),
-          */
-
           padding: const EdgeInsets.all(8.0),
           color: HexColor("FFFFFF"),
           alignment: Alignment(-1.0,-1.0), //Aligned to Top Left
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Icon(Icons.account_circle, size:40, color:Colors.black),
+                    Stack(
+                      children: [
+                        Icon(Icons.account_circle, size:40, color:Colors.black),
+                        Positioned(
+                          bottom: 0,
+                          right: 4,
+                          child:
+                          Image.asset('assets/lville.jpeg',
+                            height: 20,
+                            width:20,
+                          ),
+                          //BoxDecoration(
+                          // 	shape: BoxShape.circle,
+                          // 	image: DecorationImage(
+                          // 	  image: NetworkImage('https://googleflutter.com/sample_image.jpg'),
+                          // 	  fit: BoxFit.fill
+                          // 	),
+                        )
+                      ],
+                    ),
 
                     //Spacer(),
                   ],
