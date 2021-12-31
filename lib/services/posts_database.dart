@@ -80,6 +80,13 @@ class PostsDatabaseService {
 
         // delete post
         final delPost = postRef.delete();
+
+        // delete post's poll (if applicable)
+        final postData = await postRef.get();
+        if (postData.get('polls') != null) {
+          await (postData.get('polls') as DocumentReference).delete();
+        }
+
         await delComments;
         await delReplies;
         await delPost;
