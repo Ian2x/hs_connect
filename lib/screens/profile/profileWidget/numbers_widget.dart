@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 
 class NumbersWidget extends StatelessWidget {
+
+  int groupCount;
+  int scoreCount;
+
+  NumbersWidget({Key? key, required this.scoreCount,
+    required this.groupCount}) : super(key: key);
+
   @override
   Widget build(BuildContext context) => Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: <Widget>[
-      buildButton(context, '4.8', 'Ranking'),
+      buildButton(context, scoreCount.toString(), 'Likes'),
       buildDivider(),
-      buildButton(context, '35', 'Following'),
-      buildDivider(),
-      buildButton(context, '50', 'Followers'),
+      buildButton(context, groupCount.toString(), 'Groups'),
     ],
   );
   Widget buildDivider() => Container(
