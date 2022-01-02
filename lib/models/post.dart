@@ -6,6 +6,7 @@ class Post {
   final DocumentReference groupRef;
   final DocumentReference userRef;
   final String title;
+  final String LCtitle;
   final String text;
   final String? media;
   final Timestamp createdAt;
@@ -19,6 +20,7 @@ class Post {
     required this.postRef,
     required this.groupRef,
     required this.userRef,
+    required this.LCtitle,
     required this.title,
     required this.text,
     required this.media,

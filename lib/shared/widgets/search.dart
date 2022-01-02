@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/search_result.dart';
 import 'package:hs_connect/screens/home/post_feeds/specific_group_feed.dart';
 import 'package:hs_connect/services/groups_database.dart';
+import 'package:hs_connect/shared/tools/hexcolor.dart';
 import 'package:hs_connect/shared/widgets/navbar.dart';
 
 class Search extends StatefulWidget {
@@ -18,8 +19,8 @@ class _SearchState extends State<Search> {
   final TextEditingController _filter = new TextEditingController();
   String _searchText = "";
   List<SearchResult> filteredResults = [];
-  Icon _searchIcon = new Icon(Icons.search);
-  Widget _appBarTitle = new Text('DiscoverGroups');
+  Icon _closeIcon = new Icon(Icons.close, color: Colors.black);
+  Widget _appBarTitle = new Text('Loading...');
 
   _SearchState() {
     _filter.addListener(() {
@@ -39,6 +40,14 @@ class _SearchState extends State<Search> {
   @override
   void initState() {
     this._getNames();
+    setState(() {
+      _appBarTitle = new TextField(
+        controller: _filter,
+        decoration: new InputDecoration(
+            hintText: 'Search...'
+        ),
+      );
+    });
     super.initState();
   }
 
@@ -46,76 +55,59 @@ class _SearchState extends State<Search> {
     return Scaffold(
       appBar: _buildBar(context),
       body: Container(
-        child: _buildList(),
+        child: _buildBody(),
       ),
-      bottomNavigationBar: navbar(),
+      bottomNavigationBar: navbar(currentIndex: 1,),
     );
   }
 
   PreferredSizeWidget _buildBar(BuildContext context) {
     return new AppBar(
+      backgroundColor: HexColor('FFFFFF'),
       centerTitle: true,
       title: _appBarTitle,
       leading: new IconButton(
-        icon: _searchIcon,
-        onPressed: _searchPressed,
+        icon: _closeIcon,
+        onPressed: () {
+          Navigator.pop(context);
+        }
       ),
     );
   }
 
-  Widget _buildList() {
-    if (!(_searchText.isEmpty)) {
-      List<SearchResult> tempList = [];
-      for (int i = 0; i < widget.searchResults.length; i++) {
-        if (widget.searchResults[i].resultText.toLowerCase().contains(_searchText.toLowerCase())) {
-          tempList.add(widget.searchResults[i]);
+  Widget _buildBody() {
+      if (!(_searchText.isEmpty)) {
+        List<SearchResult> tempList = [];
+        for (int i = 0; i < widget.searchResults.length; i++) {
+          if (widget.searchResults[i].resultText.toLowerCase().contains(_searchText.toLowerCase())) {
+            tempList.add(widget.searchResults[i]);
+          }
         }
+        filteredResults = tempList;
       }
-      filteredResults = tempList;
+      return ListView.builder(
+        itemCount: filteredResults.length,
+        itemBuilder: (BuildContext context, int index) {
+          return new ListTile(
+            title: Text(filteredResults[index].resultText),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) =>
+                    SpecificGroupFeed(groupRef: filteredResults[index].resultRef)), // GroupSearch()),
+              );
+              print(filteredResults[index].resultText);
+            },
+          );
+        },
+      );
     }
-    return ListView.builder(
-      itemCount: filteredResults.length,
-      itemBuilder: (BuildContext context, int index) {
-        return new ListTile(
-          title: Text(filteredResults[index].resultText),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => SpecificGroupFeed(groupRef: filteredResults[index].resultRef)),// GroupSearch()),
-            );
-            print(filteredResults[index].resultText);
-          },
-        );
-      },
-    );
-  }
 
-  void _searchPressed() {
-    setState(() {
-      if (this._searchIcon.icon == Icons.search) {
-        this._searchIcon = new Icon(Icons.close);
-        this._appBarTitle = new TextField(
-          controller: _filter,
-          decoration: new InputDecoration(
-              prefixIcon: new Icon(Icons.search),
-              hintText: 'Search...'
-          ),
-        );
-      } else {
-        this._searchIcon = new Icon(Icons.search);
-        this._appBarTitle = new Text( 'Search Example' );
-        filteredResults = widget.searchResults;
-        _filter.clear();
-      }
-    });
-  }
 
   void _getNames() async {
-
     setState(() {
       filteredResults = widget.searchResults;
     });
-
   }
 
 

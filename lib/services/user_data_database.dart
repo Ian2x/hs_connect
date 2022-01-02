@@ -29,6 +29,7 @@ class UserDataDatabaseService {
 
     return await userRef!.set({
       'displayedName': username,
+      'LCdisplayedName': username.toLowerCase(),
       'domain': domain,
       'county': kd!=null ? kd.county : null,
       'state': kd!=null ? kd.state : null,
@@ -49,6 +50,7 @@ class UserDataDatabaseService {
       return await userRef!
           .update({
         'displayedName': displayedName,
+        'LCdisplayedName': displayedName.toLowerCase(),
         'imageURL': imageURL,
       })
           .then(onValue)
@@ -77,6 +79,7 @@ class UserDataDatabaseService {
       final temp = UserData(
         userRef: overrideUserRef != null ? overrideUserRef : userRef!,
         displayedName: snapshot.get('displayedName'),
+        LCdisplayedName: snapshot.get('displayedName'),
         domain: snapshot.get('domain'),
         county: snapshot.get('county'),
         state: snapshot.get('state'),

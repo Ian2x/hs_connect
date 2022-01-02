@@ -10,6 +10,7 @@ import 'package:hs_connect/screens/home/home2.dart';
 import 'package:hs_connect/screens/new_post/new_post.dart';
 import 'package:hs_connect/screens/profile/profile.dart';
 import 'package:hs_connect/screens/search/group_search.dart';
+import 'package:hs_connect/screens/search/search_page.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/shared/tools/hexcolor.dart';
 import 'package:hs_connect/shared/widgets/search.dart';
@@ -20,7 +21,8 @@ import '../no_animation_material_page_route.dart';
 import 'loading.dart';
 
 class navbar extends StatefulWidget {
-  const navbar({Key? key}) : super(key: key);
+  final int currentIndex;
+  const navbar({Key? key, required this.currentIndex}) : super(key: key);
 
   @override
   _navbarState createState() => _navbarState();
@@ -51,14 +53,17 @@ class _navbarState extends State<navbar> {
       child: BottomNavigationBar(
         backgroundColor: HexColor("#FFFFFF"),
         type: BottomNavigationBarType.fixed,
-        currentIndex: 0,
+        showSelectedLabels: false,   // <-- HERE
+        showUnselectedLabels: false,
+        currentIndex: widget.currentIndex,
+        selectedItemColor: Colors.black,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: IconButton(
               padding: EdgeInsets.zero,
-              color: Colors.black,
+              // color: Colors.black,
               constraints: BoxConstraints(),
-              icon: const Icon(Icons.school, size: 18.0),
+              icon: Icon(Icons.school, size: 18.0),
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
@@ -72,27 +77,34 @@ class _navbarState extends State<navbar> {
           BottomNavigationBarItem(
             icon: IconButton(
               padding: EdgeInsets.zero,
-              color: Colors.black,
+              // color: Colors.black,
               constraints: BoxConstraints(),
-              icon: const Icon(Icons.search_rounded, size: 18.0),
+              icon: Icon(Icons.search_rounded, size: 18.0),
               onPressed: () async {
                 setState(() {
                   loading = true;
                 });
-                List<Group?> groupData = await _groups.getAllowableGroups(userData: userData);
-                groupData.removeWhere((value) => value == null);
-                List<SearchResult> searchResults = groupData
-                    .map((item) {final group = item as Group; return SearchResult(
-                        resultRef: group.groupRef,
-                        resultType: 'Group',
-                        resultText: group.name,
-                        resultDescription: group.description)
-                ;})
-                    .toList();
+
+                // List<Group?> groupData = await _groups.getAllowableGroups(userData: userData);
+                // groupData.removeWhere((value) => value == null);
+                // List<SearchResult> searchResults = groupData
+                //     .map((item) {final group = item as Group; return SearchResult(
+                //         resultRef: group.groupRef,
+                //         resultType: 'Group',
+                //         resultText: group.name,
+                //         resultDescription: group.description)
+                // ;})
+                //     .toList();
+                // Navigator.pushReplacement(
+                //   context,
+                //   NoAnimationMaterialPageRoute(
+                //       builder: (context) => Search(searchResults: searchResults)),
+                // );
                 Navigator.pushReplacement(
                   context,
                   NoAnimationMaterialPageRoute(
-                      builder: (context) => Search(searchResults: searchResults)),
+                      builder: (context) => SearchPage(),
+                  )
                 );
               },
             ),
@@ -101,9 +113,9 @@ class _navbarState extends State<navbar> {
           BottomNavigationBarItem(
             icon: IconButton(
               padding: EdgeInsets.zero,
-              color: Colors.black,
+              // color: Colors.black,
               constraints: BoxConstraints(),
-              icon: const Icon(Icons.add, size: 18.0),
+              icon: Icon(Icons.add, size: 18.0),
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
@@ -117,9 +129,9 @@ class _navbarState extends State<navbar> {
           BottomNavigationBarItem(
             icon: IconButton(
               padding: EdgeInsets.zero,
-              color: Colors.black,
+              // color: Colors.black,
               constraints: BoxConstraints(),
-              icon: const Icon(Icons.search_rounded, size: 18.0),
+              icon: Icon(Icons.person, size: 18.0),
               onPressed: () {
                 Navigator.pushReplacement(
                   context,

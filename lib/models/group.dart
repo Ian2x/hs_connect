@@ -30,6 +30,7 @@ class Group {
   final DocumentReference? creatorRef;
   final List<DocumentReference> moderatorRefs;
   final String name;
+  final String LCname;
   final String? image;
   final String? description;
   final AccessRestriction accessRestrictions;
@@ -42,6 +43,7 @@ class Group {
     required this.creatorRef,
     required this.moderatorRefs,
     required this.name,
+    required this.LCname,
     required this.image,
     required this.description,
     required this.accessRestrictions,

@@ -19,6 +19,7 @@ class PostCard extends StatefulWidget {
   final DocumentReference userRef;
   final DocumentReference groupRef;
   final String title;
+  final String LCtitle;
   final String text;
   final String? media;
   final Timestamp createdAt;
@@ -35,6 +36,7 @@ class PostCard extends StatefulWidget {
       required this.userRef,
       required this.groupRef,
       required this.title,
+      required this.LCtitle,
       required this.text,
       required this.media,
       required this.createdAt,
@@ -156,6 +158,7 @@ class _PostCardState extends State<PostCard> {
                             userRef: widget.userRef,
                             groupRef: widget.groupRef,
                             title: widget.title,
+                            LCtitle: widget.LCtitle,
                             text: widget.text,
                             media: widget.media,
                             createdAt: widget.createdAt,

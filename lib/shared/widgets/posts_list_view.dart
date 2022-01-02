@@ -17,6 +17,7 @@ ListView PostsListView({required List<Post> posts, required DocumentReference cu
           userRef: posts[index].userRef,
           groupRef: posts[index].groupRef,
           title: posts[index].title,
+          LCtitle: posts[index].LCtitle,
           text: posts[index].text,
           media: posts[index].media,
           createdAt: posts[index].createdAt,

@@ -112,7 +112,7 @@ class _HomeState extends State<Home> {
               userData!=null ? TrendingFeed(country: userData.country, state: userData.state, county: userData.county, domain: userData.domain) : Loading(),
             ]
           ),
-          bottomNavigationBar: navbar(),
+          bottomNavigationBar: navbar(currentIndex: 0,),
         ),
     );
   }

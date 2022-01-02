@@ -1,8 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+enum ResultType {
+  posts,
+  groups,
+  people
+}
+
 class SearchResult {
   final DocumentReference resultRef;
-  final String resultType;
+  final ResultType resultType;
   final String resultText;
   final String? resultDescription;
 

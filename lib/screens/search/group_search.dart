@@ -50,7 +50,7 @@ class GroupSearch extends StatelessWidget {
           // TrendingFeed(),
         ]),
       ),
-      bottomNavigationBar: navbar(),
+      bottomNavigationBar: navbar(currentIndex: 1,),
     );
   }
 }

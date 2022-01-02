@@ -51,7 +51,7 @@ class userFriend extends StatelessWidget {
         body: Container(
           child: ProfileForm(currDisplayName: userData.displayedName, currImageURL: userData.image,),
         ),
-        bottomNavigationBar: navbar(),
+        bottomNavigationBar: navbar(currentIndex: 3,),
       );
     } else {
 
