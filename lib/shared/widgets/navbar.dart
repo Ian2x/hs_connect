@@ -9,6 +9,7 @@ import 'package:hs_connect/screens/home/home2.dart';
 
 import 'package:hs_connect/screens/new_post/new_post.dart';
 import 'package:hs_connect/screens/profile/profile.dart';
+import 'package:hs_connect/screens/profile/profile2.dart';
 import 'package:hs_connect/screens/search/group_search.dart';
 import 'package:hs_connect/screens/search/search_page.dart';
 import 'package:hs_connect/services/groups_database.dart';
@@ -136,7 +137,7 @@ class _navbarState extends State<navbar> {
                 Navigator.pushReplacement(
                   context,
                   NoAnimationMaterialPageRoute(
-                      builder: (context) => Profile(profileId: user!.uid)),
+                      builder: (context) => profile2(profilePersonRef: userData.userRef)),
                 );
               },
             ),

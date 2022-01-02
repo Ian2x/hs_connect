@@ -82,12 +82,8 @@ class _SignInState extends State<SignIn> {
                 onPressed: () async {
                   if (_formKey.currentState != null &&
                       _formKey.currentState!.validate()) {
-                    print(username);
-                    print(password);
                     setState(() => loading = true);
                     dynamic result = await _auth.signInWithUsernameAndPassword(username, password);
-                    print(result);
-                    print("LOOK ABOVE");
                     if (!(result is User?)) {
                       setState(() {
                         error = 'Could not sign in with those credentials';
