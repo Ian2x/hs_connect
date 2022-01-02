@@ -24,9 +24,11 @@ class _CommentFormState extends State<CommentForm> {
   final _formKey = GlobalKey<FormState>();
 
   void handleError(err) {
-    setState(() {
-      error = 'ERROR: something went wrong :(';
-    });
+    if (mounted) {
+      setState(() {
+        error = 'ERROR: something went wrong :(';
+      });
+    }
   }
 
   void handleValue(val) {
@@ -48,9 +50,11 @@ class _CommentFormState extends State<CommentForm> {
     final userData = Provider.of<UserData?>(context);
 
     void setPic(File newFile2) {
-      setState(() {
-        newFile = newFile2;
-      });
+      if (mounted) {
+        setState(() {
+          newFile = newFile2;
+        });
+      }
     }
 
     if (userData == null) {
@@ -66,14 +70,19 @@ class _CommentFormState extends State<CommentForm> {
               decoration: messageInputDecoration(
                   onPressed: () async {
                     if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-                      setState(() => loading = true);
+
+                      if (mounted) {
+                        setState(() => loading = true);
+                      }
 
                       if (newFile != null) {
                         // upload newFile
                         final downloadURL = await _images.uploadImage(file: newFile!);
-                        setState(() {
-                          newFileURL = downloadURL;
-                        });
+                        if (mounted) {
+                          setState(() {
+                            newFileURL = downloadURL;
+                          });
+                        }
                       }
 
                       await CommentsDatabaseService(userRef: userData.userRef).newComment(
@@ -93,7 +102,11 @@ class _CommentFormState extends State<CommentForm> {
                 else
                   return null;
               },
-              onChanged: (val) => setState(() => _text = val),
+              onChanged: (val) {
+                if (mounted) {
+                  setState(() => _text = val);
+                }
+              },
             ),
             newFile != null
                 ? Semantics(

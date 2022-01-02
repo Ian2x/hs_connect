@@ -28,9 +28,11 @@ class _NewGroupFormState extends State<NewGroupForm> {
   final _formKey = GlobalKey<FormState>();
 
   void handleError(err) {
-    setState(() {
-      error = 'ERROR: something went wrong, possibly with username to email conversion';
-    });
+    if (mounted) {
+      setState(() {
+        error = 'ERROR: something went wrong, possibly with username to email conversion';
+      });
+    }
   }
 
   void handleValue(val) {
@@ -96,7 +98,11 @@ class _NewGroupFormState extends State<NewGroupForm> {
                   else
                     return null;
                 },
-                onChanged: (val) => setState(() => _name = val),
+                onChanged: (val) {
+                  if (mounted) {
+                    setState(() => _name = val);
+                  }
+                },
               ),
               SizedBox(height: 20.0),
               DropdownButtonFormField<AccessRestriction>(
@@ -109,7 +115,11 @@ class _NewGroupFormState extends State<NewGroupForm> {
                   );
                 }).toList(),
                 validator: (value) => value == null ? 'Must select access restrictions' : null,
-                onChanged: (val) => setState(() => _accessRestriction = val!),
+                onChanged: (val) {
+                  if (mounted) {
+                    setState(() => _accessRestriction = val!);
+                  }
+                },
               ),
               FloatingActionButton(
                 onPressed: () async {
@@ -118,13 +128,17 @@ class _NewGroupFormState extends State<NewGroupForm> {
                       source: ImageSource.gallery,
                     );
                     if (pickedFile != null) {
-                      setState(() {
-                        newFile = File(pickedFile.path);
-                      });
+                      if (mounted) {
+                        setState(() {
+                          newFile = File(pickedFile.path);
+                        });
+                      }
                     } else {
-                      setState(() {
-                        newFile = null;
-                      });
+                      if (mounted) {
+                        setState(() {
+                          newFile = null;
+                        });
+                      }
                     }
                   } catch (e) {
                     print(e);
@@ -149,13 +163,17 @@ class _NewGroupFormState extends State<NewGroupForm> {
                     if (newFile != null) {
                       // upload newFile
                       final downloadURL = await _images.uploadImage(file: newFile!);
-                      setState(() {
-                        newFileURL = downloadURL;
-                      });
+                      if (mounted) {
+                        setState(() {
+                          newFileURL = downloadURL;
+                        });
+                      }
                     }
 
                     if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-                      setState(() => loading = true);
+                      if (mounted) {
+                        setState(() => loading = true);
+                      }
                       await GroupsDatabaseService().newGroup(
                         accessRestrictions: _accessRestriction!,
                         name: _name,

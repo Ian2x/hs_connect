@@ -26,9 +26,10 @@ class UserData {
   final String? country;
   final List<UserGroup> userGroups;
   final List<Message> messages;
+  final List<DocumentReference> postsRefs;
   final String? image;
   final int score;
-  final int warnings;
+  final List<DocumentReference> reportsRefs;
 
   UserData({
     required this.userRef,
@@ -40,8 +41,9 @@ class UserData {
     required this.country,
     required this.userGroups,
     required this.messages,
+    required this.postsRefs,
     required this.image,
     required this.score,
-    required this.warnings,
+    required this.reportsRefs,
   });
 }

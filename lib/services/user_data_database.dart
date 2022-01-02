@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/known_domain.dart';
 import 'package:hs_connect/models/message.dart';
+import 'package:hs_connect/models/search_result.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/known_domains_database.dart';
@@ -124,4 +125,23 @@ class UserDataDatabaseService {
       return null;
     }
   }
+
+  SearchResult _streamResultFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
+    return SearchResult(
+      resultRef: querySnapshot.reference,
+      resultType: SearchResultType.people,
+      resultDescription: querySnapshot['domain'],
+      resultText: querySnapshot['displayedName'],
+    );
+  }
+
+  Stream<List<SearchResult>> searchStream(String searchKey) {
+    final LCsearchKey = searchKey.toLowerCase();
+    return userDataCollection
+        .where('LCdisplayedName', isGreaterThanOrEqualTo: LCsearchKey)
+        .where('LCdisplayedName', isLessThan: LCsearchKey + 'z')
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map(_streamResultFromQuerySnapshot).toList());
+  }
+
 }

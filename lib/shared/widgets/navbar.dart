@@ -82,25 +82,11 @@ class _navbarState extends State<navbar> {
               constraints: BoxConstraints(),
               icon: Icon(Icons.search_rounded, size: 18.0),
               onPressed: () async {
-                setState(() {
-                  loading = true;
-                });
-
-                // List<Group?> groupData = await _groups.getAllowableGroups(userData: userData);
-                // groupData.removeWhere((value) => value == null);
-                // List<SearchResult> searchResults = groupData
-                //     .map((item) {final group = item as Group; return SearchResult(
-                //         resultRef: group.groupRef,
-                //         resultType: 'Group',
-                //         resultText: group.name,
-                //         resultDescription: group.description)
-                // ;})
-                //     .toList();
-                // Navigator.pushReplacement(
-                //   context,
-                //   NoAnimationMaterialPageRoute(
-                //       builder: (context) => Search(searchResults: searchResults)),
-                // );
+                if (mounted) {
+                  setState(() {
+                    loading = true;
+                  });
+                }
                 Navigator.pushReplacement(
                   context,
                   NoAnimationMaterialPageRoute(

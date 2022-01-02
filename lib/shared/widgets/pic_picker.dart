@@ -43,18 +43,22 @@ class _PicPickerState extends State<PicPicker> {
         maxHeight: widget.height,
         imageQuality: widget.quality,
       );
-      setState(() {
-        _imageFile = pickedFile;
-      });
+      if (mounted) {
+        setState(() {
+          _imageFile = pickedFile;
+        });
+      }
       if (_imageFile != null) {
         widget.setPic(File(_imageFile!.path));
       } else {
         widget.setPic(null);
       }
     } catch (e) {
-      setState(() {
-        _pickImageError = e;
-      });
+      if (mounted) {
+        setState(() {
+          _pickImageError = e;
+        });
+      }
     }
   }
 
@@ -94,9 +98,11 @@ class _PicPickerState extends State<PicPicker> {
       return;
     }
     if (response.file != null) {
-      setState(() {
-        _imageFile = response.file;
-      });
+      if (mounted) {
+        setState(() {
+          _imageFile = response.file;
+        });
+      }
     } else {
       _retrieveDataError = response.exception!.code;
     }
@@ -104,7 +110,6 @@ class _PicPickerState extends State<PicPicker> {
 
   @override
   Widget build(BuildContext context) {
-    print("rebuilding");
     return Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
       Center(
         child: !kIsWeb && defaultTargetPlatform == TargetPlatform.android

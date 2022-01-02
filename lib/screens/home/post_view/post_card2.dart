@@ -74,13 +74,17 @@ class _PostCard2State extends State<PostCard2> {
   void initState() {
     // initialize liked/disliked
     if (widget.likes.contains(widget.currUserRef)) {
-      setState(() {
-        liked = true;
-      });
+      if (mounted) {
+        setState(() {
+          liked = true;
+        });
+      }
     } else if (widget.dislikes.contains(widget.currUserRef)) {
-      setState(() {
-        disliked = true;
-      });
+      if (mounted) {
+        setState(() {
+          disliked = true;
+        });
+      }
     }
     // find username for userId
     // _userInfoDatabaseService.userId = widget.userId;
@@ -91,17 +95,21 @@ class _PostCard2State extends State<PostCard2> {
 
   void getUserData() async {
     final UserData? fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.userRef);
-    setState(() {
-      username = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
-      userDomain = fetchUserData != null ? fetchUserData.domain : '<Failed to retrieve user domain>';
-    });
+    if (mounted) {
+      setState(() {
+        username = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
+        userDomain = fetchUserData != null ? fetchUserData.domain : '<Failed to retrieve user domain>';
+      });
+    }
   }
 
   void getGroupName() async {
     final Group? fetchGroupName = await _groups.getGroupData(groupRef: widget.groupRef);
-    setState(() {
-      groupName = fetchGroupName != null ? fetchGroupName.name : '<Failed to retrieve group name>';
-    });
+    if (mounted) {
+      setState(() {
+        groupName = fetchGroupName != null ? fetchGroupName.name : '<Failed to retrieve group name>';
+      });
+    }
   }
 
   void openSpecificGroupFeed() async {
@@ -122,21 +130,7 @@ class _PostCard2State extends State<PostCard2> {
           context,
           MaterialPageRoute(
               builder: (context) => PostPage(
-                  postInfo: Post(
-                    postRef: widget.postRef,
-                    userRef: widget.userRef,
-                    groupRef: widget.groupRef,
-                    title: widget.title,
-                    LCtitle: widget.LCtitle,
-                    text: widget.text,
-                    media: widget.media,
-                    createdAt: widget.createdAt,
-                    likes: widget.likes,
-                    dislikes: widget.dislikes,
-                    numComments: widget.numComments,
-                    reports: widget.reportedStatus,
-                    tags: widget.tags,
-                  ))),
+                  postRef: widget.postRef)),
         );
       },
       child: Card(

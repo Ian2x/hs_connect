@@ -26,12 +26,14 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
 
   @override
   void initState() {
-    setState(() {
-      likeStatus = widget.likes.contains(widget.currUserRef);
-      dislikeStatus = widget.dislikes.contains(widget.currUserRef);
-      likeCount = widget.likes.length;
-      dislikeCount = widget.dislikes.length;
-    });
+    if (mounted) {
+      setState(() {
+        likeStatus = widget.likes.contains(widget.currUserRef);
+        dislikeStatus = widget.dislikes.contains(widget.currUserRef);
+        likeCount = widget.likes.length;
+        dislikeCount = widget.dislikes.length;
+      });
+    }
     super.initState();
   }
 
@@ -47,10 +49,12 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               icon: Icon(Icons.thumb_up),
               onPressed: () {
                 _comments.unLikeComment(commentRef: widget.commentRef, userRef: widget.currUserRef);
-                setState(() {
-                  likeCount-=1;
-                  likeStatus = false;
-                });
+                if (mounted) {
+                  setState(() {
+                    likeCount-=1;
+                    likeStatus = false;
+                  });
+                }
               },
             );
           } else {
@@ -59,12 +63,14 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               icon: Icon(Icons.thumb_up_outlined),
               onPressed: () {
                 _comments.likeComment(commentRef: widget.commentRef, userRef: widget.currUserRef);
-                setState(() {
-                  likeCount+=1;
-                  if(dislikeStatus==true) dislikeCount-=1;
-                  likeStatus = true;
-                  dislikeStatus = false;
-                });
+                if (mounted) {
+                  setState(() {
+                    likeCount+=1;
+                    if(dislikeStatus==true) dislikeCount-=1;
+                    likeStatus = true;
+                    dislikeStatus = false;
+                  });
+                }
               },
             );
           }
@@ -77,10 +83,12 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               icon: Icon(Icons.thumb_down),
               onPressed: () {
                 _comments.unDislikeComment(commentRef: widget.commentRef, userRef: widget.currUserRef);
-                setState(() {
-                  dislikeCount-=1;
-                  dislikeStatus = false;
-                });
+                if (mounted) {
+                  setState(() {
+                    dislikeCount-=1;
+                    dislikeStatus = false;
+                  });
+                }
               },
             );
           } else {

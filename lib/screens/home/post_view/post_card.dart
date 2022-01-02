@@ -70,13 +70,17 @@ class _PostCardState extends State<PostCard> {
   void initState() {
     // initialize liked/disliked
     if (widget.likes.contains(widget.currUserRef)) {
-      setState(() {
-        liked = true;
-      });
+      if (mounted) {
+        setState(() {
+          liked = true;
+        });
+      }
     } else if (widget.dislikes.contains(widget.currUserRef)) {
-      setState(() {
-        disliked = true;
-      });
+      if (mounted) {
+        setState(() {
+          disliked = true;
+        });
+      }
     }
     getUsername();
     getGroupName();
@@ -86,21 +90,25 @@ class _PostCardState extends State<PostCard> {
   void getUsername() async {
     final UserData? fetchUsername =
         await _userDataDatabaseService.getUserData(userRef: widget.userRef);
-    setState(() {
-      username = fetchUsername != null
-          ? fetchUsername.displayedName
-          : '<Failed to retrieve user name>';
-    });
+    if (mounted) {
+      setState(() {
+        username = fetchUsername != null
+            ? fetchUsername.displayedName
+            : '<Failed to retrieve user name>';
+      });
+    }
   }
 
   void getGroupName() async {
     final Group? fetchGroupName =
         await _groups.getGroupData(groupRef: widget.groupRef);
-    setState(() {
-      groupName = fetchGroupName != null
-          ? fetchGroupName.name
-          : '<Failed to retrieve group name>';
-    });
+    if (mounted) {
+      setState(() {
+        groupName = fetchGroupName != null
+            ? fetchGroupName.name
+            : '<Failed to retrieve group name>';
+      });
+    }
   }
 
   void openSpecificGroupFeed() async {
@@ -153,21 +161,7 @@ class _PostCardState extends State<PostCard> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => PostPage(
-                              postInfo: Post(
-                            postRef: widget.postRef,
-                            userRef: widget.userRef,
-                            groupRef: widget.groupRef,
-                            title: widget.title,
-                            LCtitle: widget.LCtitle,
-                            text: widget.text,
-                            media: widget.media,
-                            createdAt: widget.createdAt,
-                            likes: widget.likes,
-                            dislikes: widget.dislikes,
-                            numComments: widget.numComments,
-                            reports: widget.reportedStatus,
-                            tags: widget.tags,
-                          ))),
+                              postRef: widget.postRef)),
                 );
               },
               trailing: DeletePost(

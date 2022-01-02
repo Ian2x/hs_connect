@@ -52,9 +52,11 @@ class _RegisterEmailState extends State<RegisterEmail> {
                   hintText: 'Email'
               ),
               onChanged: (value) {
-                setState(() {
-                  email = value.trim();
-                });
+                if (mounted) {
+                  setState(() {
+                    email = value.trim();
+                  });
+                }
               },
             ),
           ),
@@ -64,7 +66,9 @@ class _RegisterEmailState extends State<RegisterEmail> {
                 ElevatedButton(
                   child: Text('Verify'),
                   onPressed: () async {
-                    setState(() => loading = true);
+                    if (mounted) {
+                      setState(() => loading = true);
+                    }
                     dynamic result =  await _auth.createEmailUser(email);
 
                     if (result is User?) {
@@ -72,18 +76,22 @@ class _RegisterEmailState extends State<RegisterEmail> {
                       final String domain = email.substring(tempIndex);
                       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => WaitVerification(domain: domain)));
                     } else if (result is FirebaseAuthException) {
-                      setState(() {
-                        String errorMsg = '';
-                        if (result.message != null) errorMsg += result.message!;
-                        errorMsg += 'If you think this is a mistake, please contact us at ___ for support. [Error Code: ' + result.code + ']';
-                        error = errorMsg;
-                        loading = false;
-                      });
+                      if (mounted) {
+                        setState(() {
+                          String errorMsg = '';
+                          if (result.message != null) errorMsg += result.message!;
+                          errorMsg += 'If you think this is a mistake, please contact us at ___ for support. [Error Code: ' + result.code + ']';
+                          error = errorMsg;
+                          loading = false;
+                        });
+                      }
                     } else {
-                      setState(() {
-                        error = 'ERROR: [' + result.toString() + ']. Please contact us at ___ for support.';
-                        loading = false;
-                      });
+                      if (mounted) {
+                        setState(() {
+                          error = 'ERROR: [' + result.toString() + ']. Please contact us at ___ for support.';
+                          loading = false;
+                        });
+                      }
                     }
                   }
                 )

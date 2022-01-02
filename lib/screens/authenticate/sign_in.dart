@@ -58,7 +58,9 @@ class _SignInState extends State<SignIn> {
                     return null;
                 },
                 onChanged: (val) {
-                  setState(() => username = val);
+                  if (mounted) {
+                    setState(() => username = val);
+                  }
                 }),
             SizedBox(height: 20.0),
             TextFormField(
@@ -72,7 +74,9 @@ class _SignInState extends State<SignIn> {
                     return null;
                 },
                 onChanged: (val) {
-                  setState(() => password = val);
+                  if (mounted) {
+                    setState(() => password = val);
+                  }
                 }),
             SizedBox(height: 20.0),
             ElevatedButton(
@@ -82,13 +86,17 @@ class _SignInState extends State<SignIn> {
                 onPressed: () async {
                   if (_formKey.currentState != null &&
                       _formKey.currentState!.validate()) {
-                    setState(() => loading = true);
+                    if (mounted) {
+                      setState(() => loading = true);
+                    }
                     dynamic result = await _auth.signInWithUsernameAndPassword(username, password);
                     if (!(result is User?)) {
-                      setState(() {
-                        error = 'Could not sign in with those credentials';
-                        loading = false;
-                      });
+                      if (mounted) {
+                        setState(() {
+                          error = 'Could not sign in with those credentials';
+                          loading = false;
+                        });
+                      }
                     }
                   }
                 },

@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/ref_ranking.dart';
 import 'package:hs_connect/models/post.dart';
+import 'package:hs_connect/models/search_result.dart';
 import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:rxdart/rxdart.dart';
 
 void defaultFunc(dynamic parameter) {}
 
@@ -59,6 +61,7 @@ class GroupsDatabaseService {
           })
           .then(onValue)
           .catchError(onError);
+      newGroupRef.update({'selfRef': newGroupRef});
       if (creatorRef != null) {
         UserDataDatabaseService _users = UserDataDatabaseService(userRef: creatorRef);
         newGroupRef.update({'numMembers': FieldValue.increment(1)});
@@ -199,11 +202,24 @@ class GroupsDatabaseService {
     return test;
   }
 
-  Stream searchStream(String searchKey) {
+  SearchResult _streamResultFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
+    return SearchResult(
+      resultRef: querySnapshot.reference,
+      resultType: SearchResultType.groups,
+      resultDescription: querySnapshot['createdAt'].toString(),
+      resultText: querySnapshot['name'],
+    );
+  }
+
+  Stream<List<SearchResult>> searchStream(String searchKey, List<DocumentReference> allowableGroupRefs) {
+
+    final LCsearchKey = searchKey.toLowerCase();
+    if (allowableGroupRefs.length == 0) return Stream.empty();
     return groupsCollection
-        .where('TDLR IN ALLOWABLE GROUPS')
-        .where('fieldName', isGreaterThanOrEqualTo: searchKey)
-        .where('fieldName', isLessThan: searchKey + 'z')
-        .snapshots();
+        .where('selfRef', whereIn: allowableGroupRefs)
+        .where('LCname', isGreaterThanOrEqualTo: LCsearchKey)
+        .where('LCname', isLessThan: LCsearchKey + 'z')
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map(_streamResultFromQuerySnapshot).toList());
   }
 }

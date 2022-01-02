@@ -48,13 +48,17 @@ class _ReplyCardState extends State<ReplyCard> {
   void initState() {
     // initialize liked/disliked
     if (widget.likes.contains(widget.currUserRef)) {
-      setState(() {
-        liked = true;
-      });
+      if (mounted) {
+        setState(() {
+          liked = true;
+        });
+      }
     } else if (widget.likes.contains(widget.currUserRef)) {
-      setState(() {
-        disliked = true;
-      });
+      if (mounted) {
+        setState(() {
+          disliked = true;
+        });
+      }
     }
     // find username for userId
     // _userInfoDatabaseService.userId = widget.userId;
@@ -65,13 +69,17 @@ class _ReplyCardState extends State<ReplyCard> {
   void getUsername() async {
     if (widget.userRef != null) {
       final UserData? fetchUsername = await _userInfoDatabaseService.getUserData(userRef: widget.userRef!);
-      setState(() {
-        username = fetchUsername != null ? fetchUsername.displayedName : '<Failed to retrieve user name>';
-      });
+      if (mounted) {
+        setState(() {
+          username = fetchUsername != null ? fetchUsername.displayedName : '<Failed to retrieve user name>';
+        });
+      }
     } else {
-      setState(() {
-        username = '[Removed]';
-      });
+      if (mounted) {
+        setState(() {
+          username = '[Removed]';
+        });
+      }
     }
   }
 
@@ -96,9 +104,11 @@ class _ReplyCardState extends State<ReplyCard> {
             ) : Container(),
       ])),
       onDismissed: (DismissDirection direction) {
-        setState(() {
-          _replies.deleteReply(replyRef: widget.replyRef, commentRef: widget.commentRef, postRef: widget.postRef, userRef: widget.currUserRef, media: widget.media);
-        });
+        if (mounted) {
+          setState(() {
+            _replies.deleteReply(replyRef: widget.replyRef, commentRef: widget.commentRef, postRef: widget.postRef, userRef: widget.currUserRef, media: widget.media);
+          });
+        }
       },
     );
   }

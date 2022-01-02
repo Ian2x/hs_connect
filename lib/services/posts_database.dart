@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/report.dart';
+import 'package:hs_connect/models/search_result.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/constants.dart';
 
@@ -150,6 +151,34 @@ class PostsDatabaseService {
     }
   }
 
+  Post? _postFromSnapshot(DocumentSnapshot snapshot) {
+    if (snapshot.exists) {
+      final temp = Post(
+        postRef: snapshot.reference,
+        userRef: snapshot.get('userRef'),
+        groupRef: snapshot.get('groupRef'),
+        media: snapshot.get('media'),
+        title: snapshot.get('title'),
+        LCtitle: snapshot.get('LCtitle'),
+        text: snapshot.get('text'),
+        createdAt: snapshot.get('createdAt'),
+        numComments: snapshot.get('numComments'),
+        likes: (snapshot.get('likes') as List).map((item) => item as DocumentReference).toList(),
+        dislikes: (snapshot.get('dislikes') as List).map((item) => item as DocumentReference).toList(),
+        reports: (snapshot.get('reports') as List).map((item) => item as DocumentReference).toList(),
+        tags: (snapshot.get('tags') as List).map((item) => item as String).toList(),
+      );
+      return temp;
+    } else {
+      return null;
+    }
+  }
+
+
+  Future<Post?> getPost(DocumentReference postRef) async {
+    return _postFromSnapshot(await postRef.get());
+  }
+
   Stream<List<Post?>> get posts {
     return postsCollection
         .where('groupRef', whereIn: groupRefs)
@@ -177,6 +206,26 @@ class PostsDatabaseService {
         .where('tags', arrayContainsAny: searchTags)
         .snapshots()
         .map((snapshot) => snapshot.docs.map(_postFromQuerySnapshot).toList());
+  }
+
+  SearchResult _streamResultFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
+    return SearchResult(
+        resultRef: querySnapshot.reference,
+        resultType: SearchResultType.posts,
+        resultDescription: querySnapshot['createdAt'].toString(),
+        resultText: querySnapshot['title'],
+    );
+  }
+
+  Stream<List<SearchResult>> searchStream(String searchKey, List<DocumentReference> allowableGroupsRefs) {
+    final LCsearchKey = searchKey.toLowerCase();
+    if (allowableGroupsRefs.length==0) return Stream.empty();
+    return postsCollection
+        .where('groupRef', whereIn: allowableGroupsRefs)
+        .where('LCtitle', isGreaterThanOrEqualTo: LCsearchKey)
+        .where('LCtitle', isLessThan: LCsearchKey + 'z')
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map(_streamResultFromQuerySnapshot).toList());
   }
 
 }

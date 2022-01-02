@@ -56,7 +56,9 @@ class _RegisterUserState extends State<RegisterUser> {
                           return null;
                       },
                       onChanged: (val) {
-                        setState(() => username = val);
+                        if (mounted) {
+                          setState(() => username = val);
+                        }
                       }),
                   SizedBox(height: 20.0),
                   TextFormField(
@@ -71,7 +73,9 @@ class _RegisterUserState extends State<RegisterUser> {
                           return null;
                       },
                       onChanged: (val) {
-                        setState(() => password = val);
+                        if (mounted) {
+                          setState(() => password = val);
+                        }
                       }),
                   SizedBox(height: 20.0),
                   ElevatedButton(
@@ -81,7 +85,9 @@ class _RegisterUserState extends State<RegisterUser> {
                       onPressed: () async {
                         if (_formKey.currentState != null &&
                             _formKey.currentState!.validate()) {
-                          setState(() => loading = true);
+                          if (mounted) {
+                            setState(() => loading = true);
+                          }
 
                           dynamic result =
                               await _auth.registerWithUsernameAndPassword(
@@ -92,11 +98,13 @@ class _RegisterUserState extends State<RegisterUser> {
                                 MaterialPageRoute(
                                     builder: (context) => Wrapper()));
                           } else if (result is FirebaseAuthException && result.code == 'email-already-in-use'){
-                            setState(() {
-                              error =
-                              'Username already in use.';
-                              loading = false;
-                            });
+                            if (mounted) {
+                              setState(() {
+                                error =
+                                'Username already in use.';
+                                loading = false;
+                              });
+                            }
                           } else if (result is FirebaseAuthException) {
                             String errorMsg = '';
                             if (result.message != null) errorMsg += result.message!;
@@ -104,10 +112,12 @@ class _RegisterUserState extends State<RegisterUser> {
                             error = errorMsg;
                             loading = false;
                           } else {
-                            setState(() {
-                              error = 'ERROR: [' + result.toString() + ']. Please contact us at ___ for support.';
-                              loading = false;
-                            });
+                            if (mounted) {
+                              setState(() {
+                                error = 'ERROR: [' + result.toString() + ']. Please contact us at ___ for support.';
+                                loading = false;
+                              });
+                            }
                           }
                         }
                       },

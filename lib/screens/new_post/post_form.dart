@@ -28,9 +28,11 @@ class _PostFormState extends State<PostForm> {
   final _GroupsDatabaseService = GroupsDatabaseService();
 
   void handleError(err) {
-    setState(() {
-      error = 'ERROR: something went wrong, possibly with username to email conversion';
-    });
+    if (mounted) {
+      setState(() {
+        error = 'ERROR: something went wrong, possibly with username to email conversion';
+      });
+    }
   }
 
   void handleValue(val) {
@@ -61,9 +63,11 @@ class _PostFormState extends State<PostForm> {
     final userData = Provider.of<UserData?>(context);
 
     void setPic(File x) {
-      setState(() {
-        newFile = x;
-      });
+      if (mounted) {
+        setState(() {
+          newFile = x;
+        });
+      }
     }
 
     if (userData == null) {
@@ -96,7 +100,11 @@ class _PostFormState extends State<PostForm> {
                           else
                             return null;
                         },
-                        onChanged: (val) => setState(() => _title = val),
+                        onChanged: (val) {
+                          if (mounted) {
+                            setState(() => _title = val);
+                          }
+                        },
                       ),
                       SizedBox(height: 5.0),
                       Text('Post text'),
@@ -110,7 +118,11 @@ class _PostFormState extends State<PostForm> {
                           else
                             return null;
                         },
-                        onChanged: (val) => setState(() => _text = val),
+                        onChanged: (val) {
+                          if (mounted) {
+                            setState(() => _text = val);
+                          }
+                        },
                       ),
                       SizedBox(height: 5.0),
                       DropdownButtonFormField<String>(
@@ -122,7 +134,11 @@ class _PostFormState extends State<PostForm> {
                             child: Text('${group['name']}'),
                           );
                         }).toList(),
-                        onChanged: (val) => setState(() => _groupId = val!),
+                        onChanged: (val) {
+                          if (mounted) {
+                            setState(() => _groupId = val!);
+                          }
+                        },
                         validator: (val) {
                           if (val == null)
                             return 'Must select an access restriction';
@@ -140,7 +156,11 @@ class _PostFormState extends State<PostForm> {
                               child: Text(tag),
                             );
                           }).toList(),
-                          onChanged: (val) => setState(() => _tag = val!),
+                          onChanged: (val) {
+                            if (mounted) {
+                              setState(() => _tag = val!);
+                            }
+                          },
                       ),
                       PicPickerButton(setPic: setPic),
                       newFile != null ?
@@ -158,13 +178,17 @@ class _PostFormState extends State<PostForm> {
                             if (newFile != null) {
                               // upload newFile
                               final downloadURL = await _images.uploadImage(file: newFile!);
-                              setState(() {
-                                newFileURL = downloadURL;
-                              });
+                              if (mounted) {
+                                setState(() {
+                                  newFileURL = downloadURL;
+                                });
+                              }
                             }
 
                             if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-                              setState(() => loading = true);
+                              if (mounted) {
+                                setState(() => loading = true);
+                              }
                               await PostsDatabaseService(userRef: userData.userRef).newPost(
                                 title: _title,
                                 text: _text,

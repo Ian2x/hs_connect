@@ -49,13 +49,17 @@ class _GroupCardState extends State<GroupCard> {
   void getUsername() async {
     if (widget.userRef!=null) {
       final UserData? fetchUsername = await _userInfoDatabaseService.getUserData(userRef: widget.userRef!);
-      setState(() {
-        username = fetchUsername != null ? fetchUsername.displayedName : '<Failed to retrieve user name>';
-      });
+      if (mounted) {
+        setState(() {
+          username = fetchUsername != null ? fetchUsername.displayedName : '<Failed to retrieve user name>';
+        });
+      }
     } else {
-      setState(() {
-        username = '';
-      });
+      if (mounted) {
+        setState(() {
+          username = '';
+        });
+      }
     }
   }
 

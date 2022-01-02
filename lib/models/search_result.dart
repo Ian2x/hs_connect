@@ -1,14 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-enum ResultType {
+enum SearchResultType {
   posts,
   groups,
   people
 }
 
+extension SearchResultTypeExtension on SearchResultType {
+  String get stringValue {
+    switch (this) {
+      case SearchResultType.posts:
+        return 'posts';
+      case SearchResultType.people:
+        return 'people';
+      default:
+        return 'groups';
+    }
+  }
+}
+
 class SearchResult {
   final DocumentReference resultRef;
-  final ResultType resultType;
+  final SearchResultType resultType;
   final String resultText;
   final String? resultDescription;
 
