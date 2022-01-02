@@ -22,7 +22,7 @@ class PostsDatabaseService {
   // collection reference
   final CollectionReference postsCollection = FirebaseFirestore.instance.collection('posts');
 
-  Future<DocumentReference> newPost({required String title, required String text,
+  Future<dynamic> newPost({required String title, required String text,
     required String? mediaURL,
     required DocumentReference groupRef,
     required List<String> tags,
@@ -36,6 +36,7 @@ class PostsDatabaseService {
       'userRef': userRef,
       'groupRef': groupRef,
       'title': title,
+      'LCtitle': title.toLowerCase(),
       'text': text,
       'media': mediaURL,
       'createdAt': DateTime.now(),
@@ -134,6 +135,7 @@ class PostsDatabaseService {
         groupRef: querySnapshot['groupRef'],
         media: querySnapshot['media'],
         title: querySnapshot['title'],
+        LCtitle: querySnapshot['LCtitle'],
         text: querySnapshot['text'],
         createdAt: querySnapshot['createdAt'],
         numComments: querySnapshot['numComments'],

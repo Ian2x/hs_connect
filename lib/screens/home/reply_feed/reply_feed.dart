@@ -32,7 +32,6 @@ class _RepliesFeedState extends State<RepliesFeed> {
     return StreamBuilder(
       stream: _replies.commentReplies,
       builder: (context, snapshot) {
-        print(snapshot.connectionState);
         if (!snapshot.hasData) {
           return Loading();
         } else {

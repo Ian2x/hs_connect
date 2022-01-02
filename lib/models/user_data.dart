@@ -19,6 +19,7 @@ class UserGroup {
 class UserData {
   final DocumentReference userRef;
   final String displayedName;
+  final String LCdisplayedName;
   final String domain;
   final String? county;
   final String? state;
@@ -32,6 +33,7 @@ class UserData {
   UserData({
     required this.userRef,
     required this.displayedName,
+    required this.LCdisplayedName,
     required this.domain,
     required this.county,
     required this.state,

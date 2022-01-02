@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
@@ -48,6 +49,7 @@ class GroupsDatabaseService {
             'creatorRef': creatorRef,
             'moderatorRefs': [],
             'name': name,
+            'LCname': name.toLowerCase(),
             'image': image,
             'description': description,
             'accessRestrictions': accessRestrictions.asMap(),
@@ -126,6 +128,7 @@ class GroupsDatabaseService {
         groupRef: snapshot.reference,
         creatorRef: snapshot.get('creatorRef'),
         name: snapshot.get('name'),
+        LCname: snapshot.get('LCname'),
         image: snapshot.get('image'),
         description: snapshot.get('description'),
         accessRestrictions: AccessRestriction(
@@ -182,15 +185,25 @@ class GroupsDatabaseService {
         groupScores.update(post.groupRef, (value) => value + 1, ifAbsent: () => 1);
       }
     });
-
     List<refRanking> groupScoresList =
         groupScores.entries.map((ele) => refRanking(ref: ele.key, count: ele.value)).toList();
     groupScoresList.sort(refRankingCompare);
-    return groupsCollection
+    List<refRanking> shortGroupScoresList = groupScoresList.sublist(0,min(10,groupScoresList.length));
+
+    final test = groupsCollection
         .where(FieldPath.documentId,
-            whereIn: groupScoresList.map((refRanking) {
+            whereIn: shortGroupScoresList.map((refRanking) {
               return refRanking.ref.id;
             }).toList())
         .get();
+    return test;
+  }
+
+  Stream searchStream(String searchKey) {
+    return groupsCollection
+        .where('TDLR IN ALLOWABLE GROUPS')
+        .where('fieldName', isGreaterThanOrEqualTo: searchKey)
+        .where('fieldName', isLessThan: searchKey + 'z')
+        .snapshots();
   }
 }

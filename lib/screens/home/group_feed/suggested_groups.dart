@@ -42,6 +42,7 @@ class _SuggestedGroupsState extends State<SuggestedGroups> {
                 return Group(
                     groupRef: docSnapshot.reference,
                     creatorRef: docSnapshot.get("creatorRef"),
+                    LCname: docSnapshot.get("LCname"),
                     name: docSnapshot.get("name"),
                     image: docSnapshot.get("image"),
                     description: docSnapshot.get("description"),
@@ -55,7 +56,6 @@ class _SuggestedGroupsState extends State<SuggestedGroups> {
                     numMembers: docSnapshot.get('numMembers'),
                 );
               }).toList();
-              print(groups);
 
               return ListView.builder(
                 itemCount: groups.length,

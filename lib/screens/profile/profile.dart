@@ -55,7 +55,7 @@ class Profile extends StatelessWidget {
               color: HexColor('FFFFFF'),
 
             ),
-        bottomNavigationBar: navbar(),
+        bottomNavigationBar: navbar(currentIndex: 3,),
           );
     } else {
 

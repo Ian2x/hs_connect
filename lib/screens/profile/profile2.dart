@@ -107,7 +107,7 @@ class _profile2State extends State<profile2> {
           //buildGroupTileScroll(),
         ],
       ),
-      bottomNavigationBar: navbar(),
+      bottomNavigationBar: navbar(currentIndex: 3,),
     );
   }
 

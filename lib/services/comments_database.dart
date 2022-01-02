@@ -19,7 +19,7 @@ class CommentsDatabaseService {
   // collection reference
   final CollectionReference commentsCollection = FirebaseFirestore.instance.collection('comments');
 
-  Future<DocumentReference> newComment({required String text,
+  Future newComment({required String text,
     required String? mediaURL,
     required DocumentReference postRef,
     Function(void) onValue = defaultFunc,

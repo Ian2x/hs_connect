@@ -32,7 +32,7 @@ class NewPost extends StatelessWidget {
       body: Container(
         child: PostForm(),
       ),
-      bottomNavigationBar: navbar(),
+      bottomNavigationBar: navbar(currentIndex: 2,),
     );
   }
 }

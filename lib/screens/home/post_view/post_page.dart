@@ -11,8 +11,8 @@ import 'package:hs_connect/screens/home/post_view/Widgets/RoundedPostCard.dart';
 import 'package:provider/provider.dart';
 
 class PostPage extends StatefulWidget {
-
   final Post postInfo;
+
   PostPage({Key? key, required this.postInfo}) : super(key: key);
 
   @override
@@ -20,66 +20,43 @@ class PostPage extends StatefulWidget {
 }
 
 class _PostPageState extends State<PostPage> {
-
   GroupsDatabaseService _groups = GroupsDatabaseService();
 
-  String groupName= 'Loading Group name...';
+  String groupName = 'Loading Group name...';
 
   void getGroupName() async {
-    print("getting groupName");
-    final Group? fetchGroupName =
-    await _groups.getGroupData(groupRef: widget.postInfo.groupRef);
-    groupName = fetchGroupName != null
-        ? fetchGroupName.name
-        : '<Failed to retrieve group name>';
+    final Group? fetchGroupName = await _groups.getGroupData(groupRef: widget.postInfo.groupRef);
+    if (mounted) {
+      setState(() {
+        groupName = fetchGroupName != null ? fetchGroupName.name : '<Failed to retrieve group name>';
+      });
+    }
   }
 
   @override
   void initState() {
-    // initialize liked/disliked
-    // find username for userId
-    // _userInfoDatabaseService.userId = widget.userId;
     getGroupName();
     super.initState();
   }
 
-@override
-Widget build(BuildContext context) {
-
-      final userData = Provider.of<UserData?>(context);
-      if (userData==null){
-        return Text("loading");
-      }
-
-      getGroupName();
-
-      return Scaffold(
-        backgroundColor: HexColor("FFFFFF"),
-        appBar: AppBar(
-          title: Text(groupName,
-              style: TextStyle(color: HexColor('222426'),//fontFamily)
-              )),
-          backgroundColor: HexColor("FFFFFF"),
-          elevation: 0.0,
-        ),
-        body: Stack(
-          children:[
-            ListView(
-              scrollDirection: Axis.vertical,
-              children: [
-                RoundedPostCard(postInfo:widget.postInfo, userRef: userData.userRef),
-                Divider(thickness:3,color: HexColor('E9EDF0') , height:20),
-                CommentsFeed(postRef: widget.postInfo.postRef),
-              ],
-            )
-
-          ],
-        ),
-      );
-
+  @override
+  Widget build(BuildContext context) {
+    final userData = Provider.of<UserData?>(context);
+    if (userData == null) {
+      return Text("loading");
     }
+
+    return Scaffold(
+      backgroundColor: HexColor("FFFFFF"),
+      appBar: AppBar(
+        title: Text(groupName,
+            style: TextStyle(
+              color: HexColor('222426'), //fontFamily)
+            )),
+        backgroundColor: HexColor("FFFFFF"),
+        elevation: 0.0,
+      ),
+      body:  CommentsFeed(postInfo: widget.postInfo),
+    );
   }
-
-
-
-
+}

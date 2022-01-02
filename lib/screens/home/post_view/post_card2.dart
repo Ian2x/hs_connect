@@ -20,6 +20,7 @@ class PostCard2 extends StatefulWidget {
   final DocumentReference userRef;
   final DocumentReference groupRef;
   final String title;
+  final String LCtitle;
   final String text;
   final String? media;
   final Timestamp createdAt;
@@ -36,6 +37,7 @@ class PostCard2 extends StatefulWidget {
         required this.userRef,
         required this.groupRef,
         required this.title,
+        required this.LCtitle,
         required this.text,
         required this.media,
         required this.createdAt,
@@ -103,7 +105,6 @@ class _PostCard2State extends State<PostCard2> {
   }
 
   void openSpecificGroupFeed() async {
-    print("adsf");
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -126,6 +127,7 @@ class _PostCard2State extends State<PostCard2> {
                     userRef: widget.userRef,
                     groupRef: widget.groupRef,
                     title: widget.title,
+                    LCtitle: widget.LCtitle,
                     text: widget.text,
                     media: widget.media,
                     createdAt: widget.createdAt,

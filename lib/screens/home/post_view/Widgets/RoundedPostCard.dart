@@ -50,13 +50,17 @@ class _RoundedPostCardState extends State<RoundedPostCard> {
  void initState() {
   // initialize liked/disliked
   if (widget.postInfo.likes.contains(widget.userRef)) {
-   setState(() {
-    liked = true;
-   });
+   if (mounted) {
+    setState(() {
+     liked = true;
+    });
+   }
   } else if (widget.postInfo.dislikes.contains(widget.userRef)) {
-   setState(() {
-    disliked = true;
-   });
+   if (mounted) {
+    setState(() {
+     disliked = true;
+    });
+   }
   }
   // find username for userId
   // _userInfoDatabaseService.userId = widget.postInfo.userId;
@@ -67,21 +71,24 @@ class _RoundedPostCardState extends State<RoundedPostCard> {
 
  void getUserData() async {
   final UserData? fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.postInfo.userRef);
-  setState(() {
-   username = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
-   userDomain = fetchUserData != null ? fetchUserData.domain : '<Failed to retrieve user domain>';
-  });
+  if (mounted) {
+   setState(() {
+    username = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
+    userDomain = fetchUserData != null ? fetchUserData.domain : '<Failed to retrieve user domain>';
+   });
+  }
  }
 
  void getGroupName() async {
   final Group? fetchGroupName = await _groups.getGroupData(groupRef: widget.postInfo.groupRef);
-  setState(() {
-   groupName = fetchGroupName != null ? fetchGroupName.name : '<Failed to retrieve group name>';
-  });
+  if (mounted) {
+   setState(() {
+    groupName = fetchGroupName != null ? fetchGroupName.name : '<Failed to retrieve group name>';
+   });
+  }
  }
 
  void openSpecificGroupFeed() async {
-  print("adsf");
   Navigator.push(
    context,
    MaterialPageRoute(
@@ -93,7 +100,6 @@ class _RoundedPostCardState extends State<RoundedPostCard> {
 
  @override
  Widget build(BuildContext context) {
-
 
   return Card(
        margin: EdgeInsets.fromLTRB(6.0, 1.0, 6.0, 0.0),
