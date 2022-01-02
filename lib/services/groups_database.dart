@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
-import 'package:hs_connect/models/ref_ranking.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/search_result.dart';
 import 'package:hs_connect/models/user_data.dart';
@@ -18,6 +17,21 @@ void defaultFunc(dynamic parameter) {}
 int compareDocRef(dynamic dr1, dynamic dr2) {
   return dr1.id.compareTo(dr2.id);
 }
+
+int refRankingCompare(a, b) {
+  return b.count - a.count;
+}
+
+class refRanking {
+  final DocumentReference ref;
+  final int count;
+
+  refRanking({
+    required this.ref,
+    required this.count,
+  });
+}
+
 
 class GroupsDatabaseService {
   final DocumentReference? userRef;

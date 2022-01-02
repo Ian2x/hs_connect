@@ -68,7 +68,7 @@ class _SuggestedGroupsState extends State<SuggestedGroups> {
                     groupRef: groups[index].groupRef,
                     userRef: groups[index].creatorRef,
                     name: groups[index].name,
-                    image: groups[index].image,
+                    image: groups[index].profileImage,
                     description: groups[index].description,
                     accessRestrictions: groups[index].accessRestrictions,
                     currUserRef: userData.userRef,

@@ -8,7 +8,7 @@ class Message {
   final String text;
   final bool isMedia;
   final Timestamp createdAt;
-  final DocumentReference? reportedStatus;
+  final List<DocumentReference> reportsRef;
 
 
 
@@ -19,6 +19,6 @@ class Message {
     required this.text,
     required this.isMedia,
     required this.createdAt,
-    required this.reportedStatus,
+    required this.reportsRef,
   });
 }

@@ -38,6 +38,7 @@ dependencies:
   image: ^3.0.5
   timeago: ^3.1.0
   rxdart: ^0.27.3
+  quiver: ^3.0.1+1
 
 dev_dependencies:
   flutter_test:

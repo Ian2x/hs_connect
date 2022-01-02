@@ -49,7 +49,7 @@ class userProfile extends StatelessWidget {
           elevation: 0.0,
         ),
         body: Container(
-          child: ProfileForm(currDisplayName: userData.displayedName, currImageURL: userData.image,),
+          child: ProfileForm(currDisplayName: userData.displayedName, currImageURL: userData.profileImage,),
         ),
         bottomNavigationBar: navbar(currentIndex: 3,),
       );
