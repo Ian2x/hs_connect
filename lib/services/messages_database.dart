@@ -73,7 +73,7 @@ class MessagesDatabaseService {
         text: document['text'],
         isMedia: document['isMedia'],
         createdAt: document['createdAt'],
-        reportedStatus: document['reportedStatus'],
+        reportsRef: document['reportedStatus'],
       );
     } else {
       return null;

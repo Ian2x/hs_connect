@@ -57,7 +57,7 @@ class _Search2State extends State<Search2> {
       setState(() {
         _appBarTitle = new TextField(
           controller: _filter,
-          decoration: new InputDecoration(hintText: 'Search for ' + _resultType.stringValue),
+          decoration: new InputDecoration(hintText: 'Search for ' + _resultType.string),
         );
       });
     }
@@ -91,7 +91,7 @@ class _Search2State extends State<Search2> {
           DropdownButton<SearchResultType>(
             value: _resultType,
             items: SearchResultType.values
-                .map((SearchResultType srt) => DropdownMenuItem<SearchResultType>(value: srt, child: Text(srt.stringValue)))
+                .map((SearchResultType srt) => DropdownMenuItem<SearchResultType>(value: srt, child: Text(srt.string)))
                 .toList(),
             onChanged: (SearchResultType? newValue) {
               if (mounted) {
@@ -99,7 +99,7 @@ class _Search2State extends State<Search2> {
                   _resultType = newValue != null ? newValue : SearchResultType.groups;
                   _appBarTitle = new TextField(
                     controller: _filter,
-                    decoration: new InputDecoration(hintText: 'Search for ' + _resultType.stringValue),
+                    decoration: new InputDecoration(hintText: 'Search for ' + _resultType.string),
                   );
                 });
               }

@@ -51,7 +51,7 @@ class _profile2State extends State<profile2> {
     if (mounted) {
       setState(() {
         profileUsername = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
-        profileImage = fetchUserData != null ? fetchUserData.image : '<Failed to retrieve user Image>';
+        profileImage = fetchUserData != null ? fetchUserData.profileImage : '<Failed to retrieve user Image>';
         profileGroupCount = fetchUserData != null ? fetchUserData.userGroups.length : 0;
         profileScore = fetchUserData != null ? fetchUserData.score : 0;
       });

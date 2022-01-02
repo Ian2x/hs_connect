@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'access_restriction.dart';
+import 'accessRestriction.dart';
 
 class Group {
   final DocumentReference groupRef;

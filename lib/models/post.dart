@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/report.dart';
-import 'access_restriction.dart';
+import 'package:hs_connect/shared/constants.dart';
+import 'accessRestriction.dart';
 import 'group.dart';
 
 class Post {
@@ -16,8 +17,8 @@ class Post {
   final AccessRestriction accessRestrictions;
   final List<DocumentReference> likes;
   final List<DocumentReference> dislikes;
-  final List<DocumentReference> reports;
-  final List<String> tags;
+  final List<DocumentReference> reportsRefs;
+  final Tag tag;
 
   Post({
     required this.postRef,
@@ -32,7 +33,7 @@ class Post {
     required this.accessRestrictions,
     required this.likes,
     required this.dislikes,
-    required this.reports,
-    required this.tags,
+    required this.reportsRefs,
+    required this.tag,
   });
 }

@@ -7,7 +7,7 @@ enum SearchResultType {
 }
 
 extension SearchResultTypeExtension on SearchResultType {
-  String get stringValue {
+  String get string {
     switch (this) {
       case SearchResultType.posts:
         return 'posts';

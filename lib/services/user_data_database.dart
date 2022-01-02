@@ -98,9 +98,9 @@ class UserDataDatabaseService {
                 text: message['text'],
                 createdAt: message['createdAt'],
                 isMedia: message['isMedia'],
-                reportedStatus: message['reportedStatus']))
+                reportsRef: message['reportedStatus']))
             .toList(),
-        image: snapshot.get('imageURL'),
+        profileImage: snapshot.get('imageURL'),
         score: snapshot.get('score'),
         warnings: snapshot.get('warnings'),
       );
