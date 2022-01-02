@@ -17,7 +17,7 @@ import 'package:hs_connect/shared/tools/hexcolor.dart';
 
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:hs_connect/screens/profile/profileWidget/profileForm_page.dart';
 import 'package:hs_connect/screens/profile/profileWidget/appbar_widget.dart';
 import 'package:hs_connect/screens/profile/profileWidget/button_widget.dart';
 import 'package:hs_connect/screens/profile/profileWidget/numbers_widget.dart';
@@ -38,6 +38,10 @@ class _profile2State extends State<profile2> {
 
   String profileUsername = '<Loading user name...>';
 
+  String? profileImage;
+  int profileGroupCount=0;
+  int profileScore= 0;
+
   UserDataDatabaseService _userInfoDatabaseService = UserDataDatabaseService();
 
   //  GroupsDatabaseService _groups = GroupsDatabaseService();
@@ -46,30 +50,40 @@ class _profile2State extends State<profile2> {
     final UserData? fetchUserData = await _userInfoDatabaseService.getUserData(userRef: widget.profilePersonRef);
     setState(() {
       profileUsername = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
+      profileImage = fetchUserData != null ? fetchUserData.image : '<Failed to retrieve user Image>';
+      profileGroupCount = fetchUserData != null ? fetchUserData.userGroups.length : 0;
+      profileScore = fetchUserData != null ? fetchUserData.score : 0;
+
     });
   }
 
+
   @override
   void initState() {
-
     getProfileUserData();
+    super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
+
+    final userData = Provider.of<UserData?>(context);
+
+    print("1 " + profileUsername);
+    print(profileImage);
+
+
+    final user = Provider.of<User?>(context);
 
     if (_auth.user == null) {
       return Authenticate();
     }
 
-    final user = Provider.of<User?>(context);
-    final userData = Provider.of<UserData?>(context);
-
     // unnecessary?
     if (user==null) {
       return Authenticate();
     }
-
 
     return Scaffold(
       appBar: buildAppBar(context),
@@ -77,17 +91,19 @@ class _profile2State extends State<profile2> {
         physics: BouncingScrollPhysics(),
         children: [
           ProfileWidget(
+            profileImage: profileImage,
             onClicked: () async {},
           ),
           const SizedBox(height: 24),
           buildName(user),
           const SizedBox(height: 24),
-          Center(child: buildUpgradeButton()),
+          Center(child: buildEditButton()),
           const SizedBox(height: 24),
-          NumbersWidget(),
+          NumbersWidget(scoreCount:profileScore, groupCount: profileGroupCount),
           const SizedBox(height: 48),
           buildIconScroll(),
           const SizedBox(height: 24),
+          profileImage==null ? Text("no profile Image") : Image.network(profileImage!),
           //buildGroupTileScroll(),
         ],
       ),
@@ -109,9 +125,17 @@ class _profile2State extends State<profile2> {
     ],
   );
 
-  Widget buildUpgradeButton() => ButtonWidget(
+  Widget buildEditButton() => ButtonWidget(
     text: 'Edit Profile',
-    onClicked: () {},
+    onClicked: () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => profileForm_Page(
+          profileForm:(ProfileForm(currDisplayName: profileUsername, currImageURL: profileImage)),
+        )
+        )
+      );
+    },
   );
 
   Widget buildIconScroll() =>Container(

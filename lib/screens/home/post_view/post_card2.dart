@@ -9,6 +9,7 @@ import 'package:hs_connect/screens/home/post_view/post_page.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
+import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/tools/hexcolor.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
@@ -64,7 +65,10 @@ class _PostCard2State extends State<PostCard2> {
   String userDomain = '<Loading user domain...>';
   String username = '<Loading user name...>';
   String groupName = '<Loading group name...>';
-  Image groupImage = Image(image: AssetImage('assets/masonic-G.png'), height: 20, width: 20);
+
+  ImageStorage _images = ImageStorage();
+
+
 
   @override
   void initState() {
@@ -141,21 +145,56 @@ class _PostCard2State extends State<PostCard2> {
           //color: HexColor("#292929"),
           elevation: 0.0,
           child: Container(
-          /*
-          constraints: BoxConstraints.expand(
-            height: Theme.of(context).textTheme.headline4!.fontSize! * 1.1 + 200.0,
-          ),
-          */
-
           padding: const EdgeInsets.all(8.0),
           color: HexColor("FFFFFF"),
           alignment: Alignment(-1.0,-1.0), //Aligned to Top Left
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Icon(Icons.account_circle, size:40, color:Colors.black),
+                    Stack(
+                      children: [
+                        SizedBox(height:50,width:50),
+                        Positioned(
+                          bottom: 5,
+                          right: 5,
+                          child:
+                          Container(
+                              width: 40.0,
+                              height: 40.0,
+                              decoration: new BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: new DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image: new NetworkImage(
+                                          "https://i.imgur.com/BoN9kdC.png")
+                                  )
+                              )),
+                          //
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child:
+                            Container(
+                              height:35,
+                              width:33,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image: NetworkImage('https://googleflutter.com/sample_image.jpg'),
+                                    fit: BoxFit.fill
+                                  ),
+                                border: Border.all(color: Colors.white,width: 3)
+                                ),
+                          ),
+                          //
+                        )
+                      ],
+                    ),
 
                     //Spacer(),
                   ],
