@@ -25,14 +25,18 @@ class _SearchState extends State<Search> {
   _SearchState() {
     _filter.addListener(() {
       if (_filter.text.isEmpty) {
-        setState(() {
-          _searchText = "";
-          filteredResults = widget.searchResults;
-        });
+        if (mounted) {
+          setState(() {
+            _searchText = "";
+            filteredResults = widget.searchResults;
+          });
+        }
       } else {
-        setState(() {
-          _searchText = _filter.text;
-        });
+        if (mounted) {
+          setState(() {
+            _searchText = _filter.text;
+          });
+        }
       }
     });
   }
@@ -40,14 +44,16 @@ class _SearchState extends State<Search> {
   @override
   void initState() {
     this._getNames();
-    setState(() {
-      _appBarTitle = new TextField(
-        controller: _filter,
-        decoration: new InputDecoration(
-            hintText: 'Search...'
-        ),
-      );
-    });
+    if (mounted) {
+      setState(() {
+        _appBarTitle = new TextField(
+          controller: _filter,
+          decoration: new InputDecoration(
+              hintText: 'Search...'
+          ),
+        );
+      });
+    }
     super.initState();
   }
 
@@ -96,7 +102,6 @@ class _SearchState extends State<Search> {
                 MaterialPageRoute(builder: (context) =>
                     SpecificGroupFeed(groupRef: filteredResults[index].resultRef)), // GroupSearch()),
               );
-              print(filteredResults[index].resultText);
             },
           );
         },
@@ -105,9 +110,11 @@ class _SearchState extends State<Search> {
 
 
   void _getNames() async {
-    setState(() {
-      filteredResults = widget.searchResults;
-    });
+    if (mounted) {
+      setState(() {
+        filteredResults = widget.searchResults;
+      });
+    }
   }
 
 

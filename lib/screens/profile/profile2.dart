@@ -48,13 +48,14 @@ class _profile2State extends State<profile2> {
 
   void getProfileUserData() async {
     final UserData? fetchUserData = await _userInfoDatabaseService.getUserData(userRef: widget.profilePersonRef);
-    setState(() {
-      profileUsername = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
-      profileImage = fetchUserData != null ? fetchUserData.image : '<Failed to retrieve user Image>';
-      profileGroupCount = fetchUserData != null ? fetchUserData.userGroups.length : 0;
-      profileScore = fetchUserData != null ? fetchUserData.score : 0;
-
-    });
+    if (mounted) {
+      setState(() {
+        profileUsername = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
+        profileImage = fetchUserData != null ? fetchUserData.image : '<Failed to retrieve user Image>';
+        profileGroupCount = fetchUserData != null ? fetchUserData.userGroups.length : 0;
+        profileScore = fetchUserData != null ? fetchUserData.score : 0;
+      });
+    }
   }
 
 
@@ -69,10 +70,6 @@ class _profile2State extends State<profile2> {
   Widget build(BuildContext context) {
 
     final userData = Provider.of<UserData?>(context);
-
-    print("1 " + profileUsername);
-    print(profileImage);
-
 
     final user = Provider.of<User?>(context);
 

@@ -25,9 +25,11 @@ class _ReplyFormState extends State<ReplyForm> {
   final _formKey = GlobalKey<FormState>();
 
   void handleError(err) {
-    setState(() {
-      error = 'ERROR: something went wrong :(';
-    });
+    if (mounted) {
+      setState(() {
+        error = 'ERROR: something went wrong :(';
+      });
+    }
   }
 
   void handleValue(val) {
@@ -51,9 +53,11 @@ class _ReplyFormState extends State<ReplyForm> {
     final userData = Provider.of<UserData?>(context);
 
     void setPic(File newFile2) {
-      setState(() {
-        newFile = newFile2;
-      });
+      if (mounted) {
+        setState(() {
+          newFile = newFile2;
+        });
+      }
     }
 
     if (userData == null) {
@@ -68,15 +72,18 @@ class _ReplyFormState extends State<ReplyForm> {
               initialValue: '',
               decoration: messageInputDecoration(onPressed: () async {
                 if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-
-                  setState(() => loading = true);
+                  if (mounted) {
+                    setState(() => loading = true);
+                  }
 
                   if (newFile!=null) {
                     // upload newFile
                     final downloadURL = await _images.uploadImage(file: newFile!);
-                    setState(() {
-                      newFileURL = downloadURL;
-                    });
+                    if (mounted) {
+                      setState(() {
+                        newFileURL = downloadURL;
+                      });
+                    }
                   }
 
                   await RepliesDatabaseService(userRef: userData.userRef).newReply(
@@ -96,7 +103,11 @@ class _ReplyFormState extends State<ReplyForm> {
                 else
                   return null;
               },
-              onChanged: (val) => setState(() => _text = val),
+              onChanged: (val) {
+                if (mounted) {
+                  setState(() => _text = val);
+                }
+              },
             ),
             newFile != null
                 ? Semantics(

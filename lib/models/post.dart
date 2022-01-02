@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/report.dart';
+import 'access_restriction.dart';
+import 'group.dart';
 
 class Post {
   final DocumentReference postRef;
@@ -11,6 +13,7 @@ class Post {
   final String? media;
   final Timestamp createdAt;
   final int numComments;
+  final AccessRestriction accessRestrictions;
   final List<DocumentReference> likes;
   final List<DocumentReference> dislikes;
   final List<DocumentReference> reports;
@@ -26,6 +29,7 @@ class Post {
     required this.media,
     required this.createdAt,
     required this.numComments,
+    required this.accessRestrictions,
     required this.likes,
     required this.dislikes,
     required this.reports,

@@ -46,15 +46,18 @@ class _ProfileFormState extends State<ProfileForm> {
     final userData = Provider.of<UserData?>(context);
 
     void handleError(err) {
-      setState(() {
-        error =
-            'ERROR: something went wrong, possibly with username to email conversion';
-      });
+      if (mounted) {
+        setState(() {
+          error =
+          'ERROR: something went wrong, possibly with username to email conversion';
+        });
+      }
     }
 
     void handleValue(val) {
-      setState(() => loading = false);
-      // Navigator.pop(context);
+      if (mounted) {
+        setState(() => loading = false);
+      }// Navigator.pop(context);
     }
 
     if (userData == null) {
@@ -84,10 +87,17 @@ class _ProfileFormState extends State<ProfileForm> {
                 else
                   return null;
               },
-              onChanged: (val) =>
-                  setState(() => _displayedName = val),
+              onChanged: (val) {
+                if (mounted) {
+                  setState(() => _displayedName = val);
+                }
+              },
             ),
-            PicPickerButton(setPic: ((File? f) => setState(() {newFile = f;}))),
+            PicPickerButton(setPic: ((File? f) {
+              if (mounted) {
+                setState(() {newFile = f;});
+              }
+            })),
             newFile != null ?
               Semantics(
                 label: 'new_profile_pic_picked_image',
@@ -110,15 +120,17 @@ class _ProfileFormState extends State<ProfileForm> {
                 onPressed: () async {
                   if (_formKey.currentState != null &&
                       _formKey.currentState!.validate()) {
-
-                    setState(() => loading = true);
-
+                    if (mounted) {
+                      setState(() => loading = true);
+                    }
                     if (newFile!=null) {
                       // upload newFile
                       final downloadURL = await _images.uploadProfilePic(file: newFile!, oldImageURL: _initialImageURL);
-                      setState(() {
-                        newFileURL = downloadURL;
-                      });
+                      if (mounted) {
+                        setState(() {
+                          newFileURL = downloadURL;
+                        });
+                      }
                     }
 
                     await UserDataDatabaseService(userRef: userData.userRef)

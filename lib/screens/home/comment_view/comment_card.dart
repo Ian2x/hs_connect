@@ -53,13 +53,17 @@ class _CommentCardState extends State<CommentCard> {
   void initState() {
     // initialize liked/disliked
     if (widget.likes.contains(widget.currUserRef)) {
-      setState(() {
-        liked = true;
-      });
+      if (mounted) {
+        setState(() {
+          liked = true;
+        });
+      }
     } else if (widget.likes.contains(widget.currUserRef)) {
-      setState(() {
-        disliked = true;
-      });
+      if (mounted) {
+        setState(() {
+          disliked = true;
+        });
+      }
     }
     getUsername();
     super.initState();
@@ -69,15 +73,19 @@ class _CommentCardState extends State<CommentCard> {
     if (widget.userRef != null) {
       final UserData? fetchUsername = await _userDataDatabaseService
           .getUserData(userRef: widget.userRef!);
-      setState(() {
-        username = fetchUsername != null
-            ? fetchUsername.displayedName
-            : '<Failed to retrieve user name>';
-      });
+      if (mounted) {
+        setState(() {
+          username = fetchUsername != null
+              ? fetchUsername.displayedName
+              : '<Failed to retrieve user name>';
+        });
+      }
     } else {
-      setState(() {
-        username = '[Removed]';
-      });
+      if (mounted) {
+        setState(() {
+          username = '[Removed]';
+        });
+      }
     }
   }
 

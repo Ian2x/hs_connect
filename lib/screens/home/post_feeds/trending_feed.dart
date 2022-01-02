@@ -31,9 +31,11 @@ class _TrendingFeedState extends State<TrendingFeed> {
   void fetchAllowableGroupsRefs() async {
     GroupsDatabaseService _groups = GroupsDatabaseService();
     final refs = await _groups.getAllowableGroupRefs(domain: widget.domain, county: widget.county, state: widget.state, country: widget.country);
-    setState(() {
-      allowableGroupsRefs = refs;
-    });
+    if (mounted) {
+      setState(() {
+        allowableGroupsRefs = refs;
+      });
+    }
   }
 
   @override

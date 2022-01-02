@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:hs_connect/models/user_data.dart';
 import 'package:hs_connect/screens/search/discover.dart';
-import 'package:hs_connect/screens/search/search_bar.dart';
+import 'package:hs_connect/screens/search/search_result_card.dart';
 import 'package:hs_connect/shared/no_animation_material_page_route.dart';
 import 'package:hs_connect/shared/tools/hexcolor.dart';
+import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/navbar.dart';
 import 'package:hs_connect/shared/widgets/search.dart';
+import 'package:hs_connect/shared/widgets/search2.dart';
+import 'package:provider/provider.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -19,6 +23,12 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    final userData = Provider.of<UserData?>(context);
+    if (userData==null) {
+      return Loading();
+    }
+
     return Scaffold(
       backgroundColor: HexColor("#E9EDF0"),
       appBar: AppBar(
@@ -29,7 +39,7 @@ class _SearchPageState extends State<SearchPage> {
           onPressed: () {
             Navigator.push(
               context,
-              NoAnimationMaterialPageRoute(builder: (context) => Search(searchResults: [])),
+              NoAnimationMaterialPageRoute(builder: (context) => Search2(userData: userData)),
             );
           },
         ),

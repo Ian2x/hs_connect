@@ -26,12 +26,14 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
 
   @override
   void initState() {
-    setState(() {
-      likeStatus = widget.likes.contains(widget.currUserRef);
-      dislikeStatus = widget.dislikes.contains(widget.currUserRef);
-      likeCount = widget.likes.length;
-      dislikeCount = widget.dislikes.length;
-    });
+    if (mounted) {
+      setState(() {
+        likeStatus = widget.likes.contains(widget.currUserRef);
+        dislikeStatus = widget.dislikes.contains(widget.currUserRef);
+        likeCount = widget.likes.length;
+        dislikeCount = widget.dislikes.length;
+      });
+    }
     super.initState();
   }
 
@@ -47,10 +49,12 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
               icon: Icon(Icons.thumb_up),
               onPressed: () {
                 _replies.unLikeReply(replyRef: widget.replyRef, userRef: widget.currUserRef);
-                setState(() {
-                  likeCount-=1;
-                  likeStatus = false;
-                });
+                if (mounted) {
+                  setState(() {
+                    likeCount-=1;
+                    likeStatus = false;
+                  });
+                }
               },
             );
           } else {
@@ -59,12 +63,14 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
               icon: Icon(Icons.thumb_up_outlined),
               onPressed: () {
                 _replies.likeReply(replyRef: widget.replyRef, userRef: widget.currUserRef);
-                setState(() {
-                  likeCount+=1;
-                  if(dislikeStatus==true) dislikeCount-=1;
-                  likeStatus = true;
-                  dislikeStatus = false;
-                });
+                if (mounted) {
+                  setState(() {
+                    likeCount+=1;
+                    if(dislikeStatus==true) dislikeCount-=1;
+                    likeStatus = true;
+                    dislikeStatus = false;
+                  });
+                }
               },
             );
           }
@@ -77,10 +83,12 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
               icon: Icon(Icons.thumb_down),
               onPressed: () {
                 _replies.unDislikeReply(replyRef: widget.replyRef, userRef: widget.currUserRef);
-                setState(() {
-                  dislikeCount-=1;
-                  dislikeStatus = false;
-                });
+                if (mounted) {
+                  setState(() {
+                    dislikeCount-=1;
+                    dislikeStatus = false;
+                  });
+                }
               },
             );
           } else {
@@ -89,12 +97,14 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
               icon: Icon(Icons.thumb_down_outlined),
               onPressed: () {
                 _replies.dislikeReply(replyRef: widget.replyRef, userRef: widget.currUserRef);
-                setState(() {
-                  dislikeCount+=1;
-                  if(likeStatus==true) likeCount-=1;
-                  dislikeStatus = true;
-                  likeStatus = false;
-                });
+                if (mounted) {
+                  setState(() {
+                    dislikeCount+=1;
+                    if(likeStatus==true) likeCount-=1;
+                    dislikeStatus = true;
+                    likeStatus = false;
+                  });
+                }
               },
             );
           }

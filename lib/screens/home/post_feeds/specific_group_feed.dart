@@ -33,9 +33,11 @@ class _SpecificGroupFeedState extends State<SpecificGroupFeed> {
 
   void getGroupName() async {
     final Group? fetchGroupName = await _groups.getGroupData(groupRef: widget.groupRef);
-    setState(() {
-      groupName = fetchGroupName != null ? fetchGroupName.name : '<Failed to retrieve group name>';
-    });
+    if (mounted) {
+      setState(() {
+        groupName = fetchGroupName != null ? fetchGroupName.name : '<Failed to retrieve group name>';
+      });
+    }
   }
 
   @override
