@@ -1,5 +1,5 @@
-import 'package:hs_connect/screens/authenticate/register_email.dart';
-import 'package:hs_connect/screens/authenticate/sign_in.dart';
+import 'package:hs_connect/screens/authenticate/registerEmail.dart';
+import 'package:hs_connect/screens/authenticate/signIn.dart';
 import 'package:flutter/material.dart';
 
 class Authenticate extends StatefulWidget {
@@ -10,8 +10,8 @@ class Authenticate extends StatefulWidget {
 }
 
 class _AuthenticateState extends State<Authenticate> {
-
   bool showSignIn = true;
+
   void toggleView() {
     if (mounted) {
       setState(() => showSignIn = !showSignIn);
@@ -20,8 +20,7 @@ class _AuthenticateState extends State<Authenticate> {
 
   @override
   Widget build(BuildContext context) {
-
-    if(showSignIn) {
+    if (showSignIn) {
       return SignIn(toggleView: toggleView);
     } else {
       return RegisterEmail(toggleView: toggleView);

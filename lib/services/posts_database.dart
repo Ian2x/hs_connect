@@ -1,13 +1,8 @@
-import 'dart:collection';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
-import 'package:hs_connect/models/report.dart';
-import 'package:hs_connect/models/search_result.dart';
+import 'package:hs_connect/models/searchResult.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/constants.dart';
-
 
 void defaultFunc(dynamic parameter) {}
 
@@ -21,60 +16,67 @@ class PostsDatabaseService {
   ImageStorage _images = ImageStorage();
 
   // collection reference
-  final CollectionReference postsCollection = FirebaseFirestore.instance.collection('posts');
+  final CollectionReference postsCollection = FirebaseFirestore.instance.collection(C.posts);
 
-  Future<dynamic> newPost({required String title, required String text,
-    required String? mediaURL,
-    required DocumentReference groupRef,
-    required List<String> tags,
-    Function(void) onValue = defaultFunc,
-    Function onError = defaultFunc}) async {
-
-    groupRef.update({'numPosts': FieldValue.increment(1)});
+  Future<dynamic> newPost(
+      {required String title,
+      required String text,
+      required String? media,
+      required DocumentReference groupRef,
+      required String tagString,
+      required DocumentReference? pollRef,
+      Function(void) onValue = defaultFunc,
+      Function onError = defaultFunc}) async {
+    groupRef.update({C.numPosts: FieldValue.increment(1)});
+    final group = await groupRef.get();
+    final accessRestriction = group.get(C.accessRestriction);
 
     return await postsCollection
         .add({
-      'userRef': userRef,
-      'groupRef': groupRef,
-      'title': title,
-      'LCtitle': title.toLowerCase(),
-      'text': text,
-      'media': mediaURL,
-      'createdAt': DateTime.now(),
-      'numComments': 0,
-      'likes': List<String>.empty(),
-      'dislikes': List<String>.empty(),
-      'reports': [],
-      'tags': tags,
-    })
+          C.groupRef: groupRef,
+          C.creatorRef: userRef,
+          C.title: title,
+          C.titleLC: title.toLowerCase(),
+          C.text: text,
+          C.media: media,
+          C.createdAt: DateTime.now(),
+          C.numComments: 0,
+          C.accessRestriction: accessRestriction,
+          C.likes: List<String>.empty(),
+          C.dislikes: List<String>.empty(),
+          C.reportsRefs: [],
+          C.pollRef: pollRef,
+          C.tag: tagString,
+        })
         .then(onValue)
         .catchError(onError);
   }
 
   Future<dynamic> deletePost(
-      {required DocumentReference postRef, required DocumentReference groupRef, required DocumentReference userRef, String? media}) async {
-    final checkAuth = await postRef.get();
-    if (checkAuth.exists) {
-      if (userRef == checkAuth.get('userRef')) {
-        groupRef.update({'numPosts': FieldValue.increment(-1)});
+      {required DocumentReference postRef,
+      required DocumentReference groupRef,
+      required DocumentReference userRef,
+      String? media}) async {
+    final post = await postRef.get();
+    if (post.exists) {
+      if (userRef == post.get(C.creatorRef)) {
+        groupRef.update({C.numPosts: FieldValue.increment(-1)});
 
         // delete post's comments
-        final delComments = FirebaseFirestore.instance.collection('comments').get().then((snapshot) async {
+        final delComments = FirebaseFirestore.instance.collection(C.comments).get().then((snapshot) async {
           List<DocumentSnapshot> allDocs = snapshot.docs;
-          List<DocumentSnapshot> filteredDocs = await allDocs.where(
-                  (document) => document.get('postRef') == postRef
-          ).toList();
+          List<DocumentSnapshot> filteredDocs =
+              await allDocs.where((document) => document.get(C.postRef) == postRef).toList();
           for (DocumentSnapshot ds in filteredDocs) {
             ds.reference.delete();
           }
         });
 
         // delete post's replies
-        final delReplies = FirebaseFirestore.instance.collection('replies').get().then((snapshot) async {
+        final delReplies = FirebaseFirestore.instance.collection(C.replies).get().then((snapshot) async {
           List<DocumentSnapshot> allDocs = snapshot.docs;
-          List<DocumentSnapshot> filteredDocs = await allDocs.where(
-                  (document) => document.get('postRef') == postRef
-          ).toList();
+          List<DocumentSnapshot> filteredDocs =
+              await allDocs.where((document) => document.get(C.postRef) == postRef).toList();
           for (DocumentSnapshot ds in filteredDocs) {
             ds.reference.delete();
           }
@@ -85,8 +87,8 @@ class PostsDatabaseService {
 
         // delete post's poll (if applicable)
         final postData = await postRef.get();
-        if (postData.get('polls') != null) {
-          await (postData.get('polls') as DocumentReference).delete();
+        if (postData.get(C.pollRef) != null) {
+          await (postData.get(C.pollRef) as DocumentReference).delete();
         }
 
         await delComments;
@@ -96,56 +98,52 @@ class PostsDatabaseService {
         if (media != null) {
           return await _images.deleteImage(imageURL: media);
         }
-      };
+      }
+      ;
     }
     return null;
   }
 
-
   Future<void> likePost({required DocumentReference postRef, required DocumentReference userRef}) async {
     // remove dislike if disliked
-    await postRef.update({'dislikes': FieldValue.arrayRemove([userRef])});
+    await postRef.update({
+      C.dislikes: FieldValue.arrayRemove([userRef])
+    });
     // like comment
-    return await postRef.update({'likes': FieldValue.arrayUnion([userRef])});
+    return await postRef.update({
+      C.likes: FieldValue.arrayUnion([userRef])
+    });
   }
 
   Future<void> unLikePost({required DocumentReference postRef, required DocumentReference userRef}) async {
     // remove like
-    await postRef.update({'likes': FieldValue.arrayRemove([userRef])});
+    await postRef.update({
+      C.likes: FieldValue.arrayRemove([userRef])
+    });
   }
 
   Future<void> dislikePost({required DocumentReference postRef, required DocumentReference userRef}) async {
     // remove like if liked
-    await postRef.update({'likes': FieldValue.arrayRemove([userRef])});
+    await postRef.update({
+      C.likes: FieldValue.arrayRemove([userRef])
+    });
     // dislike comment
-    return await postRef.update({'dislikes': FieldValue.arrayUnion([userRef])});
+    return await postRef.update({
+      C.dislikes: FieldValue.arrayUnion([userRef])
+    });
   }
 
   Future<void> unDislikePost({required DocumentReference postRef, required DocumentReference userRef}) async {
     // remove like
-    await postRef.update({'dislikes': FieldValue.arrayRemove([userRef])});
+    await postRef.update({
+      C.dislikes: FieldValue.arrayRemove([userRef])
+    });
   }
-
 
   // home data from snapshot
   Post? _postFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
     if (querySnapshot.exists) {
-      final temp = Post(
-        postRef: querySnapshot.reference,
-        userRef: querySnapshot['userRef'],
-        groupRef: querySnapshot['groupRef'],
-        media: querySnapshot['media'],
-        title: querySnapshot['title'],
-        LCtitle: querySnapshot['LCtitle'],
-        text: querySnapshot['text'],
-        createdAt: querySnapshot['createdAt'],
-        numComments: querySnapshot['numComments'],
-        likes: (querySnapshot['likes'] as List).map((item) => item as DocumentReference).toList(),
-        dislikes: (querySnapshot['dislikes'] as List).map((item) => item as DocumentReference).toList(),
-        reports: (querySnapshot['reports'] as List).map((item) => item as DocumentReference).toList(),
-        tags: (querySnapshot['tags'] as List).map((item) => item as String).toList(),
-      );
-      return temp;
+      return Post.fromQuerySnapshot(querySnapshot);
     } else {
       return null;
     }
@@ -153,27 +151,11 @@ class PostsDatabaseService {
 
   Post? _postFromSnapshot(DocumentSnapshot snapshot) {
     if (snapshot.exists) {
-      final temp = Post(
-        postRef: snapshot.reference,
-        userRef: snapshot.get('userRef'),
-        groupRef: snapshot.get('groupRef'),
-        media: snapshot.get('media'),
-        title: snapshot.get('title'),
-        LCtitle: snapshot.get('LCtitle'),
-        text: snapshot.get('text'),
-        createdAt: snapshot.get('createdAt'),
-        numComments: snapshot.get('numComments'),
-        likes: (snapshot.get('likes') as List).map((item) => item as DocumentReference).toList(),
-        dislikes: (snapshot.get('dislikes') as List).map((item) => item as DocumentReference).toList(),
-        reports: (snapshot.get('reports') as List).map((item) => item as DocumentReference).toList(),
-        tags: (snapshot.get('tags') as List).map((item) => item as String).toList(),
-      );
-      return temp;
+      return Post.fromSnapshot(snapshot);
     } else {
       return null;
     }
   }
-
 
   Future<Post?> getPost(DocumentReference postRef) async {
     return _postFromSnapshot(await postRef.get());
@@ -181,51 +163,50 @@ class PostsDatabaseService {
 
   Stream<List<Post?>> get posts {
     return postsCollection
-        .where('groupRef', whereIn: groupRefs)
-        .orderBy('createdAt', descending: true)
+        .where(C.groupRef, whereIn: groupRefs)
+        .orderBy(C.createdAt, descending: true)
         .snapshots()
         .map((snapshot) => snapshot.docs.map(_postFromQuerySnapshot).toList());
   }
 
   Future<List<Post?>> getMultiGroupPosts() async {
-    final snapshot = await postsCollection.where('groupRef', whereIn: groupRefs).get();
+    final snapshot = await postsCollection.where(C.groupRef, whereIn: groupRefs).get();
     return snapshot.docs.map(_postFromQuerySnapshot).toList();
   }
 
   Stream<List<Post?>> get potentialTrendingPosts {
     return postsCollection
-        .where(
-        'createdAt', isGreaterThan: Timestamp.fromDate(DateTime.now().subtract(new Duration(days: daysTrending))))
-        .where('groupRef', whereIn: groupRefs)
+        .where(C.createdAt,
+            isGreaterThan: Timestamp.fromDate(DateTime.now().subtract(new Duration(days: daysTrending))))
+        .where(C.groupRef, whereIn: groupRefs)
         .snapshots()
         .map((snapshot) => snapshot.docs.map(_postFromQuerySnapshot).toList());
   }
 
   Stream<List<Post?>> get tagPosts {
     return postsCollection
-        .where('tags', arrayContainsAny: searchTags)
+        .where(C.tag, whereIn: searchTags)
         .snapshots()
         .map((snapshot) => snapshot.docs.map(_postFromQuerySnapshot).toList());
   }
 
-  SearchResult _streamResultFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
+  SearchResult _searchResultFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
     return SearchResult(
-        resultRef: querySnapshot.reference,
-        resultType: SearchResultType.posts,
-        resultDescription: querySnapshot['createdAt'].toString(),
-        resultText: querySnapshot['title'],
+      resultRef: querySnapshot.reference,
+      resultType: SearchResultType.posts,
+      resultDescription: querySnapshot[C.createdAt].toString(),
+      resultText: querySnapshot[C.title],
     );
   }
 
   Stream<List<SearchResult>> searchStream(String searchKey, List<DocumentReference> allowableGroupsRefs) {
     final LCsearchKey = searchKey.toLowerCase();
-    if (allowableGroupsRefs.length==0) return Stream.empty();
+    if (allowableGroupsRefs.length == 0) return Stream.empty();
     return postsCollection
-        .where('groupRef', whereIn: allowableGroupsRefs)
-        .where('LCtitle', isGreaterThanOrEqualTo: LCsearchKey)
-        .where('LCtitle', isLessThan: LCsearchKey + 'z')
+        .where(C.groupRef, whereIn: allowableGroupsRefs)
+        .where(C.titleLC, isGreaterThanOrEqualTo: LCsearchKey)
+        .where(C.titleLC, isLessThan: LCsearchKey + 'z')
         .snapshots()
-        .map((snapshot) => snapshot.docs.map(_streamResultFromQuerySnapshot).toList());
+        .map((snapshot) => snapshot.docs.map(_searchResultFromQuerySnapshot).toList());
   }
-
 }

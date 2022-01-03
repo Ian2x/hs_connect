@@ -2,11 +2,8 @@ import 'package:intl/intl.dart';
 
 import 'package:hs_connect/shared/tools/convertTimeMessage.dart';
 
-
-
 //taken from Timeago library if new implementations
-String convertTime(DateTime date,
-    {String? locale, DateTime? clock, bool allowFromNow = false}) {
+String convertTime(DateTime date, {String? locale, DateTime? clock, bool allowFromNow = false}) {
   final _allowFromNow = allowFromNow;
   final messages = EnMessages();
   final _clock = clock ?? DateTime.now();
@@ -14,18 +11,17 @@ String convertTime(DateTime date,
 
   String prefix, suffix;
 
-
   if (_allowFromNow && elapsed < 0) {
     elapsed = date.isBefore(_clock) ? elapsed : elapsed.abs();
     prefix = '';
-        //messages.prefixFromNow();
+    //messages.prefixFromNow();
     suffix = '';
-        //messages.suffixFromNow();
+    //messages.suffixFromNow();
   } else {
     prefix = '';
-        //messages.prefixAgo();
+    //messages.prefixAgo();
     suffix = '';
-        //messages.suffixAgo();
+    //messages.suffixAgo();
   }
 
   final num seconds = elapsed / 1000;
@@ -62,7 +58,7 @@ String convertTime(DateTime date,
 
   return result;
 
-    //[prefix, result, suffix]
-    //.where((str) => str.isNotEmpty)
-    //.join(messages.wordSeparator());
+  //[prefix, result, suffix]
+  //.where((str) => str.isNotEmpty)
+  //.join(messages.wordSeparator());
 }

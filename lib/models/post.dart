@@ -1,39 +1,124 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'accessRestriction.dart';
-import 'group.dart';
+
+enum Tag { Relationships, Parties, Memes, Classes, Advice, College, Confession }
+
+extension TagExtension on Tag {
+  String get string {
+    switch (this) {
+      case Tag.Relationships:
+        return 'Relationships';
+      case Tag.Parties:
+        return 'Parties';
+      case Tag.Memes:
+        return 'Memes';
+      case Tag.Classes:
+        return 'Classes';
+      case Tag.Advice:
+        return 'Advice';
+      case Tag.College:
+        return 'College';
+      case Tag.Confession:
+        return 'Confession';
+    }
+  }
+}
+
+Tag tagFrom(String tag) {
+  switch (tag) {
+    case 'Relationships':
+      return Tag.Relationships;
+    case 'Parties':
+      return Tag.Parties;
+    case 'Memes':
+      return Tag.Memes;
+    case 'Classes':
+      return Tag.Classes;
+    case 'Advice':
+      return Tag.Advice;
+    case 'College':
+      return Tag.College;
+    case 'Confession':
+      return Tag.Confession;
+    default:
+      throw FormatException(tag + "is not a Tag type");
+  }
+}
 
 class Post {
-  final DocumentReference postRef;
-  final DocumentReference groupRef;
-  final DocumentReference userRef;
-  final String title;
-  final String LCtitle;
-  final String text;
-  final String? media;
-  final Timestamp createdAt;
-  final int numComments;
-  final AccessRestriction accessRestrictions;
-  final List<DocumentReference> likes;
-  final List<DocumentReference> dislikes;
-  final List<DocumentReference> reportsRefs;
-  final Tag tag;
+  late DocumentReference postRef;
+  late DocumentReference groupRef;
+  late DocumentReference creatorRef;
+  late String title;
+  late String titleLC;
+  late String text;
+  String? media;
+  late Timestamp createdAt;
+  late int numComments;
+  late AccessRestriction accessRestriction;
+  late List<DocumentReference> likes;
+  late List<DocumentReference> dislikes;
+  late List<DocumentReference> reportsRefs;
+  DocumentReference? pollRef;
+  late Tag tag;
 
   Post({
     required this.postRef,
     required this.groupRef,
-    required this.userRef,
-    required this.LCtitle,
+    required this.creatorRef,
     required this.title,
+    required this.titleLC,
     required this.text,
     required this.media,
     required this.createdAt,
     required this.numComments,
-    required this.accessRestrictions,
+    required this.accessRestriction,
     required this.likes,
     required this.dislikes,
     required this.reportsRefs,
+    required this.pollRef,
     required this.tag,
   });
+
+  Post.fromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
+    final accessRestriction = querySnapshot[C.accessRestriction];
+    this.postRef = querySnapshot.reference;
+    this.groupRef = querySnapshot[C.groupRef];
+    this.creatorRef = querySnapshot[C.creatorRef];
+    this.title = querySnapshot[C.title];
+    this.titleLC = querySnapshot[C.titleLC];
+    this.text = querySnapshot[C.text];
+    this.media = querySnapshot[C.media];
+    this.createdAt = querySnapshot[C.createdAt];
+    this.numComments = querySnapshot[C.numComments];
+    this.accessRestriction = AccessRestriction(
+        restriction: accessRestriction[C.restriction],
+        restrictionType: AccessRestrictionTypeFrom(accessRestriction[C.restrictionType]));
+    this.likes = docRefList(querySnapshot[C.likes]);
+    this.dislikes = docRefList(querySnapshot[C.dislikes]);
+    this.reportsRefs = docRefList(querySnapshot[C.reportsRefs]);
+    this.pollRef = querySnapshot[C.pollRef];
+    this.tag = tagFrom(querySnapshot[C.tag]);
+  }
+
+  Post.fromSnapshot(DocumentSnapshot snapshot) {
+    final accessRestriction = snapshot.get(C.accessRestriction);
+    this.postRef = snapshot.reference;
+    this.groupRef = snapshot.get(C.groupRef);
+    this.creatorRef = snapshot.get(C.creatorRef);
+    this.title = snapshot.get(C.title);
+    this.titleLC = snapshot.get(C.titleLC);
+    this.text = snapshot.get(C.text);
+    this.media = snapshot.get(C.media);
+    this.createdAt = snapshot.get(C.createdAt);
+    this.numComments = snapshot.get(C.numComments);
+    this.accessRestriction = accessRestrictionFromMap(map: accessRestriction);
+    this.likes = docRefList(snapshot.get(C.likes));
+    this.dislikes = docRefList(snapshot.get(C.dislikes));
+    this.reportsRefs = docRefList(snapshot.get(C.reportsRefs));
+    this.pollRef = snapshot.get(C.pollRef);
+    this.tag = tagFrom(snapshot.get(C.tag));
+  }
 }

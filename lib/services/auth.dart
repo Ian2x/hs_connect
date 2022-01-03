@@ -13,9 +13,7 @@ class AuthService {
   // Create home for email verification purposes
   Future<dynamic> createEmailUser(String email) async {
     try {
-      UserCredential userCredential =
-          await _auth.createUserWithEmailAndPassword(
-              email: email, password: 'password123');
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(email: email, password: 'password123');
       User? user = userCredential.user;
       return user;
     } catch (e) {
@@ -24,18 +22,17 @@ class AuthService {
   }
 
   // register with username & password
-  Future<dynamic> registerWithUsernameAndPassword(
-      String username, String password, String domain) async {
+  Future<dynamic> registerWithUsernameAndPassword(String username, String password, String domain) async {
     try {
       await _auth.signOut();
       UserCredential userCredential =
-          await _auth.createUserWithEmailAndPassword(
-              email: '$username@ianeric.com', password: password);
+          await _auth.createUserWithEmailAndPassword(email: '$username@ianeric.com', password: password);
       User? user = userCredential.user;
 
       if (user == null || user.email == null) return null;
       // create a document for the home with the uid
-      final _userDataDatabaseService = UserDataDatabaseService(userRef: FirebaseFirestore.instance.collection('userData').doc(user.uid));
+      final _userDataDatabaseService =
+          UserDataDatabaseService(userRef: FirebaseFirestore.instance.collection('userData').doc(user.uid));
       await _userDataDatabaseService.initUserData(domain, username);
       return user;
     } catch (e) {
@@ -46,8 +43,8 @@ class AuthService {
   // sign in with username & password
   Future<dynamic> signInWithUsernameAndPassword(String username, String password) async {
     try {
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-          email: '$username@ianeric.com', password: password);
+      UserCredential userCredential =
+          await _auth.signInWithEmailAndPassword(email: '$username@ianeric.com', password: password);
       User? user = userCredential.user;
       return user;
     } catch (e) {

@@ -1,45 +1,50 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:hs_connect/models/group.dart';
-import 'package:hs_connect/models/known_domain.dart';
-import 'package:hs_connect/models/message.dart';
-import 'package:hs_connect/models/search_result.dart';
-import 'package:hs_connect/models/user_data.dart';
+import 'package:hs_connect/models/accessRestriction.dart';
+import 'package:hs_connect/models/knownDomain.dart';
+import 'package:hs_connect/models/searchResult.dart';
+import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/known_domains_database.dart';
+import 'package:hs_connect/shared/constants.dart';
 
 class UserDataDatabaseService {
   DocumentReference? userRef;
 
-  UserDataDatabaseService({this.userRef}) {
-  }
+  UserDataDatabaseService({this.userRef});
 
   // collection reference
-  final CollectionReference userDataCollection =
-      FirebaseFirestore.instance.collection('userData');
+  final CollectionReference userDataCollection = FirebaseFirestore.instance.collection(C.userData);
 
   Future<void> initUserData(String domain, String username) async {
-
     final GroupsDatabaseService _groupDatabaseService = GroupsDatabaseService();
     final KnownDomainsDatabaseService _knownDomainsDatabaseService = KnownDomainsDatabaseService();
 
-
     // Create domain group if not already created
-    final docRef = await _groupDatabaseService.newGroup(accessRestrictions: AccessRestriction(restrictionType: 'domain', restriction: domain), name: domain, creatorRef: null, image: null, description: null);
+    final docRef = await _groupDatabaseService.newGroup(
+        accessRestriction: AccessRestriction(restrictionType: AccessRestrictionType.domain, restriction: domain),
+        name: domain,
+        creatorRef: null,
+        image: null,
+        description: null);
     // Find domain data (county, state, country)
     final KnownDomain? kd = await _knownDomainsDatabaseService.getKnownDomain(domain: domain);
-
     return await userRef!.set({
-      'displayedName': username,
-      'LCdisplayedName': username.toLowerCase(),
-      'domain': domain,
-      'county': kd!=null ? kd.county : null,
-      'state': kd!=null ? kd.state : null,
-      'country': kd!=null ? kd.country : null,
-      'userGroups': [UserGroup(groupRef: docRef, public: true).asMap()],
-      'messages': [],
-      'imageURL': null,
-      'score': 0,
-      'warnings': 0,
+      C.displayedName: username,
+      C.displayedNameLC: username.toLowerCase(),
+      C.bio: null,
+      C.domain: domain,
+      C.county: kd != null ? kd.county : null,
+      C.state: kd != null ? kd.state : null,
+      C.country: kd != null ? kd.country : null,
+      C.userGroups: [UserGroup(groupRef: docRef, public: true).asMap()],
+      C.modGroupRefs: [],
+      C.messagesRefs: [],
+      C.postsRefs: [],
+      C.commentsRefs: [],
+      C.repliesRefs: [],
+      C.profileImage: null,
+      C.score: 0,
+      C.reportsRefs: [],
     });
   }
 
@@ -48,24 +53,34 @@ class UserDataDatabaseService {
       required String? imageURL,
       required Function(void) onValue,
       required Function onError}) async {
-      return await userRef!
-          .update({
-        'displayedName': displayedName,
-        'LCdisplayedName': displayedName.toLowerCase(),
-        'imageURL': imageURL,
-      })
-          .then(onValue)
-          .catchError(onError);
+    return await userRef!
+        .update({
+          C.displayedName: displayedName,
+          C.displayedNameLC: displayedName.toLowerCase(),
+          C.profileImage: imageURL,
+        })
+        .then(onValue)
+        .catchError(onError);
   }
 
-  Future<void> joinGroup({required DocumentReference userRef, required DocumentReference groupRef, required bool public}) async {
-    groupRef.update({'numMembers': FieldValue.increment(1)});
-    return await userRef.update({'userGroups': FieldValue.arrayUnion([{'groupRef': groupRef, 'public': public}])});
+  Future<void> joinGroup(
+      {required DocumentReference userRef, required DocumentReference groupRef, required bool public}) async {
+    groupRef.update({C.numMembers: FieldValue.increment(1)});
+    return await userRef.update({
+      C.userGroups: FieldValue.arrayUnion([
+        {C.groupRef: groupRef, C.public: public}
+      ])
+    });
   }
 
-  Future<void> leaveGroup({required DocumentReference userRef, required DocumentReference groupRef, required bool public}) async {
-    groupRef.update({'numMembers': FieldValue.increment(-1)});
-    return await userRef.update({'userGroups': FieldValue.arrayRemove([{'groupRef': groupRef, 'public': public}])});
+  Future<void> leaveGroup(
+      {required DocumentReference userRef, required DocumentReference groupRef, required bool public}) async {
+    groupRef.update({C.numMembers: FieldValue.increment(-1)});
+    return await userRef.update({
+      C.userGroups: FieldValue.arrayRemove([
+        {C.groupRef: groupRef, C.public: public}
+      ])
+    });
   }
 
   // get other users from userRef
@@ -77,50 +92,26 @@ class UserDataDatabaseService {
   // home data from snapshot
   UserData? _userDataFromSnapshot(DocumentSnapshot snapshot, {DocumentReference? overrideUserRef}) {
     if (snapshot.exists) {
-      final temp = UserData(
-        userRef: overrideUserRef != null ? overrideUserRef : userRef!,
-        displayedName: snapshot.get('displayedName'),
-        LCdisplayedName: snapshot.get('displayedName'),
-        domain: snapshot.get('domain'),
-        county: snapshot.get('county'),
-        state: snapshot.get('state'),
-        country: snapshot.get('country'),
-        userGroups: snapshot
-            .get('userGroups')
-            .map<UserGroup>((userGroup) => UserGroup(groupRef: userGroup['groupRef'], public: userGroup['public']))
-            .toList(),
-        messages: snapshot
-            .get('messages')
-            .map<Message>((message) => Message(
-                messageRef: message['messageRef'],
-                senderRef: message['sender'],
-                receiverRef: message['receiver'],
-                text: message['text'],
-                createdAt: message['createdAt'],
-                isMedia: message['isMedia'],
-                reportsRef: message['reportedStatus']))
-            .toList(),
-        profileImage: snapshot.get('imageURL'),
-        score: snapshot.get('score'),
-        warnings: snapshot.get('warnings'),
-      );
-      return temp;
+      return UserData.fromSnapshot(snapshot, overrideUserRef != null ? overrideUserRef : userRef!);
     } else {
       return null;
     }
   }
 
-  // get Users from list of userRefs, must be wrapped in FutureBuilder to use
+  // get Users from list of userRefs, should be wrapped in FutureBuilder to use
   Future<QuerySnapshot> getUsers({required List<DocumentReference> userRefs}) async {
-    return userDataCollection.where(FieldPath.documentId, whereIn: userRefs.map((userRef) {return userRef.id;}).toList()).get();
+    return userDataCollection
+        .where(FieldPath.documentId,
+            whereIn: userRefs.map((userRef) {
+              return userRef.id;
+            }).toList())
+        .get();
   }
 
   // get home doc stream
   Stream<UserData?>? get userData {
-    if(userRef!=null) {
-      return userRef!
-          .snapshots()
-          .map(_userDataFromSnapshot);
+    if (userRef != null) {
+      return userRef!.snapshots().map(_userDataFromSnapshot);
     } else {
       return null;
     }
@@ -130,18 +121,17 @@ class UserDataDatabaseService {
     return SearchResult(
       resultRef: querySnapshot.reference,
       resultType: SearchResultType.people,
-      resultDescription: querySnapshot['domain'],
-      resultText: querySnapshot['displayedName'],
+      resultDescription: querySnapshot[C.domain],
+      resultText: querySnapshot[C.displayedName],
     );
   }
 
   Stream<List<SearchResult>> searchStream(String searchKey) {
     final LCsearchKey = searchKey.toLowerCase();
     return userDataCollection
-        .where('LCdisplayedName', isGreaterThanOrEqualTo: LCsearchKey)
-        .where('LCdisplayedName', isLessThan: LCsearchKey + 'z')
+        .where(C.displayedNameLC, isGreaterThanOrEqualTo: LCsearchKey)
+        .where(C.displayedNameLC, isLessThan: LCsearchKey + 'z')
         .snapshots()
         .map((snapshot) => snapshot.docs.map(_streamResultFromQuerySnapshot).toList());
   }
-
 }
