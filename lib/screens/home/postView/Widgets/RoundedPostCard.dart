@@ -12,15 +12,13 @@ import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/screens/home/commentView/commentForm.dart';
 
 class RoundedPostCard extends StatefulWidget {
-  final Post postInfo;
+  final Post post;
   final DocumentReference userRef;
-  final DocumentReference groupRef;
 
   RoundedPostCard({
     Key? key,
-    required this.postInfo,
+    required this.post,
     required this.userRef,
-    required this.groupRef,
   }) : super(key: key);
 
   @override
@@ -44,13 +42,13 @@ class _RoundedPostCardState extends State<RoundedPostCard> {
   @override
   void initState() {
     // initialize liked/disliked
-    if (widget.postInfo.likes.contains(widget.userRef)) {
+    if (widget.post.likes.contains(widget.userRef)) {
       if (mounted) {
         setState(() {
           liked = true;
         });
       }
-    } else if (widget.postInfo.dislikes.contains(widget.userRef)) {
+    } else if (widget.post.dislikes.contains(widget.userRef)) {
       if (mounted) {
         setState(() {
           disliked = true;
@@ -64,7 +62,7 @@ class _RoundedPostCardState extends State<RoundedPostCard> {
   }
 
   void getUserData() async {
-    final UserData? fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.postInfo.creatorRef);
+    final UserData? fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.post.creatorRef);
     if (mounted) {
       setState(() {
         username = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
@@ -74,7 +72,7 @@ class _RoundedPostCardState extends State<RoundedPostCard> {
   }
 
   void getGroupName() async {
-    final Group? fetchGroupName = await _groups.getGroupData(groupRef: widget.postInfo.groupRef);
+    final Group? fetchGroupName = await _groups.getGroupData(groupRef: widget.post.groupRef);
     if (mounted) {
       setState(() {
         groupName = fetchGroupName != null ? fetchGroupName.name : '<Failed to retrieve group name>';
@@ -87,7 +85,7 @@ class _RoundedPostCardState extends State<RoundedPostCard> {
       context,
       MaterialPageRoute(
           builder: (context) => SpecificGroupFeed(
-                groupRef: widget.postInfo.groupRef,
+                groupRef: widget.post.groupRef,
               )),
     );
   }
@@ -147,7 +145,7 @@ class _RoundedPostCardState extends State<RoundedPostCard> {
                       SizedBox(height: 10),
                       Text(
                         //TODO: Need to figure out ways to ref
-                        widget.postInfo.title,
+                        widget.post.title,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 15.0,
@@ -157,7 +155,7 @@ class _RoundedPostCardState extends State<RoundedPostCard> {
                       ),
                       SizedBox(height: 10),
                       Text(
-                        widget.postInfo.text,
+                        widget.post.text,
                         overflow: TextOverflow.ellipsis, // default is .clip
                         maxLines: 3,
                         style: TextStyle(
@@ -171,7 +169,7 @@ class _RoundedPostCardState extends State<RoundedPostCard> {
                         children: [
                           Text(
                             //widget.postInfo.createdAt.toString()
-                            convertTime(widget.postInfo.createdAt.toDate()),
+                            convertTime(widget.post.createdAt.toDate()),
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 15.0,
@@ -187,12 +185,12 @@ class _RoundedPostCardState extends State<RoundedPostCard> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        CommentForm(postRef: widget.postInfo.postRef, groupRef: widget.groupRef)),
+                                        CommentForm(postRef: widget.post.postRef, groupRef: widget.post.groupRef)),
                               );
                             },
                           ),
                           Text(
-                            widget.postInfo.numComments.toString(),
+                            widget.post.numComments.toString(),
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 15.0,
@@ -203,9 +201,9 @@ class _RoundedPostCardState extends State<RoundedPostCard> {
                           Spacer(),
                           LikeDislikePost(
                               currUserRef: widget.userRef,
-                              postRef: widget.postInfo.postRef,
-                              likes: widget.postInfo.likes,
-                              dislikes: widget.postInfo.dislikes),
+                              postRef: widget.post.postRef,
+                              likes: widget.post.likes,
+                              dislikes: widget.post.dislikes),
                         ],
                       )
                     ], //Column Children ARRAY

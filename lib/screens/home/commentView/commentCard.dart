@@ -1,37 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
+import 'package:hs_connect/models/comment.dart';
 import 'package:hs_connect/screens/home/commentView/likeDislikeComment.dart';
 import 'package:hs_connect/screens/home/replyFeed/replyFeed.dart';
 import 'package:hs_connect/services/user_data_database.dart';
-import 'package:flutter/foundation.dart';
 
 class CommentCard extends StatefulWidget {
-  final DocumentReference commentRef;
-  final DocumentReference postRef;
-  final DocumentReference? userRef;
-  final DocumentReference groupRef;
-  final String text;
-  final String? media;
-  final Timestamp createdAt;
-  List<DocumentReference> likes;
-  List<DocumentReference> dislikes;
+  final Comment comment;
   final DocumentReference currUserRef;
-  List<DocumentReference> reportsRefs;
 
   CommentCard({
     Key? key,
-    required this.commentRef,
-    required this.postRef,
-    required this.userRef,
-    required this.groupRef,
-    required this.text,
-    required this.media,
-    required this.createdAt,
-    required this.likes,
-    required this.dislikes,
+    required this.comment,
     required this.currUserRef,
-    required this.reportsRefs,
   }) : super(key: key);
 
   @override
@@ -48,13 +30,13 @@ class _CommentCardState extends State<CommentCard> {
   @override
   void initState() {
     // initialize liked/disliked
-    if (widget.likes.contains(widget.currUserRef)) {
+    if (widget.comment.likes.contains(widget.currUserRef)) {
       if (mounted) {
         setState(() {
           liked = true;
         });
       }
-    } else if (widget.likes.contains(widget.currUserRef)) {
+    } else if (widget.comment.likes.contains(widget.currUserRef)) {
       if (mounted) {
         setState(() {
           disliked = true;
@@ -66,8 +48,8 @@ class _CommentCardState extends State<CommentCard> {
   }
 
   void getUsername() async {
-    if (widget.userRef != null) {
-      final UserData? fetchUsername = await _userDataDatabaseService.getUserData(userRef: widget.userRef!);
+    if (widget.comment.creatorRef != null) {
+      final UserData? fetchUsername = await _userDataDatabaseService.getUserData(userRef: widget.comment.creatorRef);
       if (mounted) {
         setState(() {
           username = fetchUsername != null ? fetchUsername.displayedName : '<Failed to retrieve user name>';
@@ -87,15 +69,15 @@ class _CommentCardState extends State<CommentCard> {
     return Card(
         child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
       ListTile(
-        title: Text(widget.text),
+        title: Text(widget.comment.text),
         subtitle: Text(username),
         trailing: LikeDislikeComment(
-            commentRef: widget.commentRef,
+            commentRef: widget.comment.commentRef,
             currUserRef: widget.currUserRef,
-            likes: widget.likes,
-            dislikes: widget.dislikes),
+            likes: widget.comment.likes,
+            dislikes: widget.comment.dislikes),
       ),
-      RepliesFeed(commentRef: widget.commentRef, postRef: widget.postRef, groupRef: widget.groupRef),
+      RepliesFeed(commentRef: widget.comment.commentRef, postRef: widget.comment.postRef, groupRef: widget.comment.groupRef),
     ]));
   }
 }

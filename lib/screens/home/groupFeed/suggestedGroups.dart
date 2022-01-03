@@ -44,17 +44,8 @@ class _SuggestedGroupsState extends State<SuggestedGroups> {
                 itemBuilder: (BuildContext context, int index) {
                   // when scroll up/down, fires once
                   return Center(
-                      child: GroupCard(
-                    groupRef: groups[index].groupRef,
-                    userRef: groups[index].creatorRef,
-                    name: groups[index].name,
-                    image: groups[index].profileImage,
-                    description: groups[index].description,
-                    accessRestrictions: groups[index].accessRestrictions,
-                    currUserRef: userData.userRef,
-                    numMembers: groups[index].numMembers,
-                    moderatorRefs: groups[index].moderatorRefs,
-                  ));
+                      child: GroupCard(group: groups[index])
+                  );
                 },
               );
             } else {

@@ -12,10 +12,10 @@ import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
 class CommentsFeed extends StatefulWidget {
-  final Post postInfo;
+  final Post post;
   final DocumentReference groupRef;
 
-  const CommentsFeed({Key? key, required this.postInfo, required this.groupRef}) : super(key: key);
+  const CommentsFeed({Key? key, required this.post, required this.groupRef}) : super(key: key);
 
   @override
   _CommentsFeedState createState() => _CommentsFeedState();
@@ -28,7 +28,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
 
     if (userData == null) return Loading();
 
-    CommentsDatabaseService _comments = CommentsDatabaseService(postRef: widget.postInfo.postRef);
+    CommentsDatabaseService _comments = CommentsDatabaseService(postRef: widget.post.postRef);
 
     return StreamBuilder(
       stream: _comments.postComments,
@@ -45,27 +45,17 @@ class _CommentsFeedState extends State<CommentsFeed> {
             itemBuilder: (BuildContext context, int index) {
               if (index == 0) {
                 return RoundedPostCard(
-                  postInfo: widget.postInfo,
+                  post: widget.post,
                   userRef: userData.userRef,
-                  groupRef: widget.groupRef,
                 );
               } else if (index == 1) {
                 return Divider(thickness: 3, color: HexColor('E9EDF0'), height: 20);
               } else if (index == comments.length + 2) {
-                return CommentForm(postRef: widget.postInfo.postRef, groupRef: widget.groupRef);
+                return CommentForm(postRef: widget.post.postRef, groupRef: widget.groupRef);
               } else {
                 return CommentCard(
-                  commentRef: comments[index - 2].commentRef,
-                  postRef: comments[index - 2].postRef,
-                  userRef: comments[index - 2].creatorRef,
-                  groupRef: comments[index - 2].groupRef,
-                  text: comments[index - 2].text,
-                  media: comments[index - 2].media,
-                  createdAt: comments[index - 2].createdAt,
-                  likes: comments[index - 2].likes,
-                  dislikes: comments[index - 2].dislikes,
+                  comment: comments[index - 2],
                   currUserRef: userData.userRef,
-                  reportsRefs: comments[index - 2].reportsRefs,
                 );
               }
             },
