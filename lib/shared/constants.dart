@@ -76,4 +76,11 @@ class C {
   static const comment = 'comment';
   static const reply = 'reply';
   static const people = 'people';
+  static const Relationships = 'Relationships';
+  static const Parties = 'Parties';
+  static const Memes = 'Memes';
+  static const Classes = 'Classes';
+  static const Advice = 'Advice';
+  static const College = 'College';
+  static const Confession = 'Confession';
 }

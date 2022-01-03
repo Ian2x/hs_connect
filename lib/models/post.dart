@@ -9,38 +9,38 @@ extension TagExtension on Tag {
   String get string {
     switch (this) {
       case Tag.Relationships:
-        return 'Relationships';
+        return C.Relationships;
       case Tag.Parties:
-        return 'Parties';
+        return C.Parties;
       case Tag.Memes:
-        return 'Memes';
+        return C.Memes;
       case Tag.Classes:
-        return 'Classes';
+        return C.Classes;
       case Tag.Advice:
-        return 'Advice';
+        return C.Advice;
       case Tag.College:
-        return 'College';
+        return C.College;
       case Tag.Confession:
-        return 'Confession';
+        return C.Confession;
     }
   }
 }
 
 Tag tagFrom(String tag) {
   switch (tag) {
-    case 'Relationships':
+    case C.Relationships:
       return Tag.Relationships;
-    case 'Parties':
+    case C.Parties:
       return Tag.Parties;
-    case 'Memes':
+    case C.Memes:
       return Tag.Memes;
-    case 'Classes':
+    case C.Classes:
       return Tag.Classes;
-    case 'Advice':
+    case C.Advice:
       return Tag.Advice;
-    case 'College':
+    case C.College:
       return Tag.College;
-    case 'Confession':
+    case C.Confession:
       return Tag.Confession;
     default:
       throw FormatException(tag + "is not a Tag type");
