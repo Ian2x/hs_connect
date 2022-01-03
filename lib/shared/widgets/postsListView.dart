@@ -13,20 +13,8 @@ ListView PostsListView({required List<Post> posts, required DocumentReference cu
         // when scroll up/down, fires once
         return Center(
             child: PostCard(
-          postRef: posts[index].postRef,
-          userRef: posts[index].creatorRef,
-          groupRef: posts[index].groupRef,
-          title: posts[index].title,
-          titleLC: posts[index].titleLC,
-          text: posts[index].text,
-          media: posts[index].media,
-          createdAt: posts[index].createdAt,
-          likes: posts[index].likes,
-          dislikes: posts[index].dislikes,
+          post: posts[index],
           currUserRef: currUserRef,
-          numComments: posts[index].numComments,
-          reportedStatus: posts[index].reportsRefs,
-          tag: posts[index].tag,
         ));
       });
 }

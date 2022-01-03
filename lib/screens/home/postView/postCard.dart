@@ -14,39 +14,9 @@ import 'package:hs_connect/shared/tools/convertTime.dart';
 
 class PostCard extends StatefulWidget {
   final Post post;
-  final DocumentReference postRef;
-  final DocumentReference userRef;
-  final DocumentReference groupRef;
-  final String title;
-  final String titleLC;
-  final String text;
-  final String? media;
-  final Timestamp createdAt;
-  final List<DocumentReference> likes;
-  final List<DocumentReference> dislikes;
-  final int numComments;
   final DocumentReference currUserRef;
-  final List<DocumentReference> reportedStatus;
-  final Tag tag;
 
-  PostCard(
-      {Key? key,
-      required this.post,
-      required this.postRef,
-      required this.userRef,
-      required this.groupRef,
-      required this.title,
-      required this.titleLC,
-      required this.text,
-      required this.media,
-      required this.createdAt,
-      required this.likes,
-      required this.dislikes,
-      required this.numComments,
-      required this.currUserRef,
-      required this.reportedStatus,
-      required this.tag})
-      : super(key: key);
+  PostCard({Key? key, required this.post, required this.currUserRef}) : super(key: key);
 
   @override
   _PostCardState createState() => _PostCardState();
@@ -68,13 +38,13 @@ class _PostCardState extends State<PostCard> {
   @override
   void initState() {
     // initialize liked/disliked
-    if (widget.likes.contains(widget.currUserRef)) {
+    if (widget.post.likes.contains(widget.currUserRef)) {
       if (mounted) {
         setState(() {
           liked = true;
         });
       }
-    } else if (widget.dislikes.contains(widget.currUserRef)) {
+    } else if (widget.post.dislikes.contains(widget.currUserRef)) {
       if (mounted) {
         setState(() {
           disliked = true;
@@ -82,14 +52,13 @@ class _PostCardState extends State<PostCard> {
       }
     }
     // find username for userId
-    // _userInfoDatabaseService.userId = widget.userId;
     getUserData();
     getGroupName();
     super.initState();
   }
 
   void getUserData() async {
-    final UserData? fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.userRef);
+    final UserData? fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.post.creatorRef);
     if (mounted) {
       setState(() {
         username = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
@@ -99,7 +68,7 @@ class _PostCardState extends State<PostCard> {
   }
 
   void getGroupName() async {
-    final Group? fetchGroupName = await _groups.getGroupData(groupRef: widget.groupRef);
+    final Group? fetchGroupName = await _groups.getGroupData(groupRef: widget.post.groupRef);
     if (mounted) {
       setState(() {
         groupName = fetchGroupName != null ? fetchGroupName.name : '<Failed to retrieve group name>';
@@ -112,7 +81,7 @@ class _PostCardState extends State<PostCard> {
       context,
       MaterialPageRoute(
           builder: (context) => SpecificGroupFeed(
-                groupRef: widget.groupRef,
+                groupRef: widget.post.groupRef,
               )),
     );
   }
@@ -123,7 +92,7 @@ class _PostCardState extends State<PostCard> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => PostPage(postRef: widget.postRef)),
+          MaterialPageRoute(builder: (context) => PostPage(postRef: widget.post.postRef)),
         );
       },
       child: Card(
@@ -206,7 +175,7 @@ class _PostCardState extends State<PostCard> {
                         SizedBox(height: 10),
                         Text(
                           //TODO: Need to figure out ways to ref
-                          widget.title,
+                          widget.post.title,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 15.0,
@@ -216,7 +185,7 @@ class _PostCardState extends State<PostCard> {
                         ),
                         SizedBox(height: 10),
                         Text(
-                          widget.text,
+                          widget.post.text,
                           overflow: TextOverflow.ellipsis, // default is .clip
                           maxLines: 3,
                           style: TextStyle(
@@ -230,7 +199,7 @@ class _PostCardState extends State<PostCard> {
                           children: [
                             Text(
                               //widget.createdAt.toString()
-                              convertTime(widget.createdAt.toDate()),
+                              convertTime(widget.post.createdAt.toDate()),
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 15.0,
@@ -245,7 +214,7 @@ class _PostCardState extends State<PostCard> {
                               size: 15.0,
                             ),
                             Text(
-                              widget.numComments.toString(),
+                              widget.post.numComments.toString(),
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 15.0,
@@ -256,9 +225,9 @@ class _PostCardState extends State<PostCard> {
                             Spacer(),
                             LikeDislikePost(
                                 currUserRef: widget.currUserRef,
-                                postRef: widget.postRef,
-                                likes: widget.likes,
-                                dislikes: widget.dislikes),
+                                postRef: widget.post.postRef,
+                                likes: widget.post.likes,
+                                dislikes: widget.post.dislikes),
                           ],
                         )
                       ], //Column Children ARRAY

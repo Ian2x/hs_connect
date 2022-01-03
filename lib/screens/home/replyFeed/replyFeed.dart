@@ -51,15 +51,7 @@ class _RepliesFeedState extends State<RepliesFeed> {
                 } else {
                   return Center(
                       child: ReplyCard(
-                    replyRef: replies[index].replyRef,
-                    commentRef: replies[index].commentRef,
-                    postRef: replies[index].postRef,
-                    userRef: replies[index].creatorRef,
-                    text: replies[index].text,
-                    media: replies[index].media,
-                    createdAt: replies[index].createdAt,
-                    likes: replies[index].likes,
-                    dislikes: replies[index].dislikes,
+                    reply: replies[index],
                     currUserRef: userData.userRef,
                   ));
                 }

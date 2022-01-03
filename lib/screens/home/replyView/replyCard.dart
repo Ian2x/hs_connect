@@ -1,33 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:hs_connect/models/reply.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/replyView/likeDislikeReply.dart';
 import 'package:hs_connect/services/replies_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 
 class ReplyCard extends StatefulWidget {
-  final DocumentReference replyRef;
-  final DocumentReference commentRef;
-  final DocumentReference postRef;
-  final DocumentReference? userRef;
-  final String text;
-  final String? media;
-  final Timestamp createdAt;
-  List<DocumentReference> likes;
-  List<DocumentReference> dislikes;
+  final Reply reply;
   final DocumentReference currUserRef;
 
   ReplyCard(
       {Key? key,
-      required this.replyRef,
-      required this.commentRef,
-      required this.postRef,
-      required this.userRef,
-      required this.text,
-      required this.media,
-      required this.createdAt,
-      required this.likes,
-      required this.dislikes,
+      required this.reply,
       required this.currUserRef})
       : super(key: key);
 
@@ -47,13 +32,13 @@ class _ReplyCardState extends State<ReplyCard> {
   @override
   void initState() {
     // initialize liked/disliked
-    if (widget.likes.contains(widget.currUserRef)) {
+    if (widget.reply.likes.contains(widget.currUserRef)) {
       if (mounted) {
         setState(() {
           liked = true;
         });
       }
-    } else if (widget.likes.contains(widget.currUserRef)) {
+    } else if (widget.reply.likes.contains(widget.currUserRef)) {
       if (mounted) {
         setState(() {
           disliked = true;
@@ -67,8 +52,8 @@ class _ReplyCardState extends State<ReplyCard> {
   }
 
   void getUsername() async {
-    if (widget.userRef != null) {
-      final UserData? fetchUsername = await _userInfoDatabaseService.getUserData(userRef: widget.userRef!);
+    if (widget.reply.creatorRef != null) {
+      final UserData? fetchUsername = await _userInfoDatabaseService.getUserData(userRef: widget.reply.creatorRef);
       if (mounted) {
         setState(() {
           username = fetchUsername != null ? fetchUsername.displayedName : '<Failed to retrieve user name>';
@@ -86,23 +71,23 @@ class _ReplyCardState extends State<ReplyCard> {
   @override
   Widget build(BuildContext context) {
     return Dismissible(
-      key: ValueKey(widget.commentRef),
+      key: ValueKey(widget.reply.commentRef),
       child: Card(
           child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
         ListTile(
-          title: Text(widget.text),
+          title: Text(widget.reply.text),
           subtitle: Text(username),
           trailing: LikeDislikeReply(
-              replyRef: widget.replyRef,
+              replyRef: widget.reply.replyRef,
               currUserRef: widget.currUserRef,
-              likes: widget.likes,
-              dislikes: widget.dislikes),
+              likes: widget.reply.likes,
+              dislikes: widget.reply.dislikes),
         ),
-        widget.media != null
+        widget.reply.media != null
             ? Semantics(
                 label: 'new_profile_pic_picked_image',
                 child: Image.network(
-                    widget.media!) // kIsWeb ? Image.network(widget.image!) : Image.file(File(widget.image!)),
+                    widget.reply.media!) // kIsWeb ? Image.network(widget.image!) : Image.file(File(widget.image!)),
                 )
             : Container(),
       ])),
@@ -110,11 +95,11 @@ class _ReplyCardState extends State<ReplyCard> {
         if (mounted) {
           setState(() {
             _replies.deleteReply(
-                replyRef: widget.replyRef,
-                commentRef: widget.commentRef,
-                postRef: widget.postRef,
+                replyRef: widget.reply.replyRef,
+                commentRef: widget.reply.commentRef,
+                postRef: widget.reply.postRef,
                 userRef: widget.currUserRef,
-                media: widget.media);
+                media: widget.reply.media);
           });
         }
       },
