@@ -7,33 +7,73 @@ const double profilePicHeight = 400;
 const double groupPicWidth = 400;
 const double groupPicHeight = 400;
 
-enum Tag {
-  Relationships,
-  Parties,
-  Memes,
-  Classes,
-  Advice,
-  College,
-  Confession
-}
-
-extension TagExtension on Tag {
-  String get string {
-    switch (this) {
-      case Tag.Relationships:
-        return 'Relationships';
-      case Tag.Parties:
-        return 'Parties';
-      case Tag.Memes:
-        return 'Memes';
-      case Tag.Classes:
-        return 'Classes';
-      case Tag.Advice:
-        return 'Advice';
-      case Tag.College:
-        return 'College';
-      default:
-        return 'Confession';
-    }
-  }
+class C {
+  static const displayedName = 'displayedName';
+  static const displayedNameLC = 'displayedNameLC';
+  static const bio = 'bio';
+  static const domain = 'domain';
+  static const county = 'county';
+  static const state = 'state';
+  static const country = 'country';
+  static const userGroups = 'userGroups';
+  static const modGroupRefs = 'modGroupsRefs';
+  static const messagesRefs = 'messagesRefs';
+  static const postsRefs = 'postsRefs';
+  static const commentsRefs = 'commentsRefs';
+  static const repliesRefs = 'repliesRefs';
+  static const profileImage = 'profileImage';
+  static const score = 'score';
+  static const reportsRefs = 'reportsRefs';
+  static const groupRef = 'groupRef';
+  static const public = 'public';
+  static const creatorRef = 'creatorRef';
+  static const moderatorRefs = 'moderatorRefs';
+  static const name = 'name';
+  static const nameLC = 'nameLC';
+  static const image = 'image';
+  static const description = 'description';
+  static const accessRestriction = 'accessRestriction';
+  static const createdAt = 'createdAt';
+  static const numPosts = 'numPosts';
+  static const numMembers = 'numMembers';
+  static const restriction = 'restriction';
+  static const restrictionType = 'restrictionType';
+  static const selfRef = 'selfRef';
+  static const commentRef = 'commentRef';
+  static const postRef = 'postRef';
+  static const text = 'text';
+  static const media = 'media';
+  static const numReplies = 'numReplies';
+  static const likes = 'likes';
+  static const dislikes = 'dislikes';
+  static const numComments = 'numComments';
+  static const title = 'title';
+  static const titleLC = 'titleLC';
+  static const tag = 'tag';
+  static const userData = 'userData';
+  static const groups = 'groups';
+  static const comments = 'comments';
+  static const posts = 'posts';
+  static const replies = 'replies';
+  static const pollRef = 'pollRef';
+  static const messages = 'messages';
+  static const messageRef = 'messageRef';
+  static const senderRef = 'senderRef';
+  static const receiverRef = 'receiverRef';
+  static const isMedia = 'isMedia';
+  static const knownDomains = 'knownDomains';
+  static const prompt = 'prompt';
+  static const choices = 'choices';
+  static const votes = 'votes';
+  static const polls = 'polls';
+  static const replyRef = 'replyRef';
+  static const reportType = 'reportType';
+  static const entityRef = 'entityRef';
+  static const reporterRef = 'reporterRef';
+  static const reports = 'reports';
+  static const message = 'message';
+  static const post = 'post';
+  static const comment = 'comment';
+  static const reply = 'reply';
+  static const people = 'people';
 }

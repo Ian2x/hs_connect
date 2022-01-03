@@ -1,13 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hs_connect/models/user_data.dart';
+import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/authenticate/authenticate.dart';
-
 import 'package:hs_connect/screens/home/home.dart';
-import 'package:hs_connect/screens/home/home2.dart';
-
 import 'package:provider/provider.dart';
-
 
 class Wrapper extends StatefulWidget {
   const Wrapper({Key? key}) : super(key: key);
@@ -17,16 +13,14 @@ class Wrapper extends StatefulWidget {
 }
 
 class _WrapperState extends State<Wrapper> {
-
   @override
   Widget build(BuildContext context) {
-
     final user = Provider.of<User?>(context);
     final userData = Provider.of<UserData?>(context);
     if (user == null || userData == null || !user.email!.endsWith('@ianeric.com')) {
       return Authenticate();
     } else {
-      return Home2();
+      return Home();
     }
   }
 }

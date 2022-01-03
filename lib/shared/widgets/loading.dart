@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:hs_connect/shared/tools/hexcolor.dart';
+import 'package:hs_connect/shared/tools/hexColor.dart';
 
 class Loading extends StatelessWidget {
   @override
