@@ -54,10 +54,11 @@ class Post {
   late DocumentReference creatorRef;
   late String title;
   late String titleLC;
-  late String text;
+  String? text;
   String? media;
   late Timestamp createdAt;
-  late int numComments;
+  late List<DocumentReference> commentsRefs;
+  late List<DocumentReference> repliesRefs;
   late AccessRestriction accessRestriction;
   late List<DocumentReference> likes;
   late List<DocumentReference> dislikes;
@@ -74,7 +75,8 @@ class Post {
     required this.text,
     required this.media,
     required this.createdAt,
-    required this.numComments,
+    required this.commentsRefs,
+    required this.repliesRefs,
     required this.accessRestriction,
     required this.likes,
     required this.dislikes,
@@ -93,7 +95,8 @@ class Post {
     this.text = querySnapshot[C.text];
     this.media = querySnapshot[C.media];
     this.createdAt = querySnapshot[C.createdAt];
-    this.numComments = querySnapshot[C.numComments];
+    this.commentsRefs = docRefList(querySnapshot[C.commentsRefs]);
+    this.repliesRefs = docRefList(querySnapshot[C.repliesRefs]);
     this.accessRestriction = accessRestrictionFromMap(map: accessRestriction);
     this.likes = docRefList(querySnapshot[C.likes]);
     this.dislikes = docRefList(querySnapshot[C.dislikes]);
@@ -112,7 +115,8 @@ class Post {
     this.text = snapshot.get(C.text);
     this.media = snapshot.get(C.media);
     this.createdAt = snapshot.get(C.createdAt);
-    this.numComments = snapshot.get(C.numComments);
+    this.commentsRefs = docRefList(snapshot.get(C.commentsRefs));
+    this.repliesRefs = docRefList(snapshot.get(C.repliesRefs));
     this.accessRestriction = accessRestrictionFromMap(map: accessRestriction);
     this.likes = docRefList(snapshot.get(C.likes));
     this.dislikes = docRefList(snapshot.get(C.dislikes));

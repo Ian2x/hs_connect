@@ -57,7 +57,7 @@ class _TrendingFeedState extends State<TrendingFeed> {
             return Loading();
           } else {
             List<Post> posts = (snapshot.data as List<Post?>).map((post) => post!).toList();
-            posts.sort((a, b) => (b as Post).numComments - (a as Post).numComments);
+            posts.sort((a, b) => ((b as Post).commentsRefs.length + (b as Post).repliesRefs.length) - ((a as Post).commentsRefs.length + (a as Post).repliesRefs.length));
 
             return PostsListView(posts: posts, currUserRef: userData.userRef);
           }

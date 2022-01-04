@@ -39,7 +39,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
   @override
   Widget build(BuildContext context) {
 
-    CommentsDatabaseService _comments = CommentsDatabaseService(userRef: widget.currUserRef, commentRef: widget.commentRef);
+    CommentsDatabaseService _comments = CommentsDatabaseService(currUserRef: widget.currUserRef, commentRef: widget.commentRef);
 
     return Row(
       mainAxisSize: MainAxisSize.min,

@@ -154,7 +154,7 @@ class _RoundedPostCardState extends State<RoundedPostCard> {
                       ),
                       SizedBox(height: 10),
                       Text(
-                        widget.post.text,
+                        widget.post.text != null ? widget.post.text! : '',
                         overflow: TextOverflow.ellipsis, // default is .clip
                         maxLines: 3,
                         style: TextStyle(
@@ -189,7 +189,7 @@ class _RoundedPostCardState extends State<RoundedPostCard> {
                             },
                           ),
                           Text(
-                            widget.post.numComments.toString(),
+                            (widget.post.commentsRefs.length + widget.post.repliesRefs.length).toString(),
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 15.0,

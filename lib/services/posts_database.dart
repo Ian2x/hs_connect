@@ -20,19 +20,24 @@ class PostsDatabaseService {
 
   Future<dynamic> newPost(
       {required String title,
-      required String text,
+      required String? text,
       required String? media,
       required DocumentReference groupRef,
       required String? tagString,
       required DocumentReference? pollRef,
       Function(void) onValue = defaultFunc,
       Function onError = defaultFunc}) async {
-    groupRef.update({C.numPosts: FieldValue.increment(1)});
+    // get accessRestriction
     final group = await groupRef.get();
     final accessRestriction = group.get(C.accessRestriction);
+    // update group's numPosts
+    groupRef.update({C.numPosts: FieldValue.increment(1)});
+    // update user's posts
+    DocumentReference postRef = postsCollection.doc();
+    currUserRef.update({C.myPostsRefs: FieldValue.arrayUnion([postRef])});
 
-    return await postsCollection
-        .add({
+    return await postRef
+        .set({
           C.groupRef: groupRef,
           C.creatorRef: currUserRef,
           C.title: title,
@@ -40,13 +45,14 @@ class PostsDatabaseService {
           C.text: text,
           C.media: media,
           C.createdAt: DateTime.now(),
-          C.numComments: 0,
+          C.commentsRefs: [],
+          C.repliesRefs: [],
           C.accessRestriction: accessRestriction,
           C.likes: List<String>.empty(),
           C.dislikes: List<String>.empty(),
           C.reportsRefs: [],
           C.pollRef: pollRef,
-          C.tag: tagString,
+          C.tag: tagString == '' ? null : tagString,
         })
         .then(onValue)
         .catchError(onError);
@@ -57,11 +63,14 @@ class PostsDatabaseService {
       required DocumentReference groupRef,
       required DocumentReference userRef,
       String? media}) async {
+    // check post exists and matches current user
     final post = await postRef.get();
     if (post.exists) {
       if (userRef == post.get(C.creatorRef)) {
+        // update group's numPosts
         groupRef.update({C.numPosts: FieldValue.increment(-1)});
-
+        // update user's posts
+        currUserRef.update({C.myCommentsRefs: FieldValue.arrayRemove([postRef])});
         // delete post's comments
         final delComments = FirebaseFirestore.instance.collection(C.comments).get().then((snapshot) async {
           List<DocumentSnapshot> allDocs = snapshot.docs;

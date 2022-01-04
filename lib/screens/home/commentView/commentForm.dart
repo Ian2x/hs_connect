@@ -61,7 +61,7 @@ class _CommentFormState extends State<CommentForm> {
       return Loading();
     }
 
-    CommentsDatabaseService _comments = CommentsDatabaseService(userRef: userData.userRef, postRef: widget.postRef);
+    CommentsDatabaseService _comments = CommentsDatabaseService(currUserRef: userData.userRef, postRef: widget.postRef);
 
     return Form(
       key: _formKey,

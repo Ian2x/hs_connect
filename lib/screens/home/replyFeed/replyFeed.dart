@@ -36,7 +36,6 @@ class _RepliesFeedState extends State<RepliesFeed> {
           return Loading();
         } else {
           final replies = (snapshot.data as List<Reply?>).map((reply) => reply!).toList();
-          // print(posts.map((post) => post!.image));
 
           return Flexible(
             //height: 200.0,
