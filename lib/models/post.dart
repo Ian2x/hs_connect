@@ -26,7 +26,8 @@ extension TagExtension on Tag {
   }
 }
 
-Tag tagFrom(String tag) {
+Tag? tagFrom(String? tag) {
+  if (tag==null || tag=='') return null;
   switch (tag) {
     case C.Relationships:
       return Tag.Relationships;
@@ -62,7 +63,7 @@ class Post {
   late List<DocumentReference> dislikes;
   late List<DocumentReference> reportsRefs;
   DocumentReference? pollRef;
-  late Tag tag;
+  late Tag? tag;
 
   Post({
     required this.postRef,
@@ -93,9 +94,7 @@ class Post {
     this.media = querySnapshot[C.media];
     this.createdAt = querySnapshot[C.createdAt];
     this.numComments = querySnapshot[C.numComments];
-    this.accessRestriction = AccessRestriction(
-        restriction: accessRestriction[C.restriction],
-        restrictionType: AccessRestrictionTypeFrom(accessRestriction[C.restrictionType]));
+    this.accessRestriction = accessRestrictionFromMap(map: accessRestriction);
     this.likes = docRefList(querySnapshot[C.likes]);
     this.dislikes = docRefList(querySnapshot[C.dislikes]);
     this.reportsRefs = docRefList(querySnapshot[C.reportsRefs]);
