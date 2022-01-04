@@ -11,20 +11,21 @@ import 'package:provider/provider.dart';
 
 class PostPage extends StatefulWidget {
   final DocumentReference postRef;
+  final DocumentReference currUserRef;
 
-  PostPage({Key? key, required this.postRef}) : super(key: key);
+  PostPage({Key? key, required this.postRef, required this.currUserRef}) : super(key: key);
 
   @override
   _PostPageState createState() => _PostPageState();
 }
 
 class _PostPageState extends State<PostPage> {
-  GroupsDatabaseService _groups = GroupsDatabaseService();
-  PostsDatabaseService _posts = PostsDatabaseService();
   String groupName = 'Loading Group name...';
   Post? post;
 
   void getData() async {
+    PostsDatabaseService _posts = PostsDatabaseService(currUserRef: widget.currUserRef);
+
     final temp = await _posts.getPost(widget.postRef);
     if (mounted) {
       setState(() {
@@ -32,6 +33,7 @@ class _PostPageState extends State<PostPage> {
       });
     }
     if (post != null) {
+      GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserRef);
       final Group? fetchGroupName = await _groups.getGroupData(groupRef: post!.groupRef);
       if (mounted) {
         setState(() {

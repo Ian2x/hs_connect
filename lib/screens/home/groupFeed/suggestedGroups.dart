@@ -22,36 +22,34 @@ class SuggestedGroups extends StatefulWidget {
 class _SuggestedGroupsState extends State<SuggestedGroups> {
   @override
   Widget build(BuildContext context) {
-    GroupsDatabaseService _groups = GroupsDatabaseService();
     final userData = Provider.of<UserData?>(context);
 
     if (userData == null) {
       return Loading();
-    } else {
-      return FutureBuilder(
-          future: _groups.getTrendingGroups(
-              domain: widget.domain, county: widget.county, state: widget.state, country: widget.country),
-          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-            if (snapshot.hasData) {
-              final groups = snapshot.data.docs.map((docSnapshot) {
-                return _groups.groupDataFromSnapshot(snapshot: docSnapshot);
-              }).toList();
-
-              return ListView.builder(
-                itemCount: groups.length,
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemBuilder: (BuildContext context, int index) {
-                  // when scroll up/down, fires once
-                  return Center(
-                      child: GroupCard(group: groups[index])
-                  );
-                },
-              );
-            } else {
-              return Loading();
-            }
-          });
     }
+    GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: userData.userRef);
+
+    return FutureBuilder(
+        future: _groups.getTrendingGroups(
+            domain: widget.domain, county: widget.county, state: widget.state, country: widget.country),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          if (snapshot.hasData) {
+            final groups = snapshot.data.docs.map((docSnapshot) {
+              return _groups.groupDataFromSnapshot(snapshot: docSnapshot);
+            }).toList();
+
+            return ListView.builder(
+              itemCount: groups.length,
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemBuilder: (BuildContext context, int index) {
+                // when scroll up/down, fires once
+                return Center(child: GroupCard(group: groups[index], currUserRef: userData.userRef));
+              },
+            );
+          } else {
+            return Loading();
+          }
+        });
   }
 }

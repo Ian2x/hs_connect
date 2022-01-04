@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:hs_connect/shared/tools/hexColor.dart';
+
 // Calculate trending by activity within past 2 days
 const daysTrending = 2;
 
@@ -6,6 +9,27 @@ const double profilePicHeight = 400;
 
 const double groupPicWidth = 400;
 const double groupPicHeight = 400;
+
+//TODO: May have to do sizing based on Media.context(of)
+
+class themeLayout {
+  static double borderRadius = 15.0;
+}
+
+class themeText {
+  static double regular = 16.0;
+}
+
+class themeColor extends Color {
+  themeColor(int value) : super(value);
+
+  static Color neutralBlack = HexColor("223E52");
+  static Color neutralGrey = HexColor("E9EDF0");
+
+  static Color textGrey = HexColor("C8CED2");
+
+  static Color secBlue = HexColor("54A0DC");
+}
 
 class C {
   static const displayedName = 'displayedName';
@@ -18,9 +42,9 @@ class C {
   static const userGroups = 'userGroups';
   static const modGroupRefs = 'modGroupsRefs';
   static const messagesRefs = 'messagesRefs';
-  static const postsRefs = 'postsRefs';
-  static const commentsRefs = 'commentsRefs';
-  static const repliesRefs = 'repliesRefs';
+  static const myPostsRefs = 'myPostsRefs';
+  static const myCommentsRefs = 'myCommentsRefs';
+  static const myRepliesRefs = 'myRepliesRefs';
   static const profileImage = 'profileImage';
   static const score = 'score';
   static const reportsRefs = 'reportsRefs';
@@ -83,4 +107,5 @@ class C {
   static const Advice = 'Advice';
   static const College = 'College';
   static const Confession = 'Confession';
+  static const savedPostsRefs = 'savedPostsRefs';
 }

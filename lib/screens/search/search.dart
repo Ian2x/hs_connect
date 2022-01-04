@@ -30,10 +30,6 @@ class _SearchState extends State<Search> {
   Stream streamQuery = Stream.empty();
   List<DocumentReference> _allowableGroupRefs = [];
 
-  GroupsDatabaseService _groups = GroupsDatabaseService();
-  UserDataDatabaseService _userDataDatabase = UserDataDatabaseService();
-  PostsDatabaseService _posts = PostsDatabaseService();
-
   _SearchState() {
     _filter.addListener(() {
       if (_filter.text.isEmpty) {
@@ -126,6 +122,7 @@ class _SearchState extends State<Search> {
                     return SearchResultCard(
                       searchResult: filteredResults[index],
                       searchResultType: _resultType,
+                      currUserRef: widget.userData.userRef,
                     );
                   });
             }
@@ -142,17 +139,17 @@ class _SearchState extends State<Search> {
         switch (_resultType) {
           case SearchResultType.people:
             setState(() {
-              streamQuery = _userDataDatabase.searchStream(_searchText);
+              streamQuery = UserDataDatabaseService(currUserRef: widget.userData.userRef).searchStream(_searchText);
             });
             break;
           case SearchResultType.posts:
             setState(() {
-              streamQuery = _posts.searchStream(_searchText, _allowableGroupRefs);
+              streamQuery = PostsDatabaseService(currUserRef: widget.userData.userRef).searchStream(_searchText, _allowableGroupRefs);
             });
             break;
           default: // for ResultType.groups
             setState(() {
-              streamQuery = _groups.searchStream(_searchText, _allowableGroupRefs);
+              streamQuery = GroupsDatabaseService(currUserRef: widget.userData.userRef).searchStream(_searchText, _allowableGroupRefs);
             });
         }
       });
@@ -160,7 +157,7 @@ class _SearchState extends State<Search> {
   }
 
   void _getAllowableGroupIds() async {
-    final temp = await _groups.getAllowableGroupRefs(
+    final temp = await GroupsDatabaseService(currUserRef: widget.userData.userRef).getAllowableGroupRefs(
         domain: widget.userData.domain,
         county: widget.userData.county,
         state: widget.userData.state,

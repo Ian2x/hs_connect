@@ -23,7 +23,6 @@ class navigationBar extends StatefulWidget {
 }
 
 class _navigationBarState extends State<navigationBar> {
-  GroupsDatabaseService _groups = GroupsDatabaseService();
 
   bool loading = false;
 
@@ -105,7 +104,7 @@ class _navigationBarState extends State<navigationBar> {
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  NoAnimationMaterialPageRoute(builder: (context) => Profile(profilePersonRef: userData.userRef)),
+                  NoAnimationMaterialPageRoute(builder: (context) => Profile(profilePersonRef: userData.userRef, currUserRef: userData.userRef)),
                 );
               },
             ),

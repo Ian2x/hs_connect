@@ -21,7 +21,7 @@ class _HomeFeedState extends State<HomeFeed> {
     if (userData == null) return Loading();
 
     PostsDatabaseService _posts =
-        PostsDatabaseService(groupRefs: userData.userGroups.map((userGroup) => userGroup.groupRef).toList());
+        PostsDatabaseService(currUserRef: userData.userRef, groupRefs: userData.userGroups.map((userGroup) => userGroup.groupRef).toList());
 
     return StreamBuilder(
       stream: _posts.posts,

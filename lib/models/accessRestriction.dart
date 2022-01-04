@@ -26,7 +26,7 @@ AccessRestrictionTypeFrom(String accessRestrictionType) {
       return AccessRestrictionType.county;
     case C.state:
       return AccessRestrictionType.state;
-    case C.domain:
+    case C.country:
       return AccessRestrictionType.country;
   }
 }

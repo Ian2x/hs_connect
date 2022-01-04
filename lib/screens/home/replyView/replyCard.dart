@@ -21,7 +21,6 @@ class ReplyCard extends StatefulWidget {
 }
 
 class _ReplyCardState extends State<ReplyCard> {
-  UserDataDatabaseService _userInfoDatabaseService = UserDataDatabaseService();
 
   RepliesDatabaseService _replies = RepliesDatabaseService();
 
@@ -53,6 +52,7 @@ class _ReplyCardState extends State<ReplyCard> {
 
   void getUsername() async {
     if (widget.reply.creatorRef != null) {
+      UserDataDatabaseService _userInfoDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserRef);
       final UserData? fetchUsername = await _userInfoDatabaseService.getUserData(userRef: widget.reply.creatorRef);
       if (mounted) {
         setState(() {

@@ -11,15 +11,15 @@ import 'package:provider/provider.dart';
 
 class SpecificGroupFeed extends StatefulWidget {
   final DocumentReference groupRef;
+  final DocumentReference currUserRef;
 
-  const SpecificGroupFeed({Key? key, required this.groupRef}) : super(key: key);
+  const SpecificGroupFeed({Key? key, required this.groupRef, required this.currUserRef}) : super(key: key);
 
   @override
   _SpecificGroupFeedState createState() => _SpecificGroupFeedState();
 }
 
 class _SpecificGroupFeedState extends State<SpecificGroupFeed> {
-  GroupsDatabaseService _groups = GroupsDatabaseService();
 
   String groupName = '<Loading group name...>';
 
@@ -30,6 +30,7 @@ class _SpecificGroupFeedState extends State<SpecificGroupFeed> {
   }
 
   void getGroupName() async {
+    GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserRef);
     final Group? fetchGroupName = await _groups.getGroupData(groupRef: widget.groupRef);
     if (mounted) {
       setState(() {
@@ -44,7 +45,7 @@ class _SpecificGroupFeedState extends State<SpecificGroupFeed> {
 
     if (userData == null) return Loading();
 
-    PostsDatabaseService _posts = PostsDatabaseService(groupRefs: [widget.groupRef]);
+    PostsDatabaseService _posts = PostsDatabaseService(currUserRef: userData.userRef, groupRefs: [widget.groupRef]);
 
     return Scaffold(
       backgroundColor: Colors.brown[50],

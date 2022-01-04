@@ -44,82 +44,84 @@ class _CommentFormState extends State<CommentForm> {
 
   ImageStorage _images = ImageStorage();
 
+  void setPic(File newFile2) {
+    if (mounted) {
+      setState(() {
+        newFile = newFile2;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
 
-    void setPic(File newFile2) {
-      if (mounted) {
-        setState(() {
-          newFile = newFile2;
-        });
-      }
-    }
-
     if (userData == null) {
       // Don't expect to be here, but just in case
       return Loading();
-    } else {
-      return Form(
-        key: _formKey,
-        child: Column(
-          children: <Widget>[
-            TextFormField(
-              initialValue: '',
-              decoration: messageInputDecoration(
-                  onPressed: () async {
-                    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-                      if (mounted) {
-                        setState(() => loading = true);
-                      }
-
-                      if (newFile != null) {
-                        // upload newFile
-                        final downloadURL = await _images.uploadImage(file: newFile!);
-                        if (mounted) {
-                          setState(() {
-                            newFileURL = downloadURL;
-                          });
-                        }
-                      }
-
-                      await CommentsDatabaseService(userRef: userData.userRef).newComment(
-                        postRef: widget.postRef,
-                        text: _text,
-                        mediaURL: newFileURL,
-                        onValue: handleValue,
-                        onError: handleError,
-                        groupRef: widget.groupRef,
-                      );
-                    }
-                  },
-                  setPic: setPic),
-              validator: (val) {
-                if (val == null) return 'Error: null value';
-                if (val.isEmpty)
-                  return 'Can\'t create an empty comment';
-                else
-                  return null;
-              },
-              onChanged: (val) {
-                if (mounted) {
-                  setState(() => _text = val);
-                }
-              },
-            ),
-            newFile != null
-                ? Semantics(
-                    label: 'new_profile_pic_picked_image',
-                    child: kIsWeb ? Image.network(newFile!.path) : Image.file(File(newFile!.path)),
-                  )
-                : Container(),
-            Text(
-              error,
-              style: TextStyle(color: Colors.red, fontSize: 14.0),
-            )
-          ],
-        ),
-      );
     }
+
+    CommentsDatabaseService _comments = CommentsDatabaseService(userRef: userData.userRef, postRef: widget.postRef);
+
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: <Widget>[
+          TextFormField(
+            initialValue: '',
+            decoration: messageInputDecoration(
+                onPressed: () async {
+                  if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+                    if (mounted) {
+                      setState(() => loading = true);
+                    }
+
+                    if (newFile != null) {
+                      // upload newFile
+                      final downloadURL = await _images.uploadImage(file: newFile!);
+                      if (mounted) {
+                        setState(() {
+                          newFileURL = downloadURL;
+                        });
+                      }
+                    }
+
+                    await _comments.newComment(
+                      postRef: widget.postRef,
+                      text: _text,
+                      media: newFileURL,
+                      onValue: handleValue,
+                      onError: handleError,
+                      groupRef: widget.groupRef,
+                    );
+                  }
+                },
+                setPic: setPic),
+            validator: (val) {
+              if (val == null) return 'Error: null value';
+              if (val.isEmpty)
+                return 'Can\'t create an empty comment';
+              else
+                return null;
+            },
+            onChanged: (val) {
+              if (mounted) {
+                setState(() => _text = val);
+              }
+            },
+          ),
+          newFile != null
+              ? Semantics(
+                  label: 'new_profile_pic_picked_image',
+                  child: kIsWeb ? Image.network(newFile!.path) : Image.file(File(newFile!.path)),
+                )
+              : Container(),
+          Text(
+            error,
+            style: TextStyle(color: Colors.red, fontSize: 14.0),
+          )
+        ],
+      ),
+    );
   }
 }

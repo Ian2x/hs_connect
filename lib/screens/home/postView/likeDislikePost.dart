@@ -17,7 +17,6 @@ class LikeDislikePost extends StatefulWidget {
 }
 
 class _LikeDislikePostState extends State<LikeDislikePost> {
-  PostsDatabaseService _posts = PostsDatabaseService();
 
   bool likeStatus = false;
   bool dislikeStatus = false;
@@ -39,6 +38,9 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
 
   @override
   Widget build(BuildContext context) {
+
+    PostsDatabaseService _posts = PostsDatabaseService(currUserRef: widget.currUserRef);
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[

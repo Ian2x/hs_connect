@@ -24,7 +24,7 @@ class NewPost extends StatelessWidget {
       body: Stack(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.all(20.0),
+            padding: EdgeInsets.fromLTRB(15.0, 30.0,15.0,0.0), //TODO May need to adjust to phone height?
             constraints: BoxConstraints.expand(),
             child: PostForm(),
           ),

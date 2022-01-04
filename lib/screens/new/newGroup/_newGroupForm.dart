@@ -52,152 +52,149 @@ class _NewGroupFormState extends State<NewGroupForm> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
-
     final userData = Provider.of<UserData?>(context);
 
     if (userData == null) {
       // Don't expect to be here, but just in case
       return Loading();
-    } else {
-      final List<AccessRestriction> accessOptions = [
-        AccessRestriction(restrictionType: AccessRestrictionType.domain, restriction: userData.domain),
-      ];
-      if (userData.county != null) {
-        accessOptions
-            .add(AccessRestriction(restrictionType: AccessRestrictionType.county, restriction: userData.county!));
-      }
-      if (userData.state != null) {
-        accessOptions
-            .add(AccessRestriction(restrictionType: AccessRestrictionType.state, restriction: userData.state!));
-      }
-      if (userData.country != null) {
-        accessOptions
-            .add(AccessRestriction(restrictionType: AccessRestrictionType.country, restriction: userData.country!));
-      }
-
-      return SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: <Widget>[
-              Text(
-                'Form a new group',
-                style: TextStyle(fontSize: 18.0),
-              ),
-              SizedBox(height: 20.0),
-              Text('Group name'),
-              TextFormField(
-                initialValue: '',
-                decoration: textInputDecoration,
-                validator: (val) {
-                  if (val == null) return 'Error: null value';
-                  if (val.isEmpty)
-                    return 'Group name is required';
-                  else
-                    return null;
-                },
-                onChanged: (val) {
-                  if (mounted) {
-                    setState(() => _name = val);
-                  }
-                },
-              ),
-              SizedBox(height: 20.0),
-              DropdownButtonFormField<AccessRestriction>(
-                decoration: textInputDecoration,
-                value: _accessRestriction,
-                items: accessOptions.map((option) {
-                  return DropdownMenuItem(
-                    value: option,
-                    child: Text(option.restriction),
-                  );
-                }).toList(),
-                validator: (value) => value == null ? 'Must select access restrictions' : null,
-                onChanged: (val) {
-                  if (mounted) {
-                    setState(() => _accessRestriction = val!);
-                  }
-                },
-              ),
-              FloatingActionButton(
-                onPressed: () async {
-                  try {
-                    final pickedFile = await ImagePicker().pickImage(
-                      source: ImageSource.gallery,
-                    );
-                    if (pickedFile != null) {
-                      if (mounted) {
-                        setState(() {
-                          newFile = File(pickedFile.path);
-                        });
-                      }
-                    } else {
-                      if (mounted) {
-                        setState(() {
-                          newFile = null;
-                        });
-                      }
-                    }
-                  } catch (e) {
-                    print(e);
-                  }
-                },
-                heroTag: 'image0',
-                tooltip: 'Pick Image from gallery',
-                child: const Icon(Icons.photo),
-              ),
-              newFile != null
-                  ? Semantics(
-                      label: 'new_profile_pic_picked_image',
-                      child: kIsWeb ? Image.network(newFile!.path) : Image.file(File(newFile!.path)),
-                    )
-                  : Container(),
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.pink[400],
-                  ),
-                  onPressed: () async {
-                    if (newFile != null) {
-                      // upload newFile
-                      final downloadURL = await _images.uploadImage(file: newFile!);
-                      if (mounted) {
-                        setState(() {
-                          newFileURL = downloadURL;
-                        });
-                      }
-                    }
-
-                    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-                      if (mounted) {
-                        setState(() => loading = true);
-                      }
-                      await GroupsDatabaseService().newGroup(
-                        accessRestriction: _accessRestriction!,
-                        name: _name,
-                        creatorRef: userData.userRef,
-                        image: newFileURL,
-                        description: _description,
-                        onValue: handleValue,
-                        onError: handleError,
-                      );
-                    }
-                  },
-                  child: Text(
-                    'Make group',
-                    style: TextStyle(color: Colors.white),
-                  )),
-              SizedBox(height: 12.0),
-              Text(
-                error,
-                style: TextStyle(color: Colors.red, fontSize: 14.0),
-              )
-            ],
-          ),
-        ),
-      );
     }
 
-    return Container();
+    GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: userData.userRef);
+
+    final List<AccessRestriction> accessOptions = [
+      AccessRestriction(restrictionType: AccessRestrictionType.domain, restriction: userData.domain),
+    ];
+    if (userData.county != null) {
+      accessOptions
+          .add(AccessRestriction(restrictionType: AccessRestrictionType.county, restriction: userData.county!));
+    }
+    if (userData.state != null) {
+      accessOptions.add(AccessRestriction(restrictionType: AccessRestrictionType.state, restriction: userData.state!));
+    }
+    if (userData.country != null) {
+      accessOptions
+          .add(AccessRestriction(restrictionType: AccessRestrictionType.country, restriction: userData.country!));
+    }
+
+    return SingleChildScrollView(
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: <Widget>[
+            Text(
+              'Form a new group',
+              style: TextStyle(fontSize: 18.0),
+            ),
+            SizedBox(height: 20.0),
+            Text('Group name'),
+            TextFormField(
+              initialValue: '',
+              decoration: textInputDecoration,
+              validator: (val) {
+                if (val == null) return 'Error: null value';
+                if (val.isEmpty)
+                  return 'Group name is required';
+                else
+                  return null;
+              },
+              onChanged: (val) {
+                if (mounted) {
+                  setState(() => _name = val);
+                }
+              },
+            ),
+            SizedBox(height: 20.0),
+            DropdownButtonFormField<AccessRestriction>(
+              decoration: textInputDecoration,
+              value: _accessRestriction,
+              items: accessOptions.map((option) {
+                return DropdownMenuItem(
+                  value: option,
+                  child: Text(option.restriction),
+                );
+              }).toList(),
+              validator: (value) => value == null ? 'Must select access restrictions' : null,
+              onChanged: (val) {
+                if (mounted) {
+                  setState(() => _accessRestriction = val!);
+                }
+              },
+            ),
+            FloatingActionButton(
+              onPressed: () async {
+                try {
+                  final pickedFile = await ImagePicker().pickImage(
+                    source: ImageSource.gallery,
+                  );
+                  if (pickedFile != null) {
+                    if (mounted) {
+                      setState(() {
+                        newFile = File(pickedFile.path);
+                      });
+                    }
+                  } else {
+                    if (mounted) {
+                      setState(() {
+                        newFile = null;
+                      });
+                    }
+                  }
+                } catch (e) {
+                  print(e);
+                }
+              },
+              heroTag: 'image0',
+              tooltip: 'Pick Image from gallery',
+              child: const Icon(Icons.photo),
+            ),
+            newFile != null
+                ? Semantics(
+                    label: 'new_profile_pic_picked_image',
+                    child: kIsWeb ? Image.network(newFile!.path) : Image.file(File(newFile!.path)),
+                  )
+                : Container(),
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.pink[400],
+                ),
+                onPressed: () async {
+                  if (newFile != null) {
+                    // upload newFile
+                    final downloadURL = await _images.uploadImage(file: newFile!);
+                    if (mounted) {
+                      setState(() {
+                        newFileURL = downloadURL;
+                      });
+                    }
+                  }
+
+                  if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+                    if (mounted) {
+                      setState(() => loading = true);
+                    }
+                    await _groups.newGroup(
+                      accessRestriction: _accessRestriction!,
+                      name: _name,
+                      creatorRef: userData.userRef,
+                      image: newFileURL,
+                      description: _description,
+                      onValue: handleValue,
+                      onError: handleError,
+                    );
+                  }
+                },
+                child: Text(
+                  'Make group',
+                  style: TextStyle(color: Colors.white),
+                )),
+            SizedBox(height: 12.0),
+            Text(
+              error,
+              style: TextStyle(color: Colors.red, fontSize: 14.0),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }

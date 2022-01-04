@@ -13,8 +13,9 @@ class TrendingFeed extends StatefulWidget {
   final String? county;
   final String? state;
   final String? country;
+  final DocumentReference currUserRef;
 
-  const TrendingFeed({Key? key, required this.domain, required this.county, required this.state, required this.country})
+  const TrendingFeed({Key? key, required this.domain, required this.county, required this.state, required this.country, required this.currUserRef})
       : super(key: key);
 
   @override
@@ -30,7 +31,7 @@ class _TrendingFeedState extends State<TrendingFeed> {
   }
 
   void fetchAllowableGroupsRefs() async {
-    GroupsDatabaseService _groups = GroupsDatabaseService();
+    GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserRef);
     final refs = await _groups.getAllowableGroupRefs(
         domain: widget.domain, county: widget.county, state: widget.state, country: widget.country);
     if (mounted) {
@@ -42,16 +43,12 @@ class _TrendingFeedState extends State<TrendingFeed> {
 
   @override
   Widget build(BuildContext context) {
-    if (allowableGroupsRefs == null) {
-      return Loading();
-    }
-
-    PostsDatabaseService _posts = PostsDatabaseService(groupRefs: allowableGroupsRefs);
 
     final userData = Provider.of<UserData?>(context);
-    if (userData == null) {
-      return Loading();
-    }
+
+    if (userData == null || allowableGroupsRefs == null) return Loading();
+
+    PostsDatabaseService _posts = PostsDatabaseService(currUserRef: userData.userRef, groupRefs: allowableGroupsRefs);
 
     return StreamBuilder(
         stream: _posts.potentialTrendingPosts,
