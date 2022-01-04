@@ -36,7 +36,6 @@ class _DiscoverState extends State<Discover> {
                 })
                 .toList()
                 .cast<Group>();
-
             return Container(
               height: double.maxFinite,
               // width: 500,
@@ -54,7 +53,6 @@ class _DiscoverState extends State<Discover> {
                         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot2) {
                           if (snapshot2.hasData) {
                             List<Post?> posts = snapshot2.data;
-
                             return Container(
                               height: 100,
                               width: double.maxFinite,

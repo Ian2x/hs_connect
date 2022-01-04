@@ -70,7 +70,6 @@ class C {
   static const numReplies = 'numReplies';
   static const likes = 'likes';
   static const dislikes = 'dislikes';
-  static const numComments = 'numComments';
   static const title = 'title';
   static const titleLC = 'titleLC';
   static const tag = 'tag';
@@ -108,4 +107,6 @@ class C {
   static const College = 'College';
   static const Confession = 'Confession';
   static const savedPostsRefs = 'savedPostsRefs';
+  static const commentsRefs = 'commentsRefs';
+  static const repliesRefs = 'repliesRefs';
 }

@@ -26,7 +26,7 @@ class RepliesDatabaseService {
       required DocumentReference groupRef,
       Function(void) onValue = defaultFunc,
       Function onError = defaultFunc}) async {
-    postRef.update({C.numComments: FieldValue.increment(1)});
+    // TODO: update post's numReplies
     commentRef.update({C.numReplies: FieldValue.increment(1)});
 
     final group = await groupRef.get();
@@ -59,7 +59,7 @@ class RepliesDatabaseService {
     final reply = await replyRef.get();
     if (reply.exists) {
       if (userRef == reply.get(C.creatorRef)) {
-        postRef.update({C.numComments: FieldValue.increment(-1)});
+        // TODO: update post's repliesRefs
         commentRef.update({C.numReplies: FieldValue.increment(1)});
 
         await replyRef

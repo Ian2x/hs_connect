@@ -181,6 +181,7 @@ class GroupsDatabaseService {
     // collect post information for each group
     PostsDatabaseService _posts = PostsDatabaseService(groupRefs: allGroupsRefs, currUserRef: currUserRef);
     final List<Post?> allPosts = await _posts.getMultiGroupPosts();
+    print(allPosts);
     final List<Post?> filteredPosts = allPosts
         .where((post) =>
             post != null &&
@@ -195,7 +196,6 @@ class GroupsDatabaseService {
         groupScores.entries.map((ele) => refRanking(ref: ele.key, count: ele.value)).toList();
     groupScoresList.sort(refRankingCompare);
     List<refRanking> shortGroupScoresList = groupScoresList.sublist(0, min(10, groupScoresList.length));
-
     final test = groupsCollection
         .where(FieldPath.documentId,
             whereIn: shortGroupScoresList.map((refRanking) {

@@ -184,7 +184,7 @@ class _PostCardState extends State<PostCard> {
                         ),
                         SizedBox(height: 10),
                         Text(
-                          widget.post.text,
+                          widget.post.text != null ? widget.post.text! : '',
                           overflow: TextOverflow.ellipsis, // default is .clip
                           maxLines: 3,
                           style: TextStyle(
@@ -213,7 +213,7 @@ class _PostCardState extends State<PostCard> {
                               size: 15.0,
                             ),
                             Text(
-                              widget.post.numComments.toString(),
+                              (widget.post.commentsRefs.length + widget.post.repliesRefs.length).toString(),
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 15.0,

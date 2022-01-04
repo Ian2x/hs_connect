@@ -6,38 +6,38 @@ import 'package:hs_connect/shared/constants.dart';
 void defaultFunc(dynamic parameter) {}
 
 class CommentsDatabaseService {
-  final DocumentReference userRef;
+  final DocumentReference currUserRef;
   final DocumentReference? postRef;
   final DocumentReference? commentRef;
 
-  CommentsDatabaseService({required this.userRef, this.postRef, this.commentRef});
+  CommentsDatabaseService({required this.currUserRef, this.postRef, this.commentRef});
 
   ImageStorage _images = ImageStorage();
 
   // collection reference
   final CollectionReference commentsCollection = FirebaseFirestore.instance.collection(C.comments);
 
-  Future newComment(
+  Future<dynamic> newComment(
       {required String text,
       required String? media,
       required DocumentReference postRef,
       required DocumentReference groupRef,
       Function(void) onValue = defaultFunc,
       Function onError = defaultFunc}) async {
+    DocumentReference commentRef = commentsCollection.doc();
+    // update user's comments
+    currUserRef.update({C.myCommentsRefs: FieldValue.arrayUnion([commentRef])});
+    // update post's commentsRefs
+    postRef.update({C.commentsRefs: FieldValue.arrayUnion([commentRef])});
     // get accessRestriction
     final group = await groupRef.get();
     final accessRestriction = group.get(C.accessRestriction);
-    // update post's numComments
-    postRef.update({C.numComments: FieldValue.increment(1)});
-    // update user's comments
-    DocumentReference commentRef = commentsCollection.doc();
-    userRef.update({C.myCommentsRefs: FieldValue.arrayUnion([commentRef])});
 
-    await commentRef
+    return await commentRef
         .set({
           C.postRef: postRef,
           C.groupRef: groupRef,
-          C.creatorRef: userRef,
+          C.creatorRef: currUserRef,
           C.text: text,
           C.media: media,
           C.createdAt: DateTime.now(),
@@ -49,7 +49,6 @@ class CommentsDatabaseService {
         })
         .then(onValue)
         .catchError(onError);
-    return commentRef;
   }
 
   Future<dynamic> deleteComment(
@@ -59,11 +58,11 @@ class CommentsDatabaseService {
     // check comment exists and matches current user
     final comment = await commentRef.get();
     if (comment.exists) {
-      if (userRef == comment.get(C.creatorRef)) {
-        // update post's numComments
-        postRef.update({C.numComments: FieldValue.increment(-1)});
+      if (currUserRef == comment.get(C.creatorRef)) {
+        // TODO: update post's numComments
+        //
         // update user's comments
-        userRef.update({C.myCommentsRefs: FieldValue.arrayRemove([commentRef])});
+        currUserRef.update({C.myCommentsRefs: FieldValue.arrayRemove([commentRef])});
         // "delete" comment
         await commentRef
             .update({C.likes: [], C.dislikes: [], C.media: null, C.creatorRef: null, C.text: '[Comment removed]'});
@@ -79,36 +78,36 @@ class CommentsDatabaseService {
   Future<void> likeComment() async {
     // remove dislike if disliked
     await commentRef!.update({
-      C.dislikes: FieldValue.arrayRemove([userRef])
+      C.dislikes: FieldValue.arrayRemove([currUserRef])
     });
     // like comment
     return await commentRef!.update({
-      C.likes: FieldValue.arrayUnion([userRef])
+      C.likes: FieldValue.arrayUnion([currUserRef])
     });
   }
 
   Future<void> unLikeComment() async {
     // remove like
     await commentRef!.update({
-      C.likes: FieldValue.arrayRemove([userRef])
+      C.likes: FieldValue.arrayRemove([currUserRef])
     });
   }
 
   Future<void> dislikeComment() async {
     // remove like if liked
     await commentRef!.update({
-      C.likes: FieldValue.arrayRemove([userRef])
+      C.likes: FieldValue.arrayRemove([currUserRef])
     });
     // dislike comment
     return await commentRef!.update({
-      C.dislikes: FieldValue.arrayUnion([userRef])
+      C.dislikes: FieldValue.arrayUnion([currUserRef])
     });
   }
 
   Future<void> unDislikeComment() async {
     // remove like
     await commentRef!.update({
-      C.dislikes: FieldValue.arrayRemove([userRef])
+      C.dislikes: FieldValue.arrayRemove([currUserRef])
     });
   }
 
