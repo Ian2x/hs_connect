@@ -8,15 +8,15 @@ import 'package:hs_connect/services/known_domains_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 
 class UserDataDatabaseService {
-  DocumentReference? userRef;
+  DocumentReference currUserRef;
 
-  UserDataDatabaseService({this.userRef});
+  UserDataDatabaseService({required this.currUserRef});
 
   // collection reference
   final CollectionReference userDataCollection = FirebaseFirestore.instance.collection(C.userData);
 
   Future<void> initUserData(String domain, String username) async {
-    final GroupsDatabaseService _groupDatabaseService = GroupsDatabaseService();
+    final GroupsDatabaseService _groupDatabaseService = GroupsDatabaseService(currUserRef: currUserRef);
     final KnownDomainsDatabaseService _knownDomainsDatabaseService = KnownDomainsDatabaseService();
 
     // Create domain group if not already created
@@ -28,7 +28,7 @@ class UserDataDatabaseService {
         description: null);
     // Find domain data (county, state, country)
     final KnownDomain? kd = await _knownDomainsDatabaseService.getKnownDomain(domain: domain);
-    return await userRef!.set({
+    return await currUserRef.set({
       C.displayedName: username,
       C.displayedNameLC: username.toLowerCase(),
       C.bio: null,
@@ -39,9 +39,10 @@ class UserDataDatabaseService {
       C.userGroups: [UserGroup(groupRef: docRef, public: true).asMap()],
       C.modGroupRefs: [],
       C.messagesRefs: [],
-      C.postsRefs: [],
-      C.commentsRefs: [],
-      C.repliesRefs: [],
+      C.myPostsRefs: [],
+      C.myCommentsRefs: [],
+      C.myRepliesRefs: [],
+      C.savedPostsRefs: [],
       C.profileImage: null,
       C.score: 0,
       C.reportsRefs: [],
@@ -53,7 +54,7 @@ class UserDataDatabaseService {
       required String? imageURL,
       required Function(void) onValue,
       required Function onError}) async {
-    return await userRef!
+    return await currUserRef
         .update({
           C.displayedName: displayedName,
           C.displayedNameLC: displayedName.toLowerCase(),
@@ -92,7 +93,7 @@ class UserDataDatabaseService {
   // home data from snapshot
   UserData? _userDataFromSnapshot(DocumentSnapshot snapshot, {DocumentReference? overrideUserRef}) {
     if (snapshot.exists) {
-      return UserData.fromSnapshot(snapshot, overrideUserRef != null ? overrideUserRef : userRef!);
+      return UserData.fromSnapshot(snapshot, overrideUserRef != null ? overrideUserRef : currUserRef);
     } else {
       return null;
     }
@@ -109,12 +110,8 @@ class UserDataDatabaseService {
   }
 
   // get home doc stream
-  Stream<UserData?>? get userData {
-    if (userRef != null) {
-      return userRef!.snapshots().map(_userDataFromSnapshot);
-    } else {
-      return null;
-    }
+  Stream<UserData?> get userData {
+    return currUserRef.snapshots().map(_userDataFromSnapshot);
   }
 
   SearchResult _streamResultFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {

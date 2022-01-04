@@ -22,7 +22,7 @@ class _DomainFeedState extends State<DomainFeed> {
 
     if (userData == null) return Loading();
 
-    PostsDatabaseService _posts = PostsDatabaseService(groupRefs: [userData.userGroups[0].groupRef]);
+    PostsDatabaseService _posts = PostsDatabaseService(currUserRef: userData.userRef, groupRefs: [userData.userGroups[0].groupRef]);
 
     return StreamBuilder(
       stream: _posts.posts,

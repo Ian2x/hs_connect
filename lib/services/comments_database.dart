@@ -6,35 +6,40 @@ import 'package:hs_connect/shared/constants.dart';
 void defaultFunc(dynamic parameter) {}
 
 class CommentsDatabaseService {
-  final DocumentReference? userRef;
+  final DocumentReference userRef;
+  final DocumentReference? postRef;
+  final DocumentReference? commentRef;
 
-  DocumentReference? postRef;
-
-  CommentsDatabaseService({this.userRef, this.postRef});
+  CommentsDatabaseService({required this.userRef, this.postRef, this.commentRef});
 
   ImageStorage _images = ImageStorage();
 
   // collection reference
-  final CollectionReference commentsCollection = FirebaseFirestore.instance.collection('comments');
+  final CollectionReference commentsCollection = FirebaseFirestore.instance.collection(C.comments);
 
   Future newComment(
       {required String text,
-      required String? mediaURL,
+      required String? media,
       required DocumentReference postRef,
       required DocumentReference groupRef,
       Function(void) onValue = defaultFunc,
       Function onError = defaultFunc}) async {
-    postRef.update({C.numComments: FieldValue.increment(1)});
+    // get accessRestriction
     final group = await groupRef.get();
     final accessRestriction = group.get(C.accessRestriction);
+    // update post's numComments
+    postRef.update({C.numComments: FieldValue.increment(1)});
+    // update user's comments
+    DocumentReference commentRef = commentsCollection.doc();
+    userRef.update({C.myCommentsRefs: FieldValue.arrayUnion([commentRef])});
 
-    return await commentsCollection
-        .add({
+    await commentRef
+        .set({
           C.postRef: postRef,
           C.groupRef: groupRef,
           C.creatorRef: userRef,
           C.text: text,
-          C.media: mediaURL,
+          C.media: media,
           C.createdAt: DateTime.now(),
           C.numReplies: 0,
           C.accessRestriction: accessRestriction,
@@ -44,62 +49,65 @@ class CommentsDatabaseService {
         })
         .then(onValue)
         .catchError(onError);
+    return commentRef;
   }
 
   Future<dynamic> deleteComment(
       {required DocumentReference commentRef,
       required DocumentReference postRef,
-      required DocumentReference userRef,
       String? media}) async {
-    final checkAuth = await commentRef.get();
-    if (checkAuth.exists) {
-      if (userRef == checkAuth.get(C.creatorRef)) {
+    // check comment exists and matches current user
+    final comment = await commentRef.get();
+    if (comment.exists) {
+      if (userRef == comment.get(C.creatorRef)) {
+        // update post's numComments
         postRef.update({C.numComments: FieldValue.increment(-1)});
-
+        // update user's comments
+        userRef.update({C.myCommentsRefs: FieldValue.arrayRemove([commentRef])});
+        // "delete" comment
         await commentRef
             .update({C.likes: [], C.dislikes: [], C.media: null, C.creatorRef: null, C.text: '[Comment removed]'});
-
+        // delete media (if applicable)
         if (media != null) {
           return await _images.deleteImage(imageURL: media);
         }
-      }
-      ;
+      };
     }
     return null;
   }
 
-  Future<void> likeComment({required DocumentReference commentRef, required DocumentReference userRef}) async {
+  Future<void> likeComment() async {
     // remove dislike if disliked
-    await commentRef.update({
+    await commentRef!.update({
       C.dislikes: FieldValue.arrayRemove([userRef])
     });
     // like comment
-    return await commentRef.update({
+    return await commentRef!.update({
       C.likes: FieldValue.arrayUnion([userRef])
     });
   }
 
-  Future<void> unLikeComment({required DocumentReference commentRef, required DocumentReference userRef}) async {
+  Future<void> unLikeComment() async {
     // remove like
-    await commentRef.update({
+    await commentRef!.update({
       C.likes: FieldValue.arrayRemove([userRef])
     });
   }
 
-  Future<void> dislikeComment({required DocumentReference commentRef, required DocumentReference userRef}) async {
+  Future<void> dislikeComment() async {
     // remove like if liked
-    await commentRef.update({
+    await commentRef!.update({
       C.likes: FieldValue.arrayRemove([userRef])
     });
     // dislike comment
-    return await commentRef.update({
+    return await commentRef!.update({
       C.dislikes: FieldValue.arrayUnion([userRef])
     });
   }
 
-  Future<void> unDislikeComment({required DocumentReference commentRef, required DocumentReference userRef}) async {
+  Future<void> unDislikeComment() async {
     // remove like
-    await commentRef.update({
+    await commentRef!.update({
       C.dislikes: FieldValue.arrayRemove([userRef])
     });
   }

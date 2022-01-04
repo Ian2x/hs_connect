@@ -92,7 +92,7 @@ class _ReplyFormState extends State<ReplyForm> {
                         commentRef: widget.commentRef,
                         postRef: widget.postRef,
                         text: _text,
-                        mediaURL: newFileURL,
+                        media: newFileURL,
                         onValue: handleValue,
                         onError: handleError,
                         groupRef: widget.groupRef,

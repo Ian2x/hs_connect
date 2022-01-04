@@ -130,7 +130,7 @@ class _ProfileFormState extends State<ProfileForm> {
                             }
                           }
 
-                          await UserDataDatabaseService(userRef: userData.userRef).updateProfile(
+                          await UserDataDatabaseService(currUserRef: userData.userRef).updateProfile(
                             displayedName: _displayedName ?? userData.displayedName,
                             imageURL: newFileURL, // _initialImageURL ?? userData.imageURL,
                             onValue: handleValue,

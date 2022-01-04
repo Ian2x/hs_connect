@@ -7,11 +7,16 @@ import 'package:hs_connect/screens/home/home.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
+import 'package:hs_connect/shared/noAnimationMaterialPageRoute.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/widgets/tagOutline.dart';
 import 'package:provider/provider.dart';
+import 'package:hs_connect/services/posts_database.dart';
+import 'package:hs_connect/shared/constants.dart';
+
+// newPost, postForm, posts_database.dart, tagOutline, constants.dart
 
 class PostForm extends StatefulWidget {
   const PostForm({Key? key}) : super(key: key);
@@ -22,8 +27,6 @@ class PostForm extends StatefulWidget {
 
 class _PostFormState extends State<PostForm> {
   final _formKey = GlobalKey<FormState>();
-
-  final _GroupsDatabaseService = GroupsDatabaseService();
 
   void handleError(err) {
     setState(() {
@@ -42,6 +45,7 @@ class _PostFormState extends State<PostForm> {
 
   String? newFileURL;
   File? newFile;
+  bool isPost=true;
 
   // form values
   String _title = '';
@@ -60,59 +64,117 @@ class _PostFormState extends State<PostForm> {
 
     final userData = Provider.of<UserData?>(context);
 
+    if (userData == null) {
+      // Don't expect to be here, but just in case
+      return Loading();
+    }
+
+    void submitForm() async {
+      if (newFile != null) {
+        // upload newFile
+        final downloadURL = await _images.uploadImage(file: newFile!);
+        setState(() {
+          newFileURL = downloadURL;
+        });
+      }
+      if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+        setState(() => loading = true);
+        await PostsDatabaseService(currUserRef: userData.userRef).newPost(
+          title: _title,
+          text: _text,
+          tagString: _tag,
+          media: newFileURL,
+          pollRef: null, //until poll is implemented
+          groupRef: FirebaseFirestore.instance.collection('groups').doc(_groupId),
+          onValue: handleValue,
+          onError: handleError,
+        );
+      }
+    }
+
     void setPic(File x) {
       setState(() {
         newFile = x;
       });
     }
 
-    if (userData == null) {
-      // Don't expect to be here, but just in case
-      return Loading();
-    } else {
-      return FutureBuilder(
-          future: _GroupsDatabaseService.getGroups(userGroups: userData.userGroups),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              final groups = (snapshot.data as QuerySnapshot).docs.toList();
+    final _GroupsDatabaseService = GroupsDatabaseService(currUserRef: userData.userRef);
+
+    return FutureBuilder(
+        future: _GroupsDatabaseService.getGroups(userGroups: userData.userGroups),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final groups = (snapshot.data as QuerySnapshot).docs.toList();
+            if (isPost){
               return SingleChildScrollView(
                 child: Form(
                   key: _formKey,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      SizedBox(height: 100),
+                      SizedBox(height:30), //TODO: Find media height
                       Row(
                         children: [
-                          tagOutline(textOnly: true, text: "button"),
-                          SizedBox(width: 20),
-                          tagOutline(textOnly: true, text: "Group"),
+                          IconButton( icon:Icon(Icons.arrow_back_ios_rounded, size:23.0),
+                            onPressed:() {
+                              Navigator.pushReplacement(
+                                context, NoAnimationMaterialPageRoute(builder: (context) => Home()),);
+                            },
+                          ),
+                          Spacer(flex:6),
+                          tagOutline(
+                            textOnly:true,
+                            text: "Post",
+                            textColor: "54A0DC",
+                            borderColor: "54A0DC",
+                          ),
+                          Spacer(flex:1),
+                          TextButton (
+                            onPressed:(){
+                              setState((){
+                                isPost=false;
+                              });
+                            },
+                            child: Text("Group",
+                              style: TextStyle(
+                                color: themeColor.textGrey,
+                                fontSize:16,
+                              ),
+                            ),
+                          ),
+                          Spacer(flex:6),
+                          IconButton(onPressed: submitForm,
+                              icon: Icon(Icons.add_circle_rounded, color: themeColor.secBlue, size: 30.0)),
                         ],
                       ),
                       SizedBox(height: 12),
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Flexible(
                             flex: 2,
                             child: Container(
-                              height: 70,
-                              width: (MediaQuery.of(context).size.width) * .75,
-                              padding: EdgeInsets.fromLTRB(8.0, 0.0, 3.0, 0.0),
+                              height: 64,
+                              //width: (MediaQuery.of(context).size.width) * .75,
+                              padding: EdgeInsets.fromLTRB(8.0, 0.0, 4.0, 0.0),
                               decoration: ShapeDecoration(
                                 color: HexColor('FFFFFF'),
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(13.0),
+                                    borderRadius: BorderRadius.circular(themeLayout.borderRadius),
                                     side: BorderSide(
-                                      color: HexColor("E9EDF0"),
+                                      color: themeColor.neutralGrey,
                                       width: 3.0,
                                     )),
                               ),
                               child: DropdownButtonFormField<String>(
+                                  iconSize:0.0,
+                                  itemHeight: 48.0,
+                                  isExpanded: true,
                                   decoration: textInputDecoration,
                                   hint: Text(
-                                    "Post to a group",
+                                    "Add a group",
                                     style: TextStyle(
-                                      color: HexColor("B5BABE"),
+                                      color: themeColor.textGrey,
                                       fontSize: 16,
                                     ),
                                   ),
@@ -133,7 +195,7 @@ class _PostFormState extends State<PostForm> {
                                   onChanged: (val) => setState(() => _groupId = val!),
                                   validator: (val) {
                                     if (val == null)
-                                      return 'Must select an access restriction';
+                                      return 'Pick a group to post to';
                                     else
                                       return null;
                                   }),
@@ -143,25 +205,26 @@ class _PostFormState extends State<PostForm> {
                           Flexible(
                             flex: 1,
                             child: Container(
-                              height: 70,
+                              height: 64,
                               width: (MediaQuery.of(context).size.width) * .75,
-                              padding: EdgeInsets.fromLTRB(8.0, 0.0, 3.0, 0.0),
+                              padding: EdgeInsets.fromLTRB(8.0, 0.0, 4.0, 0.0),
                               decoration: ShapeDecoration(
                                 color: HexColor('FFFFFF'),
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16.0),
+                                    borderRadius: BorderRadius.circular(themeLayout.borderRadius),
                                     side: BorderSide(
                                       color: HexColor("E9EDF0"),
                                       width: 3.0,
                                     )),
                               ),
                               child: DropdownButtonFormField<String>(
+                                iconSize:0.0,
                                 isExpanded: true,
                                 decoration: textInputDecoration,
                                 hint: Text(
-                                  "+ tag",
+                                  "+ Tag",
                                   style: TextStyle(
-                                    color: HexColor("B5BABE"),
+                                    color: themeColor.secBlue,
                                     fontSize: 16,
                                   ),
                                 ),
@@ -196,7 +259,7 @@ class _PostFormState extends State<PostForm> {
                         decoration: ShapeDecoration(
                           color: HexColor('FFFFFF'),
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(13.0),
+                              borderRadius: BorderRadius.circular(themeLayout.borderRadius),
                               side: BorderSide(
                                 color: HexColor("E9EDF0"),
                                 width: 3.0,
@@ -260,9 +323,227 @@ class _PostFormState extends State<PostForm> {
                 ),
               );
             } else {
-              return Loading();
+              return SingleChildScrollView(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(height:30), //TODO: Find media height
+                      Row(
+                        children: [
+                          IconButton( icon:Icon(Icons.arrow_back_ios_rounded, size: 23.0),
+                            onPressed:() {
+                              Navigator.pushReplacement(
+                                context, NoAnimationMaterialPageRoute(builder: (context) => Home()),);
+                            },
+                          ),
+                          Spacer(flex:6),
+                          TextButton (
+                            onPressed:(){
+                              setState((){
+                                isPost=true;
+                              });
+                            },
+                            child: Text("Post",
+                              style: TextStyle(
+                                color: themeColor.textGrey,
+                                fontSize: themeText.regular,
+                              ),
+                            ),
+                          ),
+                          Spacer(flex:1),
+                          tagOutline(
+                            textOnly:true,
+                            text: "Group",
+                            textColor: "54A0DC",
+                            borderColor: "54A0DC",
+                          ),
+
+                          Spacer(flex:6),
+                          IconButton(onPressed: submitForm,
+                              icon: Icon(Icons.add_circle_rounded, color: themeColor.secBlue, size:30.0)),
+                        ],
+                      ),
+                      SizedBox(height: 12),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Flexible(
+                            flex: 2,
+                            child: Container(
+                              height: 64,
+                              //width: (MediaQuery.of(context).size.width) * .75,
+                              padding: EdgeInsets.fromLTRB(8.0, 0.0, 4.0, 0.0),
+                              decoration: ShapeDecoration(
+                                color: HexColor('FFFFFF'),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(themeLayout.borderRadius),
+                                    side: BorderSide(
+                                      color: themeColor.neutralGrey,
+                                      width: 3.0,
+                                    )),
+                              ),
+                              child: DropdownButtonFormField<String>(
+                                  iconSize:0.0,
+                                  itemHeight: 48.0,
+                                  isExpanded: true,
+                                  decoration: textInputDecoration,
+                                  hint: Text(
+                                    "Add a group",
+                                    style: TextStyle(
+                                      color: themeColor.textGrey,
+                                      fontSize: themeText.regular,
+                                    ),
+                                  ),
+                                  value: _groupId != '' ? _groupId : null,
+                                  items: groups.map((group) {
+                                    return DropdownMenuItem(
+                                      value: group.id,
+                                      child: Text(
+                                        '${group['name']}',
+                                        style: TextStyle(
+                                          color: HexColor("B5BABE"),
+                                          fontSize: 14,
+                                          //fontWeight: ,
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (val) => setState(() => _groupId = val!),
+                                  validator: (val) {
+                                    if (val == null)
+                                      return 'Pick a group to post to';
+                                    else
+                                      return null;
+                                  }),
+                            ),
+                          ),
+                          SizedBox(width: 12),
+                          Flexible(
+                            flex: 1,
+                            child: Container(
+                              height: 64,
+                              width: (MediaQuery.of(context).size.width) * .75,
+                              padding: EdgeInsets.fromLTRB(8.0, 0.0, 4.0, 0.0),
+                              decoration: ShapeDecoration(
+                                color: HexColor('FFFFFF'),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(themeLayout.borderRadius),
+                                    side: BorderSide(
+                                      color: HexColor("E9EDF0"),
+                                      width: 3.0,
+                                    )),
+                              ),
+                              child: DropdownButtonFormField<String>(
+                                iconSize:0.0,
+                                isExpanded: true,
+                                decoration: textInputDecoration,
+                                hint: Text(
+                                  "+ Tag",
+                                  style: TextStyle(
+                                    color: themeColor.secBlue,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                value: _tag.isNotEmpty ? _tag : null,
+                                items: Tag.values.map((tag) {
+                                  return DropdownMenuItem(
+                                    value: tag.string,
+                                    child: Text(
+                                      tag.string,
+                                      style: TextStyle(
+                                        color: themeColor.neutralGrey,
+                                        fontSize: 14,
+                                        //fontWeight: ,
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                                onChanged: (val) => setState(() => _tag = val!),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 12),
+                      Container(
+                        //TextInput Container
+                        constraints: BoxConstraints(
+                          maxHeight: double.infinity,
+                          minHeight: phoneHeight,
+                        ),
+                        padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                        decoration: ShapeDecoration(
+                          color: HexColor('FFFFFF'),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(themeLayout.borderRadius),
+                              side: BorderSide(
+                                color: HexColor("E9EDF0"),
+                                width: 3.0,
+                              )),
+                        ),
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              style: TextStyle(
+                                color: HexColor("223E52"),
+                                fontSize: 22,
+                                //fontWeight: ,
+                              ),
+                              maxLines: null,
+                              decoration: InputDecoration(
+                                  hintStyle: TextStyle(
+                                    color: HexColor("223E52"),
+                                    fontSize: 22,
+                                    //fontWeight: ,
+                                  ),
+                                  border: InputBorder.none,
+                                  hintText: "What's up?"),
+                              validator: (val) {
+                                if (val == null) return 'Error: null value';
+                                if (val.isEmpty)
+                                  return 'Can\'t create an empty post';
+                                else
+                                  return null;
+                              },
+                              onChanged: (val) => setState(() => _title = val),
+                            ),
+                            TextFormField(
+                              style: TextStyle(
+                                color: themeColor.neutralGrey,
+                                fontSize: 18,
+                                //fontWeight: ,
+                              ),
+                              maxLines: null,
+                              decoration: InputDecoration(
+                                  hintStyle: TextStyle(
+                                    color: HexColor("b5Babe"),
+                                    fontSize: 18,
+                                    //fontWeight: ,
+                                  ),
+                                  border: InputBorder.none,
+                                  hintText: "optional text"),
+                              validator: (val) {
+                                if (val == null) return 'Error: null value';
+                                if (val.isEmpty)
+                                  return 'Can\'t create an empty post';
+                                else
+                                  return null;
+                              },
+                              onChanged: (val) => setState(() => _title = val),
+                            )
+                          ],
+                        ),
+                      ), //
+                    ],
+                  ),
+                ),
+              );
             }
-          });
-    }
+          } else {
+            return Loading();
+          }
+        });
   }
 }

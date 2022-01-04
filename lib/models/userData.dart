@@ -32,9 +32,10 @@ class UserData {
   late List<UserGroup> userGroups;
   late List<DocumentReference> modGroupsRefs;
   late List<DocumentReference> messagesRefs;
-  late List<DocumentReference> postsRefs;
-  late List<DocumentReference> commentsRefs;
-  late List<DocumentReference> repliesRefs;
+  late List<DocumentReference> myPostsRefs;
+  late List<DocumentReference> savedPostsRefs;
+  late List<DocumentReference> myCommentsRefs;
+  late List<DocumentReference> myRepliesRefs;
   String? profileImage;
   late int score;
   late List<DocumentReference> reportsRefs;
@@ -51,9 +52,10 @@ class UserData {
     required this.userGroups,
     required this.modGroupsRefs,
     required this.messagesRefs,
-    required this.postsRefs,
-    required this.commentsRefs,
-    required this.repliesRefs,
+    required this.myPostsRefs,
+    required this.savedPostsRefs,
+    required this.myCommentsRefs,
+    required this.myRepliesRefs,
     required this.profileImage,
     required this.score,
     required this.reportsRefs,
@@ -72,9 +74,10 @@ class UserData {
         snapshot.get(C.userGroups).map<UserGroup>((userGroup) => userGroupFromMap(map: userGroup)).toList();
     this.modGroupsRefs = docRefList(snapshot.get(C.modGroupRefs));
     this.messagesRefs = docRefList(snapshot.get(C.messagesRefs));
-    this.postsRefs = docRefList(snapshot.get(C.postsRefs));
-    this.commentsRefs = docRefList(snapshot.get(C.commentsRefs));
-    this.repliesRefs = docRefList(snapshot.get(C.repliesRefs));
+    this.myPostsRefs = docRefList(snapshot.get(C.myPostsRefs));
+    this.savedPostsRefs = docRefList(snapshot.get(C.savedPostsRefs));
+    this.myCommentsRefs = docRefList(snapshot.get(C.myCommentsRefs));
+    this.myRepliesRefs = docRefList(snapshot.get(C.myRepliesRefs));
     this.profileImage = snapshot.get(C.profileImage);
     this.score = snapshot.get(C.score);
     this.reportsRefs = docRefList(snapshot.get(C.reportsRefs));

@@ -21,7 +21,6 @@ class CommentCard extends StatefulWidget {
 }
 
 class _CommentCardState extends State<CommentCard> {
-  UserDataDatabaseService _userDataDatabaseService = UserDataDatabaseService();
 
   bool liked = false;
   bool disliked = false;
@@ -49,6 +48,7 @@ class _CommentCardState extends State<CommentCard> {
 
   void getUsername() async {
     if (widget.comment.creatorRef != null) {
+      UserDataDatabaseService _userDataDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserRef);
       final UserData? fetchUsername = await _userDataDatabaseService.getUserData(userRef: widget.comment.creatorRef);
       if (mounted) {
         setState(() {

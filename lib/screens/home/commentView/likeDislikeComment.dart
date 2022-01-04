@@ -17,7 +17,6 @@ class LikeDislikeComment extends StatefulWidget {
 }
 
 class _LikeDislikeCommentState extends State<LikeDislikeComment> {
-  CommentsDatabaseService _comments = CommentsDatabaseService();
 
   bool likeStatus = false;
   bool dislikeStatus = false;
@@ -39,6 +38,9 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
 
   @override
   Widget build(BuildContext context) {
+
+    CommentsDatabaseService _comments = CommentsDatabaseService(userRef: widget.currUserRef, commentRef: widget.commentRef);
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -48,7 +50,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               iconSize: 20.0,
               icon: Icon(Icons.thumb_up),
               onPressed: () {
-                _comments.unLikeComment(commentRef: widget.commentRef, userRef: widget.currUserRef);
+                _comments.unLikeComment();
                 if (mounted) {
                   setState(() {
                     likeCount -= 1;
@@ -62,7 +64,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               iconSize: 20.0,
               icon: Icon(Icons.thumb_up_outlined),
               onPressed: () {
-                _comments.likeComment(commentRef: widget.commentRef, userRef: widget.currUserRef);
+                _comments.likeComment();
                 if (mounted) {
                   setState(() {
                     likeCount += 1;
@@ -82,7 +84,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               iconSize: 20.0,
               icon: Icon(Icons.thumb_down),
               onPressed: () {
-                _comments.unDislikeComment(commentRef: widget.commentRef, userRef: widget.currUserRef);
+                _comments.unDislikeComment();
                 if (mounted) {
                   setState(() {
                     dislikeCount -= 1;
@@ -96,7 +98,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               iconSize: 20.0,
               icon: Icon(Icons.thumb_down_outlined),
               onPressed: () {
-                _comments.dislikeComment(commentRef: widget.commentRef, userRef: widget.currUserRef);
+                _comments.dislikeComment();
                 setState(() {
                   dislikeCount += 1;
                   if (likeStatus == true) likeCount -= 1;

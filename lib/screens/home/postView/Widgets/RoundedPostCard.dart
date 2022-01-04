@@ -13,12 +13,12 @@ import 'package:hs_connect/screens/home/commentView/commentForm.dart';
 
 class RoundedPostCard extends StatefulWidget {
   final Post post;
-  final DocumentReference userRef;
+  final DocumentReference currUserRef;
 
   RoundedPostCard({
     Key? key,
     required this.post,
-    required this.userRef,
+    required this.currUserRef,
   }) : super(key: key);
 
   @override
@@ -26,10 +26,7 @@ class RoundedPostCard extends StatefulWidget {
 }
 
 class _RoundedPostCardState extends State<RoundedPostCard> {
-  UserDataDatabaseService _userDataDatabaseService = UserDataDatabaseService();
-
-  GroupsDatabaseService _groups = GroupsDatabaseService();
-
+  
   //final userData = Provider.of<UserData?>(context);
 
   bool liked = false;
@@ -42,13 +39,13 @@ class _RoundedPostCardState extends State<RoundedPostCard> {
   @override
   void initState() {
     // initialize liked/disliked
-    if (widget.post.likes.contains(widget.userRef)) {
+    if (widget.post.likes.contains(widget.currUserRef)) {
       if (mounted) {
         setState(() {
           liked = true;
         });
       }
-    } else if (widget.post.dislikes.contains(widget.userRef)) {
+    } else if (widget.post.dislikes.contains(widget.currUserRef)) {
       if (mounted) {
         setState(() {
           disliked = true;
@@ -62,6 +59,7 @@ class _RoundedPostCardState extends State<RoundedPostCard> {
   }
 
   void getUserData() async {
+    UserDataDatabaseService _userDataDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserRef);
     final UserData? fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.post.creatorRef);
     if (mounted) {
       setState(() {
@@ -72,6 +70,7 @@ class _RoundedPostCardState extends State<RoundedPostCard> {
   }
 
   void getGroupName() async {
+    GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserRef);
     final Group? fetchGroupName = await _groups.getGroupData(groupRef: widget.post.groupRef);
     if (mounted) {
       setState(() {
@@ -85,7 +84,7 @@ class _RoundedPostCardState extends State<RoundedPostCard> {
       context,
       MaterialPageRoute(
           builder: (context) => SpecificGroupFeed(
-                groupRef: widget.post.groupRef,
+                groupRef: widget.post.groupRef, currUserRef: widget.currUserRef,
               )),
     );
   }
@@ -200,7 +199,7 @@ class _RoundedPostCardState extends State<RoundedPostCard> {
                           ),
                           Spacer(),
                           LikeDislikePost(
-                              currUserRef: widget.userRef,
+                              currUserRef: widget.currUserRef,
                               postRef: widget.post.postRef,
                               likes: widget.post.likes,
                               dislikes: widget.post.dislikes),

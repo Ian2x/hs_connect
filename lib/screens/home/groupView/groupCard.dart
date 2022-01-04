@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/userData.dart';
@@ -5,10 +6,11 @@ import 'package:hs_connect/services/user_data_database.dart';
 
 class GroupCard extends StatefulWidget {
   final Group group;
+  final DocumentReference currUserRef;
 
   GroupCard({
     Key? key,
-    required this.group,
+    required this.group, required this.currUserRef,
   }) : super(key: key);
 
   @override
@@ -16,7 +18,6 @@ class GroupCard extends StatefulWidget {
 }
 
 class _GroupCardState extends State<GroupCard> {
-  UserDataDatabaseService _userInfoDatabaseService = UserDataDatabaseService();
 
   String username = '<Loading user name...>';
   String groupName = '<Loading group name...>';
@@ -30,6 +31,7 @@ class _GroupCardState extends State<GroupCard> {
 
   void getUsername() async {
     if (widget.group.creatorRef != null) {
+      UserDataDatabaseService _userInfoDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserRef);
       final UserData? fetchUsername = await _userInfoDatabaseService.getUserData(userRef: widget.group.creatorRef!);
       if (mounted) {
         setState(() {

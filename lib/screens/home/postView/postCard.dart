@@ -23,9 +23,6 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> {
-  UserDataDatabaseService _userDataDatabaseService = UserDataDatabaseService();
-
-  GroupsDatabaseService _groups = GroupsDatabaseService();
 
   bool liked = false;
   bool disliked = false;
@@ -58,6 +55,7 @@ class _PostCardState extends State<PostCard> {
   }
 
   void getUserData() async {
+    UserDataDatabaseService _userDataDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserRef);
     final UserData? fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.post.creatorRef);
     if (mounted) {
       setState(() {
@@ -68,6 +66,7 @@ class _PostCardState extends State<PostCard> {
   }
 
   void getGroupName() async {
+    GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserRef);
     final Group? fetchGroupName = await _groups.getGroupData(groupRef: widget.post.groupRef);
     if (mounted) {
       setState(() {
@@ -81,7 +80,7 @@ class _PostCardState extends State<PostCard> {
       context,
       MaterialPageRoute(
           builder: (context) => SpecificGroupFeed(
-                groupRef: widget.post.groupRef,
+                groupRef: widget.post.groupRef, currUserRef: widget.currUserRef,
               )),
     );
   }
@@ -92,7 +91,7 @@ class _PostCardState extends State<PostCard> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => PostPage(postRef: widget.post.postRef)),
+          MaterialPageRoute(builder: (context) => PostPage(postRef: widget.post.postRef, currUserRef: widget.currUserRef,)),
         );
       },
       child: Card(

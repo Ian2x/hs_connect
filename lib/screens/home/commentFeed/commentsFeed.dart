@@ -22,13 +22,14 @@ class CommentsFeed extends StatefulWidget {
 }
 
 class _CommentsFeedState extends State<CommentsFeed> {
+
   @override
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
 
     if (userData == null) return Loading();
 
-    CommentsDatabaseService _comments = CommentsDatabaseService(postRef: widget.post.postRef);
+    CommentsDatabaseService _comments = CommentsDatabaseService(userRef: userData.userRef, postRef: widget.post.postRef);
 
     return StreamBuilder(
       stream: _comments.postComments,
@@ -46,7 +47,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
               if (index == 0) {
                 return RoundedPostCard(
                   post: widget.post,
-                  userRef: userData.userRef,
+                  currUserRef: userData.userRef,
                 );
               } else if (index == 1) {
                 return Divider(thickness: 3, color: HexColor('E9EDF0'), height: 20);

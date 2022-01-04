@@ -32,7 +32,7 @@ class AuthService {
       if (user == null || user.email == null) return null;
       // create a document for the home with the uid
       final _userDataDatabaseService =
-          UserDataDatabaseService(userRef: FirebaseFirestore.instance.collection('userData').doc(user.uid));
+          UserDataDatabaseService(currUserRef: FirebaseFirestore.instance.collection('userData').doc(user.uid));
       await _userDataDatabaseService.initUserData(domain, username);
       return user;
     } catch (e) {

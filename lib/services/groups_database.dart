@@ -32,9 +32,9 @@ class refRanking {
 }
 
 class GroupsDatabaseService {
-  final DocumentReference? userRef;
+  final DocumentReference currUserRef;
 
-  GroupsDatabaseService({this.userRef});
+  GroupsDatabaseService({required this.currUserRef});
 
   // collection reference
   final CollectionReference groupsCollection = FirebaseFirestore.instance.collection(C.groups);
@@ -74,7 +74,7 @@ class GroupsDatabaseService {
           .then(onValue)
           .catchError(onError);
       if (creatorRef != null) {
-        UserDataDatabaseService _users = UserDataDatabaseService(userRef: creatorRef);
+        UserDataDatabaseService _users = UserDataDatabaseService(currUserRef: creatorRef);
         newGroupRef.update({C.numMembers: FieldValue.increment(1)});
         await _users.joinGroup(userRef: creatorRef, groupRef: newGroupRef, public: true);
       }
@@ -179,7 +179,7 @@ class GroupsDatabaseService {
     // get all group refs
     final allGroupsRefs = await getAllowableGroupRefs(domain: domain, county: county, state: state, country: country);
     // collect post information for each group
-    PostsDatabaseService _posts = PostsDatabaseService(groupRefs: allGroupsRefs);
+    PostsDatabaseService _posts = PostsDatabaseService(groupRefs: allGroupsRefs, currUserRef: currUserRef);
     final List<Post?> allPosts = await _posts.getMultiGroupPosts();
     final List<Post?> filteredPosts = allPosts
         .where((post) =>

@@ -7,11 +7,11 @@ import 'package:hs_connect/shared/constants.dart';
 void defaultFunc(dynamic parameter) {}
 
 class PostsDatabaseService {
-  final DocumentReference? userRef;
+  final DocumentReference currUserRef;
   List<DocumentReference>? groupRefs;
   List<String>? searchTags;
 
-  PostsDatabaseService({this.userRef, this.groupRefs, this.searchTags});
+  PostsDatabaseService({required this.currUserRef, this.groupRefs, this.searchTags});
 
   ImageStorage _images = ImageStorage();
 
@@ -34,7 +34,7 @@ class PostsDatabaseService {
     return await postsCollection
         .add({
           C.groupRef: groupRef,
-          C.creatorRef: userRef,
+          C.creatorRef: currUserRef,
           C.title: title,
           C.titleLC: title.toLowerCase(),
           C.text: text,

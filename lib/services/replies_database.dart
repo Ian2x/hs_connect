@@ -20,7 +20,7 @@ class RepliesDatabaseService {
 
   Future<DocumentReference> newReply(
       {required String text,
-      required String? mediaURL,
+      required String? media,
       required DocumentReference commentRef,
       required DocumentReference postRef,
       required DocumentReference groupRef,
@@ -40,7 +40,7 @@ class RepliesDatabaseService {
           C.groupRef: groupRef,
           C.accessRestriction: accessRestriction,
           C.text: text,
-          C.media: mediaURL,
+          C.media: media,
           C.createdAt: DateTime.now(),
           C.likes: [],
           C.dislikes: [],

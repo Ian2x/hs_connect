@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
@@ -14,9 +15,10 @@ import 'package:hs_connect/screens/profile/profileWidget/numbersWidget.dart';
 import 'package:hs_connect/screens/profile/profileWidget/profileWidget.dart';
 
 class Profile extends StatefulWidget {
-  final profilePersonRef;
+  final DocumentReference profilePersonRef;
+  final DocumentReference currUserRef;
 
-  Profile({Key? key, required this.profilePersonRef}) : super(key: key);
+  Profile({Key? key, required this.profilePersonRef, required this.currUserRef}) : super(key: key);
 
   @override
   _ProfileState createState() => _ProfileState();
@@ -31,11 +33,8 @@ class _ProfileState extends State<Profile> {
   int profileGroupCount = 0;
   int profileScore = 0;
 
-  UserDataDatabaseService _userInfoDatabaseService = UserDataDatabaseService();
-
-  //  GroupsDatabaseService _groups = GroupsDatabaseService();
-
   void getProfileUserData() async {
+    UserDataDatabaseService _userInfoDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserRef);
     final UserData? fetchUserData = await _userInfoDatabaseService.getUserData(userRef: widget.profilePersonRef);
     if (mounted) {
       setState(() {

@@ -81,7 +81,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             HomeFeed(),
             userData != null
                 ? TrendingFeed(
-                    country: userData.country, state: userData.state, county: userData.county, domain: userData.domain)
+                    country: userData.country, state: userData.state, county: userData.county, domain: userData.domain, currUserRef: userData.userRef,)
                 : Loading(),
           ],
           controller: _tabController,

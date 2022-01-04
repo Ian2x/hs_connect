@@ -23,10 +23,11 @@ class DeletePost extends StatefulWidget {
 }
 
 class _DeletePostState extends State<DeletePost> {
-  PostsDatabaseService _posts = PostsDatabaseService();
 
   @override
   Widget build(BuildContext context) {
+    PostsDatabaseService _posts = PostsDatabaseService(currUserRef: widget.currUserRef);
+
     if (widget.currUserRef != widget.postUserRef) {
       return Container(
         height: 0.0,

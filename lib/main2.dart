@@ -19,9 +19,9 @@ class _Main2State extends State<Main2> {
   Widget build(BuildContext context) {
     final user = Provider.of<User?>(context);
     return StreamProvider<UserData?>.value(
-      value: UserDataDatabaseService(
-              userRef: user != null ? FirebaseFirestore.instance.collection(C.userData).doc(user.uid) : null)
-          .userData,
+      value: user != null ? UserDataDatabaseService(
+              currUserRef: FirebaseFirestore.instance.collection(C.userData).doc(user.uid))
+          .userData : null,
       initialData: null,
       child: MaterialApp(
         home: Wrapper(),
