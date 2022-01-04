@@ -181,7 +181,6 @@ class GroupsDatabaseService {
     // collect post information for each group
     PostsDatabaseService _posts = PostsDatabaseService(groupRefs: allGroupsRefs, currUserRef: currUserRef);
     final List<Post?> allPosts = await _posts.getMultiGroupPosts();
-    print(allPosts);
     final List<Post?> filteredPosts = allPosts
         .where((post) =>
             post != null &&
