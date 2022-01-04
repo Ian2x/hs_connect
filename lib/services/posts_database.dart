@@ -23,7 +23,7 @@ class PostsDatabaseService {
       required String text,
       required String? media,
       required DocumentReference groupRef,
-      required String tagString,
+      required String? tagString,
       required DocumentReference? pollRef,
       Function(void) onValue = defaultFunc,
       Function onError = defaultFunc}) async {
