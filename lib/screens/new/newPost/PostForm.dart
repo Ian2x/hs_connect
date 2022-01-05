@@ -462,39 +462,6 @@ class _PostFormState extends State<PostForm> {
                                   }
                                 },
                               ),
-                              child: DropdownButtonFormField<DocumentReference>(
-                                  iconSize:0.0,
-                                  itemHeight: 48.0,
-                                  isExpanded: true,
-                                  decoration: textInputDecoration,
-                                  hint: Text(
-                                    "Add a group",
-                                    style: TextStyle(
-                                      color: themeColor.textGrey,
-                                      fontSize: themeText.regular,
-                                    ),
-                                  ),
-                                  value: _groupRef != null ? _groupRef : null,
-                                  items: groups.map((group) {
-                                    return DropdownMenuItem(
-                                      value: group.groupRef,
-                                      child: Text(
-                                        group.name,
-                                        style: TextStyle(
-                                          color: HexColor("B5BABE"),
-                                          fontSize: 14,
-                                          //fontWeight: ,
-                                        ),
-                                      ),
-                                    );
-                                  }).toList(),
-                                  onChanged: (val) => setState(() => _groupRef = val!),
-                                  validator: (val) {
-                                    if (val == null)
-                                      return 'Pick a group to post to';
-                                    else
-                                      return null;
-                                  }),
                             ),
                           ),
                           SizedBox(width:15),
