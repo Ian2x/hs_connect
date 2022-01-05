@@ -28,13 +28,7 @@ class MessagesDatabaseService {
   // home data from snapshot
   Report? _reportFromSnapshot({required DocumentSnapshot snapshot}) {
     if (snapshot.exists) {
-      return Report(
-        entityRef: snapshot.get(C.entityRef),
-        reporterRef: snapshot.get(C.reporterRef),
-        text: snapshot.get(C.text),
-        createdAt: snapshot.get(C.createdAt),
-        reportType: reportTypeFrom(snapshot.get(C.reportType)),
-      );
+      return reportFromSnapshot(snapshot);
     } else {
       return null;
     }

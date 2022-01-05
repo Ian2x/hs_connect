@@ -3,19 +3,43 @@ import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'accessRestriction.dart';
 
+class CountAtTime {
+  final int count;
+  final Timestamp time;
+
+  CountAtTime({required this.count, required this.time});
+
+  Map<String, dynamic> asMap() {
+    return {
+      C.count: count,
+      C.time: time,
+    };
+  }
+}
+
+CountAtTime countAtTimeFromMap({required Map map}) {
+  return CountAtTime(
+      count: map[C.count], time: map[C.time]);
+}
+
+
+
 class Group {
-  late DocumentReference groupRef;
-  DocumentReference? creatorRef;
-  late List<DocumentReference> moderatorRefs;
-  late String name;
-  late String nameLC;
-  String? image;
-  String? description;
-  late AccessRestriction accessRestriction;
-  late Timestamp createdAt;
-  late int numPosts;
-  late int numMembers;
-  late List<DocumentReference> reportsRefs;
+  final DocumentReference groupRef;
+  final DocumentReference? creatorRef;
+  final List<DocumentReference> moderatorRefs;
+  final String name;
+  final String nameLC;
+  final String? image;
+  final String? description;
+  final AccessRestriction accessRestriction;
+  final Timestamp createdAt;
+  final int numPosts;
+  final List<CountAtTime> postsOverTime;
+  final int numMembers;
+  final List<CountAtTime> membersOverTime;
+  final Timestamp lastOverTimeUpdate;
+  final List<DocumentReference> reportsRefs;
 
   Group({
     required this.groupRef,
@@ -28,23 +52,55 @@ class Group {
     required this.accessRestriction,
     required this.createdAt,
     required this.numPosts,
+    required this.postsOverTime,
     required this.numMembers,
+    required this.membersOverTime,
+    required this.lastOverTimeUpdate,
     required this.reportsRefs,
   });
+}
 
-  Group.fromSnapshot(DocumentSnapshot snapshot) {
+Group groupFromMap({required Map map}) {
+  return Group(
+    groupRef: map[C.groupRef],
+    creatorRef: map[C.creatorRef],
+    moderatorRefs: map[C.moderatorRefs],
+    name: map[C.name],
+    nameLC: map[C.nameLC],
+    image: map[C.image],
+    description: map[C.description],
+    accessRestriction: map[C.accessRestriction],
+    createdAt: map[C.createdAt],
+    numPosts: map[C.numPosts],
+    postsOverTime: map[C.postsOverTime],
+    numMembers: map[C.numMembers],
+    membersOverTime: map[C.membersOverTime],
+    lastOverTimeUpdate: map[C.lastOverTimeUpdate],
+    reportsRefs: map[C.reportsRefs],
+  );
+}
+
+Group? groupFromSnapshot(DocumentSnapshot snapshot) {
+  if (snapshot.exists) {
     final accessRestriction = snapshot.get(C.accessRestriction);
-    this.groupRef = snapshot.reference;
-    this.creatorRef = snapshot.get(C.creatorRef);
-    this.moderatorRefs = docRefList(snapshot.get(C.moderatorRefs));
-    this.name = snapshot.get(C.name);
-    this.nameLC = snapshot.get(C.nameLC);
-    this.image = snapshot.get(C.image);
-    this.description = snapshot.get(C.description);
-    this.accessRestriction = accessRestrictionFromMap(map: accessRestriction);
-    this.createdAt = snapshot.get(C.createdAt);
-    this.numPosts = snapshot.get(C.numPosts);
-    this.numMembers = snapshot.get(C.numMembers);
-    this.reportsRefs = docRefList(snapshot.get(C.reportsRefs));
+    return Group(
+      groupRef: snapshot.reference,
+      creatorRef: snapshot.get(C.creatorRef),
+      moderatorRefs: docRefList(snapshot.get(C.moderatorRefs)),
+      name: snapshot.get(C.name),
+      nameLC: snapshot.get(C.nameLC),
+      image: snapshot.get(C.image),
+      description: snapshot.get(C.description),
+      accessRestriction: accessRestrictionFromMap(accessRestriction),
+      createdAt: snapshot.get(C.createdAt),
+      numPosts: snapshot.get(C.numPosts),
+      postsOverTime: countAtTimeList(snapshot.get(C.postsOverTime)),
+      numMembers: snapshot.get(C.numMembers),
+      membersOverTime: countAtTimeList(snapshot.get(C.membersOverTime)),
+      lastOverTimeUpdate: snapshot.get(C.lastOverTimeUpdate),
+      reportsRefs: docRefList(snapshot.get(C.reportsRefs)),
+    );
+  } else {
+    return null;
   }
 }

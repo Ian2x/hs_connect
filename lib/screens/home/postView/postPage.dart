@@ -34,7 +34,7 @@ class _PostPageState extends State<PostPage> {
     }
     if (post != null) {
       GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserRef);
-      final Group? fetchGroupName = await _groups.getGroupData(groupRef: post!.groupRef);
+      final Group? fetchGroupName = await _groups.groupFromRef(post!.groupRef);
       if (mounted) {
         setState(() {
           groupName = fetchGroupName != null ? fetchGroupName.name : '<Failed to retrieve group name>';

@@ -3,6 +3,8 @@ import 'package:hs_connect/shared/tools/hexColor.dart';
 
 // Calculate trending by activity within past 2 days
 const daysTrending = 2;
+const maxDataCollectionRate = 3; // in hours
+const maxDataCollectionDays = 2; // in days
 
 const double profilePicWidth = 400;
 const double profilePicHeight = 400;
@@ -12,16 +14,16 @@ const double groupPicHeight = 400;
 
 //TODO: May have to do sizing based on Media.context(of)
 
-class themeLayout {
+class ThemeLayout {
   static double borderRadius = 15.0;
 }
 
-class themeText {
+class ThemeText {
   static double regular = 16.0;
 }
 
-class themeColor extends Color {
-  themeColor(int value) : super(value);
+class ThemeColor extends Color {
+  ThemeColor(int value) : super(value);
 
   static Color neutralBlack = HexColor("223E52");
   static Color neutralGrey = HexColor("E9EDF0");
@@ -42,8 +44,8 @@ class C {
   static const userGroups = 'userGroups';
   static const modGroupRefs = 'modGroupsRefs';
   static const messagesRefs = 'messagesRefs';
-  static const myPostsRefs = 'myPostsRefs';
-  static const myCommentsRefs = 'myCommentsRefs';
+  static const myPostsObservedRefs = 'myPostsObservedRefs';
+  static const myCommentsObservedRefs = 'myCommentsObservedRefs';
   static const myRepliesRefs = 'myRepliesRefs';
   static const profileImage = 'profileImage';
   static const score = 'score';
@@ -111,4 +113,12 @@ class C {
   static const repliesRefs = 'repliesRefs';
   static const images = 'images';
   static const profilePics = 'profilePics';
+  static const ref = 'ref';
+  static const refType = 'refType';
+  static const lastObserved = 'lastObserved';
+  static const count = 'count';
+  static const time = 'time';
+  static const postsOverTime = 'postsOverTime';
+  static const membersOverTime = 'membersOverTime';
+  static const lastOverTimeUpdate = 'lastOverTimeUpdate';
 }

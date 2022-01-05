@@ -1,8 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hs_connect/models/observedRef.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/searchResult.dart';
+import 'package:hs_connect/services/comments_database.dart';
+import 'package:hs_connect/services/replies_database.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/tools/helperFunctions.dart';
 
 void defaultFunc(dynamic parameter) {}
 
@@ -27,16 +31,20 @@ class PostsDatabaseService {
       required DocumentReference? pollRef,
       Function(void) onValue = defaultFunc,
       Function onError = defaultFunc}) async {
+    // update user's posts
+    DocumentReference newPostRef = postsCollection.doc();
+    currUserRef.update({
+      C.myPostsObservedRefs: FieldValue.arrayUnion([
+        {C.ref: newPostRef, C.refType: ObservedRefType.post.string, C.lastObserved: Timestamp.now()}
+      ])
+    });
+    // update group's numPosts
+    groupRef.update({C.numPosts: FieldValue.increment(1)});
     // get accessRestriction
     final group = await groupRef.get();
     final accessRestriction = group.get(C.accessRestriction);
-    // update group's numPosts
-    groupRef.update({C.numPosts: FieldValue.increment(1)});
-    // update user's posts
-    DocumentReference postRef = postsCollection.doc();
-    currUserRef.update({C.myPostsRefs: FieldValue.arrayUnion([postRef])});
 
-    return await postRef
+    return await newPostRef
         .set({
           C.groupRef: groupRef,
           C.creatorRef: currUserRef,
@@ -70,37 +78,36 @@ class PostsDatabaseService {
         // update group's numPosts
         groupRef.update({C.numPosts: FieldValue.increment(-1)});
         // update user's posts
-        currUserRef.update({C.myCommentsRefs: FieldValue.arrayRemove([postRef])});
+        final myPostsObservedRefs = observedRefList((await currUserRef.get()).get(C.myPostsObservedRefs));
+        for (final observedRef in myPostsObservedRefs) {
+          if (observedRef.ref == postRef) {
+            currUserRef.update({
+              C.myPostsObservedRefs: FieldValue.arrayRemove([observedRef.asMap()])
+            });
+            break;
+          }
+        }
 
         // delete post's replies
         final delReplies = Future.forEach(post.get(C.repliesRefs), (item) async {
           final replyRef = item as DocumentReference;
           final reply = await replyRef.get();
-          // remove reply from its creator
-          (reply.get(C.creatorRef) as DocumentReference).update({C.myRepliesRefs: FieldValue.arrayRemove([replyRef])});
-          // delete media (if applicable)
-          if (reply.get(C.media) != null) {
-            _images.deleteImage(imageURL: reply.get(C.media));
-          }
-          // delete reply for good
-          return await replyRef.delete();
+          RepliesDatabaseService _tempReplies = RepliesDatabaseService(currUserRef: reply.get(C.creatorRef));
+          // delete reply
+          _tempReplies.deleteReply(
+              replyRef: replyRef, commentRef: reply.get(C.commentRef), postRef: postRef, weakDelete: false);
         });
 
         // delete post's comments
         final delComments = Future.forEach(post.get(C.commentsRefs), (item) async {
           final commentRef = item as DocumentReference;
           final comment = await commentRef.get();
-          // remove comment from its creator
-          (comment.get(C.creatorRef) as DocumentReference).update({C.myCommentsRefs: FieldValue.arrayRemove([commentRef])});
-          // delete media (if applicable)
-          if (comment.get(C.media) != null) {
-            _images.deleteImage(imageURL: comment.get(C.media));
-          }
-          // delete comment for good
-          return await commentRef.delete();
+          CommentsDatabaseService _tempComments = CommentsDatabaseService(currUserRef: comment.get(C.creatorRef));
+          // delete comment
+          _tempComments.deleteComment(commentRef: commentRef, postRef: postRef, weakDelete: false);
         });
 
-        var delPoll = null;
+        var delPoll;
         // delete post's poll (if applicable)
         if (post.get(C.pollRef) != null) {
           delPoll = (post.get(C.pollRef) as DocumentReference).delete();
@@ -117,7 +124,7 @@ class PostsDatabaseService {
         if (media != null) {
           return await _images.deleteImage(imageURL: media);
         }
-      };
+      }
     }
     return null;
   }
@@ -161,7 +168,7 @@ class PostsDatabaseService {
   // home data from snapshot
   Post? _postFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
     if (querySnapshot.exists) {
-      return Post.fromQuerySnapshot(querySnapshot);
+      return postFromQuerySnapshot(querySnapshot);
     } else {
       return null;
     }
@@ -169,7 +176,7 @@ class PostsDatabaseService {
 
   Post? _postFromSnapshot(DocumentSnapshot snapshot) {
     if (snapshot.exists) {
-      return Post.fromSnapshot(snapshot);
+      return postFromSnapshot(snapshot);
     } else {
       return null;
     }
@@ -218,12 +225,12 @@ class PostsDatabaseService {
   }
 
   Stream<List<SearchResult>> searchStream(String searchKey, List<DocumentReference> allowableGroupsRefs) {
-    final LCsearchKey = searchKey.toLowerCase();
+    final searchKeyLC = searchKey.toLowerCase();
     if (allowableGroupsRefs.length == 0) return Stream.empty();
     return postsCollection
         .where(C.groupRef, whereIn: allowableGroupsRefs)
-        .where(C.titleLC, isGreaterThanOrEqualTo: LCsearchKey)
-        .where(C.titleLC, isLessThan: LCsearchKey + 'z')
+        .where(C.titleLC, isGreaterThanOrEqualTo: searchKeyLC)
+        .where(C.titleLC, isLessThan: searchKeyLC + 'z')
         .snapshots()
         .map((snapshot) => snapshot.docs.map(_searchResultFromQuerySnapshot).toList());
   }

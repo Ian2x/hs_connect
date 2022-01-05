@@ -39,8 +39,8 @@ class UserDataDatabaseService {
       C.userGroups: [UserGroup(groupRef: docRef, public: true).asMap()],
       C.modGroupRefs: [],
       C.messagesRefs: [],
-      C.myPostsRefs: [],
-      C.myCommentsRefs: [],
+      C.myPostsObservedRefs: [],
+      C.myCommentsObservedRefs: [],
       C.myRepliesRefs: [],
       C.savedPostsRefs: [],
       C.profileImage: null,
@@ -93,7 +93,7 @@ class UserDataDatabaseService {
   // home data from snapshot
   UserData? _userDataFromSnapshot(DocumentSnapshot snapshot, {DocumentReference? overrideUserRef}) {
     if (snapshot.exists) {
-      return UserData.fromSnapshot(snapshot, overrideUserRef != null ? overrideUserRef : currUserRef);
+      return userDataFromSnapshot(snapshot, overrideUserRef != null ? overrideUserRef : currUserRef);
     } else {
       return null;
     }
@@ -114,10 +114,10 @@ class UserDataDatabaseService {
   }
 
   Stream<List<SearchResult>> searchStream(String searchKey) {
-    final LCsearchKey = searchKey.toLowerCase();
+    final searchKeyLC = searchKey.toLowerCase();
     return userDataCollection
-        .where(C.displayedNameLC, isGreaterThanOrEqualTo: LCsearchKey)
-        .where(C.displayedNameLC, isLessThan: LCsearchKey + 'z')
+        .where(C.displayedNameLC, isGreaterThanOrEqualTo: searchKeyLC)
+        .where(C.displayedNameLC, isLessThan: searchKeyLC + 'z')
         .snapshots()
         .map((snapshot) => snapshot.docs.map(_streamResultFromQuerySnapshot).toList());
   }

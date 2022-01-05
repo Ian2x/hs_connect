@@ -4,18 +4,18 @@ import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 
 class Reply {
-  late DocumentReference replyRef;
-  late DocumentReference creatorRef;
-  late DocumentReference commentRef;
-  late DocumentReference postRef;
-  late DocumentReference groupRef;
-  late AccessRestriction accessRestriction;
-  late String text;
-  String? media;
-  late Timestamp createdAt;
-  late List<DocumentReference> likes;
-  late List<DocumentReference> dislikes;
-  late List<DocumentReference> reportsRefs;
+  final DocumentReference replyRef;
+  final DocumentReference creatorRef;
+  final DocumentReference commentRef;
+  final DocumentReference postRef;
+  final DocumentReference groupRef;
+  final AccessRestriction accessRestriction;
+  final String text;
+  final String? media;
+  final Timestamp createdAt;
+  final List<DocumentReference> likes;
+  final List<DocumentReference> dislikes;
+  final List<DocumentReference> reportsRefs;
 
   Reply({
     required this.replyRef,
@@ -31,20 +31,22 @@ class Reply {
     required this.dislikes,
     required this.reportsRefs,
   });
+}
 
-  Reply.fromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
-    final accessRestriction = querySnapshot.get(C.accessRestriction);
-    this.replyRef = querySnapshot.reference;
-    this.creatorRef = querySnapshot[C.creatorRef];
-    this.commentRef = querySnapshot[C.commentRef];
-    this.postRef = querySnapshot[C.postRef];
-    this.groupRef = querySnapshot[C.groupRef];
-    this.accessRestriction = accessRestrictionFromMap(map: accessRestriction);
-    this.text = querySnapshot[C.text];
-    this.media = querySnapshot[C.media];
-    this.createdAt = querySnapshot[C.createdAt];
-    this.likes = docRefList(querySnapshot[C.likes]);
-    this.dislikes = docRefList(querySnapshot[C.dislikes]);
-    this.reportsRefs = docRefList(querySnapshot[C.reportsRefs]);
-  }
+replyFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
+  final accessRestriction = querySnapshot.get(C.accessRestriction);
+  return Reply(
+    replyRef: querySnapshot.reference,
+    creatorRef: querySnapshot[C.creatorRef],
+    commentRef: querySnapshot[C.commentRef],
+    postRef: querySnapshot[C.postRef],
+    groupRef: querySnapshot[C.groupRef],
+    accessRestriction: accessRestrictionFromMap(accessRestriction),
+    text: querySnapshot[C.text],
+    media: querySnapshot[C.media],
+    createdAt: querySnapshot[C.createdAt],
+    likes: docRefList(querySnapshot[C.likes]),
+    dislikes: docRefList(querySnapshot[C.dislikes]),
+    reportsRefs: docRefList(querySnapshot[C.reportsRefs]),
+  );
 }

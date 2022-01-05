@@ -34,11 +34,11 @@ ReportType reportTypeFrom(String reportType) {
 }
 
 class Report {
-  late ReportType reportType;
-  late DocumentReference entityRef; // ref to message, post, comment, or reply
-  late DocumentReference reporterRef; // person filing the report
-  late String text;
-  late Timestamp createdAt;
+  final ReportType reportType;
+  final DocumentReference entityRef; // ref to message, post, comment, or reply
+  final DocumentReference reporterRef; // person filing the report
+  final String text;
+  final Timestamp createdAt;
 
   Report({
     required this.reportType,
@@ -47,12 +47,14 @@ class Report {
     required this.text,
     required this.createdAt,
   });
+}
 
-  Report.fromSnapshot(DocumentSnapshot snapshot) {
-    this.reportType = reportTypeFrom(snapshot.get(C.reportType));
-    this.entityRef = snapshot.get(C.entityRef);
-    this.reporterRef = snapshot.get(C.reporterRef);
-    this.text = snapshot.get(C.text);
-    this.createdAt = snapshot.get(C.createdAt);
-  }
+reportFromSnapshot(DocumentSnapshot snapshot) {
+  return Report(
+    reportType: reportTypeFrom(snapshot.get(C.reportType)),
+    entityRef: snapshot.get(C.entityRef),
+    reporterRef: snapshot.get(C.reporterRef),
+    text: snapshot.get(C.text),
+    createdAt: snapshot.get(C.createdAt),
+  );
 }

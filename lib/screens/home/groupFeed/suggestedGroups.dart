@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/groupView/groupCard.dart';
 import 'package:hs_connect/services/groups_database.dart';
@@ -32,24 +33,23 @@ class _SuggestedGroupsState extends State<SuggestedGroups> {
     return FutureBuilder(
         future: _groups.getTrendingGroups(
             domain: widget.domain, county: widget.county, state: widget.state, country: widget.country),
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<List<Group>> snapshot) {
           if (snapshot.hasData) {
-            final groups = snapshot.data.docs.map((docSnapshot) {
-              return _groups.groupDataFromSnapshot(snapshot: docSnapshot);
-            }).toList();
-
-            return ListView.builder(
-              itemCount: groups.length,
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemBuilder: (BuildContext context, int index) {
-                // when scroll up/down, fires once
-                return Center(child: GroupCard(group: groups[index], currUserRef: userData.userRef));
-              },
-            );
-          } else {
-            return Loading();
+            final groups = snapshot.data;
+            // final groups = snapshot.data.docs.map((snapshot) => groupFromSnapshot(snapshot)).toList();
+            if (groups != null) {
+              return ListView.builder(
+                itemCount: groups.length,
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemBuilder: (BuildContext context, int index) {
+                  // when scroll up/down, fires once
+                  return Center(child: GroupCard(group: groups[index], currUserRef: userData.userRef));
+                },
+              );
+            }
           }
+          return Loading();
         });
   }
 }

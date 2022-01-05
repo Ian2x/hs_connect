@@ -68,7 +68,7 @@ class MessagesDatabaseService {
   // home data from snapshot
   Message? _messageFromDocument(QueryDocumentSnapshot querySnapshot) {
     if (querySnapshot.exists) {
-      return Message.fromQuerySnapshot(querySnapshot);
+      return messageFromQuerySnapshot(querySnapshot);
     } else {
       return null;
     }

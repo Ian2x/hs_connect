@@ -1,13 +1,9 @@
 import 'dart:async';
-import 'dart:collection';
-import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/accessRestriction.dart';
 import 'package:hs_connect/models/group.dart';
-import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/searchResult.dart';
 import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 
@@ -93,7 +89,7 @@ class GroupsDatabaseService {
     return groupFromSnapshot(snapshot);
   }
 
-  void updateGroupOverTimeStats({required DocumentReference groupRef}) async {
+  void d({required DocumentReference groupRef}) async {
     final group = await groupFromRef(groupRef);
     if (group==null) return;
     // return if there's been an update less than 3 hours ago
@@ -186,8 +182,6 @@ class GroupsDatabaseService {
 
   Future<List<Group>> getTrendingGroups(
       {required String domain, required String? county, required String? state, required String? country}) async {
-    //TODO: replace with tracking numPosts and numMembers over time
-
     // get all group refs
     final allowableGroups = await getAllowableGroups(domain: domain, county: county, state: state, country: country);
     List<GroupRanking> groupRankings = <GroupRanking>[];
@@ -198,38 +192,15 @@ class GroupsDatabaseService {
         pot.sort((a,b) => a.time.compareTo(b.time));
         score+=pot[0].count;
       }
+      List<CountAtTime> mot = group.membersOverTime;
+      if (mot.isNotEmpty) {
+        mot.sort((a,b) => a.time.compareTo(b.time));
+        score+=mot[0].count;
+      }
       groupRankings.add(GroupRanking(group: group, score: score));
     });
     groupRankings.sort((a,b) => b.score-a.score);
     return groupRankings.map((groupRanking) => groupRanking.group).toList();
-
-    /*SplayTreeMap groupScores = new SplayTreeMap(compareDocRef);
-    // get all group refs
-    final allGroupsRefs = await getAllowableGroupRefs(domain: domain, county: county, state: state, country: country);
-    // collect post information for each group
-    PostsDatabaseService _posts = PostsDatabaseService(groupRefs: allGroupsRefs, currUserRef: currUserRef);
-    final List<Post?> allPosts = await _posts.getMultiGroupPosts();
-    final List<Post?> filteredPosts = allPosts
-        .where((post) =>
-            post != null &&
-            DateTime.now().difference(post.createdAt.toDate()).compareTo(Duration(days: daysTrending)) < 0)
-        .toList();
-    filteredPosts.forEach((post) {
-      if (post != null) {
-        groupScores.update(post.groupRef, (value) => value + 1, ifAbsent: () => 1);
-      }
-    });
-    List<refRanking> groupScoresList =
-        groupScores.entries.map((ele) => refRanking(ref: ele.key, count: ele.value)).toList();
-    groupScoresList.sort((a, b) {return b.count - a.count;});
-    List<refRanking> shortGroupScoresList = groupScoresList.sublist(0, min(10, groupScoresList.length));
-    final test = groupsCollection
-        .where(FieldPath.documentId,
-            whereIn: shortGroupScoresList.map((refRanking) {
-              return refRanking.ref.id;
-            }).toList())
-        .get();
-    return test;*/
   }
 
   SearchResult _searchResultFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
@@ -242,15 +213,13 @@ class GroupsDatabaseService {
   }
 
   Stream<List<SearchResult>> searchStream(String searchKey, List<DocumentReference> allowableGroupRefs) {
-    final LCsearchKey = searchKey.toLowerCase();
+    final searchKeyLC = searchKey.toLowerCase();
     if (allowableGroupRefs.length == 0) return Stream.empty();
     return groupsCollection
         .where(C.selfRef, whereIn: allowableGroupRefs)
-        .where(C.nameLC, isGreaterThanOrEqualTo: LCsearchKey)
-        .where(C.nameLC, isLessThan: LCsearchKey + 'z')
+        .where(C.nameLC, isGreaterThanOrEqualTo: searchKeyLC)
+        .where(C.nameLC, isLessThan: searchKeyLC + 'z')
         .snapshots()
         .map((snapshot) => snapshot.docs.map(_searchResultFromQuerySnapshot).toList());
   }
-
-
 }
