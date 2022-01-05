@@ -27,7 +27,7 @@ class _RepliesFeedState extends State<RepliesFeed> {
 
     if (userData == null) return Loading();
 
-    RepliesDatabaseService _replies = RepliesDatabaseService(commentRef: widget.commentRef);
+    RepliesDatabaseService _replies = RepliesDatabaseService(commentRef: widget.commentRef, currUserRef: userData.userRef);
 
     return StreamBuilder(
       stream: _replies.commentReplies,

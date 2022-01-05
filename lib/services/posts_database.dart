@@ -71,81 +71,90 @@ class PostsDatabaseService {
         groupRef.update({C.numPosts: FieldValue.increment(-1)});
         // update user's posts
         currUserRef.update({C.myCommentsRefs: FieldValue.arrayRemove([postRef])});
-        // delete post's comments
-        final delComments = FirebaseFirestore.instance.collection(C.comments).get().then((snapshot) async {
-          List<DocumentSnapshot> allDocs = snapshot.docs;
-          List<DocumentSnapshot> filteredDocs =
-              await allDocs.where((document) => document.get(C.postRef) == postRef).toList();
-          for (DocumentSnapshot ds in filteredDocs) {
-            ds.reference.delete();
-          }
-        });
 
         // delete post's replies
-        final delReplies = FirebaseFirestore.instance.collection(C.replies).get().then((snapshot) async {
-          List<DocumentSnapshot> allDocs = snapshot.docs;
-          List<DocumentSnapshot> filteredDocs =
-              await allDocs.where((document) => document.get(C.postRef) == postRef).toList();
-          for (DocumentSnapshot ds in filteredDocs) {
-            ds.reference.delete();
+        final delReplies = Future.forEach(post.get(C.repliesRefs), (item) async {
+          final replyRef = item as DocumentReference;
+          final reply = await replyRef.get();
+          // remove reply from its creator
+          (reply.get(C.creatorRef) as DocumentReference).update({C.myRepliesRefs: FieldValue.arrayRemove([replyRef])});
+          // delete media (if applicable)
+          if (reply.get(C.media) != null) {
+            _images.deleteImage(imageURL: reply.get(C.media));
           }
+          // delete reply for good
+          return await replyRef.delete();
         });
+
+        // delete post's comments
+        final delComments = Future.forEach(post.get(C.commentsRefs), (item) async {
+          final commentRef = item as DocumentReference;
+          final comment = await commentRef.get();
+          // remove comment from its creator
+          (comment.get(C.creatorRef) as DocumentReference).update({C.myCommentsRefs: FieldValue.arrayRemove([commentRef])});
+          // delete media (if applicable)
+          if (comment.get(C.media) != null) {
+            _images.deleteImage(imageURL: comment.get(C.media));
+          }
+          // delete comment for good
+          return await commentRef.delete();
+        });
+
+        var delPoll = null;
+        // delete post's poll (if applicable)
+        if (post.get(C.pollRef) != null) {
+          delPoll = (post.get(C.pollRef) as DocumentReference).delete();
+        }
 
         // delete post
         final delPost = postRef.delete();
 
-        // delete post's poll (if applicable)
-        final postData = await postRef.get();
-        if (postData.get(C.pollRef) != null) {
-          await (postData.get(C.pollRef) as DocumentReference).delete();
-        }
-
         await delComments;
         await delReplies;
+        await delPoll;
         await delPost;
         // delete image
         if (media != null) {
           return await _images.deleteImage(imageURL: media);
         }
-      }
-      ;
+      };
     }
     return null;
   }
 
-  Future<void> likePost({required DocumentReference postRef, required DocumentReference userRef}) async {
+  Future<void> likePost({required DocumentReference postRef}) async {
     // remove dislike if disliked
     await postRef.update({
-      C.dislikes: FieldValue.arrayRemove([userRef])
+      C.dislikes: FieldValue.arrayRemove([currUserRef])
     });
     // like comment
     return await postRef.update({
-      C.likes: FieldValue.arrayUnion([userRef])
+      C.likes: FieldValue.arrayUnion([currUserRef])
     });
   }
 
-  Future<void> unLikePost({required DocumentReference postRef, required DocumentReference userRef}) async {
+  Future<void> unLikePost({required DocumentReference postRef}) async {
     // remove like
     await postRef.update({
-      C.likes: FieldValue.arrayRemove([userRef])
+      C.likes: FieldValue.arrayRemove([currUserRef])
     });
   }
 
-  Future<void> dislikePost({required DocumentReference postRef, required DocumentReference userRef}) async {
+  Future<void> dislikePost({required DocumentReference postRef}) async {
     // remove like if liked
     await postRef.update({
-      C.likes: FieldValue.arrayRemove([userRef])
+      C.likes: FieldValue.arrayRemove([currUserRef])
     });
     // dislike comment
     return await postRef.update({
-      C.dislikes: FieldValue.arrayUnion([userRef])
+      C.dislikes: FieldValue.arrayUnion([currUserRef])
     });
   }
 
-  Future<void> unDislikePost({required DocumentReference postRef, required DocumentReference userRef}) async {
+  Future<void> unDislikePost({required DocumentReference postRef}) async {
     // remove like
     await postRef.update({
-      C.dislikes: FieldValue.arrayRemove([userRef])
+      C.dislikes: FieldValue.arrayRemove([currUserRef])
     });
   }
 

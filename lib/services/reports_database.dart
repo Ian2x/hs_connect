@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/report.dart';
-import 'package:async/async.dart' show StreamGroup;
 import 'package:hs_connect/shared/constants.dart';
 
 class MessagesDatabaseService {

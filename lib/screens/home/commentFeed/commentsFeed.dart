@@ -28,8 +28,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
     final userData = Provider.of<UserData?>(context);
 
     if (userData == null) return Loading();
-
-    CommentsDatabaseService _comments = CommentsDatabaseService(currUserRef: userData.userRef, postRef: widget.post.postRef);
+    CommentsDatabaseService _comments = CommentsDatabaseService(currUserRef: userData.userRef, postRef: widget.post.postRef, commentsRefs: widget.post.commentsRefs);
 
     return StreamBuilder(
       stream: _comments.postComments,
@@ -37,7 +36,11 @@ class _CommentsFeedState extends State<CommentsFeed> {
         if (!snapshot.hasData) {
           return Loading();
         } else {
-          final comments = (snapshot.data as List<Comment?>).map((comment) => comment!).toList();
+          List<Comment> comments = (snapshot.data as List<Comment?>).map((comment) => comment!).toList();
+          // sort by most recent
+          comments.sort((a,b) {
+            return b.createdAt.compareTo(a.createdAt);
+          });
 
           return ListView.builder(
             itemCount: comments.length + 3,

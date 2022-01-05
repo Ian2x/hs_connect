@@ -17,7 +17,6 @@ class LikeDislikeReply extends StatefulWidget {
 }
 
 class _LikeDislikeReplyState extends State<LikeDislikeReply> {
-  RepliesDatabaseService _replies = RepliesDatabaseService();
 
   bool likeStatus = false;
   bool dislikeStatus = false;
@@ -39,6 +38,9 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
 
   @override
   Widget build(BuildContext context) {
+
+    RepliesDatabaseService _replies = RepliesDatabaseService(currUserRef: widget.currUserRef);
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -48,7 +50,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
               iconSize: 20.0,
               icon: Icon(Icons.thumb_up),
               onPressed: () {
-                _replies.unLikeReply(replyRef: widget.replyRef, userRef: widget.currUserRef);
+                _replies.unLikeReply(replyRef: widget.replyRef);
                 if (mounted) {
                   setState(() {
                     likeCount -= 1;
@@ -62,7 +64,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
               iconSize: 20.0,
               icon: Icon(Icons.thumb_up_outlined),
               onPressed: () {
-                _replies.likeReply(replyRef: widget.replyRef, userRef: widget.currUserRef);
+                _replies.likeReply(replyRef: widget.replyRef);
                 if (mounted) {
                   setState(() {
                     likeCount += 1;
@@ -82,7 +84,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
               iconSize: 20.0,
               icon: Icon(Icons.thumb_down),
               onPressed: () {
-                _replies.unDislikeReply(replyRef: widget.replyRef, userRef: widget.currUserRef);
+                _replies.unDislikeReply(replyRef: widget.replyRef);
                 if (mounted) {
                   setState(() {
                     dislikeCount -= 1;
@@ -96,7 +98,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
               iconSize: 20.0,
               icon: Icon(Icons.thumb_down_outlined),
               onPressed: () {
-                _replies.dislikeReply(replyRef: widget.replyRef, userRef: widget.currUserRef);
+                _replies.dislikeReply(replyRef: widget.replyRef);
                 if (mounted) {
                   setState(() {
                     dislikeCount += 1;
