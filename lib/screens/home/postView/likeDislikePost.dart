@@ -50,7 +50,7 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
               iconSize: 20.0,
               icon: Icon(Icons.thumb_up),
               onPressed: () {
-                _posts.unLikePost(postRef: widget.postRef, userRef: widget.currUserRef);
+                _posts.unLikePost(postRef: widget.postRef);
                 if (mounted) {
                   setState(() {
                     likeCount -= 1;
@@ -64,7 +64,7 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
               iconSize: 20.0,
               icon: Icon(Icons.thumb_up_outlined),
               onPressed: () {
-                _posts.likePost(postRef: widget.postRef, userRef: widget.currUserRef);
+                _posts.likePost(postRef: widget.postRef);
                 if (mounted) {
                   setState(() {
                     likeCount += 1;
@@ -84,7 +84,7 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
               iconSize: 20.0,
               icon: Icon(Icons.thumb_down),
               onPressed: () {
-                _posts.unDislikePost(postRef: widget.postRef, userRef: widget.currUserRef);
+                _posts.unDislikePost(postRef: widget.postRef);
                 if (mounted) {
                   setState(() {
                     dislikeCount -= 1;
@@ -98,7 +98,7 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
               iconSize: 20.0,
               icon: Icon(Icons.thumb_down_outlined),
               onPressed: () {
-                _posts.dislikePost(postRef: widget.postRef, userRef: widget.currUserRef);
+                _posts.dislikePost(postRef: widget.postRef);
                 if (mounted) {
                   setState(() {
                     dislikeCount += 1;

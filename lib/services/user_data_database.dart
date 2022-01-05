@@ -99,16 +99,6 @@ class UserDataDatabaseService {
     }
   }
 
-  // get Users from list of userRefs, should be wrapped in FutureBuilder to use
-  Future<QuerySnapshot> getUsers({required List<DocumentReference> userRefs}) async {
-    return userDataCollection
-        .where(FieldPath.documentId,
-            whereIn: userRefs.map((userRef) {
-              return userRef.id;
-            }).toList())
-        .get();
-  }
-
   // get home doc stream
   Stream<UserData?> get userData {
     return currUserRef.snapshots().map(_userDataFromSnapshot);

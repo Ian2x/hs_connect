@@ -17,10 +17,6 @@ int compareDocRef(dynamic dr1, dynamic dr2) {
   return dr1.id.compareTo(dr2.id);
 }
 
-int refRankingCompare(a, b) {
-  return b.count - a.count;
-}
-
 class refRanking {
   final DocumentReference ref;
   final int count;
@@ -47,6 +43,7 @@ class GroupsDatabaseService {
       required String? description,
       Function(void) onValue = defaultFunc,
       Function onError = defaultFunc}) async {
+    // if group already exists, just return that
     QuerySnapshot docs = await groupsCollection
         .where(C.name, isEqualTo: name)
         .where(C.accessRestriction, isEqualTo: accessRestriction.asMap())
@@ -54,7 +51,7 @@ class GroupsDatabaseService {
     if (docs.size > 0) {
       return docs.docs.first.reference;
     } else {
-      DocumentReference newGroupRef = await groupsCollection.doc();
+      DocumentReference newGroupRef = groupsCollection.doc();
 
       await newGroupRef
           .set({
@@ -74,6 +71,11 @@ class GroupsDatabaseService {
           .then(onValue)
           .catchError(onError);
       if (creatorRef != null) {
+        // set creator as group's creator and moderator
+        newGroupRef.update({C.creatorRef: creatorRef, C.moderatorRefs: FieldValue.arrayUnion([creatorRef])});
+        // set group as one of user's modGroups
+        creatorRef.update({C.modGroupRefs: FieldValue.arrayUnion([newGroupRef])});
+        // have creator join group
         UserDataDatabaseService _users = UserDataDatabaseService(currUserRef: creatorRef);
         newGroupRef.update({C.numMembers: FieldValue.increment(1)});
         await _users.joinGroup(userRef: creatorRef, groupRef: newGroupRef, public: true);
@@ -91,48 +93,48 @@ class GroupsDatabaseService {
   Future<List<DocumentReference>> getAllowableGroupRefs(
       {required String domain, required String? county, required String? state, required String? country}) async {
     // get all group refs
-    final domainGroupsFetch = groupsCollection
+    final Future domainGroupsFetch = groupsCollection
         .where(C.accessRestriction,
             isEqualTo: AccessRestriction(restrictionType: AccessRestrictionType.domain, restriction: domain).asMap())
         .get();
-    final countyGroupsFetch = county != null
+    final Future? countyGroupsFetch = county != null
         ? groupsCollection
             .where(C.county,
                 isEqualTo:
                     AccessRestriction(restrictionType: AccessRestrictionType.county, restriction: county).asMap())
             .get()
         : null;
-    final stateGroupsFetch = state != null
+    final Future? stateGroupsFetch = state != null
         ? groupsCollection
             .where(C.state,
                 isEqualTo: AccessRestriction(restrictionType: AccessRestrictionType.state, restriction: state).asMap())
             .get()
         : null;
-    final countryGroupsFetch = country != null
+    final Future? countryGroupsFetch = country != null
         ? groupsCollection
             .where(C.country,
                 isEqualTo:
                     AccessRestriction(restrictionType: AccessRestrictionType.country, restriction: country).asMap())
             .get()
         : null;
-    final domainGroups = await domainGroupsFetch;
-    final countyGroups = await countyGroupsFetch;
-    final stateGroups = await stateGroupsFetch;
-    final countryGroups = await countryGroupsFetch;
-    final domainGroupsRefs = domainGroups.docs.map((group) {
+    final QuerySnapshot domainGroups = await domainGroupsFetch;
+    final QuerySnapshot? countyGroups = await countyGroupsFetch;
+    final QuerySnapshot? stateGroups = await stateGroupsFetch;
+    final QuerySnapshot? countryGroups = await countryGroupsFetch;
+    final List<DocumentReference> domainGroupsRefs = domainGroups.docs.map((group) {
       return group.reference;
     }).toList();
-    final countyGroupsRefs = countyGroups != null
+    final List<DocumentReference> countyGroupsRefs = countyGroups != null
         ? countyGroups.docs.map((group) {
             return group.reference;
           }).toList()
         : <DocumentReference>[];
-    final stateGroupsRefs = stateGroups != null
+    final List<DocumentReference> stateGroupsRefs = stateGroups != null
         ? stateGroups.docs.map((group) {
             return group.reference;
           }).toList()
         : <DocumentReference>[];
-    final countryGroupsRefs = countryGroups != null
+    final List<DocumentReference> countryGroupsRefs = countryGroups != null
         ? countryGroups.docs.map((group) {
             return group.reference;
           }).toList()
@@ -155,26 +157,30 @@ class GroupsDatabaseService {
     return groupDataFromSnapshot(snapshot: snapshot);
   }
 
-  // for converting userGroups to Groups, must be wrapped in FutureBuilder (see post_form for reference)
-  Future<QuerySnapshot> getGroups({required List<UserGroup> userGroups}) async {
-    return groupsCollection
-        .where(FieldPath.documentId,
-            whereIn: userGroups.map((userGroup) {
-              return userGroup.groupRef.id;
-            }).toList())
-        .get();
+  Future<List<Group>> getGroups({required List<UserGroup> userGroups}) async {
+    final Iterable<DocumentReference> groupRefs = userGroups.map((userGroup) => userGroup.groupRef);
+    List<Group> result = <Group>[];
+    await Future.forEach(groupRefs, (item) async {
+      final temp = await group(groupRef: item as DocumentReference);
+      if (temp!=null) result.add(temp);
+    });
+    return result;
   }
 
   Future<List<Group?>> getAllowableGroups({required UserData userData}) async {
-    final allowableGroupRefs = await getAllowableGroupRefs(
+    final List<DocumentReference> allowableGroupRefs = await getAllowableGroupRefs(
         domain: userData.domain, county: userData.county, state: userData.state, country: userData.country);
-    return await Future.wait(allowableGroupRefs.map((item) async {
-      return await group(groupRef: item);
-    }));
+    List<Group> result = <Group>[];
+    await Future.forEach(allowableGroupRefs, (groupRef) async {
+      final temp = await group(groupRef: groupRef as DocumentReference);
+      if (temp!=null) result.add(temp);
+    });
+    return result;
   }
 
   Future<QuerySnapshot> getTrendingGroups(
       {required String domain, required String? county, required String? state, required String? country}) async {
+    //TODO: replace with tracking numPosts and numMembers over time
     SplayTreeMap groupScores = new SplayTreeMap(compareDocRef);
     // get all group refs
     final allGroupsRefs = await getAllowableGroupRefs(domain: domain, county: county, state: state, country: country);
@@ -193,7 +199,7 @@ class GroupsDatabaseService {
     });
     List<refRanking> groupScoresList =
         groupScores.entries.map((ele) => refRanking(ref: ele.key, count: ele.value)).toList();
-    groupScoresList.sort(refRankingCompare);
+    groupScoresList.sort((a, b) {return b.count - a.count;});
     List<refRanking> shortGroupScoresList = groupScoresList.sublist(0, min(10, groupScoresList.length));
     final test = groupsCollection
         .where(FieldPath.documentId,
@@ -204,7 +210,7 @@ class GroupsDatabaseService {
     return test;
   }
 
-  SearchResult _streamResultFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
+  SearchResult _searchResultFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
     return SearchResult(
       resultRef: querySnapshot.reference,
       resultType: SearchResultType.groups,
@@ -221,6 +227,6 @@ class GroupsDatabaseService {
         .where(C.nameLC, isGreaterThanOrEqualTo: LCsearchKey)
         .where(C.nameLC, isLessThan: LCsearchKey + 'z')
         .snapshots()
-        .map((snapshot) => snapshot.docs.map(_streamResultFromQuerySnapshot).toList());
+        .map((snapshot) => snapshot.docs.map(_searchResultFromQuerySnapshot).toList());
   }
 }

@@ -47,4 +47,20 @@ class Comment {
     this.dislikes = docRefList(querySnapshot[C.dislikes]);
     this.reportsRefs = docRefList(querySnapshot[C.reportsRefs]);
   }
+
+  Comment.fromSnapshot(DocumentSnapshot snapshot) {
+    final accessRestriction = snapshot.get(C.accessRestriction);
+    this.commentRef = snapshot.reference;
+    this.postRef = snapshot[C.postRef];
+    this.groupRef = snapshot[C.groupRef];
+    this.creatorRef = snapshot[C.creatorRef];
+    this.text = snapshot[C.text];
+    this.media = snapshot[C.media];
+    this.createdAt = snapshot[C.createdAt];
+    this.numReplies = snapshot[C.numReplies];
+    this.accessRestriction = accessRestrictionFromMap(map: accessRestriction);
+    this.likes = docRefList(snapshot[C.likes]);
+    this.dislikes = docRefList(snapshot[C.dislikes]);
+    this.reportsRefs = docRefList(snapshot[C.reportsRefs]);
+  }
 }

@@ -1,15 +1,15 @@
 import 'dart:io';
-
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:hs_connect/shared/constants.dart';
 import 'package:uuid/uuid.dart';
 
 class ImageStorage {
   // initializer
   ImageStorage();
 
-  final Reference imagesRef = FirebaseStorage.instance.ref().child('images');
+  final Reference imagesRef = FirebaseStorage.instance.ref().child(C.images);
 
-  final Reference profilePicsRef = FirebaseStorage.instance.ref().child('profilePics');
+  final Reference profilePicsRef = FirebaseStorage.instance.ref().child(C.profilePics);
 
   Future<void> listExample() async {
     ListResult result = await imagesRef.listAll();

@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/home.dart';
@@ -15,8 +15,6 @@ import 'package:hs_connect/shared/widgets/tagOutline.dart';
 import 'package:provider/provider.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/constants.dart';
-
-// newPost, postForm, posts_database.dart, tagOutline, constants.dart
 
 class PostForm extends StatefulWidget {
   const PostForm({Key? key}) : super(key: key);
@@ -50,7 +48,7 @@ class _PostFormState extends State<PostForm> {
   // form values
   String _title = '';
   String _text = '';
-  String _groupId = '';
+  DocumentReference? _groupRef = null;
   String _tag = '';
   String error = '';
   bool loading = false;
@@ -59,7 +57,6 @@ class _PostFormState extends State<PostForm> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
     double phoneHeight = MediaQuery.of(context).size.height - 200;
 
     final userData = Provider.of<UserData?>(context);
@@ -70,13 +67,6 @@ class _PostFormState extends State<PostForm> {
     }
 
     void submitForm() async {
-      if (newFile != null) {
-        // upload newFile
-        final downloadURL = await _images.uploadImage(file: newFile!);
-        setState(() {
-          newFileURL = downloadURL;
-        });
-      }
       if (_formKey.currentState != null && _formKey.currentState!.validate()) {
         setState(() => loading = true);
         await PostsDatabaseService(currUserRef: userData.userRef).newPost(
@@ -85,10 +75,17 @@ class _PostFormState extends State<PostForm> {
           tagString: _tag,
           media: newFileURL,
           pollRef: null, //until poll is implemented
-          groupRef: FirebaseFirestore.instance.collection('groups').doc(_groupId),
+          groupRef: _groupRef!,
           onValue: handleValue,
           onError: handleError,
         );
+      }
+      if (newFile != null) {
+        // upload newFile
+        final downloadURL = await _images.uploadImage(file: newFile!);
+        setState(() {
+          newFileURL = downloadURL;
+        });
       }
     }
 
@@ -104,7 +101,7 @@ class _PostFormState extends State<PostForm> {
         future: _GroupsDatabaseService.getGroups(userGroups: userData.userGroups),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            final groups = (snapshot.data as QuerySnapshot).docs.toList();
+            final groups = snapshot.data as List<Group>;
             if (isPost){
               return SingleChildScrollView(
                 child: Form(
@@ -166,7 +163,7 @@ class _PostFormState extends State<PostForm> {
                                       width: 3.0,
                                     )),
                               ),
-                              child: DropdownButtonFormField<String>(
+                              child: DropdownButtonFormField<DocumentReference>(
                                   iconSize:0.0,
                                   itemHeight: 48.0,
                                   isExpanded: true,
@@ -178,12 +175,12 @@ class _PostFormState extends State<PostForm> {
                                       fontSize: 16,
                                     ),
                                   ),
-                                  value: _groupId != '' ? _groupId : null,
+                                  value: _groupRef != null ? _groupRef : null,
                                   items: groups.map((group) {
                                     return DropdownMenuItem(
-                                      value: group.id,
+                                      value: group.groupRef,
                                       child: Text(
-                                        '${group['name']}',
+                                        group.name,
                                         style: TextStyle(
                                           color: HexColor("B5BABE"),
                                           fontSize: 14,
@@ -192,7 +189,7 @@ class _PostFormState extends State<PostForm> {
                                       ),
                                     );
                                   }).toList(),
-                                  onChanged: (val) => setState(() => _groupId = val!),
+                                  onChanged: (val) => setState(() => _groupRef = val!),
                                   validator: (val) {
                                     if (val == null)
                                       return 'Pick a group to post to';
@@ -384,7 +381,7 @@ class _PostFormState extends State<PostForm> {
                                       width: 3.0,
                                     )),
                               ),
-                              child: DropdownButtonFormField<String>(
+                              child: DropdownButtonFormField<DocumentReference>(
                                   iconSize:0.0,
                                   itemHeight: 48.0,
                                   isExpanded: true,
@@ -396,12 +393,12 @@ class _PostFormState extends State<PostForm> {
                                       fontSize: themeText.regular,
                                     ),
                                   ),
-                                  value: _groupId != '' ? _groupId : null,
+                                  value: _groupRef != null ? _groupRef : null,
                                   items: groups.map((group) {
                                     return DropdownMenuItem(
-                                      value: group.id,
+                                      value: group.groupRef,
                                       child: Text(
-                                        '${group['name']}',
+                                        group.name,
                                         style: TextStyle(
                                           color: HexColor("B5BABE"),
                                           fontSize: 14,
@@ -410,7 +407,7 @@ class _PostFormState extends State<PostForm> {
                                       ),
                                     );
                                   }).toList(),
-                                  onChanged: (val) => setState(() => _groupId = val!),
+                                  onChanged: (val) => setState(() => _groupRef = val!),
                                   validator: (val) {
                                     if (val == null)
                                       return 'Pick a group to post to';

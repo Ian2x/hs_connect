@@ -88,7 +88,7 @@ class _ReplyFormState extends State<ReplyForm> {
                         }
                       }
 
-                      await RepliesDatabaseService(userRef: userData.userRef).newReply(
+                      await RepliesDatabaseService(currUserRef: userData.userRef).newReply(
                         commentRef: widget.commentRef,
                         postRef: widget.postRef,
                         text: _text,

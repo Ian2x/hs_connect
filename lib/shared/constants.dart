@@ -109,4 +109,6 @@ class C {
   static const savedPostsRefs = 'savedPostsRefs';
   static const commentsRefs = 'commentsRefs';
   static const repliesRefs = 'repliesRefs';
+  static const images = 'images';
+  static const profilePics = 'profilePics';
 }

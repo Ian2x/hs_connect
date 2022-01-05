@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/comment.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:rxdart/rxdart.dart';
 
 void defaultFunc(dynamic parameter) {}
 
@@ -9,8 +10,9 @@ class CommentsDatabaseService {
   final DocumentReference currUserRef;
   final DocumentReference? postRef;
   final DocumentReference? commentRef;
+  final List<DocumentReference?>? commentsRefs;
 
-  CommentsDatabaseService({required this.currUserRef, this.postRef, this.commentRef});
+  CommentsDatabaseService({required this.currUserRef, this.postRef, this.commentRef, this.commentsRefs});
 
   ImageStorage _images = ImageStorage();
 
@@ -24,16 +26,16 @@ class CommentsDatabaseService {
       required DocumentReference groupRef,
       Function(void) onValue = defaultFunc,
       Function onError = defaultFunc}) async {
-    DocumentReference commentRef = commentsCollection.doc();
+    DocumentReference newCommentRef = commentsCollection.doc();
     // update user's comments
-    currUserRef.update({C.myCommentsRefs: FieldValue.arrayUnion([commentRef])});
+    currUserRef.update({C.myCommentsRefs: FieldValue.arrayUnion([newCommentRef])});
     // update post's commentsRefs
-    postRef.update({C.commentsRefs: FieldValue.arrayUnion([commentRef])});
+    postRef.update({C.commentsRefs: FieldValue.arrayUnion([newCommentRef])});
     // get accessRestriction
     final group = await groupRef.get();
     final accessRestriction = group.get(C.accessRestriction);
 
-    return await commentRef
+    return await newCommentRef
         .set({
           C.postRef: postRef,
           C.groupRef: groupRef,
@@ -59,10 +61,10 @@ class CommentsDatabaseService {
     final comment = await commentRef.get();
     if (comment.exists) {
       if (currUserRef == comment.get(C.creatorRef)) {
-        // TODO: update post's numComments
-        //
         // update user's comments
         currUserRef.update({C.myCommentsRefs: FieldValue.arrayRemove([commentRef])});
+        // update post's numComments
+        postRef.update({C.commentsRefs: FieldValue.arrayRemove([commentRef])});
         // "delete" comment
         await commentRef
             .update({C.likes: [], C.dislikes: [], C.media: null, C.creatorRef: null, C.text: '[Comment removed]'});
@@ -70,7 +72,7 @@ class CommentsDatabaseService {
         if (media != null) {
           return await _images.deleteImage(imageURL: media);
         }
-      };
+      }
     }
     return null;
   }
@@ -111,7 +113,6 @@ class CommentsDatabaseService {
     });
   }
 
-  // home data from snapshot
   Comment? _commentFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
     if (querySnapshot.exists) {
       return Comment.fromQuerySnapshot(querySnapshot);
@@ -120,11 +121,20 @@ class CommentsDatabaseService {
     }
   }
 
+  Comment? _commentFromSnapshot(DocumentSnapshot snapshot) {
+    if (snapshot.exists) {
+      return Comment.fromSnapshot(snapshot);
+    } else {
+      return null;
+    }
+  }
+
   Stream<List<Comment?>> get postComments {
-    return commentsCollection
-        .where(C.postRef, isEqualTo: postRef)
-        .orderBy(C.createdAt, descending: false)
-        .snapshots()
-        .map((snapshot) => snapshot.docs.map(_commentFromQuerySnapshot).toList());
+    List<Stream<Comment?>> postCommentsList = <Stream<Comment?>>[];
+    for (DocumentReference ref in (commentsRefs! as List<DocumentReference>)) {
+      postCommentsList.add(ref.snapshots().map(_commentFromSnapshot));
+    }
+    // StreamZip won't rebuild when any comment changes, Rx.combineLatestList will
+    return Rx.combineLatestList(postCommentsList);
   }
 }

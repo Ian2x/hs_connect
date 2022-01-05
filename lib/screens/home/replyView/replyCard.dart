@@ -22,8 +22,6 @@ class ReplyCard extends StatefulWidget {
 
 class _ReplyCardState extends State<ReplyCard> {
 
-  RepliesDatabaseService _replies = RepliesDatabaseService();
-
   bool liked = false;
   bool disliked = false;
   String username = '<Loading user name...>';
@@ -94,11 +92,11 @@ class _ReplyCardState extends State<ReplyCard> {
       onDismissed: (DismissDirection direction) {
         if (mounted) {
           setState(() {
+            RepliesDatabaseService _replies = RepliesDatabaseService(currUserRef: widget.currUserRef);
             _replies.deleteReply(
                 replyRef: widget.reply.replyRef,
                 commentRef: widget.reply.commentRef,
                 postRef: widget.reply.postRef,
-                userRef: widget.currUserRef,
                 media: widget.reply.media);
           });
         }
