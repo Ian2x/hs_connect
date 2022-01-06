@@ -29,7 +29,7 @@ class _GroupPageState extends State<GroupPage> {
 
   void getGroupData() async {
     GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserRef);
-    final Group? fetchGroupData = await _groups.getGroupData(groupRef: widget.groupRef);
+    final Group? fetchGroupData = await _groups.groupFromRef(widget.groupRef);
     if (mounted) {
       setState(() {
         groupName = fetchGroupData != null ? fetchGroupData.name : '<Failed to retrieve group name>';
