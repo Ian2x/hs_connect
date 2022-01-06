@@ -4,18 +4,19 @@ import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'accessRestriction.dart';
 
 class Comment {
-  late DocumentReference commentRef;
-  late DocumentReference postRef;
-  late DocumentReference groupRef;
-  late DocumentReference creatorRef;
-  late String text;
-  String? media;
-  late Timestamp createdAt;
-  late int numReplies;
-  late AccessRestriction accessRestriction;
-  late List<DocumentReference> likes;
-  late List<DocumentReference> dislikes;
-  late List<DocumentReference> reportsRefs;
+  final DocumentReference commentRef;
+  final DocumentReference postRef;
+  final DocumentReference groupRef;
+  final DocumentReference creatorRef;
+  final String text;
+  final String? media;
+  final Timestamp createdAt;
+  final int numReplies;
+  final AccessRestriction accessRestriction;
+  final List<DocumentReference> likes;
+  final List<DocumentReference> dislikes;
+  final List<DocumentReference> reportsRefs;
+  final Timestamp lastUpdated;
 
   Comment({
     required this.commentRef,
@@ -30,37 +31,45 @@ class Comment {
     required this.likes,
     required this.dislikes,
     required this.reportsRefs,
+    required this.lastUpdated,
   });
+}
 
-  Comment.fromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
-    final accessRestriction = querySnapshot.get(C.accessRestriction);
-    this.commentRef = querySnapshot.reference;
-    this.postRef = querySnapshot[C.postRef];
-    this.groupRef = querySnapshot[C.groupRef];
-    this.creatorRef = querySnapshot[C.creatorRef];
-    this.text = querySnapshot[C.text];
-    this.media = querySnapshot[C.media];
-    this.createdAt = querySnapshot[C.createdAt];
-    this.numReplies = querySnapshot[C.numReplies];
-    this.accessRestriction = accessRestrictionFromMap(map: accessRestriction);
-    this.likes = docRefList(querySnapshot[C.likes]);
-    this.dislikes = docRefList(querySnapshot[C.dislikes]);
-    this.reportsRefs = docRefList(querySnapshot[C.reportsRefs]);
-  }
+commentFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
+  final accessRestriction = querySnapshot.get(C.accessRestriction);
+  return Comment(
+      commentRef: querySnapshot.reference,
+      postRef: querySnapshot[C.postRef],
+      groupRef: querySnapshot[C.groupRef],
+      creatorRef: querySnapshot[C.creatorRef],
+      text: querySnapshot[C.text],
+      media: querySnapshot[C.media],
+      createdAt: querySnapshot[C.createdAt],
+      numReplies: querySnapshot[C.numReplies],
+      accessRestriction: accessRestrictionFromMap(accessRestriction),
+      likes: docRefList(querySnapshot[C.likes]),
+      dislikes: docRefList(querySnapshot[C.dislikes]),
+      reportsRefs: docRefList(querySnapshot[C.reportsRefs]),
+      lastUpdated: querySnapshot[C.lastUpdated]
+  );
+}
 
-  Comment.fromSnapshot(DocumentSnapshot snapshot) {
-    final accessRestriction = snapshot.get(C.accessRestriction);
-    this.commentRef = snapshot.reference;
-    this.postRef = snapshot[C.postRef];
-    this.groupRef = snapshot[C.groupRef];
-    this.creatorRef = snapshot[C.creatorRef];
-    this.text = snapshot[C.text];
-    this.media = snapshot[C.media];
-    this.createdAt = snapshot[C.createdAt];
-    this.numReplies = snapshot[C.numReplies];
-    this.accessRestriction = accessRestrictionFromMap(map: accessRestriction);
-    this.likes = docRefList(snapshot[C.likes]);
-    this.dislikes = docRefList(snapshot[C.dislikes]);
-    this.reportsRefs = docRefList(snapshot[C.reportsRefs]);
-  }
+commentFromSnapshot(DocumentSnapshot snapshot) {
+  final accessRestriction = snapshot.get(C.accessRestriction);
+  return Comment(
+      commentRef: snapshot.reference,
+      postRef: snapshot[C.postRef],
+      groupRef: snapshot[C.groupRef],
+      creatorRef: snapshot[C.creatorRef],
+      text: snapshot[C.text],
+      media: snapshot[C.media],
+      createdAt: snapshot[C.createdAt],
+      numReplies: snapshot[C.numReplies],
+      accessRestriction: accessRestrictionFromMap(accessRestriction),
+      likes: docRefList(snapshot[C.likes]),
+      dislikes: docRefList(snapshot[C.dislikes]),
+      reportsRefs: docRefList(snapshot[C.reportsRefs]),
+      lastUpdated: snapshot[C.lastUpdated],
+  );
+
 }

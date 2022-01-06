@@ -31,7 +31,7 @@ class _SpecificGroupFeedState extends State<SpecificGroupFeed> {
 
   void getGroupName() async {
     GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserRef);
-    final Group? fetchGroupName = await _groups.getGroupData(groupRef: widget.groupRef);
+    final Group? fetchGroupName = await _groups.groupFromRef(widget.groupRef);
     if (mounted) {
       setState(() {
         groupName = fetchGroupName != null ? fetchGroupName.name : '<Failed to retrieve group name>';

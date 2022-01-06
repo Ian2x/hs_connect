@@ -39,8 +39,8 @@ class UserDataDatabaseService {
       C.userGroups: [UserGroup(groupRef: docRef, public: true).asMap()],
       C.modGroupRefs: [],
       C.messagesRefs: [],
-      C.myPostsRefs: [],
-      C.myCommentsRefs: [],
+      C.myPostsObservedRefs: [],
+      C.myCommentsObservedRefs: [],
       C.myRepliesRefs: [],
       C.savedPostsRefs: [],
       C.profileImage: null,
@@ -67,11 +67,14 @@ class UserDataDatabaseService {
   Future<void> joinGroup(
       {required DocumentReference userRef, required DocumentReference groupRef, required bool public}) async {
     groupRef.update({C.numMembers: FieldValue.increment(1)});
-    return await userRef.update({
+    final result = await userRef.update({
       C.userGroups: FieldValue.arrayUnion([
         {C.groupRef: groupRef, C.public: public}
       ])
     });
+    GroupsDatabaseService _tempGroups = GroupsDatabaseService(currUserRef: currUserRef);
+    _tempGroups.updateGroupStats(groupRef: groupRef);
+    return result;
   }
 
   Future<void> leaveGroup(
@@ -93,7 +96,7 @@ class UserDataDatabaseService {
   // home data from snapshot
   UserData? _userDataFromSnapshot(DocumentSnapshot snapshot, {DocumentReference? overrideUserRef}) {
     if (snapshot.exists) {
-      return UserData.fromSnapshot(snapshot, overrideUserRef != null ? overrideUserRef : currUserRef);
+      return userDataFromSnapshot(snapshot, overrideUserRef != null ? overrideUserRef : currUserRef);
     } else {
       return null;
     }
@@ -114,10 +117,10 @@ class UserDataDatabaseService {
   }
 
   Stream<List<SearchResult>> searchStream(String searchKey) {
-    final LCsearchKey = searchKey.toLowerCase();
+    final searchKeyLC = searchKey.toLowerCase();
     return userDataCollection
-        .where(C.displayedNameLC, isGreaterThanOrEqualTo: LCsearchKey)
-        .where(C.displayedNameLC, isLessThan: LCsearchKey + 'z')
+        .where(C.displayedNameLC, isGreaterThanOrEqualTo: searchKeyLC)
+        .where(C.displayedNameLC, isLessThan: searchKeyLC + 'z')
         .snapshots()
         .map((snapshot) => snapshot.docs.map(_streamResultFromQuerySnapshot).toList());
   }

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hs_connect/models/observedRef.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 
@@ -21,24 +22,24 @@ UserGroup userGroupFromMap({required Map map}) {
 }
 
 class UserData {
-  late DocumentReference userRef;
-  late String displayedName;
-  late String displayedNameLC;
-  String? bio;
-  late String domain;
-  String? county;
-  String? state;
-  String? country;
-  late List<UserGroup> userGroups;
-  late List<DocumentReference> modGroupsRefs;
-  late List<DocumentReference> messagesRefs;
-  late List<DocumentReference> myPostsRefs;
-  late List<DocumentReference> savedPostsRefs;
-  late List<DocumentReference> myCommentsRefs;
-  late List<DocumentReference> myRepliesRefs;
-  String? profileImage;
-  late int score;
-  late List<DocumentReference> reportsRefs;
+  final DocumentReference userRef;
+  final String displayedName;
+  final String displayedNameLC;
+  final String? bio;
+  final String domain;
+  final String? county;
+  final String? state;
+  final String? country;
+  final List<UserGroup> userGroups;
+  final List<DocumentReference> modGroupsRefs;
+  final List<DocumentReference> messagesRefs;
+  final List<ObservedRef> myPostsObservedRefs;
+  final List<DocumentReference> savedPostsRefs;
+  final List<ObservedRef> myCommentsObservedRefs;
+  final List<DocumentReference> myRepliesRefs;
+  final String? profileImage;
+  final int score;
+  final List<DocumentReference> reportsRefs;
 
   UserData({
     required this.userRef,
@@ -52,34 +53,35 @@ class UserData {
     required this.userGroups,
     required this.modGroupsRefs,
     required this.messagesRefs,
-    required this.myPostsRefs,
+    required this.myPostsObservedRefs,
     required this.savedPostsRefs,
-    required this.myCommentsRefs,
+    required this.myCommentsObservedRefs,
     required this.myRepliesRefs,
     required this.profileImage,
     required this.score,
     required this.reportsRefs,
   });
+}
 
-  UserData.fromSnapshot(DocumentSnapshot snapshot, DocumentReference userRef) {
-    this.userRef = userRef;
-    this.displayedName = snapshot.get(C.displayedName);
-    this.displayedNameLC = snapshot.get(C.displayedNameLC);
-    this.bio = snapshot.get(C.bio);
-    this.domain = snapshot.get(C.domain);
-    this.county = snapshot.get(C.county);
-    this.state = snapshot.get(C.state);
-    this.country = snapshot.get(C.country);
-    this.userGroups =
-        snapshot.get(C.userGroups).map<UserGroup>((userGroup) => userGroupFromMap(map: userGroup)).toList();
-    this.modGroupsRefs = docRefList(snapshot.get(C.modGroupRefs));
-    this.messagesRefs = docRefList(snapshot.get(C.messagesRefs));
-    this.myPostsRefs = docRefList(snapshot.get(C.myPostsRefs));
-    this.savedPostsRefs = docRefList(snapshot.get(C.savedPostsRefs));
-    this.myCommentsRefs = docRefList(snapshot.get(C.myCommentsRefs));
-    this.myRepliesRefs = docRefList(snapshot.get(C.myRepliesRefs));
-    this.profileImage = snapshot.get(C.profileImage);
-    this.score = snapshot.get(C.score);
-    this.reportsRefs = docRefList(snapshot.get(C.reportsRefs));
-  }
+userDataFromSnapshot(DocumentSnapshot snapshot, DocumentReference userRef) {
+  return UserData(
+    userRef: userRef,
+    displayedName: snapshot.get(C.displayedName),
+    displayedNameLC: snapshot.get(C.displayedNameLC),
+    bio: snapshot.get(C.bio),
+    domain: snapshot.get(C.domain),
+    county: snapshot.get(C.county),
+    state: snapshot.get(C.state),
+    country: snapshot.get(C.country),
+    userGroups: snapshot.get(C.userGroups).map<UserGroup>((userGroup) => userGroupFromMap(map: userGroup)).toList(),
+    modGroupsRefs: docRefList(snapshot.get(C.modGroupRefs)),
+    messagesRefs: docRefList(snapshot.get(C.messagesRefs)),
+    myPostsObservedRefs: observedRefList(snapshot.get(C.myPostsObservedRefs)),
+    savedPostsRefs: docRefList(snapshot.get(C.savedPostsRefs)),
+    myCommentsObservedRefs: observedRefList(snapshot.get(C.myCommentsObservedRefs)),
+    myRepliesRefs: docRefList(snapshot.get(C.myRepliesRefs)),
+    profileImage: snapshot.get(C.profileImage),
+    score: snapshot.get(C.score),
+    reportsRefs: docRefList(snapshot.get(C.reportsRefs)),
+  );
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/authenticate/authenticate.dart';
 import 'package:hs_connect/screens/home/home.dart';
+import 'package:hs_connect/screens/test.dart';
 import 'package:provider/provider.dart';
 
 class Wrapper extends StatefulWidget {
@@ -21,6 +22,7 @@ class _WrapperState extends State<Wrapper> {
       return Authenticate();
     } else {
       return Home();
+      // return Wheel();
     }
   }
 }

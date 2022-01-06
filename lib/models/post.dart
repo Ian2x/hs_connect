@@ -49,22 +49,23 @@ Tag? tagFrom(String? tag) {
 }
 
 class Post {
-  late DocumentReference postRef;
-  late DocumentReference groupRef;
-  late DocumentReference creatorRef;
-  late String title;
-  late String titleLC;
-  String? text;
-  String? media;
-  late Timestamp createdAt;
-  late List<DocumentReference> commentsRefs;
-  late List<DocumentReference> repliesRefs;
-  late AccessRestriction accessRestriction;
-  late List<DocumentReference> likes;
-  late List<DocumentReference> dislikes;
-  late List<DocumentReference> reportsRefs;
-  DocumentReference? pollRef;
-  late Tag? tag;
+  final DocumentReference postRef;
+  final DocumentReference groupRef;
+  final DocumentReference creatorRef;
+  final String title;
+  final String titleLC;
+  final String? text;
+  final String? media;
+  final Timestamp createdAt;
+  final List<DocumentReference> commentsRefs;
+  final List<DocumentReference> repliesRefs;
+  final AccessRestriction accessRestriction;
+  final List<DocumentReference> likes;
+  final List<DocumentReference> dislikes;
+  final List<DocumentReference> reportsRefs;
+  final DocumentReference? pollRef;
+  final Tag? tag;
+  final Timestamp lastUpdated;
 
   Post({
     required this.postRef,
@@ -83,45 +84,52 @@ class Post {
     required this.reportsRefs,
     required this.pollRef,
     required this.tag,
+    required this.lastUpdated,
   });
+}
 
-  Post.fromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
-    final accessRestriction = querySnapshot[C.accessRestriction];
-    this.postRef = querySnapshot.reference;
-    this.groupRef = querySnapshot[C.groupRef];
-    this.creatorRef = querySnapshot[C.creatorRef];
-    this.title = querySnapshot[C.title];
-    this.titleLC = querySnapshot[C.titleLC];
-    this.text = querySnapshot[C.text];
-    this.media = querySnapshot[C.media];
-    this.createdAt = querySnapshot[C.createdAt];
-    this.commentsRefs = docRefList(querySnapshot[C.commentsRefs]);
-    this.repliesRefs = docRefList(querySnapshot[C.repliesRefs]);
-    this.accessRestriction = accessRestrictionFromMap(map: accessRestriction);
-    this.likes = docRefList(querySnapshot[C.likes]);
-    this.dislikes = docRefList(querySnapshot[C.dislikes]);
-    this.reportsRefs = docRefList(querySnapshot[C.reportsRefs]);
-    this.pollRef = querySnapshot[C.pollRef];
-    this.tag = tagFrom(querySnapshot[C.tag]);
-  }
+postFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
+  final accessRestriction = querySnapshot[C.accessRestriction];
+  return Post(
+    postRef: querySnapshot.reference,
+    groupRef: querySnapshot[C.groupRef],
+    creatorRef: querySnapshot[C.creatorRef],
+    title: querySnapshot[C.title],
+    titleLC: querySnapshot[C.titleLC],
+    text: querySnapshot[C.text],
+    media: querySnapshot[C.media],
+    createdAt: querySnapshot[C.createdAt],
+    commentsRefs: docRefList(querySnapshot[C.commentsRefs]),
+    repliesRefs: docRefList(querySnapshot[C.repliesRefs]),
+    accessRestriction: accessRestrictionFromMap(accessRestriction),
+    likes: docRefList(querySnapshot[C.likes]),
+    dislikes: docRefList(querySnapshot[C.dislikes]),
+    reportsRefs: docRefList(querySnapshot[C.reportsRefs]),
+    pollRef: querySnapshot[C.pollRef],
+    tag: tagFrom(querySnapshot[C.tag]),
+    lastUpdated: querySnapshot[C.lastUpdated],
+  );
+}
 
-  Post.fromSnapshot(DocumentSnapshot snapshot) {
-    final accessRestriction = snapshot.get(C.accessRestriction);
-    this.postRef = snapshot.reference;
-    this.groupRef = snapshot.get(C.groupRef);
-    this.creatorRef = snapshot.get(C.creatorRef);
-    this.title = snapshot.get(C.title);
-    this.titleLC = snapshot.get(C.titleLC);
-    this.text = snapshot.get(C.text);
-    this.media = snapshot.get(C.media);
-    this.createdAt = snapshot.get(C.createdAt);
-    this.commentsRefs = docRefList(snapshot.get(C.commentsRefs));
-    this.repliesRefs = docRefList(snapshot.get(C.repliesRefs));
-    this.accessRestriction = accessRestrictionFromMap(map: accessRestriction);
-    this.likes = docRefList(snapshot.get(C.likes));
-    this.dislikes = docRefList(snapshot.get(C.dislikes));
-    this.reportsRefs = docRefList(snapshot.get(C.reportsRefs));
-    this.pollRef = snapshot.get(C.pollRef);
-    this.tag = tagFrom(snapshot.get(C.tag));
-  }
+postFromSnapshot(DocumentSnapshot snapshot) {
+  final accessRestriction = snapshot[C.accessRestriction];
+  return Post(
+    postRef: snapshot.reference,
+    groupRef: snapshot[C.groupRef],
+    creatorRef: snapshot[C.creatorRef],
+    title: snapshot[C.title],
+    titleLC: snapshot[C.titleLC],
+    text: snapshot[C.text],
+    media: snapshot[C.media],
+    createdAt: snapshot[C.createdAt],
+    commentsRefs: docRefList(snapshot[C.commentsRefs]),
+    repliesRefs: docRefList(snapshot[C.repliesRefs]),
+    accessRestriction: accessRestrictionFromMap(accessRestriction),
+    likes: docRefList(snapshot[C.likes]),
+    dislikes: docRefList(snapshot[C.dislikes]),
+    reportsRefs: docRefList(snapshot[C.reportsRefs]),
+    pollRef: snapshot[C.pollRef],
+    tag: tagFrom(snapshot[C.tag]),
+    lastUpdated: snapshot[C.lastUpdated],
+  );
 }

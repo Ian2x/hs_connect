@@ -18,7 +18,7 @@ extension AccessRestrictionTypeExtension on AccessRestrictionType {
   }
 }
 
-AccessRestrictionTypeFrom(String accessRestrictionType) {
+accessRestrictionTypeFrom(String accessRestrictionType) {
   switch (accessRestrictionType) {
     case C.domain:
       return AccessRestrictionType.domain;
@@ -55,7 +55,7 @@ class AccessRestriction {
   }
 }
 
-AccessRestriction accessRestrictionFromMap({required Map map}) {
+AccessRestriction accessRestrictionFromMap(Map map) {
   return AccessRestriction(
-      restriction: map[C.restriction], restrictionType: AccessRestrictionTypeFrom(map[C.restrictionType]));
+      restriction: map[C.restriction], restrictionType: accessRestrictionTypeFrom(map[C.restrictionType]));
 }

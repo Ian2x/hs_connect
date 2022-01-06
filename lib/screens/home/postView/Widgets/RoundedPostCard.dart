@@ -73,7 +73,7 @@ class _RoundedPostCardState extends State<RoundedPostCard> {
 
   void getGroupName() async {
     GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserRef);
-    final Group? fetchGroupName = await _groups.getGroupData(groupRef: widget.post.groupRef);
+    final Group? fetchGroupName = await _groups.groupFromRef(widget.post.groupRef);
     if (mounted) {
       setState(() {
         groupName = fetchGroupName != null ? fetchGroupName.name : '<Failed to retrieve group name>';

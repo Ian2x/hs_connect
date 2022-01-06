@@ -26,11 +26,19 @@ class RepliesDatabaseService {
       Function onError = defaultFunc}) async {
     DocumentReference newReplyRef = repliesCollection.doc();
     // update user's replies
-    currUserRef.update({C.myRepliesRefs: FieldValue.arrayUnion([newReplyRef])});
-    // update post's repliesRefs
-    postRef.update({C.repliesRefs: FieldValue.arrayUnion([newReplyRef])});
-    // update comment's numReplies
-    commentRef.update({C.numReplies: FieldValue.increment(1)});
+    currUserRef.update({
+      C.myRepliesRefs: FieldValue.arrayUnion([newReplyRef])
+    });
+    // update post's repliesRefs and lastUpdated
+    postRef.update({
+      C.repliesRefs: FieldValue.arrayUnion([newReplyRef]),
+      C.lastUpdated: DateTime.now()
+    });
+    // update comment's numReplies and lastUpdated
+    commentRef.update({
+      C.numReplies: FieldValue.increment(1),
+      C.lastUpdated: DateTime.now()
+    });
     // get accessRestriction
     final group = await groupRef.get();
     final accessRestriction = group.get(C.accessRestriction);
@@ -57,22 +65,32 @@ class RepliesDatabaseService {
       {required DocumentReference replyRef,
       required DocumentReference commentRef,
       required DocumentReference postRef,
+      bool weakDelete = true,
       String? media}) async {
     final reply = await replyRef.get();
     if (reply.exists) {
       if (currUserRef == reply.get(C.creatorRef)) {
         // update user's replies
-        currUserRef.update({C.myRepliesRefs: FieldValue.arrayRemove([replyRef])});
+        currUserRef.update({
+          C.myRepliesRefs: FieldValue.arrayRemove([replyRef])
+        });
         // update post's repliesRefs
-        postRef.update({C.repliesRefs: FieldValue.arrayRemove([replyRef])});
+        // postRef.update({C.repliesRefs: FieldValue.arrayRemove([replyRef])});
         // update comment's numReplies
         // commentRef.update({C.numReplies: FieldValue.increment(-1)});
-        // "delete" reply
-        await replyRef
-            .update({C.likes: [], C.dislikes: [], C.media: null, C.creatorRef: null, C.text: '[Reply removed]'});
+
         // delete media (if applicable)
         if (media != null) {
-          return await _images.deleteImage(imageURL: media);
+          await _images.deleteImage(imageURL: media);
+        }
+
+        if (weakDelete) {
+          // "delete" reply
+          return await replyRef
+              .update({C.likes: [], C.dislikes: [], C.media: null, C.creatorRef: null, C.text: '[Reply removed]'});
+        } else {
+          // delete reply for good
+          return await replyRef.delete();
         }
       }
     }
@@ -118,7 +136,7 @@ class RepliesDatabaseService {
   // home data from snapshot
   Reply? _replyFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
     if (querySnapshot.exists) {
-      return Reply.fromQuerySnapshot(querySnapshot);
+      return replyFromQuerySnapshot(querySnapshot);
     } else {
       return null;
     }

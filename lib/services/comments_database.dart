@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/comment.dart';
+import 'package:hs_connect/models/observedRef.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:rxdart/rxdart.dart';
 
 void defaultFunc(dynamic parameter) {}
@@ -26,11 +28,18 @@ class CommentsDatabaseService {
       required DocumentReference groupRef,
       Function(void) onValue = defaultFunc,
       Function onError = defaultFunc}) async {
-    DocumentReference newCommentRef = commentsCollection.doc();
     // update user's comments
-    currUserRef.update({C.myCommentsRefs: FieldValue.arrayUnion([newCommentRef])});
-    // update post's commentsRefs
-    postRef.update({C.commentsRefs: FieldValue.arrayUnion([newCommentRef])});
+    DocumentReference newCommentRef = commentsCollection.doc();
+    currUserRef.update({
+      C.myCommentsObservedRefs: FieldValue.arrayUnion([
+        {C.ref: newCommentRef, C.refType: ObservedRefType.comment.string, C.lastObserved: Timestamp.now()}
+      ])
+    });
+    // update post's commentsRefs and lastUpdated
+    postRef.update({
+      C.commentsRefs: FieldValue.arrayUnion([newCommentRef]),
+      C.lastUpdated: DateTime.now(),
+    });
     // get accessRestriction
     final group = await groupRef.get();
     final accessRestriction = group.get(C.accessRestriction);
@@ -48,6 +57,7 @@ class CommentsDatabaseService {
           C.likes: [],
           C.dislikes: [],
           C.reportsRefs: [],
+          C.lastUpdated: DateTime.now(),
         })
         .then(onValue)
         .catchError(onError);
@@ -56,21 +66,37 @@ class CommentsDatabaseService {
   Future<dynamic> deleteComment(
       {required DocumentReference commentRef,
       required DocumentReference postRef,
+      bool weakDelete = true,
       String? media}) async {
     // check comment exists and matches current user
     final comment = await commentRef.get();
     if (comment.exists) {
       if (currUserRef == comment.get(C.creatorRef)) {
-        // update user's comments
-        currUserRef.update({C.myCommentsRefs: FieldValue.arrayRemove([commentRef])});
         // update post's numComments
-        postRef.update({C.commentsRefs: FieldValue.arrayRemove([commentRef])});
-        // "delete" comment
-        await commentRef
-            .update({C.likes: [], C.dislikes: [], C.media: null, C.creatorRef: null, C.text: '[Comment removed]'});
+        // postRef.update({C.commentsRefs: FieldValue.arrayRemove([commentRef])});
+        // update user's comments
+        final myCommentsObservedRefs = observedRefList((await currUserRef.get()).get(C.myCommentsObservedRefs));
+        for (final observedRef in myCommentsObservedRefs) {
+          if (observedRef.ref == commentRef) {
+            currUserRef.update({
+              C.myCommentsObservedRefs: FieldValue.arrayRemove([observedRef.asMap()])
+            });
+            break;
+          }
+        }
+
         // delete media (if applicable)
         if (media != null) {
-          return await _images.deleteImage(imageURL: media);
+          _images.deleteImage(imageURL: media);
+        }
+
+        if (weakDelete) {
+          // "delete" comment
+          return await commentRef
+              .update({C.likes: [], C.dislikes: [], C.media: null, C.creatorRef: null, C.text: '[Comment removed]'});
+        } else {
+          // delete comment for good
+          return await commentRef.delete();
         }
       }
     }
@@ -115,7 +141,7 @@ class CommentsDatabaseService {
 
   Comment? _commentFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
     if (querySnapshot.exists) {
-      return Comment.fromQuerySnapshot(querySnapshot);
+      return commentFromQuerySnapshot(querySnapshot);
     } else {
       return null;
     }
@@ -123,7 +149,7 @@ class CommentsDatabaseService {
 
   Comment? _commentFromSnapshot(DocumentSnapshot snapshot) {
     if (snapshot.exists) {
-      return Comment.fromSnapshot(snapshot);
+      return commentFromSnapshot(snapshot);
     } else {
       return null;
     }
