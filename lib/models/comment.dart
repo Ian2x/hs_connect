@@ -16,6 +16,7 @@ class Comment {
   final List<DocumentReference> likes;
   final List<DocumentReference> dislikes;
   final List<DocumentReference> reportsRefs;
+  final Timestamp lastUpdated;
 
   Comment({
     required this.commentRef,
@@ -30,6 +31,7 @@ class Comment {
     required this.likes,
     required this.dislikes,
     required this.reportsRefs,
+    required this.lastUpdated,
   });
 }
 
@@ -47,7 +49,8 @@ commentFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
       accessRestriction: accessRestrictionFromMap(accessRestriction),
       likes: docRefList(querySnapshot[C.likes]),
       dislikes: docRefList(querySnapshot[C.dislikes]),
-      reportsRefs: docRefList(querySnapshot[C.reportsRefs])
+      reportsRefs: docRefList(querySnapshot[C.reportsRefs]),
+      lastUpdated: querySnapshot[C.lastUpdated]
   );
 }
 
@@ -65,5 +68,8 @@ commentFromSnapshot(DocumentSnapshot snapshot) {
       accessRestriction: accessRestrictionFromMap(accessRestriction),
       likes: docRefList(snapshot[C.likes]),
       dislikes: docRefList(snapshot[C.dislikes]),
-      reportsRefs: docRefList(snapshot[C.reportsRefs]));
+      reportsRefs: docRefList(snapshot[C.reportsRefs]),
+      lastUpdated: snapshot[C.lastUpdated],
+  );
+
 }

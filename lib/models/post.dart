@@ -65,6 +65,7 @@ class Post {
   final List<DocumentReference> reportsRefs;
   final DocumentReference? pollRef;
   final Tag? tag;
+  final Timestamp lastUpdated;
 
   Post({
     required this.postRef,
@@ -83,6 +84,7 @@ class Post {
     required this.reportsRefs,
     required this.pollRef,
     required this.tag,
+    required this.lastUpdated,
   });
 }
 
@@ -105,6 +107,7 @@ postFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
     reportsRefs: docRefList(querySnapshot[C.reportsRefs]),
     pollRef: querySnapshot[C.pollRef],
     tag: tagFrom(querySnapshot[C.tag]),
+    lastUpdated: querySnapshot[C.lastUpdated],
   );
 }
 
@@ -127,5 +130,6 @@ postFromSnapshot(DocumentSnapshot snapshot) {
     reportsRefs: docRefList(snapshot[C.reportsRefs]),
     pollRef: snapshot[C.pollRef],
     tag: tagFrom(snapshot[C.tag]),
+    lastUpdated: snapshot[C.lastUpdated],
   );
 }

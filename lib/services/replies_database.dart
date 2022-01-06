@@ -29,12 +29,16 @@ class RepliesDatabaseService {
     currUserRef.update({
       C.myRepliesRefs: FieldValue.arrayUnion([newReplyRef])
     });
-    // update post's repliesRefs
+    // update post's repliesRefs and lastUpdated
     postRef.update({
-      C.repliesRefs: FieldValue.arrayUnion([newReplyRef])
+      C.repliesRefs: FieldValue.arrayUnion([newReplyRef]),
+      C.lastUpdated: DateTime.now()
     });
-    // update comment's numReplies
-    commentRef.update({C.numReplies: FieldValue.increment(1)});
+    // update comment's numReplies and lastUpdated
+    commentRef.update({
+      C.numReplies: FieldValue.increment(1),
+      C.lastUpdated: DateTime.now()
+    });
     // get accessRestriction
     final group = await groupRef.get();
     final accessRestriction = group.get(C.accessRestriction);

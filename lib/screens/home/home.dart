@@ -34,6 +34,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     final userData = Provider.of<UserData?>(context);
 
     if (userData == null || user == null) {
+      print(userData);
+      print(user);
       return Loading();
     }
     // this sliver app bar is only use to hide/show the tabBar, the AppBar

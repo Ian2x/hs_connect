@@ -76,7 +76,6 @@ class GroupsDatabaseService {
         creatorRef.update({C.modGroupRefs: FieldValue.arrayUnion([newGroupRef])});
         // have creator join group
         UserDataDatabaseService _users = UserDataDatabaseService(currUserRef: creatorRef);
-        newGroupRef.update({C.numMembers: FieldValue.increment(1)});
         await _users.joinGroup(userRef: creatorRef, groupRef: newGroupRef, public: true);
       }
       return newGroupRef;
@@ -89,7 +88,7 @@ class GroupsDatabaseService {
     return groupFromSnapshot(snapshot);
   }
 
-  void d({required DocumentReference groupRef}) async {
+  void updateGroupStats({required DocumentReference groupRef}) async {
     final group = await groupFromRef(groupRef);
     if (group==null) return;
     // return if there's been an update less than 3 hours ago
@@ -110,6 +109,7 @@ class GroupsDatabaseService {
     // Add new postCountAtTime and memberCountAtTime
     groupRef.update({C.postsOverTime: FieldValue.arrayUnion([{C.count: group.numPosts, C.time: Timestamp.now()}])});
     groupRef.update({C.membersOverTime: FieldValue.arrayUnion([{C.count: group.numMembers, C.time: Timestamp.now()}])});
+    groupRef.update({C.lastOverTimeUpdate: Timestamp.now()});
   }
 
   Future<List<Group>> getAllowableGroups(

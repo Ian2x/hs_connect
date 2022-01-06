@@ -121,4 +121,5 @@ class C {
   static const postsOverTime = 'postsOverTime';
   static const membersOverTime = 'membersOverTime';
   static const lastOverTimeUpdate = 'lastOverTimeUpdate';
+  static const lastUpdated = 'lastUpdated';
 }

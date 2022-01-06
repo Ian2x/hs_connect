@@ -35,9 +35,10 @@ class CommentsDatabaseService {
         {C.ref: newCommentRef, C.refType: ObservedRefType.comment.string, C.lastObserved: Timestamp.now()}
       ])
     });
-    // update post's commentsRefs
+    // update post's commentsRefs and lastUpdated
     postRef.update({
-      C.commentsRefs: FieldValue.arrayUnion([newCommentRef])
+      C.commentsRefs: FieldValue.arrayUnion([newCommentRef]),
+      C.lastUpdated: DateTime.now(),
     });
     // get accessRestriction
     final group = await groupRef.get();
@@ -56,6 +57,7 @@ class CommentsDatabaseService {
           C.likes: [],
           C.dislikes: [],
           C.reportsRefs: [],
+          C.lastUpdated: DateTime.now(),
         })
         .then(onValue)
         .catchError(onError);

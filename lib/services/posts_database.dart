@@ -3,6 +3,7 @@ import 'package:hs_connect/models/observedRef.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/searchResult.dart';
 import 'package:hs_connect/services/comments_database.dart';
+import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/replies_database.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/constants.dart';
@@ -44,7 +45,7 @@ class PostsDatabaseService {
     final group = await groupRef.get();
     final accessRestriction = group.get(C.accessRestriction);
 
-    return await newPostRef
+    final result = await newPostRef
         .set({
           C.groupRef: groupRef,
           C.creatorRef: currUserRef,
@@ -61,9 +62,13 @@ class PostsDatabaseService {
           C.reportsRefs: [],
           C.pollRef: pollRef,
           C.tag: tagString == '' ? null : tagString,
+          C.lastUpdated: DateTime.now(),
         })
         .then(onValue)
         .catchError(onError);
+    GroupsDatabaseService _tempGroups = GroupsDatabaseService(currUserRef: currUserRef);
+    _tempGroups.updateGroupStats(groupRef: groupRef);
+    return result;
   }
 
   Future<dynamic> deletePost(

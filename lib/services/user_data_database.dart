@@ -67,11 +67,14 @@ class UserDataDatabaseService {
   Future<void> joinGroup(
       {required DocumentReference userRef, required DocumentReference groupRef, required bool public}) async {
     groupRef.update({C.numMembers: FieldValue.increment(1)});
-    return await userRef.update({
+    final result = await userRef.update({
       C.userGroups: FieldValue.arrayUnion([
         {C.groupRef: groupRef, C.public: public}
       ])
     });
+    GroupsDatabaseService _tempGroups = GroupsDatabaseService(currUserRef: currUserRef);
+    _tempGroups.updateGroupStats(groupRef: groupRef);
+    return result;
   }
 
   Future<void> leaveGroup(
