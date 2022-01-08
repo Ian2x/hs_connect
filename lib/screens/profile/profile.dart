@@ -1,11 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/authenticate/authenticate.dart';
+import 'package:hs_connect/screens/profile/groupCarousel.dart';
 import 'package:hs_connect/screens/profile/profileForm.dart';
 import 'package:hs_connect/services/auth.dart';
+import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
+import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:hs_connect/shared/widgets/navigationBar.dart';
 import 'package:hs_connect/screens/profile/profileWidget/profileFormPage.dart';
@@ -32,6 +36,7 @@ class _ProfileState extends State<Profile> {
   String? profileImage;
   int profileGroupCount = 0;
   int profileScore = 0;
+  List<Group>? profileGroups;
 
   void getProfileUserData() async {
     UserDataDatabaseService _userInfoDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserRef);
@@ -42,6 +47,13 @@ class _ProfileState extends State<Profile> {
         profileImage = fetchUserData != null ? fetchUserData.profileImage : '<Failed to retrieve user Image>';
         profileGroupCount = fetchUserData != null ? fetchUserData.userGroups.length : 0;
         profileScore = fetchUserData != null ? fetchUserData.score : 0;
+      });
+    }
+    GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserRef);
+    if (fetchUserData!=null) {
+      final temp = await _groups.getGroups(userGroups: fetchUserData.userGroups);
+      setState(() {
+        profileGroups = temp;
       });
     }
   }
@@ -56,15 +68,11 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
 
-    final user = Provider.of<User?>(context);
-
-    if (_auth.user == null) {
+    if (userData == null) {
       return Authenticate();
     }
-
-    // unnecessary?
-    if (user == null) {
-      return Authenticate();
+    if (profileGroups == null) {
+      return Loading();
     }
 
     return Scaffold(
@@ -72,21 +80,23 @@ class _ProfileState extends State<Profile> {
       body: ListView(
         physics: BouncingScrollPhysics(),
         children: [
+          const SizedBox(height:20),
           ProfileWidget(
             profileImage: profileImage,
             onClicked: () async {},
+            currUserName: profileUsername,
           ),
-          const SizedBox(height: 24),
-          buildName(user),
-          const SizedBox(height: 24),
-          Center(child: buildEditButton()),
-          const SizedBox(height: 24),
+          const SizedBox(height: 10),
+          buildName(userData),
+          //const SizedBox(height: 24),
+          //Center(child: buildEditButton()),
+          const SizedBox(height: 5),
           NumbersWidget(scoreCount: profileScore, groupCount: profileGroupCount),
-          const SizedBox(height: 48),
+          const SizedBox(height: 20),
+          Divider(thickness: 1.5),
+          SizedBox(height: 10),
           buildIconScroll(),
-          const SizedBox(height: 24),
-          profileImage == null ? Text("no profile Image") : Image.network(profileImage!),
-          //buildGroupTileScroll(),
+          const SizedBox(height: 2),
         ],
       ),
       bottomNavigationBar: navigationBar(
@@ -95,16 +105,15 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  Widget buildName(User user) => Column(
+  Widget buildName(UserData userData) => Column(
         children: [
           Text(
             profileUsername,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
           ),
           const SizedBox(height: 4),
-          Text(
-            'DOMAINl',
-            style: TextStyle(color: Colors.grey),
+          Text(userData.domain,
+            style: TextStyle(color: Colors.black),
           )
         ],
       );
@@ -122,47 +131,7 @@ class _ProfileState extends State<Profile> {
       );
 
   Widget buildIconScroll() => Container(
-        height: 100,
-        child: ListView(
-          scrollDirection: Axis.horizontal,
-          children: <Widget>[
-            Container(
-              width: 200,
-              color: Colors.purple[600],
-              child: const Center(
-                  child: Text(
-                'Item 1',
-                style: TextStyle(fontSize: 18, color: Colors.white),
-              )),
-            ),
-            Container(
-              width: 200,
-              color: Colors.purple[500],
-              child: const Center(
-                  child: Text(
-                'Item 2',
-                style: TextStyle(fontSize: 18, color: Colors.white),
-              )),
-            ),
-            Container(
-              width: 200,
-              color: Colors.purple[400],
-              child: const Center(
-                  child: Text(
-                'Item 3',
-                style: TextStyle(fontSize: 18, color: Colors.white),
-              )),
-            ),
-            Container(
-              width: 200,
-              color: Colors.purple[300],
-              child: const Center(
-                  child: Text(
-                'Item 4',
-                style: TextStyle(fontSize: 18, color: Colors.white),
-              )),
-            ),
-          ],
-        ),
+        height: 400,
+        child: GroupCarousel(groups: profileGroups!)
       );
 }

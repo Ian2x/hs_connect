@@ -177,6 +177,7 @@ class GroupsDatabaseService {
       final temp = await groupFromRef(ref as DocumentReference);
       if (temp!=null) result.add(temp);
     });
+    result.sort((a,b) => (a as Group).createdAt.compareTo((b as Group).createdAt) );
     return result;
   }
 

@@ -5,6 +5,7 @@ import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
+import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/postsListView.dart';
 import 'package:provider/provider.dart';
@@ -48,7 +49,7 @@ class _SpecificGroupFeedState extends State<SpecificGroupFeed> {
     PostsDatabaseService _posts = PostsDatabaseService(currUserRef: userData.userRef, groupRefs: [widget.groupRef]);
 
     return Scaffold(
-      backgroundColor: Colors.brown[50],
+      backgroundColor: HexColor("#E9EDF0"),
       appBar: AppBar(
         title: Text(groupName),
         backgroundColor: Colors.brown[400],

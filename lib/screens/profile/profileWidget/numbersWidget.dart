@@ -10,14 +10,14 @@ class NumbersWidget extends StatelessWidget {
   Widget build(BuildContext context) => Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          buildButton(context, scoreCount.toString(), 'Likes'),
+          buildButton(context, scoreCount.toString() + ' Points', 'Points'),
           buildDivider(),
-          buildButton(context, groupCount.toString(), 'Groups'),
+          buildButton(context, groupCount.toString() + ' Groups', 'Groups'),
         ],
       );
 
   Widget buildDivider() => Container(
-        height: 24,
+        height: 2,
         child: VerticalDivider(),
       );
 
@@ -31,13 +31,13 @@ class NumbersWidget extends StatelessWidget {
           children: <Widget>[
             Text(
               value,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
             ),
-            SizedBox(height: 2),
+            /*SizedBox(height: 2),
             Text(
               text,
               style: TextStyle(fontWeight: FontWeight.bold),
-            ),
+            ),*/
           ],
         ),
       );
