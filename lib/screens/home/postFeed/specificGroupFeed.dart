@@ -61,7 +61,10 @@ class _SpecificGroupFeedState extends State<SpecificGroupFeed> {
           if (!snapshot.hasData) {
             return Loading();
           } else {
-            final posts = (snapshot.data as List<Post?>).map((post) => post!).toList();
+            List<Post?> postss = (snapshot.data as List<Post?>);
+            postss.removeWhere((value) => value == null);
+            List<Post> posts = postss.map((item) => item!).toList();
+
             return PostsListView(posts: posts, currUserRef: userData.userRef);
           }
         },

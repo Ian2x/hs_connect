@@ -155,12 +155,22 @@ class CommentsDatabaseService {
     }
   }
 
-  Stream<List<Comment?>> get postComments {
+  /*Stream<List<Comment?>> get postComments {
     List<Stream<Comment?>> postCommentsList = <Stream<Comment?>>[];
+    // Stream<List<Comment?>> test = Stream.value(<Comment?>[]);
     for (DocumentReference ref in (commentsRefs! as List<DocumentReference>)) {
       postCommentsList.add(ref.snapshots().map(_commentFromSnapshot));
+      postCommentsList.add(ref.)
     }
     // StreamZip won't rebuild when any comment changes, Rx.combineLatestList will
-    return Rx.combineLatestList(postCommentsList);
+    final temp = Rx.combineLatestList(postCommentsList);
+    return temp;
+  }*/
+  Stream get postComments {
+    print(postRef);
+    return commentsCollection
+      .where('postRef', isEqualTo: postRef!)
+      .snapshots()
+      .map((snapshot) => snapshot.docs.map(_commentFromQuerySnapshot).toList());
   }
 }
