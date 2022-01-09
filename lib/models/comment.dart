@@ -37,7 +37,7 @@ class Comment {
 
 commentFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
   final accessRestriction = querySnapshot.get(C.accessRestriction);
-  return Comment(
+  final temp = Comment(
       commentRef: querySnapshot.reference,
       postRef: querySnapshot[C.postRef],
       groupRef: querySnapshot[C.groupRef],
@@ -52,11 +52,12 @@ commentFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
       reportsRefs: docRefList(querySnapshot[C.reportsRefs]),
       lastUpdated: querySnapshot[C.lastUpdated]
   );
+  return temp;
 }
 
 commentFromSnapshot(DocumentSnapshot snapshot) {
   final accessRestriction = snapshot.get(C.accessRestriction);
-  return Comment(
+  final temp = Comment(
       commentRef: snapshot.reference,
       postRef: snapshot[C.postRef],
       groupRef: snapshot[C.groupRef],
@@ -71,5 +72,5 @@ commentFromSnapshot(DocumentSnapshot snapshot) {
       reportsRefs: docRefList(snapshot[C.reportsRefs]),
       lastUpdated: snapshot[C.lastUpdated],
   );
-
+  return temp;
 }

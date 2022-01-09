@@ -36,7 +36,9 @@ class _CommentsFeedState extends State<CommentsFeed> {
         if (!snapshot.hasData) {
           return Loading();
         } else {
-          List<Comment> comments = (snapshot.data as List<Comment?>).map((comment) => comment!).toList();
+          List<Comment?> commentss = (snapshot.data as List<Comment?>);
+          commentss.removeWhere((value) => value == null);
+          List<Comment> comments = commentss.map((item) => item!).toList();
           // sort by most recent
           comments.sort((a,b) {
             return b.createdAt.compareTo(a.createdAt);
