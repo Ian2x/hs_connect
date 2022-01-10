@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/authenticate/authenticate.dart';
 import 'package:hs_connect/screens/home/home.dart';
-import 'package:hs_connect/screens/profile/groupCarousel.dart';
 import 'package:provider/provider.dart';
 
 class Wrapper extends StatefulWidget {

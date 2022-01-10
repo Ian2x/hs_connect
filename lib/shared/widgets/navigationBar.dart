@@ -104,7 +104,7 @@ class _navigationBarState extends State<navigationBar> {
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  NoAnimationMaterialPageRoute(builder: (context) => Profile(profilePersonRef: userData.userRef, currUserRef: userData.userRef)),
+                  NoAnimationMaterialPageRoute(builder: (context) => Profile(profileRef: userData.userRef, currUserRef: userData.userRef)),
                 );
               },
             ),

@@ -59,3 +59,30 @@ AccessRestriction accessRestrictionFromMap(Map map) {
   return AccessRestriction(
       restriction: map[C.restriction], restrictionType: accessRestrictionTypeFrom(map[C.restrictionType]));
 }
+
+class Access {
+  final String domain;
+  final String? county;
+  final String? state;
+  final String? country;
+
+  Access({
+    required this.domain,
+    required this.county,
+    required this.state,
+    required this.country,
+  });
+
+  bool haveAccess(AccessRestriction ar) {
+    switch (ar.restrictionType) {
+      case AccessRestrictionType.domain:
+        return ar.restriction==this.domain;
+      case AccessRestrictionType.county:
+        return ar.restriction==this.county;
+      case AccessRestrictionType.state:
+        return ar.restriction==this.state;
+      case AccessRestrictionType.country:
+        return ar.restriction==this.country;
+    }
+  }
+}

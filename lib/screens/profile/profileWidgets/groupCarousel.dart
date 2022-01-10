@@ -2,13 +2,14 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:hs_connect/models/accessRestriction.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/groupView/groupPage.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
+import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
-
 
 const circlesViewportFraction = 0.25;
 const blocksViewportFraction = 0.6;
@@ -19,11 +20,14 @@ const blocksHeight = 200.0;
 const blocksWidth = 200.0;
 const circleSizeFactor = 0.5; // bigger = more different
 const blockSizeFactor = 0.0; // bigger = more different
+const circlesFontSize = 35.0;
+const chevronSplashRadius = 20.0;
 
 class GroupCarousel extends StatefulWidget {
   final List<Group> groups;
+  final Access userAccess;
 
-  GroupCarousel({required this.groups});
+  GroupCarousel({required this.groups, required this.userAccess});
 
   @override
   _GroupCarouselState createState() => new _GroupCarouselState();
@@ -34,10 +38,13 @@ class _GroupCarouselState extends State<GroupCarousel> {
   late PageController blocksController;
   int? currentPage;
   int initialPage = 0;
+
   // This makes sure the animation only runs once
   bool initialized = false;
   List<Widget> circlesContent = [];
-  static const defaultCirclesContent = Image(image: AssetImage('assets/masonic-G.png'));
+
+  // static const defaultCirclesContent = Image(image: AssetImage('assets/masonic-G.png'));
+  Widget defaultCirclesContent = Loading(size: 20.0);
 
   // Handle time
   late Timer timer;
@@ -47,7 +54,7 @@ class _GroupCarouselState extends State<GroupCarousel> {
     timer = Timer(Duration(milliseconds: 100), () => setState(() {}));
     super.initState();
     while (initialPage < 50) {
-      initialPage+=widget.groups.length;
+      initialPage += widget.groups.length;
     }
     circlesController = PageController(
       initialPage: initialPage,
@@ -60,26 +67,25 @@ class _GroupCarouselState extends State<GroupCarousel> {
       viewportFraction: blocksViewportFraction,
     );
     circlesController.addListener(onCirclesScroll);
-    for (int i=0; i<widget.groups.length; i++) {
-      bool textCircle = widget.groups[i].image==null || widget.groups[i].image=='';
+    for (int i = 0; i < widget.groups.length; i++) {
+      bool textCircle = widget.groups[i].image == null || widget.groups[i].image == '';
       if (textCircle) {
         String s = widget.groups[i].name;
         int sLen = s.length;
         String initial = "?";
-        for (int j=0; j<sLen; j++) {
+        for (int j = 0; j < sLen; j++) {
           if (RegExp(r'[a-z]').hasMatch(widget.groups[i].name[j].toLowerCase())) {
             initial = widget.groups[i].name[j].toUpperCase();
             break;
           }
         }
-        circlesContent.add(Text(initial));
+        circlesContent.add(Text(initial, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)));
       } else {
         circlesContent.add(defaultCirclesContent);
         var tempImage = Image.network(widget.groups[i].image!);
         tempImage.image
             .resolve(ImageConfiguration())
-            .addListener(ImageStreamListener((ImageInfo image, bool synchronousCall)
-        {
+            .addListener(ImageStreamListener((ImageInfo image, bool synchronousCall) {
           if (mounted) {
             var newCirclesContent = circlesContent;
             newCirclesContent[i] = tempImage;
@@ -91,12 +97,13 @@ class _GroupCarouselState extends State<GroupCarousel> {
   }
 
   void onCirclesScroll() {
-    if (circlesController.page==null) return;
-    if (circlesController.page!<=5.1) {
-      circlesController.animateToPage(circlesController.page!.toInt() + initialPage, duration: instant, curve: Curves.linear);
+    if (circlesController.page == null) return;
+    if (circlesController.page! <= 5.1) {
+      circlesController.animateToPage(circlesController.page!.round() + initialPage,
+          duration: instant, curve: Curves.linear);
     }
-    blocksController.animateToPage(circlesController.page!.round(), duration: Duration(milliseconds: 150), curve: Curves.linear);
-
+    blocksController.animateToPage(circlesController.page!.round(),
+        duration: Duration(milliseconds: 250), curve: Curves.easeOutSine);
   }
 
   @override
@@ -114,7 +121,6 @@ class _GroupCarouselState extends State<GroupCarousel> {
       blocksController.animateToPage(initialPage, duration: instant, curve: Curves.linear);
       initialized = true;
     }
-
 
     return Container(
       height: 400,
@@ -137,9 +143,23 @@ class _GroupCarouselState extends State<GroupCarousel> {
                 OverlayEntry(builder: (BuildContext context) {
                   return Row(children: <Widget>[
                     SizedBox(width: 12),
-                    Icon(Icons.chevron_left, size: 40, color: Colors.black),
+                    IconButton(
+                      onPressed: () {
+                        circlesController.animateToPage(circlesController.page!.round() - 1,
+                            duration: Duration(milliseconds: 400), curve: Curves.linear);
+                      },
+                      icon: Icon(Icons.chevron_left, size: 40, color: Colors.black),
+                      splashRadius: chevronSplashRadius,
+                    ),
                     Spacer(),
-                    Icon(Icons.chevron_right, size: 40, color: Colors.black),
+                    IconButton(
+                      onPressed: () {
+                        circlesController.animateToPage(circlesController.page!.round() + 1,
+                            duration: Duration(milliseconds: 400), curve: Curves.linear);
+                      },
+                      icon: Icon(Icons.chevron_right, size: 40, color: Colors.black),
+                      splashRadius: chevronSplashRadius,
+                    ),
                     SizedBox(width: 12),
                   ]);
                 })
@@ -168,8 +188,18 @@ class _GroupCarouselState extends State<GroupCarousel> {
   circlesBuilder(int index) {
     final trueIndex = index % widget.groups.length;
     Widget localContent = defaultCirclesContent;
-    if (circlesContent.length>trueIndex) {
+    if (circlesContent.length > trueIndex) {
       localContent = circlesContent[trueIndex];
+      if (circlesContent[trueIndex] is Text) {
+        if (circlesController.position.haveDimensions) {
+          double value = circlesController.page! - index;
+          value = (1 - (value.abs() * circleSizeFactor)).clamp(1 - circleSizeFactor, 1.0);
+          localContent = AnimatedDefaultTextStyle(
+              child: circlesContent[trueIndex],
+              style: TextStyle(fontSize: circlesFontSize * value),
+              duration: Duration(milliseconds: 100));
+        }
+      }
     }
     return AnimatedBuilder(
       animation: circlesController,
@@ -177,7 +207,7 @@ class _GroupCarouselState extends State<GroupCarousel> {
         double value = 1.0;
         if (circlesController.position.haveDimensions) {
           value = circlesController.page! - index;
-          value = (1 - (value.abs() * circleSizeFactor)).clamp(1-circleSizeFactor, 1.0);
+          value = (1 - (value.abs() * circleSizeFactor)).clamp(1 - circleSizeFactor, 1.0);
         }
 
         return Center(
@@ -189,15 +219,10 @@ class _GroupCarouselState extends State<GroupCarousel> {
         );
       },
       child: Container(
-        // margin: const EdgeInsets.all(8.0),
-        // color: index % 2 == 0 ? Colors.blue : Colors.red,
-        child: CircleButton(
-          onTap: () {},
-          child: localContent,
-          textBackgroundColor: translucentColorFromString(widget.groups[trueIndex].name),
-        )
-
-      ),
+          child: Circle(
+        child: localContent,
+        textBackgroundColor: translucentColorFromString(widget.groups[trueIndex].name),
+      )),
     );
   }
 
@@ -209,7 +234,7 @@ class _GroupCarouselState extends State<GroupCarousel> {
         double value = 1.0;
         if (blocksController.position.haveDimensions) {
           value = blocksController.page! - index;
-          value = (1 - (value.abs() * blockSizeFactor)).clamp(1-blockSizeFactor, 1.0);
+          value = (1 - (value.abs() * blockSizeFactor)).clamp(1 - blockSizeFactor, 1.0);
         }
 
         return Center(
@@ -223,113 +248,123 @@ class _GroupCarouselState extends State<GroupCarousel> {
       child: Container(
         // margin: const EdgeInsets.all(8.0),
         // color: index % 2 == 0 ? Colors.blue : Colors.red,
-          child: BlockBlurb(group: widget.groups[trueIndex]),
-
+        child: BlockBlurb(
+          group: widget.groups[trueIndex],
+          userAccess: widget.userAccess,
+        ),
       ),
     );
   }
 }
 
-class CircleButton extends StatelessWidget {
-  final GestureTapCallback onTap;
+class Circle extends StatelessWidget {
   final Widget child;
   final Color textBackgroundColor;
+  final double size;
 
-  const CircleButton({Key? key, required this.onTap, required this.child, required this.textBackgroundColor}) : super(key: key);
+  const Circle({Key? key, required this.child, required this.textBackgroundColor, this.size=200}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 200,
-      height: 200,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: textBackgroundColor,
-        border: Border.all(
-          color: Colors.black,
-          width: 1,
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: textBackgroundColor,
+          border: Border.all(
+            color: Colors.black,
+            width: 1,
+          ),
+          image: child is Image
+              ? DecorationImage(
+                  fit: BoxFit.fill,
+                  image: (child as Image).image,
+                )
+              : null,
         ),
-        image: child is Image ? DecorationImage(
-          fit: BoxFit.fill,
-          image: (child as Image).image,
-        ) : null,
-      ),
-      child: child is Image ? null : Center(child: child)
-    );
+        child: child is Image ? null : Center(child: child));
   }
 }
 
 class BlockBlurb extends StatelessWidget {
   final Group group;
-  const BlockBlurb({Key? key, required this.group}) : super(key: key);
+  final Access userAccess;
+
+  const BlockBlurb({Key? key, required this.group, required this.userAccess}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     final userData = Provider.of<UserData?>(context);
 
     return Container(
-      width: 200,
-      height: 200,
-      decoration: ShapeDecoration(
-        color: HexColor('FFFFFF'),
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(13.0),
-            side: BorderSide(
-              color: HexColor("E9EDF0"),
-              width: 3.0,
-            )),
-      ),
-      child: Center(
-        child: Column(
-          children: <Widget>[
-            SizedBox(height: 18),
-            Text(group.name, style:
-                TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                )
-            ),
-            SizedBox(height:5),
-            Row(
-              children: <Widget>[
-                Spacer(),
-                Text(group.numMembers.toString(), style: TextStyle(
+        width: 200,
+        height: 200,
+        decoration: ShapeDecoration(
+          color: HexColor('FFFFFF'),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(13.0),
+              side: BorderSide(
+                color: HexColor("E9EDF0"),
+                width: 3.0,
+              )),
+        ),
+        child: Center(
+            child: Column(children: <Widget>[
+          SizedBox(height: 18),
+          Text(group.name,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              )),
+          SizedBox(height: 5),
+          Row(children: <Widget>[
+            Spacer(),
+            Text(group.numMembers.toString(),
+                style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.bold,
                 )),
-                Text(" People", style: TextStyle(
+            Text(" People",
+                style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.normal,
                 )),
-                Spacer()
-              ]
-            ),
-            SizedBox(height:2),
+            Spacer()
+          ]),
+          Spacer(),
+          Container(
+            padding: EdgeInsets.all(14.0),
+            child: group.description != null
+                ? Text(
+                    group.description!,
+                    maxLines: 4,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 12.0),
+                  )
+                : Text('No description...', style: TextStyle(fontSize: 14.0)),
+          ),
+          Spacer(),
+          Row(children: <Widget>[
+            SizedBox(width: 10.0),
+            Text("For " + group.accessRestriction.restriction, style: TextStyle(fontSize: 10)),
             Spacer(),
-            group.description != null ? Text(group.description!): Container(),
-            Spacer(),
-            Row(
-              children: <Widget>[
-                Spacer(),
-            IconButton(
-              icon: Icon(Icons.zoom_out_map),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => GroupPage(
-                        groupRef: group.groupRef,
-                        currUserRef: userData!.userRef,
-                      ),
-                    ));
-              },
-            )
-              ]
-            )
-          ]
-        )
-      )
-    );
+            userAccess.haveAccess(group.accessRestriction)
+                ? IconButton(
+                    icon: Icon(Icons.zoom_out_map),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => GroupPage(
+                              groupRef: group.groupRef,
+                              currUserRef: userData!.userRef,
+                            ),
+                          ));
+                    },
+                  )
+                : Icon(Icons.lock_outline)
+          ])
+        ])));
   }
 }

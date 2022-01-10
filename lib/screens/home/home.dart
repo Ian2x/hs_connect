@@ -147,7 +147,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => Profile(profilePersonRef: userData.userRef,
+                              builder: (context) => Profile(profileRef: userData.userRef,
                               currUserRef: userData.userRef,)),
                         );
                       },

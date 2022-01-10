@@ -23,7 +23,7 @@ class SearchResultCard extends StatelessWidget {
               builder: (context) {
                 switch (searchResultType) {
                   case SearchResultType.people:
-                    return Profile(profilePersonRef: searchResult.resultRef, currUserRef: currUserRef,);
+                    return Profile(profileRef: searchResult.resultRef, currUserRef: currUserRef,);
                   case SearchResultType.posts:
                     return PostPage(postRef: searchResult.resultRef, currUserRef: currUserRef,);
                   default: // for SearchResultType.groups

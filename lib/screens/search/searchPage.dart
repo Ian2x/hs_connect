@@ -26,9 +26,9 @@ class _SearchPageState extends State<SearchPage> {
     }
 
     return Scaffold(
-      backgroundColor: HexColor("#E9EDF0"),
+      backgroundColor: Colors.white,//HexColor("#E9EDF0"),
       appBar: AppBar(
-        backgroundColor: HexColor('FFFFFF'),
+        backgroundColor: Colors.white,
         title: Text('test'),
         leading: new IconButton(
           icon: _searchIcon,
