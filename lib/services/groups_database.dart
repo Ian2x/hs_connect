@@ -65,6 +65,7 @@ class GroupsDatabaseService {
             C.membersOverTime: [],
             C.lastOverTimeUpdate: DateTime.now(),
             C.reportsRefs: [],
+            C.hexColor: null,
             C.selfRef: newGroupRef,
           })
           .then(onValue)

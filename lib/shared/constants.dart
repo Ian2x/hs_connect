@@ -148,4 +148,5 @@ class C {
   static const membersOverTime = 'membersOverTime';
   static const lastOverTimeUpdate = 'lastOverTimeUpdate';
   static const lastUpdated = 'lastUpdated';
+  static const hexColor = 'hexColor';
 }

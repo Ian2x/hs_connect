@@ -40,6 +40,7 @@ class Group {
   final List<CountAtTime> membersOverTime;
   final Timestamp lastOverTimeUpdate;
   final List<DocumentReference> reportsRefs;
+  final String? hexColor;
 
   Group({
     required this.groupRef,
@@ -57,6 +58,7 @@ class Group {
     required this.membersOverTime,
     required this.lastOverTimeUpdate,
     required this.reportsRefs,
+    required this.hexColor,
   });
 }
 
@@ -77,6 +79,7 @@ Group groupFromMap({required Map map}) {
     membersOverTime: map[C.membersOverTime],
     lastOverTimeUpdate: map[C.lastOverTimeUpdate],
     reportsRefs: map[C.reportsRefs],
+    hexColor: map[C.hexColor],
   );
 }
 
@@ -99,6 +102,7 @@ Group? groupFromSnapshot(DocumentSnapshot snapshot) {
       membersOverTime: countAtTimeList(snapshot.get(C.membersOverTime)),
       lastOverTimeUpdate: snapshot.get(C.lastOverTimeUpdate),
       reportsRefs: docRefList(snapshot.get(C.reportsRefs)),
+      hexColor: snapshot.get(C.hexColor),
     );
   } else {
     return null;

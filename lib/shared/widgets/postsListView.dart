@@ -9,6 +9,7 @@ ListView PostsListView({required List<Post> posts, required DocumentReference cu
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
       padding: EdgeInsets.zero,
+      physics: BouncingScrollPhysics(),
       itemBuilder: (BuildContext context, int index) {
         // when scroll up/down, fires once
         return Center(
