@@ -31,7 +31,7 @@ class Group {
   final String name;
   final String nameLC;
   final String? image;
-  final String? description;
+  final String description;
   final AccessRestriction accessRestriction;
   final Timestamp createdAt;
   final int numPosts;

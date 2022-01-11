@@ -47,7 +47,7 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
           controller: _tabController,
         ),
         SizedBox( // can be removed once tabbarview contains listviewbuilders
-          height: 300.0,
+          height: 500.0,
           child: TabBarView(children: <Widget>[
             NotificationsFeed(),
             Container(height: 100.0, child: Text("bye"))

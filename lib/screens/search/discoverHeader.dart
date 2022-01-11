@@ -7,6 +7,7 @@ import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
+import 'package:hs_connect/shared/widgets/myCircle.dart';
 class DiscoverHeader extends StatefulWidget {
   final Group group;
   final bool joined;

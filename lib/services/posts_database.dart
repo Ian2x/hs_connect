@@ -191,6 +191,15 @@ class PostsDatabaseService {
     return _postFromSnapshot(await postRef.get());
   }
 
+  Future<List<Post?>> getPosts(List<DocumentReference> postsRefs) async {
+    List<Post?> results = [];
+    Future.forEach(results, (postRef) async {
+      final tempPost = await getPost(postRef as DocumentReference);
+      results.add(tempPost);
+    });
+    return results;
+  }
+
   Stream<List<Post?>> get posts {
     return postsCollection
         .where(C.groupRef, whereIn: groupRefs)

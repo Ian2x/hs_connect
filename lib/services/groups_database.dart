@@ -36,7 +36,7 @@ class GroupsDatabaseService {
       required String name,
       required DocumentReference? creatorRef,
       required String? image,
-      required String? description,
+      required String description,
       Function(void) onValue = defaultFunc,
       Function onError = defaultFunc}) async {
     // if group already exists, just return that
@@ -171,7 +171,12 @@ class GroupsDatabaseService {
         .toList();
   }
 
-  Future<List<Group>> getGroups({required List<UserGroup> userGroups}) async {
+  Future<Group?> getGroup({required DocumentReference groupRef}) async {
+    return groupFromSnapshot(await groupRef.get());
+
+  }
+
+  Future<List<Group>> getUserGroups({required List<UserGroup> userGroups}) async {
     final Iterable<DocumentReference> groupRefs = userGroups.map((userGroup) => userGroup.groupRef);
     List<Group> result = <Group>[];
     await Future.forEach(groupRefs, (ref) async {
@@ -180,6 +185,15 @@ class GroupsDatabaseService {
     });
     result.sort((a,b) => (a as Group).createdAt.compareTo((b as Group).createdAt) );
     return result;
+  }
+
+  Future<List<Group?>> getGroups({required List<DocumentReference> groupsRefs}) async {
+    List<Group?> results = [];
+    Future.forEach(results, (groupRef) async {
+      final tempGroup = await getGroup(groupRef: groupRef as DocumentReference);
+      results.add(tempGroup);
+    });
+    return results;
   }
 
   Future<List<Group>> getTrendingGroups(

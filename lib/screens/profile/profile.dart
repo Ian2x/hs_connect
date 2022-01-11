@@ -58,7 +58,7 @@ class _ProfileState extends State<Profile> {
     }
     GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserRef);
     if (fetchUserData!=null) {
-      final fetchUserGroups = await _groups.getGroups(userGroups: fetchUserData.userGroups);
+      final fetchUserGroups = await _groups.getUserGroups(userGroups: fetchUserData.userGroups);
       if (mounted) {
         setState(() {
           profileGroups = fetchUserGroups;

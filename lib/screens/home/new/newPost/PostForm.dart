@@ -136,7 +136,7 @@ class _PostFormState extends State<PostForm> {
     final _GroupsDatabaseService = GroupsDatabaseService(currUserRef: userData.userRef);
 
     return FutureBuilder(
-        future: _GroupsDatabaseService.getGroups(userGroups: userData.userGroups),
+        future: _GroupsDatabaseService.getUserGroups(userGroups: userData.userGroups),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final groups = snapshot.data as List<Group>;

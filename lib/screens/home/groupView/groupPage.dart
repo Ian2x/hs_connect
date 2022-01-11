@@ -37,7 +37,7 @@ class _GroupPageState extends State<GroupPage> {
         //groupDesc.
         if (fetchGroupData != null) {
           if (fetchGroupData.description !=null){
-            groupDescription = fetchGroupData.description!;} else {groupName= "";}
+            groupDescription = fetchGroupData.description;} else {groupName= "";}
         } else {groupDescription = '<Failed to retrieve group description>';}
         //groupImage
         if (fetchGroupData != null) {

@@ -103,13 +103,6 @@ class _PostCardState extends State<PostCard> {
           //color: HexColor("#292929"),
           elevation: 0.0,
           child: Container(
-              decoration: ShapeDecoration(
-                  shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50.0),
-                  //if border then BorderSide
-                )
-              ),
-              //color: HexColor("FFFFFF"),
               padding: const EdgeInsets.fromLTRB(7.0,12.0,5.0,5.0),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
