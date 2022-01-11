@@ -13,11 +13,14 @@ import 'package:hs_connect/shared/noAnimationMaterialPageRoute.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:hs_connect/shared/widgets/picPickerButton.dart';
 import 'package:hs_connect/shared/widgets/tagOutline.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+
+import 'imagePreview.dart';
 
 class PostForm extends StatefulWidget {
   const PostForm({Key? key}) : super(key: key);
@@ -46,6 +49,7 @@ class _PostFormState extends State<PostForm> {
 
   String? newFileURL;
   File? newFile;
+
   bool isPost=true;
 
   // form values
@@ -55,6 +59,7 @@ class _PostFormState extends State<PostForm> {
   String _tag = '';
   String error = '';
   bool loading = false;
+  bool hasPic=false;
 
   String _groupName = '';
   String _description = '';
@@ -65,6 +70,7 @@ class _PostFormState extends State<PostForm> {
 
   @override
   Widget build(BuildContext context) {
+
 
     double phoneHeight = MediaQuery.of(context).size.height - 200;
 
@@ -178,13 +184,13 @@ class _PostFormState extends State<PostForm> {
                       ),
                       SizedBox(height:15),
                       Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Flexible(
-                            flex: 2,
+                            flex:4,
                             child: Container(
                               height: 64,
-                              //width: (MediaQuery.of(context).size.width) * .75,
+                              width:double.infinity,
                               padding: EdgeInsets.fromLTRB(8.0, 0.0, 4.0, 0.0),
                               decoration: ShapeDecoration(
                                 color: HexColor('FFFFFF'),
@@ -232,52 +238,61 @@ class _PostFormState extends State<PostForm> {
                           ),
                           SizedBox(width:15),
                           Flexible(
-                            flex: 1,
+                            flex:1,
                             child: Container(
                               height: 64,
-                              width: (MediaQuery.of(context).size.width) * .75,
+                              width: 64,
                               padding: EdgeInsets.fromLTRB(8.0, 0.0, 4.0, 0.0),
                               decoration: ShapeDecoration(
-                                color: HexColor('FFFFFF'),
+                                color: HexColor("FFFFFF"),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(ThemeLayout.borderRadius),
                                     side: BorderSide(
-                                      color: HexColor("E9EDF0"),
+                                      color: ThemeColor.neutralGrey,
                                       width: 3.0,
                                     )),
                               ),
-                              child: DropdownButtonFormField<String>(
-                                iconSize:0.0,
-                                isExpanded: true,
-                                decoration: textInputDecoration,
-                                hint: Text(
-                                  "+ Tag",
-                                  style: TextStyle(
-                                    color: ThemeColor.secBlue,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                value: _tag.isNotEmpty ? _tag : null,
-                                items: Tag.values.map((tag) {
-                                  return DropdownMenuItem(
-                                    value: tag.string,
-                                    child: Text(
-                                      tag.string,
-                                      style: TextStyle(
-                                        color: ThemeColor.secBlue,
-                                        fontSize: 14,
-                                        //fontWeight: ,
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (val) => setState(() => _tag = val!),
+                              child: IconButton(
+                                onPressed: () async {
+                                  try {
+                                    final pickedFile = await ImagePicker().pickImage(
+                                      source: ImageSource.gallery,
+                                      maxHeight:400,
+                                      maxWidth:400,
+                                      imageQuality: 100,
+                                    );
+                                    if (pickedFile != null) {
+                                      if (mounted) {
+                                        setState(() {
+                                          newFile = File(pickedFile.path);
+                                        });
+                                      }
+                                    } else {
+                                      if (mounted) {
+                                        setState(() {
+                                          newFile = null;
+                                        });
+                                      }
+                                    }
+                                    setState(() {
+                                      if (newFile!=null) {
+                                        hasPic=true;
+                                      }
+                                    });
+                                  } catch (e) {
+                                    print(e);
+                                  }
+                                },
+                                icon: Icon(Icons.photo, color:ThemeColor.secBlue,size:30),
                               ),
                             ),
                           )
                         ],
                       ),
                       SizedBox(height:15),
+                      hasPic!= false ? SizedBox(height:10): SizedBox(),
+                      hasPic!= false ? imagePreview(fileImage: newFile) : SizedBox(),
+                      hasPic!= false ? SizedBox(height:10) : SizedBox(),
                       Container(
                         //TextInput Container
                         constraints: BoxConstraints(
@@ -335,14 +350,7 @@ class _PostFormState extends State<PostForm> {
                                   ),
                                   border: InputBorder.none,
                                   hintText: "optional text"),
-                              validator: (val) {
-                                if (val == null) return 'Error: null value';
-                                if (val.isEmpty)
-                                  return 'Can\'t create an empty post';
-                                else
-                                  return null;
-                              },
-                              onChanged: (val) => setState(() => _title = val),
+                              onChanged: (val) => setState(() => _text = val),
                             )
                           ],
                         ),

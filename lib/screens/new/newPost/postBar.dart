@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 
 class postBar extends StatelessWidget {
@@ -12,6 +13,33 @@ class postBar extends StatelessWidget {
       child: Row(
         children: [
           SizedBox(width: 40),
+          /*DropdownButtonFormField<String>(
+            iconSize:0.0,
+            isExpanded: true,
+            decoration: textInputDecoration,
+            hint: Text(
+              "+ Tag",
+              style: TextStyle(
+                color: ThemeColor.secBlue,
+                fontSize: 16,
+              ),
+            ),
+            value: _tag.isNotEmpty ? _tag : null,
+            items: Tag.values.map((tag) {
+              return DropdownMenuItem(
+                value: tag.string,
+                child: Text(
+                  tag.string,
+                  style: TextStyle(
+                    color: ThemeColor.secBlue,
+                    fontSize: 14,
+                    //fontWeight: ,
+                  ),
+                ),
+              );
+            }).toList(),
+            onChanged: (val) => setState(() => _tag = val!),
+          ), */
           IconButton(
             icon: Icon(Icons.image_outlined),
             color: HexColor("223e52"),
