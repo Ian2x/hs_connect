@@ -150,7 +150,7 @@ class _PostCardState extends State<PostCard> {
                             SizedBox(width:10),
                             Icon(
                               Icons.chat_bubble_rounded,
-                              color: ThemeColor.secBlue,
+                              color: ThemeColor.secondaryBlue,
                               size: 15.0,
                             ),
                             SizedBox(width:5),

@@ -26,7 +26,7 @@ class ThemeText {
     return TextStyle(
       fontSize: fontSize,
       fontFamily: "Inter",
-      color: ThemeColor.blueBlack,
+      color: ThemeColor.darkGrey,
     );
   }
 
@@ -43,7 +43,7 @@ class ThemeText {
     return TextStyle(
       fontSize: fontSize,
       fontFamily: "Inter",
-      color: ThemeColor.blueBlack,
+      color: ThemeColor.darkGrey,
     );
   }
 
@@ -53,13 +53,13 @@ class ThemeText {
 class ThemeColor extends Color {
   ThemeColor(int value) : super(value);
 
-  static Color blueBlack = HexColor("223E52");
+  static Color backgroundGrey = HexColor ("F4F4F4");
 
   static Color hintTextGrey = HexColor("C8CED2");
 
   static Color secondaryBlue = HexColor("57ADEF");
 
-  static Color lightGrey = HexColor("E9EDF0");
+  static Color lightGrey = HexColor("F4F4F4");
   static Color mediumGrey = HexColor("C9C9C9");
   static Color darkGrey = HexColor("505559");
 

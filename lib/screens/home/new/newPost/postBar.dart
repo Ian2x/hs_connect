@@ -20,7 +20,7 @@ class postBar extends StatelessWidget {
             hint: Text(
               "+ Tag",
               style: TextStyle(
-                color: ThemeColor.secBlue,
+                color: ThemeColor.secondaryBlue,
                 fontSize: 16,
               ),
             ),
@@ -31,7 +31,7 @@ class postBar extends StatelessWidget {
                 child: Text(
                   tag.string,
                   style: TextStyle(
-                    color: ThemeColor.secBlue,
+                    color: ThemeColor.secondaryBlue,
                     fontSize: 14,
                     //fontWeight: ,
                   ),
