@@ -37,9 +37,9 @@ class ThemeText {
       );
   }
 
-  static TextStyle regularSmall (){
+  static TextStyle regularSmall ({double fontSize=13.0}){
     return TextStyle(
-      fontSize: 13,
+      fontSize: fontSize,
       fontFamily: "Inter",
       color: ThemeColor.neutralBlack,
     );
