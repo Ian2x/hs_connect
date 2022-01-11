@@ -155,6 +155,23 @@ class CommentsDatabaseService {
     }
   }
 
+  Future<Comment?> getComment(DocumentReference commentRef) async {
+    return _commentFromSnapshot(await commentRef.get());
+  }
+
+  Future<List<Comment>> newActivityComments(List<ObservedRef> userCommentsObservedRefs) async {
+    List<Comment> newActivityComments = [];
+    await Future.forEach(userCommentsObservedRefs, (COR) async {
+      final tempComment = await getComment((COR as ObservedRef).ref);
+      if (tempComment != null) {
+        if (tempComment.lastUpdated.compareTo(COR.lastObserved)>0) {
+          newActivityComments.add(tempComment);
+        }
+      }
+    });
+    return newActivityComments;
+  }
+
   /*Stream<List<Comment?>> get postComments {
     List<Stream<Comment?>> postCommentsList = <Stream<Comment?>>[];
     // Stream<List<Comment?>> test = Stream.value(<Comment?>[]);

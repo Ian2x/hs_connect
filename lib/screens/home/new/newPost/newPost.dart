@@ -1,9 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/screens/new/newPost/postBar.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
-import 'package:hs_connect/shared/widgets/navigationBar.dart';
+import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
 import 'package:provider/provider.dart';
 import 'PostForm.dart';
 
@@ -35,7 +34,7 @@ class NewPost extends StatelessWidget {
           )*/
         ],
       ),
-      bottomNavigationBar: navigationBar(
+      bottomNavigationBar: MyNavigationBar(
         currentIndex: 2,
       ),
     );

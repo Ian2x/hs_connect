@@ -22,26 +22,28 @@ class ThemeLayout {
 
 class ThemeText {
 
-  static TextStyle titleRegular = TextStyle(
-  fontSize: 18,
-  fontFamily: "Inter",
-  color: ThemeColor.neutralBlack,
-  );
-
-  static TextStyle groupBold (Color color){
+  static TextStyle titleRegular({double fontSize=18}) {
     return TextStyle(
-      fontSize: 13,
+      fontSize: fontSize,
+      fontFamily: "Inter",
+      color: ThemeColor.blueBlack,
+    );
+  }
+
+  static TextStyle groupBold (Color color, {double fontSize=13}){
+    return TextStyle(
+      fontSize: fontSize,
       fontFamily: "Inter",
       fontWeight: FontWeight.w700,
       color: color,
       );
   }
 
-  static TextStyle regularSmall (){
+  static TextStyle regularSmall ({double fontSize=13}){
     return TextStyle(
-      fontSize: 13,
+      fontSize: fontSize,
       fontFamily: "Inter",
-      color: ThemeColor.neutralBlack,
+      color: ThemeColor.blueBlack,
     );
   }
 
@@ -51,12 +53,18 @@ class ThemeText {
 class ThemeColor extends Color {
   ThemeColor(int value) : super(value);
 
-  static Color neutralBlack = HexColor("223E52");
-  static Color neutralGrey = HexColor("E9EDF0");
+  static Color blueBlack = HexColor("223E52");
 
-  static Color textGrey = HexColor("C8CED2");
+  static Color hintTextGrey = HexColor("C8CED2");
 
-  static Color secBlue = HexColor("54A0DC");
+  static Color secondaryBlue = HexColor("57ADEF");
+
+  static Color lightGrey = HexColor("E9EDF0");
+  static Color mediumGrey = HexColor("C9C9C9");
+  static Color darkGrey = HexColor("505559");
+
+  static Color white = HexColor("FFFFFF");
+  static Color black = HexColor("000000");
 }
 
 class C {

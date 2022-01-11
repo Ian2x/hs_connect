@@ -172,14 +172,14 @@ class _PostFormState extends State<PostForm> {
                             },
                             child: Text("Group",
                               style: TextStyle(
-                                color: ThemeColor.textGrey,
+                                color: ThemeColor.hintTextGrey,
                                 fontSize:16,
                               ),
                             ),
                           ),
                           Spacer(flex:6),
                           IconButton(onPressed: submitForm,
-                              icon: Icon(Icons.add_circle_rounded, color: ThemeColor.secBlue, size: 30.0)),
+                              icon: Icon(Icons.add_circle_rounded, color: ThemeColor.secondaryBlue, size: 30.0)),
                         ],
                       ),
                       SizedBox(height:15),
@@ -197,7 +197,7 @@ class _PostFormState extends State<PostForm> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(ThemeLayout.borderRadius),
                                     side: BorderSide(
-                                      color: ThemeColor.neutralGrey,
+                                      color: ThemeColor.lightGrey,
                                       width: 3.0,
                                     )),
                               ),
@@ -209,7 +209,7 @@ class _PostFormState extends State<PostForm> {
                                   hint: Text(
                                     "Add a group",
                                     style: TextStyle(
-                                      color: ThemeColor.textGrey,
+                                      color: ThemeColor.hintTextGrey,
                                       fontSize: 16,
                                     ),
                                   ),
@@ -248,7 +248,7 @@ class _PostFormState extends State<PostForm> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(ThemeLayout.borderRadius),
                                     side: BorderSide(
-                                      color: ThemeColor.neutralGrey,
+                                      color: ThemeColor.lightGrey,
                                       width: 3.0,
                                     )),
                               ),
@@ -283,7 +283,7 @@ class _PostFormState extends State<PostForm> {
                                     print(e);
                                   }
                                 },
-                                icon: Icon(Icons.photo, color:ThemeColor.secBlue,size:30),
+                                icon: Icon(Icons.photo, color:ThemeColor.secondaryBlue,size:30),
                               ),
                             ),
                           )
@@ -384,7 +384,7 @@ class _PostFormState extends State<PostForm> {
                             },
                             child: Text("Post",
                               style: TextStyle(
-                                color: ThemeColor.textGrey,
+                                color: ThemeColor.hintTextGrey,
                                 fontSize: ThemeText.regular,
                               ),
                             ),
@@ -423,7 +423,7 @@ class _PostFormState extends State<PostForm> {
                               );
                             }
                           },
-                              icon: Icon(Icons.add_circle_rounded, color: ThemeColor.secBlue, size:30.0)),
+                              icon: Icon(Icons.add_circle_rounded, color: ThemeColor.secondaryBlue, size:30.0)),
                         ],
                       ), //Top Row
                       SizedBox(height:15),
@@ -441,7 +441,7 @@ class _PostFormState extends State<PostForm> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(ThemeLayout.borderRadius),
                                     side: BorderSide(
-                                      color: ThemeColor.neutralGrey,
+                                      color: ThemeColor.lightGrey,
                                       width: 3.0,
                                     )),
                               ),
@@ -451,7 +451,7 @@ class _PostFormState extends State<PostForm> {
                                 hint: Text(
                                   "Who can see this group?",
                                   style: TextStyle(
-                                    color: ThemeColor.textGrey,
+                                    color: ThemeColor.hintTextGrey,
                                     fontSize: 16,
                                   ),
                                 ),
@@ -484,7 +484,7 @@ class _PostFormState extends State<PostForm> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(ThemeLayout.borderRadius),
                                     side: BorderSide(
-                                      color: ThemeColor.secBlue,
+                                      color: ThemeColor.secondaryBlue,
                                       width: 3.0,
                                     )),
                               ),
@@ -511,7 +511,7 @@ class _PostFormState extends State<PostForm> {
                                     print(e);
                                   }
                                 },
-                                icon: Icon(Icons.photo, color:ThemeColor.secBlue,size:30),
+                                icon: Icon(Icons.photo, color:ThemeColor.secondaryBlue,size:30),
                               ),
                             ),
                           )
@@ -586,14 +586,14 @@ class _PostFormState extends State<PostForm> {
                           children: [
                             TextFormField(
                               style: TextStyle(
-                                color: ThemeColor.textGrey,
+                                color: ThemeColor.hintTextGrey,
                                 fontSize: ThemeText.regular,
                                 //fontWeight: ,
                               ),
                               maxLines: null,
                               decoration: InputDecoration(
                                   hintStyle: TextStyle(
-                                    color: ThemeColor.textGrey,
+                                    color: ThemeColor.hintTextGrey,
                                     fontSize: ThemeText.regular,
                                     //fontWeight: ,
                                   ),

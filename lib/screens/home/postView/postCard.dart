@@ -129,7 +129,7 @@ class _PostCardState extends State<PostCard> {
                         Text(
                           //TODO: Need to figure out ways to ref
                           widget.post.title,
-                          style: ThemeText.titleRegular, overflow: TextOverflow.ellipsis, // default is .clip
+                          style: ThemeText.titleRegular(), overflow: TextOverflow.ellipsis, // default is .clip
                           maxLines:4
                         ),
                         SizedBox(height: 10),

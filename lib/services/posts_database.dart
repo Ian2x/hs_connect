@@ -6,6 +6,7 @@ import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/replies_database.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
+import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 
@@ -22,16 +23,16 @@ class PostsDatabaseService {
 
   // collection reference
   final CollectionReference postsCollection = FirebaseFirestore.instance.collection(C.posts);
+  late UserDataDatabaseService _userData = new UserDataDatabaseService(currUserRef: currUserRef);
 
-  Future<dynamic> newPost(
-      {required String title,
-      required String? text,
-      required String? media,
-      required DocumentReference groupRef,
-      required String? tagString,
-      required DocumentReference? pollRef,
-      Function(void) onValue = defaultFunc,
-      Function onError = defaultFunc}) async {
+  Future<dynamic> newPost({required String title,
+    required String? text,
+    required String? media,
+    required DocumentReference groupRef,
+    required String? tagString,
+    required DocumentReference? pollRef,
+    Function(void) onValue = defaultFunc,
+    Function onError = defaultFunc}) async {
     // update user's posts
     DocumentReference newPostRef = postsCollection.doc();
     currUserRef.update({
@@ -47,23 +48,23 @@ class PostsDatabaseService {
 
     final result = await newPostRef
         .set({
-          C.groupRef: groupRef,
-          C.creatorRef: currUserRef,
-          C.title: title,
-          C.titleLC: title.toLowerCase(),
-          C.text: text,
-          C.media: media,
-          C.createdAt: DateTime.now(),
-          C.commentsRefs: [],
-          C.repliesRefs: [],
-          C.accessRestriction: accessRestriction,
-          C.likes: List<String>.empty(),
-          C.dislikes: List<String>.empty(),
-          C.reportsRefs: [],
-          C.pollRef: pollRef,
-          C.tag: tagString == '' ? null : tagString,
-          C.lastUpdated: DateTime.now(),
-        })
+      C.groupRef: groupRef,
+      C.creatorRef: currUserRef,
+      C.title: title,
+      C.titleLC: title.toLowerCase(),
+      C.text: text,
+      C.media: media,
+      C.createdAt: DateTime.now(),
+      C.commentsRefs: [],
+      C.repliesRefs: [],
+      C.accessRestriction: accessRestriction,
+      C.likes: List<String>.empty(),
+      C.dislikes: List<String>.empty(),
+      C.reportsRefs: [],
+      C.pollRef: pollRef,
+      C.tag: tagString == '' ? null : tagString,
+      C.lastUpdated: DateTime.now(),
+    })
         .then(onValue)
         .catchError(onError);
     GroupsDatabaseService _tempGroups = GroupsDatabaseService(currUserRef: currUserRef);
@@ -71,11 +72,10 @@ class PostsDatabaseService {
     return result;
   }
 
-  Future<dynamic> deletePost(
-      {required DocumentReference postRef,
-      required DocumentReference groupRef,
-      required DocumentReference userRef,
-      String? media}) async {
+  Future<dynamic> deletePost({required DocumentReference postRef,
+    required DocumentReference groupRef,
+    required DocumentReference userRef,
+    String? media}) async {
     // check post exists and matches current user
     final post = await postRef.get();
     if (post.exists) {
@@ -207,7 +207,7 @@ class PostsDatabaseService {
   Stream<List<Post?>> get potentialTrendingPosts {
     return postsCollection
         .where(C.createdAt,
-            isGreaterThan: Timestamp.fromDate(DateTime.now().subtract(new Duration(days: daysTrending))))
+        isGreaterThan: Timestamp.fromDate(DateTime.now().subtract(new Duration(days: daysTrending))))
         .where(C.groupRef, whereIn: groupRefs)
         .snapshots()
         .map((snapshot) => snapshot.docs.map(_postFromQuerySnapshot).toList());
@@ -218,6 +218,19 @@ class PostsDatabaseService {
         .where(C.tag, whereIn: searchTags)
         .snapshots()
         .map((snapshot) => snapshot.docs.map(_postFromQuerySnapshot).toList());
+  }
+
+  Future<List<Post>> newActivityPosts(List<ObservedRef> userPostsObservedRefs) async {
+    List<Post> newActivityPosts = [];
+    await Future.forEach(userPostsObservedRefs, (POR) async {
+      final tempPost = await getPost((POR as ObservedRef).ref);
+      if (tempPost != null) {
+        if (tempPost.lastUpdated.compareTo(POR.lastObserved)>0) {
+          newActivityPosts.add(tempPost);
+        }
+      }
+    });
+    return newActivityPosts;
   }
 
   SearchResult _searchResultFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {

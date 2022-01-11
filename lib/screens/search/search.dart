@@ -9,7 +9,7 @@ import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 
 import '../../shared/widgets/loading.dart';
-import '../../shared/widgets/navigationBar.dart';
+import '../../shared/widgets/myNavigationBar.dart';
 
 class Search extends StatefulWidget {
   final UserData userData;
@@ -67,7 +67,7 @@ class _SearchState extends State<Search> {
       body: Container(
         child: _buildBody(),
       ),
-      bottomNavigationBar: navigationBar(
+      bottomNavigationBar: MyNavigationBar(
         currentIndex: 1,
       ),
     );

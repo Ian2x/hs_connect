@@ -8,7 +8,7 @@ import 'package:hs_connect/screens/home/postFeed/specificGroupFeed.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
-import 'package:hs_connect/shared/widgets/navigationBar.dart';
+import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
 import 'package:provider/provider.dart';
 
 class GroupPage extends StatefulWidget {
@@ -75,7 +75,7 @@ class _GroupPageState extends State<GroupPage> {
 
       SpecificGroupFeed(groupRef: widget.groupRef, currUserRef: userData.userRef,),
 
-      bottomNavigationBar: navigationBar(currentIndex:0),
+      bottomNavigationBar: MyNavigationBar(currentIndex:0),
     );
   }
 }
