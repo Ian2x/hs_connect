@@ -9,6 +9,8 @@ import 'package:hs_connect/screens/home/postView/postPage.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/services/user_data_database.dart';
+import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
 
@@ -106,95 +108,38 @@ class _PostCardState extends State<PostCard> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Stack(
-                        children: [
-                          SizedBox(height: 50, width: 50),
-                          Positioned(
-                            bottom: 5,
-                            right: 5,
-                            child: Container(
-                                width: 40.0,
-                                height: 40.0,
-                                decoration: new BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: new DecorationImage(
-                                        fit: BoxFit.fill, image: new NetworkImage("https://i.imgur.com/BoN9kdC.png")))),
-                            //
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: Container(
-                              height: 35,
-                              width: 33,
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                      image: NetworkImage('https://googleflutter.com/sample_image.jpg'),
-                                      fit: BoxFit.fill),
-                                  border: Border.all(color: Colors.white, width: 3)),
-                            ),
-                            //
-                          )
-                        ],
-                      ),
-
-                      //Spacer(),
-                    ],
-                  ),
                   SizedBox(width: 10),
                   Flexible(
                     //Otherwise horizontal renderflew of row
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          username + " • " + userDomain,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 15.0,
-                            color: HexColor("#222426"),
-                            fontFamily: 'Segoe UI',
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        Text(
-                          groupName,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15.0,
-                            color: HexColor("#222426"),
-                            fontFamily: 'Segoe UI',
+                        RichText(
+                          text: TextSpan(
+                            text: 'in ',
+                            style: ThemeText.regularSmall(),
+                            children: <TextSpan>[
+                              TextSpan(text: groupName,style: ThemeText.groupBold(translucentColorFromString(groupName))),
+                              TextSpan(text: ' from ', style: ThemeText.regularSmall()),
+                              TextSpan(text: userDomain, style: ThemeText.groupBold(translucentColorFromString(userDomain))),
+                            ],
                           ),
                         ),
                         SizedBox(height: 10),
                         Text(
                           //TODO: Need to figure out ways to ref
                           widget.post.title,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15.0,
-                            color: HexColor("#222426"),
-                            fontFamily: 'Segoe UI',
-                          ),
+                          style: ThemeText.titleRegular, overflow: TextOverflow.ellipsis, // default is .clip
+                          maxLines:4
                         ),
                         SizedBox(height: 10),
                         Text(
                           widget.post.text != null ? widget.post.text! : '',
                           overflow: TextOverflow.ellipsis, // default is .clip
-                          maxLines: 3,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15.0,
-                            color: HexColor("#2F3031"),
-                            fontFamily: 'Segoe UI',
-                          ),
+                          maxLines: 2,
+                          style: ThemeText.regularSmall(),
                         ),
-                        Row(
+                        Row( //Icon Row
                           children: [
                             Text(
                               //widget.createdAt.toString()
@@ -207,19 +152,32 @@ class _PostCardState extends State<PostCard> {
                               ),
                             ),
                             Spacer(),
-                            Icon(
-                              Icons.mode_comment_outlined,
-                              color: Colors.black,
-                              size: 15.0,
-                            ),
-                            Text(
-                              (widget.post.commentsRefs.length + widget.post.repliesRefs.length).toString(),
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 15.0,
-                                color: HexColor("#2F3031"),
-                                fontFamily: 'Segoe UI',
+                            Container(
+                              decoration: ShapeDecoration(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16.0),
+                                    ),
                               ),
+                              //color: ThemeColor.secBlue,
+
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.chat_bubble_rounded,
+                                    color: HexColor("FFFFFF"),
+                                    size: 15.0,
+                                  ),
+                                  Text(
+                                    (widget.post.commentsRefs.length + widget.post.repliesRefs.length).toString(),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 15.0,
+                                      color: HexColor("#FFFFF"),
+                                      fontFamily: 'Segoe UI',
+                                    ),
+                                  ),
+                                ]
+                              )
                             ),
                             Spacer(),
                             LikeDislikePost(
