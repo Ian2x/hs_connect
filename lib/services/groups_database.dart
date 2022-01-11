@@ -76,7 +76,7 @@ class GroupsDatabaseService {
         creatorRef.update({C.modGroupRefs: FieldValue.arrayUnion([newGroupRef])});
         // have creator join group
         UserDataDatabaseService _users = UserDataDatabaseService(currUserRef: creatorRef);
-        await _users.joinGroup(userRef: creatorRef, groupRef: newGroupRef, public: true);
+        await _users.joinGroup(groupRef: newGroupRef, public: true);
       }
       return newGroupRef;
     }

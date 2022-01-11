@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/userData.dart';
+import 'package:hs_connect/screens/home/groupView/groupPage.dart';
+import 'package:hs_connect/screens/home/postView/postPage.dart';
 import 'package:hs_connect/screens/search/discoverHeader.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
@@ -47,7 +49,10 @@ class _DiscoverState extends State<Discover> {
                         PostsDatabaseService(groupRefs: [groups[index1].groupRef], currUserRef: userData.userRef);
 
                     return Column(children: <Widget>[
-                      DiscoverHeader(group: groups[index1]),
+                      DiscoverHeader(
+                          group: groups[index1],
+                          currUserRef: userData.userRef,
+                          joined: userData.userGroups.map((ug) => ug.groupRef).contains(groups[index1].groupRef)),
                       FutureBuilder(
                           future: _posts.getMultiGroupPosts(),
                           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot2) {
@@ -104,7 +109,22 @@ class _DiscoverState extends State<Discover> {
                                                               padding: EdgeInsets.all(0.0),
                                                               iconSize: 12.0,
                                                               splashRadius: 12.0,
-                                                              onPressed: () {},
+                                                              onPressed: () {
+                                                                Navigator.push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                      builder: (context) => GroupPage(
+                                                                        groupRef: groups[index1].groupRef,
+                                                                        currUserRef: userData.userRef,
+                                                                      ),
+                                                                    ));
+                                                                Navigator.push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                        builder: (context) => PostPage(
+                                                                            postRef: posts[index2]!.postRef,
+                                                                            currUserRef: userData.userRef)));
+                                                              },
                                                               icon: Icon(Icons.subdirectory_arrow_left_rounded))
                                                         ])
                                                       ]);

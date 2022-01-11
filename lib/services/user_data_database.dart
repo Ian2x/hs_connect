@@ -65,9 +65,9 @@ class UserDataDatabaseService {
   }
 
   Future<void> joinGroup(
-      {required DocumentReference userRef, required DocumentReference groupRef, required bool public}) async {
+      {required DocumentReference groupRef, required bool public}) async {
     groupRef.update({C.numMembers: FieldValue.increment(1)});
-    final result = await userRef.update({
+    final result = await currUserRef.update({
       C.userGroups: FieldValue.arrayUnion([
         {C.groupRef: groupRef, C.public: public}
       ])
