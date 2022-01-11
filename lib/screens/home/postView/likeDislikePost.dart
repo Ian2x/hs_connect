@@ -47,8 +47,8 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
         () {
           if (likeStatus == true) {
             return IconButton(
-              iconSize: 20.0,
-              icon: Icon(Icons.thumb_up),
+              iconSize: 35.0,
+              icon: Icon(Icons.keyboard_arrow_up_rounded),
               onPressed: () {
                 _posts.unLikePost(postRef: widget.postRef);
                 if (mounted) {
@@ -61,8 +61,8 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
             );
           } else {
             return IconButton(
-              iconSize: 20.0,
-              icon: Icon(Icons.thumb_up_outlined),
+              iconSize: 35.0,
+              icon: Icon(Icons.keyboard_arrow_up_rounded),
               onPressed: () {
                 _posts.likePost(postRef: widget.postRef);
                 if (mounted) {
@@ -81,8 +81,8 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
         () {
           if (dislikeStatus == true) {
             return IconButton(
-              iconSize: 20.0,
-              icon: Icon(Icons.thumb_down),
+              iconSize: 35.0,
+              icon: Icon(Icons.keyboard_arrow_down_rounded),
               onPressed: () {
                 _posts.unDislikePost(postRef: widget.postRef);
                 if (mounted) {
@@ -95,8 +95,8 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
             );
           } else {
             return IconButton(
-              iconSize: 20.0,
-              icon: Icon(Icons.thumb_down_outlined),
+              iconSize: 35.0,
+              icon: Icon(Icons.keyboard_arrow_down_rounded),
               onPressed: () {
                 _posts.dislikePost(postRef: widget.postRef);
                 if (mounted) {

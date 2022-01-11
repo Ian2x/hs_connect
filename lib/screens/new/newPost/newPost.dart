@@ -28,11 +28,11 @@ class NewPost extends StatelessWidget {
             constraints: BoxConstraints.expand(),
             child: PostForm(),
           ),
-          Positioned(
+          /*Positioned(
             right: 0,
             bottom: 0,
             child: postBar(),
-          )
+          )*/
         ],
       ),
       bottomNavigationBar: navigationBar(

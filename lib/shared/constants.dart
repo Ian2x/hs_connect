@@ -14,11 +14,37 @@ const double groupPicHeight = 400;
 
 //TODO: May have to do sizing based on Media.context(of)
 
+
+
 class ThemeLayout {
   static double borderRadius = 15.0;
 }
 
 class ThemeText {
+
+  static TextStyle titleRegular = TextStyle(
+  fontSize: 18,
+  fontFamily: "Inter",
+  color: ThemeColor.neutralBlack,
+  );
+
+  static TextStyle groupBold (Color color){
+    return TextStyle(
+      fontSize: 13,
+      fontFamily: "Inter",
+      fontWeight: FontWeight.w700,
+      color: color,
+      );
+  }
+
+  static TextStyle regularSmall (){
+    return TextStyle(
+      fontSize: 13,
+      fontFamily: "Inter",
+      color: ThemeColor.neutralBlack,
+    );
+  }
+
   static double regular = 16.0;
 }
 
