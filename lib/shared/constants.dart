@@ -39,7 +39,7 @@ class ThemeText {
       );
   }
 
-  static TextStyle regularSmall ({double fontSize=13}){
+  static TextStyle regularSmall ({double fontSize=13.0}){
     return TextStyle(
       fontSize: fontSize,
       fontFamily: "Inter",

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/services/posts_database.dart';
+import 'package:hs_connect/shared/constants.dart';
 
 class LikeDislikePost extends StatefulWidget {
   final DocumentReference currUserRef;
@@ -77,7 +78,9 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
             );
           }
         }(),
-        Text((likeCount - dislikeCount).toString()),
+        Text((likeCount - dislikeCount).toString(),
+          style:ThemeText.regularSmall(fontSize:15.0),
+          ),
         () {
           if (dislikeStatus == true) {
             return IconButton(

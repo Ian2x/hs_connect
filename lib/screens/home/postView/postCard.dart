@@ -97,14 +97,20 @@ class _PostCardState extends State<PostCard> {
         );
       },
       child: Card(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0)),
-          margin: EdgeInsets.fromLTRB(0.0, 3.0, 0.0, 0.0),
+          //if border then ShapeDecoration
+          shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(10.0)),
+          margin: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
           //color: HexColor("#292929"),
           elevation: 0.0,
           child: Container(
-              padding: const EdgeInsets.all(8.0),
-              color: HexColor("FFFFFF"),
-              alignment: Alignment(-1.0, -1.0), //Aligned to Top Left
+              decoration: ShapeDecoration(
+                  shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50.0),
+                  //if border then BorderSide
+                )
+              ),
+              //color: HexColor("FFFFFF"),
+              padding: const EdgeInsets.fromLTRB(7.0,12.0,5.0,5.0),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -122,6 +128,7 @@ class _PostCardState extends State<PostCard> {
                               TextSpan(text: groupName,style: ThemeText.groupBold(translucentColorFromString(groupName))),
                               TextSpan(text: ' from ', style: ThemeText.regularSmall()),
                               TextSpan(text: userDomain, style: ThemeText.groupBold(translucentColorFromString(userDomain))),
+                              TextSpan(text: ' • ' + convertTime(widget.post.createdAt.toDate()), style: ThemeText.regularSmall()),
                             ],
                           ),
                         ),
@@ -132,52 +139,24 @@ class _PostCardState extends State<PostCard> {
                           style: ThemeText.titleRegular(), overflow: TextOverflow.ellipsis, // default is .clip
                           maxLines:4
                         ),
-                        SizedBox(height: 10),
-                        Text(
-                          widget.post.text != null ? widget.post.text! : '',
-                          overflow: TextOverflow.ellipsis, // default is .clip
-                          maxLines: 2,
-                          style: ThemeText.regularSmall(),
-                        ),
+                        //SizedBox(height: 10),
+                        if (widget.post.text != null || widget.post.text == "") Text(
+                            widget.post.text!,
+                            maxLines:2,
+                              style:ThemeText.regularSmall(),
+                          ) else SizedBox(height:1),
                         Row( //Icon Row
                           children: [
-                            Text(
-                              //widget.createdAt.toString()
-                              convertTime(widget.post.createdAt.toDate()),
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 15.0,
-                                color: HexColor("#2F3031"),
-                                fontFamily: 'Segoe UI',
-                              ),
+                            SizedBox(width:10),
+                            Icon(
+                              Icons.chat_bubble_rounded,
+                              color: ThemeColor.secBlue,
+                              size: 15.0,
                             ),
-                            Spacer(),
-                            Container(
-                              decoration: ShapeDecoration(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16.0),
-                                    ),
-                              ),
-                              //color: ThemeColor.secBlue,
-
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.chat_bubble_rounded,
-                                    color: HexColor("FFFFFF"),
-                                    size: 15.0,
-                                  ),
-                                  Text(
-                                    (widget.post.commentsRefs.length + widget.post.repliesRefs.length).toString(),
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 15.0,
-                                      color: HexColor("#FFFFF"),
-                                      fontFamily: 'Segoe UI',
-                                    ),
-                                  ),
-                                ]
-                              )
+                            SizedBox(width:5),
+                            Text(
+                              (widget.post.commentsRefs.length + widget.post.repliesRefs.length).toString(),
+                              style: ThemeText.regularSmall(fontSize: 15.0),
                             ),
                             Spacer(),
                             LikeDislikePost(
