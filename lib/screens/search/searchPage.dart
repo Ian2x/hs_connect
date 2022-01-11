@@ -4,7 +4,7 @@ import 'package:hs_connect/screens/search/discover.dart';
 import 'package:hs_connect/shared/noAnimationMaterialPageRoute.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
-import 'package:hs_connect/shared/widgets/navigationBar.dart';
+import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
 import 'package:hs_connect/screens/search/search.dart';
 import 'package:provider/provider.dart';
 
@@ -41,7 +41,7 @@ class _SearchPageState extends State<SearchPage> {
         ),
       ),
       body: Discover(),
-      bottomNavigationBar: navigationBar(
+      bottomNavigationBar: MyNavigationBar(
         currentIndex: 1,
       ),
     );

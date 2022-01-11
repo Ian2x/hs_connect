@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/groupCarousel.dart';
 import 'package:hs_connect/services/user_data_database.dart';
+import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
@@ -80,7 +81,7 @@ class _DiscoverHeaderState extends State<DiscoverHeader> {
                   behavior: HitTestBehavior.deferToChild,
                   child: Card(
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-                      color: HexColor('57ADEF'),
+                      color: ThemeColor.secondaryBlue,
                       child: Container(
                         padding: EdgeInsets.all(5.0),
                     child: Row(children: <Widget>[

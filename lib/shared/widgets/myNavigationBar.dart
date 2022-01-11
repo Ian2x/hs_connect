@@ -2,10 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/home.dart';
-import 'package:hs_connect/screens/new/newPost/newPost.dart';
+import 'package:hs_connect/screens/home/new/newPost/newPost.dart';
+import 'package:hs_connect/screens/notifications/notificationsPage.dart';
 import 'package:hs_connect/screens/profile/profile.dart';
 import 'package:hs_connect/screens/search/searchPage.dart';
-import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:provider/provider.dart';
 
@@ -13,22 +13,21 @@ import '../noAnimationMaterialPageRoute.dart';
 
 import 'loading.dart';
 
-class navigationBar extends StatefulWidget {
+class MyNavigationBar extends StatefulWidget {
   final int currentIndex;
 
-  const navigationBar({Key? key, required this.currentIndex}) : super(key: key);
+  const MyNavigationBar({Key? key, required this.currentIndex}) : super(key: key);
 
   @override
-  _navigationBarState createState() => _navigationBarState();
+  _MyNavigationBarState createState() => _MyNavigationBarState();
 }
 
-class _navigationBarState extends State<navigationBar> {
+class _MyNavigationBarState extends State<MyNavigationBar> {
 
   bool loading = false;
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User?>(context);
     final userData = Provider.of<UserData?>(context);
 
     if (loading || userData == null) return Loading();
@@ -85,15 +84,15 @@ class _navigationBarState extends State<navigationBar> {
               padding: EdgeInsets.zero,
               // color: Colors.black,
               constraints: BoxConstraints(),
-              icon: Icon(Icons.add, size: 18.0),
+              icon: Icon(Icons.notifications, size: 18.0),
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  NoAnimationMaterialPageRoute(builder: (context) => NewPost()),
+                  NoAnimationMaterialPageRoute(builder: (context) => NotificationPage()),
                 );
               },
             ),
-            label: 'Post',
+            label: 'Notifications',
           ),
           BottomNavigationBarItem(
             icon: IconButton(

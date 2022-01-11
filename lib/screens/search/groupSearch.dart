@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/screens/new/newGroup/_newGroup.dart';
+import 'package:hs_connect/screens/home/new/newGroup/_newGroup.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
-import 'package:hs_connect/shared/widgets/navigationBar.dart';
+import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
 import 'package:provider/provider.dart';
 
 class GroupSearch extends StatelessWidget {
@@ -42,7 +42,7 @@ class GroupSearch extends StatelessWidget {
           // TrendingFeed(),
         ]),
       ),
-      bottomNavigationBar: navigationBar(
+      bottomNavigationBar: MyNavigationBar(
         currentIndex: 1,
       ),
     );

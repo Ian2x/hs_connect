@@ -1,14 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/postFeed/domainFeed.dart';
+import 'package:hs_connect/screens/home/new/floatingNewButton.dart';
 import 'package:hs_connect/screens/home/postFeed/homeFeed.dart';
 import 'package:hs_connect/screens/home/postFeed/trendingFeed.dart';
 import 'package:hs_connect/screens/profile/profile.dart';
 import 'package:hs_connect/services/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
-import 'package:hs_connect/shared/widgets/navigationBar.dart';
+import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
@@ -60,7 +62,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   snap: true,
                   pinned: false,
                   bottom: TabBar(
-                    tabs: [
+                    indicatorColor: ThemeColor.darkGrey,
+                    tabs: <Widget>[
                       Tab(
                           icon: Text(userData.domain,
                               style:
@@ -159,7 +162,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
         ],
       ),
-      bottomNavigationBar: navigationBar(currentIndex: 0),
+      bottomNavigationBar: MyNavigationBar(currentIndex: 0),
+      floatingActionButton: floatingNewButton(context),
     );
   }
 

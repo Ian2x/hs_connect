@@ -10,7 +10,7 @@ import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
-import 'package:hs_connect/shared/widgets/navigationBar.dart';
+import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileAppBar.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileStats.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileImage.dart';
@@ -106,7 +106,7 @@ class _ProfileState extends State<Profile> {
           SizedBox(height: 2),
         ],
       ),
-      bottomNavigationBar: navigationBar(
+      bottomNavigationBar: MyNavigationBar(
         currentIndex: 3,
       ),
     );

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hs_connect/screens/new/newGroup/_newGroupForm.dart';
+import 'package:hs_connect/screens/home/new/newGroup/_newGroupForm.dart';
 
 class NewGroup extends StatelessWidget {
   const NewGroup({Key? key}) : super(key: key);
