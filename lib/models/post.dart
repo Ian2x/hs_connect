@@ -86,6 +86,7 @@ class Post {
     required this.pollRef,
     required this.tag,
     required this.lastUpdated,
+    this.newActivity,
   });
 }
 

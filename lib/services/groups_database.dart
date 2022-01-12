@@ -171,7 +171,7 @@ class GroupsDatabaseService {
         .toList();
   }
 
-  Future<Group?> getGroup({required DocumentReference groupRef}) async {
+  Future<Group?> getGroup(DocumentReference groupRef) async {
     return groupFromSnapshot(await groupRef.get());
   }
 
@@ -186,12 +186,27 @@ class GroupsDatabaseService {
     return result;
   }
 
+  /*
+  Future _getPostsHelper(DocumentReference PR, int index, List<Post?> results) async {
+    results[index] = await getPost(PR);
+  }
+
+  // preserves order
+  Future<List<Post?>> getPosts(List<DocumentReference> postsRefs) async {
+    List<Post?> results = List.filled(postsRefs.length, null);
+    await Future.wait([for (int i=0; i<postsRefs.length; i++) _getPostsHelper(postsRefs[i], i, results)]);
+    return results;
+  }
+   */
+
+  Future _getGroupsHelper(DocumentReference GR, int index, List<Group?> results) async {
+    results[index] = await getGroup(GR);
+  }
+
+  // preserves order
   Future<List<Group?>> getGroups({required List<DocumentReference> groupsRefs}) async {
-    List<Group?> results = [];
-    await Future.forEach(groupsRefs, (groupRef) async {
-      final tempGroup = await getGroup(groupRef: groupRef as DocumentReference);
-      results.add(tempGroup);
-    });
+    List<Group?> results = List.filled(groupsRefs.length, null);
+    await Future.wait([for (int i=0; i<groupsRefs.length; i++) _getGroupsHelper(groupsRefs[i], i, results)]);
     return results;
   }
 

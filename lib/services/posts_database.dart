@@ -191,12 +191,14 @@ class PostsDatabaseService {
     return _postFromSnapshot(await postRef.get());
   }
 
+  Future _getPostsHelper(DocumentReference PR, int index, List<Post?> results) async {
+    results[index] = await getPost(PR);
+  }
+
+  // preserves order
   Future<List<Post?>> getPosts(List<DocumentReference> postsRefs) async {
-    List<Post?> results = [];
-    await Future.forEach(postsRefs, (postRef) async {
-      final tempPost = await getPost(postRef as DocumentReference);
-      results.add(tempPost);
-    });
+    List<Post?> results = List.filled(postsRefs.length, null);
+    await Future.wait([for (int i=0; i<postsRefs.length; i++) _getPostsHelper(postsRefs[i], i, results)]);
     return results;
   }
 
@@ -229,19 +231,22 @@ class PostsDatabaseService {
         .map((snapshot) => snapshot.docs.map(_postFromQuerySnapshot).toList());
   }
 
+  Future _newActivityPostsHelper(ObservedRef OR, List<Post> NAP) async {
+    var tempPost = await getPost(OR.ref);
+    if (tempPost != null) {
+      if (tempPost.createdAt.compareTo(Timestamp.fromDate(DateTime.now().subtract(new Duration(days: 7)))) > 0) {
+        if (tempPost.lastUpdated.compareTo(OR.lastObserved)>0) {
+          tempPost.newActivity = true;
+        }
+        NAP.add(tempPost);
+      }
+    }
+  }
+
+  // Does not preserve order
   Future<List<Post>> newActivityPosts(List<ObservedRef> userPostsObservedRefs) async {
     List<Post> newActivityPosts = [];
-    await Future.forEach(userPostsObservedRefs, (POR) async {
-      var tempPost = await getPost((POR as ObservedRef).ref);
-      if (tempPost != null) {
-        if (tempPost.createdAt.compareTo(Timestamp.fromDate(DateTime.now().subtract(new Duration(days: 7)))) > 0) {
-          if (tempPost.lastUpdated.compareTo(POR.lastObserved)>0) {
-            tempPost.newActivity = true;
-          }
-          newActivityPosts.add(tempPost);
-        }
-      }
-    });
+    await Future.wait([for (ObservedRef POR in userPostsObservedRefs) _newActivityPostsHelper(POR, newActivityPosts)]);
     return newActivityPosts;
   }
 
