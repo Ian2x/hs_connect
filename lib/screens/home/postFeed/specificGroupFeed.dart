@@ -79,7 +79,7 @@ class _SpecificGroupFeedState extends State<SpecificGroupFeed> {
             List<Post> posts = postss.map((item) => item!).toList();
 
             return ListView.builder(
-                //itemCount: posts.length,
+                itemCount: posts.length,
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 padding: EdgeInsets.zero,
