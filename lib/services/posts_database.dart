@@ -72,6 +72,14 @@ class PostsDatabaseService {
     return result;
   }
 
+  Future _delReplyHelper(DocumentReference replyRef, DocumentReference postRef) async {
+    final reply = await replyRef.get();
+    RepliesDatabaseService _tempReplies = RepliesDatabaseService(currUserRef: reply.get(C.creatorRef));
+    // delete reply
+    _tempReplies.deleteReply(
+        replyRef: replyRef, commentRef: reply.get(C.commentRef), postRef: postRef, weakDelete: false);
+  }
+
   Future<dynamic> deletePost({required DocumentReference postRef,
     required DocumentReference groupRef,
     required DocumentReference userRef,
@@ -79,6 +87,9 @@ class PostsDatabaseService {
     // check post exists and matches current user
     final post = await postRef.get();
     if (post.exists) {
+      // delete post first so UI can update
+      final delPost = postRef.delete();
+
       if (userRef == post.get(C.creatorRef)) {
         // update group's numPosts
         groupRef.update({C.numPosts: FieldValue.increment(-1)});
@@ -93,7 +104,10 @@ class PostsDatabaseService {
           }
         }
 
-        // delete post's replies
+        // delete post's replies in parallel
+        //final delReplies = Future.wait([for (DocumentReference replyRef in post.get(C.repliesRefs)) _delReplyHelper(replyRef, postRef)]);
+
+        // delete post's replies one by one
         final delReplies = Future.forEach(post.get(C.repliesRefs), (item) async {
           final replyRef = item as DocumentReference;
           final reply = await replyRef.get();
@@ -117,9 +131,6 @@ class PostsDatabaseService {
         if (post.get(C.pollRef) != null) {
           delPoll = (post.get(C.pollRef) as DocumentReference).delete();
         }
-
-        // delete post
-        final delPost = postRef.delete();
 
         await delComments;
         await delReplies;

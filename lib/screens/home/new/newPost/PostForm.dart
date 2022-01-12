@@ -133,13 +133,17 @@ class _PostFormState extends State<PostForm> {
       });
     }
 
-    final _GroupsDatabaseService = GroupsDatabaseService(currUserRef: userData.userRef);
-
     return FutureBuilder(
-        future: _GroupsDatabaseService.getUserGroups(userGroups: userData.userGroups),
+        future: _groups.getUserGroups(userGroups: userData.userGroups),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            final groups = snapshot.data as List<Group>;
+            final nullGroups = snapshot.data as List<Group?>;
+            List<Group> groups = [];
+            for (Group? group in nullGroups) {
+              if (group!=null) {
+                groups.add(group);
+              }
+            }
             if (isPost){
               return SingleChildScrollView(
                 child: Form(

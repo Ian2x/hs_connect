@@ -175,29 +175,18 @@ class GroupsDatabaseService {
     return groupFromSnapshot(await groupRef.get());
   }
 
-  Future<List<Group>> getUserGroups({required List<UserGroup> userGroups}) async {
-    final Iterable<DocumentReference> groupRefs = userGroups.map((userGroup) => userGroup.groupRef);
-    List<Group> result = <Group>[];
-    await Future.forEach(groupRefs, (ref) async {
-      final temp = await groupFromRef(ref as DocumentReference);
-      if (temp!=null) result.add(temp);
-    });
-    result.sort((a,b) => (a as Group).createdAt.compareTo((b as Group).createdAt) );
-    return result;
+
+  Future _getUserGroupsHelper(UserGroup UGR, int index, List<Group?> results) async {
+    results[index] = await getGroup(UGR.groupRef);
   }
 
-  /*
-  Future _getPostsHelper(DocumentReference PR, int index, List<Post?> results) async {
-    results[index] = await getPost(PR);
-  }
-
-  // preserves order
-  Future<List<Post?>> getPosts(List<DocumentReference> postsRefs) async {
-    List<Post?> results = List.filled(postsRefs.length, null);
-    await Future.wait([for (int i=0; i<postsRefs.length; i++) _getPostsHelper(postsRefs[i], i, results)]);
+  // returns sorted by oldest groups first (domain first)
+  Future<List<Group?>> getUserGroups({required List<UserGroup> userGroups}) async {
+    List<Group?> results = List.filled(userGroups.length, null);
+    await Future.wait([for (int i=0; i<userGroups.length; i++) _getUserGroupsHelper(userGroups[i], i, results)]);
+    results.sort((a,b) => (a as Group).createdAt.compareTo((b as Group).createdAt));
     return results;
   }
-   */
 
   Future _getGroupsHelper(DocumentReference GR, int index, List<Group?> results) async {
     results[index] = await getGroup(GR);

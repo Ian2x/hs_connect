@@ -58,10 +58,16 @@ class _ProfileBodyState extends State<ProfileBody> {
     }
     GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserRef);
     if (fetchUserData!=null) {
-      final fetchUserGroups = await _groups.getUserGroups(userGroups: fetchUserData.userGroups);
+      var fetchUserGroups = await _groups.getUserGroups(userGroups: fetchUserData.userGroups);
       if (mounted) {
         setState(() {
-          profileGroups = fetchUserGroups;
+          List<Group> nullRemovedGroups = [];
+          for (Group? UG in fetchUserGroups) {
+            if (UG!=null) {
+              nullRemovedGroups.add(UG);
+            }
+          }
+          profileGroups = nullRemovedGroups;
         });
       }
     }
