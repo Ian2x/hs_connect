@@ -8,6 +8,7 @@ import 'package:hs_connect/screens/home/postFeed/specificGroupFeed.dart';
 import 'package:hs_connect/screens/home/postView/likeDislikePost.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
+import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/noAnimationMaterialPageRoute.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
@@ -95,11 +96,14 @@ class _RoundedPostCardState extends State<RoundedPostCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        openSpecificGroupFeed();
+
+        /*
         Navigator.pushReplacement(
           context,
           NoAnimationMaterialPageRoute(builder: (context) =>
-              GroupPage(currUserRef: widget.currUserRef,groupRef: widget.post.groupRef,)),
-        );
+          */
+              //GroupPage(currUserRef: widget.currUserRef,groupRef: widget.post.groupRef,)),
       },
       child: Card(
           margin: EdgeInsets.fromLTRB(6.0, 1.0, 6.0, 0.0),
@@ -122,7 +126,7 @@ class _RoundedPostCardState extends State<RoundedPostCard> {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Icon(Icons.account_circle, size: 40, color: Colors.black),
+                      Icon(Icons.account_circle, size: 40, color: ThemeColor.black),
                       //Spacer(),
                     ],
                   ),
@@ -188,7 +192,7 @@ class _RoundedPostCardState extends State<RoundedPostCard> {
                             ),
                             Spacer(),
                             IconButton(
-                              icon: Icon(Icons.mode_comment_outlined, color: Colors.black, size: 15.0),
+                              icon: Icon(Icons.mode_comment_outlined, color: ThemeColor.black, size: 15.0),
                               onPressed: () {
                                 Navigator.pushReplacement(
                                   context,

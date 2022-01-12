@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hs_connect/shared/constants.dart';
 
 class ProfileName extends StatelessWidget {
   final String name;
@@ -15,7 +16,7 @@ class ProfileName extends StatelessWidget {
         ),
         const SizedBox(height: 4),
         Text(domain,
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: ThemeColor.black),
         )
       ],
     );

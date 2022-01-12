@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 
+import '../constants.dart';
+
 class DeletableImage extends StatelessWidget {
   final Image image;
   final voidFunction onDelete;
@@ -59,7 +61,7 @@ class DeleteImageButton extends StatelessWidget {
               width: buttonSize,
               height: buttonSize,
               decoration: new BoxDecoration(
-                color: Colors.black.withOpacity(0.35),
+                color: ThemeColor.black.withOpacity(0.35),
                 shape: BoxShape.circle,
               ),
             ),

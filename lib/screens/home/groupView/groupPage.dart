@@ -4,6 +4,7 @@ import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/commentFeed/commentsFeed.dart';
+import 'package:hs_connect/screens/home/groupView/groupTitleCard.dart';
 import 'package:hs_connect/screens/home/postFeed/specificGroupFeed.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
@@ -26,6 +27,8 @@ class _GroupPageState extends State<GroupPage> {
   String? groupImage;
   int groupMemberCount=0;
   String? groupDescription;
+
+
 
   void getGroupData() async {
     GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserRef);
@@ -56,10 +59,14 @@ class _GroupPageState extends State<GroupPage> {
 
   @override
   Widget build(BuildContext context) {
+
     final userData = Provider.of<UserData?>(context);
     if (userData == null) {
       return Text("loading");
     }
+
+    PostsDatabaseService _posts = PostsDatabaseService(currUserRef: widget.currUserRef, groupRefs: [widget.groupRef]);
+
 
     return Scaffold(
       backgroundColor: HexColor("FFFFFF"),
@@ -72,8 +79,27 @@ class _GroupPageState extends State<GroupPage> {
         elevation: 0.0,
       ),
       body:
+      SingleChildScrollView(
+        physics: ScrollPhysics(),
+        child: Column(
+          children: <Widget>[
+            groupTitleCard(name:groupName, description: groupDescription!, memberCount: groupMemberCount, image:groupImage),
+            ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemBuilder: (context,index){
+                  return  Text('Some text');
+                })
+            //SpecificGroupFeed(groupRef: widget.groupRef, currUserRef: userData.userRef,),
+          ],
+        ),
+      ),
 
-      SpecificGroupFeed(groupRef: widget.groupRef, currUserRef: userData.userRef,),
+
+
+
+
+
 
       bottomNavigationBar: MyNavigationBar(currentIndex:0),
     );

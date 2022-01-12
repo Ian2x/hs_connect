@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 
@@ -48,7 +49,7 @@ class ProfileImage extends StatelessWidget {
         decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: Colors.white54,
-            border: Border.all(color: Colors.black, width: 1),
+            border: Border.all(color: ThemeColor.black, width: 1),
             image: content is Image
                 ? DecorationImage(
                     fit: BoxFit.fill,

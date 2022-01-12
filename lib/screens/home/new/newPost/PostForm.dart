@@ -164,8 +164,8 @@ class _PostFormState extends State<PostForm> {
                           tagOutline(
                             textOnly:true,
                             text: "Post",
-                            textColor: "54A0DC",
-                            borderColor: "54A0DC",
+                            textColor: ThemeColor.secondaryBlue,
+                            borderColor: ThemeColor.secondaryBlue,
                           ),
                           Spacer(flex:1),
                           TextButton (
@@ -397,8 +397,8 @@ class _PostFormState extends State<PostForm> {
                           tagOutline(
                             textOnly:true,
                             text: "Group",
-                            textColor: "54A0DC",
-                            borderColor: "54A0DC",
+                            textColor: ThemeColor.secondaryBlue,
+                            borderColor: ThemeColor.secondaryBlue,
                           ),
                           Spacer(flex:6),
                           IconButton(onPressed: () async {

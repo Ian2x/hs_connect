@@ -22,7 +22,7 @@ class ThemeLayout {
 
 class ThemeText {
 
-  static TextStyle titleRegular({Color? color, double fontSize=18.0}) {
+  static TextStyle titleRegular({Color? color, double fontSize=18}) {
     return TextStyle(
       fontSize: fontSize,
       fontFamily: "Inter",
@@ -34,14 +34,15 @@ class ThemeText {
     return TextStyle(
       fontSize: fontSize,
       fontFamily: "Inter",
-      fontWeight: FontWeight.w700,
+      fontWeight: FontWeight.w500,
       color: color != null ? color : ThemeColor.darkGrey,
       );
   }
 
-  static TextStyle regularSmall ({Color? color, double fontSize=13.0}){
+  static TextStyle regularSmall ({Color? color, double fontSize=13.0, double height=1.0}){
     return TextStyle(
       fontSize: fontSize,
+      height: height,
       fontFamily: "Inter",
       color: color != null ? color: ThemeColor.darkGrey,
     );
