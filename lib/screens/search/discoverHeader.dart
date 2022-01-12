@@ -72,7 +72,7 @@ class _DiscoverHeaderState extends State<DiscoverHeader> {
           widget.joined
               ? Card(
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-                  color: HexColor('57ADEF'),
+                  color: ThemeColor.secondaryBlue,
                   child: Container(
                     padding: EdgeInsets.all(5.0),
                     child: Text("Joined", style: TextStyle(color: Colors.white))

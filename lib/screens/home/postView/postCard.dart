@@ -118,9 +118,9 @@ class _PostCardState extends State<PostCard> {
                             text: 'in ',
                             style: ThemeText.regularSmall(),
                             children: <TextSpan>[
-                              TextSpan(text: groupName,style: ThemeText.groupBold(translucentColorFromString(groupName))),
+                              TextSpan(text: groupName,style: ThemeText.groupBold(color: translucentColorFromString(groupName))),
                               TextSpan(text: ' from ', style: ThemeText.regularSmall()),
-                              TextSpan(text: userDomain, style: ThemeText.groupBold(translucentColorFromString(userDomain))),
+                              TextSpan(text: userDomain, style: ThemeText.groupBold(color: translucentColorFromString(userDomain))),
                               TextSpan(text: ' • ' + convertTime(widget.post.createdAt.toDate()), style: ThemeText.regularSmall()),
                             ],
                           ),

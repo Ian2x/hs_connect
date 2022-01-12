@@ -29,7 +29,7 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
       appBar: notificationsAppBar(),
       body: Column(children: <Widget>[
         TabBar(
-          indicatorColor: ThemeColor.darkGrey,
+          indicatorColor: ThemeColor.black,
           tabs: <Widget>[
             Tab(
                 icon: Text("Activity",

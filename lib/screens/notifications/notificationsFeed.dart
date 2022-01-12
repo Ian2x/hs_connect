@@ -14,6 +14,8 @@ import 'package:hs_connect/shared/widgets/myCircle.dart';
 import 'package:provider/provider.dart';
 import 'package:hs_connect/models/comment.dart';
 
+const circleSize = 35.0;
+
 class NotificationsFeed extends StatefulWidget {
   const NotificationsFeed({Key? key}) : super(key: key);
 
@@ -22,6 +24,7 @@ class NotificationsFeed extends StatefulWidget {
 }
 
 class _NotificationsFeedState extends State<NotificationsFeed> {
+
   @override
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
@@ -60,12 +63,12 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
                       for (Group? group in groups) {
                         if (group == null) {
                           groupCirclesForPostsAndComments.add(Circle(
-                              size: 20.0,
+                              size: circleSize,
                               child: Loading(size: 20.0),
                               textBackgroundColor: ThemeColor.backgroundGrey));
                         } else if (group.image != null) {
                           groupCirclesForPostsAndComments.add(Circle(
-                            size: 20.0,
+                            size: circleSize,
                             child: Image.network(group.image!),
                             textBackgroundColor: ThemeColor.backgroundGrey,
                           ));
@@ -80,7 +83,7 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
                             }
                           }
                           groupCirclesForPostsAndComments.add(Circle(
-                              size: 20.0,
+                              size: circleSize,
                               textBackgroundColor: translucentColorFromString(group.name),
                               child: Text(initial,
                                   style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white))));
@@ -99,7 +102,9 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
                                 final postIndex = index - 1;
                                 return PostNotificationCard(
                                     post: posts[postIndex],
-                                    groupCircle: groupCirclesForPostsAndComments[postIndex]);
+                                    groupCircle: groupCirclesForPostsAndComments[postIndex],
+                                    currUserRef: userData.userRef,
+                                );
                               } else if (index == posts.length + 1) {
                                 return Text("Comments", style: ThemeText.titleRegular());
                               } else {
@@ -108,7 +113,10 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
                                     comment: comments[commentIndex],
                                     originPost: postsForComments[commentIndex],
                                     groupCircle:
-                                    groupCirclesForPostsAndComments[posts.length + commentIndex]);
+                                    groupCirclesForPostsAndComments[posts.length + commentIndex],
+                                    currUserRef: userData.userRef,
+                                );
+
                               }
                             },
                           ));
@@ -122,97 +130,5 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
           return Loading();
     }
     );
-
-
-
-
-    /*return FutureBuilder(
-        future: Future.wait([_posts.newActivityPosts(userData.myPostsObservedRefs), _comments.newActivityComments(userData.myCommentsObservedRefs)]),
-        builder: (BuildContext context, AsyncSnapshot postsSnapshot) {
-          return FutureBuilder(
-              future: _comments.newActivityComments(userData.myCommentsObservedRefs),
-              builder: (BuildContext context2, AsyncSnapshot commentsSnapshot) {
-                if (commentsSnapshot.hasData && postsSnapshot.hasData) {
-                  final comments = commentsSnapshot.data;
-                  final posts = postsSnapshot.data;
-                  if (comments != null && posts != null) {
-                    return FutureBuilder(
-                        future: _posts.getPosts(comments.map((comment) => comment.postRef).toList()),
-                        builder: (BuildContext context3, AsyncSnapshot<List<Post?>> postsForCommentsSnapshot) {
-                          return FutureBuilder(
-                              future: _groups.getGroups(
-                                  groupsRefs: posts.map((post) => post.groupRef).toList() +
-                                      comments.map((comment) => comment.groupRef).toList()),
-                              builder: (BuildContext context4,
-                                  AsyncSnapshot<List<Group?>> groupsForPostsAndCommentsSnapshot) {
-                                final postsForComments = postsForCommentsSnapshot.data;
-                                final groupsForPostsAndComments = groupsForPostsAndCommentsSnapshot.data;
-                                if (postsForComments != null && groupsForPostsAndComments != null) {
-                                  List<Widget> groupCirclesForPostsAndComments = [];
-                                  for (var group in groupsForPostsAndComments) {
-                                    if (group == null) {
-                                      groupCirclesForPostsAndComments.add(Circle(
-                                          size: 20.0,
-                                          child: Loading(size: 20.0),
-                                          textBackgroundColor: ThemeColor.backgroundGrey));
-                                    } else if (group.image != null) {
-                                      groupCirclesForPostsAndComments.add(Circle(
-                                        size: 20.0,
-                                        child: Image.network(group.image!),
-                                        textBackgroundColor: ThemeColor.backgroundGrey,
-                                      ));
-                                    } else {
-                                      String s = group.name;
-                                      int sLen = s.length;
-                                      String initial = "?";
-                                      for (int j = 0; j < sLen; j++) {
-                                        if (RegExp(r'[a-z]').hasMatch(group.name[j].toLowerCase())) {
-                                          initial = group.name[j].toUpperCase();
-                                          break;
-                                        }
-                                      }
-                                      groupCirclesForPostsAndComments.add(Circle(
-                                          size: 20.0,
-                                          textBackgroundColor: translucentColorFromString(group.name),
-                                          child: Text(initial,
-                                              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white))));
-                                    }
-                                  }
-
-                                  return Container(
-                                      color: ThemeColor.backgroundGrey,
-                                      child: ListView.builder(
-                                        itemCount: posts.length + comments.length + 2,
-                                        physics: BouncingScrollPhysics(),
-                                        padding: EdgeInsets.all(6.0),
-                                        itemBuilder: (BuildContext context, int index) {
-                                          if (index == 0) {
-                                            return Text("Posts", style: ThemeText.titleRegular());
-                                          } else if (index <= posts.length) {
-                                            final postIndex = index - 1;
-                                            return PostNotificationCard(
-                                                post: posts[postIndex],
-                                                groupCircle: groupCirclesForPostsAndComments[postIndex]);
-                                          } else if (index == posts.length + 1) {
-                                            return Text("Comments", style: ThemeText.titleRegular());
-                                          } else {
-                                            final commentIndex = index - posts.length - 2;
-                                            return CommentNotificationCard(
-                                                comment: comments[commentIndex],
-                                                originPost: postsForComments[commentIndex],
-                                                groupCircle:
-                                                    groupCirclesForPostsAndComments[posts.length + commentIndex]);
-                                          }
-                                        },
-                                      ));
-                                }
-                                return Loading();
-                              });
-                        });
-                  }
-                }
-                return Loading();
-              };
-        });*/
   }
 }
