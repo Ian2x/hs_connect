@@ -38,7 +38,7 @@ class _SpecificGroupFeedState extends State<SpecificGroupFeed> {
       setState(() {
         if (fetchGroupData!= null){
           groupName=fetchGroupData.name;
-          groupDescription= fetchGroupData.description!;
+          groupDescription= fetchGroupData.description;
           groupImage=fetchGroupData.image;
           groupMemberCount= fetchGroupData.numMembers;
           groupColor = fetchGroupData.hexColor;

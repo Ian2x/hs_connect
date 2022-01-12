@@ -32,7 +32,7 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
           indicatorColor: ThemeColor.black,
           tabs: <Widget>[
             Tab(
-                icon: Text("Activity",
+                icon: Text("Posts & Comments",
                     style: TextStyle(
                       color: ThemeColor.black,
                       fontFamily: "Inter",

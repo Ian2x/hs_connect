@@ -59,7 +59,7 @@ class _groupTitleCardState extends State<groupTitleCard> {
                     Flexible(
                       flex:2,
                       child: Text(widget.name,
-                        style: ThemeText.titleMedium(color: widget.hexColor != null ?
+                        style: ThemeText.titleRegular(color: widget.hexColor != null ?
                           HexColor(widget.hexColor!): ThemeColor.black,
                           fontSize: 23,
                           ),

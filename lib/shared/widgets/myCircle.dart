@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hs_connect/shared/constants.dart';
 
 class Circle extends StatelessWidget {
   final Widget child;
@@ -16,8 +17,8 @@ class Circle extends StatelessWidget {
           shape: BoxShape.circle,
           color: textBackgroundColor,
           border: Border.all(
-            color: Colors.black,
-            width: 1,
+            color: ThemeColor.darkGrey,
+            width: 0.3,
           ),
           image: child is Image
               ? DecorationImage(
