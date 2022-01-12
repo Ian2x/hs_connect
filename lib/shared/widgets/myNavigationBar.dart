@@ -9,6 +9,7 @@ import 'package:hs_connect/screens/search/searchPage.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:provider/provider.dart';
 
+import '../constants.dart';
 import '../noAnimationMaterialPageRoute.dart';
 
 import 'loading.dart';
@@ -41,12 +42,12 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
         // <-- HERE
         showUnselectedLabels: false,
         currentIndex: widget.currentIndex,
-        selectedItemColor: Colors.black,
+        selectedItemColor: ThemeColor.black,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: IconButton(
               padding: EdgeInsets.zero,
-              // color: Colors.black,
+              // color: ThemeColor.black,
               constraints: BoxConstraints(),
               icon: Icon(Icons.school, size: 18.0),
               onPressed: () {
@@ -61,7 +62,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
           BottomNavigationBarItem(
             icon: IconButton(
               padding: EdgeInsets.zero,
-              // color: Colors.black,
+              // color: ThemeColor.black,
               constraints: BoxConstraints(),
               icon: Icon(Icons.search_rounded, size: 18.0),
               onPressed: () async {
@@ -82,7 +83,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
           BottomNavigationBarItem(
             icon: IconButton(
               padding: EdgeInsets.zero,
-              // color: Colors.black,
+              // color: ThemeColor.black,
               constraints: BoxConstraints(),
               icon: Icon(Icons.notifications, size: 18.0),
               onPressed: () {
@@ -97,7 +98,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
           BottomNavigationBarItem(
             icon: IconButton(
               padding: EdgeInsets.zero,
-              // color: Colors.black,
+              // color: ThemeColor.black,
               constraints: BoxConstraints(),
               icon: Icon(Icons.person, size: 18.0),
               onPressed: () {

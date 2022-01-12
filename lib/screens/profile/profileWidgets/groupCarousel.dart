@@ -6,6 +6,7 @@ import 'package:hs_connect/models/accessRestriction.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/groupView/groupPage.dart';
+import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
@@ -148,7 +149,7 @@ class _GroupCarouselState extends State<GroupCarousel> {
                         circlesController.animateToPage(circlesController.page!.round() - 1,
                             duration: Duration(milliseconds: 400), curve: Curves.linear);
                       },
-                      icon: Icon(Icons.chevron_left, size: 40, color: Colors.black),
+                      icon: Icon(Icons.chevron_left, size: 40, color: ThemeColor.black),
                       splashRadius: chevronSplashRadius,
                     ),
                     Spacer(),
@@ -157,7 +158,7 @@ class _GroupCarouselState extends State<GroupCarousel> {
                         circlesController.animateToPage(circlesController.page!.round() + 1,
                             duration: Duration(milliseconds: 400), curve: Curves.linear);
                       },
-                      icon: Icon(Icons.chevron_right, size: 40, color: Colors.black),
+                      icon: Icon(Icons.chevron_right, size: 40, color: ThemeColor.black),
                       splashRadius: chevronSplashRadius,
                     ),
                     SizedBox(width: 12),
@@ -273,7 +274,7 @@ class Circle extends StatelessWidget {
           shape: BoxShape.circle,
           color: textBackgroundColor,
           border: Border.all(
-            color: Colors.black,
+            color: ThemeColor.black,
             width: 1,
           ),
           image: child is Image

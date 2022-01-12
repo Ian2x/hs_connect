@@ -6,6 +6,7 @@ import 'package:hs_connect/screens/search/searchResultCard.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
+import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 
 import '../../shared/widgets/loading.dart';
@@ -24,7 +25,7 @@ class _SearchState extends State<Search> {
   final TextEditingController _filter = new TextEditingController();
   String _searchText = "";
   List<SearchResult> filteredResults = [];
-  Icon _closeIcon = new Icon(Icons.close, color: Colors.black);
+  Icon _closeIcon = new Icon(Icons.close, color: ThemeColor.black);
   Widget _appBarTitle = new Text('Loading');
   SearchResultType _resultType = SearchResultType.groups;
   Stream streamQuery = Stream.empty();
