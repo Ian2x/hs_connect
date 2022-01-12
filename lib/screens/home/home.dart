@@ -4,7 +4,7 @@ import 'package:hs_connect/screens/home/postFeed/domainFeed.dart';
 import 'package:hs_connect/screens/home/new/floatingNewButton.dart';
 import 'package:hs_connect/screens/home/postFeed/homeFeed.dart';
 import 'package:hs_connect/screens/home/postFeed/trendingFeed.dart';
-import 'package:hs_connect/screens/profile/profile.dart';
+import 'package:hs_connect/screens/profile/profileBody.dart';
 import 'package:hs_connect/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/constants.dart';
@@ -150,7 +150,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => Profile(profileRef: userData.userRef,
+                              builder: (context) => ProfileBody(profileRef: userData.userRef,
                               currUserRef: userData.userRef,)),
                         );
                       },

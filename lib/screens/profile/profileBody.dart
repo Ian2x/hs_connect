@@ -15,17 +15,17 @@ import 'package:hs_connect/screens/profile/profileWidgets/profileAppBar.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileStats.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileImage.dart';
 
-class Profile extends StatefulWidget {
+class ProfileBody extends StatefulWidget {
   final DocumentReference profileRef;
   final DocumentReference currUserRef;
 
-  Profile({Key? key, required this.profileRef, required this.currUserRef}) : super(key: key);
+  ProfileBody({Key? key, required this.profileRef, required this.currUserRef}) : super(key: key);
 
   @override
-  _ProfileState createState() => _ProfileState();
+  _ProfileBodyState createState() => _ProfileBodyState();
 }
 
-class _ProfileState extends State<Profile> {
+class _ProfileBodyState extends State<ProfileBody> {
 
   String profileUsername = '<Loading user name...>';
 
@@ -83,9 +83,7 @@ class _ProfileState extends State<Profile> {
     if (profileGroups == null) {
       return Loading();
     }
-    return Scaffold(
-      appBar: profileAppBar(context),
-      body: ListView(
+    return ListView(
         physics: BouncingScrollPhysics(),
         children: [
           SizedBox(height: 10),
@@ -105,10 +103,6 @@ class _ProfileState extends State<Profile> {
           GroupCarousel(groups: profileGroups!, userAccess: Access(domain: userData.domain, county: userData.county, state: userData.state, country: userData.country)), //buildIconScroll(),
           SizedBox(height: 2),
         ],
-      ),
-      bottomNavigationBar: MyNavigationBar(
-        currentIndex: 3,
-      ),
-    );
+      );
   }
 }

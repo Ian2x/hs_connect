@@ -173,7 +173,6 @@ class GroupsDatabaseService {
 
   Future<Group?> getGroup({required DocumentReference groupRef}) async {
     return groupFromSnapshot(await groupRef.get());
-
   }
 
   Future<List<Group>> getUserGroups({required List<UserGroup> userGroups}) async {
@@ -189,7 +188,7 @@ class GroupsDatabaseService {
 
   Future<List<Group?>> getGroups({required List<DocumentReference> groupsRefs}) async {
     List<Group?> results = [];
-    Future.forEach(results, (groupRef) async {
+    await Future.forEach(groupsRefs, (groupRef) async {
       final tempGroup = await getGroup(groupRef: groupRef as DocumentReference);
       results.add(tempGroup);
     });

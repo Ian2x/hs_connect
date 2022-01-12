@@ -193,7 +193,7 @@ class PostsDatabaseService {
 
   Future<List<Post?>> getPosts(List<DocumentReference> postsRefs) async {
     List<Post?> results = [];
-    Future.forEach(results, (postRef) async {
+    await Future.forEach(postsRefs, (postRef) async {
       final tempPost = await getPost(postRef as DocumentReference);
       results.add(tempPost);
     });
@@ -232,9 +232,12 @@ class PostsDatabaseService {
   Future<List<Post>> newActivityPosts(List<ObservedRef> userPostsObservedRefs) async {
     List<Post> newActivityPosts = [];
     await Future.forEach(userPostsObservedRefs, (POR) async {
-      final tempPost = await getPost((POR as ObservedRef).ref);
+      var tempPost = await getPost((POR as ObservedRef).ref);
       if (tempPost != null) {
-        if (tempPost.lastUpdated.compareTo(POR.lastObserved)>0) {
+        if (tempPost.createdAt.compareTo(Timestamp.fromDate(DateTime.now().subtract(new Duration(days: 7)))) > 0) {
+          if (tempPost.lastUpdated.compareTo(POR.lastObserved)>0) {
+            tempPost.newActivity = true;
+          }
           newActivityPosts.add(tempPost);
         }
       }
