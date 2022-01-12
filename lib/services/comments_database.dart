@@ -159,16 +159,19 @@ class CommentsDatabaseService {
     return _commentFromSnapshot(await commentRef.get());
   }
 
+  // doesn't preserve order
+  Future _newActivityCommentsHelper(ObservedRef OR, List<Comment> NAC) async {
+    var tempComment = await getComment(OR.ref);
+    if (tempComment != null) {
+      if (tempComment.createdAt.compareTo(Timestamp.fromDate(DateTime.now().subtract(new Duration(days: 7))))>0) {
+        tempComment.newActivity = true;
+      }
+      NAC.add(tempComment);
+    }
+  }
   Future<List<Comment>> newActivityComments(List<ObservedRef> userCommentsObservedRefs) async {
     List<Comment> newActivityComments = [];
-    await Future.forEach(userCommentsObservedRefs, (COR) async {
-      final tempComment = await getComment((COR as ObservedRef).ref);
-      if (tempComment != null) {
-        if (tempComment.lastUpdated.compareTo(COR.lastObserved)>0) {
-          newActivityComments.add(tempComment);
-        }
-      }
-    });
+    await Future.wait([for (ObservedRef COR in userCommentsObservedRefs) _newActivityCommentsHelper(COR, newActivityComments)]);
     return newActivityComments;
   }
 

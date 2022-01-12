@@ -133,13 +133,17 @@ class _PostFormState extends State<PostForm> {
       });
     }
 
-    final _GroupsDatabaseService = GroupsDatabaseService(currUserRef: userData.userRef);
-
     return FutureBuilder(
-        future: _GroupsDatabaseService.getGroups(userGroups: userData.userGroups),
+        future: _groups.getUserGroups(userGroups: userData.userGroups),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            final groups = snapshot.data as List<Group>;
+            final nullGroups = snapshot.data as List<Group?>;
+            List<Group> groups = [];
+            for (Group? group in nullGroups) {
+              if (group!=null) {
+                groups.add(group);
+              }
+            }
             if (isPost){
               return SingleChildScrollView(
                 child: Form(
@@ -160,8 +164,8 @@ class _PostFormState extends State<PostForm> {
                           tagOutline(
                             textOnly:true,
                             text: "Post",
-                            textColor: "54A0DC",
-                            borderColor: "54A0DC",
+                            textColor: ThemeColor.secondaryBlue,
+                            borderColor: ThemeColor.secondaryBlue,
                           ),
                           Spacer(flex:1),
                           TextButton (
@@ -393,8 +397,8 @@ class _PostFormState extends State<PostForm> {
                           tagOutline(
                             textOnly:true,
                             text: "Group",
-                            textColor: "54A0DC",
-                            borderColor: "54A0DC",
+                            textColor: ThemeColor.secondaryBlue,
+                            borderColor: ThemeColor.secondaryBlue,
                           ),
                           Spacer(flex:6),
                           IconButton(onPressed: () async {

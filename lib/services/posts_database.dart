@@ -72,6 +72,14 @@ class PostsDatabaseService {
     return result;
   }
 
+  Future _delReplyHelper(DocumentReference replyRef, DocumentReference postRef) async {
+    final reply = await replyRef.get();
+    RepliesDatabaseService _tempReplies = RepliesDatabaseService(currUserRef: reply.get(C.creatorRef));
+    // delete reply
+    _tempReplies.deleteReply(
+        replyRef: replyRef, commentRef: reply.get(C.commentRef), postRef: postRef, weakDelete: false);
+  }
+
   Future<dynamic> deletePost({required DocumentReference postRef,
     required DocumentReference groupRef,
     required DocumentReference userRef,
@@ -79,6 +87,9 @@ class PostsDatabaseService {
     // check post exists and matches current user
     final post = await postRef.get();
     if (post.exists) {
+      // delete post first so UI can update
+      final delPost = postRef.delete();
+
       if (userRef == post.get(C.creatorRef)) {
         // update group's numPosts
         groupRef.update({C.numPosts: FieldValue.increment(-1)});
@@ -93,7 +104,10 @@ class PostsDatabaseService {
           }
         }
 
-        // delete post's replies
+        // delete post's replies in parallel
+        //final delReplies = Future.wait([for (DocumentReference replyRef in post.get(C.repliesRefs)) _delReplyHelper(replyRef, postRef)]);
+
+        // delete post's replies one by one
         final delReplies = Future.forEach(post.get(C.repliesRefs), (item) async {
           final replyRef = item as DocumentReference;
           final reply = await replyRef.get();
@@ -117,9 +131,6 @@ class PostsDatabaseService {
         if (post.get(C.pollRef) != null) {
           delPoll = (post.get(C.pollRef) as DocumentReference).delete();
         }
-
-        // delete post
-        final delPost = postRef.delete();
 
         await delComments;
         await delReplies;
@@ -191,6 +202,17 @@ class PostsDatabaseService {
     return _postFromSnapshot(await postRef.get());
   }
 
+  Future _getPostsHelper(DocumentReference PR, int index, List<Post?> results) async {
+    results[index] = await getPost(PR);
+  }
+
+  // preserves order
+  Future<List<Post?>> getPosts(List<DocumentReference> postsRefs) async {
+    List<Post?> results = List.filled(postsRefs.length, null);
+    await Future.wait([for (int i=0; i<postsRefs.length; i++) _getPostsHelper(postsRefs[i], i, results)]);
+    return results;
+  }
+
   Stream<List<Post?>> get posts {
     return postsCollection
         .where(C.groupRef, whereIn: groupRefs)
@@ -220,16 +242,22 @@ class PostsDatabaseService {
         .map((snapshot) => snapshot.docs.map(_postFromQuerySnapshot).toList());
   }
 
+  Future _newActivityPostsHelper(ObservedRef OR, List<Post> NAP) async {
+    var tempPost = await getPost(OR.ref);
+    if (tempPost != null) {
+      if (tempPost.createdAt.compareTo(Timestamp.fromDate(DateTime.now().subtract(new Duration(days: 7)))) > 0) {
+        if (tempPost.lastUpdated.compareTo(OR.lastObserved)>0) {
+          tempPost.newActivity = true;
+        }
+        NAP.add(tempPost);
+      }
+    }
+  }
+
+  // Does not preserve order
   Future<List<Post>> newActivityPosts(List<ObservedRef> userPostsObservedRefs) async {
     List<Post> newActivityPosts = [];
-    await Future.forEach(userPostsObservedRefs, (POR) async {
-      final tempPost = await getPost((POR as ObservedRef).ref);
-      if (tempPost != null) {
-        if (tempPost.lastUpdated.compareTo(POR.lastObserved)>0) {
-          newActivityPosts.add(tempPost);
-        }
-      }
-    });
+    await Future.wait([for (ObservedRef POR in userPostsObservedRefs) _newActivityPostsHelper(POR, newActivityPosts)]);
     return newActivityPosts;
   }
 

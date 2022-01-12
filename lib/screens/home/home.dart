@@ -4,7 +4,7 @@ import 'package:hs_connect/screens/home/postFeed/domainFeed.dart';
 import 'package:hs_connect/screens/home/new/floatingNewButton.dart';
 import 'package:hs_connect/screens/home/postFeed/homeFeed.dart';
 import 'package:hs_connect/screens/home/postFeed/trendingFeed.dart';
-import 'package:hs_connect/screens/profile/profile.dart';
+import 'package:hs_connect/screens/profile/profileBody.dart';
 import 'package:hs_connect/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/constants.dart';
@@ -46,14 +46,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     // this sliver app bar is only use to hide/show the tabBar, the AppBar
     // is invisible at all times. The to the user visible AppBar is below
     return Scaffold(
-      backgroundColor: HexColor("#E9EDF0"),
+      backgroundColor: ThemeColor.backgroundGrey,
       body: Stack(
         children: <Widget>[
           NestedScrollView(
             headerSliverBuilder:
                 (BuildContext context, bool innerBoxIsScrolled) {
               return <Widget>[
-
                 SliverAppBar(
                   elevation: 0.0,
                   primary: true,
@@ -68,7 +67,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                           icon: Text(userData.domain,
                               style:
                               TextStyle(
-                                color: Colors.black,
+                                color: ThemeColor.black,
                               )
                           )
                       ),
@@ -76,7 +75,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                           icon: Text("Home",
                               style:
                               TextStyle(
-                                color: Colors.black,
+                                color: ThemeColor.black,
                               )
                           )
                       ),
@@ -84,7 +83,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                           icon: Text("Trending",
                               style:
                               TextStyle(
-                                color: Colors.black,
+                                color: ThemeColor.black,
                               )
                           )
                       )
@@ -121,7 +120,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   title: Text('HS Connect',
                       style:
                       TextStyle(
-                        color: Colors.black,
+                        color: ThemeColor.black,
                       )
                   ),
                   backgroundColor: HexColor("#FFFFFF"),
@@ -131,7 +130,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       label: Text('Logout',
                           style:
                           TextStyle(
-                            color: Colors.black,
+                            color: ThemeColor.black,
                           )
                       ),
                       onPressed: () async {
@@ -143,14 +142,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       label: Text('Profile',
                           style:
                           TextStyle(
-                            color: Colors.black,
+                            color: ThemeColor.black,
                           )
                       ),
                       onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => Profile(profileRef: userData.userRef,
+                              builder: (context) => ProfileBody(profileRef: userData.userRef,
                               currUserRef: userData.userRef,)),
                         );
                       },

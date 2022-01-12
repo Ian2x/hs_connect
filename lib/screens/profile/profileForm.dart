@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/screens/profile/profile.dart';
+import 'package:hs_connect/screens/profile/profileBody.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileAppBar.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/services/user_data_database.dart';
@@ -174,7 +174,7 @@ class _ProfileFormState extends State<ProfileForm> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => Profile(profileRef: userData.userRef, currUserRef: userData.userRef)),
+                            builder: (context) => ProfileBody(profileRef: userData.userRef, currUserRef: userData.userRef)),
                       );
                     }
                   },
@@ -190,7 +190,7 @@ class _ProfileFormState extends State<ProfileForm> {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => Profile(profileRef: userData.userRef, currUserRef: userData.userRef)),
+                          builder: (context) => ProfileBody(profileRef: userData.userRef, currUserRef: userData.userRef)),
                     );
                   },
                   child: Text(

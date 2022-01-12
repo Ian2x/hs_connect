@@ -7,23 +7,26 @@ import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
+import 'package:hs_connect/shared/widgets/myCircle.dart';
+
 class DiscoverHeader extends StatefulWidget {
   final Group group;
   final bool joined;
   final DocumentReference currUserRef;
-  const DiscoverHeader({Key? key, required this.group, required this.joined, required this.currUserRef}) : super(key: key);
+
+  const DiscoverHeader({Key? key, required this.group, required this.joined, required this.currUserRef})
+      : super(key: key);
 
   @override
   _DiscoverHeaderState createState() => _DiscoverHeaderState();
 }
 
 class _DiscoverHeaderState extends State<DiscoverHeader> {
-
   Widget localContent = Loading(size: 20.0);
 
   @override
   void initState() {
-    if (widget.group.image==null) {
+    if (widget.group.image == null) {
       String s = widget.group.name;
       int sLen = s.length;
       String initial = "?";
@@ -51,17 +54,14 @@ class _DiscoverHeaderState extends State<DiscoverHeader> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
-
     UserDataDatabaseService _userData = new UserDataDatabaseService(currUserRef: widget.currUserRef);
 
     return Container(
         padding: EdgeInsets.all(10.0),
-        child: Row(
-            children:<Widget> [
-              Circle(child: localContent, textBackgroundColor: translucentColorFromString(widget.group.name), size: 40.0),
+        child: Row(children: <Widget>[
+          Circle(child: localContent, textBackgroundColor: translucentColorFromString(widget.group.name), size: 40.0),
           SizedBox(width: 10.0),
           Text(
             widget.group.name,
@@ -71,12 +71,9 @@ class _DiscoverHeaderState extends State<DiscoverHeader> {
           widget.joined
               ? Card(
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-                  color: HexColor('57ADEF'),
+                  color: ThemeColor.secondaryBlue,
                   child: Container(
-                    padding: EdgeInsets.all(5.0),
-                    child: Text("Joined", style: TextStyle(color: Colors.white))
-                  )
-              )
+                      padding: EdgeInsets.all(5.0), child: Text("Joined", style: TextStyle(color: Colors.white))))
               : GestureDetector(
                   behavior: HitTestBehavior.deferToChild,
                   child: Card(
@@ -84,16 +81,14 @@ class _DiscoverHeaderState extends State<DiscoverHeader> {
                       color: ThemeColor.secondaryBlue,
                       child: Container(
                         padding: EdgeInsets.all(5.0),
-                    child: Row(children: <Widget>[
-                      Icon(Icons.add, color: Colors.white, size: 12.0),
-                      Text("Join", style: TextStyle(color: Colors.white))
-                    ],),
-                  )
-                ),
-                onTap: () => _userData.joinGroup(groupRef: widget.group.groupRef, public: true)
-              )
-            ]
-        )
-    );
+                        child: Row(
+                          children: <Widget>[
+                            Icon(Icons.add, color: Colors.white, size: 12.0),
+                            Text("Join", style: TextStyle(color: Colors.white))
+                          ],
+                        ),
+                      )),
+                  onTap: () => _userData.joinGroup(groupRef: widget.group.groupRef, public: true))
+        ]));
   }
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/screens/home/groupView/groupPage.dart';
 import 'package:hs_connect/screens/home/postView/postPage.dart';
 import 'package:hs_connect/screens/search/discoverHeader.dart';
 import 'package:hs_connect/services/groups_database.dart';
@@ -110,14 +109,6 @@ class _DiscoverState extends State<Discover> {
                                                               iconSize: 12.0,
                                                               splashRadius: 12.0,
                                                               onPressed: () {
-                                                                Navigator.push(
-                                                                    context,
-                                                                    MaterialPageRoute(
-                                                                      builder: (context) => GroupPage(
-                                                                        groupRef: groups[index1].groupRef,
-                                                                        currUserRef: userData.userRef,
-                                                                      ),
-                                                                    ));
                                                                 Navigator.push(
                                                                     context,
                                                                     MaterialPageRoute(

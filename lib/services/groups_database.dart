@@ -36,7 +36,7 @@ class GroupsDatabaseService {
       required String name,
       required DocumentReference? creatorRef,
       required String? image,
-      required String? description,
+      required String description,
       Function(void) onValue = defaultFunc,
       Function onError = defaultFunc}) async {
     // if group already exists, just return that
@@ -171,15 +171,32 @@ class GroupsDatabaseService {
         .toList();
   }
 
-  Future<List<Group>> getGroups({required List<UserGroup> userGroups}) async {
-    final Iterable<DocumentReference> groupRefs = userGroups.map((userGroup) => userGroup.groupRef);
-    List<Group> result = <Group>[];
-    await Future.forEach(groupRefs, (ref) async {
-      final temp = await groupFromRef(ref as DocumentReference);
-      if (temp!=null) result.add(temp);
-    });
-    result.sort((a,b) => (a as Group).createdAt.compareTo((b as Group).createdAt) );
-    return result;
+  Future<Group?> getGroup(DocumentReference groupRef) async {
+    return groupFromSnapshot(await groupRef.get());
+  }
+
+
+  Future _getUserGroupsHelper(UserGroup UGR, int index, List<Group?> results) async {
+    results[index] = await getGroup(UGR.groupRef);
+  }
+
+  // returns sorted by oldest groups first (domain first)
+  Future<List<Group?>> getUserGroups({required List<UserGroup> userGroups}) async {
+    List<Group?> results = List.filled(userGroups.length, null);
+    await Future.wait([for (int i=0; i<userGroups.length; i++) _getUserGroupsHelper(userGroups[i], i, results)]);
+    results.sort((a,b) => (a as Group).createdAt.compareTo((b as Group).createdAt));
+    return results;
+  }
+
+  Future _getGroupsHelper(DocumentReference GR, int index, List<Group?> results) async {
+    results[index] = await getGroup(GR);
+  }
+
+  // preserves order
+  Future<List<Group?>> getGroups({required List<DocumentReference> groupsRefs}) async {
+    List<Group?> results = List.filled(groupsRefs.length, null);
+    await Future.wait([for (int i=0; i<groupsRefs.length; i++) _getGroupsHelper(groupsRefs[i], i, results)]);
+    return results;
   }
 
   Future<List<Group>> getTrendingGroups(

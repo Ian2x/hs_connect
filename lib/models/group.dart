@@ -31,7 +31,7 @@ class Group {
   final String name;
   final String nameLC;
   final String? image;
-  final String? description;
+  final String description;
   final AccessRestriction accessRestriction;
   final Timestamp createdAt;
   final int numPosts;
@@ -86,7 +86,7 @@ Group groupFromMap({required Map map}) {
 Group? groupFromSnapshot(DocumentSnapshot snapshot) {
   if (snapshot.exists) {
     final accessRestriction = snapshot.get(C.accessRestriction);
-    return Group(
+    final temp = Group(
       groupRef: snapshot.reference,
       creatorRef: snapshot.get(C.creatorRef),
       moderatorRefs: docRefList(snapshot.get(C.moderatorRefs)),
@@ -104,6 +104,7 @@ Group? groupFromSnapshot(DocumentSnapshot snapshot) {
       reportsRefs: docRefList(snapshot.get(C.reportsRefs)),
       hexColor: snapshot.get(C.hexColor),
     );
+    return temp;
   } else {
     return null;
   }

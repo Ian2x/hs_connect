@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/search/discover.dart';
+import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/noAnimationMaterialPageRoute.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
@@ -16,7 +17,7 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  Icon _searchIcon = new Icon(Icons.search, color: Colors.black);
+  Icon _searchIcon = new Icon(Icons.search, color: ThemeColor.black);
 
   @override
   Widget build(BuildContext context) {

@@ -4,11 +4,13 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/home.dart';
 import 'package:hs_connect/screens/home/new/newPost/newPost.dart';
 import 'package:hs_connect/screens/notifications/notificationsPage.dart';
-import 'package:hs_connect/screens/profile/profile.dart';
+import 'package:hs_connect/screens/profile/profileBody.dart';
+import 'package:hs_connect/screens/profile/profilePage.dart';
 import 'package:hs_connect/screens/search/searchPage.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:provider/provider.dart';
 
+import '../constants.dart';
 import '../noAnimationMaterialPageRoute.dart';
 
 import 'loading.dart';
@@ -41,18 +43,18 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
         // <-- HERE
         showUnselectedLabels: false,
         currentIndex: widget.currentIndex,
-        selectedItemColor: Colors.black,
+        selectedItemColor: ThemeColor.black,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: IconButton(
               padding: EdgeInsets.zero,
-              // color: Colors.black,
+              // color: ThemeColor.black,
               constraints: BoxConstraints(),
               icon: Icon(Icons.school, size: 18.0),
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  NoAnimationMaterialPageRoute(builder: (context) => Home()),
+                  NoAnimationMaterialPageRoute(builder: (context) => new Home()),
                 );
               },
             ),
@@ -61,7 +63,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
           BottomNavigationBarItem(
             icon: IconButton(
               padding: EdgeInsets.zero,
-              // color: Colors.black,
+              // color: ThemeColor.black,
               constraints: BoxConstraints(),
               icon: Icon(Icons.search_rounded, size: 18.0),
               onPressed: () async {
@@ -73,7 +75,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
                 Navigator.pushReplacement(
                     context,
                     NoAnimationMaterialPageRoute(
-                      builder: (context) => SearchPage(),
+                      builder: (context) => new SearchPage(),
                     ));
               },
             ),
@@ -82,13 +84,13 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
           BottomNavigationBarItem(
             icon: IconButton(
               padding: EdgeInsets.zero,
-              // color: Colors.black,
+              // color: ThemeColor.black,
               constraints: BoxConstraints(),
               icon: Icon(Icons.notifications, size: 18.0),
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  NoAnimationMaterialPageRoute(builder: (context) => NotificationPage()),
+                  NoAnimationMaterialPageRoute(builder: (context) => new NotificationPage()),
                 );
               },
             ),
@@ -97,13 +99,13 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
           BottomNavigationBarItem(
             icon: IconButton(
               padding: EdgeInsets.zero,
-              // color: Colors.black,
+              // color: ThemeColor.black,
               constraints: BoxConstraints(),
               icon: Icon(Icons.person, size: 18.0),
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  NoAnimationMaterialPageRoute(builder: (context) => Profile(profileRef: userData.userRef, currUserRef: userData.userRef)),
+                  NoAnimationMaterialPageRoute(builder: (context) => new ProfilePage(profileRef: userData.userRef, currUserRef: userData.userRef)),
                 );
               },
             ),

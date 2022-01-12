@@ -25,7 +25,7 @@ class UserDataDatabaseService {
         name: domain,
         creatorRef: null,
         image: null,
-        description: null);
+        description: 'Default group for ' + domain);
     // Find domain data (county, state, country)
     final KnownDomain? kd = await _knownDomainsDatabaseService.getKnownDomain(domain: domain);
     return await currUserRef.set({

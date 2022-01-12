@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/searchResult.dart';
 import 'package:hs_connect/screens/home/postFeed/specificGroupFeed.dart';
 import 'package:hs_connect/screens/home/postView/postPage.dart';
-import 'package:hs_connect/screens/profile/profile.dart';
+import 'package:hs_connect/screens/profile/profileBody.dart';
 
 class SearchResultCard extends StatelessWidget {
   final SearchResult searchResult;
@@ -23,7 +23,7 @@ class SearchResultCard extends StatelessWidget {
               builder: (context) {
                 switch (searchResultType) {
                   case SearchResultType.people:
-                    return Profile(profileRef: searchResult.resultRef, currUserRef: currUserRef,);
+                    return ProfileBody(profileRef: searchResult.resultRef, currUserRef: currUserRef,);
                   case SearchResultType.posts:
                     return PostPage(postRef: searchResult.resultRef, currUserRef: currUserRef,);
                   default: // for SearchResultType.groups

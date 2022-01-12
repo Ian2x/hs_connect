@@ -6,9 +6,11 @@ import 'package:hs_connect/models/accessRestriction.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/groupView/groupPage.dart';
+import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
+import 'package:hs_connect/shared/widgets/myCircle.dart';
 import 'package:provider/provider.dart';
 
 const circlesViewportFraction = 0.25;
@@ -148,7 +150,7 @@ class _GroupCarouselState extends State<GroupCarousel> {
                         circlesController.animateToPage(circlesController.page!.round() - 1,
                             duration: Duration(milliseconds: 400), curve: Curves.linear);
                       },
-                      icon: Icon(Icons.chevron_left, size: 40, color: Colors.black),
+                      icon: Icon(Icons.chevron_left, size: 40, color: ThemeColor.black),
                       splashRadius: chevronSplashRadius,
                     ),
                     Spacer(),
@@ -157,7 +159,7 @@ class _GroupCarouselState extends State<GroupCarousel> {
                         circlesController.animateToPage(circlesController.page!.round() + 1,
                             duration: Duration(milliseconds: 400), curve: Curves.linear);
                       },
-                      icon: Icon(Icons.chevron_right, size: 40, color: Colors.black),
+                      icon: Icon(Icons.chevron_right, size: 40, color: ThemeColor.black),
                       splashRadius: chevronSplashRadius,
                     ),
                     SizedBox(width: 12),
@@ -257,36 +259,6 @@ class _GroupCarouselState extends State<GroupCarousel> {
   }
 }
 
-class Circle extends StatelessWidget {
-  final Widget child;
-  final Color textBackgroundColor;
-  final double size;
-
-  const Circle({Key? key, required this.child, required this.textBackgroundColor, this.size=200}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        width: size,
-        height: size,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: textBackgroundColor,
-          border: Border.all(
-            color: Colors.black,
-            width: 1,
-          ),
-          image: child is Image
-              ? DecorationImage(
-                  fit: BoxFit.fill,
-                  image: (child as Image).image,
-                )
-              : null,
-        ),
-        child: child is Image ? null : Center(child: child));
-  }
-}
-
 class BlockBlurb extends StatelessWidget {
   final Group group;
   final Access userAccess;
@@ -337,7 +309,7 @@ class BlockBlurb extends StatelessWidget {
             padding: EdgeInsets.all(14.0),
             child: group.description != null
                 ? Text(
-                    group.description!,
+                    group.description,
                     maxLines: 4,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(fontSize: 12.0),

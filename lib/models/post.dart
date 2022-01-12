@@ -66,6 +66,7 @@ class Post {
   final DocumentReference? pollRef;
   final Tag? tag;
   final Timestamp lastUpdated;
+  bool? newActivity;
 
   Post({
     required this.postRef,
@@ -85,6 +86,7 @@ class Post {
     required this.pollRef,
     required this.tag,
     required this.lastUpdated,
+    this.newActivity,
   });
 }
 

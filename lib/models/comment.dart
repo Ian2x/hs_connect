@@ -17,6 +17,7 @@ class Comment {
   final List<DocumentReference> dislikes;
   final List<DocumentReference> reportsRefs;
   final Timestamp lastUpdated;
+  bool? newActivity;
 
   Comment({
     required this.commentRef,
@@ -32,6 +33,7 @@ class Comment {
     required this.dislikes,
     required this.reportsRefs,
     required this.lastUpdated,
+    this.newActivity,
   });
 }
 
