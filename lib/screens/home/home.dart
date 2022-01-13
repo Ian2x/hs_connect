@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hs_connect/models/userData.dart';
+import 'package:hs_connect/screens/authenticate/authenticate.dart';
 import 'package:hs_connect/screens/home/postFeed/domainFeed.dart';
 import 'package:hs_connect/screens/home/new/floatingNewButton.dart';
 import 'package:hs_connect/screens/home/postFeed/homeFeed.dart';
@@ -29,7 +30,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   void initState() {
 
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
 
     super.initState();
   }
@@ -40,8 +41,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     final user = Provider.of<User?>(context);
     final userData = Provider.of<UserData?>(context);
 
-    if(userData==null || user==null) {
-      return Loading();
+    if(user==null) {
+      return Authenticate();
+    }
+
+    if(userData==null) {
+      return Scaffold(
+        backgroundColor: ThemeColor.backgroundGrey,
+        body: Loading()
+      );
     }
     // this sliver app bar is only use to hide/show the tabBar, the AppBar
     // is invisible at all times. The to the user visible AppBar is below
@@ -72,14 +80,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                           )
                       ),
                       Tab(
-                          icon: Text("Home",
-                              style:
-                              TextStyle(
-                                color: ThemeColor.black,
-                              )
-                          )
-                      ),
-                      Tab(
                           icon: Text("Trending",
                               style:
                               TextStyle(
@@ -96,7 +96,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             body: TabBarView(
               children: [
                 DomainFeed(),
-                HomeFeed(),
                 userData!=null ? TrendingFeed(country: userData.country,
                     state: userData.state, county: userData.county,
                     currUserRef: userData.userRef,
@@ -137,23 +136,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         await _auth.signOut();
                       },
                     ),
-                    TextButton.icon(
-                      icon: Icon(Icons.settings),
-                      label: Text('Profile',
-                          style:
-                          TextStyle(
-                            color: ThemeColor.black,
-                          )
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProfileBody(profileRef: userData.userRef,
-                              currUserRef: userData.userRef,)),
-                        );
-                      },
-                    )
                   ],),
               ),
             ),

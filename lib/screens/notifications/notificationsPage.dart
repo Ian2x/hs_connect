@@ -55,7 +55,7 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
         )
       ]),
       bottomNavigationBar: MyNavigationBar(
-        currentIndex: 2,
+        currentIndex: 1,
       ),
     );
   }

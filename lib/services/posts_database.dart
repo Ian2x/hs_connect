@@ -245,10 +245,7 @@ class PostsDatabaseService {
   Future _newActivityPostsHelper(ObservedRef OR, List<Post> NAP) async {
     var tempPost = await getPost(OR.ref);
     if (tempPost != null) {
-      if (tempPost.createdAt.compareTo(Timestamp.fromDate(DateTime.now().subtract(new Duration(days: 7)))) > 0) {
-        if (tempPost.lastUpdated.compareTo(OR.lastObserved)>0) {
-          tempPost.newActivity = true;
-        }
+      if (tempPost.lastUpdated.toDate().compareTo(OR.lastObserved.toDate().add(Duration(seconds: 2)))>0) {
         NAP.add(tempPost);
       }
     }

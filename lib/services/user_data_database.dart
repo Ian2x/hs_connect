@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/accessRestriction.dart';
 import 'package:hs_connect/models/knownDomain.dart';
+import 'package:hs_connect/models/observedRef.dart';
 import 'package:hs_connect/models/searchResult.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/known_domains_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/tools/helperFunctions.dart';
 
 class UserDataDatabaseService {
   DocumentReference currUserRef;
@@ -20,23 +22,23 @@ class UserDataDatabaseService {
     final KnownDomainsDatabaseService _knownDomainsDatabaseService = KnownDomainsDatabaseService();
 
     // Create domain group if not already created
-    final docRef = await _groupDatabaseService.newGroup(
+    final domainGroupRef = await _groupDatabaseService.newGroup(
         accessRestriction: AccessRestriction(restrictionType: AccessRestrictionType.domain, restriction: domain),
         name: domain,
-        creatorRef: null,
         image: null,
-        description: 'Default group for ' + domain);
+        description: 'Default group for ' + domain,
+        creatorRef: null);
     // Find domain data (county, state, country)
     final KnownDomain? kd = await _knownDomainsDatabaseService.getKnownDomain(domain: domain);
-    return await currUserRef.set({
+    await currUserRef.set({
       C.displayedName: username,
       C.displayedNameLC: username.toLowerCase(),
       C.bio: null,
       C.domain: domain,
       C.county: kd != null ? kd.county : null,
       C.state: kd != null ? kd.state : null,
-      C.country: kd != null ? kd.country : null,
-      C.userGroups: [UserGroup(groupRef: docRef, public: true).asMap()],
+      C.country: kd != null ? kd.country : "Public",
+      C.userGroups: [UserGroup(groupRef: domainGroupRef, public: true).asMap()],
       C.modGroupRefs: [],
       C.messagesRefs: [],
       C.myPostsObservedRefs: [],
@@ -47,6 +49,10 @@ class UserDataDatabaseService {
       C.score: 0,
       C.reportsRefs: [],
     });
+    // join domain group
+    await joinGroup(groupRef: domainGroupRef, public: true);
+    // join public group
+    await joinGroup(groupRef: FirebaseFirestore.instance.collection(C.groups).doc("vQr3EZz0nUehF0rXmuRB"), public: true);
   }
 
   Future<void> updateProfile(
@@ -62,6 +68,42 @@ class UserDataDatabaseService {
         })
         .then(onValue)
         .catchError(onError);
+  }
+
+  Future updatePostLastObserved({required DocumentReference postRef}) async {
+    final userData = await currUserRef.get();
+    final PLOs = observedRefList(userData.get(C.myPostsObservedRefs));
+    for (final OR in PLOs) {
+      if (OR.ref == postRef && OR.refType.string == C.post) {
+        await currUserRef.update({
+          C.myPostsObservedRefs: FieldValue.arrayRemove([OR.asMap()])
+        });
+        await currUserRef.update({
+          C.myPostsObservedRefs: FieldValue.arrayUnion([
+            {C.lastObserved: Timestamp.now(), C.ref: postRef, C.refType: ObservedRefType.post.string}
+          ])
+        });
+        return;
+      }
+    }
+  }
+
+  Future updateComment({required DocumentReference commentRef}) async {
+    final userData = await currUserRef.get();
+    final CLOs = observedRefList(userData.get(C.myCommentsObservedRefs));
+    for (final OR in CLOs) {
+      if (OR.ref == commentRef && OR.refType.string == C.comment) {
+        await currUserRef.update({
+          C.myCommentsObservedRefs: FieldValue.arrayRemove([OR.asMap()])
+        });
+        await currUserRef.update({
+          C.myCommentsObservedRefs: FieldValue.arrayUnion([
+            {C.lastObserved: Timestamp.now(), C.ref: commentRef, C.refType: ObservedRefType.comment.string}
+          ])
+        });
+        return;
+      }
+    }
   }
 
   Future<void> joinGroup(

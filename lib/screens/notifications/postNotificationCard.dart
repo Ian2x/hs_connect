@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/screens/home/postView/postPage.dart';
-import 'package:hs_connect/screens/notifications/numResponseIcon.dart';
+import 'package:hs_connect/screens/notifications/newResponseIcon.dart';
 import 'package:hs_connect/shared/constants.dart';
 
 class PostNotificationCard extends StatelessWidget {
@@ -53,9 +53,7 @@ class PostNotificationCard extends StatelessWidget {
                       SizedBox(height: 10.0),
                       Row(children: <Widget>[
                         SizedBox(width: 5.0),
-                        NumResponseIcon(
-                            numResponse:
-                                post.newActivity == true ? -1 : post.commentsRefs.length + post.repliesRefs.length),
+                        newResponseIcon(),
                         Spacer(),
                         Text((post.likes.length - post.dislikes.length).toString() + " Likes",
                             style: ThemeText.regularSmall()),

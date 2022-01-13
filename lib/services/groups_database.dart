@@ -122,20 +122,20 @@ class GroupsDatabaseService {
         .get();
     final Future? countyGroupsFetch = county != null
         ? groupsCollection
-        .where(C.county,
+        .where(C.accessRestriction,
         isEqualTo:
         AccessRestriction(restrictionType: AccessRestrictionType.county, restriction: county).asMap())
         .get()
         : null;
     final Future? stateGroupsFetch = state != null
         ? groupsCollection
-        .where(C.state,
+        .where(C.accessRestriction,
         isEqualTo: AccessRestriction(restrictionType: AccessRestrictionType.state, restriction: state).asMap())
         .get()
         : null;
     final Future? countryGroupsFetch = country != null
         ? groupsCollection
-        .where(C.country,
+        .where(C.accessRestriction,
         isEqualTo:
         AccessRestriction(restrictionType: AccessRestrictionType.country, restriction: country).asMap())
         .get()
