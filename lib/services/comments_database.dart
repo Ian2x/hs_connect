@@ -163,10 +163,9 @@ class CommentsDatabaseService {
   Future _newActivityCommentsHelper(ObservedRef OR, List<Comment> NAC) async {
     var tempComment = await getComment(OR.ref);
     if (tempComment != null) {
-      if (tempComment.createdAt.compareTo(Timestamp.fromDate(DateTime.now().subtract(new Duration(days: 7))))>0) {
-        tempComment.newActivity = true;
+      if (tempComment.lastUpdated.toDate().compareTo(OR.lastObserved.toDate().add(Duration(seconds: 2)))>0) {
+        NAC.add(tempComment);
       }
-      NAC.add(tempComment);
     }
   }
   Future<List<Comment>> newActivityComments(List<ObservedRef> userCommentsObservedRefs) async {

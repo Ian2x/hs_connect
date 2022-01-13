@@ -35,7 +35,7 @@ class NewPost extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: MyNavigationBar(
-        currentIndex: 2,
+        currentIndex: 0,
       ),
     );
   }

@@ -175,11 +175,11 @@ class _NewGroupFormState extends State<NewGroupForm> {
                     await _groups.newGroup(
                       accessRestriction: _accessRestriction!,
                       name: _name,
-                      creatorRef: userData.userRef,
                       image: newFileURL,
                       description: _description,
                       onValue: handleValue,
                       onError: handleError,
+                      creatorRef: userData.userRef,
                     );
                   }
                 },

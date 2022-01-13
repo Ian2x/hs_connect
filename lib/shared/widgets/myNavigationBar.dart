@@ -65,27 +65,6 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
               padding: EdgeInsets.zero,
               // color: ThemeColor.black,
               constraints: BoxConstraints(),
-              icon: Icon(Icons.search_rounded, size: 18.0),
-              onPressed: () async {
-                if (mounted) {
-                  setState(() {
-                    loading = true;
-                  });
-                }
-                Navigator.pushReplacement(
-                    context,
-                    NoAnimationMaterialPageRoute(
-                      builder: (context) => new SearchPage(),
-                    ));
-              },
-            ),
-            label: 'Search',
-          ),
-          BottomNavigationBarItem(
-            icon: IconButton(
-              padding: EdgeInsets.zero,
-              // color: ThemeColor.black,
-              constraints: BoxConstraints(),
               icon: Icon(Icons.notifications, size: 18.0),
               onPressed: () {
                 Navigator.pushReplacement(

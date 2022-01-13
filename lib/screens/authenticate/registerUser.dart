@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/screens/wrapper.dart';
 import 'package:hs_connect/services/auth.dart';
+import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 
@@ -27,7 +28,10 @@ class _RegisterUserState extends State<RegisterUser> {
   @override
   Widget build(BuildContext context) {
     return loading
-        ? Loading()
+        ? Scaffold(
+      backgroundColor: ThemeColor.backgroundGrey,
+      body: Loading()
+    )
         : Scaffold(
             backgroundColor: Colors.brown[100],
             appBar: AppBar(

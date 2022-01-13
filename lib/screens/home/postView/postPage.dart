@@ -6,6 +6,7 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/commentFeed/commentsFeed.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
+import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:provider/provider.dart';
 
@@ -39,6 +40,9 @@ class _PostPageState extends State<PostPage> {
         setState(() {
           groupName = fetchGroupName != null ? fetchGroupName.name : '<Failed to retrieve group name>';
         });
+      }
+      if (post!.creatorRef==widget.currUserRef) {
+        UserDataDatabaseService(currUserRef: widget.currUserRef).updatePostLastObserved(postRef: widget.postRef);
       }
     }
   }

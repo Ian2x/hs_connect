@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:hs_connect/models/accessRestriction.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/userData.dart';
@@ -31,6 +32,7 @@ class _PostCardState extends State<PostCard> {
   String userDomain = '<Loading user domain...>';
   String username = '<Loading user name...>';
   String groupName = '<Loading group name...>';
+  bool inDomain = false;
 
   ImageStorage _images = ImageStorage();
 
@@ -69,10 +71,19 @@ class _PostCardState extends State<PostCard> {
 
   void getGroupName() async {
     GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserRef);
-    final Group? fetchGroupName = await _groups.groupFromRef(widget.post.groupRef);
+    final Group? fetchGroup = await _groups.groupFromRef(widget.post.groupRef);
     if (mounted) {
       setState(() {
-        groupName = fetchGroupName != null ? fetchGroupName.name : '<Failed to retrieve group name>';
+        if (fetchGroup!=null) {
+          groupName = fetchGroup.name;
+          if (fetchGroup.accessRestriction== AccessRestriction(restriction: groupName, restrictionType: AccessRestrictionType.domain)) {
+            inDomain=true;
+          }
+        } else {
+          groupName = '<Failed to retrieve group name>';
+        }
+        groupName = fetchGroup != null ? fetchGroup.name : '<Failed to retrieve group name>';
+
       });
     }
   }
@@ -89,6 +100,7 @@ class _PostCardState extends State<PostCard> {
 
   @override
   Widget build(BuildContext context) {
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -119,8 +131,8 @@ class _PostCardState extends State<PostCard> {
                             style: ThemeText.regularSmall(),
                             children: <TextSpan>[
                               TextSpan(text: groupName,style: ThemeText.groupBold(color: translucentColorFromString(groupName))),
-                              TextSpan(text: ' from ', style: ThemeText.regularSmall()),
-                              TextSpan(text: userDomain, style: ThemeText.groupBold(color: translucentColorFromString(userDomain))),
+                              TextSpan(text: inDomain ? '' : ' from ', style: ThemeText.regularSmall()),
+                              TextSpan(text: inDomain ? '' : userDomain, style: ThemeText.groupBold(color: translucentColorFromString(userDomain))),
                               TextSpan(text: ' • ' + convertTime(widget.post.createdAt.toDate()), style: ThemeText.regularSmall()),
                             ],
                           ),
@@ -130,13 +142,14 @@ class _PostCardState extends State<PostCard> {
                           //TODO: Need to figure out ways to ref
                           widget.post.title,
                           style: ThemeText.titleRegular(), overflow: TextOverflow.ellipsis, // default is .clip
-                          maxLines:4
+                          maxLines: 3
                         ),
                         //SizedBox(height: 10),
                         if (widget.post.text != null || widget.post.text == "") Text(
                             widget.post.text!,
                             maxLines:2,
-                              style:ThemeText.regularSmall(),
+                            style:ThemeText.regularSmall(),
+                          overflow: TextOverflow.ellipsis,
                           ) else SizedBox(height:1),
                         Row( //Icon Row
                           children: [

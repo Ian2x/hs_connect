@@ -151,7 +151,7 @@ class _PostFormState extends State<PostForm> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      SizedBox(height:30), //TODO: Find media height
+                      SizedBox(height:40), //TODO: Find media height
                       Row(
                         children: [
                           IconButton( icon:Icon(Icons.arrow_back_ios_rounded, size:23.0),
@@ -163,23 +163,9 @@ class _PostFormState extends State<PostForm> {
                           Spacer(flex:6),
                           tagOutline(
                             textOnly:true,
-                            text: "Post",
+                            text: "Make a Post",
                             textColor: ThemeColor.secondaryBlue,
                             borderColor: ThemeColor.secondaryBlue,
-                          ),
-                          Spacer(flex:1),
-                          TextButton (
-                            onPressed:(){
-                              setState((){
-                                isPost=false;
-                              });
-                            },
-                            child: Text("Group",
-                              style: TextStyle(
-                                color: ThemeColor.hintTextGrey,
-                                fontSize:16,
-                              ),
-                            ),
                           ),
                           Spacer(flex:6),
                           IconButton(onPressed: submitForm,
@@ -211,7 +197,7 @@ class _PostFormState extends State<PostForm> {
                                   isExpanded: true,
                                   decoration: textInputDecoration,
                                   hint: Text(
-                                    "Add a group",
+                                    "Visibility",
                                     style: TextStyle(
                                       color: ThemeColor.hintTextGrey,
                                       fontSize: 16,
@@ -419,11 +405,11 @@ class _PostFormState extends State<PostForm> {
                               await _groups.newGroup(
                                 accessRestriction: _accessRestriction!,
                                 name: _groupName,
-                                creatorRef: userData.userRef,
                                 image: newFileURL,
                                 description: _description,
                                 onValue: handleValue,
                                 onError: handleError,
+                                creatorRef: userData.userRef,
                               );
                             }
                           },

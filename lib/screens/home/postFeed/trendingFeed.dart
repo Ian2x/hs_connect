@@ -49,7 +49,6 @@ class _TrendingFeedState extends State<TrendingFeed> {
     if (userData == null || allowableGroupsRefs == null) return Loading();
 
     PostsDatabaseService _posts = PostsDatabaseService(currUserRef: userData.userRef, groupRefs: allowableGroupsRefs);
-
     return StreamBuilder(
         stream: _posts.potentialTrendingPosts,
         builder: (context, snapshot) {

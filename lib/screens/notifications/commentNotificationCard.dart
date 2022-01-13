@@ -5,7 +5,7 @@ import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/screens/home/postView/postPage.dart';
 import 'package:hs_connect/shared/constants.dart';
 
-import 'numResponseIcon.dart';
+import 'newResponseIcon.dart';
 
 class CommentNotificationCard extends StatelessWidget {
   final Comment comment;
@@ -61,7 +61,7 @@ class CommentNotificationCard extends StatelessWidget {
                     SizedBox(height: 10),
                     Row(children: <Widget>[
                       SizedBox(width: 5.0),
-                      NumResponseIcon(numResponse: comment.newActivity == true ? -1 : comment.numReplies),
+                      newResponseIcon(),
                       Spacer(),
                       Text((comment.likes.length-comment.dislikes.length).toString() + " Likes", style: ThemeText.regularSmall()),
                       SizedBox(width: 10.0),

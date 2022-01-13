@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hs_connect/screens/authenticate/waitVerification.dart';
 import 'package:hs_connect/services/auth.dart';
+import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/widgets/loading.dart';
 
 class RegisterEmail extends StatefulWidget {
   final Function toggleView;
@@ -20,7 +22,12 @@ class _RegisterEmailState extends State<RegisterEmail> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading
+        ? Scaffold(
+        backgroundColor: ThemeColor.backgroundGrey,
+        body: Loading()
+    )
+        : Scaffold(
       appBar: AppBar(
         title: Text('Verify your school email'),
         actions: <Widget>[

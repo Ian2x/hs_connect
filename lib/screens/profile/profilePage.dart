@@ -16,7 +16,7 @@ class ProfilePage extends StatelessWidget {
       appBar: profileAppBar(context),
       body: ProfileBody(profileRef: profileRef, currUserRef: currUserRef,),
       bottomNavigationBar: MyNavigationBar(
-        currentIndex: 3,
+        currentIndex: 2,
       ),
     );
   }
