@@ -12,12 +12,19 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: profileAppBar(context),
-      body: ProfileBody(profileRef: profileRef, currUserRef: currUserRef,),
-      bottomNavigationBar: MyNavigationBar(
-        currentIndex: 2,
-      ),
-    );
+    if (profileRef==currUserRef) {
+      return Scaffold(
+        appBar: profileAppBar(context),
+        body: ProfileBody(profileRef: profileRef, currUserRef: currUserRef,),
+        bottomNavigationBar: MyNavigationBar(
+          currentIndex: 2,
+        ),
+      );
+    } else {
+      return Scaffold(
+        appBar: profileAppBar(context),
+        body: ProfileBody(profileRef: profileRef, currUserRef: currUserRef,),
+      );
+    }
   }
 }

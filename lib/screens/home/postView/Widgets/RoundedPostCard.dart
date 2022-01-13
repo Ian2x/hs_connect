@@ -6,6 +6,7 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/groupView/groupPage.dart';
 import 'package:hs_connect/screens/home/postFeed/specificGroupFeed.dart';
 import 'package:hs_connect/screens/home/postView/likeDislikePost.dart';
+import 'package:hs_connect/screens/profile/profilePage.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
@@ -82,12 +83,12 @@ class _RoundedPostCardState extends State<RoundedPostCard> {
     }
   }
 
-  void openSpecificGroupFeed() async {
+  void openCreatorProfile() async {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => SpecificGroupFeed(
-                groupRef: widget.post.groupRef, currUserRef: widget.currUserRef,
+          builder: (context) => ProfilePage(
+                profileRef: widget.post.creatorRef, currUserRef: widget.currUserRef,
               )),
     );
   }
@@ -96,14 +97,8 @@ class _RoundedPostCardState extends State<RoundedPostCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        openSpecificGroupFeed();
+        openCreatorProfile();
 
-        /*
-        Navigator.pushReplacement(
-          context,
-          NoAnimationMaterialPageRoute(builder: (context) =>
-          */
-              //GroupPage(currUserRef: widget.currUserRef,groupRef: widget.post.groupRef,)),
       },
       child: Card(
           margin: EdgeInsets.fromLTRB(6.0, 1.0, 6.0, 0.0),
