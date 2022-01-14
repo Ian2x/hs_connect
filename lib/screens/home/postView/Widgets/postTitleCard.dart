@@ -127,7 +127,7 @@ class _postTitleCardState extends State<postTitleCard> {
       var tempImage = Image.network(imageString!);
       tempImage.image
           .resolve(ImageConfiguration())
-          .addListener(ImageStreamListener((ImageInfo image, bool syncrhonousCall) {
+          .addListener(ImageStreamListener((ImageInfo image, bool synchronousCall) {
         if (mounted) {
           setState(() => groupImage = tempImage);
         }
@@ -147,7 +147,8 @@ class _postTitleCardState extends State<postTitleCard> {
         openCreatorProfile();
       },
       child: Container(
-          padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+          color:Colors.blue,
+          padding: EdgeInsets.fromLTRB(20.0, 10.0, 5.0, 10.0),
           child:
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,7 +158,7 @@ class _postTitleCardState extends State<postTitleCard> {
                   Text("from " + creatorName + " • " + convertTime(widget.post.createdAt.toDate()),
                     style: ThemeText.regularSmall(color:ThemeColor.postIntroGrey,fontSize:14)
                   ),
-                  Spacer(),
+                  Spacer(flex:1),
                   IconButton(
                     icon: Icon(Icons.more_horiz),
                     iconSize: 20,
