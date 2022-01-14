@@ -82,10 +82,8 @@ class C {
   static const userMessages = 'userMessages';
   static const myPostsObservedRefs = 'myPostsObservedRefs';
   static const myCommentsObservedRefs = 'myCommentsObservedRefs';
-  static const myRepliesRefs = 'myRepliesRefs';
   static const profileImage = 'profileImage';
   static const score = 'score';
-  static const reportsRefs = 'reportsRefs';
   static const groupRef = 'groupRef';
   static const public = 'public';
   static const creatorRef = 'creatorRef';
@@ -145,8 +143,6 @@ class C {
   static const College = 'College';
   static const Confession = 'Confession';
   static const savedPostsRefs = 'savedPostsRefs';
-  static const commentsRefs = 'commentsRefs';
-  static const repliesRefs = 'repliesRefs';
   static const images = 'images';
   static const profilePics = 'profilePics';
   static const ref = 'ref';
@@ -161,4 +157,6 @@ class C {
   static const hexColor = 'hexColor';
   static const otherUserRef = 'otherUserRef';
   static const lastMessage = 'lastMessage';
+  static const numReports = 'numReports';
+  static const numComments = 'numComments';
 }

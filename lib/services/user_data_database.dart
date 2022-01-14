@@ -43,16 +43,16 @@ class UserDataDatabaseService {
       C.userMessages: [],
       C.myPostsObservedRefs: [],
       C.myCommentsObservedRefs: [],
-      C.myRepliesRefs: [],
+      C.numReplies: 0,
       C.savedPostsRefs: [],
       C.profileImage: null,
       C.score: 0,
-      C.reportsRefs: [],
+      C.numReports: 0,
     });
     // join domain group
     await joinGroup(groupRef: domainGroupRef, public: true);
     // join public group
-    await joinGroup(groupRef: FirebaseFirestore.instance.collection(C.groups).doc("vQr3EZz0nUehF0rXmuRB"), public: true);
+    await joinGroup(groupRef: FirebaseFirestore.instance.collection(C.groups).doc("Public"), public: true);
   }
 
   Future<void> updateProfile(

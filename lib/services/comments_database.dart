@@ -12,9 +12,8 @@ class CommentsDatabaseService {
   final DocumentReference currUserRef;
   final DocumentReference? postRef;
   final DocumentReference? commentRef;
-  final List<DocumentReference?>? commentsRefs;
 
-  CommentsDatabaseService({required this.currUserRef, this.postRef, this.commentRef, this.commentsRefs});
+  CommentsDatabaseService({required this.currUserRef, this.postRef, this.commentRef});
 
   ImageStorage _images = ImageStorage();
 
@@ -37,7 +36,7 @@ class CommentsDatabaseService {
     });
     // update post's commentsRefs and lastUpdated
     postRef.update({
-      C.commentsRefs: FieldValue.arrayUnion([newCommentRef]),
+      C.numComments: FieldValue.increment(1),
       C.lastUpdated: DateTime.now(),
     });
     // get accessRestriction
@@ -56,7 +55,7 @@ class CommentsDatabaseService {
           C.accessRestriction: accessRestriction,
           C.likes: [],
           C.dislikes: [],
-          C.reportsRefs: [],
+          C.numReports: 0,
           C.lastUpdated: DateTime.now(),
         })
         .then(onValue)
@@ -174,17 +173,6 @@ class CommentsDatabaseService {
     return newActivityComments;
   }
 
-  /*Stream<List<Comment?>> get postComments {
-    List<Stream<Comment?>> postCommentsList = <Stream<Comment?>>[];
-    // Stream<List<Comment?>> test = Stream.value(<Comment?>[]);
-    for (DocumentReference ref in (commentsRefs! as List<DocumentReference>)) {
-      postCommentsList.add(ref.snapshots().map(_commentFromSnapshot));
-      postCommentsList.add(ref.)
-    }
-    // StreamZip won't rebuild when any comment changes, Rx.combineLatestList will
-    final temp = Rx.combineLatestList(postCommentsList);
-    return temp;
-  }*/
   Stream get postComments {
     return commentsCollection
       .where('postRef', isEqualTo: postRef!)

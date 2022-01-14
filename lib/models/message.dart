@@ -9,7 +9,7 @@ class Message {
   final String text;
   final bool isMedia;
   final Timestamp createdAt;
-  final List<DocumentReference> reportsRef;
+  final int numReports;
 
   Message({
     required this.messageRef,
@@ -18,7 +18,7 @@ class Message {
     required this.text,
     required this.isMedia,
     required this.createdAt,
-    required this.reportsRef,
+    required this.numReports,
   });
 }
 
@@ -30,6 +30,6 @@ messageFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
     text: querySnapshot[C.text],
     isMedia: querySnapshot[C.isMedia],
     createdAt: querySnapshot[C.createdAt],
-    reportsRef: docRefList(querySnapshot[C.reportsRefs]),
+    numReports: querySnapshot[C.numReports],
   );
 }

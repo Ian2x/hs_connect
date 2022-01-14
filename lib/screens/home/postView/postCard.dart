@@ -161,7 +161,7 @@ class _PostCardState extends State<PostCard> {
                             ),
                             SizedBox(width:5),
                             Text(
-                              (widget.post.commentsRefs.length + widget.post.repliesRefs.length).toString(),
+                              (widget.post.numComments + widget.post.numReplies).toString(),
                               style: ThemeText.regularSmall(fontSize: 15.0),
                             ),
                             Spacer(),

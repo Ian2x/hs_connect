@@ -198,7 +198,7 @@ class _RoundedPostCardState extends State<RoundedPostCard> {
                               },
                             ),
                             Text(
-                              (widget.post.commentsRefs.length + widget.post.repliesRefs.length).toString(),
+                              (widget.post.numComments + widget.post.numReplies).toString(),
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 15.0,

@@ -29,7 +29,7 @@ class MessagesDatabaseService {
       C.text: text,
       C.isMedia: isMedia,
       C.createdAt: createdAt,
-      C.reportsRefs: []
+      C.numReports: 0
     });
 
     senderRef.update({

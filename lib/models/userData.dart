@@ -54,10 +54,10 @@ class UserData {
   final List<ObservedRef> myPostsObservedRefs;
   final List<DocumentReference> savedPostsRefs;
   final List<ObservedRef> myCommentsObservedRefs;
-  final List<DocumentReference> myRepliesRefs;
+  final int numReplies;
   final String? profileImage;
   final int score;
-  final List<DocumentReference> reportsRefs;
+  final int numReports;
 
   UserData({
     required this.userRef,
@@ -74,10 +74,10 @@ class UserData {
     required this.myPostsObservedRefs,
     required this.savedPostsRefs,
     required this.myCommentsObservedRefs,
-    required this.myRepliesRefs,
+    required this.numReplies,
     required this.profileImage,
     required this.score,
-    required this.reportsRefs,
+    required this.numReports,
   });
 }
 
@@ -97,9 +97,9 @@ userDataFromSnapshot(DocumentSnapshot snapshot, DocumentReference userRef) {
     myPostsObservedRefs: observedRefList(snapshot.get(C.myPostsObservedRefs)),
     savedPostsRefs: docRefList(snapshot.get(C.savedPostsRefs)),
     myCommentsObservedRefs: observedRefList(snapshot.get(C.myCommentsObservedRefs)),
-    myRepliesRefs: docRefList(snapshot.get(C.myRepliesRefs)),
+    numReplies: snapshot.get(C.numReplies),
     profileImage: snapshot.get(C.profileImage),
     score: snapshot.get(C.score),
-    reportsRefs: docRefList(snapshot.get(C.reportsRefs)),
+    numReports: snapshot.get(C.numReports),
   );
 }

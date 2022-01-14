@@ -28,7 +28,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
     final userData = Provider.of<UserData?>(context);
 
     if (userData == null) return Loading();
-    CommentsDatabaseService _comments = CommentsDatabaseService(currUserRef: userData.userRef, postRef: widget.post.postRef, commentsRefs: widget.post.commentsRefs);
+    CommentsDatabaseService _comments = CommentsDatabaseService(currUserRef: userData.userRef, postRef: widget.post.postRef);
 
     return StreamBuilder(
       stream: _comments.postComments,

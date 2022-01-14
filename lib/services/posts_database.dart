@@ -55,12 +55,12 @@ class PostsDatabaseService {
       C.text: text,
       C.media: media,
       C.createdAt: DateTime.now(),
-      C.commentsRefs: [],
-      C.repliesRefs: [],
+      C.numComments: 0,
+      C.numReplies: 0,
       C.accessRestriction: accessRestriction,
       C.likes: List<String>.empty(),
       C.dislikes: List<String>.empty(),
-      C.reportsRefs: [],
+      C.numReports: 0,
       C.pollRef: pollRef,
       C.tag: tagString == '' ? null : tagString,
       C.lastUpdated: DateTime.now(),
@@ -108,7 +108,8 @@ class PostsDatabaseService {
         //final delReplies = Future.wait([for (DocumentReference replyRef in post.get(C.repliesRefs)) _delReplyHelper(replyRef, postRef)]);
 
         // delete post's replies one by one
-        final delReplies = Future.forEach(post.get(C.repliesRefs), (item) async {
+        // TODO: update for numReplies
+        final delReplies = Future.forEach(post.get("BROKEN"), (item) async {
           final replyRef = item as DocumentReference;
           final reply = await replyRef.get();
           RepliesDatabaseService _tempReplies = RepliesDatabaseService(currUserRef: reply.get(C.creatorRef));
@@ -117,14 +118,17 @@ class PostsDatabaseService {
               replyRef: replyRef, commentRef: reply.get(C.commentRef), postRef: postRef, weakDelete: false);
         });
 
+
         // delete post's comments
-        final delComments = Future.forEach(post.get(C.commentsRefs), (item) async {
+        // TODO: update for numComments
+        final delComments = Future.forEach(post.get("BROKEN"), (item) async {
           final commentRef = item as DocumentReference;
           final comment = await commentRef.get();
           CommentsDatabaseService _tempComments = CommentsDatabaseService(currUserRef: comment.get(C.creatorRef));
           // delete comment
           _tempComments.deleteComment(commentRef: commentRef, postRef: postRef, weakDelete: false);
         });
+
 
         var delPoll;
         // delete post's poll (if applicable)
