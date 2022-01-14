@@ -21,10 +21,13 @@ class MessagesPage extends StatelessWidget {
           title: Text('HII', style: ThemeText.titleRegular()),
           leading: myBackButtonIcon(context),
         ),
-        body: Column(mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.max, children: <Widget>[
-          MessagesFeed(currUserRef: currUserRef, otherUserRef: otherUserRef,),
-          Spacer(),
-          MessagesForm(currUserRef: currUserRef, otherUserRef: otherUserRef)
-        ]));
+        body: Container(
+          padding: EdgeInsets.all(15),
+          child: Column(mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.max, children: <Widget>[
+            MessagesFeed(currUserRef: currUserRef, otherUserRef: otherUserRef,),
+            Spacer(),
+            MessagesForm(currUserRef: currUserRef, otherUserRef: otherUserRef)
+          ]),
+        ));
   }
 }

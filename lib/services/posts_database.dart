@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hs_connect/models/comment.dart';
 import 'package:hs_connect/models/observedRef.dart';
 import 'package:hs_connect/models/post.dart';
+import 'package:hs_connect/models/reply.dart';
 import 'package:hs_connect/models/searchResult.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/services/groups_database.dart';
@@ -108,27 +110,25 @@ class PostsDatabaseService {
         //final delReplies = Future.wait([for (DocumentReference replyRef in post.get(C.repliesRefs)) _delReplyHelper(replyRef, postRef)]);
 
         // delete post's replies one by one
-        // TODO: update for numReplies
-        final delReplies = Future.forEach(post.get("BROKEN"), (item) async {
-          final replyRef = item as DocumentReference;
-          final reply = await replyRef.get();
-          RepliesDatabaseService _tempReplies = RepliesDatabaseService(currUserRef: reply.get(C.creatorRef));
-          // delete reply
-          _tempReplies.deleteReply(
-              replyRef: replyRef, commentRef: reply.get(C.commentRef), postRef: postRef, weakDelete: false);
+        final delReplies = Future(() async {
+          final repliesData = await FirebaseFirestore.instance.collection(C.replies).where(C.postRef, isEqualTo: postRef).get();
+          repliesData.docs.forEach((replyData) {
+            Reply reply = replyFromQuerySnapshot(replyData);
+            RepliesDatabaseService _tempReplies = RepliesDatabaseService(currUserRef: reply.creatorRef);
+            // delete reply
+            _tempReplies.deleteReply(
+                replyRef: replyData.reference, commentRef: reply.commentRef, postRef: postRef, weakDelete: false);
+          });
         });
-
-
-        // delete post's comments
-        // TODO: update for numComments
-        final delComments = Future.forEach(post.get("BROKEN"), (item) async {
-          final commentRef = item as DocumentReference;
-          final comment = await commentRef.get();
-          CommentsDatabaseService _tempComments = CommentsDatabaseService(currUserRef: comment.get(C.creatorRef));
-          // delete comment
-          _tempComments.deleteComment(commentRef: commentRef, postRef: postRef, weakDelete: false);
+        final delComments = Future(() async {
+          final commentsData = await FirebaseFirestore.instance.collection(C.comments).where(C.postRef, isEqualTo: postRef).get();
+          commentsData.docs.forEach((commentData) {
+            Comment comment = commentFromQuerySnapshot(commentData);
+            CommentsDatabaseService _tempComments = CommentsDatabaseService(currUserRef: comment.creatorRef);
+            // delete comment
+            _tempComments.deleteComment(commentRef: commentData.reference, postRef: postRef, weakDelete: false);
+          });
         });
-
 
         var delPoll;
         // delete post's poll (if applicable)

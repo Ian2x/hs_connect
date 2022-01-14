@@ -136,7 +136,6 @@ class C {
   static const replies = 'replies';
   static const pollRef = 'pollRef';
   static const messages = 'messages';
-  static const messageRef = 'messageRef';
   static const senderRef = 'senderRef';
   static const receiverRef = 'receiverRef';
   static const isMedia = 'isMedia';
