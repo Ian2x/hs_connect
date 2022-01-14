@@ -170,11 +170,6 @@ class _CommentCardState extends State<CommentCard> {
               ),
           //RepliesFeed(commentRef: widget.comment.commentRef, postRef: widget.comment.postRef, groupRef: widget.comment.groupRef),
           Divider(thickness: 3, color: ThemeColor.backgroundGrey, height: 20),
-          Positioned(
-            right:10,
-            top:10,
-            child:Text("hell0"),
-          )
         ]),
             )),
       ],
