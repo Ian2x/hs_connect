@@ -40,7 +40,7 @@ class UserDataDatabaseService {
       C.country: kd != null ? kd.country : "Public",
       C.userGroups: [UserGroup(groupRef: domainGroupRef, public: true).asMap()],
       C.modGroupRefs: [],
-      C.messagesRefs: [],
+      C.userMessages: [],
       C.myPostsObservedRefs: [],
       C.myCommentsObservedRefs: [],
       C.myRepliesRefs: [],

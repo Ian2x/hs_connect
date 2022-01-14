@@ -3,12 +3,13 @@ import 'package:hs_connect/models/message.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:async/async.dart' show StreamGroup;
 import 'package:hs_connect/shared/constants.dart';
+import 'package:rxdart/rxdart.dart';
 
 class MessagesDatabaseService {
   final DocumentReference currUserRef;
-  DocumentReference? otherPersonRef;
+  DocumentReference? otherUserRef;
 
-  MessagesDatabaseService({required this.currUserRef});
+  MessagesDatabaseService({required this.currUserRef, this.otherUserRef});
 
   // collection reference
   final CollectionReference messagesCollection = FirebaseFirestore.instance.collection(C.messages);
@@ -28,13 +29,14 @@ class MessagesDatabaseService {
       C.text: text,
       C.isMedia: isMedia,
       C.createdAt: createdAt,
+      C.reportsRefs: []
     });
 
     senderRef.update({
-      C.messagesRefs: FieldValue.arrayUnion([messageRef])
+      C.userMessages: FieldValue.arrayUnion([{C.messageRef: messageRef, C.otherUserRef: receiverRef}])
     });
     receiverRef.update({
-      C.messagesRefs: FieldValue.arrayUnion([messageRef])
+      C.userMessages: FieldValue.arrayUnion([{C.messageRef: messageRef, C.otherUserRef: senderRef}])
     });
 
     return messageRef;
@@ -49,10 +51,10 @@ class MessagesDatabaseService {
       return null;
     }
     final delSender = senderRef.update({
-      C.messagesRefs: FieldValue.arrayRemove([messageRef])
+      C.userMessages: FieldValue.arrayRemove([{C.messageRef: messageRef, C.otherUserRef: receiverRef}])
     });
     final delReceiver = receiverRef.update({
-      C.messagesRefs: FieldValue.arrayRemove([messageRef])
+      C.userMessages: FieldValue.arrayRemove([{C.messageRef: messageRef, C.otherUserRef: senderRef}])
     });
     final delMessage = messageRef.delete();
 
@@ -77,14 +79,15 @@ class MessagesDatabaseService {
   Stream<List<Message?>> get messagesWithOtherPerson {
     Stream<List<Message?>> a = messagesCollection
         .where(C.senderRef, isEqualTo: currUserRef)
-        .where(C.receiverRef, isEqualTo: otherPersonRef!)
+        .where(C.receiverRef, isEqualTo: otherUserRef!)
         .snapshots()
         .map((snapshot) => snapshot.docs.map(_messageFromDocument).toList());
     Stream<List<Message?>> b = messagesCollection
+        .where(C.senderRef, isEqualTo: otherUserRef!)
         .where(C.receiverRef, isEqualTo: currUserRef)
-        .where(C.senderRef, isEqualTo: otherPersonRef!)
         .snapshots()
         .map((snapshot) => snapshot.docs.map(_messageFromDocument).toList());
+    return Rx.combineLatest2(a,b, (x,y) => (x as List<Message?>) + (y as List<Message?>));
     return StreamGroup.merge([a, b]);
   }
 }

@@ -69,7 +69,7 @@ class _CommentFormState extends State<CommentForm> {
         children: <Widget>[
           TextFormField(
             initialValue: '',
-            decoration: messageInputDecoration(
+            decoration: commentInputDecoration(
                 onPressed: () async {
                   if (_formKey.currentState != null && _formKey.currentState!.validate()) {
                     if (mounted) {

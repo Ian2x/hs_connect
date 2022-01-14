@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hs_connect/screens/notifications/Messages/allMessagesPage.dart';
 import 'package:hs_connect/screens/notifications/notificationsAppBar.dart';
 import 'package:hs_connect/screens/notifications/notificationsFeed.dart';
 import 'package:hs_connect/shared/constants.dart';
@@ -23,6 +24,8 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
 
   @override
   Widget build(BuildContext context) {
+
+
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -50,7 +53,7 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
           height: 500.0,
           child: TabBarView(children: <Widget>[
             NotificationsFeed(),
-            Container(height: 100.0, child: Text("bye"))
+            AllMessagesPage()
           ], controller: _tabController, physics: BouncingScrollPhysics()),
         )
       ]),

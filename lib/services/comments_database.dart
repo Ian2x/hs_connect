@@ -186,7 +186,6 @@ class CommentsDatabaseService {
     return temp;
   }*/
   Stream get postComments {
-    print(postRef);
     return commentsCollection
       .where('postRef', isEqualTo: postRef!)
       .snapshots()

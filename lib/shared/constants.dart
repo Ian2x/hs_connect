@@ -79,7 +79,7 @@ class C {
   static const country = 'country';
   static const userGroups = 'userGroups';
   static const modGroupRefs = 'modGroupsRefs';
-  static const messagesRefs = 'messagesRefs';
+  static const userMessages = 'userMessages';
   static const myPostsObservedRefs = 'myPostsObservedRefs';
   static const myCommentsObservedRefs = 'myCommentsObservedRefs';
   static const myRepliesRefs = 'myRepliesRefs';
@@ -159,4 +159,6 @@ class C {
   static const lastOverTimeUpdate = 'lastOverTimeUpdate';
   static const lastUpdated = 'lastUpdated';
   static const hexColor = 'hexColor';
+  static const otherUserRef = 'otherUserRef';
+  static const lastMessage = 'lastMessage';
 }

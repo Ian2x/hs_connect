@@ -21,6 +21,24 @@ UserGroup userGroupFromMap({required Map map}) {
   return UserGroup(groupRef: map[C.groupRef], public: map[C.public]);
 }
 
+class UserMessage {
+  final DocumentReference otherUserRef;
+  final Timestamp lastMessage;
+
+  UserMessage({required this.otherUserRef, required this.lastMessage});
+
+  Map<String, dynamic> asMap() {
+    return {
+      C.otherUserRef: otherUserRef,
+      C.lastMessage: lastMessage,
+    };
+  }
+}
+
+UserMessage userMessageFromMap({required Map map}) {
+  return UserMessage(otherUserRef: map[C.otherUserRef], lastMessage: map[C.lastMessage]);
+}
+
 class UserData {
   final DocumentReference userRef;
   final String displayedName;
@@ -32,7 +50,7 @@ class UserData {
   final String? country;
   final List<UserGroup> userGroups;
   final List<DocumentReference> modGroupsRefs;
-  final List<DocumentReference> messagesRefs;
+  final List<UserMessage> userMessages;
   final List<ObservedRef> myPostsObservedRefs;
   final List<DocumentReference> savedPostsRefs;
   final List<ObservedRef> myCommentsObservedRefs;
@@ -52,7 +70,7 @@ class UserData {
     required this.country,
     required this.userGroups,
     required this.modGroupsRefs,
-    required this.messagesRefs,
+    required this.userMessages,
     required this.myPostsObservedRefs,
     required this.savedPostsRefs,
     required this.myCommentsObservedRefs,
@@ -75,7 +93,7 @@ userDataFromSnapshot(DocumentSnapshot snapshot, DocumentReference userRef) {
     country: snapshot.get(C.country),
     userGroups: snapshot.get(C.userGroups).map<UserGroup>((userGroup) => userGroupFromMap(map: userGroup)).toList(),
     modGroupsRefs: docRefList(snapshot.get(C.modGroupRefs)),
-    messagesRefs: docRefList(snapshot.get(C.messagesRefs)),
+    userMessages: snapshot.get(C.userMessages).map<UserMessage>((userMessage) => userMessageFromMap(map: userMessage)).toList(),
     myPostsObservedRefs: observedRefList(snapshot.get(C.myPostsObservedRefs)),
     savedPostsRefs: docRefList(snapshot.get(C.savedPostsRefs)),
     myCommentsObservedRefs: observedRefList(snapshot.get(C.myCommentsObservedRefs)),
