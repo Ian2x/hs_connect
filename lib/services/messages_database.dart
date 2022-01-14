@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/message.dart';
+import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:async/async.dart' show StreamGroup;
 import 'package:hs_connect/shared/constants.dart';
@@ -15,6 +16,19 @@ class MessagesDatabaseService {
   final CollectionReference messagesCollection = FirebaseFirestore.instance.collection(C.messages);
 
   ImageStorage _images = ImageStorage();
+
+
+  Future _updateUserMessages(DocumentReference userRef, DocumentReference otherUserRef) async {
+    final userData = await userRef.get();
+    final userMessages = (userData.get(C.userMessages) as List).map((item) => userMessageFromMap(map: item)).toList();
+    userMessages.forEach((UM) {
+      if (UM.otherUserRef==otherUserRef) {
+        userRef.update({C.userMessages: FieldValue.arrayRemove([UM.asMap()])});
+        return;
+      }
+    });
+    userRef.update({C.userMessages: FieldValue.arrayUnion([{C.otherUserRef: otherUserRef, C.lastMessage: Timestamp.now()}])});
+  }
 
   Future<DocumentReference> newMessage({
     required DocumentReference senderRef,
@@ -32,12 +46,8 @@ class MessagesDatabaseService {
       C.numReports: 0
     });
 
-    senderRef.update({
-      C.userMessages: FieldValue.arrayUnion([{C.messageRef: messageRef, C.otherUserRef: receiverRef}])
-    });
-    receiverRef.update({
-      C.userMessages: FieldValue.arrayUnion([{C.messageRef: messageRef, C.otherUserRef: senderRef}])
-    });
+    _updateUserMessages(senderRef, receiverRef);
+    _updateUserMessages(receiverRef, senderRef);
 
     return messageRef;
   }
@@ -50,17 +60,7 @@ class MessagesDatabaseService {
       print("Not allowed to delete arbitrary message");
       return null;
     }
-    final delSender = senderRef.update({
-      C.userMessages: FieldValue.arrayRemove([{C.messageRef: messageRef, C.otherUserRef: receiverRef}])
-    });
-    final delReceiver = receiverRef.update({
-      C.userMessages: FieldValue.arrayRemove([{C.messageRef: messageRef, C.otherUserRef: senderRef}])
-    });
-    final delMessage = messageRef.delete();
-
-    await delSender;
-    await delReceiver;
-    await delMessage;
+    await messageRef.delete();
 
     if (message.get(C.isMedia)) {
       return await _images.deleteImage(imageURL: message.get(C.text));
@@ -88,6 +88,6 @@ class MessagesDatabaseService {
         .snapshots()
         .map((snapshot) => snapshot.docs.map(_messageFromDocument).toList());
     return Rx.combineLatest2(a,b, (x,y) => (x as List<Message?>) + (y as List<Message?>));
-    return StreamGroup.merge([a, b]);
+    // return StreamGroup.merge([a, b]);
   }
 }

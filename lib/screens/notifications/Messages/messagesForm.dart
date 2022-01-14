@@ -104,6 +104,9 @@ class _MessagesFormState extends State<MessagesForm> {
                                   createdAt: Timestamp.now(),
                                   senderRef: userData.userRef);
                             }
+                            if (mounted) {
+                              setState(() => loading = false);
+                            }
                           }
                         }),
                     onChanged: (val) {

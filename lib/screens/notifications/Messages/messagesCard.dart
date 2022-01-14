@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/message.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:bubble/bubble.dart';
 
 class MessagesCard extends StatelessWidget {
   final Message message;
@@ -10,13 +11,30 @@ class MessagesCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
+    if (message.isMedia) {
+      return Align(
+        alignment: isSentMessage ? Alignment.centerRight : Alignment.centerLeft,
+        child: Card(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          margin: EdgeInsets.fromLTRB(5, 5, 5, 0),
+          child: Container(height: 300, width: 300, child: Image.network(message.text, fit: BoxFit.scaleDown))
+        ),
+      );
+    } else {
+      return Bubble(
+        margin: BubbleEdges.only(top: 10),
+        alignment: isSentMessage ? Alignment.centerRight : Alignment.centerLeft,
+        nip: isSentMessage ? BubbleNip.rightTop : BubbleNip.leftTop,
+        child: Text(message.text)
+      );
+    }
+    /*return Align(
         alignment: isSentMessage ? Alignment.centerRight : Alignment.centerLeft,
         child: Card(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
             margin: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
             child: message.isMedia
                 ? Container(height: 300, width: 300, child: Image.network(message.text, fit: BoxFit.scaleDown))
-                : Container(padding: EdgeInsets.all(10), child: Text(message.text))));
+                : Container(padding: EdgeInsets.all(10), child: Text(message.text))));*/
   }
 }
