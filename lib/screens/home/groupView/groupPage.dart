@@ -66,7 +66,6 @@ class _GroupPageState extends State<GroupPage> {
     }
 
 
-
     return Scaffold(
       backgroundColor: HexColor("FFFFFF"),
       appBar: AppBar(

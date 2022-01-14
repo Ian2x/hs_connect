@@ -48,7 +48,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
           if (likeStatus == true) {
             return IconButton(
               iconSize: 20.0,
-              icon: Icon(Icons.thumb_up),
+              icon: Icon(Icons.keyboard_arrow_up_rounded),
               onPressed: () {
                 _comments.unLikeComment();
                 if (mounted) {
@@ -62,7 +62,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
           } else {
             return IconButton(
               iconSize: 20.0,
-              icon: Icon(Icons.thumb_up_outlined),
+              icon: Icon(Icons.keyboard_arrow_up_rounded),
               onPressed: () {
                 _comments.likeComment();
                 if (mounted) {
@@ -82,7 +82,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
           if (dislikeStatus == true) {
             return IconButton(
               iconSize: 20.0,
-              icon: Icon(Icons.thumb_down),
+              icon: Icon(Icons.keyboard_arrow_down_rounded),
               onPressed: () {
                 _comments.unDislikeComment();
                 if (mounted) {
@@ -96,7 +96,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
           } else {
             return IconButton(
               iconSize: 20.0,
-              icon: Icon(Icons.thumb_down_outlined),
+              icon: Icon(Icons.keyboard_arrow_up_rounded),
               onPressed: () {
                 _comments.dislikeComment();
                 setState(() {

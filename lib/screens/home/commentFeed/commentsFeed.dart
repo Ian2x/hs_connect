@@ -63,6 +63,8 @@ class _CommentsFeedState extends State<CommentsFeed> {
                 return CommentCard(
                   comment: comments[index - 2],
                   currUserRef: userData.userRef,
+
+
                 );
               }
             },
