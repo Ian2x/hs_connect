@@ -22,6 +22,24 @@ class ThemeLayout {
 
 class ThemeText {
 
+  static TextStyle postViewText({Color? color, double fontSize=18}) {
+    return TextStyle(
+      fontSize: fontSize,
+      fontFamily: "Roboto",
+      fontWeight: FontWeight.normal,
+      color: color != null ? color: ThemeColor.mediumGrey,
+    );
+  }
+
+  static TextStyle postViewTitle({Color? color, double fontSize=18}) {
+    return TextStyle(
+      fontSize: fontSize,
+      fontFamily: "Roboto",
+      fontWeight: FontWeight.w500,
+      color: color != null ? color: ThemeColor.darkGrey,
+    );
+  }
+
   static TextStyle titleRegular({Color? color, double fontSize=18}) {
     return TextStyle(
       fontSize: fontSize,
@@ -56,13 +74,15 @@ class ThemeColor extends Color {
 
   static Color backgroundGrey = HexColor ("F4F4F4");
 
+  static Color postIntroGrey= HexColor ("8D8D8D");
+
   static Color hintTextGrey = HexColor("C8CED2");
 
   static Color secondaryBlue = HexColor("68b9f7");
 
 
   static Color lightGrey = HexColor("F4F4F4");
-  static Color mediumGrey = HexColor("C9C9C9");
+  static Color mediumGrey = HexColor("8D8D8D");
   static Color darkGrey = HexColor("373a3d");
 
   static Color white = HexColor("FFFFFF");
