@@ -41,7 +41,7 @@ class _postTitleCardState extends State<postTitleCard> {
   int commentCount=0;
   String commentString="Comments";
   String? imageString;
-  Color? groupColor;
+  Color groupColor = ThemeColor.darkGrey;
   String userDomain = '<Loading user domain...>';
   String creatorName = '<Loading user name...>';
   String groupName = '<Loading group name...>';
@@ -74,7 +74,7 @@ class _postTitleCardState extends State<postTitleCard> {
     PostsDatabaseService _posts = PostsDatabaseService(currUserRef: widget.currUserRef);
     final post = await  _posts.getPost(widget.post.postRef);
     setState(() {
-      commentCount= post != null ? post.commentsRefs.length: 0;
+      commentCount= post != null ? post.numComments + post.numReplies: 0;
     });
   }
 
@@ -94,11 +94,19 @@ class _postTitleCardState extends State<postTitleCard> {
   void getGroupData() async {
     GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserRef);
     final Group? fetchGroupData = await _groups.groupFromRef(widget.post.groupRef);
-    if (mounted) {
-      setState(() {
-        groupName = fetchGroupData != null ? fetchGroupData.name : '<Failed to retrieve group name>';
-        groupColor = fetchGroupData != null ? HexColor(fetchGroupData.hexColor!) : ThemeColor.darkGrey;
-      });
+    if (fetchGroupData != null) {
+      if (mounted) {
+        setState(() {
+          groupName = fetchGroupData.name;
+          if (fetchGroupData.hexColor != null) groupColor = HexColor(fetchGroupData.hexColor!);
+        });
+      }
+    } else {
+      if (mounted) {
+        setState(() {
+          groupName = '<Failed to retrieve group name>';
+        });
+      }
     }
   }
 
