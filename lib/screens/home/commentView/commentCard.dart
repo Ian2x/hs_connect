@@ -27,6 +27,8 @@ class _CommentCardState extends State<CommentCard> {
   bool liked = false;
   bool disliked = false;
   String username = '<Loading user name...>';
+  String? imageString;
+  Image? userImage;
   String userGroupName='';
 
   @override
@@ -50,17 +52,18 @@ class _CommentCardState extends State<CommentCard> {
   }
 
 
-  
+
+
 
   void getUserData() async {
     if (widget.comment.creatorRef != null) {
       UserDataDatabaseService _userDataDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserRef);
       final UserData? fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.comment.creatorRef);
-
       if (mounted) {
         setState(() {
           username = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
           userGroupName = fetchUserData != null ? fetchUserData.domain : '<Failed to retrieve user name>';
+          imageString = fetchUserData != null ? fetchUserData.profileImage : '<Failed to retrieve user name>';
         });
       }
     } else {
@@ -72,76 +75,109 @@ class _CommentCardState extends State<CommentCard> {
     }
   }
 
+
+
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: Column(mainAxisSize: MainAxisSize.min,
+
+    double imageSide= (MediaQuery.of(context).size.width)/12;
+
+    if (imageString != null && imageString != "") {
+      var tempImage = Image.network(imageString!);
+      tempImage.image
+          .resolve(ImageConfiguration())
+          .addListener(ImageStreamListener((ImageInfo image, bool syncrhonousCall) {
+        if (mounted) {
+          setState(() => userImage = tempImage);
+        }
+      }));
+    } else {
+      userImage=  Image(image: AssetImage('assets/lville.jpeg'), height: 20, width: 20);
+    }
+
+    return Stack(
+      children: [
+        Container(
+          padding: EdgeInsets.fromLTRB(10.0, 5.0, 5.0, 10.0),
+          child: Center(
+          child: Column(
             children: <Widget>[
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Column(
                     children: [
-
+                      Container(
+                        width: imageSide,
+                        height: imageSide,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: userImage!.image,
+                              fit: BoxFit.fill,
+                            )
+                        ),
+                      ),
                     ],
                   ),
-                  Column(
-                    children: [
-                      Row(//settings icon
-                         mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Icon(Icons.more_horiz),
-                        ],
-                      ),
-                      Row( //Text Row
-                        children: [
-                          RichText(
-                          text: TextSpan(
-                            text: 'in ',
-                            style: ThemeText.regularSmall(),
-                            children: <TextSpan>[
-                              TextSpan(text: username,style: ThemeText.groupBold(color: ThemeColor.mediumGrey)),
-                              TextSpan(text: widget.comment.text,style: ThemeText.postViewText(color: ThemeColor.black)),
-                           ],
+                  SizedBox(width:10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Container(
+                          child: IconButton(icon: Icon(Icons.more_horiz),
+                            iconSize: 20,
+                            onPressed: (){},
                           ),
                         ),
-                      ]),
-                      SizedBox(height:10),
-                      Row(
-                        children: [
-                          Text(
-                            userGroupName, style: ThemeText.groupBold(color:ThemeColor.mediumGrey, fontSize:14),
-                          ),
-                          Spacer(),
-                          TextButton(
-                            child: Text("Reply", style: ThemeText.groupBold(color:ThemeColor.mediumGrey, fontSize:14)),
-                            onPressed: (){}
-                          ),
-                          SizedBox(width: 10),
-                          LikeDislikeComment(
-                            commentRef: widget.comment.commentRef,
-                            currUserRef: widget.currUserRef,
-                            likes: widget.comment.likes,
-                            dislikes: widget.comment.dislikes
-                          ),
-                        ],
-                      ),
-                    ],
+                        Row( //Text Row
+                            children: [
+                              RichText(
+                                text: TextSpan(
+                                  children: <TextSpan>[
+                                    TextSpan(text: username + " ",style: ThemeText.groupBold(color: ThemeColor.mediumGrey, fontSize: 15)),
+                                    TextSpan(text: widget.comment.text,style: ThemeText.postViewText(color: ThemeColor.black, fontSize: 15)),
+                                  ],
+                                ),
+                              ),
+                            ]),
+                        SizedBox(height:10),
+                        Row(
+                          children: [
+                            Text(
+                              userGroupName, style: ThemeText.groupBold(color:ThemeColor.mediumGrey, fontSize:14),
+                            ),
+                            Spacer(flex:1),
+                            TextButton(
+                                child: Text("Reply", style: ThemeText.groupBold(color:ThemeColor.mediumGrey, fontSize:14)),
+                                onPressed: (){}
+                            ),
+                            SizedBox(width: 10),
+                            LikeDislikeComment(
+                                commentRef: widget.comment.commentRef,
+                                currUserRef: widget.currUserRef,
+                                likes: widget.comment.likes,
+                                dislikes: widget.comment.dislikes
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ],
-
               ),
-      ListTile(
-        title: Text(widget.comment.text),
-        subtitle: Text(username),
-        trailing: LikeDislikeComment(
-            commentRef: widget.comment.commentRef,
-            currUserRef: widget.currUserRef,
-            likes: widget.comment.likes,
-            dislikes: widget.comment.dislikes),
-      ),
-      RepliesFeed(commentRef: widget.comment.commentRef, postRef: widget.comment.postRef, groupRef: widget.comment.groupRef),
-      Divider(thickness: 3, color: ThemeColor.backgroundGrey, height: 20),
-    ]));
+          //RepliesFeed(commentRef: widget.comment.commentRef, postRef: widget.comment.postRef, groupRef: widget.comment.groupRef),
+          Divider(thickness: 3, color: ThemeColor.backgroundGrey, height: 20),
+          Positioned(
+            right:10,
+            top:10,
+            child:Text("hell0"),
+          )
+        ]),
+            )),
+      ],
+    );
   }
 }
