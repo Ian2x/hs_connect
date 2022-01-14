@@ -5,6 +5,8 @@ import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/authenticate/authenticate.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/newMessageButton.dart';
+import 'package:hs_connect/screens/notifications/Messages/messagesPage.dart';
+import 'package:hs_connect/screens/profile/profileWidgets/newMessageButton.dart';
 import 'package:hs_connect/shared/widgets/MessagesPopup.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileName.dart';
 import 'package:hs_connect/services/groups_database.dart';

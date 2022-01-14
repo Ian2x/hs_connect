@@ -64,7 +64,7 @@ class GroupsDatabaseService {
             C.numMembers: 0,
             C.membersOverTime: [],
             C.lastOverTimeUpdate: DateTime.now(),
-            C.reportsRefs: [],
+            C.numReports: 0,
             C.hexColor: null,
             C.selfRef: newGroupRef,
           })

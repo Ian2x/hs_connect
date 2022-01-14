@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:hs_connect/screens/notifications/Messages/messagesPage.dart';
 import 'package:hs_connect/shared/constants.dart';
 
 class NewMessageButton extends StatefulWidget {
@@ -56,8 +56,14 @@ class _NewMessageButtonState extends State<NewMessageButton> {
                   OverlayEntry(builder: (BuildContext context) {
                     return GestureDetector(
                       onTap: () {
-                        print('hi');
                         myFocusNode.requestFocus();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MessagesPage(
+                                      currUserRef: widget.currUserRef,
+                                      otherUserRef: widget.otherUserRef,
+                                    )));
                       },
                       behavior: HitTestBehavior.translucent,
                       child: Container(),
@@ -65,42 +71,6 @@ class _NewMessageButtonState extends State<NewMessageButton> {
                   }),
                 ]),
               ))
-        ]));
-
-    return Container(
-        height: 400,
-        width: 300,
-        child: Column(children: <Widget>[
-          Align(
-              alignment: Alignment.centerLeft,
-              child: Row(children: <Widget>[
-                SizedBox(width: 30.0),
-                Column(children: <Widget>[
-                  Text("Message", style: ThemeText.groupBold(fontSize: 24), textAlign: TextAlign.left),
-                  Container(
-                    height: 100,
-                    width: 300,
-                    child: Overlay(initialEntries: <OverlayEntry>[
-                      OverlayEntry(builder: (BuildContext context) {
-                        return TextField(
-                          decoration: InputDecoration(border: OutlineInputBorder(), hintText: "Start a Chat"),
-                          focusNode: myFocusNode,
-                        );
-                      }),
-                      OverlayEntry(builder: (BuildContext context) {
-                        return GestureDetector(
-                          onTap: () {
-                            print('hi');
-                            myFocusNode.requestFocus();
-                          },
-                          behavior: HitTestBehavior.translucent,
-                          child: Container(),
-                        );
-                      }),
-                    ]),
-                  )
-                ]),
-              ])),
         ]));
   }
 }

@@ -65,7 +65,6 @@ class _GroupPageState extends State<GroupPage> {
       return Text("loading");
     }
 
-    PostsDatabaseService _posts = PostsDatabaseService(currUserRef: widget.currUserRef, groupRefs: [widget.groupRef]);
 
 
     return Scaffold(

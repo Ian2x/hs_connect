@@ -15,7 +15,7 @@ class Reply {
   final Timestamp createdAt;
   final List<DocumentReference> likes;
   final List<DocumentReference> dislikes;
-  final List<DocumentReference> reportsRefs;
+  final int numReports;
 
   Reply({
     required this.replyRef,
@@ -29,7 +29,7 @@ class Reply {
     required this.createdAt,
     required this.likes,
     required this.dislikes,
-    required this.reportsRefs,
+    required this.numReports,
   });
 }
 
@@ -47,6 +47,6 @@ replyFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
     createdAt: querySnapshot[C.createdAt],
     likes: docRefList(querySnapshot[C.likes]),
     dislikes: docRefList(querySnapshot[C.dislikes]),
-    reportsRefs: docRefList(querySnapshot[C.reportsRefs]),
+    numReports: querySnapshot[C.numReports],
   );
 }

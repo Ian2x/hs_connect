@@ -5,8 +5,9 @@ import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/commentView/commentCard.dart';
 import 'package:hs_connect/screens/home/commentView/commentForm.dart';
-import 'package:hs_connect/screens/home/postView/Widgets/RoundedPostCard.dart';
+import 'package:hs_connect/screens/home/postView/Widgets/postTitleCard.dart';
 import 'package:hs_connect/services/comments_database.dart';
+import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +29,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
     final userData = Provider.of<UserData?>(context);
 
     if (userData == null) return Loading();
-    CommentsDatabaseService _comments = CommentsDatabaseService(currUserRef: userData.userRef, postRef: widget.post.postRef, commentsRefs: widget.post.commentsRefs);
+    CommentsDatabaseService _comments = CommentsDatabaseService(currUserRef: userData.userRef, postRef: widget.post.postRef);
 
     return StreamBuilder(
       stream: _comments.postComments,
@@ -50,12 +51,12 @@ class _CommentsFeedState extends State<CommentsFeed> {
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) {
               if (index == 0) {
-                return RoundedPostCard(
+                return postTitleCard(
                   post: widget.post,
                   currUserRef: userData.userRef,
                 );
               } else if (index == 1) {
-                return Divider(thickness: 3, color: HexColor('E9EDF0'), height: 20);
+                return Divider(thickness: 3, color: ThemeColor.backgroundGrey, height: 20);
               } else if (index == comments.length + 2) {
                 return CommentForm(postRef: widget.post.postRef, groupRef: widget.groupRef);
               } else {

@@ -15,7 +15,7 @@ class Comment {
   final AccessRestriction accessRestriction;
   final List<DocumentReference> likes;
   final List<DocumentReference> dislikes;
-  final List<DocumentReference> reportsRefs;
+  final int numReports;
   final Timestamp lastUpdated;
   bool? newActivity;
 
@@ -31,7 +31,7 @@ class Comment {
     required this.accessRestriction,
     required this.likes,
     required this.dislikes,
-    required this.reportsRefs,
+    required this.numReports,
     required this.lastUpdated,
     this.newActivity,
   });
@@ -51,7 +51,7 @@ commentFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
       accessRestriction: accessRestrictionFromMap(accessRestriction),
       likes: docRefList(querySnapshot[C.likes]),
       dislikes: docRefList(querySnapshot[C.dislikes]),
-      reportsRefs: docRefList(querySnapshot[C.reportsRefs]),
+      numReports: querySnapshot[C.numReports],
       lastUpdated: querySnapshot[C.lastUpdated]
   );
   return temp;
@@ -71,7 +71,7 @@ commentFromSnapshot(DocumentSnapshot snapshot) {
       accessRestriction: accessRestrictionFromMap(accessRestriction),
       likes: docRefList(snapshot[C.likes]),
       dislikes: docRefList(snapshot[C.dislikes]),
-      reportsRefs: docRefList(snapshot[C.reportsRefs]),
+      numReports: snapshot[C.numReports],
       lastUpdated: snapshot[C.lastUpdated],
   );
   return temp;

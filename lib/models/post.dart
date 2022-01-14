@@ -57,12 +57,12 @@ class Post {
   final String? text;
   final String? media;
   final Timestamp createdAt;
-  final List<DocumentReference> commentsRefs;
-  final List<DocumentReference> repliesRefs;
+  final int numComments;
+  final int numReplies;
   final AccessRestriction accessRestriction;
   final List<DocumentReference> likes;
   final List<DocumentReference> dislikes;
-  final List<DocumentReference> reportsRefs;
+  final int numReports;
   final DocumentReference? pollRef;
   final Tag? tag;
   final Timestamp lastUpdated;
@@ -77,12 +77,12 @@ class Post {
     required this.text,
     required this.media,
     required this.createdAt,
-    required this.commentsRefs,
-    required this.repliesRefs,
+    required this.numComments,
+    required this.numReplies,
     required this.accessRestriction,
     required this.likes,
     required this.dislikes,
-    required this.reportsRefs,
+    required this.numReports,
     required this.pollRef,
     required this.tag,
     required this.lastUpdated,
@@ -101,12 +101,12 @@ postFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
     text: querySnapshot[C.text],
     media: querySnapshot[C.media],
     createdAt: querySnapshot[C.createdAt],
-    commentsRefs: docRefList(querySnapshot[C.commentsRefs]),
-    repliesRefs: docRefList(querySnapshot[C.repliesRefs]),
+    numComments: querySnapshot[C.numComments],
+    numReplies: querySnapshot[C.numReplies],
     accessRestriction: accessRestrictionFromMap(accessRestriction),
     likes: docRefList(querySnapshot[C.likes]),
     dislikes: docRefList(querySnapshot[C.dislikes]),
-    reportsRefs: docRefList(querySnapshot[C.reportsRefs]),
+    numReports: querySnapshot[C.numReports],
     pollRef: querySnapshot[C.pollRef],
     tag: tagFrom(querySnapshot[C.tag]),
     lastUpdated: querySnapshot[C.lastUpdated],
@@ -124,12 +124,12 @@ postFromSnapshot(DocumentSnapshot snapshot) {
     text: snapshot[C.text],
     media: snapshot[C.media],
     createdAt: snapshot[C.createdAt],
-    commentsRefs: docRefList(snapshot[C.commentsRefs]),
-    repliesRefs: docRefList(snapshot[C.repliesRefs]),
+    numComments: snapshot[C.numComments],
+    numReplies: snapshot[C.numReplies],
     accessRestriction: accessRestrictionFromMap(accessRestriction),
     likes: docRefList(snapshot[C.likes]),
     dislikes: docRefList(snapshot[C.dislikes]),
-    reportsRefs: docRefList(snapshot[C.reportsRefs]),
+    numReports: snapshot[C.numReports],
     pollRef: snapshot[C.pollRef],
     tag: tagFrom(snapshot[C.tag]),
     lastUpdated: snapshot[C.lastUpdated],

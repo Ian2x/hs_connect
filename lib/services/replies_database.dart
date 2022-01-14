@@ -27,11 +27,11 @@ class RepliesDatabaseService {
     DocumentReference newReplyRef = repliesCollection.doc();
     // update user's replies
     currUserRef.update({
-      C.myRepliesRefs: FieldValue.arrayUnion([newReplyRef])
+      C.numReplies: FieldValue.increment(1)
     });
     // update post's repliesRefs and lastUpdated
     postRef.update({
-      C.repliesRefs: FieldValue.arrayUnion([newReplyRef]),
+      C.numReplies: FieldValue.increment(1),
       C.lastUpdated: DateTime.now()
     });
     // update comment's numReplies and lastUpdated
@@ -55,7 +55,7 @@ class RepliesDatabaseService {
           C.createdAt: DateTime.now(),
           C.likes: [],
           C.dislikes: [],
-          C.reportsRefs: [],
+          C.numReports: 0,
         })
         .then(onValue)
         .catchError(onError);
@@ -72,7 +72,7 @@ class RepliesDatabaseService {
       if (currUserRef == reply.get(C.creatorRef)) {
         // update user's replies
         currUserRef.update({
-          C.myRepliesRefs: FieldValue.arrayRemove([replyRef])
+          C.numReplies: FieldValue.increment(-1)
         });
         // update post's repliesRefs
         // postRef.update({C.repliesRefs: FieldValue.arrayRemove([replyRef])});
