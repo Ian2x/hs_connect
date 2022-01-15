@@ -16,7 +16,7 @@ class DomainsDataDatabaseService {
           state: documentSnapshot.get(C.overrideState),
           country: documentSnapshot.get(C.overrideCounty),
           fullName: documentSnapshot.get(C.fullName),
-          color: HexColor(documentSnapshot.get(C.color))
+          color: documentSnapshot.get(C.color)
       );
     } else {
       return null;

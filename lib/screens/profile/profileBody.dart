@@ -42,7 +42,7 @@ class _ProfileBodyState extends State<ProfileBody> {
         profileGroupCount = fetchUserData != null ? fetchUserData.userGroups.length : -1;
         profileScore = fetchUserData != null ? fetchUserData.score : -1;
         profileImage = fetchUserData!.profileImage;
-        profileImageURL = fetchUserData!.profileImageURL;
+        profileImageURL = fetchUserData.profileImageURL;
       });
     }
     GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserRef);
