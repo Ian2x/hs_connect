@@ -55,7 +55,7 @@ class PostsDatabaseService {
       C.title: title,
       C.titleLC: title.toLowerCase(),
       C.text: text,
-      C.media: media,
+      C.mediaURL: media,
       C.createdAt: DateTime.now(),
       C.numComments: 0,
       C.numReplies: 0,

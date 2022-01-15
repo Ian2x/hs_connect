@@ -51,7 +51,7 @@ class RepliesDatabaseService {
           C.groupRef: groupRef,
           C.accessRestriction: accessRestriction,
           C.text: text,
-          C.media: media,
+          C.mediaURL: media,
           C.createdAt: DateTime.now(),
           C.likes: [],
           C.dislikes: [],
@@ -87,7 +87,7 @@ class RepliesDatabaseService {
         if (weakDelete) {
           // "delete" reply
           return await replyRef
-              .update({C.likes: [], C.dislikes: [], C.media: null, C.creatorRef: null, C.text: '[Reply removed]'});
+              .update({C.likes: [], C.dislikes: [], C.mediaURL: null, C.creatorRef: null, C.text: '[Reply removed]'});
         } else {
           // delete reply for good
           return await replyRef.delete();
