@@ -97,10 +97,18 @@ class _CommentCardState extends State<CommentCard> {
     }
 
     return Stack(
+
       children: [
+        Positioned(
+          top:-10,
+          right:0,
+          child:IconButton(icon: Icon(Icons.more_horiz),
+            iconSize: 20,
+            onPressed: (){},
+          ),
+        ),
         Container(
-          padding: EdgeInsets.fromLTRB(10.0, 5.0, 5.0, 10.0),
-          child: Center(
+          padding: EdgeInsets.fromLTRB(20.0, 15, 0, 10.0),
           child: Column(
             children: <Widget>[
               Row(
@@ -124,26 +132,21 @@ class _CommentCardState extends State<CommentCard> {
                   SizedBox(width:10),
                   Expanded(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          child: IconButton(icon: Icon(Icons.more_horiz),
-                            iconSize: 20,
-                            onPressed: (){},
+                        SizedBox(
+                          width: (MediaQuery.of(context).size.width)*.70,
+                          child: RichText(
+                            text: TextSpan(
+                              children: <TextSpan>[
+                                TextSpan(text: username + " ",
+                                    style: ThemeText.groupBold(color: ThemeColor.mediumGrey, fontSize: 15)),
+                                TextSpan(text: widget.comment.text,
+                                    style: ThemeText.postViewText(color: ThemeColor.black, fontSize: 15, height: 1.3)),
+                              ],
+                            ),
                           ),
                         ),
-                        Row( //Text Row
-                            children: [
-                              RichText(
-                                text: TextSpan(
-                                  children: <TextSpan>[
-                                    TextSpan(text: username + " ",style: ThemeText.groupBold(color: ThemeColor.mediumGrey, fontSize: 15)),
-                                    TextSpan(text: widget.comment.text,style: ThemeText.postViewText(color: ThemeColor.black, fontSize: 15)),
-                                  ],
-                                ),
-                              ),
-                            ]),
-                        SizedBox(height:10),
                         Row(
                           children: [
                             Text(
@@ -154,7 +157,7 @@ class _CommentCardState extends State<CommentCard> {
                                 child: Text("Reply", style: ThemeText.groupBold(color:ThemeColor.mediumGrey, fontSize:14)),
                                 onPressed: (){}
                             ),
-                            SizedBox(width: 10),
+                            SizedBox(width: 0),
                             LikeDislikeComment(
                                 commentRef: widget.comment.commentRef,
                                 currUserRef: widget.currUserRef,
@@ -170,8 +173,9 @@ class _CommentCardState extends State<CommentCard> {
               ),
           //RepliesFeed(commentRef: widget.comment.commentRef, postRef: widget.comment.postRef, groupRef: widget.comment.groupRef),
           Divider(thickness: 3, color: ThemeColor.backgroundGrey, height: 20),
-        ]),
-            )),
+            ]
+          )
+        ),
       ],
     );
   }
