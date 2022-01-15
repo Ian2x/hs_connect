@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/accessRestriction.dart';
-import 'package:hs_connect/models/knownDomain.dart';
 import 'package:hs_connect/models/observedRef.dart';
 import 'package:hs_connect/models/searchResult.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/groups_database.dart';
-import 'package:hs_connect/services/known_domains_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 
@@ -17,9 +15,8 @@ class UserDataDatabaseService {
   // collection reference
   final CollectionReference userDataCollection = FirebaseFirestore.instance.collection(C.userData);
 
-  Future<void> initUserData(String domain, String username) async {
+  Future<void> initUserData(String domain, String username, {String? overrideCounty, String? overrideState, String? overrideCountry}) async {
     final GroupsDatabaseService _groupDatabaseService = GroupsDatabaseService(currUserRef: currUserRef);
-    final KnownDomainsDatabaseService _knownDomainsDatabaseService = KnownDomainsDatabaseService();
 
     // Create domain group if not already created
     final domainGroupRef = await _groupDatabaseService.newGroup(
@@ -28,16 +25,15 @@ class UserDataDatabaseService {
         image: null,
         description: 'Default group for ' + domain,
         creatorRef: null);
-    // Find domain data (county, state, country)
-    final KnownDomain? kd = await _knownDomainsDatabaseService.getKnownDomain(domain: domain);
+
     await currUserRef.set({
       C.displayedName: username,
       C.displayedNameLC: username.toLowerCase(),
       C.bio: null,
       C.domain: domain,
-      C.county: kd != null ? kd.county : null,
-      C.state: kd != null ? kd.state : null,
-      C.country: kd != null ? kd.country : "Public",
+      C.overrideCounty: overrideCounty,
+      C.overrideState: overrideState,
+      C.overrideCountry: overrideCountry,
       C.userGroups: [UserGroup(groupRef: domainGroupRef, public: true).asMap()],
       C.modGroupRefs: [],
       C.userMessages: [],
@@ -132,13 +128,13 @@ class UserDataDatabaseService {
   // get other users from userRef
   Future<UserData?> getUserData({required DocumentReference userRef}) async {
     final snapshot = await userRef.get();
-    return _userDataFromSnapshot(snapshot, overrideUserRef: userRef);
+    return await _userDataFromSnapshot(snapshot, overrideUserRef: userRef);
   }
 
   // home data from snapshot
-  UserData? _userDataFromSnapshot(DocumentSnapshot snapshot, {DocumentReference? overrideUserRef}) {
+  Future<UserData?> _userDataFromSnapshot(DocumentSnapshot snapshot, {DocumentReference? overrideUserRef}) async {
     if (snapshot.exists) {
-      return userDataFromSnapshot(snapshot, overrideUserRef != null ? overrideUserRef : currUserRef);
+      return await userDataFromSnapshot(snapshot, overrideUserRef != null ? overrideUserRef : currUserRef);
     } else {
       return null;
     }
@@ -146,7 +142,7 @@ class UserDataDatabaseService {
 
   // get home doc stream
   Stream<UserData?> get userData {
-    return currUserRef.snapshots().map(_userDataFromSnapshot);
+    return currUserRef.snapshots().asyncMap((event) => _userDataFromSnapshot(event));
   }
 
   SearchResult _streamResultFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {

@@ -30,7 +30,7 @@ class _DiscoverState extends State<Discover> {
 
     return FutureBuilder(
         future: _groups.getTrendingGroups(
-            domain: userData.domain, county: userData.county, state: userData.state, country: userData.country),
+            domain: userData.domain, county: userData.currCounty, state: userData.currState, country: userData.currCountry),
         builder: (BuildContext context, AsyncSnapshot<List<Group>> snapshot1) {
           if (snapshot1.hasData) {
             final groups = snapshot1.data;

@@ -8,15 +8,17 @@ import '../profileForm.dart';
 class ProfileImage extends StatelessWidget {
   final String currUserName;
   final bool showEditIcon;
-  final Widget profileImage;
-  final String? profileImageString;
+  final Widget? profileImage;
+  final String? profileImageURL;
+  final bool profileImageExists;
 
   const ProfileImage({
     Key? key,
     required this.currUserName,
     required this.showEditIcon,
     required this.profileImage,
-    required this.profileImageString,
+    required this.profileImageURL,
+    required this.profileImageExists,
   }) : super(key: key);
 
   @override
@@ -39,8 +41,8 @@ class ProfileImage extends StatelessWidget {
 
   Widget buildImage() {
 
-    Widget content = profileImage;
-    if (profileImageString == null) {
+    Widget? content = profileImage;
+    if (profileImageExists == false) {
       content = buildDefaultImage();
     }
     return Container(
@@ -64,7 +66,7 @@ class ProfileImage extends StatelessWidget {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) => ProfileForm(currDisplayName: currUserName, currImageURL: profileImageString)),
+                builder: (context) => ProfileForm(currDisplayName: currUserName, currImageURL: profileImageURL)),
           );
         },
         child: buildCircle(

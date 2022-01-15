@@ -36,7 +36,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
   }
   
   Future _fetchUsersHelper(DocumentReference otherUserRef, int index, List<UserData?> results) async {
-    results[index] = userDataFromSnapshot(await otherUserRef.get(), otherUserRef);
+    results[index] = await userDataFromSnapshot(await otherUserRef.get(), otherUserRef);
   }
   
   Future fetchUsers(List<UserMessage> UMs) async {

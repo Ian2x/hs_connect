@@ -9,11 +9,11 @@ extension AccessRestrictionTypeExtension on AccessRestrictionType {
       case AccessRestrictionType.domain:
         return C.domain;
       case AccessRestrictionType.county:
-        return C.county;
+        return C.overrideCounty;
       case AccessRestrictionType.state:
-        return C.state;
+        return C.overrideState;
       case AccessRestrictionType.country:
-        return C.country;
+        return C.overrideCountry;
     }
   }
 }
@@ -22,11 +22,11 @@ accessRestrictionTypeFrom(String accessRestrictionType) {
   switch (accessRestrictionType) {
     case C.domain:
       return AccessRestrictionType.domain;
-    case C.county:
+    case C.overrideCounty:
       return AccessRestrictionType.county;
-    case C.state:
+    case C.overrideState:
       return AccessRestrictionType.state;
-    case C.country:
+    case C.overrideCountry:
       return AccessRestrictionType.country;
   }
 }
