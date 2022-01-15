@@ -160,9 +160,9 @@ class _SearchState extends State<Search> {
   void _getAllowableGroupIds() async {
     final temp = await GroupsDatabaseService(currUserRef: widget.userData.userRef).getAllowableGroupRefs(
         domain: widget.userData.domain,
-        county: widget.userData.county,
-        state: widget.userData.state,
-        country: widget.userData.country);
+        county: widget.userData.currCounty,
+        state: widget.userData.currState,
+        country: widget.userData.currCountry);
     setState(() {
       _allowableGroupRefs = temp;
     });

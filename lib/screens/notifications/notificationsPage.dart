@@ -47,23 +47,26 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
       body: Container(
         color: ThemeColor.backgroundGrey,
         child: Column(children: <Widget>[
-          TabBar(
-            indicatorColor: ThemeColor.black,
-            tabs: <Widget>[
-              Tab(
-                  icon: Text("Posts & Comments",
-                      style: TextStyle(
-                        color: ThemeColor.black,
-                        fontFamily: "Inter",
-                      ))),
-              Tab(
-                  icon: Text("Messages",
-                      style: TextStyle(
-                        color: ThemeColor.black,
-                        fontFamily: "Inter",
-                      )))
-            ],
-            controller: _tabController,
+          Container(
+            color: ThemeColor.white,
+            child: TabBar(
+              indicatorColor: Colors.transparent,
+              labelColor: ThemeColor.black,
+              unselectedLabelColor: ThemeColor.mediumGrey,
+              labelStyle: TextStyle(
+                fontFamily: "Inter",
+                fontWeight: FontWeight.w800,
+              ),
+              unselectedLabelStyle: TextStyle(
+                fontFamily: "Inter",
+                fontWeight: FontWeight.w700
+              ),
+              tabs: <Widget>[
+                Tab(child: Text("Posts & Comments")),
+                Tab(child: Text("Messages"))
+              ],
+              controller: _tabController,
+            ),
           ),
           SizedBox( // can be removed once tabbarview contains listviewbuilders
             height: 500.0,
