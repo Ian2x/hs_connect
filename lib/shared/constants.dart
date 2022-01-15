@@ -122,7 +122,7 @@ class C {
   static const commentRef = 'commentRef';
   static const postRef = 'postRef';
   static const text = 'text';
-  static const media = 'media';
+  static const mediaURL = 'mediaURL';
   static const numReplies = 'numReplies';
   static const likes = 'likes';
   static const dislikes = 'dislikes';

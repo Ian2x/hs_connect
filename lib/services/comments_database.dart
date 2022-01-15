@@ -49,7 +49,7 @@ class CommentsDatabaseService {
           C.groupRef: groupRef,
           C.creatorRef: currUserRef,
           C.text: text,
-          C.media: media,
+          C.mediaURL: media,
           C.createdAt: DateTime.now(),
           C.numReplies: 0,
           C.accessRestriction: accessRestriction,
@@ -92,7 +92,7 @@ class CommentsDatabaseService {
         if (weakDelete) {
           // "delete" comment
           return await commentRef
-              .update({C.likes: [], C.dislikes: [], C.media: null, C.creatorRef: null, C.text: '[Comment removed]'});
+              .update({C.likes: [], C.dislikes: [], C.mediaURL: null, C.creatorRef: null, C.text: '[Comment removed]'});
         } else {
           // delete comment for good
           return await commentRef.delete();
