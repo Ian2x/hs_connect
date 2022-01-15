@@ -147,8 +147,7 @@ class _postTitleCardState extends State<postTitleCard> {
         openCreatorProfile();
       },
       child: Container(
-          color:Colors.blue,
-          padding: EdgeInsets.fromLTRB(20.0, 10.0, 5.0, 10.0),
+          padding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
           child:
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,7 +155,7 @@ class _postTitleCardState extends State<postTitleCard> {
               Row(  //intro row + three dots
                 children: [
                   Text("from " + creatorName + " • " + convertTime(widget.post.createdAt.toDate()),
-                    style: ThemeText.regularSmall(color:ThemeColor.postIntroGrey,fontSize:14)
+                    style: ThemeText.regularSmall(color:ThemeColor.mediumGrey,fontSize:14)
                   ),
                   Spacer(flex:1),
                   IconButton(
@@ -166,14 +165,14 @@ class _postTitleCardState extends State<postTitleCard> {
                   )
                 ]
               ), //introRow
-              SizedBox(height:20),
+              SizedBox(height:0),
               Text( widget.post.title,
-                style: ThemeText.postViewTitle(fontSize:18, color: ThemeColor.black),
+                style: ThemeText.postViewTitle(fontSize:18, color: ThemeColor.black, height:1.5),
               ),
-              SizedBox(height:20),
+              SizedBox(height:8),
               widget.post.text!= null ?
                 Text( widget.post.text!,
-                  style: ThemeText.postViewTitle(fontSize:16)) : Container(),
+                  style: ThemeText.postViewText(fontSize:16, color: ThemeColor.mediumGrey, height: 1.5)) : Container(),
               widget.post.text!= null ?  SizedBox(height:20): Container(),
               Row(
                 children: [
