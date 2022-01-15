@@ -33,9 +33,11 @@ class _PostFormState extends State<PostForm> {
   final _formKey = GlobalKey<FormState>();
 
   void handleError(err) {
-    setState(() {
-      error = 'ERROR: something went wrong, possibly with username to email conversion';
-    });
+    if (mounted) {
+      setState(() {
+        error = 'ERROR: something went wrong, possibly with username to email conversion';
+      });
+    }
   }
 
   void handleValue(val) {
@@ -50,7 +52,7 @@ class _PostFormState extends State<PostForm> {
   String? newFileURL;
   File? newFile;
 
-  bool isPost=true;
+  bool isPost = true;
 
   // form values
   String _title = '';
@@ -59,7 +61,7 @@ class _PostFormState extends State<PostForm> {
   String _tag = '';
   String error = '';
   bool loading = false;
-  bool hasPic=false;
+  bool hasPic = false;
 
   String _groupName = '';
   String _description = '';
@@ -67,11 +69,8 @@ class _PostFormState extends State<PostForm> {
 
   ImageStorage _images = ImageStorage();
 
-
   @override
   Widget build(BuildContext context) {
-
-
     double phoneHeight = MediaQuery.of(context).size.height - 200;
 
     final user = Provider.of<User>(context);
@@ -92,7 +91,8 @@ class _PostFormState extends State<PostForm> {
           .add(AccessRestriction(restrictionType: AccessRestrictionType.county, restriction: userData.currCounty!));
     }
     if (userData.currState != null) {
-      accessOptions.add(AccessRestriction(restrictionType: AccessRestrictionType.state, restriction: userData.currState!));
+      accessOptions
+          .add(AccessRestriction(restrictionType: AccessRestrictionType.state, restriction: userData.currState!));
     }
     if (userData.currCountry != null) {
       accessOptions
@@ -106,13 +106,16 @@ class _PostFormState extends State<PostForm> {
 
     void submitForm() async {
       if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-        setState(() => loading = true);
+        if (mounted) {
+          setState(() => loading = true);
+        }
         await PostsDatabaseService(currUserRef: userData.userRef).newPost(
           title: _title,
           text: _text,
           tagString: _tag,
           media: newFileURL,
-          pollRef: null, //until poll is implemented
+          pollRef: null,
+          //until poll is implemented
           groupRef: _groupRef!,
           onValue: handleValue,
           onError: handleError,
@@ -121,16 +124,20 @@ class _PostFormState extends State<PostForm> {
       if (newFile != null) {
         // upload newFile
         final downloadURL = await _images.uploadImage(file: newFile!);
-        setState(() {
-          newFileURL = downloadURL;
-        });
+        if (mounted) {
+          setState(() {
+            newFileURL = downloadURL;
+          });
+        }
       }
     }
 
     void setPic(File x) {
-      setState(() {
-        newFile = x;
-      });
+      if (mounted) {
+        setState(() {
+          newFile = x;
+        });
+      }
     }
 
     return FutureBuilder(
@@ -140,47 +147,51 @@ class _PostFormState extends State<PostForm> {
             final nullGroups = snapshot.data as List<Group?>;
             List<Group> groups = [];
             for (Group? group in nullGroups) {
-              if (group!=null) {
+              if (group != null) {
                 groups.add(group);
               }
             }
-            if (isPost){
+            if (isPost) {
               return SingleChildScrollView(
                 child: Form(
                   key: _formKey,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      SizedBox(height:40), //TODO: Find media height
+                      SizedBox(height: 40), //TODO: Find media height
                       Row(
                         children: [
-                          IconButton( icon:Icon(Icons.arrow_back_ios_rounded, size:23.0),
-                            onPressed:() {
+                          IconButton(
+                            icon: Icon(Icons.arrow_back_ios_rounded, size: 23.0),
+                            onPressed: () {
                               Navigator.pushReplacement(
-                                context, NoAnimationMaterialPageRoute(builder: (context) => Home()),);
+                                context,
+                                NoAnimationMaterialPageRoute(builder: (context) => Home()),
+                              );
                             },
                           ),
-                          Spacer(flex:6),
+                          Spacer(flex: 6),
                           tagOutline(
-                            textOnly:true,
+                            textOnly: true,
                             text: "Make a Post",
                             textColor: ThemeColor.secondaryBlue,
                             borderColor: ThemeColor.secondaryBlue,
                           ),
-                          Spacer(flex:6),
-                          IconButton(onPressed: submitForm,
+                          Spacer(flex: 6),
+                          IconButton(
+                              onPressed: submitForm,
                               icon: Icon(Icons.add_circle_rounded, color: ThemeColor.secondaryBlue, size: 30.0)),
                         ],
                       ),
-                      SizedBox(height:15),
+                      SizedBox(height: 15),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Flexible(
-                            flex:4,
+                            flex: 4,
                             child: Container(
                               height: 64,
-                              width:double.infinity,
+                              width: double.infinity,
                               padding: EdgeInsets.fromLTRB(8.0, 0.0, 4.0, 0.0),
                               decoration: ShapeDecoration(
                                 color: HexColor('FFFFFF'),
@@ -192,7 +203,7 @@ class _PostFormState extends State<PostForm> {
                                     )),
                               ),
                               child: DropdownButtonFormField<DocumentReference>(
-                                  iconSize:0.0,
+                                  iconSize: 0.0,
                                   itemHeight: 48.0,
                                   isExpanded: true,
                                   decoration: textInputDecoration,
@@ -217,7 +228,11 @@ class _PostFormState extends State<PostForm> {
                                       ),
                                     );
                                   }).toList(),
-                                  onChanged: (val) => setState(() => _groupRef = val!),
+                                  onChanged: (val) {
+                                    if (mounted) {
+                                      setState(() => _groupRef = val!);
+                                    }
+                                  },
                                   validator: (val) {
                                     if (val == null)
                                       return 'Pick a group to post to';
@@ -226,9 +241,9 @@ class _PostFormState extends State<PostForm> {
                                   }),
                             ),
                           ),
-                          SizedBox(width:15),
+                          SizedBox(width: 15),
                           Flexible(
-                            flex:1,
+                            flex: 1,
                             child: Container(
                               height: 64,
                               width: 64,
@@ -247,8 +262,8 @@ class _PostFormState extends State<PostForm> {
                                   try {
                                     final pickedFile = await ImagePicker().pickImage(
                                       source: ImageSource.gallery,
-                                      maxHeight:400,
-                                      maxWidth:400,
+                                      maxHeight: 400,
+                                      maxWidth: 400,
                                       imageQuality: 100,
                                     );
                                     if (pickedFile != null) {
@@ -264,25 +279,27 @@ class _PostFormState extends State<PostForm> {
                                         });
                                       }
                                     }
-                                    setState(() {
-                                      if (newFile!=null) {
-                                        hasPic=true;
-                                      }
-                                    });
+                                    if (mounted) {
+                                      setState(() {
+                                        if (newFile != null) {
+                                          hasPic = true;
+                                        }
+                                      });
+                                    }
                                   } catch (e) {
                                     print(e);
                                   }
                                 },
-                                icon: Icon(Icons.photo, color:ThemeColor.secondaryBlue,size:30),
+                                icon: Icon(Icons.photo, color: ThemeColor.secondaryBlue, size: 30),
                               ),
                             ),
                           )
                         ],
                       ),
-                      SizedBox(height:15),
-                      hasPic!= false ? SizedBox(height:10): SizedBox(),
-                      hasPic!= false ? imagePreview(fileImage: newFile) : SizedBox(),
-                      hasPic!= false ? SizedBox(height:10) : SizedBox(),
+                      SizedBox(height: 15),
+                      hasPic != false ? SizedBox(height: 10) : SizedBox(),
+                      hasPic != false ? imagePreview(fileImage: newFile) : SizedBox(),
+                      hasPic != false ? SizedBox(height: 10) : SizedBox(),
                       Container(
                         //TextInput Container
                         constraints: BoxConstraints(
@@ -356,68 +373,74 @@ class _PostFormState extends State<PostForm> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      SizedBox(height:30), //TODO: Find media height
+                      SizedBox(height: 30), //TODO: Find media height
                       Row(
                         children: [
-                          IconButton( icon:Icon(Icons.arrow_back_ios_rounded, size: 23.0),
-                            onPressed:() {
+                          IconButton(
+                            icon: Icon(Icons.arrow_back_ios_rounded, size: 23.0),
+                            onPressed: () {
                               Navigator.pushReplacement(
-                                context, NoAnimationMaterialPageRoute(builder: (context) => Home()),);
+                                context,
+                                NoAnimationMaterialPageRoute(builder: (context) => Home()),
+                              );
                             },
                           ),
-                          Spacer(flex:6),
-                          TextButton (
-                            onPressed:(){
-                              setState((){
-                                isPost=true;
+                          Spacer(flex: 6),
+                          TextButton(
+                            onPressed: () {
+                              setState(() {
+                                isPost = true;
                               });
                             },
-                            child: Text("Post",
+                            child: Text(
+                              "Post",
                               style: TextStyle(
                                 color: ThemeColor.hintTextGrey,
                                 fontSize: ThemeText.regular,
                               ),
                             ),
                           ),
-                          Spacer(flex:1),
+                          Spacer(flex: 1),
                           tagOutline(
-                            textOnly:true,
+                            textOnly: true,
                             text: "Group",
                             textColor: ThemeColor.secondaryBlue,
                             borderColor: ThemeColor.secondaryBlue,
                           ),
-                          Spacer(flex:6),
-                          IconButton(onPressed: () async {
-                            if (newFile != null) {
-                              // upload newFile
-                              final downloadURL = await _images.uploadImage(file: newFile!);
-                              if (mounted) {
-                                setState(() {
-                                  newFileURL = downloadURL;
-                                });
-                              }
-                            }
+                          Spacer(flex: 6),
+                          IconButton(
+                              onPressed: () async {
+                                if (newFile != null) {
+                                  // upload newFile
+                                  final downloadURL = await _images.uploadImage(file: newFile!);
+                                  if (mounted) {
+                                    setState(() {
+                                      newFileURL = downloadURL;
+                                    });
+                                  }
+                                }
 
-                            if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-                              if (mounted) {
-                                setState(() => loading = true);
-                              }
-                              await _groups.newGroup(
-                                accessRestriction: _accessRestriction!,
-                                name: _groupName,
-                                image: newFileURL,
-                                description: _description,
-                                onValue: handleValue,
-                                onError: handleError,
-                                creatorRef: userData.userRef,
-                              );
-                            }
-                          },
-                              icon: Icon(Icons.add_circle_rounded, color: ThemeColor.secondaryBlue, size:30.0)),
+                                if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+                                  if (mounted) {
+                                    setState(() => loading = true);
+                                  }
+                                  await _groups.newGroup(
+                                    accessRestriction: _accessRestriction!,
+                                    name: _groupName,
+                                    image: newFileURL,
+                                    description: _description,
+                                    onValue: handleValue,
+                                    onError: handleError,
+                                    creatorRef: userData.userRef,
+                                  );
+                                }
+                              },
+                              icon: Icon(Icons.add_circle_rounded, color: ThemeColor.secondaryBlue, size: 30.0)),
                         ],
                       ), //Top Row
-                      SizedBox(height:15),
-                      Row(   //GroupTitle Row
+                      SizedBox(height: 15),
+                      Row(
+                        //GroupTitle Row
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Flexible(
@@ -435,9 +458,8 @@ class _PostFormState extends State<PostForm> {
                                       width: 3.0,
                                     )),
                               ),
-                              child:
-                              DropdownButtonFormField<AccessRestriction>(
-                                iconSize:0.0,
+                              child: DropdownButtonFormField<AccessRestriction>(
+                                iconSize: 0.0,
                                 hint: Text(
                                   "Who can see this group?",
                                   style: TextStyle(
@@ -462,7 +484,7 @@ class _PostFormState extends State<PostForm> {
                               ),
                             ),
                           ),
-                          SizedBox(width:15),
+                          SizedBox(width: 15),
                           Flexible(
                             flex: 1,
                             child: Container(
@@ -501,62 +523,62 @@ class _PostFormState extends State<PostForm> {
                                     print(e);
                                   }
                                 },
-                                icon: Icon(Icons.photo, color:ThemeColor.secondaryBlue,size:30),
+                                icon: Icon(Icons.photo, color: ThemeColor.secondaryBlue, size: 30),
                               ),
                             ),
                           )
                         ],
                       ), //Title + Image Row
-                    SizedBox(height:15),
-                    Container(
-                      //TextInput Container
-                      //height: 100,
-                      padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                      decoration: ShapeDecoration(
-                        color: HexColor('FFFFFF'),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(ThemeLayout.borderRadius),
-                            side: BorderSide(
-                              color: HexColor("E9EDF0"),
-                              width: 3.0,
-                            )),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TextFormField(
-                            style: TextStyle(
-                              color: HexColor("223E52"),
-                              fontSize: 22,
-                              //fontWeight: ,
+                      SizedBox(height: 15),
+                      Container(
+                        //TextInput Container
+                        //height: 100,
+                        padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                        decoration: ShapeDecoration(
+                          color: HexColor('FFFFFF'),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(ThemeLayout.borderRadius),
+                              side: BorderSide(
+                                color: HexColor("E9EDF0"),
+                                width: 3.0,
+                              )),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TextFormField(
+                              style: TextStyle(
+                                color: HexColor("223E52"),
+                                fontSize: 22,
+                                //fontWeight: ,
+                              ),
+                              maxLines: null,
+                              decoration: InputDecoration(
+                                  hintStyle: TextStyle(
+                                    color: HexColor("223E52"),
+                                    fontSize: 20,
+                                    //fontWeight: ,
+                                  ),
+                                  border: InputBorder.none,
+                                  hintText: "Your Group's name?"),
+                              validator: (val) {
+                                if (val == null) return 'Error: null value';
+                                if (val.isEmpty)
+                                  return 'Group name is required';
+                                else
+                                  return null;
+                              },
+                              onChanged: (val) {
+                                if (mounted) {
+                                  setState(() => _groupName = val);
+                                }
+                              },
                             ),
-                            maxLines: null,
-                            decoration: InputDecoration(
-                                hintStyle: TextStyle(
-                                  color: HexColor("223E52"),
-                                  fontSize: 20,
-                                  //fontWeight: ,
-                                ),
-                                border: InputBorder.none,
-                                hintText: "Your Group's name?"),
-                            validator: (val) {
-                              if (val == null) return 'Error: null value';
-                              if (val.isEmpty)
-                                return 'Group name is required';
-                              else
-                                return null;
-                            },
-                            onChanged: (val) {
-                              if (mounted) {
-                                setState(() => _groupName = val);
-                              }
-                            },
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    SizedBox(height:15),
-                    Container(
+                      SizedBox(height: 15),
+                      Container(
                         //TextInput Container
                         constraints: BoxConstraints(
                           maxHeight: double.infinity,

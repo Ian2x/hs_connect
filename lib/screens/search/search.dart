@@ -139,19 +139,26 @@ class _SearchState extends State<Search> {
         _searchText = _filter.text;
         switch (_resultType) {
           case SearchResultType.people:
-            setState(() {
-              streamQuery = UserDataDatabaseService(currUserRef: widget.userData.userRef).searchStream(_searchText);
-            });
+            if (mounted) {
+              setState(() {
+                streamQuery = UserDataDatabaseService(currUserRef: widget.userData.userRef).searchStream(_searchText);
+              });
+            }
             break;
           case SearchResultType.posts:
-            setState(() {
-              streamQuery = PostsDatabaseService(currUserRef: widget.userData.userRef).searchStream(_searchText, _allowableGroupRefs);
-            });
+            if (mounted) {
+              setState(() {
+                streamQuery = PostsDatabaseService(currUserRef: widget.userData.userRef).searchStream(_searchText, _allowableGroupRefs);
+              });
+            }
             break;
           default: // for ResultType.groups
+          if (mounted) {
             setState(() {
               streamQuery = GroupsDatabaseService(currUserRef: widget.userData.userRef).searchStream(_searchText, _allowableGroupRefs);
             });
+          }
+
         }
       });
     }
@@ -163,8 +170,10 @@ class _SearchState extends State<Search> {
         county: widget.userData.currCounty,
         state: widget.userData.currState,
         country: widget.userData.currCountry);
-    setState(() {
-      _allowableGroupRefs = temp;
-    });
+    if (mounted) {
+      setState(() {
+        _allowableGroupRefs = temp;
+      });
+    }
   }
 }

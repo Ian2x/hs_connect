@@ -134,9 +134,11 @@ class _GroupCarouselState extends State<GroupCarousel> {
                 OverlayEntry(builder: (BuildContext context) {
                   return PageView.builder(
                       onPageChanged: (value) {
-                        setState(() {
-                          currentPage = value;
-                        });
+                        if (mounted) {
+                          setState(() {
+                            currentPage = value;
+                          });
+                        }
                       },
                       pageSnapping: true,
                       controller: circlesController,
@@ -174,9 +176,11 @@ class _GroupCarouselState extends State<GroupCarousel> {
             height: blocksHeight,
             child: PageView.builder(
                 onPageChanged: (value) {
-                  setState(() {
-                    currentPage = value;
-                  });
+                  if (mounted) {
+                    setState(() {
+                      currentPage = value;
+                    });
+                  }
                 },
                 pageSnapping: true,
                 controller: blocksController,

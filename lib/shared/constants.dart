@@ -183,4 +183,8 @@ class C {
   static const fullDomainName = 'fullDomainName';
   static const domainColor = 'domainColor';
   static const color = 'color';
+  static const country = 'country';
+  static const state = 'state';
+  static const county = 'county';
+  static const Public = 'Public';
 }
