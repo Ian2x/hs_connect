@@ -54,7 +54,6 @@ class _MessagesFormState extends State<MessagesForm> {
     return loading
         ? Container()
         : Container(
-            padding: EdgeInsets.all(13.0),
             child: Form(
               key: _formKey,
               child: Column(children: <Widget>[
@@ -77,6 +76,8 @@ class _MessagesFormState extends State<MessagesForm> {
                     : Container(),
                 TextFormField(
                     initialValue: null,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
                     decoration: messageInputDecoration(
                         setPic: setPic,
                         onPressed: () async {

@@ -15,19 +15,42 @@ class MessagesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
+      backgroundColor: ThemeColor.white,
+      appBar: AppBar(
         backgroundColor: ThemeColor.white,
-        appBar: AppBar(
-          backgroundColor: ThemeColor.white,
-          title: Text('HII', style: ThemeText.titleRegular()),
-          leading: myBackButtonIcon(context),
-        ),
-        body: Container(
-          padding: EdgeInsets.all(15),
-          child: Column(mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.max, children: <Widget>[
-            MessagesFeed(currUserRef: currUserRef, otherUserRef: otherUserRef,),
-            Spacer(),
-            MessagesForm(currUserRef: currUserRef, otherUserRef: otherUserRef)
-          ]),
-        ));
+        title: Text('HII', style: ThemeText.titleRegular()),
+        leading: myBackButtonIcon(context),
+      ),
+      body: Container(
+        padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+        child: Column(children: <Widget>[
+          Expanded(
+              child: MessagesFeed(
+                currUserRef: currUserRef,
+                otherUserRef: otherUserRef,
+              )),
+          Container(
+            color: Colors.transparent,
+            child: SizedBox(height: 10),
+          ),
+          MessagesForm(currUserRef: currUserRef, otherUserRef: otherUserRef)
+        ]),
+        /*Overlay(
+            initialEntries: <OverlayEntry>[
+              OverlayEntry(builder: (BuildContext context) {
+                return MessagesFeed(currUserRef: currUserRef, otherUserRef: otherUserRef,);
+
+              }),
+              OverlayEntry(builder: (BuildContext context) {
+                return Column(mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.max, children: <Widget>[
+                  Spacer(),
+                  MessagesForm(currUserRef: currUserRef, otherUserRef: otherUserRef)
+                ]);
+              }),
+            ],
+          )*/
+      ),
+    );
   }
 }
