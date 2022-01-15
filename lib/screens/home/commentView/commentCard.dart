@@ -5,8 +5,10 @@ import 'package:hs_connect/models/comment.dart';
 import 'package:hs_connect/screens/home/commentView/likeDislikeComment.dart';
 import 'package:hs_connect/screens/home/postView/likeDislikePost.dart';
 import 'package:hs_connect/screens/home/replyFeed/replyFeed.dart';
+import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/tools/convertTime.dart';
 
 class CommentCard extends StatefulWidget {
   final Comment comment;
@@ -29,6 +31,7 @@ class _CommentCardState extends State<CommentCard> {
   String username = '<Loading user name...>';
   String? imageString;
   Image? userImage;
+  String? groupColor;
   String userGroupName='';
 
   @override
@@ -50,9 +53,6 @@ class _CommentCardState extends State<CommentCard> {
     getUserData();
     super.initState();
   }
-
-
-
 
 
   void getUserData() async {
@@ -83,6 +83,7 @@ class _CommentCardState extends State<CommentCard> {
 
     double imageSide= (MediaQuery.of(context).size.width)/12;
 
+    /*
     if (imageString != null && imageString != "") {
       var tempImage = Image.network(imageString!);
       tempImage.image
@@ -95,6 +96,7 @@ class _CommentCardState extends State<CommentCard> {
     } else {
       userImage=  Image(image: AssetImage('assets/lville.jpeg'), height: 20, width: 20);
     }
+    */
 
     return Stack(
       children: [
@@ -107,13 +109,17 @@ class _CommentCardState extends State<CommentCard> {
           ),
         ),
         Container(
-          padding: EdgeInsets.fromLTRB(20.0, 15, 0, 10.0),
+          padding: EdgeInsets.fromLTRB(20.0, 5, 0, 5.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              Text(username + " • " + userGroupName,
+                  style: ThemeText.groupBold(color: ThemeColor.mediumGrey, fontSize: 13)),
+              SizedBox(height:10),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
+                  /*Column(
                     children: [
                       Container(
                         width: imageSide,
@@ -127,21 +133,19 @@ class _CommentCardState extends State<CommentCard> {
                         ),
                       ),
                     ],
-                  ),
-                  SizedBox(width:10),
+                  ),*/
+
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
-                          width: (MediaQuery.of(context).size.width)*.70,
+                          width: (MediaQuery.of(context).size.width)*.85,
                           child: RichText(
                             text: TextSpan(
                               children: <TextSpan>[
-                                TextSpan(text: username + " ",
-                                    style: ThemeText.groupBold(color: ThemeColor.mediumGrey, fontSize: 15)),
                                 TextSpan(text: widget.comment.text,
-                                    style: ThemeText.postViewText(color: ThemeColor.black, fontSize: 15, height: 1.3)),
+                                    style: ThemeText.postViewText(color: ThemeColor.black, fontSize: 15, height: 1.5)),
                               ],
                             ),
                           ),
@@ -149,11 +153,11 @@ class _CommentCardState extends State<CommentCard> {
                         Row(
                           children: [
                             Text(
-                              userGroupName, style: ThemeText.groupBold(color:ThemeColor.mediumGrey, fontSize:14),
+                              convertTime(widget.comment.createdAt.toDate()), style: ThemeText.groupBold(color:ThemeColor.mediumGrey, fontSize:14),
                             ),
                             Spacer(flex:1),
                             TextButton(
-                                child: Text("Reply", style: ThemeText.groupBold(color:ThemeColor.mediumGrey, fontSize:14)),
+                                child: Text("Reply", style: ThemeText.groupBold(color:ThemeColor.secondaryBlue, fontSize:14)),
                                 onPressed: (){}
                             ),
                             LikeDislikeComment(

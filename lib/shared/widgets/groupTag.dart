@@ -19,7 +19,7 @@ class groupTag extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      padding: EdgeInsets.all(5.0),
+      padding: EdgeInsets.fromLTRB(5.0,0.0,5.0,0.0),
       decoration: ShapeDecoration(
         color: ThemeColor.lightGrey,
         shape: RoundedRectangleBorder(
