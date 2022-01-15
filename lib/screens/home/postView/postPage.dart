@@ -70,7 +70,8 @@ class _PostPageState extends State<PostPage> {
         backgroundColor: HexColor("FFFFFF"),
         elevation: 0.0,
       ),
-      body: CommentsFeed(post: post!, groupRef: post!.groupRef),
+      body:
+        CommentsFeed(post: post!, groupRef: post!.groupRef),
     );
   }
 }
