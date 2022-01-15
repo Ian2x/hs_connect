@@ -63,7 +63,7 @@ class _CommentCardState extends State<CommentCard> {
         setState(() {
           username = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
           userGroupName = fetchUserData != null ? fetchUserData.domain : '<Failed to retrieve user name>';
-          imageString = fetchUserData != null ? fetchUserData.profileImage : '<Failed to retrieve user name>';
+          imageString = fetchUserData != null ? fetchUserData.profileImageURL : '<Failed to retrieve user name>';
         });
       }
     } else {

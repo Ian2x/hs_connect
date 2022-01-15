@@ -55,7 +55,7 @@ class Post {
   final String title;
   final String titleLC;
   final String? text;
-  final String? media;
+  final String? mediaURL;
   final Timestamp createdAt;
   final int numComments;
   final int numReplies;
@@ -75,7 +75,7 @@ class Post {
     required this.title,
     required this.titleLC,
     required this.text,
-    required this.media,
+    required this.mediaURL,
     required this.createdAt,
     required this.numComments,
     required this.numReplies,
@@ -99,7 +99,7 @@ postFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
     title: querySnapshot[C.title],
     titleLC: querySnapshot[C.titleLC],
     text: querySnapshot[C.text],
-    media: querySnapshot[C.media],
+    mediaURL: querySnapshot[C.mediaURL],
     createdAt: querySnapshot[C.createdAt],
     numComments: querySnapshot[C.numComments],
     numReplies: querySnapshot[C.numReplies],
@@ -122,7 +122,7 @@ postFromSnapshot(DocumentSnapshot snapshot) {
     title: snapshot[C.title],
     titleLC: snapshot[C.titleLC],
     text: snapshot[C.text],
-    media: snapshot[C.media],
+    mediaURL: snapshot[C.mediaURL],
     createdAt: snapshot[C.createdAt],
     numComments: snapshot[C.numComments],
     numReplies: snapshot[C.numReplies],

@@ -94,9 +94,9 @@ class C {
   static const displayedNameLC = 'displayedNameLC';
   static const bio = 'bio';
   static const domain = 'domain';
-  static const county = 'county';
-  static const state = 'state';
-  static const country = 'country';
+  static const overrideCounty = 'overrideCounty';
+  static const overrideState = 'overrideState';
+  static const overrideCountry = 'overrideCountry';
   static const userGroups = 'userGroups';
   static const modGroupRefs = 'modGroupsRefs';
   static const userMessages = 'userMessages';
@@ -122,7 +122,7 @@ class C {
   static const commentRef = 'commentRef';
   static const postRef = 'postRef';
   static const text = 'text';
-  static const media = 'media';
+  static const mediaURL = 'mediaURL';
   static const numReplies = 'numReplies';
   static const likes = 'likes';
   static const dislikes = 'dislikes';
@@ -178,4 +178,13 @@ class C {
   static const lastMessage = 'lastMessage';
   static const numReports = 'numReports';
   static const numComments = 'numComments';
+  static const domainsData = 'domainsData';
+  static const fullName = 'fullName';
+  static const fullDomainName = 'fullDomainName';
+  static const domainColor = 'domainColor';
+  static const color = 'color';
+  static const country = 'country';
+  static const state = 'state';
+  static const county = 'county';
+  static const Public = 'Public';
 }

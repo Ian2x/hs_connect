@@ -43,7 +43,7 @@ replyFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
     groupRef: querySnapshot[C.groupRef],
     accessRestriction: accessRestrictionFromMap(accessRestriction),
     text: querySnapshot[C.text],
-    media: querySnapshot[C.media],
+    media: querySnapshot[C.mediaURL],
     createdAt: querySnapshot[C.createdAt],
     likes: docRefList(querySnapshot[C.likes]),
     dislikes: docRefList(querySnapshot[C.dislikes]),

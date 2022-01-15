@@ -96,8 +96,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             body: TabBarView(
               children: [
                 DomainFeed(),
-                userData!=null ? TrendingFeed(country: userData.country,
-                    state: userData.state, county: userData.county,
+                userData!=null ? TrendingFeed(country: userData.currCountry,
+                    state: userData.currState, county: userData.currCounty,
                     currUserRef: userData.userRef,
                     domain: userData.domain) : Loading(),
               ],

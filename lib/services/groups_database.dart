@@ -116,6 +116,7 @@ class GroupsDatabaseService {
   Future<List<Group>> getAllowableGroups(
       {required String domain, required String? county, required String? state, required String? country}) async {
     // get all group refs
+
     final Future domainGroupsFetch = groupsCollection
         .where(C.accessRestriction,
         isEqualTo: AccessRestriction(restrictionType: AccessRestrictionType.domain, restriction: domain).asMap())
@@ -140,6 +141,7 @@ class GroupsDatabaseService {
         AccessRestriction(restrictionType: AccessRestrictionType.country, restriction: country).asMap())
         .get()
         : null;
+    final publicGroup = groupFromSnapshot(await groupsCollection.doc(C.Public).get());
     final QuerySnapshot domainGroupsSnapshots= await domainGroupsFetch;
     final QuerySnapshot? countyGroupsSnapshots = await countyGroupsFetch;
     final QuerySnapshot? stateGroupsSnapshots = await stateGroupsFetch;
@@ -161,6 +163,7 @@ class GroupsDatabaseService {
       countryGroups.removeWhere((value) => value==null);
       allowableGroups.addAll(countryGroups);
     }
+    if (publicGroup != null) allowableGroups.add(publicGroup);
     return allowableGroups.cast<Group>();
   }
 

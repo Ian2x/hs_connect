@@ -64,16 +64,16 @@ class _NewGroupFormState extends State<NewGroupForm> {
     final List<AccessRestriction> accessOptions = [
       AccessRestriction(restrictionType: AccessRestrictionType.domain, restriction: userData.domain),
     ];
-    if (userData.county != null) {
+    if (userData.currCounty != null) {
       accessOptions
-          .add(AccessRestriction(restrictionType: AccessRestrictionType.county, restriction: userData.county!));
+          .add(AccessRestriction(restrictionType: AccessRestrictionType.county, restriction: userData.currCounty!));
     }
-    if (userData.state != null) {
-      accessOptions.add(AccessRestriction(restrictionType: AccessRestrictionType.state, restriction: userData.state!));
+    if (userData.currState != null) {
+      accessOptions.add(AccessRestriction(restrictionType: AccessRestrictionType.state, restriction: userData.currState!));
     }
-    if (userData.country != null) {
+    if (userData.currCountry != null) {
       accessOptions
-          .add(AccessRestriction(restrictionType: AccessRestrictionType.country, restriction: userData.country!));
+          .add(AccessRestriction(restrictionType: AccessRestrictionType.country, restriction: userData.currCountry!));
     }
 
     return SingleChildScrollView(

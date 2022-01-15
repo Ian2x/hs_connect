@@ -1,20 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:hs_connect/models/accessRestriction.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/authenticate/authenticate.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/newMessageButton.dart';
-import 'package:hs_connect/screens/notifications/Messages/messagesPage.dart';
-import 'package:hs_connect/screens/profile/profileWidgets/newMessageButton.dart';
-import 'package:hs_connect/shared/widgets/MessagesPopup.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileName.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
-import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
-import 'package:hs_connect/screens/profile/profileWidgets/profileAppBar.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileStats.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileImage.dart';
 
@@ -31,8 +25,9 @@ class ProfileBody extends StatefulWidget {
 class _ProfileBodyState extends State<ProfileBody> {
   String profileUsername = '<Loading user name...>';
 
-  String? profileImageString;
-  Widget profileImage = Loading(size: 30.0);
+  bool profileImageExists = false;
+  Widget? profileImage = Loading(size: 30.0);
+  String? profileImageURL;
   int profileGroupCount = 0;
   int profileScore = 0;
   List<Group>? profileGroups;
@@ -43,20 +38,12 @@ class _ProfileBodyState extends State<ProfileBody> {
     if (mounted) {
       setState(() {
         profileUsername = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
-        profileImageString = fetchUserData != null ? fetchUserData.profileImage : '<Failed to retrieve user Image>';
+        profileImageExists = fetchUserData != null && fetchUserData.profileImage != null;
         profileGroupCount = fetchUserData != null ? fetchUserData.userGroups.length : -1;
         profileScore = fetchUserData != null ? fetchUserData.score : -1;
+        profileImage = fetchUserData!.profileImage;
+        profileImageURL = fetchUserData.profileImageURL;
       });
-    }
-    if (profileImageString != '<Failed to retrieve user Image>' && profileImageString != null) {
-      var tempImage = Image.network(profileImageString!);
-      tempImage.image
-          .resolve(ImageConfiguration())
-          .addListener(ImageStreamListener((ImageInfo image, bool syncrhonousCall) {
-        if (mounted) {
-          setState(() => profileImage = tempImage);
-        }
-      }));
     }
     GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserRef);
     if (fetchUserData != null) {
@@ -97,7 +84,8 @@ class _ProfileBodyState extends State<ProfileBody> {
         SizedBox(height: 50),
         ProfileImage(
           profileImage: profileImage,
-          profileImageString: profileImageString == '<Failed to retrieve user Image>' ? null : profileImageString,
+          profileImageURL: profileImageURL,
+          profileImageExists: profileImageExists,
           currUserName: profileUsername,
           showEditIcon: widget.profileRef == widget.currUserRef && widget.currUserRef == userData.userRef,
         ),
