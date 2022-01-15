@@ -26,5 +26,6 @@ class MessagesCard extends StatelessWidget {
           nip: isSentMessage ? BubbleNip.rightTop : BubbleNip.leftTop,
           child: Text(message.text)),
     );
+
   }
 }

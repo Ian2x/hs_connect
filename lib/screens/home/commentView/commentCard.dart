@@ -97,7 +97,6 @@ class _CommentCardState extends State<CommentCard> {
     }
 
     return Stack(
-
       children: [
         Positioned(
           top:-10,
@@ -157,7 +156,6 @@ class _CommentCardState extends State<CommentCard> {
                                 child: Text("Reply", style: ThemeText.groupBold(color:ThemeColor.mediumGrey, fontSize:14)),
                                 onPressed: (){}
                             ),
-                            SizedBox(width: 0),
                             LikeDislikeComment(
                                 commentRef: widget.comment.commentRef,
                                 currUserRef: widget.currUserRef,
@@ -176,6 +174,7 @@ class _CommentCardState extends State<CommentCard> {
             ]
           )
         ),
+
       ],
     );
   }
