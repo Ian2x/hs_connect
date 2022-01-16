@@ -12,9 +12,9 @@ class DomainsDataDatabaseService {
     final DocumentSnapshot documentSnapshot = await domainsDataDatabaseCollection.doc(domain).get();
     if (documentSnapshot.exists) {
       return DomainData(
-          county: documentSnapshot.get(C.overrideCounty),
-          state: documentSnapshot.get(C.overrideState),
-          country: documentSnapshot.get(C.overrideCounty),
+          county: documentSnapshot.get(C.county),
+          state: documentSnapshot.get(C.state),
+          country: documentSnapshot.get(C.country),
           fullName: documentSnapshot.get(C.fullName),
           color: documentSnapshot.get(C.color)
       );
