@@ -9,7 +9,6 @@ import 'package:hs_connect/screens/home/postView/postPage.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
 

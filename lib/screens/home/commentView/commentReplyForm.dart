@@ -84,7 +84,8 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
           Form(
             key:_formKey,
             child: TextFormField(
-              decoration: commentInputDecoration(
+              initialValue: '',
+              decoration: commentReplyInputDecoration(
                   isReply: widget.isReply,
                   onPressed: () async {
                     if (_formKey.currentState != null && _formKey.currentState!.validate()) {
@@ -152,16 +153,3 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
       );
   }
 }
-
-/*
-newFile != null
-              ? Semantics(
-                  label: 'new_profile_pic_picked_image',
-                  child: kIsWeb ? Image.network(newFile!.path) : Image.file(File(newFile!.path)),
-                )
-              : Container(),
-          Text(
-            error,
-            style: TextStyle(color: Colors.red, fontSize: 14.0),
-          )
- */

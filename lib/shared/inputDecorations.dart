@@ -15,7 +15,7 @@ typedef voidFunction = void Function();
 
 typedef voidParamFunction = void Function (DocumentReference?);
 
-InputDecoration commentInputDecoration({required voidFunction onPressed, required Function setPic, required bool isReply}) {
+InputDecoration commentReplyInputDecoration({required voidFunction onPressed, required Function setPic, required bool isReply}) {
   return InputDecoration(
     fillColor: Colors.white,
     hintText: isReply != false ? "Reply..." : "Comment...",
