@@ -187,4 +187,6 @@ class C {
   static const state = 'state';
   static const county = 'county';
   static const Public = 'Public';
+  static const lastViewed = 'lastViewed';
+
 }

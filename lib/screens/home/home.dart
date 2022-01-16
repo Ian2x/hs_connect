@@ -96,10 +96,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             body: TabBarView(
               children: [
                 DomainFeed(),
-                userData!=null ? TrendingFeed(country: userData.currCountry,
+                TrendingFeed(country: userData.currCountry,
                     state: userData.currState, county: userData.currCounty,
                     currUserRef: userData.userRef,
-                    domain: userData.domain) : Loading(),
+                    domain: userData.domain),
               ],
               controller: _tabController,
               physics: new NeverScrollableScrollPhysics(),

@@ -27,19 +27,42 @@ class PostNotificationCard extends StatelessWidget {
         },
         child: Card(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-            margin: EdgeInsets.fromLTRB(2.5, 5.0, 2.5, 2.5),
-            elevation: 0.0,
+            margin: EdgeInsets.fromLTRB(2.5, 5, 2.5, 2.5),
+            elevation: 0,
             color: ThemeColor.white,
-            child: Container(
-                padding: const EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 10.0),
-                child: Row(children: <Widget>[
-                  SizedBox(width: 5.0),
-                  Column(children: <Widget>[
-                    //SizedBox(height: 10.0),
-                    groupCircle,
-                    SizedBox(height: 20.0),
-                  ]),
-                  Flexible(
+            child: Stack(
+              children: <Widget>[
+                Container(padding: EdgeInsets.fromLTRB(15, 15, 0, 0),child: groupCircle),
+                Container(
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                    child: Row(crossAxisAlignment: CrossAxisAlignment.end, children: <Widget>[
+                      SizedBox(width: 50),
+                      Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+                        SizedBox(height: 10),
+                        SizedBox(
+                            width: (MediaQuery.of(context).size.width) * 0.65,
+                            child: Text(post.title,
+                                style: ThemeText.titleRegular(fontSize: 15),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2)),
+                        SizedBox(height: 10),
+                        newResponseIcon(),
+                      ]),
+                      Spacer(),
+                      Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            Text((post.likes.length - post.dislikes.length).toString() + " Likes",
+                                style: TextStyle(fontSize: 14, fontFamily: "Inter", color: ThemeColor.black, fontWeight: FontWeight.bold)),
+                          ])
+                    ]))
+              ],
+            )));
+  }
+}
+
+/*
+Flexible(
                     child: Column(children: <Widget>[
                       Row(children: <Widget>[
                         SizedBox(width: 10.0),
@@ -61,6 +84,4 @@ class PostNotificationCard extends StatelessWidget {
                       ])
                     ]),
                   )
-                ]))));
-  }
-}
+ */

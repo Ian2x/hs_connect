@@ -33,8 +33,39 @@ class CommentNotificationCard extends StatelessWidget {
                       )));
         },
         child: Card(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          margin: EdgeInsets.fromLTRB(2.5,5,2.5,2.5),
+          elevation: 0,
+          color: ThemeColor.white,
+          child: Stack(
+            children: <Widget>[
+              Container(padding: EdgeInsets.fromLTRB(15, 15, 0, 0),child: groupCircle),
+              Container(
+                padding: const EdgeInsets.fromLTRB(10,0,10,10),
+                child: Row(crossAxisAlignment: CrossAxisAlignment.end,children: <Widget>[
+                  SizedBox(width: 50),
+                  Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+                    SizedBox(height: 10),
+                    SizedBox(
+                        width: (MediaQuery.of(context).size.width) * 0.65,
+                        child: Text(comment.text,
+                            style: ThemeText.titleRegular(fontSize: 15),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2)),
+                    SizedBox(height: 10),
+                    // put card here
+                    ]),
+                  Spacer(),
+                ])
+              )
+            ]
+          )
+        )
+
+
+        /*Card(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-            margin: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
+            margin: EdgeInsets.fromLTRB(2.5, 5, 2.5, 2.5),
             elevation: 0.0,
             color: ThemeColor.white,
             child: Container(
@@ -67,6 +98,7 @@ class CommentNotificationCard extends StatelessWidget {
                       SizedBox(width: 10.0),
                     ])
                   ]))
-                ]))));
+                ])))*/
+    );
   }
 }
