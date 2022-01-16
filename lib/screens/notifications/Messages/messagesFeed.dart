@@ -8,6 +8,7 @@ import 'package:hs_connect/shared/widgets/loading.dart';
 import 'messagesBubble.dart';
 
 
+
 class MessagesFeed extends StatefulWidget {
   final DocumentReference otherUserRef;
   final DocumentReference currUserRef;
