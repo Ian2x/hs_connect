@@ -4,6 +4,8 @@ import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/commentFeed/commentsFeed.dart';
+import 'package:hs_connect/screens/home/commentView/commentForm.dart';
+import 'package:hs_connect/screens/home/new/newPost/postBar.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
@@ -71,7 +73,17 @@ class _PostPageState extends State<PostPage> {
         elevation: 0.0,
       ),
       body:
-        CommentsFeed(post: post!, groupRef: post!.groupRef),
+          Stack(
+            children: [
+              Container(
+                constraints: BoxConstraints(
+                  minHeight:MediaQuery.of(context).size.height,
+                ),
+                child:
+                  CommentsFeed(post: post!, groupRef: post!.groupRef),
+              ),
+            ],
+          )
     );
   }
 }
