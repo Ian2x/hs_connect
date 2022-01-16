@@ -7,10 +7,9 @@ import 'package:hs_connect/shared/constants.dart';
 
 class PostNotificationCard extends StatelessWidget {
   final Post post;
-  final Widget groupCircle;
   final DocumentReference currUserRef;
 
-  const PostNotificationCard({Key? key, required this.post, required this.groupCircle, required this.currUserRef})
+  const PostNotificationCard({Key? key, required this.post, required this.currUserRef})
       : super(key: key);
 
   @override
@@ -32,7 +31,6 @@ class PostNotificationCard extends StatelessWidget {
             color: ThemeColor.white,
             child: Stack(
               children: <Widget>[
-                Container(padding: EdgeInsets.fromLTRB(15, 15, 0, 0),child: groupCircle),
                 Container(
                     padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                     child: Row(crossAxisAlignment: CrossAxisAlignment.end, children: <Widget>[

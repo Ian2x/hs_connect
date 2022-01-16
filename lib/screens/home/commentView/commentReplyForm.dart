@@ -13,14 +13,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart';
 
-class CommentForm extends StatefulWidget {
+class CommentReplyForm extends StatefulWidget {
   final DocumentReference postRef;
   final DocumentReference groupRef;
-  bool isReply;
-  DocumentReference? commentReference;
+  final bool isReply;
+  final DocumentReference? commentReference;
   final voidParamFunction switchFormBool;
 
-  CommentForm({Key? key,
+  CommentReplyForm({Key? key,
     required this.postRef,
     required this.groupRef,
     required this.isReply,
@@ -29,10 +29,10 @@ class CommentForm extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CommentFormState createState() => _CommentFormState();
+  _CommentReplyFormState createState() => _CommentReplyFormState();
 }
 
-class _CommentFormState extends State<CommentForm> {
+class _CommentReplyFormState extends State<CommentReplyForm> {
   final _formKey = GlobalKey<FormState>();
 
   void handleError(err) {

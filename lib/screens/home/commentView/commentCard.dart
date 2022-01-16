@@ -32,7 +32,7 @@ class _CommentCardState extends State<CommentCard> {
 
   bool liked = false;
   bool disliked = false;
-  String username = '<Loading user name...>';
+  String username = '';
   String? imageString;
   Image? userImage;
   Color? groupColor;

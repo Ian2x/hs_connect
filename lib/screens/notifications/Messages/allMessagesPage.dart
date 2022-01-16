@@ -4,7 +4,6 @@ import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/tools/circleFromGroup.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +21,6 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
 
   List<UserMessage>? UMs;
   List<UserData>? otherUsers;
-  List<Widget>? groupCirclesForOtherUsers;
 
   @override
   void initState() {
@@ -63,12 +61,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
     final CollectionReference groupsCollection = FirebaseFirestore.instance.collection(C.groups);
     final groups = await _groups.getGroups(groupsRefs: LUD.map((UD) => groupsCollection.doc(UD.domain)).toList());
     for (Group? group in groups) {
-      tempGroupCirclesForOtherUsers.add(circleFromGroup(group: group, circleSize: 35));
-    }
-    if (mounted) {
-      setState(() {
-        groupCirclesForOtherUsers = tempGroupCirclesForOtherUsers;
-      });
+      // tempGroupCirclesForOtherUsers.add(circleFromGroup(group: group, circleSize: 35));
     }
   }
 
@@ -78,7 +71,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
 
     final userData = Provider.of<UserData?>(context);
 
-    if (userData == null || UMs == null || otherUsers == null || groupCirclesForOtherUsers == null) {
+    if (userData == null || UMs == null || otherUsers == null) {
       return Loading();
     }
 

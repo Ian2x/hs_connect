@@ -4,14 +4,10 @@ import 'package:hs_connect/models/comment.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/commentView/commentCard.dart';
-import 'package:hs_connect/screens/home/commentView/commentForm.dart';
-import 'package:hs_connect/screens/home/new/newPost/postBar.dart';
+import 'package:hs_connect/screens/home/commentView/commentReplyForm.dart';
 import 'package:hs_connect/screens/home/postView/Widgets/postTitleCard.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/inputDecorations.dart';
-import 'package:hs_connect/shared/tools/formListener.dart';
-import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
@@ -91,7 +87,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
             bottom:0,
             right:0,
             child:
-              CommentForm(
+              CommentReplyForm(
                   switchFormBool: switchFormBool,
                   commentReference: commentRef,
                   isReply: isReply,

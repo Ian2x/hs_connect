@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hs_connect/models/accessRestriction.dart';
 import 'package:hs_connect/models/group.dart';
-import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/home.dart';
 import 'package:hs_connect/services/groups_database.dart';
@@ -13,7 +12,6 @@ import 'package:hs_connect/shared/noAnimationMaterialPageRoute.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
-import 'package:hs_connect/shared/widgets/picPickerButton.dart';
 import 'package:hs_connect/shared/widgets/tagOutline.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -171,7 +169,7 @@ class _PostFormState extends State<PostForm> {
                             },
                           ),
                           Spacer(flex: 6),
-                          tagOutline(
+                          TagOutline(
                             textOnly: true,
                             text: "Make a Post",
                             textColor: ThemeColor.secondaryBlue,
@@ -401,7 +399,7 @@ class _PostFormState extends State<PostForm> {
                             ),
                           ),
                           Spacer(flex: 1),
-                          tagOutline(
+                          TagOutline(
                             textOnly: true,
                             text: "Group",
                             textColor: ThemeColor.secondaryBlue,

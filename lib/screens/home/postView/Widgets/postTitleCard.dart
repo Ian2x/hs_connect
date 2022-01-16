@@ -3,19 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/screens/home/groupView/groupPage.dart';
-import 'package:hs_connect/screens/home/postFeed/specificGroupFeed.dart';
 import 'package:hs_connect/screens/home/postView/likeDislikePost.dart';
 import 'package:hs_connect/screens/profile/profilePage.dart';
-import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/noAnimationMaterialPageRoute.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
-import 'package:hs_connect/screens/home/commentView/commentForm.dart';
 import 'package:hs_connect/shared/widgets/groupTag.dart';
 
 class postTitleCard extends StatefulWidget {
@@ -42,9 +37,9 @@ class _postTitleCardState extends State<postTitleCard> {
   String commentString="Comments";
   String? imageString;
   Color groupColor = ThemeColor.darkGrey;
-  String userDomain = '<Loading user domain...>';
-  String creatorName = '<Loading user name...>';
-  String groupName = '<Loading group name...>';
+  String userDomain = '';
+  String creatorName = '';
+  String groupName = '';
   Image? groupImage;
 
   @override

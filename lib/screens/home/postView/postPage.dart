@@ -4,12 +4,11 @@ import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/commentFeed/commentsFeed.dart';
-import 'package:hs_connect/screens/home/commentView/commentForm.dart';
-import 'package:hs_connect/screens/home/new/newPost/postBar.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
+import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
 import 'package:provider/provider.dart';
 
 class PostPage extends StatefulWidget {
@@ -23,7 +22,7 @@ class PostPage extends StatefulWidget {
 }
 
 class _PostPageState extends State<PostPage> {
-  String groupName = 'Loading Group name...';
+  String groupName = '';
   Post? post;
 
   void getData() async {
@@ -75,6 +74,7 @@ class _PostPageState extends State<PostPage> {
             )),
         backgroundColor: HexColor("FFFFFF"),
         elevation: 0.0,
+        leading: myBackButtonIcon(context),
       ),
       body:
           Stack(

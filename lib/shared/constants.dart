@@ -68,6 +68,26 @@ class ThemeText {
     );
   }
 
+  static TextStyle inter({Color? color, double? fontSize, double? height, FontWeight? fontWeight}) {
+    return TextStyle(
+      color: color,
+      fontSize: fontSize,
+      height: height,
+      fontWeight: fontWeight,
+      fontFamily: "Inter"
+    );
+  }
+
+  static TextStyle roboto({Color? color, double? fontSize, double? height, FontWeight? fontWeight}) {
+    return TextStyle(
+      color: color,
+      fontSize: fontSize,
+      height: height,
+      fontWeight: fontWeight,
+      fontFamily: "Roboto"
+    );
+  }
+
   static double regular = 16.0;
 }
 

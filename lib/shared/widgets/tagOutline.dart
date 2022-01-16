@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 
 
-class tagOutline extends StatelessWidget {
-  Widget? widget;
+class TagOutline extends StatelessWidget {
+  final Widget? widget;
   final bool textOnly;
-  String? text;
-  Color? textColor;
-  Color? fillColor;
-  Color? borderColor;
-  double? height;
-  EdgeInsetsGeometry? padding;
+  final String? text;
+  final Color? textColor;
+  final Color? fillColor;
+  final Color? borderColor;
+  final double? height;
+  final EdgeInsetsGeometry? padding;
 
 
-  tagOutline({Key? key,
+  TagOutline({Key? key,
     required bool this.textOnly,
     this.textColor,
     this.borderColor,

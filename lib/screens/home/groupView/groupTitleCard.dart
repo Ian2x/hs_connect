@@ -102,7 +102,7 @@ class _groupTitleCardState extends State<groupTitleCard> {
                         SizedBox(width:5),
                         Icon(Icons.person, size: 20.0) ,
                         SizedBox(width:10),
-                        tagOutline(textOnly: false, fillColor: ThemeColor.secondaryBlue,
+                        TagOutline(textOnly: false, fillColor: ThemeColor.secondaryBlue,
                           borderColor: ThemeColor.secondaryBlue, height: 30,
                           padding: EdgeInsets.all(0.0),
                           widget:

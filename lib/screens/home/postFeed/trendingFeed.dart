@@ -61,7 +61,7 @@ class _TrendingFeedState extends State<TrendingFeed> {
             
             posts.sort((a, b) => (b.numComments + b.numReplies) - (a.numComments + a.numReplies));
 
-            return PostsListView(posts: posts, currUserRef: userData.userRef);
+            return postsListView(posts: posts, currUserRef: userData.userRef);
           }
         });
   }

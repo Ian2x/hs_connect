@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/screens/home/postView/postCard.dart';
 
-ListView PostsListView({required List<Post> posts, required DocumentReference currUserRef}) {
+ListView postsListView({required List<Post> posts, required DocumentReference currUserRef}) {
   return ListView.builder(
       itemCount: posts.length,
       scrollDirection: Axis.vertical,

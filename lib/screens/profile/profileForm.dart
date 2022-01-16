@@ -97,7 +97,7 @@ class _ProfileFormState extends State<ProfileForm> {
               ),
               SizedBox(height: 20.0),
               newFile == null && _initialImageURL == null
-                  ? PicPickerButton(
+                  ? picPickerButton(
                       iconSize: 50.0,
                       setPic: ((File? f) {
                         if (mounted) {

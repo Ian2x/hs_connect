@@ -5,7 +5,6 @@ import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/commentFeed/commentsFeed.dart';
 import 'package:hs_connect/screens/home/groupView/groupTitleCard.dart';
-import 'package:hs_connect/screens/home/postFeed/specificGroupFeed.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';

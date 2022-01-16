@@ -51,7 +51,7 @@ class MessagesPageAppBar extends StatefulWidget {
 
 class _MessagesPageAppBarState extends State<MessagesPageAppBar> {
 
-  String otherUserUsername = '<Loading user name...>';
+  String otherUserUsername = '';
 
   @override
   void initState() {

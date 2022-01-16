@@ -1,12 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/home.dart';
-import 'package:hs_connect/screens/home/new/newPost/newPost.dart';
 import 'package:hs_connect/screens/notifications/notificationsPage.dart';
-import 'package:hs_connect/screens/profile/profileBody.dart';
 import 'package:hs_connect/screens/profile/profilePage.dart';
-import 'package:hs_connect/screens/search/searchPage.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:provider/provider.dart';
 

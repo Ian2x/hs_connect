@@ -4,13 +4,14 @@ import 'package:hs_connect/shared/tools/hexColor.dart';
 
 class Loading extends StatelessWidget {
   final double size;
-  const Loading({Key? key, this.size=50.0})
+  final Color? backgroundColor;
+  const Loading({Key? key, this.size=50.0, this.backgroundColor})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.transparent,
+      color: backgroundColor!= null ? backgroundColor : Colors.transparent,
       child: Center(
         child: SpinKitFadingCircle(
           color: HexColor("222426"),

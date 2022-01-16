@@ -8,10 +8,8 @@ import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/tools/circleFromGroup.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
-import 'package:hs_connect/shared/widgets/myCircle.dart';
 import 'package:provider/provider.dart';
 import 'package:hs_connect/models/comment.dart';
 
@@ -64,7 +62,12 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
                         final groups = groupsData as List<Group?>;
                         List<Widget> groupCirclesForPostsAndComments = [];
                         for (Group? group in groups) {
-                          groupCirclesForPostsAndComments.add(circleFromGroup(group: group, circleSize: circleSize));
+                          /*if (group == null) {
+                            groupCirclesForPostsAndComments.add(Circle(
+                                size: circleSize,
+                                child: Loading(size: 20.0),
+                                textBackgroundColor: ThemeColor.backgroundGrey));
+                          }*/
                         }
                         return ListView.builder(
                               itemCount: posts.length + comments.length + 2,
@@ -100,7 +103,6 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
                                   final postIndex = index - 1;
                                   return PostNotificationCard(
                                     post: posts[postIndex],
-                                    groupCircle: groupCirclesForPostsAndComments[postIndex],
                                     currUserRef: userData.userRef,
                                   );
                                 } else if (index == posts.length + 1) {
@@ -135,7 +137,6 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
                                   return CommentNotificationCard(
                                     comment: comments[commentIndex],
                                     originPost: postsForComments[commentIndex],
-                                    groupCircle: groupCirclesForPostsAndComments[posts.length + commentIndex],
                                     currUserRef: userData.userRef,
                                   );
                                 }

@@ -10,11 +10,10 @@ import 'newResponseIcon.dart';
 class CommentNotificationCard extends StatelessWidget {
   final Comment comment;
   final Post? originPost;
-  final Widget groupCircle;
   final DocumentReference currUserRef;
 
   const CommentNotificationCard(
-      {Key? key, required this.comment, required this.originPost, required this.groupCircle, required this.currUserRef})
+      {Key? key, required this.comment, required this.originPost, required this.currUserRef})
       : super(key: key);
 
   @override
@@ -39,7 +38,6 @@ class CommentNotificationCard extends StatelessWidget {
           color: ThemeColor.white,
           child: Stack(
             children: <Widget>[
-              Container(padding: EdgeInsets.fromLTRB(15, 15, 0, 0),child: groupCircle),
               Container(
                 padding: const EdgeInsets.fromLTRB(10,0,10,10),
                 child: Row(crossAxisAlignment: CrossAxisAlignment.end,children: <Widget>[

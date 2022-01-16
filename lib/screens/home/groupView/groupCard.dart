@@ -19,8 +19,8 @@ class GroupCard extends StatefulWidget {
 
 class _GroupCardState extends State<GroupCard> {
 
-  String username = '<Loading user name...>';
-  String groupName = '<Loading group name...>';
+  String username = '';
+  String groupName = '';
 
   @override
   void initState() {

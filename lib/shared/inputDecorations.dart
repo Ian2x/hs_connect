@@ -25,7 +25,7 @@ InputDecoration commentInputDecoration({required voidFunction onPressed, require
     enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white, width: 1.0)),
     focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.pink, width: 1.0)),
     suffixIcon: Row(mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.min, children: <Widget>[
-      PicPickerButton(setPic: setPic),
+      picPickerButton(setPic: setPic),
       IconButton(icon: Icon(Icons.send), iconSize: 12.0, onPressed: onPressed),
     ]),
   );
@@ -46,7 +46,7 @@ InputDecoration messageInputDecoration({required voidFunction onPressed, require
         borderRadius: new BorderRadius.circular(25.7),
         borderSide: new BorderSide(width: 3.0, color: ThemeColor.mediumGrey)),
     suffixIcon: Row(mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.min, children: <Widget>[
-      PicPickerButton(setPic: setPic),
+      picPickerButton(setPic: setPic),
       IconButton(icon: Icon(Icons.send), iconSize: 12.0, onPressed: onPressed),
     ]),
   );

@@ -34,7 +34,7 @@ class _DomainFeedState extends State<DomainFeed> {
           postss.removeWhere((value) => value == null);
           List<Post> posts = postss.map((item) => item!).toList();
 
-          return PostsListView(posts: posts, currUserRef: userData.userRef);
+          return postsListView(posts: posts, currUserRef: userData.userRef);
         }
       },
     );

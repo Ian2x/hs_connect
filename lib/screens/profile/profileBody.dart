@@ -23,7 +23,7 @@ class ProfileBody extends StatefulWidget {
 }
 
 class _ProfileBodyState extends State<ProfileBody> {
-  String profileUsername = '<Loading user name...>';
+  String profileUsername = '';
 
   bool profileImageExists = false;
   Widget? profileImage = Loading(size: 30.0);
