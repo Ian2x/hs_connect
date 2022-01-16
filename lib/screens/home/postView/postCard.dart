@@ -11,6 +11,8 @@ import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
+import 'package:hs_connect/shared/tools/hexColor.dart';
+import 'package:hs_connect/shared/widgets/groupTag.dart';
 
 class PostCard extends StatefulWidget {
   final Post post;
@@ -29,6 +31,9 @@ class _PostCardState extends State<PostCard> {
   String userDomain = '';
   String username = '';
   String groupName = '';
+  String? imageString;
+  Image? groupImage;
+  String? groupColor;
   bool inDomain = false;
 
   @override
@@ -49,7 +54,7 @@ class _PostCardState extends State<PostCard> {
     }
     // find username for userId
     getUserData();
-    getGroupName();
+    getGroupData();
     super.initState();
   }
 
@@ -64,13 +69,15 @@ class _PostCardState extends State<PostCard> {
     }
   }
 
-  void getGroupName() async {
+  void getGroupData() async {
     GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserRef);
     final Group? fetchGroup = await _groups.groupFromRef(widget.post.groupRef);
     if (mounted) {
       setState(() {
         if (fetchGroup!=null) {
+          imageString = fetchGroup.image;
           groupName = fetchGroup.name;
+          groupColor = fetchGroup.hexColor;
           if (fetchGroup.accessRestriction== AccessRestriction(restriction: groupName, restrictionType: AccessRestrictionType.domain)) {
             inDomain=true;
           }
@@ -86,6 +93,19 @@ class _PostCardState extends State<PostCard> {
   @override
   Widget build(BuildContext context) {
 
+    if (imageString != null && imageString!="") {
+      var tempImage = Image.network(imageString!);
+      tempImage.image
+          .resolve(ImageConfiguration())
+          .addListener(ImageStreamListener((ImageInfo image, bool synchronousCall) {
+        if (mounted) {
+          setState(() => groupImage = tempImage);
+        }
+      }));
+    } else {
+      groupImage=  Image(image: AssetImage('assets/masonic-G.png'), height: 20, width: 20);
+    }
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -100,7 +120,7 @@ class _PostCardState extends State<PostCard> {
           //color: HexColor("#292929"),
           elevation: 0.0,
           child: Container(
-              padding: const EdgeInsets.fromLTRB(7.0,12.0,5.0,5.0),
+              padding: const EdgeInsets.fromLTRB(7.0,12.0,10.0,5.0),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -110,17 +130,12 @@ class _PostCardState extends State<PostCard> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        RichText(
-                          text: TextSpan(
-                            text: 'in ',
-                            style: ThemeText.regularSmall(),
-                            children: <TextSpan>[
-                              TextSpan(text: groupName,style: ThemeText.groupBold(color: translucentColorFromString(groupName))),
-                              TextSpan(text: inDomain ? '' : ' from ', style: ThemeText.regularSmall()),
-                              TextSpan(text: inDomain ? '' : userDomain, style: ThemeText.groupBold(color: translucentColorFromString(userDomain))),
-                              TextSpan(text: ' • ' + convertTime(widget.post.createdAt.toDate()), style: ThemeText.regularSmall()),
-                            ],
-                          ),
+                        Row(
+                          children: [
+                            GroupTag( groupColor: groupColor != null ? HexColor(groupColor!) : null, groupImage:groupImage, groupName: groupName, fontSize:12),
+                            Spacer(),
+                            Icon(Icons.more_horiz),
+                          ],
                         ),
                         SizedBox(height: 10),
                         Text(
@@ -130,24 +145,13 @@ class _PostCardState extends State<PostCard> {
                           maxLines: 3
                         ),
                         //SizedBox(height: 10),
-                        if (widget.post.text != null || widget.post.text == "") Text(
-                            widget.post.text!,
-                            maxLines:2,
-                            style:ThemeText.regularSmall(),
-                          overflow: TextOverflow.ellipsis,
-                          ) else SizedBox(height:1),
                         Row( //Icon Row
                           children: [
                             SizedBox(width:10),
-                            Icon(
-                              Icons.chat_bubble_rounded,
-                              color: ThemeColor.secondaryBlue,
-                              size: 15.0,
-                            ),
-                            SizedBox(width:5),
                             Text(
-                              (widget.post.numComments + widget.post.numReplies).toString(),
-                              style: ThemeText.regularSmall(fontSize: 15.0),
+                              (widget.post.numComments + widget.post.numReplies).toString()
+                              + " Comments",
+                              style: ThemeText.regularSmall(fontSize: 15.0, color: ThemeColor.mediumGrey),
                             ),
                             Spacer(),
                             LikeDislikePost(

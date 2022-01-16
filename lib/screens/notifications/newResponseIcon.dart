@@ -10,6 +10,7 @@ class newResponseIcon extends StatelessWidget {
     return Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
         color: ThemeColor.secondaryBlue,
+        margin: EdgeInsets.all(0),
         child: Container(
           padding: EdgeInsets.all(5.0),
           child: Row(
