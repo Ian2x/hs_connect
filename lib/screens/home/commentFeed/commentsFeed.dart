@@ -40,7 +40,6 @@ class _CommentsFeedState extends State<CommentsFeed> {
       setState(() {
         isReply=!isReply;
         commentRef= passedRef;
-        print("justt switched: " +  isReply.toString());
       });
     }
 
