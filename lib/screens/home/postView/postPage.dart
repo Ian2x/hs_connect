@@ -41,9 +41,6 @@ class _PostPageState extends State<PostPage> {
           groupName = fetchGroupName != null ? fetchGroupName.name : '<Failed to retrieve group name>';
         });
       }
-      if (post!.creatorRef==widget.currUserRef) {
-        UserDataDatabaseService(currUserRef: widget.currUserRef).updatePostLastObserved(postRef: widget.postRef);
-      }
     }
   }
 
@@ -54,12 +51,19 @@ class _PostPageState extends State<PostPage> {
   }
 
   @override
+  void dispose() {
+    if (post!.creatorRef==widget.currUserRef) {
+      UserDataDatabaseService(currUserRef: widget.currUserRef).updatePostLastObserved(postRef: widget.postRef);
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
     if (userData == null || post == null) {
       return Text("loading");
     }
-
     return Scaffold(
       backgroundColor: HexColor("FFFFFF"),
       appBar: AppBar(

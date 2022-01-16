@@ -47,7 +47,12 @@ class GroupsDatabaseService {
     if (docs.size > 0) {
       return docs.docs.first.reference;
     } else {
-      DocumentReference newGroupRef = groupsCollection.doc();
+      DocumentReference newGroupRef;
+      if (accessRestriction.restrictionType==AccessRestrictionType.domain) {
+        newGroupRef = groupsCollection.doc(name);
+      } else {
+        newGroupRef = groupsCollection.doc();
+      }
 
       await newGroupRef
           .set({

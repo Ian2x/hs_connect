@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/notifications/Messages/messagesForm.dart';
+import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
 
@@ -17,11 +19,8 @@ class MessagesPage extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: ThemeColor.white,
-      appBar: AppBar(
-        backgroundColor: ThemeColor.white,
-        title: Text('HII', style: ThemeText.titleRegular()),
-        leading: myBackButtonIcon(context),
-      ),
+      appBar: PreferredSize(preferredSize: Size.fromHeight(100),
+      child: MessagesPageAppBar(currUserRef: currUserRef, otherUserRef: otherUserRef)),
       body: Container(
         padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
         child: Column(children: <Widget>[
@@ -36,21 +35,47 @@ class MessagesPage extends StatelessWidget {
           ),
           MessagesForm(currUserRef: currUserRef, otherUserRef: otherUserRef)
         ]),
-        /*Overlay(
-            initialEntries: <OverlayEntry>[
-              OverlayEntry(builder: (BuildContext context) {
-                return MessagesFeed(currUserRef: currUserRef, otherUserRef: otherUserRef,);
-
-              }),
-              OverlayEntry(builder: (BuildContext context) {
-                return Column(mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.max, children: <Widget>[
-                  Spacer(),
-                  MessagesForm(currUserRef: currUserRef, otherUserRef: otherUserRef)
-                ]);
-              }),
-            ],
-          )*/
       ),
+    );
+  }
+}
+
+class MessagesPageAppBar extends StatefulWidget {
+  final DocumentReference currUserRef;
+  final DocumentReference otherUserRef;
+  const MessagesPageAppBar({Key? key, required this.currUserRef, required this.otherUserRef}) : super(key: key);
+
+  @override
+  _MessagesPageAppBarState createState() => _MessagesPageAppBarState();
+}
+
+class _MessagesPageAppBarState extends State<MessagesPageAppBar> {
+
+  String otherUserUsername = '<Loading user name...>';
+
+  @override
+  void initState() {
+    getUserData();
+    super.initState();
+  }
+
+  void getUserData() async {
+    UserDataDatabaseService _userDataDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserRef);
+    final UserData? fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.otherUserRef);
+    if (mounted) {
+      setState(() {
+        otherUserUsername = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
+      });
+    }
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    
+    return AppBar(
+      backgroundColor: ThemeColor.white,
+      title: Text(otherUserUsername, style: ThemeText.titleRegular()),
+      leading: myBackButtonIcon(context),
     );
   }
 }

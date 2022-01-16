@@ -63,8 +63,8 @@ class _MessagesFormState extends State<MessagesForm> {
                         child: Container(
                           width: 150,
                           height: 150,
-                          padding: EdgeInsets.all(1.5),
-                          decoration: BoxDecoration(color: ThemeColor.darkGrey, borderRadius: imageBorderRadius),
+                          padding: EdgeInsets.all(3),
+                          decoration: BoxDecoration(color: ThemeColor.lightGrey, borderRadius: imageBorderRadius),
                           child: ClipRRect(
                               borderRadius: imageBorderRadius,
                               child: DeletableImage(
@@ -106,7 +106,9 @@ class _MessagesFormState extends State<MessagesForm> {
                                   senderRef: userData.userRef);
                             }
                             if (mounted) {
-                              setState(() => loading = false);
+                              setState(() {
+                                loading = false; newFile = null;
+                              });
                             }
                           }
                         }),

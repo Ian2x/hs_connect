@@ -2,9 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/message.dart';
 import 'package:hs_connect/services/messages_database.dart';
+import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 
 import 'messagesCard.dart';
+
 
 class MessagesFeed extends StatefulWidget {
   final DocumentReference otherUserRef;
@@ -16,11 +18,16 @@ class MessagesFeed extends StatefulWidget {
 }
 
 class _MessagesFeedState extends State<MessagesFeed> {
+
+  @override
+  void dispose() {
+    MessagesDatabaseService _messages = new MessagesDatabaseService(currUserRef: widget.currUserRef, otherUserRef: widget.otherUserRef);
+    _messages.updateLastViewed(widget.currUserRef, widget.otherUserRef);
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
-
     MessagesDatabaseService _messages = new MessagesDatabaseService(currUserRef: widget.currUserRef, otherUserRef: widget.otherUserRef);
-
     return StreamBuilder(
       stream: _messages.messagesWithOtherPerson,
       builder: (context, snapshot) {
@@ -48,3 +55,4 @@ class _MessagesFeedState extends State<MessagesFeed> {
     });
   }
 }
+

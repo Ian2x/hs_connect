@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
+import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
@@ -19,10 +20,10 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
 
   List<UserMessage>? UMs;
   List<UserData>? otherUsers;
+  List<Widget>? groupCirclesForOtherUsers;
 
   @override
   void initState() {
-    // TODO: implement initState
     List<UserMessage> tempUMs = widget.userData.userMessages;
     // sorted by latest first
     tempUMs.sort((a, b) => b.lastMessage.compareTo(a.lastMessage));
@@ -51,15 +52,33 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
         otherUsers = tempTempOtherUsers;
       });
     }
+    fetchUserGroups(tempTempOtherUsers);
   }
+
+  Future fetchUserGroups(List<UserData> LUD) async {
+    GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.userData.userRef);
+    List<Widget> tempGroupCirclesForOtherUsers = [];
+   /* _groups.getGroups(LUD.map((UD) => DocumentReference(UD.domain)))
+    for (final UD in LUD) {
+      _groups.UD.domain
+    }*/
+  }
+
 
   @override
   Widget build(BuildContext context) {
 
     final userData = Provider.of<UserData?>(context);
 
-    if (userData == null || UMs == null || otherUsers == null) {
+    if (userData == null || UMs == null || otherUsers == null || groupCirclesForOtherUsers == null) {
       return Loading();
+    }
+
+    if (otherUsers!.length == 0) {
+      return Container(
+          padding: EdgeInsets.all(10.0),
+          child: Text("No messages :/\n\n... maybe try finding a friend", style: ThemeText.titleRegular(color: ThemeColor.black))
+      );
     }
 
     return ListView.builder(
@@ -70,6 +89,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
         itemBuilder: (BuildContext context, int index) {
           final otherUser = otherUsers![index];
           return Container(
+            padding: EdgeInsets.fromLTRB(4,4,4,4),
             color: ThemeColor.backgroundGrey,
             child: GestureDetector(
               onTap: () {
@@ -82,6 +102,10 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                         )));
               },
               child: Card(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+                margin: EdgeInsets.fromLTRB(2.5, 5, 2.5, 2.5),
+                elevation: 0,
+                color: ThemeColor.white,
                 child: Container(padding: EdgeInsets.all(10), child: Text(otherUser.displayedName)),
               ),
             ),

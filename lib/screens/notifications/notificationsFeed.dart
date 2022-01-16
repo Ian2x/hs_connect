@@ -91,22 +91,36 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
                                     Text(initial, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white))));
                           }
                         }
-                        return Container(
-                            color: ThemeColor.backgroundGrey,
-                            child: ListView.builder(
+                        return ListView.builder(
                               itemCount: posts.length + comments.length + 2,
                               physics: BouncingScrollPhysics(),
-                              padding: EdgeInsets.all(6.0),
+                              padding: EdgeInsets.all(4.0),
+                              shrinkWrap: true,
                               itemBuilder: (BuildContext context, int index) {
                                 if (index == 0) {
                                   if (posts.length == 0) {
-                                    return Column(crossAxisAlignment: CrossAxisAlignment.start,children: [
-                                      Text("Posts", style: ThemeText.titleRegular()),
-                                      SizedBox(height: 5),
-                                      Text("No new activity on your posts", style: ThemeText.regularSmall())
-                                    ]);
+                                    return Container(
+                                      padding: EdgeInsets.fromLTRB(5, 5, 5, 2),
+                                      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                        Text("Posts",
+                                            style: TextStyle(
+                                                fontFamily: "Inter",
+                                                color: ThemeColor.black,
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 20)),
+                                        SizedBox(height: 5),
+                                        Text("No new activity on your posts", style: ThemeText.regularSmall(color: ThemeColor.black))
+                                      ]),
+                                    );
                                   }
-                                  return Text("Posts", style: ThemeText.titleRegular());
+                                  return Container(
+                                      padding: EdgeInsets.fromLTRB(5, 5, 5, 2),
+                                      child: Text("Posts",
+                                          style: TextStyle(
+                                              fontFamily: "Inter",
+                                              color: ThemeColor.black,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 20)));
                                 } else if (index <= posts.length) {
                                   final postIndex = index - 1;
                                   return PostNotificationCard(
@@ -116,17 +130,31 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
                                   );
                                 } else if (index == posts.length + 1) {
                                   if (comments.length == 0) {
-                                    return Column(crossAxisAlignment: CrossAxisAlignment.start,children: [
-                                      Divider(),
-                                      Text("Comments", style: ThemeText.titleRegular()),
-                                      SizedBox(height: 5),
-                                      Text("No new activity on your comments", style: ThemeText.regularSmall())
-                                    ]);
+                                    return Container(
+                                      padding: EdgeInsets.fromLTRB(5, 5, 5, 2),
+                                      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                        Divider(),
+                                        Text("Comments", style: TextStyle(
+                                            fontFamily: "Inter",
+                                            color: ThemeColor.black,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 20)),
+                                        SizedBox(height: 5),
+                                        Text("No new activity on your comments", style: ThemeText.regularSmall(color: ThemeColor.black))
+                                      ]),
+                                    );
                                   }
-                                  return Column(crossAxisAlignment: CrossAxisAlignment.start,children: [
-                                    Divider(),
-                                    Text("Comments", style: ThemeText.titleRegular()),
-                                  ]);
+                                  return Container(
+                                    padding: EdgeInsets.fromLTRB(5, 5, 5, 2),
+                                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                      Divider(),
+                                      Text("Comments", style: TextStyle(
+                                          fontFamily: "Inter",
+                                          color: ThemeColor.black,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 20)),
+                                    ]),
+                                  );
                                 } else {
                                   final commentIndex = index - posts.length - 2;
                                   return CommentNotificationCard(
@@ -137,7 +165,8 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
                                   );
                                 }
                               },
-                            ));
+                            );
+
                       }
                     }
                     return Loading();

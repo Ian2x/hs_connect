@@ -29,19 +29,21 @@ UserGroup userGroupFromMap({required Map map}) {
 class UserMessage {
   final DocumentReference otherUserRef;
   final Timestamp lastMessage;
+  final Timestamp? lastViewed;
 
-  UserMessage({required this.otherUserRef, required this.lastMessage});
+  UserMessage({required this.otherUserRef, required this.lastMessage, required this.lastViewed});
 
   Map<String, dynamic> asMap() {
     return {
       C.otherUserRef: otherUserRef,
       C.lastMessage: lastMessage,
+      C.lastViewed: lastViewed,
     };
   }
 }
 
 UserMessage userMessageFromMap({required Map map}) {
-  return UserMessage(otherUserRef: map[C.otherUserRef], lastMessage: map[C.lastMessage]);
+  return UserMessage(otherUserRef: map[C.otherUserRef], lastMessage: map[C.lastMessage], lastViewed: map[C.lastViewed]);
 }
 
 class UserData {
