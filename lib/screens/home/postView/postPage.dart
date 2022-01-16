@@ -61,6 +61,7 @@ class _PostPageState extends State<PostPage> {
 
   @override
   Widget build(BuildContext context) {
+
     final userData = Provider.of<UserData?>(context);
     if (userData == null || post == null) {
       return Text("loading");

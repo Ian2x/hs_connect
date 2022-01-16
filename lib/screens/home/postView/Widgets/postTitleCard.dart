@@ -36,7 +36,7 @@ class _postTitleCardState extends State<postTitleCard> {
   int commentCount=0;
   String commentString="Comments";
   String? imageString;
-  Color groupColor = ThemeColor.darkGrey;
+  String? groupColor;
   String userDomain = '';
   String creatorName = '';
   String groupName = '';
@@ -93,7 +93,7 @@ class _postTitleCardState extends State<postTitleCard> {
       if (mounted) {
         setState(() {
           groupName = fetchGroupData.name;
-          if (fetchGroupData.hexColor != null) groupColor = HexColor(fetchGroupData.hexColor!);
+          groupColor= fetchGroupData.hexColor;
         });
       }
     } else {
