@@ -101,9 +101,16 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
                                               fontSize: 20)));
                                 } else if (index <= posts.length) {
                                   final postIndex = index - 1;
+                                  Group? group = groups[postIndex];
+                                  Image? groupImage = group!=null ? group.image!=null ? Image.network(group.image!): null : null;
+                                  String groupName = group!=null ? group.name : '<Failed to fetch group name>';
+                                  String? groupColor = group!=null ? group.hexColor : null;
                                   return PostNotificationCard(
                                     post: posts[postIndex],
                                     currUserRef: userData.userRef,
+                                    groupImage: groupImage,
+                                    groupName: groupName,
+                                    groupColor: groupColor,
                                   );
                                 } else if (index == posts.length + 1) {
                                   if (comments.length == 0) {

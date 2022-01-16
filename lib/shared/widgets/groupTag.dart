@@ -8,11 +8,13 @@ class GroupTag extends StatelessWidget {
   final Image? groupImage;
   final String groupName;
   final Color? groupColor;
+  final double fontSize;
 
   GroupTag({Key? key,
     required this.groupImage,
     required this.groupName,
-    this.groupColor,
+    required this.fontSize,
+    required this.groupColor,
   }) : super(key: key);
 
 
@@ -20,17 +22,18 @@ class GroupTag extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      padding: EdgeInsets.fromLTRB(5.0,0.0,5.0,0.0),
+      padding: EdgeInsets.fromLTRB(fontSize/2,fontSize/2.5,fontSize/2,fontSize/2.5),
       decoration: ShapeDecoration(
         color: ThemeColor.lightGrey,
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
+            borderRadius: BorderRadius.circular(fontSize/1.5),
             ),
       ),
       child: Row(
         children: [
-          Container(
-            height: 33,
+          groupImage!=null ? Container(
+            height: fontSize * 1.5,
+            width: fontSize * 1.5,
             decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
@@ -38,10 +41,10 @@ class GroupTag extends StatelessWidget {
                   fit: BoxFit.fill,
                 )
             ),
-          ),
-          SizedBox(width:3),
+          ) : Container(),
+          SizedBox(width: fontSize / 3),
           Text( groupName,
-            style:ThemeText.regularSmall(fontSize:14.0,
+            style:ThemeText.regularSmall(fontSize: fontSize,
               color: groupColor,
             ),
           )
