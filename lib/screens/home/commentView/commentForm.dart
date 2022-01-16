@@ -16,12 +16,16 @@ import 'package:flutter/foundation.dart';
 class CommentForm extends StatefulWidget {
   final DocumentReference postRef;
   final DocumentReference groupRef;
-  formListener FormListener;
+  bool isReply;
+  DocumentReference? commentReference;
+  final voidParamFunction switchFormBool;
 
   CommentForm({Key? key,
     required this.postRef,
     required this.groupRef,
-    required this.FormListener,
+    required this.isReply,
+    required this.switchFormBool,
+    this.commentReference,
   }) : super(key: key);
 
   @override
@@ -77,11 +81,11 @@ class _CommentFormState extends State<CommentForm> {
         //height: 100,
         color: ThemeColor.backgroundGrey,
         child:
-        widget.FormListener.isReply !=null ?
           Form(
             key:_formKey,
             child: TextFormField(
               decoration: commentInputDecoration(
+                  isReply: widget.isReply,
                   onPressed: () async {
                     if (_formKey.currentState != null && _formKey.currentState!.validate()) {
                       if (mounted) {
@@ -98,24 +102,46 @@ class _CommentFormState extends State<CommentForm> {
                         }
                       }
 
-                      await _comments.newComment(
-                        postRef: widget.postRef,
-                        text: _text,
-                        media: newFileURL,
-                        onValue: handleValue,
-                        onError: handleError,
-                        groupRef: widget.groupRef,
-                      );
+                      if (widget.isReply){
+                        widget.switchFormBool(null);
+                        await RepliesDatabaseService(currUserRef: userData.userRef).newReply(
+                          postRef: widget.postRef,
+                          commentRef: widget.commentReference!,
+                          text: _text,
+                          media: newFileURL,
+                          onValue: handleValue,
+                          onError: handleError,
+                          groupRef: widget.groupRef,
+                        );
+                      } else {
+                        await _comments.newComment(
+                          postRef: widget.postRef,
+                          text: _text,
+                          media: newFileURL,
+                          onValue: handleValue,
+                          onError: handleError,
+                          groupRef: widget.groupRef,
+                        );
+                      }
                     }
                   },
                   setPic: setPic),
-              validator: (val) {
-                if (val == null) return 'Error: null value';
-                if (val.isEmpty)
-                  return 'Can\'t create an empty comment';
-                else
+              validator:
+                widget.isReply!= false ? (val) {
+                    if (val == null) return 'Write a reply...';
+                    if (val.isEmpty)
+                      return 'Can\'t create an empty reply';
+                    else
                   return null;
-              },
+                  }
+                : (val) {
+                  if (val == null) return 'Write a comment...';
+                  if (val.isEmpty)
+                    return 'Can\'t create an empty comment';
+                  else
+                    return null;
+                }
+               ,
               onChanged: (val) {
                 if (mounted) {
                   setState(() => _text = val);
@@ -123,68 +149,6 @@ class _CommentFormState extends State<CommentForm> {
               },
             ),
           )
-        :
-      Form(
-      key: _formKey,
-      child: Column(
-        children: <Widget>[
-          TextFormField(
-            initialValue: 'REPLY',
-            decoration: commentInputDecoration(
-                onPressed: () async {
-                  if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-                    if (mounted) {
-                      setState(() => loading = true);
-                    }
-
-                    if (newFile != null) {
-                      // upload newFile
-                      final downloadURL = await _images.uploadImage(file: newFile!);
-                      if (mounted) {
-                        setState(() {
-                          newFileURL = downloadURL;
-                        });
-                      }
-                    }
-
-                    await RepliesDatabaseService(currUserRef: userData.userRef).newReply(
-                      postRef: widget.postRef,
-                      commentRef: widget.FormListener.commentReference!,
-                      text: _text,
-                      media: newFileURL,
-                      onValue: handleValue,
-                      onError: handleError,
-                      groupRef: widget.groupRef,
-                    );
-                  }
-                },
-                setPic: setPic),
-            validator: (val) {
-              if (val == null) return 'Error: null value';
-              if (val.isEmpty)
-                return 'Can\'t create an empty reply';
-              else
-                return null;
-            },
-            onChanged: (val) {
-              if (mounted) {
-                setState(() => _text = val);
-              }
-            },
-          ),
-          newFile != null
-              ? Semantics(
-            label: 'new_profile_pic_picked_image',
-            child: kIsWeb ? Image.network(newFile!.path) : Image.file(File(newFile!.path)),
-          )
-              : Container(),
-          Text(
-            error,
-            style: TextStyle(color: Colors.red, fontSize: 14.0),
-          )
-        ],
-      ),
-    ),
       );
   }
 }
