@@ -167,7 +167,6 @@ class _CommentCardState extends State<CommentCard> {
                             TextButton(
                                 child: Text("Reply", style: ThemeText.groupBold(color: ThemeColor.secondaryBlue, fontSize:14)),
                                 onPressed: (){
-                                  print("waspressed");
                                   widget.switchFormBool(widget.comment.commentRef);
                                 }
                             ),

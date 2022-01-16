@@ -16,7 +16,7 @@ class RepliesDatabaseService {
   // collection reference
   final CollectionReference repliesCollection = FirebaseFirestore.instance.collection(C.replies);
 
-  Future<DocumentReference> newReply(
+  Future newReply(
       {required String text,
       required String? media,
       required DocumentReference commentRef,
