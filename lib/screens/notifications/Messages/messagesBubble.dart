@@ -3,11 +3,11 @@ import 'package:hs_connect/models/message.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:bubble/bubble.dart';
 
-class MessagesCard extends StatelessWidget {
+class MessagesBubble extends StatelessWidget {
   final Message message;
   final bool isSentMessage;
 
-  const MessagesCard({Key? key, required this.message, required this.isSentMessage}) : super(key: key);
+  const MessagesBubble({Key? key, required this.message, required this.isSentMessage}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -8,6 +8,7 @@ import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/tools/circleFromGroup.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/myCircle.dart';
@@ -63,33 +64,7 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
                         final groups = groupsData as List<Group?>;
                         List<Widget> groupCirclesForPostsAndComments = [];
                         for (Group? group in groups) {
-                          if (group == null) {
-                            groupCirclesForPostsAndComments.add(Circle(
-                                size: circleSize,
-                                child: Loading(size: 20.0),
-                                textBackgroundColor: ThemeColor.backgroundGrey));
-                          } else if (group.image != null) {
-                            groupCirclesForPostsAndComments.add(Circle(
-                              size: circleSize,
-                              child: Image.network(group.image!),
-                              textBackgroundColor: ThemeColor.backgroundGrey,
-                            ));
-                          } else {
-                            String s = group.name;
-                            int sLen = s.length;
-                            String initial = "?";
-                            for (int j = 0; j < sLen; j++) {
-                              if (RegExp(r'[a-z]').hasMatch(group.name[j].toLowerCase())) {
-                                initial = group.name[j].toUpperCase();
-                                break;
-                              }
-                            }
-                            groupCirclesForPostsAndComments.add(Circle(
-                                size: circleSize,
-                                textBackgroundColor: translucentColorFromString(group.name),
-                                child:
-                                    Text(initial, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white))));
-                          }
+                          groupCirclesForPostsAndComments.add(circleFromGroup(group: group, circleSize: circleSize));
                         }
                         return ListView.builder(
                               itemCount: posts.length + comments.length + 2,

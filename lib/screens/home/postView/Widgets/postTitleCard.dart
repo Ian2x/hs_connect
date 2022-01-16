@@ -176,7 +176,7 @@ class _postTitleCardState extends State<postTitleCard> {
               widget.post.text!= null ?  SizedBox(height:20): Container(),
               Row(
                 children: [
-                  groupTag(groupImage: groupImage, groupName: groupName,
+                  GroupTag(groupImage: groupImage, groupName: groupName,
                       groupColor: groupColor),
                   Spacer(),
                   LikeDislikePost(currUserRef: widget.currUserRef, postRef: widget.post.postRef,
