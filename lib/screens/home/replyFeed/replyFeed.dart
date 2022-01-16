@@ -37,26 +37,29 @@ class _RepliesFeedState extends State<RepliesFeed> {
         } else {
           final replies = (snapshot.data as List<Reply?>).map((reply) => reply!).toList();
 
-          return Flexible(
-            //height: 200.0,
-            child: ListView.builder(
-              itemCount: replies.length + 1,
+
+            return ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: replies.length,
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               itemBuilder: (BuildContext context, int index) {
+
+                  bool isLast=false;
+
+                  if (index==replies.length-1){
+                    isLast=true;
+                  }
+
                 // when scroll up/down, fires once
-                if (index == replies.length) {
-                  return ReplyForm(commentRef: widget.commentRef, postRef: widget.postRef, groupRef: widget.groupRef);
-                } else {
                   return Center(
                       child: ReplyCard(
+                    isLast: isLast,
                     reply: replies[index],
                     currUserRef: userData.userRef,
                   ));
-                }
               },
-            ),
-          );
+            );
         }
       },
     );

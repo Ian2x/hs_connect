@@ -15,6 +15,7 @@ typedef voidFunction = void Function();
 InputDecoration commentInputDecoration({required voidFunction onPressed, required Function setPic}) {
   return InputDecoration(
     fillColor: Colors.white,
+    hintText: "Comment...",
     filled: true,
     isDense: true,
     contentPadding: EdgeInsets.all(0.0),
@@ -29,7 +30,7 @@ InputDecoration commentInputDecoration({required voidFunction onPressed, require
 
 InputDecoration messageInputDecoration({required voidFunction onPressed, required Function setPic}) {
   return InputDecoration(
-    hintText: "Message...",
+    hintText: "Comment...",
     fillColor: ThemeColor.white,
     filled: true,
     border: new OutlineInputBorder(

@@ -14,7 +14,7 @@ class DomainsDataDatabaseService {
       return DomainData(
           county: documentSnapshot.get(C.county),
           state: documentSnapshot.get(C.state),
-          country: documentSnapshot.get(C.country),
+          country: documentSnapshot.get(C.county),
           fullName: documentSnapshot.get(C.fullName),
           color: documentSnapshot.get(C.color)
       );

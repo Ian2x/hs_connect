@@ -2,16 +2,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/reply.dart';
 import 'package:hs_connect/models/userData.dart';
+import 'package:hs_connect/screens/home/commentView/likeDislikeComment.dart';
+import 'package:hs_connect/screens/home/replyFeed/replyFeed.dart';
 import 'package:hs_connect/screens/home/replyView/likeDislikeReply.dart';
 import 'package:hs_connect/services/replies_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
+import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/tools/convertTime.dart';
 
 class ReplyCard extends StatefulWidget {
   final Reply reply;
   final DocumentReference currUserRef;
+  final bool isLast;
 
   ReplyCard(
       {Key? key,
+      required this.isLast,
       required this.reply,
       required this.currUserRef})
       : super(key: key);
@@ -24,10 +30,13 @@ class _ReplyCardState extends State<ReplyCard> {
 
   bool liked = false;
   bool disliked = false;
-  String username = '<Loading user name...>';
+  String username="";
+  String groupName="";
+
 
   @override
   void initState() {
+    super.initState();
     // initialize liked/disliked
     if (widget.reply.likes.contains(widget.currUserRef)) {
       if (mounted) {
@@ -44,17 +53,20 @@ class _ReplyCardState extends State<ReplyCard> {
     }
     // find username for userId
     // _userInfoDatabaseService.userId = widget.userId;
-    getUsername();
-    super.initState();
+    getUserData();
   }
 
-  void getUsername() async {
+  void getUserData() async {
     if (widget.reply.creatorRef != null) {
       UserDataDatabaseService _userInfoDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserRef);
-      final UserData? fetchUsername = await _userInfoDatabaseService.getUserData(userRef: widget.reply.creatorRef);
+      final UserData? fetchUserData = await _userInfoDatabaseService.getUserData(userRef: widget.reply.creatorRef);
       if (mounted) {
         setState(() {
-          username = fetchUsername != null ? fetchUsername.displayedName : '<Failed to retrieve user name>';
+          username = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
+          groupName = fetchUserData != null ?
+            fetchUserData.domain != null ?
+                 fetchUserData.domain : fetchUserData.domain
+          : '<Failed to retrieve user name>';
         });
       }
     } else {
@@ -68,39 +80,86 @@ class _ReplyCardState extends State<ReplyCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Dismissible(
-      key: ValueKey(widget.reply.commentRef),
-      child: Card(
-          child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-        ListTile(
-          title: Text(widget.reply.text),
-          subtitle: Text(username),
-          trailing: LikeDislikeReply(
-              replyRef: widget.reply.replyRef,
-              currUserRef: widget.currUserRef,
-              likes: widget.reply.likes,
-              dislikes: widget.reply.dislikes),
+    return Stack(
+      children: [
+        Positioned(
+          top:-10,
+          right:0,
+          child:IconButton(icon: Icon(Icons.more_horiz),
+            iconSize: 20,
+            onPressed: (){},
+          ),
         ),
-        widget.reply.media != null
-            ? Semantics(
-                label: 'new_profile_pic_picked_image',
-                child: Image.network(
-                    widget.reply.media!) // kIsWeb ? Image.network(widget.image!) : Image.file(File(widget.image!)),
-                )
-            : Container(),
-      ])),
-      onDismissed: (DismissDirection direction) {
-        if (mounted) {
-          setState(() {
-            RepliesDatabaseService _replies = RepliesDatabaseService(currUserRef: widget.currUserRef);
-            _replies.deleteReply(
-                replyRef: widget.reply.replyRef,
-                commentRef: widget.reply.commentRef,
-                postRef: widget.reply.postRef,
-                media: widget.reply.media);
-          });
-        }
-      },
-    );
+        Container(
+            padding: EdgeInsets.fromLTRB(20.0, 5, 0, 5.0),
+            child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(username + " • " + groupName,
+                      style: ThemeText.groupBold(color: ThemeColor.mediumGrey, fontSize: 13)),
+                  SizedBox(height:10),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      /*Column(
+                    children: [
+                      Container(
+                        width: imageSide,
+                        height: imageSide,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: userImage!.image,
+                              fit: BoxFit.fill,
+                            )
+                        ),
+                      ),
+                    ],
+                  ),*/
+
+                      Flexible(
+                        fit:FlexFit.loose,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: (MediaQuery.of(context).size.width)*.85,
+                              child: RichText(
+                                text: TextSpan(
+                                  children: <TextSpan>[
+                                    TextSpan(text: widget.reply.text,
+                                        style: ThemeText.postViewText(color: ThemeColor.black, fontSize: 15, height: 1.5)),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  convertTime(widget.reply.createdAt.toDate()), style: ThemeText.groupBold(color:ThemeColor.mediumGrey, fontSize:14),
+                                ),
+                                Spacer(flex:1),
+                                LikeDislikeComment(
+                                    commentRef: widget.reply.commentRef,
+                                    currUserRef: widget.currUserRef,
+                                    likes: widget.reply.likes,
+                                    dislikes: widget.reply.dislikes
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  widget.isLast !=false ?
+                    Container() :
+                    Divider(thickness: 3, color: ThemeColor.backgroundGrey, height: 20),
+                ]
+            )
+        ),
+      ],
+    );;
   }
 }

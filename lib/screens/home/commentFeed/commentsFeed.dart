@@ -9,6 +9,7 @@ import 'package:hs_connect/screens/home/new/newPost/postBar.dart';
 import 'package:hs_connect/screens/home/postView/Widgets/postTitleCard.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/tools/formListener.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
@@ -17,13 +18,16 @@ class CommentsFeed extends StatefulWidget {
   final Post post;
   final DocumentReference groupRef;
 
-  const CommentsFeed({Key? key, required this.post, required this.groupRef}) : super(key: key);
+  formListener FormListener= formListener(isReply:false);
+
+  CommentsFeed({Key? key, required this.post, required this.groupRef}) : super(key: key);
 
   @override
   _CommentsFeedState createState() => _CommentsFeedState();
 }
 
 class _CommentsFeedState extends State<CommentsFeed> {
+
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +53,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
               });
 
               return ListView.builder(
-                itemCount: comments.length + 3,
+                itemCount: comments.length + 2,
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 itemBuilder: (BuildContext context, int index) {
@@ -60,10 +64,9 @@ class _CommentsFeedState extends State<CommentsFeed> {
                     );
                   } else if (index == 1) {
                     return Divider(thickness: 3, color: ThemeColor.backgroundGrey, height: 20);
-                  } else if (index == comments.length + 2) {
-                    return CommentForm(postRef: widget.post.postRef, groupRef: widget.groupRef);
                   } else {
                     return CommentCard(
+                      FormListener: widget.FormListener,
                       comment: comments[index - 2],
                       currUserRef: userData.userRef,
                     );
@@ -73,11 +76,15 @@ class _CommentsFeedState extends State<CommentsFeed> {
             }
           },
         ),
-        Positioned(
-          bottom:0,
-          right:0,
-          child: CommentForm(postRef: widget.post.postRef, groupRef: widget.groupRef),
-        ),
+
+          Positioned(
+            bottom:0,
+            right:0,
+            child:
+              CommentForm(FormListener: widget.FormListener,
+                  postRef: widget.post.postRef,
+                  groupRef: widget.groupRef),
+          ),
       ],
     );
   }

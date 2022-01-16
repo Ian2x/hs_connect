@@ -9,13 +9,16 @@ import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
+import 'package:hs_connect/shared/tools/formListener.dart';
 
 class CommentCard extends StatefulWidget {
   final Comment comment;
   final DocumentReference currUserRef;
+  formListener FormListener;
 
   CommentCard({
     Key? key,
+    required this.FormListener,
     required this.comment,
     required this.currUserRef,
   }) : super(key: key);
@@ -36,6 +39,8 @@ class _CommentCardState extends State<CommentCard> {
 
   @override
   void initState() {
+    super.initState();
+
     // initialize liked/disliked
     if (widget.comment.likes.contains(widget.currUserRef)) {
       if (mounted) {
@@ -51,7 +56,6 @@ class _CommentCardState extends State<CommentCard> {
       }
     }
     getUserData();
-    super.initState();
   }
 
 
@@ -109,8 +113,9 @@ class _CommentCardState extends State<CommentCard> {
           ),
         ),
         Container(
-          padding: EdgeInsets.fromLTRB(20.0, 5, 0, 5.0),
+          padding: EdgeInsets.fromLTRB(20.0, 5, 0, 0),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(username + " • " + userGroupName,
@@ -135,7 +140,8 @@ class _CommentCardState extends State<CommentCard> {
                     ],
                   ),*/
 
-                  Expanded(
+                  Flexible(
+                    fit:FlexFit.loose,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -158,7 +164,9 @@ class _CommentCardState extends State<CommentCard> {
                             Spacer(flex:1),
                             TextButton(
                                 child: Text("Reply", style: ThemeText.groupBold(color:ThemeColor.secondaryBlue, fontSize:14)),
-                                onPressed: (){}
+                                onPressed: (){
+                                  widget.FormListener.isReply=true;
+                                }
                             ),
                             LikeDislikeComment(
                                 commentRef: widget.comment.commentRef,
@@ -173,7 +181,7 @@ class _CommentCardState extends State<CommentCard> {
                   ),
                 ],
               ),
-          //RepliesFeed(commentRef: widget.comment.commentRef, postRef: widget.comment.postRef, groupRef: widget.comment.groupRef),
+          RepliesFeed(commentRef: widget.comment.commentRef, postRef: widget.comment.postRef, groupRef: widget.comment.groupRef),
           Divider(thickness: 3, color: ThemeColor.backgroundGrey, height: 20),
             ]
           )
