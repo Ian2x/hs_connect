@@ -125,6 +125,7 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
                         );
                       }
                     }
+                    _formKey.currentState?.reset();
                   },
                   setPic: setPic),
               validator:
