@@ -7,11 +7,13 @@ class GroupTag extends StatelessWidget {
   // NOTE: use circleFromGroup takes in a group, not groupImage and groupName
   final Image? groupImage;
   final String groupName;
-  final Color? groupColor;
+  final String? groupColor;
+  final double? radius;
 
   GroupTag({Key? key,
     required this.groupImage,
     required this.groupName,
+    this.radius,
     this.groupColor,
   }) : super(key: key);
 
@@ -24,7 +26,8 @@ class GroupTag extends StatelessWidget {
       decoration: ShapeDecoration(
         color: ThemeColor.lightGrey,
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
+            borderRadius: radius != null ? BorderRadius.circular(radius!):
+            BorderRadius.circular(10.0),
             ),
       ),
       child: Row(
@@ -34,6 +37,7 @@ class GroupTag extends StatelessWidget {
             decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
+
                   image: groupImage!.image,
                   fit: BoxFit.fill,
                 )
@@ -42,7 +46,7 @@ class GroupTag extends StatelessWidget {
           SizedBox(width:3),
           Text( groupName,
             style:ThemeText.regularSmall(fontSize:14.0,
-              color: groupColor,
+              color: groupColor != null ? HexColor(groupColor!): ThemeColor.darkGrey,
             ),
           )
         ],
