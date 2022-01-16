@@ -8,17 +8,18 @@ import 'package:hs_connect/screens/home/replyFeed/replyFeed.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/tools/formListener.dart';
 
 class CommentCard extends StatefulWidget {
   final Comment comment;
   final DocumentReference currUserRef;
-  formListener FormListener;
+  final voidParamFunction switchFormBool;
 
   CommentCard({
     Key? key,
-    required this.FormListener,
+    required this.switchFormBool,
     required this.comment,
     required this.currUserRef,
   }) : super(key: key);
@@ -34,7 +35,7 @@ class _CommentCardState extends State<CommentCard> {
   String username = '<Loading user name...>';
   String? imageString;
   Image? userImage;
-  String? groupColor;
+  Color? groupColor;
   String userGroupName='';
 
   @override
@@ -58,7 +59,6 @@ class _CommentCardState extends State<CommentCard> {
     getUserData();
   }
 
-
   void getUserData() async {
     if (widget.comment.creatorRef != null) {
       UserDataDatabaseService _userDataDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserRef);
@@ -68,6 +68,7 @@ class _CommentCardState extends State<CommentCard> {
           username = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
           userGroupName = fetchUserData != null ? fetchUserData.domain : '<Failed to retrieve user name>';
           imageString = fetchUserData != null ? fetchUserData.profileImageURL : '<Failed to retrieve user name>';
+          groupColor = fetchUserData != null ? fetchUserData.domainColor :ThemeColor.black;
         });
       }
     } else {
@@ -119,7 +120,8 @@ class _CommentCardState extends State<CommentCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(username + " • " + userGroupName,
-                  style: ThemeText.groupBold(color: ThemeColor.mediumGrey, fontSize: 13)),
+                  style: ThemeText.groupBold(color: groupColor !=null ? groupColor :ThemeColor.mediumGrey,
+                      fontSize: 13)),
               SizedBox(height:10),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,13 +161,14 @@ class _CommentCardState extends State<CommentCard> {
                         Row(
                           children: [
                             Text(
-                              convertTime(widget.comment.createdAt.toDate()), style: ThemeText.groupBold(color:ThemeColor.mediumGrey, fontSize:14),
+                              convertTime(widget.comment.createdAt.toDate()), style: ThemeText.groupBold(color: ThemeColor.mediumGrey, fontSize:14),
                             ),
                             Spacer(flex:1),
                             TextButton(
-                                child: Text("Reply", style: ThemeText.groupBold(color:ThemeColor.secondaryBlue, fontSize:14)),
+                                child: Text("Reply", style: ThemeText.groupBold(color: ThemeColor.secondaryBlue, fontSize:14)),
                                 onPressed: (){
-                                  widget.FormListener.isReply=true;
+                                  print("waspressed");
+                                  widget.switchFormBool(widget.comment.commentRef);
                                 }
                             ),
                             LikeDislikeComment(

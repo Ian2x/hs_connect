@@ -32,6 +32,7 @@ class _ReplyCardState extends State<ReplyCard> {
   bool disliked = false;
   String username="";
   String groupName="";
+  Color? groupColor;
 
 
   @override
@@ -63,10 +64,8 @@ class _ReplyCardState extends State<ReplyCard> {
       if (mounted) {
         setState(() {
           username = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
-          groupName = fetchUserData != null ?
-            fetchUserData.domain != null ?
-                 fetchUserData.domain : fetchUserData.domain
-          : '<Failed to retrieve user name>';
+          groupColor = fetchUserData != null ? fetchUserData.domainColor :ThemeColor.black;
+          groupName = fetchUserData != null ? fetchUserData.domain : '<Failed to retrieve user name>';
         });
       }
     } else {
@@ -97,7 +96,7 @@ class _ReplyCardState extends State<ReplyCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(username + " • " + groupName,
-                      style: ThemeText.groupBold(color: ThemeColor.mediumGrey, fontSize: 13)),
+                      style: ThemeText.groupBold(color: groupColor != null ? groupColor: ThemeColor.mediumGrey, fontSize: 13)),
                   SizedBox(height:10),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,

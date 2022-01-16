@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/widgets/picPickerButton.dart';
 
@@ -12,10 +13,12 @@ const textInputDecoration = InputDecoration(
 
 typedef voidFunction = void Function();
 
-InputDecoration commentInputDecoration({required voidFunction onPressed, required Function setPic}) {
+typedef voidParamFunction = void Function (DocumentReference?);
+
+InputDecoration commentInputDecoration({required voidFunction onPressed, required Function setPic, required bool isReply}) {
   return InputDecoration(
     fillColor: Colors.white,
-    hintText: "Comment...",
+    hintText: isReply != false ? "Reply..." : "Comment...",
     filled: true,
     isDense: true,
     contentPadding: EdgeInsets.all(0.0),
