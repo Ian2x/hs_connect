@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 
-class groupTag extends StatelessWidget {
-
+class GroupTag extends StatelessWidget {
+  // TODO:
   Image? groupImage;
   String groupName;
   Color? groupColor;
 
-  groupTag({Key? key,
+  GroupTag({Key? key,
     required this.groupImage,
     required this.groupName,
     this.groupColor,

@@ -5,7 +5,7 @@ import 'package:hs_connect/services/messages_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 
-import 'messagesCard.dart';
+import 'messagesBubble.dart';
 
 
 class MessagesFeed extends StatefulWidget {
@@ -48,7 +48,7 @@ class _MessagesFeedState extends State<MessagesFeed> {
             physics: BouncingScrollPhysics(),
             reverse: true,
             itemBuilder: (BuildContext context, int index) {
-              return MessagesCard(message: messages[index], isSentMessage: messages[index].senderRef==widget.currUserRef,);
+              return MessagesBubble(message: messages[index], isSentMessage: messages[index].senderRef==widget.currUserRef,);
             },
           );
         }
