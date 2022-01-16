@@ -11,6 +11,7 @@ import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
+import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/groupTag.dart';
 
 class PostCard extends StatefulWidget {
@@ -131,7 +132,7 @@ class _PostCardState extends State<PostCard> {
                       children: [
                         Row(
                           children: [
-                            GroupTag( groupColor: groupColor, groupImage:groupImage, groupName: groupName, radius:6),
+                            GroupTag( groupColor: groupColor != null ? HexColor(groupColor!) : null, groupImage:groupImage, groupName: groupName, fontSize:12),
                             Spacer(),
                             Icon(Icons.more_horiz),
                           ],

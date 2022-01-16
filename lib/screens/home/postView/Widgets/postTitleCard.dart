@@ -172,7 +172,7 @@ class _postTitleCardState extends State<postTitleCard> {
               Row(
                 children: [
                   GroupTag(groupImage: groupImage, groupName: groupName,
-                      groupColor: groupColor, fontSize: 21,),
+                      groupColor: groupColor != null ? HexColor(groupColor!) : null, fontSize: 21,),
                   Spacer(),
                   LikeDislikePost(currUserRef: widget.currUserRef, postRef: widget.post.postRef,
                       likes: widget.post.likes, dislikes: widget.post.dislikes),
