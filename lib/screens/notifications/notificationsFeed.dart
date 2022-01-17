@@ -117,7 +117,7 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
                                     return Container(
                                       padding: EdgeInsets.fromLTRB(5, 5, 5, 2),
                                       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                                        Divider(),
+                                        Divider(thickness: 1.3),
                                         Text("Comments", style: TextStyle(
                                             fontFamily: "Inter",
                                             color: ThemeColor.black,
@@ -131,7 +131,7 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
                                   return Container(
                                     padding: EdgeInsets.fromLTRB(5, 5, 5, 2),
                                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                                      Divider(),
+                                      Divider(thickness: 1.3),
                                       Text("Comments", style: TextStyle(
                                           fontFamily: "Inter",
                                           color: ThemeColor.black,
@@ -141,10 +141,17 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
                                   );
                                 } else {
                                   final commentIndex = index - posts.length - 2;
+                                  Group? group = groups[posts.length+commentIndex];
+                                  Image? groupImage = group!=null ? group.image!=null ? Image.network(group.image!): null : null;
+                                  String groupName = group!=null ? group.name : '<Failed to fetch group name>';
+                                  String? groupColor = group!=null ? group.hexColor : null;
                                   return CommentNotificationCard(
                                     comment: comments[commentIndex],
                                     originPost: postsForComments[commentIndex],
                                     currUserRef: userData.userRef,
+                                    groupImage: groupImage,
+                                    groupName: groupName,
+                                    groupColor: groupColor,
                                   );
                                 }
                               },

@@ -98,7 +98,7 @@ class ThemeColor extends Color {
 
   static Color hintTextGrey = HexColor("C8CED2");
 
-  static Color secondaryBlue = HexColor("68b9f7");
+  static Color secondaryBlue = HexColor("73c2ff");
 
 
   static Color lightGrey = HexColor("F4F4F4");

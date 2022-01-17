@@ -111,7 +111,7 @@ class _PostCardState extends State<PostCard> {
     }
 
     if (widget.post.mediaURL!= null) {
-      var tempImage = Image.network(groupImageString!);
+      var tempImage = Image.network(widget.post.mediaURL!);
       tempImage.image
           .resolve(ImageConfiguration())
           .addListener(ImageStreamListener((ImageInfo image, bool synchronousCall) {
@@ -130,12 +130,12 @@ class _PostCardState extends State<PostCard> {
       },
       child: Card(
           //if border then ShapeDecoration
-          shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(10.0)),
-          margin: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
+          shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(10)),
+          margin: EdgeInsets.fromLTRB(5, 5, 5, 0),
           //color: HexColor("#292929"),
-          elevation: 0.0,
+          elevation: 0,
           child: Container(
-              padding: const EdgeInsets.fromLTRB(0.0,12.0,10.0,0.0),
+              padding: const EdgeInsets.fromLTRB(0,12,10,10),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -166,7 +166,7 @@ class _PostCardState extends State<PostCard> {
                             imageContainer(imageString: widget.post.mediaURL!)
                             :
                             Container(),
-                        //SizedBox(height: 10),
+                        SizedBox(height: 8),
                         Row( //Icon Row
                           children: [
                             Text(

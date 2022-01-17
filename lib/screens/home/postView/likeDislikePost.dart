@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 
+const double iconSize = 25;
+const EdgeInsets iconPadding = EdgeInsets.all(0);
+
 class LikeDislikePost extends StatefulWidget {
   final DocumentReference currUserRef;
   final DocumentReference postRef;
@@ -18,7 +21,6 @@ class LikeDislikePost extends StatefulWidget {
 }
 
 class _LikeDislikePostState extends State<LikeDislikePost> {
-
   bool likeStatus = false;
   bool dislikeStatus = false;
   int likeCount = 0;
@@ -39,7 +41,6 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
 
   @override
   Widget build(BuildContext context) {
-
     PostsDatabaseService _posts = PostsDatabaseService(currUserRef: widget.currUserRef);
 
     return Row(
@@ -48,9 +49,11 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
         () {
           if (dislikeStatus == true) {
             return IconButton(
-              iconSize: 35.0,
+              iconSize: iconSize,
               splashColor: Colors.transparent,
-              icon: Icon(Icons.keyboard_arrow_down_rounded, color: ThemeColor.secondaryBlue),
+              padding: iconPadding,
+              constraints: BoxConstraints(),
+              icon: Icon(Icons.keyboard_arrow_up_rounded),
               onPressed: () {
                 _posts.unDislikePost(postRef: widget.postRef);
                 if (mounted) {
@@ -63,9 +66,11 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
             );
           } else {
             return IconButton(
-              iconSize: 35.0,
+              iconSize: iconSize,
               splashColor: Colors.transparent,
-              icon: Icon(Icons.keyboard_arrow_down_rounded),
+              padding: iconPadding,
+              constraints: BoxConstraints(),
+              icon: Icon(Icons.keyboard_arrow_up_rounded),
               onPressed: () {
                 _posts.dislikePost(postRef: widget.postRef);
                 if (mounted) {
@@ -80,44 +85,49 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
             );
           }
         }(),
-        Text((likeCount - dislikeCount).toString(),
-          style:ThemeText.regularSmall(fontSize:15.0),
+        Text(
+          (likeCount - dislikeCount).toString(),
+          style: ThemeText.regularSmall(fontSize: 16),
         ),
         () {
-        if (likeStatus == true) {
-          return IconButton(
-            iconSize: 35.0,
-            splashColor: Colors.transparent,
-            icon: Icon(Icons.keyboard_arrow_up_rounded, color: ThemeColor.secondaryBlue),
-            onPressed: () {
-              _posts.unLikePost(postRef: widget.postRef);
-              if (mounted) {
-                setState(() {
-                  likeCount -= 1;
-                  likeStatus = false;
-                });
-              }
-            },
-          );
-        } else {
-          return IconButton(
-            iconSize: 35.0,
-            splashColor: Colors.transparent,
-            icon: Icon(Icons.keyboard_arrow_up_rounded),
-            onPressed: () {
-              _posts.likePost(postRef: widget.postRef);
-              if (mounted) {
-                setState(() {
-                  likeCount += 1;
-                  if (dislikeStatus == true) dislikeCount -= 1;
-                  likeStatus = true;
-                  dislikeStatus = false;
-                });
-              }
-            },
-          );
-        }
-      }(),
+          if (likeStatus == true) {
+            return IconButton(
+              iconSize: iconSize,
+              splashColor: Colors.transparent,
+              padding: iconPadding,
+              constraints: BoxConstraints(),
+              icon: Icon(Icons.keyboard_arrow_up_rounded, color: ThemeColor.secondaryBlue),
+              onPressed: () {
+                _posts.unLikePost(postRef: widget.postRef);
+                if (mounted) {
+                  setState(() {
+                    likeCount -= 1;
+                    likeStatus = false;
+                  });
+                }
+              },
+            );
+          } else {
+            return IconButton(
+              iconSize: iconSize,
+              splashColor: Colors.transparent,
+              padding: iconPadding,
+              constraints: BoxConstraints(),
+              icon: Icon(Icons.keyboard_arrow_up_rounded),
+              onPressed: () {
+                _posts.likePost(postRef: widget.postRef);
+                if (mounted) {
+                  setState(() {
+                    likeCount += 1;
+                    if (dislikeStatus == true) dislikeCount -= 1;
+                    likeStatus = true;
+                    dislikeStatus = false;
+                  });
+                }
+              },
+            );
+          }
+        }()
       ],
     );
   }
