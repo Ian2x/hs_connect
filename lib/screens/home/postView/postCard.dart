@@ -13,6 +13,7 @@ import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/groupTag.dart';
+import 'package:hs_connect/shared/widgets/widgetDisplay.dart';
 
 class PostCard extends StatefulWidget {
   final Post post;
@@ -31,10 +32,13 @@ class _PostCardState extends State<PostCard> {
   String userDomain = '';
   String username = '';
   String groupName = '';
-  String? imageString;
+  String? groupImageString;
   Image? groupImage;
   String? groupColor;
   bool inDomain = false;
+  Image? postImage;
+
+
 
   @override
   void initState() {
@@ -52,6 +56,7 @@ class _PostCardState extends State<PostCard> {
         });
       }
     }
+
     // find username for userId
     getUserData();
     getGroupData();
@@ -70,12 +75,13 @@ class _PostCardState extends State<PostCard> {
   }
 
   void getGroupData() async {
+
     GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserRef);
     final Group? fetchGroup = await _groups.groupFromRef(widget.post.groupRef);
     if (mounted) {
       setState(() {
         if (fetchGroup!=null) {
-          imageString = fetchGroup.image;
+          groupImageString = fetchGroup.image;
           groupName = fetchGroup.name;
           groupColor = fetchGroup.hexColor;
           if (fetchGroup.accessRestriction== AccessRestriction(restriction: groupName, restrictionType: AccessRestrictionType.domain)) {
@@ -93,8 +99,8 @@ class _PostCardState extends State<PostCard> {
   @override
   Widget build(BuildContext context) {
 
-    if (imageString != null && imageString!="") {
-      var tempImage = Image.network(imageString!);
+    if (groupImageString != null && groupImageString!="") {
+      var tempImage = Image.network(groupImageString!);
       tempImage.image
           .resolve(ImageConfiguration())
           .addListener(ImageStreamListener((ImageInfo image, bool synchronousCall) {
@@ -102,8 +108,17 @@ class _PostCardState extends State<PostCard> {
           setState(() => groupImage = tempImage);
         }
       }));
-    } else {
-      groupImage=  Image(image: AssetImage('assets/masonic-G.png'), height: 20, width: 20);
+    }
+
+    if (widget.post.mediaURL!= null) {
+      var tempImage = Image.network(groupImageString!);
+      tempImage.image
+          .resolve(ImageConfiguration())
+          .addListener(ImageStreamListener((ImageInfo image, bool synchronousCall) {
+        if (mounted) {
+          setState(() => postImage = tempImage);
+        }
+      }));
     }
 
     return GestureDetector(
@@ -120,7 +135,7 @@ class _PostCardState extends State<PostCard> {
           //color: HexColor("#292929"),
           elevation: 0.0,
           child: Container(
-              padding: const EdgeInsets.fromLTRB(7.0,12.0,10.0,5.0),
+              padding: const EdgeInsets.fromLTRB(0.0,12.0,10.0,0.0),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -133,6 +148,9 @@ class _PostCardState extends State<PostCard> {
                         Row(
                           children: [
                             GroupTag( groupColor: groupColor != null ? HexColor(groupColor!) : null, groupImage:groupImage, groupName: groupName, fontSize:12),
+                            Text(
+                            " • " + convertTime(widget.post.createdAt.toDate()), style: ThemeText.regularSmall(color: ThemeColor.mediumGrey, fontSize:12),
+                            ),
                             Spacer(),
                             Icon(Icons.more_horiz),
                           ],
@@ -141,13 +159,16 @@ class _PostCardState extends State<PostCard> {
                         Text(
                           //TODO: Need to figure out ways to ref
                           widget.post.title,
-                          style: ThemeText.titleRegular(), overflow: TextOverflow.ellipsis, // default is .clip
+                          style: ThemeText.titleRegular(fontSize: 16), overflow: TextOverflow.ellipsis, // default is .clip
                           maxLines: 3
                         ),
+                        widget.post.mediaURL != null ?
+                            imageContainer(imageString: widget.post.mediaURL!)
+                            :
+                            Container(),
                         //SizedBox(height: 10),
                         Row( //Icon Row
                           children: [
-                            SizedBox(width:10),
                             Text(
                               (widget.post.numComments + widget.post.numReplies).toString()
                               + " Comments",

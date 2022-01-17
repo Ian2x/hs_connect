@@ -42,7 +42,7 @@ class GroupTag extends StatelessWidget {
                 )
             ),
           ) : Container(),
-          SizedBox(width: fontSize / 3),
+          groupImage!=null ? SizedBox(width: fontSize / 3) : Container(),
           Text( groupName,
             style:ThemeText.regularSmall(fontSize: fontSize,
               color: groupColor,
