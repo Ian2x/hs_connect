@@ -53,9 +53,9 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
               splashColor: Colors.transparent,
               padding: iconPadding,
               constraints: BoxConstraints(),
-              icon: Icon(Icons.keyboard_arrow_up_rounded),
+              icon: Icon(Icons.keyboard_arrow_down_rounded, color: ThemeColor.secondaryBlue),
               onPressed: () {
-                _posts.unDislikePost(postRef: widget.postRef);
+                _posts.unDislikePost(postRef: widget.postRef, );
                 if (mounted) {
                   setState(() {
                     dislikeCount -= 1;
@@ -70,7 +70,7 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
               splashColor: Colors.transparent,
               padding: iconPadding,
               constraints: BoxConstraints(),
-              icon: Icon(Icons.keyboard_arrow_up_rounded),
+              icon: Icon(Icons.keyboard_arrow_down_rounded),
               onPressed: () {
                 _posts.dislikePost(postRef: widget.postRef);
                 if (mounted) {

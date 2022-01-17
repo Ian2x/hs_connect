@@ -7,6 +7,9 @@ import 'package:hs_connect/screens/profile/profileWidgets/newMessageButton.dart'
 import 'package:hs_connect/screens/profile/profileWidgets/profileName.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
+import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/tools/hexColor.dart';
+import 'package:hs_connect/shared/widgets/groupTag.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileStats.dart';
@@ -32,6 +35,11 @@ class _ProfileBodyState extends State<ProfileBody> {
   int profileScore = 0;
   List<Group>? profileGroups;
 
+  String userGroup="";
+  String? userGroupImage;
+  Color userGroupColor=ThemeColor.black;
+
+
   void getProfileUserData() async {
     UserDataDatabaseService _userInfoDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserRef);
     final UserData? fetchUserData = await _userInfoDatabaseService.getUserData(userRef: widget.profileRef);
@@ -40,6 +48,11 @@ class _ProfileBodyState extends State<ProfileBody> {
         profileUsername = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
         profileImageExists = fetchUserData != null && fetchUserData.profileImage != null;
         profileGroupCount = fetchUserData != null ? fetchUserData.userGroups.length : -1;
+        userGroupColor = fetchUserData != null ?
+          fetchUserData.domainColor!= null ? fetchUserData.domainColor!:
+            ThemeColor.black
+        : ThemeColor.black;
+        userGroup = fetchUserData != null ? fetchUserData.domain : "@gmail.com";
         profileScore = fetchUserData != null ? fetchUserData.score : -1;
         profileImage = fetchUserData!.profileImage;
         profileImageURL = fetchUserData.profileImageURL;
@@ -48,8 +61,10 @@ class _ProfileBodyState extends State<ProfileBody> {
     GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserRef);
     if (fetchUserData != null) {
       var fetchUserGroups = await _groups.getUserGroups(userGroups: fetchUserData.userGroups);
+      var fetchUserDomain = await _groups.getGroup(FirebaseFirestore.instance.collection(C.groups).doc(fetchUserData.domain));
       if (mounted) {
         setState(() {
+          userGroupImage = fetchUserDomain != null ? fetchUserDomain.image : null;
           List<Group> nullRemovedGroups = [];
           for (Group? UG in fetchUserGroups) {
             if (UG != null) {
@@ -92,7 +107,27 @@ class _ProfileBodyState extends State<ProfileBody> {
         SizedBox(height: 10),
         ProfileName(name: profileUsername, domain: userData.domain),
         SizedBox(height: 15),
-        ProfileStats(scoreCount: profileScore, groupCount: profileGroupCount),
+        Row(
+          children: [
+            GroupTag(groupImage: userGroupImage!= null ? Image.network(userGroupImage!) :
+                 null, groupName: userGroup,
+                fontSize: 18, groupColor: userGroupColor != null ? userGroupColor!:
+                    null,
+            ),
+            RichText(
+              text: TextSpan(
+                children: <TextSpan>[
+                  TextSpan(text: profileScore.toString(),
+                      style: ThemeText.groupBold(color: ThemeColor.black, fontSize: 15 )),
+                  TextSpan(text: "Likes ",
+                      style: ThemeText.regularSmall(color: ThemeColor.mediumGrey, fontSize: 15)),
+                ],
+              ),
+            ),
+          ],
+
+
+        ),
         SizedBox(height: 80),
         widget.profileRef != widget.currUserRef
             ? Row(children: <Widget>[SizedBox(width: 45), NewMessageButton(otherUserRef: widget.profileRef, currUserRef: widget.currUserRef,)])
