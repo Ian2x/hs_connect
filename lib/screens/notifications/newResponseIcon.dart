@@ -12,7 +12,8 @@ class newResponseIcon extends StatelessWidget {
         color: ThemeColor.secondaryBlue,
         margin: EdgeInsets.all(0),
         child: Container(
-          padding: EdgeInsets.all(5.0),
+          padding: EdgeInsets.fromLTRB(5, 3, 5, 3),
+          margin: EdgeInsets.all(0),
           child: Row(
             children: <Widget>[
               Icon(Icons.chat_bubble_rounded, color: ThemeColor.white, size: 12.0),
