@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/services/comments_database.dart';
 
+const double iconSize = 10;
+const EdgeInsets iconPadding = EdgeInsets.all(0);
+
 class LikeDislikeComment extends StatefulWidget {
   final DocumentReference currUserRef;
   final DocumentReference commentRef;

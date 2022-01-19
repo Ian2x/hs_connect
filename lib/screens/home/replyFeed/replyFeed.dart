@@ -32,7 +32,7 @@ class _RepliesFeedState extends State<RepliesFeed> {
       stream: _replies.commentReplies,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return Loading();
+          return Container();
         } else {
           final replies = (snapshot.data as List<Reply?>).map((reply) => reply!).toList();
 

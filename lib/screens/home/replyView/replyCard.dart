@@ -151,11 +151,11 @@ class _ReplyCardState extends State<ReplyCard> {
                   ),
                   widget.isLast !=false ?
                     Container() :
-                    Divider(thickness: 3, color: ThemeColor.backgroundGrey, height: 20),
+                    Divider(thickness: 3, color: ThemeColor.backgroundGrey, height: 40),
                 ]
             )
         ),
       ],
-    );;
+    );
   }
 }
