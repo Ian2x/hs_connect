@@ -14,6 +14,7 @@ import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/groupTag.dart';
 import 'package:hs_connect/shared/widgets/widgetDisplay.dart';
+import 'package:provider/provider.dart';
 
 class PostCard extends StatefulWidget {
   final Post post;
@@ -94,6 +95,15 @@ class _PostCardState extends State<PostCard> {
 
       });
     }
+    if (widget.post.groupRef.id[0]=='@') {
+      UserDataDatabaseService _userDataDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserRef);
+      final tempUserData = await _userDataDatabaseService.getUserData(userRef: widget.currUserRef);
+      if (tempUserData!=null && mounted && tempUserData.fullDomainName!=null) {
+        setState(() {
+          groupName = tempUserData.fullDomainName!;
+        });
+      }
+    }
   }
 
   @override
@@ -109,7 +119,6 @@ class _PostCardState extends State<PostCard> {
         }
       }));
     }
-
     if (widget.post.mediaURL!= null) {
       var tempImage = Image.network(widget.post.mediaURL!);
       tempImage.image
@@ -135,7 +144,7 @@ class _PostCardState extends State<PostCard> {
           //color: HexColor("#292929"),
           elevation: 0,
           child: Container(
-              padding: const EdgeInsets.fromLTRB(0,12,10,10),
+              padding: const EdgeInsets.fromLTRB(2,12,10,10),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -147,19 +156,21 @@ class _PostCardState extends State<PostCard> {
                       children: [
                         Row(
                           children: [
+                            Text("in ", style: ThemeText.inter(fontSize: 14, color: groupColor!=null ? HexColor(groupColor!) : ThemeColor.black)),
                             GroupTag( groupColor: groupColor != null ? HexColor(groupColor!) : null, groupImage:groupImage, groupName: groupName, fontSize:12),
                             Text(
-                            " • " + convertTime(widget.post.createdAt.toDate()), style: ThemeText.regularSmall(color: ThemeColor.mediumGrey, fontSize:12),
+                            " • " + convertTime(widget.post.createdAt.toDate()), style: ThemeText.inter(color: ThemeColor.mediumGrey, fontSize:14),
                             ),
                             Spacer(),
                             Icon(Icons.more_horiz),
+                            SizedBox(width: 6),
                           ],
                         ),
                         SizedBox(height: 10),
                         Text(
                           //TODO: Need to figure out ways to ref
                           widget.post.title,
-                          style: ThemeText.titleRegular(fontSize: 16), overflow: TextOverflow.ellipsis, // default is .clip
+                          style: ThemeText.roboto(fontSize: 18, color: ThemeColor.black), overflow: TextOverflow.ellipsis, // default is .clip
                           maxLines: 3
                         ),
                         widget.post.mediaURL != null ?
@@ -169,10 +180,11 @@ class _PostCardState extends State<PostCard> {
                         SizedBox(height: 8),
                         Row( //Icon Row
                           children: [
+                            SizedBox(width:1),
                             Text(
                               (widget.post.numComments + widget.post.numReplies).toString()
                               + " Comments",
-                              style: ThemeText.regularSmall(fontSize: 15.0, color: ThemeColor.mediumGrey),
+                              style: ThemeText.regularSmall(fontSize: 14, color: ThemeColor.mediumGrey),
                             ),
                             Spacer(),
                             LikeDislikePost(
