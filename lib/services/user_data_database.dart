@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/accessRestriction.dart';
-import 'package:hs_connect/models/observedRef.dart';
 import 'package:hs_connect/models/searchResult.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/groups_database.dart';
@@ -34,21 +33,20 @@ class UserDataDatabaseService {
       C.overrideCounty: overrideCounty,
       C.overrideState: overrideState,
       C.overrideCountry: overrideCountry,
-      C.userGroups: [UserGroup(groupRef: domainGroupRef, public: true).asMap()],
+      C.groups: [domainGroupRef],
       C.modGroupRefs: [],
       C.userMessages: [],
-      C.myPostsObservedRefs: [],
-      C.myCommentsObservedRefs: [],
+      C.myNotifications: [],
+      C.myPosts: [],
       C.numReplies: 0,
       C.savedPostsRefs: [],
-      C.profileImage: null,
+      C.profileImageURL: null,
       C.score: 0,
       C.numReports: 0,
+      C.private: false,
     });
     // join domain group
-    await joinGroup(groupRef: domainGroupRef, public: true);
-    // join public group
-    await joinGroup(groupRef: FirebaseFirestore.instance.collection(C.groups).doc("Public"), public: true);
+    await joinGroup(groupRef: domainGroupRef);
   }
 
   Future<void> updateProfile(
@@ -60,55 +58,17 @@ class UserDataDatabaseService {
         .update({
           C.displayedName: displayedName,
           C.displayedNameLC: displayedName.toLowerCase(),
-          C.profileImage: imageURL,
+          C.profileImageURL: imageURL,
         })
         .then(onValue)
         .catchError(onError);
   }
 
-  Future updatePostLastObserved({required DocumentReference postRef}) async {
-    final userData = await currUserRef.get();
-    final PLOs = observedRefList(userData.get(C.myPostsObservedRefs));
-    for (final OR in PLOs) {
-      if (OR.ref == postRef && OR.refType.string == C.post) {
-        await currUserRef.update({
-          C.myPostsObservedRefs: FieldValue.arrayRemove([OR.asMap()])
-        });
-        await currUserRef.update({
-          C.myPostsObservedRefs: FieldValue.arrayUnion([
-            {C.lastObserved: Timestamp.now(), C.ref: postRef, C.refType: ObservedRefType.post.string}
-          ])
-        });
-        return;
-      }
-    }
-  }
-
-  Future updateComment({required DocumentReference commentRef}) async {
-    final userData = await currUserRef.get();
-    final CLOs = observedRefList(userData.get(C.myCommentsObservedRefs));
-    for (final OR in CLOs) {
-      if (OR.ref == commentRef && OR.refType.string == C.comment) {
-        await currUserRef.update({
-          C.myCommentsObservedRefs: FieldValue.arrayRemove([OR.asMap()])
-        });
-        await currUserRef.update({
-          C.myCommentsObservedRefs: FieldValue.arrayUnion([
-            {C.lastObserved: Timestamp.now(), C.ref: commentRef, C.refType: ObservedRefType.comment.string}
-          ])
-        });
-        return;
-      }
-    }
-  }
-
   Future<void> joinGroup(
-      {required DocumentReference groupRef, required bool public}) async {
+      {required DocumentReference groupRef}) async {
     groupRef.update({C.numMembers: FieldValue.increment(1)});
     final result = await currUserRef.update({
-      C.userGroups: FieldValue.arrayUnion([
-        {C.groupRef: groupRef, C.public: public}
-      ])
+      C.groups: FieldValue.arrayUnion([groupRef])
     });
     GroupsDatabaseService _tempGroups = GroupsDatabaseService(currUserRef: currUserRef);
     _tempGroups.updateGroupStats(groupRef: groupRef);
@@ -116,12 +76,10 @@ class UserDataDatabaseService {
   }
 
   Future<void> leaveGroup(
-      {required DocumentReference userRef, required DocumentReference groupRef, required bool public}) async {
+      {required DocumentReference userRef, required DocumentReference groupRef}) async {
     groupRef.update({C.numMembers: FieldValue.increment(-1)});
     return await userRef.update({
-      C.userGroups: FieldValue.arrayRemove([
-        {C.groupRef: groupRef, C.public: public}
-      ])
+      C.groups: FieldValue.arrayRemove([groupRef])
     });
   }
 

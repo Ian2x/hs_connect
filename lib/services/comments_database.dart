@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/comment.dart';
-import 'package:hs_connect/models/observedRef.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
@@ -27,13 +26,9 @@ class CommentsDatabaseService {
       required DocumentReference groupRef,
       Function(void) onValue = defaultFunc,
       Function onError = defaultFunc}) async {
-    // update user's comments
     DocumentReference newCommentRef = commentsCollection.doc();
-    currUserRef.update({
-      C.myCommentsObservedRefs: FieldValue.arrayUnion([
-        {C.ref: newCommentRef, C.refType: ObservedRefType.comment.string, C.lastObserved: Timestamp.now()}
-      ])
-    });
+    // TODO: update post creator's notifications
+
     // update post's commentsRefs and lastUpdated
     postRef.update({
       C.numComments: FieldValue.increment(1),
@@ -71,18 +66,6 @@ class CommentsDatabaseService {
     final comment = await commentRef.get();
     if (comment.exists) {
       if (currUserRef == comment.get(C.creatorRef)) {
-        // update post's numComments
-        // postRef.update({C.commentsRefs: FieldValue.arrayRemove([commentRef])});
-        // update user's comments
-        final myCommentsObservedRefs = observedRefList((await currUserRef.get()).get(C.myCommentsObservedRefs));
-        for (final observedRef in myCommentsObservedRefs) {
-          if (observedRef.ref == commentRef) {
-            currUserRef.update({
-              C.myCommentsObservedRefs: FieldValue.arrayRemove([observedRef.asMap()])
-            });
-            break;
-          }
-        }
 
         // delete media (if applicable)
         if (media != null) {
@@ -156,21 +139,6 @@ class CommentsDatabaseService {
 
   Future<Comment?> getComment(DocumentReference commentRef) async {
     return _commentFromSnapshot(await commentRef.get());
-  }
-
-  // doesn't preserve order
-  Future _newActivityCommentsHelper(ObservedRef OR, List<Comment> NAC) async {
-    var tempComment = await getComment(OR.ref);
-    if (tempComment != null) {
-      if (tempComment.lastUpdated.toDate().compareTo(OR.lastObserved.toDate().add(Duration(seconds: 2)))>0) {
-        NAC.add(tempComment);
-      }
-    }
-  }
-  Future<List<Comment>> newActivityComments(List<ObservedRef> userCommentsObservedRefs) async {
-    List<Comment> newActivityComments = [];
-    await Future.wait([for (ObservedRef COR in userCommentsObservedRefs) _newActivityCommentsHelper(COR, newActivityComments)]);
-    return newActivityComments;
   }
 
   Stream get postComments {

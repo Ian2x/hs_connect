@@ -52,14 +52,6 @@ class _PostPageState extends State<PostPage> {
   }
 
   @override
-  void dispose() {
-    if (post!.creatorRef==widget.currUserRef) {
-      UserDataDatabaseService(currUserRef: widget.currUserRef).updatePostLastObserved(postRef: widget.postRef);
-    }
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
 
     final userData = Provider.of<UserData?>(context);

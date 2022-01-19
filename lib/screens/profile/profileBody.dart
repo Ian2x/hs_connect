@@ -31,14 +31,8 @@ class _ProfileBodyState extends State<ProfileBody> {
   bool profileImageExists = false;
   Widget? profileImage = Loading(size: 30.0);
   String? profileImageURL;
-  int profileGroupCount = 0;
   int profileScore = 0;
   List<Group>? profileGroups;
-
-  String userGroup="";
-  String? userGroupImage;
-  Color userGroupColor=ThemeColor.black;
-
 
   void getProfileUserData() async {
     UserDataDatabaseService _userInfoDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserRef);
