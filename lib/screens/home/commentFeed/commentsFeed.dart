@@ -62,6 +62,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
                 itemCount: comments.length + 2,
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
+                physics: BouncingScrollPhysics(),
                 itemBuilder: (BuildContext context, int index) {
                   if (index == 0) {
                     return postTitleCard(

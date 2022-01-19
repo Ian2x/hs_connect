@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 
-const double iconSize = 25;
+const double iconSize = 32;
+
 const EdgeInsets iconPadding = EdgeInsets.all(0);
 
 class LikeDislikePost extends StatefulWidget {
@@ -53,9 +54,10 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
               splashColor: Colors.transparent,
               padding: iconPadding,
               constraints: BoxConstraints(),
-              icon: Icon(Icons.keyboard_arrow_down_rounded, color: ThemeColor.secondaryBlue),
+              color: ThemeColor.secondaryBlue,
+              icon: Icon(Icons.keyboard_arrow_down_rounded),
               onPressed: () {
-                _posts.unDislikePost(postRef: widget.postRef, );
+                _posts.unDislikePost(postRef: widget.postRef);
                 if (mounted) {
                   setState(() {
                     dislikeCount -= 1;
@@ -70,6 +72,7 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
               splashColor: Colors.transparent,
               padding: iconPadding,
               constraints: BoxConstraints(),
+              color: ThemeColor.darkGrey,
               icon: Icon(Icons.keyboard_arrow_down_rounded),
               onPressed: () {
                 _posts.dislikePost(postRef: widget.postRef);
@@ -85,10 +88,12 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
             );
           }
         }(),
+        SizedBox(width: 5),
         Text(
           (likeCount - dislikeCount).toString(),
           style: ThemeText.regularSmall(fontSize: 16),
         ),
+        SizedBox(width: 5),
         () {
           if (likeStatus == true) {
             return IconButton(
@@ -96,6 +101,7 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
               splashColor: Colors.transparent,
               padding: iconPadding,
               constraints: BoxConstraints(),
+              color: ThemeColor.secondaryBlue,
               icon: Icon(Icons.keyboard_arrow_up_rounded, color: ThemeColor.secondaryBlue),
               onPressed: () {
                 _posts.unLikePost(postRef: widget.postRef);
@@ -113,6 +119,7 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
               splashColor: Colors.transparent,
               padding: iconPadding,
               constraints: BoxConstraints(),
+              color: ThemeColor.darkGrey,
               icon: Icon(Icons.keyboard_arrow_up_rounded),
               onPressed: () {
                 _posts.likePost(postRef: widget.postRef);
