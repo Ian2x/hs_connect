@@ -7,9 +7,6 @@ import 'package:hs_connect/screens/profile/profileWidgets/newMessageButton.dart'
 import 'package:hs_connect/screens/profile/profileWidgets/profileName.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
-import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/tools/hexColor.dart';
-import 'package:hs_connect/shared/widgets/groupTag.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileStats.dart';
@@ -32,7 +29,6 @@ class _ProfileBodyState extends State<ProfileBody> {
   Widget? profileImage = Loading(size: 30.0);
   String? profileImageURL;
   int profileScore = 0;
-  List<Group>? profileGroups;
 
   void getProfileUserData() async {
     UserDataDatabaseService _userInfoDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserRef);
@@ -41,12 +37,6 @@ class _ProfileBodyState extends State<ProfileBody> {
       setState(() {
         profileUsername = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
         profileImageExists = fetchUserData != null && fetchUserData.profileImage != null;
-        profileGroupCount = fetchUserData != null ? fetchUserData.userGroups.length : -1;
-        userGroupColor = fetchUserData != null ?
-          fetchUserData.domainColor!= null ? fetchUserData.domainColor!:
-            ThemeColor.black
-        : ThemeColor.black;
-        userGroup = fetchUserData != null ? fetchUserData.domain : "@gmail.com";
         profileScore = fetchUserData != null ? fetchUserData.score : -1;
         profileImage = fetchUserData!.profileImage;
         profileImageURL = fetchUserData.profileImageURL;
@@ -83,9 +73,6 @@ class _ProfileBodyState extends State<ProfileBody> {
 
     if (userData == null) {
       return Authenticate();
-    }
-    if (profileGroups == null) {
-      return Loading();
     }
     return ListView(
       physics: BouncingScrollPhysics(),
