@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/posts_database.dart';
+import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/postsListView.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +24,7 @@ class _DomainFeedState extends State<DomainFeed> {
 
     if (userData == null) return Loading();
 
-    PostsDatabaseService _posts = PostsDatabaseService(currUserRef: userData.userRef, groupRefs: [userData.userGroups[0].groupRef]);
+    PostsDatabaseService _posts = PostsDatabaseService(currUserRef: userData.userRef, groupRefs: [FirebaseFirestore.instance.collection(C.groups).doc(userData.domain)]);
 
     return StreamBuilder(
       stream: _posts.posts,

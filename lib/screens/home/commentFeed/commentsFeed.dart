@@ -65,7 +65,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
                 physics: BouncingScrollPhysics(),
                 itemBuilder: (BuildContext context, int index) {
                   if (index == 0) {
-                    return postTitleCard(
+                    return PostTitleCard(
                       post: widget.post,
                       currUserRef: userData.userRef,
                     );

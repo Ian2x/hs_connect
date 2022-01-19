@@ -117,12 +117,9 @@ class C {
   static const overrideCounty = 'overrideCounty';
   static const overrideState = 'overrideState';
   static const overrideCountry = 'overrideCountry';
-  static const userGroups = 'userGroups';
   static const modGroupRefs = 'modGroupsRefs';
   static const userMessages = 'userMessages';
-  static const myPostsObservedRefs = 'myPostsObservedRefs';
-  static const myCommentsObservedRefs = 'myCommentsObservedRefs';
-  static const profileImage = 'profileImage';
+  static const profileImageURL = 'profileImageURL';
   static const score = 'score';
   static const groupRef = 'groupRef';
   static const public = 'public';
@@ -186,7 +183,6 @@ class C {
   static const profilePics = 'profilePics';
   static const ref = 'ref';
   static const refType = 'refType';
-  static const lastObserved = 'lastObserved';
   static const count = 'count';
   static const time = 'time';
   static const postsOverTime = 'postsOverTime';
@@ -208,5 +204,17 @@ class C {
   static const county = 'county';
   static const Public = 'Public';
   static const lastViewed = 'lastViewed';
-
+  static const commentToPost = 'commentToPost';
+  static const replyToReply = 'replyToReply';
+  static const replyToComment = 'replyToComment';
+  static const parentPostRef = 'parentPostRef';
+  static const myNotificationType = 'myNotificationType';
+  static const sourceRef = 'sourceRef';
+  static const myNotifications = 'myNotifications';
+  static const private = 'private';
+  static const myPosts = 'myPosts';
+  static const sourceUserRef = 'sourceUserRef';
+  static const sourceUserDisplayedName = 'sourceUserDisplayedName';
+  static const sourceUserFullDomainName = 'sourceUserFullDomainName';
+  static const profileImage = 'profileImage';
 }

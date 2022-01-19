@@ -28,9 +28,7 @@ class _ProfileBodyState extends State<ProfileBody> {
   bool profileImageExists = false;
   Widget? profileImage = Loading(size: 30.0);
   String? profileImageURL;
-  int profileGroupCount = 0;
   int profileScore = 0;
-  List<Group>? profileGroups;
 
   void getProfileUserData() async {
     UserDataDatabaseService _userInfoDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserRef);
@@ -39,26 +37,10 @@ class _ProfileBodyState extends State<ProfileBody> {
       setState(() {
         profileUsername = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
         profileImageExists = fetchUserData != null && fetchUserData.profileImage != null;
-        profileGroupCount = fetchUserData != null ? fetchUserData.userGroups.length : -1;
         profileScore = fetchUserData != null ? fetchUserData.score : -1;
         profileImage = fetchUserData!.profileImage;
         profileImageURL = fetchUserData.profileImageURL;
       });
-    }
-    GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserRef);
-    if (fetchUserData != null) {
-      var fetchUserGroups = await _groups.getUserGroups(userGroups: fetchUserData.userGroups);
-      if (mounted) {
-        setState(() {
-          List<Group> nullRemovedGroups = [];
-          for (Group? UG in fetchUserGroups) {
-            if (UG != null) {
-              nullRemovedGroups.add(UG);
-            }
-          }
-          profileGroups = nullRemovedGroups;
-        });
-      }
     }
   }
 
@@ -75,9 +57,6 @@ class _ProfileBodyState extends State<ProfileBody> {
     if (userData == null) {
       return Authenticate();
     }
-    if (profileGroups == null) {
-      return Loading();
-    }
     return ListView(
       physics: BouncingScrollPhysics(),
       children: [
@@ -92,7 +71,7 @@ class _ProfileBodyState extends State<ProfileBody> {
         SizedBox(height: 10),
         ProfileName(name: profileUsername, domain: userData.domain),
         SizedBox(height: 15),
-        ProfileStats(scoreCount: profileScore, groupCount: profileGroupCount),
+        ProfileStats(scoreCount: profileScore),
         SizedBox(height: 80),
         widget.profileRef != widget.currUserRef
             ? Row(children: <Widget>[SizedBox(width: 45), NewMessageButton(otherUserRef: widget.profileRef, currUserRef: widget.currUserRef,)])

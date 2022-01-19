@@ -52,14 +52,14 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
         otherUsers = tempTempOtherUsers;
       });
     }
-    fetchUserGroups(tempTempOtherUsers);
+    fetchGroups(tempTempOtherUsers);
   }
 
-  Future fetchUserGroups(List<UserData> LUD) async {
+  Future fetchGroups(List<UserData> LUD) async {
     GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.userData.userRef);
     List<Widget> tempGroupCirclesForOtherUsers = [];
     final CollectionReference groupsCollection = FirebaseFirestore.instance.collection(C.groups);
-    final groups = await _groups.getGroups(groupsRefs: LUD.map((UD) => groupsCollection.doc(UD.domain)).toList());
+    final groups = await _groups.getGroups(groupsRefs: LUD.map((UD) => groupsCollection.doc(UD.domain)).toList(), withPublic: false);
     for (Group? group in groups) {
       // tempGroupCirclesForOtherUsers.add(circleFromGroup(group: group, circleSize: 35));
     }

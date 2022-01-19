@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ProfileStats extends StatelessWidget {
-  final int groupCount;
   final int scoreCount;
 
-  ProfileStats({Key? key, required this.scoreCount, required this.groupCount}) : super(key: key);
+  ProfileStats({Key? key, required this.scoreCount}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Row(
@@ -16,7 +15,7 @@ class ProfileStats extends StatelessWidget {
           ),
           VerticalDivider(),
           Text(
-              groupCount.toString() + ' Groups',
+              ' something',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
           ),
         ],

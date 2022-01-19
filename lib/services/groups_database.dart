@@ -82,7 +82,7 @@ class GroupsDatabaseService {
         creatorRef.update({C.modGroupRefs: FieldValue.arrayUnion([newGroupRef])});
         // have creator join group
         UserDataDatabaseService _users = UserDataDatabaseService(currUserRef: creatorRef);
-        await _users.joinGroup(groupRef: newGroupRef, public: true);
+        await _users.joinGroup(groupRef: newGroupRef);
       }
       return newGroupRef;
     }
@@ -183,27 +183,23 @@ class GroupsDatabaseService {
     return groupFromSnapshot(await groupRef.get());
   }
 
-
-  Future _getUserGroupsHelper(UserGroup UGR, int index, List<Group?> results) async {
-    results[index] = await getGroup(UGR.groupRef);
-  }
-
-  // returns sorted by oldest groups first (domain first)
-  Future<List<Group?>> getUserGroups({required List<UserGroup> userGroups}) async {
-    List<Group?> results = List.filled(userGroups.length, null);
-    await Future.wait([for (int i=0; i<userGroups.length; i++) _getUserGroupsHelper(userGroups[i], i, results)]);
-    results.sort((a,b) => (a as Group).createdAt.compareTo((b as Group).createdAt));
-    return results;
-  }
-
   Future _getGroupsHelper(DocumentReference GR, int index, List<Group?> results) async {
     results[index] = await getGroup(GR);
   }
 
-  // preserves order
-  Future<List<Group?>> getGroups({required List<DocumentReference> groupsRefs}) async {
-    List<Group?> results = List.filled(groupsRefs.length, null);
+  // preserves order and adds on public group at end
+  Future<List<Group?>> getGroups({required List<DocumentReference> groupsRefs, required bool withPublic}) async {
+    int listLength = withPublic ? groupsRefs.length+1 : groupsRefs.length;
+    Future<Group?>? publicGroupData;
+    if (withPublic) {
+      publicGroupData = getGroup(groupsCollection.doc(C.Public));
+    }
+    List<Group?> results = List.filled(listLength, null);
     await Future.wait([for (int i=0; i<groupsRefs.length; i++) _getGroupsHelper(groupsRefs[i], i, results)]);
+    if (withPublic) {
+      final publicGroup = await publicGroupData;
+      results[groupsRefs.length] = publicGroup;
+    }
     return results;
   }
 

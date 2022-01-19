@@ -13,6 +13,7 @@ import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/groupTag.dart';
+import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/widgetDisplay.dart';
 import 'package:provider/provider.dart';
 
@@ -39,7 +40,7 @@ class _PostCardState extends State<PostCard> {
   String? groupColor;
   bool inDomain = false;
   Image? postImage;
-
+  int fetchesCompleted = 0;
 
 
   @override
@@ -62,7 +63,24 @@ class _PostCardState extends State<PostCard> {
     // find username for userId
     getUserData();
     getGroupData();
+    getPostMedia();
     super.initState();
+  }
+
+  void getPostMedia() async {
+    if (widget.post.mediaURL!= null) {
+      var tempImage = Image.network(widget.post.mediaURL!);
+      tempImage.image
+          .resolve(ImageConfiguration())
+          .addListener(ImageStreamListener((ImageInfo image, bool synchronousCall) {
+        if (mounted) {
+          setState(() => postImage = tempImage);
+        }
+      }));
+    }
+    if (mounted) {
+      setState(() => fetchesCompleted+=1);
+    }
   }
 
   void getUserData() async {
@@ -73,6 +91,9 @@ class _PostCardState extends State<PostCard> {
         username = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
         userDomain = fetchUserData != null ? fetchUserData.domain : '<Failed to retrieve user domain>';
       });
+    }
+    if (mounted) {
+      setState(() => fetchesCompleted+=1);
     }
   }
 
@@ -88,6 +109,16 @@ class _PostCardState extends State<PostCard> {
           groupColor = fetchGroup.hexColor;
           if (fetchGroup.accessRestriction== AccessRestriction(restriction: groupName, restrictionType: AccessRestrictionType.domain)) {
             inDomain=true;
+          }
+          if (groupImageString != null && groupImageString!="") {
+            var tempImage = Image.network(groupImageString!);
+            tempImage.image
+                .resolve(ImageConfiguration())
+                .addListener(ImageStreamListener((ImageInfo image, bool synchronousCall) {
+              if (mounted) {
+                setState(() => groupImage = tempImage);
+              }
+            }));
           }
         } else {
           groupName = '<Failed to retrieve group name>';
@@ -105,30 +136,16 @@ class _PostCardState extends State<PostCard> {
         });
       }
     }
+    if (mounted) {
+      setState(() => fetchesCompleted+=1);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
 
-    if (groupImageString != null && groupImageString!="") {
-      var tempImage = Image.network(groupImageString!);
-      tempImage.image
-          .resolve(ImageConfiguration())
-          .addListener(ImageStreamListener((ImageInfo image, bool synchronousCall) {
-        if (mounted) {
-          setState(() => groupImage = tempImage);
-        }
-      }));
-    }
-    if (widget.post.mediaURL!= null) {
-      var tempImage = Image.network(widget.post.mediaURL!);
-      tempImage.image
-          .resolve(ImageConfiguration())
-          .addListener(ImageStreamListener((ImageInfo image, bool synchronousCall) {
-        if (mounted) {
-          setState(() => postImage = tempImage);
-        }
-      }));
+    if (fetchesCompleted<3) {
+      return Loading();
     }
 
     return GestureDetector(
