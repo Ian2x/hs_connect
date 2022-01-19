@@ -17,6 +17,7 @@ import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/widgetDisplay.dart';
 import 'package:provider/provider.dart';
 
+
 class PostCard extends StatefulWidget {
   final Post post;
   final DocumentReference currUserRef;

@@ -4,6 +4,7 @@ import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 
 const double iconSize = 32;
+
 const EdgeInsets iconPadding = EdgeInsets.all(0);
 
 class LikeDislikePost extends StatefulWidget {
