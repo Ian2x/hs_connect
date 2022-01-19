@@ -13,21 +13,21 @@ import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/widgets/groupTag.dart';
 
-class postTitleCard extends StatefulWidget {
-  Post post;
-  DocumentReference currUserRef;
+class PostTitleCard extends StatefulWidget {
+  final Post post;
+  final DocumentReference currUserRef;
 
-  postTitleCard({
+  PostTitleCard({
     Key? key,
     required this.post,
     required this.currUserRef,
   }) : super(key: key);
 
   @override
-  _postTitleCardState createState() => _postTitleCardState();
+  _PostTitleCardState createState() => _PostTitleCardState();
 }
 
-class _postTitleCardState extends State<postTitleCard> {
+class _PostTitleCardState extends State<PostTitleCard> {
   
   //final userData = Provider.of<UserData?>(context);
 

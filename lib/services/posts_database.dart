@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/comment.dart';
-import 'package:hs_connect/models/observedRef.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/reply.dart';
 import 'package:hs_connect/models/searchResult.dart';
@@ -38,8 +37,8 @@ class PostsDatabaseService {
     // update user's posts
     DocumentReference newPostRef = postsCollection.doc();
     currUserRef.update({
-      C.myPostsObservedRefs: FieldValue.arrayUnion([
-        {C.ref: newPostRef, C.refType: ObservedRefType.post.string, C.lastObserved: Timestamp.now()}
+      C.myPosts: FieldValue.arrayUnion([
+        {newPostRef}
       ])
     });
     // update group's numPosts
@@ -96,15 +95,9 @@ class PostsDatabaseService {
         // update group's numPosts
         groupRef.update({C.numPosts: FieldValue.increment(-1)});
         // update user's posts
-        final myPostsObservedRefs = observedRefList((await currUserRef.get()).get(C.myPostsObservedRefs));
-        for (final observedRef in myPostsObservedRefs) {
-          if (observedRef.ref == postRef) {
-            currUserRef.update({
-              C.myPostsObservedRefs: FieldValue.arrayRemove([observedRef.asMap()])
-            });
-            break;
-          }
-        }
+        currUserRef.update({
+          C.myPosts: FieldValue.arrayRemove([postRef])
+        });
 
         // delete post's replies in parallel
         //final delReplies = Future.wait([for (DocumentReference replyRef in post.get(C.repliesRefs)) _delReplyHelper(replyRef, postRef)]);
@@ -244,22 +237,6 @@ class PostsDatabaseService {
         .where(C.tag, whereIn: searchTags)
         .snapshots()
         .map((snapshot) => snapshot.docs.map(_postFromQuerySnapshot).toList());
-  }
-
-  Future _newActivityPostsHelper(ObservedRef OR, List<Post> NAP) async {
-    var tempPost = await getPost(OR.ref);
-    if (tempPost != null) {
-      if (tempPost.lastUpdated.toDate().compareTo(OR.lastObserved.toDate().add(Duration(seconds: 2)))>0) {
-        NAP.add(tempPost);
-      }
-    }
-  }
-
-  // Does not preserve order
-  Future<List<Post>> newActivityPosts(List<ObservedRef> userPostsObservedRefs) async {
-    List<Post> newActivityPosts = [];
-    await Future.wait([for (ObservedRef POR in userPostsObservedRefs) _newActivityPostsHelper(POR, newActivityPosts)]);
-    return newActivityPosts;
   }
 
   SearchResult _searchResultFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
