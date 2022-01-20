@@ -17,7 +17,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/constants.dart';
-import 'package:grouped_buttons/grouped_buttons.dart';
+import 'package:checkbox_grouped/checkbox_grouped.dart';
 
 
 import 'imagePreview.dart';
@@ -135,11 +135,27 @@ class _PostFormState extends State<PostForm> {
 
 
 
-  Widget buildSheetRow (List<Group> groups) {
+  Widget buildSheetRow (Group group) {
+
+
+      bool GroupisChecked=false;
+      bool PublicisChecked=false;
 
      //Two are never equal
 
-    List<String>? _checked= groups.map((group)=>group.name).toList();
+    /*
+    CustomGroupController controller = CustomGroupController(
+      isMultipleSelection: false,
+      initSelectedItem: "basics", //make this default home
+    );
+
+     */
+
+    //final selectedItems = controller.selectedItem;
+
+    //controller.disabledItemsByTitles(List<String> items);
+    //List<String>? _checked= groups.map((group)=>group.name).toList();
+
 
     return
       StatefulBuilder(
@@ -151,55 +167,52 @@ class _PostFormState extends State<PostForm> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                 Divider(color: ThemeColor.backgroundGrey, thickness: 2),
-                CheckboxGroup(
-                  orientation: GroupedButtonsOrientation.VERTICAL,
-                  margin: const EdgeInsets.all(left: 0.0),
-                  onSelected: (List<String> selected) => setState((){
-                    _checked = selected;
-                  }),
-                  labels: <String>[
-                    "A",
-                    "B",
-                  ],
-                  checked: _checked,
-                  itemBuilder: (Checkbox cb, Text txt, int i){
-                    return Row(
-                      children: <Widget>[
-                        Text(
-                            groups[i].name,
-                            style: ThemeText.groupBold(
-                              color: ThemeColor.darkGrey, fontSize: 16,
-                            )
-                        ), Spacer(),
-                        ConstrainedBox(
-                          constraints: BoxConstraints(maxHeight: 40),
-                          child: Checkbox(
-                            splashRadius: 0,
-                            checkColor: ThemeColor.white,
-                            activeColor: ThemeColor.secondaryBlue,
-                            tristate: false,
-                            shape: CircleBorder(),
-                            onChanged: (bool? value) {
-                              setState(() {
-                                _groupRef = groups[i].groupRef;
-                              });
-                            },
-                          ),
-                        ),
-                        groups[i].name != "Public" ?
-                        Text("Only for your school", style: ThemeText.groupBold(
-                            color: ThemeColor.mediumGrey, fontSize: 16))
-                            :
-                        Text("Anyone can see", style: ThemeText.groupBold(
-                            color: ThemeColor.mediumGrey, fontSize: 16))
-                      ],
-                    );
-                  },
-                ),
+                Row(
+                  children: <Widget>[
+                    Text(
+                        group.name,
+                        style: ThemeText.groupBold(
+                          color: ThemeColor.darkGrey, fontSize: 16,
+                        )
+                    ), Spacer(),
+                    ConstrainedBox(
+                      constraints: BoxConstraints(maxHeight: 40),
+                      child: Checkbox(
+                        splashRadius: 0,
+                        checkColor: ThemeColor.white,
+                        activeColor: ThemeColor.secondaryBlue,
+                        tristate: false,
+                        shape: CircleBorder(),
+                        onChanged: (bool? value) {
+                          setState(() {
 
-                ],
-              ),
-            );
+                            if (group.name != "Public"){
+                              GroupisChecked= value!;
+                              //PublicisChecked=false;
+                              print ("Group: " + GroupisChecked.toString());
+                              print ("Public: " + PublicisChecked.toString());
+                            } else {
+                              PublicisChecked = value!;
+                              //GroupisChecked = false;
+                              print ("Group: " + GroupisChecked.toString());
+                              print ("Public: " + PublicisChecked.toString());
+                            }
+                            _groupRef = group.groupRef;
+                          });
+                        }, value: group.name != "Public" ? GroupisChecked: PublicisChecked,
+                      ),
+                    ),
+
+                  ],
+                ),
+                  group.name != "Public" ?
+                  Text("Only for your school", style: ThemeText.groupBold(
+                      color: ThemeColor.mediumGrey, fontSize: 16))
+                      :
+                  Text("Anyone can see", style: ThemeText.groupBold(
+                      color: ThemeColor.mediumGrey, fontSize: 16))
+              ],
+          ));
       });
     }
 
@@ -213,7 +226,7 @@ class _PostFormState extends State<PostForm> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ListView.builder(
-            itemCount: 2,  //Groups.length+1
+            itemCount: Groups.length+1,
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               physics: BouncingScrollPhysics(),
@@ -232,7 +245,7 @@ class _PostFormState extends State<PostForm> {
                     ],
                   );
                 }  else {
-                  return buildSheetRow(Groups);
+                  return buildSheetRow(Groups[index-1]);
                 }
               },
             ),
