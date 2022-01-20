@@ -112,7 +112,7 @@ class _ProfileBodyState extends State<ProfileBody> {
           ],
         ),
         SizedBox(height:MediaQuery.of(context).size.height/10),
-        widget.profileRef == widget.currUserRef
+        widget.profileRef != widget.currUserRef
             ? Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[SizedBox(width: 45),
