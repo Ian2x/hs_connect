@@ -56,7 +56,8 @@ class _MessagesFormState extends State<MessagesForm> {
         : Container(
             child: Form(
               key: _formKey,
-              child: Column(children: <Widget>[
+              child: Column(crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
                 newFile != null
                     ? Semantics(
                         label: 'new_message_image',

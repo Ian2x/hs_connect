@@ -1,26 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/services/comments_database.dart';
+import 'package:hs_connect/models/comment.dart';
+import 'package:hs_connect/shared/constants.dart';
 
-const double iconSize = 10;
+const double iconSize = 20;
 const EdgeInsets iconPadding = EdgeInsets.all(0);
 
 class LikeDislikeComment extends StatefulWidget {
   final DocumentReference currUserRef;
-  final DocumentReference commentRef;
-  final List<DocumentReference> likes;
-  final List<DocumentReference> dislikes;
+  final Comment comment;
 
-  const LikeDislikeComment(
-      {Key? key, required this.currUserRef, required this.commentRef, required this.likes, required this.dislikes})
-      : super(key: key);
+  const LikeDislikeComment({Key? key, required this.currUserRef, required this.comment}) : super(key: key);
 
   @override
   _LikeDislikeCommentState createState() => _LikeDislikeCommentState();
 }
 
 class _LikeDislikeCommentState extends State<LikeDislikeComment> {
-
   bool likeStatus = false;
   bool dislikeStatus = false;
   int likeCount = 0;
@@ -30,10 +27,10 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
   void initState() {
     if (mounted) {
       setState(() {
-        likeStatus = widget.likes.contains(widget.currUserRef);
-        dislikeStatus = widget.dislikes.contains(widget.currUserRef);
-        likeCount = widget.likes.length;
-        dislikeCount = widget.dislikes.length;
+        likeStatus = widget.comment.likes.contains(widget.currUserRef);
+        dislikeStatus = widget.comment.dislikes.contains(widget.currUserRef);
+        likeCount = widget.comment.likes.length;
+        dislikeCount = widget.comment.dislikes.length;
       });
     }
     super.initState();
@@ -41,50 +38,20 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
 
   @override
   Widget build(BuildContext context) {
-
-    CommentsDatabaseService _comments = CommentsDatabaseService(currUserRef: widget.currUserRef, commentRef: widget.commentRef);
+    CommentsDatabaseService _comments = CommentsDatabaseService(
+        currUserRef: widget.currUserRef, commentRef: widget.comment.commentRef, postRef: widget.comment.postRef);
 
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         () {
-          if (likeStatus == true) {
-            return IconButton(
-              iconSize: 20.0,
-              icon: Icon(Icons.keyboard_arrow_up_rounded),
-              onPressed: () {
-                _comments.unLikeComment();
-                if (mounted) {
-                  setState(() {
-                    likeCount -= 1;
-                    likeStatus = false;
-                  });
-                }
-              },
-            );
-          } else {
-            return IconButton(
-              iconSize: 20.0,
-              icon: Icon(Icons.keyboard_arrow_up_rounded),
-              onPressed: () {
-                _comments.likeComment();
-                if (mounted) {
-                  setState(() {
-                    likeCount += 1;
-                    if (dislikeStatus == true) dislikeCount -= 1;
-                    likeStatus = true;
-                    dislikeStatus = false;
-                  });
-                }
-              },
-            );
-          }
-        }(),
-        Text((likeCount - dislikeCount).toString()),
-        () {
           if (dislikeStatus == true) {
             return IconButton(
-              iconSize: 20.0,
+              iconSize: iconSize,
+              splashColor: Colors.transparent,
+              padding: iconPadding,
+              constraints: BoxConstraints(),
+              color: ThemeColor.secondaryBlue,
               icon: Icon(Icons.keyboard_arrow_down_rounded),
               onPressed: () {
                 _comments.unDislikeComment();
@@ -98,8 +65,12 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
             );
           } else {
             return IconButton(
-              iconSize: 20.0,
-              icon: Icon(Icons.keyboard_arrow_up_rounded),
+              iconSize: iconSize,
+              splashColor: Colors.transparent,
+              padding: iconPadding,
+              constraints: BoxConstraints(),
+              color: ThemeColor.darkGrey,
+              icon: Icon(Icons.keyboard_arrow_down_rounded),
               onPressed: () {
                 _comments.dislikeComment();
                 setState(() {
@@ -111,7 +82,52 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               },
             );
           }
-        }()
+        }(),
+        Text(
+          (likeCount - dislikeCount).toString(),
+          style: ThemeText.inter(fontSize: 16)
+        ),
+        () {
+          if (likeStatus == true) {
+            return IconButton(
+              iconSize: iconSize,
+              splashColor: Colors.transparent,
+              padding: iconPadding,
+              constraints: BoxConstraints(),
+              color: ThemeColor.secondaryBlue,
+              icon: Icon(Icons.keyboard_arrow_up_rounded, color: ThemeColor.secondaryBlue),
+              onPressed: () {
+                _comments.unLikeComment();
+                if (mounted) {
+                  setState(() {
+                    likeCount -= 1;
+                    likeStatus = false;
+                  });
+                }
+              },
+            );
+          } else {
+            return IconButton(
+              iconSize: iconSize,
+              splashColor: Colors.transparent,
+              padding: iconPadding,
+              constraints: BoxConstraints(),
+              color: ThemeColor.darkGrey,
+              icon: Icon(Icons.keyboard_arrow_up_rounded),
+              onPressed: () {
+                if (mounted) {
+                  setState(() {
+                    likeCount += 1;
+                    if (dislikeStatus == true) dislikeCount -= 1;
+                    likeStatus = true;
+                    dislikeStatus = false;
+                  });
+                }
+                _comments.likeComment(widget.comment.creatorRef, likeCount);
+              },
+            );
+          }
+        }(),
       ],
     );
   }

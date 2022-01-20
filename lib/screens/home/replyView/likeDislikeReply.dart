@@ -1,26 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:hs_connect/models/reply.dart';
 import 'package:hs_connect/services/replies_database.dart';
+import 'package:hs_connect/shared/constants.dart';
 
-const double iconSize = 10;
+const double iconSize = 20;
 const EdgeInsets iconPadding = EdgeInsets.all(0);
 
 class LikeDislikeReply extends StatefulWidget {
   final DocumentReference currUserRef;
-  final DocumentReference replyRef;
-  final List<DocumentReference> likes;
-  final List<DocumentReference> dislikes;
+  final Reply reply;
 
-  const LikeDislikeReply(
-      {Key? key, required this.currUserRef, required this.replyRef, required this.likes, required this.dislikes})
-      : super(key: key);
+  const LikeDislikeReply({Key? key, required this.currUserRef, required this.reply}) : super(key: key);
 
   @override
   _LikeDislikeReplyState createState() => _LikeDislikeReplyState();
 }
 
 class _LikeDislikeReplyState extends State<LikeDislikeReply> {
-
   bool likeStatus = false;
   bool dislikeStatus = false;
   int likeCount = 0;
@@ -30,10 +27,10 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
   void initState() {
     if (mounted) {
       setState(() {
-        likeStatus = widget.likes.contains(widget.currUserRef);
-        dislikeStatus = widget.dislikes.contains(widget.currUserRef);
-        likeCount = widget.likes.length;
-        dislikeCount = widget.dislikes.length;
+        likeStatus = widget.reply.likes.contains(widget.currUserRef);
+        dislikeStatus = widget.reply.dislikes.contains(widget.currUserRef);
+        likeCount = widget.reply.likes.length;
+        dislikeCount = widget.reply.dislikes.length;
       });
     }
     super.initState();
@@ -41,53 +38,26 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
 
   @override
   Widget build(BuildContext context) {
-
-    RepliesDatabaseService _replies = RepliesDatabaseService(currUserRef: widget.currUserRef);
+    RepliesDatabaseService _replies = RepliesDatabaseService(
+        currUserRef: widget.currUserRef,
+        replyRef: widget.reply.replyRef,
+        commentRef: widget.reply.commentRef,
+        postRef: widget.reply.postRef);
 
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         () {
-          if (likeStatus == true) {
-            return IconButton(
-              iconSize: 20.0,
-              icon: Icon(Icons.thumb_up),
-              onPressed: () {
-                _replies.unLikeReply(replyRef: widget.replyRef);
-                if (mounted) {
-                  setState(() {
-                    likeCount -= 1;
-                    likeStatus = false;
-                  });
-                }
-              },
-            );
-          } else {
-            return IconButton(
-              iconSize: 20.0,
-              icon: Icon(Icons.thumb_up_outlined),
-              onPressed: () {
-                _replies.likeReply(replyRef: widget.replyRef);
-                if (mounted) {
-                  setState(() {
-                    likeCount += 1;
-                    if (dislikeStatus == true) dislikeCount -= 1;
-                    likeStatus = true;
-                    dislikeStatus = false;
-                  });
-                }
-              },
-            );
-          }
-        }(),
-        Text((likeCount - dislikeCount).toString()),
-        () {
           if (dislikeStatus == true) {
             return IconButton(
-              iconSize: 20.0,
-              icon: Icon(Icons.thumb_down),
+              iconSize: iconSize,
+              splashColor: Colors.transparent,
+              padding: iconPadding,
+              constraints: BoxConstraints(),
+              color: ThemeColor.secondaryBlue,
+              icon: Icon(Icons.keyboard_arrow_down_rounded),
               onPressed: () {
-                _replies.unDislikeReply(replyRef: widget.replyRef);
+                _replies.unDislikeReply();
                 if (mounted) {
                   setState(() {
                     dislikeCount -= 1;
@@ -98,10 +68,14 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
             );
           } else {
             return IconButton(
-              iconSize: 20.0,
-              icon: Icon(Icons.thumb_down_outlined),
+              iconSize: iconSize,
+              splashColor: Colors.transparent,
+              padding: iconPadding,
+              constraints: BoxConstraints(),
+              color: ThemeColor.darkGrey,
+              icon: Icon(Icons.keyboard_arrow_down_rounded),
               onPressed: () {
-                _replies.dislikeReply(replyRef: widget.replyRef);
+                _replies.dislikeReply();
                 if (mounted) {
                   setState(() {
                     dislikeCount += 1;
@@ -113,7 +87,52 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
               },
             );
           }
-        }()
+        }(),
+        Text(
+          (likeCount - dislikeCount).toString(),
+          style: ThemeText.inter(fontSize: 16)
+        ),
+        () {
+          if (likeStatus == true) {
+            return IconButton(
+              iconSize: iconSize,
+              splashColor: Colors.transparent,
+              padding: iconPadding,
+              constraints: BoxConstraints(),
+              color: ThemeColor.secondaryBlue,
+              icon: Icon(Icons.keyboard_arrow_up_rounded, color: ThemeColor.secondaryBlue),
+              onPressed: () {
+                _replies.unLikeReply();
+                if (mounted) {
+                  setState(() {
+                    likeCount -= 1;
+                    likeStatus = false;
+                  });
+                }
+              },
+            );
+          } else {
+            return IconButton(
+              iconSize: iconSize,
+              splashColor: Colors.transparent,
+              padding: iconPadding,
+              constraints: BoxConstraints(),
+              color: ThemeColor.darkGrey,
+              icon: Icon(Icons.keyboard_arrow_up_rounded),
+              onPressed: () {
+                if (mounted) {
+                  setState(() {
+                    likeCount += 1;
+                    if (dislikeStatus == true) dislikeCount -= 1;
+                    likeStatus = true;
+                    dislikeStatus = false;
+                  });
+                }
+                _replies.likeReply(widget.reply.creatorRef, likeCount);
+              },
+            );
+          }
+        }(),
       ],
     );
   }

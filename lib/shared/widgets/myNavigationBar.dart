@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/home.dart';
-import 'package:hs_connect/screens/notifications/notificationsPage.dart';
+import 'package:hs_connect/screens/activity/activityPage.dart';
 import 'package:hs_connect/screens/profile/profilePage.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:provider/provider.dart';
@@ -65,7 +65,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  NoAnimationMaterialPageRoute(builder: (context) => new NotificationPage()),
+                  NoAnimationMaterialPageRoute(builder: (context) => new ActivityPage()),
                 );
               },
             ),

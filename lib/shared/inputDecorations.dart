@@ -1,3 +1,7 @@
+
+
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/widgets/picPickerButton.dart';
@@ -7,13 +11,15 @@ import 'constants.dart';
 const textInputDecoration = InputDecoration(
   fillColor: Colors.white,
   filled: true,
-  enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white, width: 2.0)),
+  enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent, width: 2.0)),
   focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.pink, width: 2.0)),
 );
 
 typedef voidFunction = void Function();
 
-typedef voidParamFunction = void Function (DocumentReference?);
+typedef voidDocParamFunction = void Function (DocumentReference?);
+
+typedef voidFileParamFunction = void Function (File?);
 
 InputDecoration commentReplyInputDecoration({required voidFunction onPressed, required Function setPic, required bool isReply}) {
   return InputDecoration(

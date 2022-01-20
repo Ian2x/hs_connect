@@ -93,7 +93,8 @@ class _CommentsFeedState extends State<CommentsFeed> {
                   commentReference: commentRef,
                   isReply: isReply,
                   postRef: widget.post.postRef,
-                  groupRef: widget.groupRef),
+                  groupRef: widget.groupRef,
+                postCreatorRef: widget.post.creatorRef,),
           ),
       ],
     );

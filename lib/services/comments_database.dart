@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/comment.dart';
+import 'package:hs_connect/models/myNotification.dart';
+import 'package:hs_connect/models/post.dart';
+import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
@@ -24,10 +27,19 @@ class CommentsDatabaseService {
       required String? media,
       required DocumentReference postRef,
       required DocumentReference groupRef,
+      required DocumentReference postCreatorRef,
       Function(void) onValue = defaultFunc,
       Function onError = defaultFunc}) async {
     DocumentReference newCommentRef = commentsCollection.doc();
-    // TODO: update post creator's notifications
+    // update post creator's activity
+    postCreatorRef.update({C.myNotifications: FieldValue.arrayUnion([{
+      C.parentPostRef: postRef,
+      C.myNotificationType: MyNotificationType.commentToPost.string,
+      C.sourceRef: newCommentRef,
+      C.sourceUserRef: currUserRef,
+      C.createdAt: Timestamp.now(),
+      C.extraData: text
+    }])});
 
     // update post's commentsRefs and lastUpdated
     postRef.update({
@@ -85,15 +97,36 @@ class CommentsDatabaseService {
     return null;
   }
 
-  Future<void> likeComment() async {
+  Future<void> likeComment(DocumentReference commentCreatorRef, int likeCount) async {
     // remove dislike if disliked
     await commentRef!.update({
       C.dislikes: FieldValue.arrayRemove([currUserRef])
     });
     // like comment
-    return await commentRef!.update({
+    await commentRef!.update({
       C.likes: FieldValue.arrayUnion([currUserRef])
     });
+    if (likeCount==1 || likeCount==10 || likeCount==20 || likeCount==50 || likeCount==100) {
+      bool update = true;
+      final commentCreatorData = await commentCreatorRef.get();
+      final commentCreator = await userDataFromSnapshot(commentCreatorData, commentCreatorRef);
+      for (MyNotification MN in commentCreator.myNotifications) {
+        if (MN.sourceRef == commentRef! && MN.myNotificationType==MyNotificationType.commentVotes && MN.extraData==likeCount.toString()) {
+          update = false;
+          break;
+        }
+      }
+      if (update) {
+        commentCreatorRef.update({C.myNotifications: FieldValue.arrayUnion([{
+          C.parentPostRef: postRef!,
+          C.myNotificationType: MyNotificationType.commentVotes.string,
+          C.sourceRef: commentRef!,
+          C.sourceUserRef: currUserRef,
+          C.createdAt: Timestamp.now(),
+          C.extraData: likeCount.toString()
+        }])});
+      }
+    }
   }
 
   Future<void> unLikeComment() async {
