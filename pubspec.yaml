@@ -40,6 +40,7 @@ dependencies:
   rxdart: ^0.27.3
   quiver: ^3.0.1+1
   bubble: ^1.2.1
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

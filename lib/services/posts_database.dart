@@ -37,13 +37,7 @@ class PostsDatabaseService {
     required DocumentReference? pollRef,
     Function(void) onValue = defaultFunc,
     Function onError = defaultFunc}) async {
-    // update user's posts
     DocumentReference newPostRef = postsCollection.doc();
-    currUserRef.update({
-      C.myPosts: FieldValue.arrayUnion([
-        {newPostRef}
-      ])
-    });
     // update group's numPosts
     groupRef.update({C.numPosts: FieldValue.increment(1)});
     // get accessRestriction
@@ -97,10 +91,6 @@ class PostsDatabaseService {
       if (userRef == post.get(C.creatorRef)) {
         // update group's numPosts
         groupRef.update({C.numPosts: FieldValue.increment(-1)});
-        // update user's posts
-        currUserRef.update({
-          C.myPosts: FieldValue.arrayRemove([postRef])
-        });
 
         // delete post's replies in parallel
         //final delReplies = Future.wait([for (DocumentReference replyRef in post.get(C.repliesRefs)) _delReplyHelper(replyRef, postRef)]);

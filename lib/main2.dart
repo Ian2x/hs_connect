@@ -25,6 +25,15 @@ class _Main2State extends State<Main2> {
       initialData: null,
       child: MaterialApp(
         home: Wrapper(),
+        theme: ThemeData(
+          textSelectionTheme: TextSelectionThemeData(
+            cursorColor: ThemeColor.darkGrey,
+            selectionColor: ThemeColor.darkGrey,
+            selectionHandleColor: ThemeColor.darkGrey,
+          ),
+          splashColor: Colors.transparent,
+          backgroundColor: ThemeColor.backgroundGrey,
+        ),
       ),
     );
   }

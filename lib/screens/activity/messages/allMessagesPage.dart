@@ -5,7 +5,9 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
+import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'MessagesPage.dart';
@@ -13,9 +15,8 @@ import 'MessagesPage.dart';
 class UMUD {
   UserMessage? UM;
   UserData? UD;
-  UMUD({
-    required this.UM, required this.UD
-  });
+
+  UMUD({required this.UM, required this.UD});
 }
 
 class AllMessagesPage extends StatefulWidget {
@@ -62,8 +63,8 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
     }
     if (mounted) {
       setState(() {
-        if (tempTempOtherUsers.length==UMs.length) {
-          for (int i=0; i<tempTempOtherUsers.length; i++) {
+        if (tempTempOtherUsers.length == UMs.length) {
+          for (int i = 0; i < tempTempOtherUsers.length; i++) {
             cache[i].UD = tempTempOtherUsers[i];
           }
           otherUsers = tempTempOtherUsers;
@@ -98,10 +99,10 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
         itemBuilder: (BuildContext context, int index) {
           final otherUser = cache[index].UD!;
           final updateLastMessage = () {
-            cache[index].UM!.lastMessage=Timestamp.now();
+            cache[index].UM!.lastMessage = Timestamp.now();
           };
           final updateLastViewed = () {
-            cache[index].UM!.lastViewed=Timestamp.now();
+            cache[index].UM!.lastViewed = Timestamp.now();
           };
           return GestureDetector(
             onTap: () {
@@ -131,7 +132,9 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                               image: new DecorationImage(fit: BoxFit.fill, image: otherUser.profileImage.image))),
                       SizedBox(width: 14),
                       Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-                        Text(otherUser.displayedName, style: ThemeText.inter(fontSize: 15, color: ThemeColor.darkGrey)),
+                        Text(otherUser.displayedName,
+                            style:
+                                ThemeText.inter(fontSize: 15, color: ThemeColor.darkGrey, fontWeight: FontWeight.bold)),
                         SizedBox(height: 4),
                         Text(otherUser.fullDomainName != null ? otherUser.fullDomainName! : otherUser.domain,
                             style: ThemeText.inter(fontSize: 15, color: ThemeColor.mediumGrey))
@@ -140,12 +143,16 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                           child: Column(children: <Widget>[
                         Row(children: <Widget>[
                           Spacer(),
-                          Text(convertTime(cache[index].UM!.lastMessage.toDate()),
-                              style: ThemeText.inter(color: ThemeColor.mediumGrey, fontSize: 14))
+                          isToday(cache[index].UM!.lastMessage.toDate())
+                              ? Text(DateFormat.jm().format(cache[index].UM!.lastMessage.toDate()),
+                                  style: ThemeText.inter(color: ThemeColor.mediumGrey, fontSize: 14))
+                              : Text(DateFormat.yMd().format(cache[index].UM!.lastMessage.toDate()),
+                                  style: ThemeText.inter(color: ThemeColor.mediumGrey, fontSize: 14))
                         ])
                       ]))
                     ])),
-                (cache[index].UM!.lastViewed == null || cache[index].UM!.lastViewed!.compareTo(cache[index].UM!.lastMessage) < 0)
+                (cache[index].UM!.lastViewed == null ||
+                        cache[index].UM!.lastViewed!.compareTo(cache[index].UM!.lastMessage) < 0)
                     ? Container(
                         width: 10,
                         height: 10,

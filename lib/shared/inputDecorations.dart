@@ -37,23 +37,34 @@ InputDecoration commentReplyInputDecoration({required voidFunction onPressed, re
   );
 }
 
-InputDecoration messageInputDecoration({required voidFunction onPressed, required Function setPic}) {
+InputDecoration messageInputDecoration({required voidFunction onPressed, required Function setPic, required String hintText}) {
   return InputDecoration(
-    hintText: "Comment...",
+    hintText: hintText,
     fillColor: ThemeColor.white,
     filled: true,
+    hintStyle: ThemeText.roboto(fontSize: 16, color: ThemeColor.lightMediumGrey),
+    labelStyle: ThemeText.roboto(fontSize: 16, color: ThemeColor.lightMediumGrey),
+    contentPadding: EdgeInsets.fromLTRB(20, 14, 0, 14),
     border: new OutlineInputBorder(
         borderRadius: new BorderRadius.circular(25.7),
-        borderSide: new BorderSide(width: 3.0, color: ThemeColor.lightGrey)),
+        borderSide: new BorderSide(width: 3.0, color: ThemeColor.lightGrey),
+    ),
     enabledBorder: new OutlineInputBorder(
         borderRadius: new BorderRadius.circular(25.7),
         borderSide: new BorderSide(width: 3.0, color: ThemeColor.lightGrey)),
     focusedBorder: OutlineInputBorder(
         borderRadius: new BorderRadius.circular(25.7),
-        borderSide: new BorderSide(width: 3.0, color: ThemeColor.mediumGrey)),
+        borderSide: new BorderSide(width: 3.0, color: ThemeColor.lightGrey)),
     suffixIcon: Row(mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.min, children: <Widget>[
-      picPickerButton(setPic: setPic),
-      IconButton(icon: Icon(Icons.send), iconSize: 12.0, onPressed: onPressed),
+      picPickerButton(setPic: setPic, iconSize: 16.0),
+      IconButton(
+          icon: Icon(Icons.send),
+          color: ThemeColor.lightMediumGrey,
+          iconSize: 16.0,
+          padding: EdgeInsets.only(left: 5, right: 15),
+          splashColor: Colors.transparent,
+          onPressed: onPressed,
+          constraints: BoxConstraints()),
     ]),
   );
 }

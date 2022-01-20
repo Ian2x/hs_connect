@@ -54,6 +54,7 @@ class _MessagesFormState extends State<MessagesForm> {
     MessagesDatabaseService _messages = MessagesDatabaseService(currUserRef: userData.userRef);
 
     return Container(
+            color: Colors.transparent,
             child: Form(
               key: _formKey,
               child: Column(crossAxisAlignment: CrossAxisAlignment.end,
@@ -79,8 +80,10 @@ class _MessagesFormState extends State<MessagesForm> {
                     initialValue: null,
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
+                    style: ThemeText.roboto(fontSize: 16, color: ThemeColor.darkGrey),
                     decoration: messageInputDecoration(
                         setPic: setPic,
+                        hintText: "Message...",
                         onPressed: () async {
                           if (_formKey.currentState != null && _formKey.currentState!.validate()) {
                             if (mounted) {

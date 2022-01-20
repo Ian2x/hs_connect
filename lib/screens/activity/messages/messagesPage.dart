@@ -15,7 +15,13 @@ class MessagesPage extends StatelessWidget {
   final voidFunction onUpdateLastMessage;
   final voidFunction onUpdateLastViewed;
 
-  const MessagesPage({Key? key, required this.otherUserRef, required this.currUserRef, required this.onUpdateLastMessage, required this.onUpdateLastViewed}) : super(key: key);
+  const MessagesPage(
+      {Key? key,
+      required this.otherUserRef,
+      required this.currUserRef,
+      required this.onUpdateLastMessage,
+      required this.onUpdateLastViewed})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,22 +30,32 @@ class MessagesPage extends StatelessWidget {
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: ThemeColor.white,
-        appBar: PreferredSize(preferredSize: Size.fromHeight(100),
-        child: MessagesPageAppBar(currUserRef: currUserRef, otherUserRef: otherUserRef)),
+        appBar: PreferredSize(
+            preferredSize: Size.fromHeight(50),
+            child: MessagesPageAppBar(currUserRef: currUserRef, otherUserRef: otherUserRef)),
         body: Container(
-          padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+          padding: EdgeInsets.only(bottom: 10),
           child: Column(children: <Widget>[
             Expanded(
-                child: MessagesFeed(
-                  currUserRef: currUserRef,
-                  otherUserRef: otherUserRef,
-                  onUpdateLastViewed: onUpdateLastViewed,
-                )),
+                child: Container(
+              padding: EdgeInsets.only(left: 10, right: 10),
+              child: MessagesFeed(
+                currUserRef: currUserRef,
+                otherUserRef: otherUserRef,
+                onUpdateLastViewed: onUpdateLastViewed,
+              ),
+            )),
+            Divider(height: 0.5, color: ThemeColor.mediumGrey),
             Container(
-              color: Colors.transparent,
               child: SizedBox(height: 10),
             ),
-            MessagesForm(currUserRef: currUserRef, otherUserRef: otherUserRef, onUpdateLastMessage: onUpdateLastMessage, onUpdateLastViewed: onUpdateLastViewed)
+            Container(
+                padding: EdgeInsets.only(left: 10, right: 10),
+                child: MessagesForm(
+                    currUserRef: currUserRef,
+                    otherUserRef: otherUserRef,
+                    onUpdateLastMessage: onUpdateLastMessage,
+                    onUpdateLastViewed: onUpdateLastViewed))
           ]),
         ),
       ),
@@ -50,6 +66,7 @@ class MessagesPage extends StatelessWidget {
 class MessagesPageAppBar extends StatefulWidget {
   final DocumentReference currUserRef;
   final DocumentReference otherUserRef;
+
   const MessagesPageAppBar({Key? key, required this.currUserRef, required this.otherUserRef}) : super(key: key);
 
   @override
@@ -57,7 +74,6 @@ class MessagesPageAppBar extends StatefulWidget {
 }
 
 class _MessagesPageAppBarState extends State<MessagesPageAppBar> {
-
   String otherUserUsername = '';
 
   @override
@@ -75,14 +91,20 @@ class _MessagesPageAppBarState extends State<MessagesPageAppBar> {
       });
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
-    
     return AppBar(
       backgroundColor: ThemeColor.white,
       title: Text(otherUserUsername, style: ThemeText.titleRegular()),
       leading: myBackButtonIcon(context),
+      elevation: 0,
+      bottom: PreferredSize(
+          child: Container(
+            color: ThemeColor.mediumGrey,
+            height: 0.5,
+          ),
+          preferredSize: Size.fromHeight(0.5)),
     );
   }
 }
