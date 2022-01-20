@@ -9,8 +9,8 @@ import 'domainData.dart';
 
 class UserMessage {
   final DocumentReference otherUserRef;
-  final Timestamp lastMessage;
-  final Timestamp? lastViewed;
+  Timestamp lastMessage;
+  Timestamp? lastViewed;
 
   UserMessage({required this.otherUserRef, required this.lastMessage, required this.lastViewed});
 

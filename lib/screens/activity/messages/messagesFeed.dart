@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/message.dart';
 import 'package:hs_connect/services/messages_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 
 import 'messagesBubble.dart';
@@ -12,7 +13,8 @@ import 'messagesBubble.dart';
 class MessagesFeed extends StatefulWidget {
   final DocumentReference otherUserRef;
   final DocumentReference currUserRef;
-  const MessagesFeed({Key? key, required this.otherUserRef, required this.currUserRef}) : super(key: key);
+  final voidFunction onUpdateLastViewed;
+  const MessagesFeed({Key? key, required this.otherUserRef, required this.currUserRef, required this.onUpdateLastViewed}) : super(key: key);
 
   @override
   _MessagesFeedState createState() => _MessagesFeedState();
@@ -22,6 +24,7 @@ class _MessagesFeedState extends State<MessagesFeed> {
 
   @override
   void dispose() {
+    widget.onUpdateLastViewed();
     MessagesDatabaseService _messages = new MessagesDatabaseService(currUserRef: widget.currUserRef, otherUserRef: widget.otherUserRef);
     _messages.updateLastViewed(widget.currUserRef, widget.otherUserRef);
     super.dispose();

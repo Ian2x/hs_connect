@@ -4,6 +4,7 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/activity/Messages/messagesForm.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
 
 import 'messagesFeed.dart';
@@ -11,8 +12,10 @@ import 'messagesFeed.dart';
 class MessagesPage extends StatelessWidget {
   final DocumentReference otherUserRef;
   final DocumentReference currUserRef;
+  final voidFunction onUpdateLastMessage;
+  final voidFunction onUpdateLastViewed;
 
-  const MessagesPage({Key? key, required this.otherUserRef, required this.currUserRef}) : super(key: key);
+  const MessagesPage({Key? key, required this.otherUserRef, required this.currUserRef, required this.onUpdateLastMessage, required this.onUpdateLastViewed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +31,13 @@ class MessagesPage extends StatelessWidget {
               child: MessagesFeed(
                 currUserRef: currUserRef,
                 otherUserRef: otherUserRef,
+                onUpdateLastViewed: onUpdateLastViewed,
               )),
           Container(
             color: Colors.transparent,
             child: SizedBox(height: 10),
           ),
-          MessagesForm(currUserRef: currUserRef, otherUserRef: otherUserRef)
+          MessagesForm(currUserRef: currUserRef, otherUserRef: otherUserRef, onUpdateLastMessage: onUpdateLastMessage, onUpdateLastViewed: onUpdateLastViewed)
         ]),
       ),
     );

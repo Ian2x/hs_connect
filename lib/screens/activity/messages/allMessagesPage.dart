@@ -4,10 +4,19 @@ import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
 import 'MessagesPage.dart';
+
+class UMUD {
+  UserMessage? UM;
+  UserData? UD;
+  UMUD({
+    required this.UM, required this.UD
+  });
+}
 
 class AllMessagesPage extends StatefulWidget {
   final UserData userData;
@@ -21,14 +30,18 @@ class AllMessagesPage extends StatefulWidget {
 class _AllMessagesPageState extends State<AllMessagesPage> {
   List<UserMessage>? UMs;
   List<UserData>? otherUsers;
+  List<UMUD> cache = [];
 
   @override
   void initState() {
     List<UserMessage> tempUMs = widget.userData.userMessages;
     // sorted by latest first
-    tempUMs.sort((a, b) => b.lastMessage.compareTo(a.lastMessage));
+    // tempUMs.sort((a, b) => b.lastMessage.compareTo(a.lastMessage));
     if (mounted) {
       setState(() {
+        for (UserMessage UM in tempUMs) {
+          cache.add(UMUD(UM: UM, UD: null));
+        }
         UMs = tempUMs;
       });
     }
@@ -49,19 +62,13 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
     }
     if (mounted) {
       setState(() {
-        otherUsers = tempTempOtherUsers;
+        if (tempTempOtherUsers.length==UMs.length) {
+          for (int i=0; i<tempTempOtherUsers.length; i++) {
+            cache[i].UD = tempTempOtherUsers[i];
+          }
+          otherUsers = tempTempOtherUsers;
+        }
       });
-    }
-    fetchGroups(tempTempOtherUsers);
-  }
-
-  Future fetchGroups(List<UserData> LUD) async {
-    GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.userData.userRef);
-    List<Widget> tempGroupCirclesForOtherUsers = [];
-    final CollectionReference groupsCollection = FirebaseFirestore.instance.collection(C.groups);
-    final groups = await _groups.getGroups(groupsRefs: LUD.map((UD) => groupsCollection.doc(UD.domain)).toList(), withPublic: false);
-    for (Group? group in groups) {
-      // tempGroupCirclesForOtherUsers.add(circleFromGroup(group: group, circleSize: 35));
     }
   }
 
@@ -80,84 +87,76 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
               style: ThemeText.titleRegular(color: ThemeColor.black)));
     }
 
+    // sorted by latest first
+    cache.sort((UMUD a, UMUD b) => b.UM!.lastMessage.compareTo(a.UM!.lastMessage));
+
     return ListView.builder(
-        itemCount: otherUsers!.length,
+        itemCount: cache.length,
         physics: BouncingScrollPhysics(),
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
         itemBuilder: (BuildContext context, int index) {
-          final otherUser = otherUsers![index];
-          return Container(
-            padding: EdgeInsets.fromLTRB(4, 4, 4, 4),
-            color: ThemeColor.backgroundGrey,
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MessagesPage(
-                              currUserRef: userData.userRef,
-                              otherUserRef: otherUser.userRef,
-                            )));
-              },
-
-              /*
-              Container(
-      width: 190.0,
-      height: 190.0,
-      decoration: new BoxDecoration(
-          shape: BoxShape.circle,
-          image: new DecorationImage(
-          fit: BoxFit.fill,
-          image: new NetworkImage(
-                 "https://i.imgur.com/BoN9kdC.png")
-                 )
-)),
-
-               */
-              child: Card(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
-                margin: EdgeInsets.fromLTRB(2.5, 5, 2.5, 2.5),
-                elevation: 0,
-                color: ThemeColor.white,
-                child: Stack(
-                  alignment: AlignmentDirectional.centerStart,
-                  children: <Widget>[
-                    Container(
-                        padding: EdgeInsets.fromLTRB(20, 10, 10, 10),
-                        child: Row(children: <Widget>[
-                          Container(
-                              width: 40,
-                              height: 40,
-                              decoration: new BoxDecoration(
-                                  //color: Colors.green,
-                                  shape: BoxShape.circle,
-                                  image: new DecorationImage(
-                                      fit: BoxFit.fill,
-                                      image: otherUser.profileImage.image))),
-                          SizedBox(width: 17),
-                          Column(crossAxisAlignment: CrossAxisAlignment.start,children: <Widget>[
-                            Text(otherUser.displayedName,
-                                style: ThemeText.inter(fontSize: 15, color: ThemeColor.darkGrey)),
-                            SizedBox(height:4),
-                            Text(otherUser.fullDomainName != null ? otherUser.fullDomainName! : otherUser.domain,
-                                style: ThemeText.inter(fontSize: 15, color: ThemeColor.mediumGrey))
-                          ])
-                        ])),
-                    (UMs![index].lastViewed == null || UMs![index].lastViewed!.compareTo(UMs![index].lastMessage) < 0)
-                        ? Container(
-                            width: 10,
-                            height: 10,
-                            margin: EdgeInsets.only(left: 6),
-                            decoration: new BoxDecoration(
-                              color: ThemeColor.secondaryBlue,
+          final otherUser = cache[index].UD!;
+          final updateLastMessage = () {
+            cache[index].UM!.lastMessage=Timestamp.now();
+          };
+          final updateLastViewed = () {
+            cache[index].UM!.lastViewed=Timestamp.now();
+          };
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MessagesPage(
+                            currUserRef: userData.userRef,
+                            otherUserRef: otherUser.userRef,
+                            onUpdateLastMessage: updateLastMessage,
+                            onUpdateLastViewed: updateLastViewed,
+                          )));
+            },
+            child: Stack(
+              alignment: AlignmentDirectional.centerStart,
+              children: <Widget>[
+                Container(
+                    margin: EdgeInsets.only(top: index == 0 ? 4.5 : 2),
+                    padding: EdgeInsets.fromLTRB(20, 14, 14, 16),
+                    color: ThemeColor.white,
+                    child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
+                      Container(
+                          width: 40,
+                          height: 40,
+                          decoration: new BoxDecoration(
                               shape: BoxShape.circle,
-                            ),
-                          )
-                        : Container()
-                  ],
-                ),
-              ),
+                              image: new DecorationImage(fit: BoxFit.fill, image: otherUser.profileImage.image))),
+                      SizedBox(width: 14),
+                      Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+                        Text(otherUser.displayedName, style: ThemeText.inter(fontSize: 15, color: ThemeColor.darkGrey)),
+                        SizedBox(height: 4),
+                        Text(otherUser.fullDomainName != null ? otherUser.fullDomainName! : otherUser.domain,
+                            style: ThemeText.inter(fontSize: 15, color: ThemeColor.mediumGrey))
+                      ]),
+                      Flexible(
+                          child: Column(children: <Widget>[
+                        Row(children: <Widget>[
+                          Spacer(),
+                          Text(convertTime(cache[index].UM!.lastMessage.toDate()),
+                              style: ThemeText.inter(color: ThemeColor.mediumGrey, fontSize: 14))
+                        ])
+                      ]))
+                    ])),
+                (cache[index].UM!.lastViewed == null || cache[index].UM!.lastViewed!.compareTo(cache[index].UM!.lastMessage) < 0)
+                    ? Container(
+                        width: 10,
+                        height: 10,
+                        margin: EdgeInsets.only(left: 6),
+                        decoration: new BoxDecoration(
+                          color: ThemeColor.secondaryBlue,
+                          shape: BoxShape.circle,
+                        ),
+                      )
+                    : Container()
+              ],
             ),
           );
         });

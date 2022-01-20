@@ -13,8 +13,10 @@ import 'package:provider/provider.dart';
 class MessagesForm extends StatefulWidget {
   final DocumentReference currUserRef;
   final DocumentReference otherUserRef;
+  final voidFunction onUpdateLastMessage;
+  final voidFunction onUpdateLastViewed;
 
-  const MessagesForm({Key? key, required this.currUserRef, required this.otherUserRef}) : super(key: key);
+  const MessagesForm({Key? key, required this.currUserRef, required this.otherUserRef, required this.onUpdateLastMessage, required this.onUpdateLastViewed}) : super(key: key);
 
   @override
   _MessagesFormState createState() => _MessagesFormState();
@@ -51,9 +53,7 @@ class _MessagesFormState extends State<MessagesForm> {
 
     MessagesDatabaseService _messages = MessagesDatabaseService(currUserRef: userData.userRef);
 
-    return loading
-        ? Container()
-        : Container(
+    return Container(
             child: Form(
               key: _formKey,
               child: Column(crossAxisAlignment: CrossAxisAlignment.end,
@@ -111,6 +111,9 @@ class _MessagesFormState extends State<MessagesForm> {
                                 loading = false; newFile = null;
                               });
                             }
+                            _formKey.currentState?.reset();
+                            widget.onUpdateLastMessage();
+                            widget.onUpdateLastViewed();
                           }
                         }),
                     onChanged: (val) {
