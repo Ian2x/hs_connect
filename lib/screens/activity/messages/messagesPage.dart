@@ -19,26 +19,29 @@ class MessagesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      backgroundColor: ThemeColor.white,
-      appBar: PreferredSize(preferredSize: Size.fromHeight(100),
-      child: MessagesPageAppBar(currUserRef: currUserRef, otherUserRef: otherUserRef)),
-      body: Container(
-        padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-        child: Column(children: <Widget>[
-          Expanded(
-              child: MessagesFeed(
-                currUserRef: currUserRef,
-                otherUserRef: otherUserRef,
-                onUpdateLastViewed: onUpdateLastViewed,
-              )),
-          Container(
-            color: Colors.transparent,
-            child: SizedBox(height: 10),
-          ),
-          MessagesForm(currUserRef: currUserRef, otherUserRef: otherUserRef, onUpdateLastMessage: onUpdateLastMessage, onUpdateLastViewed: onUpdateLastViewed)
-        ]),
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        backgroundColor: ThemeColor.white,
+        appBar: PreferredSize(preferredSize: Size.fromHeight(100),
+        child: MessagesPageAppBar(currUserRef: currUserRef, otherUserRef: otherUserRef)),
+        body: Container(
+          padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+          child: Column(children: <Widget>[
+            Expanded(
+                child: MessagesFeed(
+                  currUserRef: currUserRef,
+                  otherUserRef: otherUserRef,
+                  onUpdateLastViewed: onUpdateLastViewed,
+                )),
+            Container(
+              color: Colors.transparent,
+              child: SizedBox(height: 10),
+            ),
+            MessagesForm(currUserRef: currUserRef, otherUserRef: otherUserRef, onUpdateLastMessage: onUpdateLastMessage, onUpdateLastViewed: onUpdateLastViewed)
+          ]),
+        ),
       ),
     );
   }
