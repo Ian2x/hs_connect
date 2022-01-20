@@ -104,6 +104,7 @@ class ThemeColor extends Color {
 
 
   static Color lightGrey = HexColor("F4F4F4");
+  static Color lightMediumGrey = HexColor("C9C9C9");
   static Color mediumGrey = HexColor("8D8D8D");
   static Color darkGrey = HexColor("373a3d");
 
@@ -214,7 +215,6 @@ class C {
   static const sourceRef = 'sourceRef';
   static const myNotifications = 'myNotifications';
   static const private = 'private';
-  static const myPosts = 'myPosts';
   static const sourceUserRef = 'sourceUserRef';
   static const sourceUserDisplayedName = 'sourceUserDisplayedName';
   static const sourceUserFullDomainName = 'sourceUserFullDomainName';

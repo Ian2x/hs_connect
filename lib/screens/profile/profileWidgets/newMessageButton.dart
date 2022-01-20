@@ -28,7 +28,6 @@ class _NewMessageButtonState extends State<NewMessageButton> {
   void dispose() {
     // Clean up the focus node when the Form is disposed.
     myFocusNode.dispose();
-
     super.dispose();
   }
 
@@ -76,6 +75,8 @@ class _NewMessageButtonState extends State<NewMessageButton> {
                                 builder: (context) => MessagesPage(
                                       currUserRef: widget.currUserRef,
                                       otherUserRef: widget.otherUserRef,
+                                      onUpdateLastMessage: () {},
+                                      onUpdateLastViewed: () {},
                                     )));
                       },
                       behavior: HitTestBehavior.translucent,

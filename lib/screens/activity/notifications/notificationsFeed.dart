@@ -12,6 +12,7 @@ const circleSize = 35.0;
 
 class NotificationsFeed extends StatefulWidget {
   final UserData userData;
+
   const NotificationsFeed({Key? key, required this.userData}) : super(key: key);
 
   @override
@@ -19,7 +20,6 @@ class NotificationsFeed extends StatefulWidget {
 }
 
 class _NotificationsFeedState extends State<NotificationsFeed> {
-
   bool loading = true;
 
   @override
@@ -31,7 +31,9 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
 
   Future _initStateHelper(MyNotification MN) async {
     if (DateTime.now().difference(MN.createdAt.toDate()).compareTo(Duration(days: notificationStorageDays)) > 0) {
-      await widget.userData.userRef.update({C.myNotifications: FieldValue.arrayRemove([MN.asMap()])});
+      await widget.userData.userRef.update({
+        C.myNotifications: FieldValue.arrayRemove([MN.asMap()])
+      });
     }
   }
 
@@ -44,7 +46,6 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
@@ -52,19 +53,24 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
     if (userData == null || loading) {
       return Loading();
     }
-
-    return ListView.builder(
-      itemCount: userData.myNotifications.length,
-      scrollDirection: Axis.vertical,
-      shrinkWrap: true,
-      padding: EdgeInsets.zero,
-      physics: BouncingScrollPhysics(),
-      itemBuilder: (BuildContext context, int index) {
-        if (index==0) {
-          return Container(padding: EdgeInsets.only(top: 2.5), child: NotificationCard(myNotification: userData.myNotifications[index]));
-        }
-        return NotificationCard(myNotification: userData.myNotifications[index]);
-      }
-    );
+    int numberNotifications = userData.myNotifications.length;
+    return Column(children: [
+      ListView.builder(
+          itemCount: numberNotifications,
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          padding: EdgeInsets.zero,
+          reverse: true,
+          physics: BouncingScrollPhysics(),
+          itemBuilder: (BuildContext context, int index) {
+            if (index == numberNotifications-1) {
+              return Container(
+                  padding: EdgeInsets.only(top: 2.5),
+                  child: NotificationCard(myNotification: userData.myNotifications[index]));
+            }
+            return NotificationCard(myNotification: userData.myNotifications[index]);
+          }),
+      Spacer()
+    ]);
   }
 }

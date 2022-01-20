@@ -3,13 +3,14 @@ import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 
 class Message {
-  final DocumentReference messageRef;
-  final DocumentReference senderRef;
-  final DocumentReference receiverRef;
+  final DocumentReference? messageRef;
+  final DocumentReference? senderRef;
+  final DocumentReference? receiverRef;
   final String text;
-  final bool isMedia;
-  final Timestamp createdAt;
-  final int numReports;
+  final bool? isMedia;
+  final Timestamp? createdAt;
+  final int? numReports;
+  final bool timeMessage;
 
   Message({
     required this.messageRef,
@@ -19,6 +20,7 @@ class Message {
     required this.isMedia,
     required this.createdAt,
     required this.numReports,
+    this.timeMessage=false,
   });
 }
 

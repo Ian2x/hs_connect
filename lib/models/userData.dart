@@ -9,8 +9,8 @@ import 'domainData.dart';
 
 class UserMessage {
   final DocumentReference otherUserRef;
-  final Timestamp lastMessage;
-  final Timestamp? lastViewed;
+  Timestamp lastMessage;
+  Timestamp? lastViewed;
 
   UserMessage({required this.otherUserRef, required this.lastMessage, required this.lastViewed});
 
@@ -38,7 +38,6 @@ class UserData {
   final List<UserMessage> userMessages;
   final List<DocumentReference> savedPostsRefs;
   final List<MyNotification> myNotifications;
-  final List<DocumentReference> myPosts;
   final int numReplies;
   final Image profileImage;
   final String? profileImageURL;
@@ -68,7 +67,6 @@ class UserData {
     required this.userMessages,
     required this.savedPostsRefs,
     required this.myNotifications,
-    required this.myPosts,
     required this.numReplies,
     required this.profileImage,
     required this.profileImageURL,
@@ -95,7 +93,6 @@ Future<UserData> userDataFromSnapshot(DocumentSnapshot snapshot, DocumentReferen
     userMessages: snapshot.get(C.userMessages).map<UserMessage>((userMessage) => userMessageFromMap(map: userMessage)).toList(),
     savedPostsRefs: docRefList(snapshot.get(C.savedPostsRefs)),
     myNotifications: myNotificationList(snapshot.get(C.myNotifications)),
-    myPosts: docRefList(snapshot.get(C.myPosts)),
     numReplies: snapshot.get(C.numReplies),
     profileImage: snapshot.get(C.profileImageURL) != null ? Image.network(snapshot.get(C.profileImageURL)) : Image(image: AssetImage('assets/me.png')),
     profileImageURL: snapshot.get(C.profileImageURL),

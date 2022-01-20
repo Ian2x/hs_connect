@@ -17,6 +17,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:checkbox_grouped/checkbox_grouped.dart';
+
 
 import 'imagePreview.dart';
 
@@ -60,6 +62,9 @@ class _PostFormState extends State<PostForm> {
 
   bool hasPic = false;
   bool hasPoll = false;
+
+
+
 
   ImageStorage _images = ImageStorage();
 
@@ -128,7 +133,91 @@ class _PostFormState extends State<PostForm> {
       }
     }
 
-    Widget buildSheet(){
+
+
+  Widget buildSheetRow (Group group) {
+
+
+      bool GroupisChecked=false;
+      bool PublicisChecked=false;
+
+     //Two are never equal
+
+    /*
+    CustomGroupController controller = CustomGroupController(
+      isMultipleSelection: false,
+      initSelectedItem: "basics", //make this default home
+    );
+
+     */
+
+    //final selectedItems = controller.selectedItem;
+
+    //controller.disabledItemsByTitles(List<String> items);
+    //List<String>? _checked= groups.map((group)=>group.name).toList();
+
+
+    return
+      StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+
+            return Container(
+              padding: EdgeInsets.all(0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                Divider(color: ThemeColor.backgroundGrey, thickness: 2),
+                Row(
+                  children: <Widget>[
+                    Text(
+                        group.name,
+                        style: ThemeText.groupBold(
+                          color: ThemeColor.darkGrey, fontSize: 16,
+                        )
+                    ), Spacer(),
+                    ConstrainedBox(
+                      constraints: BoxConstraints(maxHeight: 40),
+                      child: Checkbox(
+                        splashRadius: 0,
+                        checkColor: ThemeColor.white,
+                        activeColor: ThemeColor.secondaryBlue,
+                        tristate: false,
+                        shape: CircleBorder(),
+                        onChanged: (bool? value) {
+                          setState(() {
+
+                            if (group.name != "Public"){
+                              GroupisChecked= value!;
+                              //PublicisChecked=false;
+                              print ("Group: " + GroupisChecked.toString());
+                              print ("Public: " + PublicisChecked.toString());
+                            } else {
+                              PublicisChecked = value!;
+                              //GroupisChecked = false;
+                              print ("Group: " + GroupisChecked.toString());
+                              print ("Public: " + PublicisChecked.toString());
+                            }
+                            _groupRef = group.groupRef;
+                          });
+                        }, value: group.name != "Public" ? GroupisChecked: PublicisChecked,
+                      ),
+                    ),
+
+                  ],
+                ),
+                  group.name != "Public" ?
+                  Text("Only for your school", style: ThemeText.groupBold(
+                      color: ThemeColor.mediumGrey, fontSize: 16))
+                      :
+                  Text("Anyone can see", style: ThemeText.groupBold(
+                      color: ThemeColor.mediumGrey, fontSize: 16))
+              ],
+          ));
+      });
+    }
+
+
+    Widget buildSheet(List<Group> Groups){
 
       return Container(
         padding: EdgeInsets.fromLTRB( 20.0,0.0, 20.0, 40.0),
@@ -136,64 +225,30 @@ class _PostFormState extends State<PostForm> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox( height:50),
-            Text(
-              "Pick a group",
-              style: ThemeText.groupBold(
-                color: ThemeColor.black, fontSize: 18,
-              )
+            ListView.builder(
+            itemCount: Groups.length+1,
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              physics: BouncingScrollPhysics(),
+              itemBuilder: (BuildContext context, int index) {
+                if (index == 0) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height:40),
+                      Text(
+                        "Pick a group",
+                        style: ThemeText.groupBold(
+                        color: ThemeColor.black, fontSize: 18,
+                        )
+                      ),
+                    ],
+                  );
+                }  else {
+                  return buildSheetRow(Groups[index-1]);
+                }
+              },
             ),
-            Divider(color: ThemeColor.backgroundGrey, thickness:2),
-            Row(
-              children: [
-                Text(
-                    "Lawrenceville",
-                    style: ThemeText.groupBold(
-                      color: ThemeColor.darkGrey, fontSize: 16,
-                    )
-                ), Spacer(),
-                ConstrainedBox(
-                  constraints: BoxConstraints( maxHeight:40) ,
-                  child: Checkbox(
-                    checkColor: ThemeColor.white,
-                    activeColor: ThemeColor.secondaryBlue,
-                    tristate:true,
-                    shape:CircleBorder(),
-                    onChanged: (bool? value){
-                      setState(() {
-                      });
-                    }, value: null,
-                  ),
-                )
-              ]
-            ),
-            Text("Only for your school", style: ThemeText.groupBold(color: ThemeColor.mediumGrey, fontSize: 16)),
-            SizedBox(height:5),
-            Divider (color: ThemeColor.backgroundGrey, thickness:2),
-            Row(
-                children: [
-                  Text(
-                      "Lawrenceville",
-                      style: ThemeText.groupBold(
-                        color: ThemeColor.darkGrey, fontSize: 16,
-                      )
-                  ), Spacer(),
-                  ConstrainedBox(
-                    constraints: BoxConstraints( maxHeight:40) ,
-                    child: Checkbox(
-                      checkColor: ThemeColor.white,
-                      activeColor: ThemeColor.secondaryBlue,
-                      tristate:true,
-                      shape:CircleBorder(),
-                      onChanged: (bool? value){
-                        setState(() {
-                        });
-                      }, value: null,
-                    ),
-                  )
-                ]
-            ),
-            Text("Eveyrone can see", style: ThemeText.groupBold(color: ThemeColor.mediumGrey, fontSize: 16)),
           ],
         )
       );
@@ -245,7 +300,13 @@ class _PostFormState extends State<PostForm> {
                         TagOutline(
                           textOnly:false,
                           widget: TextButton(
-                            onPressed:()=> showModalBottomSheet(context: context, builder: (context)=> buildSheet()),
+                            onPressed:()=> showModalBottomSheet(context: context,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(20),
+                                  )
+                                ),
+                                builder: (context)=> buildSheet(groups)),
                             child: Text("Lawrenceville"),
                           ),
                         ),
