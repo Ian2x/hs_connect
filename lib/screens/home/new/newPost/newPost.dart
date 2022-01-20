@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
+import 'package:hs_connect/screens/home/new/newPost/postBar.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +22,7 @@ class NewPost extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
+
         children: <Widget>[
           Container(
             padding: EdgeInsets.fromLTRB(15.0, 30.0,15.0,0.0), //TODO May need to adjust to phone height?
@@ -33,9 +35,6 @@ class NewPost extends StatelessWidget {
             child: postBar(),
           )*/
         ],
-      ),
-      bottomNavigationBar: MyNavigationBar(
-        currentIndex: 0,
       ),
     );
   }

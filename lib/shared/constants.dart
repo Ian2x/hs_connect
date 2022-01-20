@@ -64,6 +64,7 @@ class ThemeText {
     return TextStyle(
       fontSize: fontSize,
       height: height,
+      fontWeight: FontWeight.normal,
       fontFamily: "Inter",
       color: color != null ? color: ThemeColor.darkGrey,
     );
@@ -99,7 +100,7 @@ class ThemeColor extends Color {
 
   static Color hintTextGrey = HexColor("C8CED2");
 
-  static Color secondaryBlue = HexColor("73c2ff");
+  static Color secondaryBlue = HexColor("54A0DC");
 
 
   static Color lightGrey = HexColor("F4F4F4");
