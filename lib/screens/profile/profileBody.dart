@@ -7,6 +7,8 @@ import 'package:hs_connect/screens/profile/profileWidgets/newMessageButton.dart'
 import 'package:hs_connect/screens/profile/profileWidgets/profileName.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
+import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/widgets/groupTag.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileStats.dart';
@@ -29,33 +31,30 @@ class _ProfileBodyState extends State<ProfileBody> {
   Widget? profileImage = Loading(size: 30.0);
   String? profileImageURL;
   int profileScore = 0;
+  String? userGroupString;
+  Color? userGroupColor;
+  String userGroup="";
 
   void getProfileUserData() async {
     UserDataDatabaseService _userInfoDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserRef);
     final UserData? fetchUserData = await _userInfoDatabaseService.getUserData(userRef: widget.profileRef);
     if (mounted) {
       setState(() {
-        profileUsername = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
+        profileUsername = fetchUserData != null ? fetchUserData.displayedName : 'username';
         profileImageExists = fetchUserData != null && fetchUserData.profileImage != null;
         profileScore = fetchUserData != null ? fetchUserData.score : -1;
         profileImage = fetchUserData!.profileImage;
         profileImageURL = fetchUserData.profileImageURL;
+        userGroupColor = fetchUserData != null ? fetchUserData.domainColor : null;
+        userGroup = fetchUserData != null ? fetchUserData.domain : 'group';
       });
     }
     GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserRef);
     if (fetchUserData != null) {
-      var fetchUserGroups = await _groups.getUserGroups(userGroups: fetchUserData.userGroups);
       var fetchUserDomain = await _groups.getGroup(FirebaseFirestore.instance.collection(C.groups).doc(fetchUserData.domain));
       if (mounted) {
         setState(() {
-          userGroupImage = fetchUserDomain != null ? fetchUserDomain.image : null;
-          List<Group> nullRemovedGroups = [];
-          for (Group? UG in fetchUserGroups) {
-            if (UG != null) {
-              nullRemovedGroups.add(UG);
-            }
-          }
-          profileGroups = nullRemovedGroups;
+          userGroupString = fetchUserDomain != null ? fetchUserDomain.image : null;
         });
       }
     }
@@ -77,7 +76,7 @@ class _ProfileBodyState extends State<ProfileBody> {
     return ListView(
       physics: BouncingScrollPhysics(),
       children: [
-        SizedBox(height: 50),
+        SizedBox(height:(MediaQuery.of(context).size.height)/8),
         ProfileImage(
           profileImage: profileImage,
           profileImageURL: profileImageURL,
@@ -89,29 +88,36 @@ class _ProfileBodyState extends State<ProfileBody> {
         ProfileName(name: profileUsername, domain: userData.domain),
         SizedBox(height: 15),
         Row(
+
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            GroupTag(groupImage: userGroupImage!= null ? Image.network(userGroupImage!) :
+            Spacer(),
+            GroupTag(groupImage: userGroupString!= null ? Image.network(userGroupString!) :
                  null, groupName: userGroup,
                 fontSize: 18, groupColor: userGroupColor != null ? userGroupColor!:
                     null,
             ),
+            SizedBox(width:20),
             RichText(
               text: TextSpan(
                 children: <TextSpan>[
                   TextSpan(text: profileScore.toString(),
-                      style: ThemeText.groupBold(color: ThemeColor.black, fontSize: 15 )),
-                  TextSpan(text: "Likes ",
-                      style: ThemeText.regularSmall(color: ThemeColor.mediumGrey, fontSize: 15)),
+                      style: ThemeText.groupBold(color: ThemeColor.black, fontSize: 18 )),
+                  TextSpan(text: " Likes ",
+                      style: ThemeText.regularSmall(color: ThemeColor.mediumGrey, fontSize: 18)),
                 ],
               ),
             ),
+            Spacer(),
           ],
-
-
         ),
-        SizedBox(height: 80),
-        widget.profileRef != widget.currUserRef
-            ? Row(children: <Widget>[SizedBox(width: 45), NewMessageButton(otherUserRef: widget.profileRef, currUserRef: widget.currUserRef,)])
+        SizedBox(height:MediaQuery.of(context).size.height/10),
+        widget.profileRef == widget.currUserRef
+            ? Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[SizedBox(width: 45),
+              NewMessageButton(otherUserRef: widget.profileRef,
+                currUserRef: widget.currUserRef,)])
             : Container()
       ],
     );

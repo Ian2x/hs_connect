@@ -82,10 +82,8 @@ Future<UserData> userDataFromSnapshot(DocumentSnapshot snapshot, DocumentReferen
 
   final domain = snapshot.get(C.domain);
   final _domainsData = DomainsDataDatabaseService();
-  Future<List<MyNotification>> myNotificationsData = myNotificationList(snapshot.get(C.myNotifications));
   DomainData? domainData = await _domainsData.getDomainData(domain: domain);
   if (domainData==null) domainData = DomainData(county: null, state: null, country: null, fullName: null, color: null);
-  final myNotifications = await myNotificationsData;
   return UserData(
     userRef: userRef,
     displayedName: snapshot.get(C.displayedName),
@@ -96,7 +94,7 @@ Future<UserData> userDataFromSnapshot(DocumentSnapshot snapshot, DocumentReferen
     modGroupsRefs: docRefList(snapshot.get(C.modGroupRefs)),
     userMessages: snapshot.get(C.userMessages).map<UserMessage>((userMessage) => userMessageFromMap(map: userMessage)).toList(),
     savedPostsRefs: docRefList(snapshot.get(C.savedPostsRefs)),
-    myNotifications: myNotifications,
+    myNotifications: [],
     myPosts: docRefList(snapshot.get(C.myPosts)),
     numReplies: snapshot.get(C.numReplies),
     profileImage: snapshot.get(C.profileImageURL) != null ? Image.network(snapshot.get(C.profileImageURL)) : null,

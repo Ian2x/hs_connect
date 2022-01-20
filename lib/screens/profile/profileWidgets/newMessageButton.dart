@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/screens/notifications/Messages/messagesPage.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/tools/hexColor.dart';
 
 class NewMessageButton extends StatefulWidget {
   final DocumentReference otherUserRef;
@@ -33,24 +34,36 @@ class _NewMessageButtonState extends State<NewMessageButton> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        height: 150,
-        width: 300,
-        child: Column(children: <Widget>[
+    return Container(
+        margin: EdgeInsets.all(0),
+        width: MediaQuery.of(context).size.width*.8,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
           Align(
             alignment: Alignment.centerLeft,
             child: Text("Message", style: ThemeText.groupBold(fontSize: 24), textAlign: TextAlign.left),
           ),
+          SizedBox(height: 20),
           Align(
               alignment: Alignment.centerLeft,
               child: Container(
-                height: 100,
+                height: MediaQuery.of(context).size.height/15,
                 width: 300,
+                decoration: ShapeDecoration(
+                  color: HexColor('FFFFFF'),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16.0),
+                      side: BorderSide(
+                        color: ThemeColor.backgroundGrey,
+                        width: 3.0,
+                      )),
+                ),
                 child: Overlay(initialEntries: <OverlayEntry>[
                   OverlayEntry(builder: (BuildContext context) {
                     return TextField(
-                      decoration: InputDecoration(border: OutlineInputBorder(), hintText: "Start a Chat"),
-                      focusNode: myFocusNode,
+                      decoration: InputDecoration(border: InputBorder.none, hintText: "   Send a chat"),
+                      //focusNode: myFocusNode,
                     );
                   }),
                   OverlayEntry(builder: (BuildContext context) {

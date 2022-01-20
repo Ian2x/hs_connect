@@ -63,6 +63,7 @@ class ThemeText {
     return TextStyle(
       fontSize: fontSize,
       height: height,
+      fontWeight: FontWeight.normal,
       fontFamily: "Inter",
       color: color != null ? color: ThemeColor.darkGrey,
     );

@@ -18,7 +18,7 @@ class CommentReplyForm extends StatefulWidget {
   final DocumentReference groupRef;
   final bool isReply;
   final DocumentReference? commentReference;
-  final voidParamFunction switchFormBool;
+  final voidDocParamFunction switchFormBool;
 
   CommentReplyForm({Key? key,
     required this.postRef,

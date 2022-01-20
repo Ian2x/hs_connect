@@ -4,6 +4,7 @@ import 'package:hs_connect/models/accessRestriction.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/home.dart';
+import 'package:hs_connect/screens/home/new/newPost/postBar.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
@@ -56,13 +57,34 @@ class _PostFormState extends State<PostForm> {
   String _tag = '';
   String error = '';
   bool loading = false;
+
   bool hasPic = false;
+  bool hasPoll = false;
 
   ImageStorage _images = ImageStorage();
+
+  addImage (File? imageFile){
+    setState((){
+      hasPic=true;
+      if (imageFile != null){
+        if (mounted) {
+          newFile = imageFile;
+        }
+      }
+    });
+  }
+
+  addPoll (){
+    setState((){
+      hasPoll=true;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
     double phoneHeight = MediaQuery.of(context).size.height - 200;
+
 
     final userData = Provider.of<UserData?>(context);
 
@@ -83,6 +105,15 @@ class _PostFormState extends State<PostForm> {
         if (mounted) {
           setState(() => loading = true);
         }
+        if (newFile != null) {
+          // upload newFile
+          final downloadURL = await _images.uploadImage(file: newFile!);
+          if (mounted) {
+            setState(() {
+              newFileURL = downloadURL;
+            });
+          }
+        }
         await PostsDatabaseService(currUserRef: userData.userRef).newPost(
           title: _title,
           text: _text,
@@ -95,26 +126,18 @@ class _PostFormState extends State<PostForm> {
           onError: handleError,
         );
       }
-      if (newFile != null) {
-        // upload newFile
-        final downloadURL = await _images.uploadImage(file: newFile!);
-        if (mounted) {
-          setState(() {
-            newFileURL = downloadURL;
-          });
-        }
-      }
+
     }
 
-    void setPic(File x) {
-      if (mounted) {
-        setState(() {
-          newFile = x;
-        });
-      }
-    }
 
-    return FutureBuilder(
+    return
+      Stack(
+      children:[
+      postBar(
+        addImage: addImage,
+        addPoll: addPoll,
+      ),
+      FutureBuilder(
         future: _groups.getGroups(groupsRefs: userData.groups, withPublic: true),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -130,13 +153,19 @@ class _PostFormState extends State<PostForm> {
               child: Form(
                 key: _formKey,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
+
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    SizedBox(height: 40), //TODO: Find media height
+                    SizedBox(height: 50), //TODO: Find media height
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      //Top ROW
                       children: [
-                        IconButton(
-                          icon: Icon(Icons.arrow_back_ios_rounded, size: 23.0),
+                        SizedBox(height:50),
+                        TextButton(
+                          child: Text(
+                            "Cancel", style: ThemeText.regularSmall(color: ThemeColor.mediumGrey,fontSize: 16)
+                          ),
                           onPressed: () {
                             Navigator.pushReplacement(
                               context,
@@ -144,48 +173,28 @@ class _PostFormState extends State<PostForm> {
                             );
                           },
                         ),
-                        Spacer(flex: 6),
-                        TagOutline(
-                          textOnly: true,
-                          text: "Make a Post",
-                          textColor: ThemeColor.secondaryBlue,
-                          borderColor: ThemeColor.secondaryBlue,
-                        ),
-                        Spacer(flex: 6),
-                        IconButton(
-                            onPressed: submitForm,
-                            icon: Icon(Icons.add_circle_rounded, color: ThemeColor.secondaryBlue, size: 30.0)),
-                      ],
-                    ),
-                    SizedBox(height: 15),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Flexible(
-                          flex: 4,
-                          child: Container(
-                            height: 64,
-                            width: double.infinity,
-                            padding: EdgeInsets.fromLTRB(8.0, 0.0, 4.0, 0.0),
-                            decoration: ShapeDecoration(
-                              color: HexColor('FFFFFF'),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(ThemeLayout.borderRadius),
-                                  side: BorderSide(
-                                    color: ThemeColor.lightGrey,
-                                    width: 3.0,
-                                  )),
-                            ),
+                        Spacer(),
+                        Container(
+                          color: ThemeColor.backgroundGrey,
+                          width:200,
+                          height:50,
+                          child:
+                          Theme(
+                            data:Theme.of(context).copyWith(canvasColor: Colors.blue),
+
                             child: DropdownButtonFormField<DocumentReference>(
-                                iconSize: 0.0,
+                                iconSize: 6.0,
+                                icon: Icon(Icons.keyboard_arrow_down_rounded),
+                                elevation:0,
+                                dropdownColor: ThemeColor.backgroundGrey,
                                 itemHeight: 48.0,
                                 isExpanded: true,
                                 decoration: textInputDecoration,
                                 hint: Text(
                                   "Visibility",
-                                  style: TextStyle(
-                                    color: ThemeColor.hintTextGrey,
-                                    fontSize: 16,
+                                  style: ThemeText.groupBold(
+                                    color: ThemeColor.black,
+                                    fontSize: 18,
                                   ),
                                 ),
                                 value: _groupRef != null ? _groupRef : null,
@@ -194,10 +203,9 @@ class _PostFormState extends State<PostForm> {
                                     value: group.groupRef,
                                     child: Text(
                                       group.name,
-                                      style: TextStyle(
-                                        color: HexColor("B5BABE"),
-                                        fontSize: 14,
-                                        //fontWeight: ,
+                                      style: ThemeText.groupBold(
+                                        color: ThemeColor.black,
+                                        fontSize: 18,
                                       ),
                                     ),
                                   );
@@ -215,59 +223,13 @@ class _PostFormState extends State<PostForm> {
                                 }),
                           ),
                         ),
-                        SizedBox(width: 15),
-                        Flexible(
-                          flex: 1,
-                          child: Container(
-                            height: 64,
-                            width: 64,
-                            padding: EdgeInsets.fromLTRB(8.0, 0.0, 4.0, 0.0),
-                            decoration: ShapeDecoration(
-                              color: HexColor("FFFFFF"),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(ThemeLayout.borderRadius),
-                                  side: BorderSide(
-                                    color: ThemeColor.lightGrey,
-                                    width: 3.0,
-                                  )),
-                            ),
-                            child: IconButton(
-                              onPressed: () async {
-                                try {
-                                  final pickedFile = await ImagePicker().pickImage(
-                                    source: ImageSource.gallery,
-                                    maxHeight: 400,
-                                    maxWidth: 400,
-                                    imageQuality: 100,
-                                  );
-                                  if (pickedFile != null) {
-                                    if (mounted) {
-                                      setState(() {
-                                        newFile = File(pickedFile.path);
-                                      });
-                                    }
-                                  } else {
-                                    if (mounted) {
-                                      setState(() {
-                                        newFile = null;
-                                      });
-                                    }
-                                  }
-                                  if (mounted) {
-                                    setState(() {
-                                      if (newFile != null) {
-                                        hasPic = true;
-                                      }
-                                    });
-                                  }
-                                } catch (e) {
-                                  print(e);
-                                }
-                              },
-                              icon: Icon(Icons.photo, color: ThemeColor.secondaryBlue, size: 30),
-                            ),
+                        Spacer(),
+                        TextButton(
+                          child: Text(
+                            "Post",
+                            style: ThemeText.regularSmall(color: ThemeColor.secondaryBlue, fontSize: 16),
                           ),
-                        )
+                          onPressed: submitForm,),
                       ],
                     ),
                     SizedBox(height: 15),
@@ -281,15 +243,6 @@ class _PostFormState extends State<PostForm> {
                         minHeight: phoneHeight,
                       ),
                       padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                      decoration: ShapeDecoration(
-                        color: HexColor('FFFFFF'),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(ThemeLayout.borderRadius),
-                            side: BorderSide(
-                              color: HexColor("E9EDF0"),
-                              width: 3.0,
-                            )),
-                      ),
                       child: Column(
                         children: [
                           TextFormField(
@@ -343,6 +296,7 @@ class _PostFormState extends State<PostForm> {
           } else {
             return Loading();
           }
-        });
+        })
+    ]);
   }
 }
