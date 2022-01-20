@@ -126,7 +126,77 @@ class _PostFormState extends State<PostForm> {
           onError: handleError,
         );
       }
+    }
 
+    Widget buildSheet(){
+
+      return Container(
+        padding: EdgeInsets.fromLTRB( 20.0,0.0, 20.0, 40.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox( height:50),
+            Text(
+              "Pick a group",
+              style: ThemeText.groupBold(
+                color: ThemeColor.black, fontSize: 18,
+              )
+            ),
+            Divider(color: ThemeColor.backgroundGrey, thickness:2),
+            Row(
+              children: [
+                Text(
+                    "Lawrenceville",
+                    style: ThemeText.groupBold(
+                      color: ThemeColor.darkGrey, fontSize: 16,
+                    )
+                ), Spacer(),
+                ConstrainedBox(
+                  constraints: BoxConstraints( maxHeight:40) ,
+                  child: Checkbox(
+                    checkColor: ThemeColor.white,
+                    activeColor: ThemeColor.secondaryBlue,
+                    tristate:true,
+                    shape:CircleBorder(),
+                    onChanged: (bool? value){
+                      setState(() {
+                      });
+                    }, value: null,
+                  ),
+                )
+              ]
+            ),
+            Text("Only for your school", style: ThemeText.groupBold(color: ThemeColor.mediumGrey, fontSize: 16)),
+            SizedBox(height:5),
+            Divider (color: ThemeColor.backgroundGrey, thickness:2),
+            Row(
+                children: [
+                  Text(
+                      "Lawrenceville",
+                      style: ThemeText.groupBold(
+                        color: ThemeColor.darkGrey, fontSize: 16,
+                      )
+                  ), Spacer(),
+                  ConstrainedBox(
+                    constraints: BoxConstraints( maxHeight:40) ,
+                    child: Checkbox(
+                      checkColor: ThemeColor.white,
+                      activeColor: ThemeColor.secondaryBlue,
+                      tristate:true,
+                      shape:CircleBorder(),
+                      onChanged: (bool? value){
+                        setState(() {
+                        });
+                      }, value: null,
+                    ),
+                  )
+                ]
+            ),
+            Text("Eveyrone can see", style: ThemeText.groupBold(color: ThemeColor.mediumGrey, fontSize: 16)),
+          ],
+        )
+      );
     }
 
 
@@ -153,8 +223,6 @@ class _PostFormState extends State<PostForm> {
               child: Form(
                 key: _formKey,
                 child: Column(
-
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     SizedBox(height: 50), //TODO: Find media height
                     Row(
@@ -174,53 +242,11 @@ class _PostFormState extends State<PostForm> {
                           },
                         ),
                         Spacer(),
-                        Container(
-                          color: ThemeColor.backgroundGrey,
-                          width:200,
-                          height:50,
-                          child:
-                          Theme(
-                            data:Theme.of(context).copyWith(canvasColor: Colors.blue),
-
-                            child: DropdownButtonFormField<DocumentReference>(
-                                iconSize: 6.0,
-                                icon: Icon(Icons.keyboard_arrow_down_rounded),
-                                elevation:0,
-                                dropdownColor: ThemeColor.backgroundGrey,
-                                itemHeight: 48.0,
-                                isExpanded: true,
-                                decoration: textInputDecoration,
-                                hint: Text(
-                                  "Visibility",
-                                  style: ThemeText.groupBold(
-                                    color: ThemeColor.black,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                value: _groupRef != null ? _groupRef : null,
-                                items: groups.map((group) {
-                                  return DropdownMenuItem(
-                                    value: group.groupRef,
-                                    child: Text(
-                                      group.name,
-                                      style: ThemeText.groupBold(
-                                        color: ThemeColor.black,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (val) {
-                                  if (mounted) {
-                                    setState(() => _groupRef = val!);
-                                  }
-                                },
-                                validator: (val) {
-                                  if (val == null)
-                                    return 'Pick a group to post to';
-                                  else
-                                    return null;
-                                }),
+                        TagOutline(
+                          textOnly:false,
+                          widget: TextButton(
+                            onPressed:()=> showModalBottomSheet(context: context, builder: (context)=> buildSheet()),
+                            child: Text("Lawrenceville"),
                           ),
                         ),
                         Spacer(),
@@ -232,6 +258,8 @@ class _PostFormState extends State<PostForm> {
                           onPressed: submitForm,),
                       ],
                     ),
+                    SizedBox(height: 6),
+                    //Divider(height: MediaQuery.of(context).size.width, thickness:2,color: ThemeColor.backgroundGrey),
                     SizedBox(height: 15),
                     hasPic != false ? SizedBox(height: 10) : SizedBox(),
                     hasPic != false ? imagePreview(fileImage: newFile) : SizedBox(),
@@ -299,4 +327,4 @@ class _PostFormState extends State<PostForm> {
         })
     ]);
   }
-}
+  }
