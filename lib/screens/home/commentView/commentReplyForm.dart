@@ -19,6 +19,7 @@ class CommentReplyForm extends StatefulWidget {
   final bool isReply;
   final DocumentReference? commentReference;
   final voidParamFunction switchFormBool;
+  final DocumentReference postCreatorRef;
 
   CommentReplyForm({Key? key,
     required this.postRef,
@@ -26,6 +27,7 @@ class CommentReplyForm extends StatefulWidget {
     required this.isReply,
     required this.switchFormBool,
     this.commentReference,
+    required this.postCreatorRef,
   }) : super(key: key);
 
   @override
@@ -113,6 +115,7 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
                           onValue: handleValue,
                           onError: handleError,
                           groupRef: widget.groupRef,
+                          postCreatorRef: widget.postCreatorRef,
                         );
                       } else {
                         await _comments.newComment(
@@ -122,6 +125,7 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
                           onValue: handleValue,
                           onError: handleError,
                           groupRef: widget.groupRef,
+                          postCreatorRef: widget.postCreatorRef,
                         );
                       }
                     }

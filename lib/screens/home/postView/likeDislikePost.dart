@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 
@@ -9,12 +10,10 @@ const EdgeInsets iconPadding = EdgeInsets.all(0);
 
 class LikeDislikePost extends StatefulWidget {
   final DocumentReference currUserRef;
-  final DocumentReference postRef;
-  final List<DocumentReference> likes;
-  final List<DocumentReference> dislikes;
+  final Post post;
 
   const LikeDislikePost(
-      {Key? key, required this.currUserRef, required this.postRef, required this.likes, required this.dislikes})
+      {Key? key, required this.currUserRef, required this.post})
       : super(key: key);
 
   @override
@@ -31,10 +30,10 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
   void initState() {
     if (mounted) {
       setState(() {
-        likeStatus = widget.likes.contains(widget.currUserRef);
-        dislikeStatus = widget.dislikes.contains(widget.currUserRef);
-        likeCount = widget.likes.length;
-        dislikeCount = widget.dislikes.length;
+        likeStatus = widget.post.likes.contains(widget.currUserRef);
+        dislikeStatus = widget.post.dislikes.contains(widget.currUserRef);
+        likeCount = widget.post.likes.length;
+        dislikeCount = widget.post.dislikes.length;
       });
     }
     super.initState();
@@ -42,7 +41,7 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
 
   @override
   Widget build(BuildContext context) {
-    PostsDatabaseService _posts = PostsDatabaseService(currUserRef: widget.currUserRef);
+    PostsDatabaseService _posts = PostsDatabaseService(currUserRef: widget.currUserRef, postRef: widget.post.postRef);
 
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -57,7 +56,7 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
               color: ThemeColor.secondaryBlue,
               icon: Icon(Icons.keyboard_arrow_down_rounded),
               onPressed: () {
-                _posts.unDislikePost(postRef: widget.postRef);
+                _posts.unDislikePost();
                 if (mounted) {
                   setState(() {
                     dislikeCount -= 1;
@@ -75,7 +74,7 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
               color: ThemeColor.darkGrey,
               icon: Icon(Icons.keyboard_arrow_down_rounded),
               onPressed: () {
-                _posts.dislikePost(postRef: widget.postRef);
+                _posts.dislikePost();
                 if (mounted) {
                   setState(() {
                     dislikeCount += 1;
@@ -91,7 +90,7 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
         SizedBox(width: 5),
         Text(
           (likeCount - dislikeCount).toString(),
-          style: ThemeText.regularSmall(fontSize: 16),
+          style: ThemeText.inter(fontSize: 16),
         ),
         SizedBox(width: 5),
         () {
@@ -104,7 +103,7 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
               color: ThemeColor.secondaryBlue,
               icon: Icon(Icons.keyboard_arrow_up_rounded, color: ThemeColor.secondaryBlue),
               onPressed: () {
-                _posts.unLikePost(postRef: widget.postRef);
+                _posts.unLikePost();
                 if (mounted) {
                   setState(() {
                     likeCount -= 1;
@@ -122,7 +121,6 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
               color: ThemeColor.darkGrey,
               icon: Icon(Icons.keyboard_arrow_up_rounded),
               onPressed: () {
-                _posts.likePost(postRef: widget.postRef);
                 if (mounted) {
                   setState(() {
                     likeCount += 1;
@@ -131,6 +129,7 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
                     dislikeStatus = false;
                   });
                 }
+                _posts.likePost(widget.post.creatorRef, likeCount);
               },
             );
           }

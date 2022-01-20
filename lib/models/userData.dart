@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:hs_connect/models/notification.dart';
+import 'package:hs_connect/models/myNotification.dart';
 import 'package:hs_connect/services/domains_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
@@ -40,7 +40,7 @@ class UserData {
   final List<MyNotification> myNotifications;
   final List<DocumentReference> myPosts;
   final int numReplies;
-  final Image? profileImage;
+  final Image profileImage;
   final String? profileImageURL;
   final int score;
   final int numReports;
@@ -82,10 +82,8 @@ Future<UserData> userDataFromSnapshot(DocumentSnapshot snapshot, DocumentReferen
 
   final domain = snapshot.get(C.domain);
   final _domainsData = DomainsDataDatabaseService();
-  Future<List<MyNotification>> myNotificationsData = myNotificationList(snapshot.get(C.myNotifications));
   DomainData? domainData = await _domainsData.getDomainData(domain: domain);
   if (domainData==null) domainData = DomainData(county: null, state: null, country: null, fullName: null, color: null);
-  final myNotifications = await myNotificationsData;
   return UserData(
     userRef: userRef,
     displayedName: snapshot.get(C.displayedName),
@@ -96,10 +94,10 @@ Future<UserData> userDataFromSnapshot(DocumentSnapshot snapshot, DocumentReferen
     modGroupsRefs: docRefList(snapshot.get(C.modGroupRefs)),
     userMessages: snapshot.get(C.userMessages).map<UserMessage>((userMessage) => userMessageFromMap(map: userMessage)).toList(),
     savedPostsRefs: docRefList(snapshot.get(C.savedPostsRefs)),
-    myNotifications: myNotifications,
+    myNotifications: myNotificationList(snapshot.get(C.myNotifications)),
     myPosts: docRefList(snapshot.get(C.myPosts)),
     numReplies: snapshot.get(C.numReplies),
-    profileImage: snapshot.get(C.profileImageURL) != null ? Image.network(snapshot.get(C.profileImageURL)) : null,
+    profileImage: snapshot.get(C.profileImageURL) != null ? Image.network(snapshot.get(C.profileImageURL)) : Image(image: AssetImage('assets/me.png')),
     profileImageURL: snapshot.get(C.profileImageURL),
     score: snapshot.get(C.score),
     numReports: snapshot.get(C.numReports),

@@ -113,7 +113,7 @@ postFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
   );
 }
 
-postFromSnapshot(DocumentSnapshot snapshot) {
+Post postFromSnapshot(DocumentSnapshot snapshot) {
   final accessRestriction = snapshot[C.accessRestriction];
   return Post(
     postRef: snapshot.reference,

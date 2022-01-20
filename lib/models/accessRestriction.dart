@@ -56,8 +56,9 @@ class AccessRestriction {
 }
 
 AccessRestriction accessRestrictionFromMap(Map map) {
-  return AccessRestriction(
+  final temp = AccessRestriction(
       restriction: map[C.restriction], restrictionType: accessRestrictionTypeFrom(map[C.restrictionType]));
+  return temp;
 }
 
 class Access {

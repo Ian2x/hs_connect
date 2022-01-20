@@ -7,6 +7,8 @@ import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
 
+import 'likeDislikeReply.dart';
+
 class ReplyCard extends StatefulWidget {
   final Reply reply;
   final DocumentReference currUserRef;
@@ -136,11 +138,9 @@ class _ReplyCardState extends State<ReplyCard> {
                                   convertTime(widget.reply.createdAt.toDate()), style: ThemeText.groupBold(color:ThemeColor.mediumGrey, fontSize:14),
                                 ),
                                 Spacer(flex:1),
-                                LikeDislikeComment(
-                                    commentRef: widget.reply.commentRef,
+                                LikeDislikeReply(
+                                    reply: widget.reply,
                                     currUserRef: widget.currUserRef,
-                                    likes: widget.reply.likes,
-                                    dislikes: widget.reply.dislikes
                                 ),
                               ],
                             ),

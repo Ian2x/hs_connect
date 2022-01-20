@@ -141,7 +141,6 @@ class _CommentCardState extends State<CommentCard> {
                       ),
                     ],
                   ),*/
-
                   Flexible(
                     fit:FlexFit.loose,
                     child: Column(
@@ -171,10 +170,8 @@ class _CommentCardState extends State<CommentCard> {
                                 }
                             ),
                             LikeDislikeComment(
-                                commentRef: widget.comment.commentRef,
+                                comment: widget.comment,
                                 currUserRef: widget.currUserRef,
-                                likes: widget.comment.likes,
-                                dislikes: widget.comment.dislikes
                             ),
                           ],
                         ),

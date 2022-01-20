@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hs_connect/models/myNotification.dart';
 import 'package:hs_connect/models/reply.dart';
+import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/constants.dart';
 
@@ -7,9 +9,12 @@ void defaultFunc(dynamic parameter) {}
 
 class RepliesDatabaseService {
   final DocumentReference currUserRef;
+  DocumentReference? postRef;
   DocumentReference? commentRef;
+  DocumentReference? replyRef;
 
-  RepliesDatabaseService({required this.currUserRef, this.commentRef});
+
+  RepliesDatabaseService({required this.currUserRef, this.commentRef, this.postRef, this.replyRef});
 
   ImageStorage _images = ImageStorage();
 
@@ -22,9 +27,42 @@ class RepliesDatabaseService {
       required DocumentReference commentRef,
       required DocumentReference postRef,
       required DocumentReference groupRef,
+      required DocumentReference postCreatorRef,
       Function(void) onValue = defaultFunc,
       Function onError = defaultFunc}) async {
     DocumentReference newReplyRef = repliesCollection.doc();
+    // update comment creator's activity
+    postCreatorRef.update({C.myNotifications: FieldValue.arrayUnion([{
+      C.parentPostRef: postRef,
+      C.myNotificationType: MyNotificationType.replyToComment.string,
+      C.sourceRef: newReplyRef,
+      C.sourceUserRef: currUserRef,
+      C.createdAt: Timestamp.now(),
+      C.extraData: text
+    }])});
+    // update other repliers' activity
+    repliesCollection.where(C.commentRef, isEqualTo: commentRef).get().then(
+        (QuerySnapshot QS) {
+          final replies = QS.docs.map((QDS) =>_replyFromQuerySnapshot(QDS)).toList();
+          for (Reply? r in replies) {
+            if (r!=null) {
+              // check not updating for multiple replies by self
+              if (r.creatorRef!=currUserRef) {
+                r.creatorRef.update({
+                  C.myNotifications: FieldValue.arrayUnion([{
+                    C.parentPostRef: postRef,
+                    C.myNotificationType: MyNotificationType.replyToReply.string,
+                    C.sourceRef: newReplyRef,
+                    C.sourceUserRef: currUserRef,
+                    C.createdAt: Timestamp.now(),
+                    C.extraData: text
+                  }])
+                });
+              }
+            }
+          }
+        }
+    );
     // update user's replies
     currUserRef.update({
       C.numReplies: FieldValue.increment(1)
@@ -97,38 +135,59 @@ class RepliesDatabaseService {
     return null;
   }
 
-  Future<void> likeReply({required DocumentReference replyRef}) async {
+  Future<void> likeReply(DocumentReference replyCreatorRef, int likeCount) async {
     // remove dislike if disliked
-    await replyRef.update({
+    await replyRef!.update({
       C.dislikes: FieldValue.arrayRemove([currUserRef])
     });
-    // like comment
-    return await replyRef.update({
+    // like reply
+    await replyRef!.update({
       C.likes: FieldValue.arrayUnion([currUserRef])
     });
+    if (likeCount==1 || likeCount==10 || likeCount==20 || likeCount==50 || likeCount==100) {
+      bool update = true;
+      final replyCreatorData = await replyCreatorRef.get();
+      final replyCreator = await userDataFromSnapshot(replyCreatorData, replyCreatorRef);
+      for (MyNotification MN in replyCreator.myNotifications) {
+        if (MN.sourceRef == replyRef! && MN.myNotificationType==MyNotificationType.replyVotes && MN.extraData==likeCount.toString()) {
+          update = false;
+          break;
+        }
+      }
+      if (update) {
+        replyCreatorRef.update({C.myNotifications: FieldValue.arrayUnion([{
+          C.parentPostRef: postRef!,
+          C.myNotificationType: MyNotificationType.replyVotes.string,
+          C.sourceRef: replyRef!,
+          C.sourceUserRef: currUserRef,
+          C.createdAt: Timestamp.now(),
+          C.extraData: likeCount.toString()
+        }])});
+      }
+    }
   }
 
-  Future<void> unLikeReply({required DocumentReference replyRef}) async {
+  Future<void> unLikeReply() async {
     // remove like
-    await replyRef.update({
+    await replyRef!.update({
       C.likes: FieldValue.arrayRemove([currUserRef])
     });
   }
 
-  Future<void> dislikeReply({required DocumentReference replyRef}) async {
+  Future<void> dislikeReply() async {
     // remove like if liked
-    await replyRef.update({
+    await replyRef!.update({
       C.likes: FieldValue.arrayRemove([currUserRef])
     });
-    // dislike comment
-    return await replyRef.update({
+    // dislike reply
+    return await replyRef!.update({
       C.dislikes: FieldValue.arrayUnion([currUserRef])
     });
   }
 
-  Future<void> unDislikeReply({required DocumentReference replyRef}) async {
+  Future<void> unDislikeReply() async {
     // remove like
-    await replyRef.update({
+    await replyRef!.update({
       C.dislikes: FieldValue.arrayRemove([currUserRef])
     });
   }

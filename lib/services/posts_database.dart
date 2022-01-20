@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/comment.dart';
+import 'package:hs_connect/models/myNotification.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/reply.dart';
 import 'package:hs_connect/models/searchResult.dart';
+import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/replies_database.dart';
@@ -17,8 +19,9 @@ class PostsDatabaseService {
   final DocumentReference currUserRef;
   List<DocumentReference>? groupRefs;
   List<String>? searchTags;
+  final DocumentReference? postRef;
 
-  PostsDatabaseService({required this.currUserRef, this.groupRefs, this.searchTags});
+  PostsDatabaseService({required this.currUserRef, this.groupRefs, this.searchTags, this.postRef});
 
   ImageStorage _images = ImageStorage();
 
@@ -142,38 +145,59 @@ class PostsDatabaseService {
     return null;
   }
 
-  Future<void> likePost({required DocumentReference postRef}) async {
+  Future<void> likePost(DocumentReference postCreatorRef, int likeCount) async {
     // remove dislike if disliked
-    await postRef.update({
+    await postRef!.update({
       C.dislikes: FieldValue.arrayRemove([currUserRef])
     });
-    // like comment
-    return await postRef.update({
+    // like post
+    await postRef!.update({
       C.likes: FieldValue.arrayUnion([currUserRef])
     });
+    if (likeCount==1 || likeCount==10 || likeCount==20 || likeCount==50 || likeCount==100) {
+      bool update = true;
+      final postCreatorData = await postCreatorRef.get();
+      final postCreator = await userDataFromSnapshot(postCreatorData, postCreatorRef);
+      for (MyNotification MN in postCreator.myNotifications) {
+        if (MN.sourceRef == postRef! && MN.myNotificationType==MyNotificationType.postVotes && MN.extraData==likeCount.toString()) {
+          update = false;
+          break;
+        }
+      }
+      if (update) {
+        postCreatorRef.update({C.myNotifications: FieldValue.arrayUnion([{
+          C.parentPostRef: postRef!,
+          C.myNotificationType: MyNotificationType.postVotes.string,
+          C.sourceRef: postRef!,
+          C.sourceUserRef: currUserRef,
+          C.createdAt: Timestamp.now(),
+          C.extraData: likeCount.toString()
+        }])});
+      }
+    }
   }
 
-  Future<void> unLikePost({required DocumentReference postRef}) async {
+  Future<void> unLikePost() async {
     // remove like
-    await postRef.update({
+    await postRef!.update({
       C.likes: FieldValue.arrayRemove([currUserRef])
     });
   }
 
-  Future<void> dislikePost({required DocumentReference postRef}) async {
+  Future<void> dislikePost() async {
     // remove like if liked
-    await postRef.update({
+    await postRef!.update({
       C.likes: FieldValue.arrayRemove([currUserRef])
     });
-    // dislike comment
-    return await postRef.update({
+    // dislike post
+    return await postRef!.update({
       C.dislikes: FieldValue.arrayUnion([currUserRef])
     });
   }
 
-  Future<void> unDislikePost({required DocumentReference postRef}) async {
+  Future<void> unDislikePost() async {
     // remove like
-    await postRef.update({
+    await postRef!.update({
       C.dislikes: FieldValue.arrayRemove([currUserRef])
     });
   }

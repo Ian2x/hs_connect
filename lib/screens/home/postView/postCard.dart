@@ -9,13 +9,11 @@ import 'package:hs_connect/screens/home/postView/postPage.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/groupTag.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/widgetDisplay.dart';
-import 'package:provider/provider.dart';
 
 
 class PostCard extends StatefulWidget {
@@ -40,7 +38,6 @@ class _PostCardState extends State<PostCard> {
   String? groupColor;
   bool inDomain = false;
   Image? postImage;
-  int fetchesCompleted = 0;
 
 
   @override
@@ -78,9 +75,6 @@ class _PostCardState extends State<PostCard> {
         }
       }));
     }
-    if (mounted) {
-      setState(() => fetchesCompleted+=1);
-    }
   }
 
   void getUserData() async {
@@ -91,9 +85,6 @@ class _PostCardState extends State<PostCard> {
         username = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
         userDomain = fetchUserData != null ? fetchUserData.domain : '<Failed to retrieve user domain>';
       });
-    }
-    if (mounted) {
-      setState(() => fetchesCompleted+=1);
     }
   }
 
@@ -123,8 +114,6 @@ class _PostCardState extends State<PostCard> {
         } else {
           groupName = '<Failed to retrieve group name>';
         }
-        groupName = fetchGroup != null ? fetchGroup.name : '<Failed to retrieve group name>';
-
       });
     }
     if (widget.post.groupRef.id[0]=='@') {
@@ -136,17 +125,10 @@ class _PostCardState extends State<PostCard> {
         });
       }
     }
-    if (mounted) {
-      setState(() => fetchesCompleted+=1);
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-
-    if (fetchesCompleted<3) {
-      return Loading();
-    }
 
     return GestureDetector(
       onTap: () {
@@ -207,9 +189,7 @@ class _PostCardState extends State<PostCard> {
                             Spacer(),
                             LikeDislikePost(
                                 currUserRef: widget.currUserRef,
-                                postRef: widget.post.postRef,
-                                likes: widget.post.likes,
-                                dislikes: widget.post.dislikes),
+                                post: widget.post),
                           ],
                         )
                       ], //Column Children ARRAY

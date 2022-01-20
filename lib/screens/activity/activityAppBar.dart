@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/constants.dart';
 
-AppBar notificationsAppBar() {
+AppBar activityAppBar() {
   return AppBar(
       backgroundColor: ThemeColor.white,
       elevation: 0.0,

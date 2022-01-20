@@ -5,6 +5,7 @@ import 'package:hs_connect/shared/tools/hexColor.dart';
 const daysTrending = 2;
 const maxDataCollectionRate = 3; // in hours
 const maxDataCollectionDays = 2; // in days
+const notificationStorageDays = 7; // in days
 
 const double profilePicWidth = 400;
 const double profilePicHeight = 400;
@@ -217,4 +218,8 @@ class C {
   static const sourceUserDisplayedName = 'sourceUserDisplayedName';
   static const sourceUserFullDomainName = 'sourceUserFullDomainName';
   static const profileImage = 'profileImage';
+  static const replyVotes = 'replyVotes';
+  static const commentVotes = 'commentVotes';
+  static const postVotes = 'postVotes';
+  static const extraData = 'extraData';
 }

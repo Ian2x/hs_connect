@@ -8,6 +8,7 @@ import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
+import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
 import 'package:provider/provider.dart';
 
@@ -56,7 +57,7 @@ class _PostPageState extends State<PostPage> {
 
     final userData = Provider.of<UserData?>(context);
     if (userData == null || post == null) {
-      return Text("loading");
+      return Loading();
     }
     return Scaffold(
       backgroundColor: HexColor("FFFFFF"),

@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/screens/notifications/Messages/allMessagesPage.dart';
-import 'package:hs_connect/screens/notifications/notificationsAppBar.dart';
-import 'package:hs_connect/screens/notifications/notificationsFeed.dart';
+import 'package:hs_connect/screens/activity/messages/allMessagesPage.dart';
+import 'package:hs_connect/screens/activity/activityAppBar.dart';
+import 'package:hs_connect/screens/activity/notifications/notificationsFeed.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
 import 'package:provider/provider.dart';
 
-class NotificationPage extends StatefulWidget {
-  const NotificationPage({Key? key}) : super(key: key);
+class ActivityPage extends StatefulWidget {
+  const ActivityPage({Key? key}) : super(key: key);
 
   @override
-  _NotificationPageState createState() => _NotificationPageState();
+  _ActivityPageState createState() => _ActivityPageState();
 }
 
-class _NotificationPageState extends State<NotificationPage> with SingleTickerProviderStateMixin {
+class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -32,7 +32,7 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
     if (userData == null) {
       return Scaffold(
         backgroundColor: Colors.white,
-        appBar: notificationsAppBar(),
+        appBar: activityAppBar(),
         body: Loading(),
         bottomNavigationBar: MyNavigationBar(
           currentIndex: 1,
@@ -77,7 +77,7 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
                 fontFamily: "Inter",
                 fontWeight: FontWeight.normal,
               ),
-              tabs: <Widget>[Tab(child: Text("Posts & Comments")), Tab(child: Text("Messages"))],
+              tabs: <Widget>[Tab(child: Text("Notifications")), Tab(child: Text("messages"))],
               controller: _tabController,
             ),
           ),
@@ -86,7 +86,7 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
       body: Container(
         color: ThemeColor.backgroundGrey,
         child: TabBarView(children: <Widget>[
-            NotificationsFeed(),
+            NotificationsFeed(userData: userData),
             AllMessagesPage(userData: userData,)
           ], controller: _tabController, physics: BouncingScrollPhysics()),
       ),

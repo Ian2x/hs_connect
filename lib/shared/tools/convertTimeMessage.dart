@@ -1,6 +1,6 @@
 import 'package:timeago/src/messages/lookupmessages.dart';
 
-/// English Messages
+/// English messages
 class EnMessages implements LookupMessages {
   @override
   String prefixAgo() => '';
@@ -51,7 +51,7 @@ class EnMessages implements LookupMessages {
   String wordSeparator() => ' ';
 }
 
-/// English short Messages
+/// English short messages
 class EnShortMessages implements LookupMessages {
   @override
   String prefixAgo() => '';
