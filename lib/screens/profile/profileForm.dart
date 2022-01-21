@@ -39,9 +39,9 @@ class _ProfileFormState extends State<ProfileForm> {
 
   @override
   void initState() {
-    super.initState();
     _displayedName = widget.currDisplayName;
     _initialImageURL = widget.currImageURL;
+    super.initState();
   }
 
   @override

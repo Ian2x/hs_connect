@@ -77,7 +77,7 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
                 fontFamily: "Inter",
                 fontWeight: FontWeight.normal,
               ),
-              tabs: <Widget>[Tab(child: Text("Notifications")), Tab(child: Text("messages"))],
+              tabs: <Widget>[Tab(child: Text("Notifications")), Tab(child: Text("Messages"))],
               controller: _tabController,
             ),
           ),

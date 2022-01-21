@@ -240,7 +240,7 @@ class PostsDatabaseService {
   Stream<List<Post?>> get potentialTrendingPosts {
     return postsCollection
         .where(C.createdAt,
-        isGreaterThan: Timestamp.fromDate(DateTime.now().subtract(new Duration(days: daysTrending))))
+        isGreaterThan: Timestamp.fromDate(DateTime.now().subtract(new Duration(hours: hoursTrending))))
         .where(C.groupRef, whereIn: groupRefs)
         .snapshots()
         .map((snapshot) => snapshot.docs.map(_postFromQuerySnapshot).toList());

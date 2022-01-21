@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 
-// Calculate trending by activity within past 2 days
-const daysTrending = 2;
+// Calculate trending by activity within past 1.5 days
+const hoursTrending = 36;
+
 const maxDataCollectionRate = 3; // in hours
 const maxDataCollectionDays = 2; // in days
 const notificationStorageDays = 7; // in days

@@ -59,7 +59,14 @@ class _TrendingFeedState extends State<TrendingFeed> {
             postss.removeWhere((value) => value == null);
             List<Post> posts = postss.map((item) => item!).toList();
             
-            posts.sort((a, b) => (b.numComments + b.numReplies) - (a.numComments + a.numReplies));
+            posts.sort((a, b) {
+              final int val = (2 * b.numComments + 2 * b.numReplies + b.likes.length + b.dislikes.length) - (2 * a.numComments + 2 * a.numReplies + a.likes.length + a.dislikes.length);
+              if (val!=0) {
+                return val;
+              } else {
+                return b.createdAt.compareTo(a.createdAt);
+              }
+            });
 
             return postsListView(posts: posts, currUserRef: userData.userRef);
           }

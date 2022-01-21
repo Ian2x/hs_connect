@@ -27,34 +27,32 @@ class ProfileBody extends StatefulWidget {
 class _ProfileBodyState extends State<ProfileBody> {
   String profileUsername = '';
 
-  bool profileImageExists = false;
-  Widget? profileImage = Loading(size: 30.0);
+  Widget profileImage = Loading(size: 30.0);
   String? profileImageURL;
   int profileScore = 0;
-  String? userGroupString;
-  Color? userGroupColor;
-  String userGroup="";
+  String? domainImage;
+  Color? domainColor;
+  String domainName="";
 
   void getProfileUserData() async {
     UserDataDatabaseService _userInfoDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserRef);
     final UserData? fetchUserData = await _userInfoDatabaseService.getUserData(userRef: widget.profileRef);
-    if (mounted) {
+    if (fetchUserData != null && mounted) {
       setState(() {
-        profileUsername = fetchUserData != null ? fetchUserData.displayedName : 'username';
-        profileImageExists = fetchUserData != null && fetchUserData.profileImage != null;
-        profileScore = fetchUserData != null ? fetchUserData.score : -1;
-        profileImage = fetchUserData!.profileImage;
+        profileUsername = fetchUserData.displayedName;
+        profileScore = fetchUserData.score;
+        profileImage = fetchUserData.profileImage;
         profileImageURL = fetchUserData.profileImageURL;
-        userGroupColor = fetchUserData != null ? fetchUserData.domainColor : null;
-        userGroup = fetchUserData != null ? fetchUserData.domain : 'group';
+        domainColor = fetchUserData.domainColor;
+        domainName = fetchUserData.fullDomainName != null ? fetchUserData.fullDomainName! : fetchUserData.domain;
       });
     }
     GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserRef);
     if (fetchUserData != null) {
       var fetchUserDomain = await _groups.getGroup(FirebaseFirestore.instance.collection(C.groups).doc(fetchUserData.domain));
-      if (mounted) {
+      if (fetchUserDomain != null && mounted) {
         setState(() {
-          userGroupString = fetchUserDomain != null ? fetchUserDomain.image : null;
+          domainImage = fetchUserDomain.image;
         });
       }
     }
@@ -80,7 +78,6 @@ class _ProfileBodyState extends State<ProfileBody> {
         ProfileImage(
           profileImage: profileImage,
           profileImageURL: profileImageURL,
-          profileImageExists: profileImageExists,
           currUserName: profileUsername,
           showEditIcon: widget.profileRef == widget.currUserRef && widget.currUserRef == userData.userRef,
         ),
@@ -88,13 +85,11 @@ class _ProfileBodyState extends State<ProfileBody> {
         ProfileName(name: profileUsername, domain: userData.domain),
         SizedBox(height: 15),
         Row(
-
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Spacer(),
-            GroupTag(groupImage: userGroupString!= null ? Image.network(userGroupString!) :
-                 null, groupName: userGroup,
-                fontSize: 18, groupColor: userGroupColor != null ? userGroupColor!:
+            GroupTag(groupImage: domainImage!= null ? Image.network(domainImage!) :
+                 null, groupName: domainName,
+                fontSize: 18, groupColor: domainColor != null ? domainColor!:
                     null,
             ),
             SizedBox(width:20),
@@ -104,21 +99,33 @@ class _ProfileBodyState extends State<ProfileBody> {
                   TextSpan(text: profileScore.toString(),
                       style: ThemeText.groupBold(color: ThemeColor.black, fontSize: 18 )),
                   TextSpan(text: " Likes ",
-                      style: ThemeText.regularSmall(color: ThemeColor.mediumGrey, fontSize: 18)),
+                      style: ThemeText.regularSmall(color: ThemeColor.darkGrey, fontSize: 18)),
                 ],
               ),
             ),
             Spacer(),
           ],
         ),
-        SizedBox(height:MediaQuery.of(context).size.height/10),
         widget.profileRef != widget.currUserRef
-            ? Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[SizedBox(width: 45),
-              NewMessageButton(otherUserRef: widget.profileRef,
-                currUserRef: widget.currUserRef,)])
-            : Container()
+            ? Column(
+                children: <Widget>[
+                  SizedBox(height: MediaQuery.of(context).size.height / 10),
+                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
+                    SizedBox(width: 45),
+                    NewMessageButton(
+                      otherUserRef: widget.profileRef,
+                      currUserRef: widget.currUserRef,
+                    )
+                  ])
+                ],
+              )
+            : Column(
+          children: <Widget>[
+            SizedBox(height: MediaQuery.of(context).size.height / 10),
+            Text("Not finished: Yur Posts")
+
+          ]
+        )
       ],
     );
   }

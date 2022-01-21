@@ -61,7 +61,7 @@ class _NewMessageButtonState extends State<NewMessageButton> {
                 child: Overlay(initialEntries: <OverlayEntry>[
                   OverlayEntry(builder: (BuildContext context) {
                     return TextField(
-                      decoration: InputDecoration(border: InputBorder.none, hintText: "   Send a chat"),
+                      decoration: InputDecoration(hintStyle: ThemeText.roboto(fontSize: 18, color: ThemeColor.lightMediumGrey), border: InputBorder.none, hintText: "   Send a chat"),
                       //focusNode: myFocusNode,
                     );
                   }),
