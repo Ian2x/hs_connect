@@ -34,7 +34,6 @@ class _ProfileFormState extends State<ProfileForm> {
 
   ImageStorage _images = ImageStorage();
 
-  String? newFileURL;
   File? newFile;
 
   @override
@@ -155,20 +154,15 @@ class _ProfileFormState extends State<ProfileForm> {
                       if (mounted) {
                         setState(() => loading = true);
                       }
+                      String? downloadURL;
                       if (newFile != null) {
                         // upload newFile
-                        final downloadURL =
-                            await _images.uploadProfilePic(file: newFile!, oldImageURL: _initialImageURL);
-                        if (mounted) {
-                          setState(() {
-                            newFileURL = downloadURL;
-                          });
-                        }
+                        downloadURL = await _images.uploadProfilePic(file: newFile!, oldImageURL: _initialImageURL);
                       }
 
                       await UserDataDatabaseService(currUserRef: userData.userRef).updateProfile(
                         displayedName: _displayedName ?? userData.displayedName,
-                        imageURL: newFileURL, // _initialImageURL ?? userData.imageURL,
+                        imageURL: downloadURL, // _initialImageURL ?? userData.imageURL,
                         onValue: handleValue,
                         onError: handleError,
                       );

@@ -15,7 +15,7 @@ import 'package:hs_connect/shared/tools/formListener.dart';
 class CommentCard extends StatefulWidget {
   final Comment comment;
   final DocumentReference currUserRef;
-  final voidDocParamFunction switchFormBool;
+  final VoidDocParamFunction switchFormBool;
 
   CommentCard({
     Key? key,

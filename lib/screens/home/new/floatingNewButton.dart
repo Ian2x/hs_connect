@@ -7,7 +7,7 @@ FloatingActionButton floatingNewButton(BuildContext context) {
   return FloatingActionButton(
     child: Icon(Icons.add),
     onPressed: () {
-      Navigator.pushReplacement(
+      Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => NewPost()),
       );

@@ -5,13 +5,13 @@ import 'package:image_picker/image_picker.dart';
 import '../constants.dart';
 
 IconButton picPickerButton(
-    {required Function setPic, iconSize = 12.0, maxHeight = 400.0, maxWidth = 400.0, imageQuality = 100}) {
+    {required Function setPic, iconSize = 12.0, maxHeight = 400.0, maxWidth = 400.0, imageQuality = 100, Color? color}) {
   return IconButton(
     icon: Icon(Icons.photo),
     iconSize: iconSize,
     constraints: BoxConstraints(),
     padding: EdgeInsets.only(left: 5, right: 5),
-    color: ThemeColor.lightMediumGrey,
+    color: color != null ? color : ThemeColor.lightMediumGrey,
     onPressed: () async {
       try {
         final pickedFile = await ImagePicker().pickImage(
