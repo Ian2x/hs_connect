@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
-
 import '../profileForm.dart';
 
 class ProfileImage extends StatelessWidget {
   final String currUserName;
   final bool showEditIcon;
-  final Widget? profileImage;
+  final Widget profileImage;
   final String? profileImageURL;
-  final bool profileImageExists;
 
   const ProfileImage({
     Key? key,
@@ -18,7 +16,6 @@ class ProfileImage extends StatelessWidget {
     required this.showEditIcon,
     required this.profileImage,
     required this.profileImageURL,
-    required this.profileImageExists,
   }) : super(key: key);
 
   @override
@@ -41,10 +38,6 @@ class ProfileImage extends StatelessWidget {
 
   Widget buildImage() {
 
-    Widget? content = profileImage;
-    if (profileImageExists == false) {
-      content = buildDefaultImage();
-    }
     return Container(
         width: 100,
         height: 100,
@@ -52,13 +45,13 @@ class ProfileImage extends StatelessWidget {
             shape: BoxShape.circle,
             color: Colors.white54,
             border: Border.all(color: ThemeColor.black, width: 1),
-            image: content is Image
+            image: profileImage is Image
                 ? DecorationImage(
                     fit: BoxFit.fill,
-                    image: content.image,
+                    image: (profileImage as Image).image,
                   )
                 : null),
-        child: content is Image ? null : content);
+        child: profileImage is Image ? null : profileImage);
   }
 
   Widget buildEditIcon(Color color, BuildContext context) => GestureDetector(
