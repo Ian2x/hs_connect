@@ -39,6 +39,8 @@ class _PostCardState extends State<PostCard> {
   bool inDomain = false;
   Image? postImage;
 
+  UserData? fetchUserData;
+
 
   @override
   void initState() {
@@ -79,11 +81,11 @@ class _PostCardState extends State<PostCard> {
 
   void getUserData() async {
     UserDataDatabaseService _userDataDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserRef);
-    final UserData? fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.post.creatorRef);
+    fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.post.creatorRef);
     if (mounted) {
       setState(() {
-        username = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
-        userDomain = fetchUserData != null ? fetchUserData.domain : '<Failed to retrieve user domain>';
+        username = fetchUserData != null ? fetchUserData!.displayedName: '<Failed to retrieve user name>';
+        userDomain = fetchUserData != null ? fetchUserData!.domain : '<Failed to retrieve user domain>';
       });
     }
   }
@@ -134,7 +136,10 @@ class _PostCardState extends State<PostCard> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => PostPage(postRef: widget.post.postRef, currUserRef: widget.currUserRef,)),
+          MaterialPageRoute(builder: (context) =>
+              PostPage(postRef: widget.post.postRef, currUserRef: widget.currUserRef,
+                userData: fetchUserData!,
+              )),
         );
       },
       child: Card(

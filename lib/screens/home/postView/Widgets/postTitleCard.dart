@@ -12,6 +12,7 @@ import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/widgets/groupTag.dart';
+import 'package:hs_connect/shared/widgets/widgetDisplay.dart';
 
 class PostTitleCard extends StatefulWidget {
   final Post post;
@@ -35,12 +36,18 @@ class _PostTitleCardState extends State<PostTitleCard> {
   bool disliked = false;
   int commentCount=0;
   String commentString="Comments";
+
   String? imageString;
+  Image? groupImage;
   String? groupColor;
+
   String userDomain = '';
   String creatorName = '';
   String groupName = '';
-  Image? groupImage;
+
+  String? postImageString;
+  Image? postImage;
+
 
   @override
   void initState() {
@@ -160,15 +167,19 @@ class _PostTitleCardState extends State<PostTitleCard> {
                   )
                 ]
               ), //introRow
-              SizedBox(height:0),
               Text( widget.post.title,
-                style: ThemeText.postViewTitle(fontSize:18, color: ThemeColor.black, height:1.5),
+                style: ThemeText.postViewTitle(fontSize:19, color: ThemeColor.black, height:1.5),
               ),
               SizedBox(height:8),
-              widget.post.text!= null ?
+              widget.post.text!= null && widget.post.text!=""?
                 Text( widget.post.text!,
                   style: ThemeText.postViewText(fontSize:16, color: ThemeColor.mediumGrey, height: 1.5)) : Container(),
-              widget.post.text!= null ?  SizedBox(height:20): Container(),
+              widget.post.mediaURL != null ?
+                imageContainer(imageString: widget.post.mediaURL!)
+                  : Container(),
+              widget.post.text!= null && widget.post.text!=""?
+                  SizedBox(height:10): Container(),
+              SizedBox(height:10),
               Row(
                 children: [
                   GroupTag(groupImage: groupImage, groupName: groupName,

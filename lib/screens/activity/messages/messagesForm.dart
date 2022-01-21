@@ -54,11 +54,10 @@ class _MessagesFormState extends State<MessagesForm> {
     MessagesDatabaseService _messages = MessagesDatabaseService(currUserRef: userData.userRef);
 
     return Container(
-            color: Colors.transparent,
-            child: Form(
+       child: Form(
               key: _formKey,
               child: Column(crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
+              children: <Widget>[
                 newFile != null
                     ? Semantics(
                         label: 'new_message_image',

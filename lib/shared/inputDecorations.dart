@@ -26,16 +26,32 @@ typedef VoidFileParamFunction = void Function (File?);
 
 InputDecoration commentReplyInputDecoration({required VoidFunction onPressed, required Function setPic, required bool isReply}) {
   return InputDecoration(
-    fillColor: Colors.white,
+
+    fillColor: ThemeColor.white, filled: true,
     hintText: isReply != false ? "Reply..." : "Comment...",
-    filled: true,
-    isDense: true,
-    contentPadding: EdgeInsets.all(0.0),
-    enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white, width: 1.0)),
-    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.pink, width: 1.0)),
+    hintStyle: ThemeText.roboto(fontSize: 16, color: ThemeColor.lightMediumGrey),
+    labelStyle: ThemeText.roboto(fontSize: 16, color: ThemeColor.lightMediumGrey),
+    contentPadding: EdgeInsets.fromLTRB(20, 14, 0, 14),
+    border: new OutlineInputBorder(
+      borderRadius: new BorderRadius.circular(25.7),
+      borderSide: new BorderSide(width: 3.0, color: ThemeColor.lightGrey),
+    ),
+    enabledBorder: new OutlineInputBorder(
+        borderRadius: new BorderRadius.circular(25.7),
+        borderSide: new BorderSide(width: 3.0, color: ThemeColor.lightGrey)),
+    focusedBorder: OutlineInputBorder(
+        borderRadius: new BorderRadius.circular(25.7),
+        borderSide: new BorderSide(width: 3.0, color: ThemeColor.lightGrey)),
     suffixIcon: Row(mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.min, children: <Widget>[
-      picPickerButton(setPic: setPic),
-      IconButton(icon: Icon(Icons.send), iconSize: 12.0, onPressed: onPressed),
+      picPickerButton(setPic: setPic, iconSize: 16.0),
+      IconButton(
+          icon: Icon(Icons.send),
+          color: ThemeColor.lightMediumGrey,
+          iconSize: 16.0,
+          padding: EdgeInsets.only(left: 5, right: 15),
+          splashColor: Colors.transparent,
+          onPressed: onPressed,
+          constraints: BoxConstraints()),
     ]),
   );
 }
