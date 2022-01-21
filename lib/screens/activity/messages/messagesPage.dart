@@ -12,8 +12,8 @@ import 'messagesFeed.dart';
 class MessagesPage extends StatelessWidget {
   final DocumentReference otherUserRef;
   final DocumentReference currUserRef;
-  final voidFunction onUpdateLastMessage;
-  final voidFunction onUpdateLastViewed;
+  final VoidFunction onUpdateLastMessage;
+  final VoidFunction onUpdateLastViewed;
 
   const MessagesPage(
       {Key? key,
