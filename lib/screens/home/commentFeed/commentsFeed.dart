@@ -87,14 +87,19 @@ class _CommentsFeedState extends State<CommentsFeed> {
           Positioned(
             bottom:0,
             right:0,
-            child:
-              CommentReplyForm(
-                  switchFormBool: switchFormBool,
-                  commentReference: commentRef,
-                  isReply: isReply,
-                  postRef: widget.post.postRef,
-                  groupRef: widget.groupRef,
-                postCreatorRef: widget.post.creatorRef,),
+            child: Container (
+            width: MediaQuery.of(context).size.width,
+            padding: EdgeInsets.fromLTRB(10.0, 10, 10.0, 10.0),
+            color: ThemeColor.backgroundGrey,
+            child: CommentReplyForm(
+              switchFormBool: switchFormBool,
+              commentReference: commentRef,
+              isReply: isReply,
+              postRef: widget.post.postRef,
+              groupRef: widget.groupRef,
+              postCreatorRef: widget.post.creatorRef,)
+            )
+              ,
           ),
       ],
     );

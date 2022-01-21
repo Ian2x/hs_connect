@@ -114,7 +114,7 @@ class _CommentCardState extends State<CommentCard> {
           ),
         ),
         Container(
-          padding: EdgeInsets.fromLTRB(20.0, 5, 0, 0),
+          padding: EdgeInsets.fromLTRB(20.0, 5, 10.0, 0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -152,7 +152,7 @@ class _CommentCardState extends State<CommentCard> {
                             text: TextSpan(
                               children: <TextSpan>[
                                 TextSpan(text: widget.comment.text,
-                                    style: ThemeText.postViewText(color: ThemeColor.black, fontSize: 15, height: 1.5)),
+                                    style: ThemeText.postViewText(color: ThemeColor.black, fontSize: 14, height: 1.5)),
                               ],
                             ),
                           ),
@@ -164,7 +164,7 @@ class _CommentCardState extends State<CommentCard> {
                             ),
                             Spacer(flex:1),
                             TextButton(
-                                child: Text("Reply", style: ThemeText.groupBold(color: ThemeColor.secondaryBlue, fontSize:14)),
+                                child: Text("Reply", style: ThemeText.groupBold(color: ThemeColor.secondaryBlue, fontSize:15)),
                                 onPressed: (){
                                   widget.switchFormBool(widget.comment.commentRef);
                                 }

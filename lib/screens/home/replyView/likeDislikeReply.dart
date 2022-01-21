@@ -4,8 +4,8 @@ import 'package:hs_connect/models/reply.dart';
 import 'package:hs_connect/services/replies_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 
-const double iconSize = 20;
-const EdgeInsets iconPadding = EdgeInsets.all(0);
+const double iconSize = 25;
+const EdgeInsets iconPadding = EdgeInsets.all(3.0);
 
 class LikeDislikeReply extends StatefulWidget {
   final DocumentReference currUserRef;
@@ -90,7 +90,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
         }(),
         Text(
           (likeCount - dislikeCount).toString(),
-          style: ThemeText.inter(fontSize: 16)
+          style: ThemeText.inter(fontSize: 14)
         ),
         () {
           if (likeStatus == true) {

@@ -9,7 +9,7 @@ class imageContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-    margin: const EdgeInsets.only(left: 5.0, right: 5.0, top: 10.0, bottom: 10.0),
+    margin: const EdgeInsets.only(left: 5.0, right: 5.0, top: 10.0, bottom: 0.0),
     child:Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

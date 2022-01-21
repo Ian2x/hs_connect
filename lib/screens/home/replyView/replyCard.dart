@@ -82,14 +82,14 @@ class _ReplyCardState extends State<ReplyCard> {
       children: [
         Positioned(
           top:-10,
-          right:0,
+          right:-10,
           child:IconButton(icon: Icon(Icons.more_horiz),
             iconSize: 20,
             onPressed: (){},
           ),
         ),
         Container(
-            padding: EdgeInsets.fromLTRB(20.0, 5, 0, 5.0),
+            padding: EdgeInsets.fromLTRB(20.0, 5, 0.0, 5.0),
             child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
