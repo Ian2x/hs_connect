@@ -11,6 +11,7 @@ import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/tools/formListener.dart';
+import 'package:hs_connect/shared/widgets/reportSheet.dart';
 
 class CommentCard extends StatefulWidget {
   final Comment comment;
@@ -110,7 +111,20 @@ class _CommentCardState extends State<CommentCard> {
           right:0,
           child:IconButton(icon: Icon(Icons.more_horiz),
             iconSize: 20,
-            onPressed: (){},
+            onPressed: (){
+              showModalBottomSheet(
+                  context: context,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20),
+                      )),
+                  builder: (context) => new reportSheet(
+                    reportType: ReportType.comment,
+                    entityRef: widget.comment.commentRef,
+                    reporterRef: widget.currUserRef,
+                  ));
+
+            },
           ),
         ),
         Container(

@@ -6,6 +6,7 @@ import 'package:hs_connect/screens/home/commentView/likeDislikeComment.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
+import 'package:hs_connect/shared/widgets/reportSheet.dart';
 
 import 'likeDislikeReply.dart';
 
@@ -85,7 +86,20 @@ class _ReplyCardState extends State<ReplyCard> {
           right:-10,
           child:IconButton(icon: Icon(Icons.more_horiz),
             iconSize: 20,
-            onPressed: (){},
+            onPressed: (){
+              showModalBottomSheet(
+                  context: context,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20),
+                      )),
+                  builder: (context) => new reportSheet(
+                    reportType: ReportType.reply,
+                    entityRef: widget.reply.replyRef,
+                    reporterRef: widget.currUserRef,
+                  ));
+
+            },
           ),
         ),
         Container(
