@@ -5,7 +5,7 @@ import '../constants.dart';
 
 class DeletableImage extends StatelessWidget {
   final Image image;
-  final voidFunction onDelete;
+  final VoidFunction onDelete;
   final double width;
   final double height;
   final double buttonSize;
@@ -44,7 +44,7 @@ class DeletableImage extends StatelessWidget {
 }
 
 class DeleteImageButton extends StatelessWidget {
-  final voidFunction onDelete;
+  final VoidFunction onDelete;
   final double buttonSize;
   const DeleteImageButton({Key? key, required this.onDelete, required this.buttonSize}) : super(key: key);
 

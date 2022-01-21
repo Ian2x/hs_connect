@@ -13,8 +13,8 @@ import 'package:provider/provider.dart';
 class MessagesForm extends StatefulWidget {
   final DocumentReference currUserRef;
   final DocumentReference otherUserRef;
-  final voidFunction onUpdateLastMessage;
-  final voidFunction onUpdateLastViewed;
+  final VoidFunction onUpdateLastMessage;
+  final VoidFunction onUpdateLastViewed;
 
   const MessagesForm({Key? key, required this.currUserRef, required this.otherUserRef, required this.onUpdateLastMessage, required this.onUpdateLastViewed}) : super(key: key);
 

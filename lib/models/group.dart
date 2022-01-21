@@ -28,7 +28,7 @@ class Group {
   final DocumentReference groupRef;
   final DocumentReference? creatorRef;
   final List<DocumentReference> moderatorRefs;
-  final String name;
+  String name;
   final String nameLC;
   final String? image;
   final String description;

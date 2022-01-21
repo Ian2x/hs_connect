@@ -97,7 +97,7 @@ class _PostPageState extends State<PostPage> {
             children: [
               Container(
                 constraints: BoxConstraints(
-                  minHeight:MediaQuery.of(context).size.height,
+                  minHeight: MediaQuery.of(context).size.height,
                 ),
                 child:
                   CommentsFeed(post: post!, groupRef: post!.groupRef),

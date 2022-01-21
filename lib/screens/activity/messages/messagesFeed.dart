@@ -14,7 +14,7 @@ import 'messagesBubble.dart';
 class MessagesFeed extends StatefulWidget {
   final DocumentReference otherUserRef;
   final DocumentReference currUserRef;
-  final voidFunction onUpdateLastViewed;
+  final VoidFunction onUpdateLastViewed;
   const MessagesFeed({Key? key, required this.otherUserRef, required this.currUserRef, required this.onUpdateLastViewed}) : super(key: key);
 
   @override
