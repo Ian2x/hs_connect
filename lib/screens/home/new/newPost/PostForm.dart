@@ -10,6 +10,7 @@ import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/noAnimationMaterialPageRoute.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
+import 'package:hs_connect/shared/widgets/groupTag.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/widgets/tagOutline.dart';
@@ -40,6 +41,7 @@ class _PostFormState extends State<PostForm> {
     }
   }
 
+
   void handleValue(val) {
     loading = false;
     Navigator.pop(context);
@@ -62,11 +64,12 @@ class _PostFormState extends State<PostForm> {
 
   bool hasPic = false;
   bool hasPoll = false;
-
-
-
-
   ImageStorage _images = ImageStorage();
+
+  bool groupIsChecked=false;
+  bool publicIsChecked=false;
+
+  String intendedPostGroup="";
 
   addImage (File? imageFile){
     setState((){
@@ -85,25 +88,21 @@ class _PostFormState extends State<PostForm> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
+
+
     double phoneHeight = MediaQuery.of(context).size.height - 200;
 
-
     final userData = Provider.of<UserData?>(context);
-
     if (userData == null) {
       // Don't expect to be here, but just in case
       return Loading();
+    } else {
+      intendedPostGroup = userData.fullDomainName!;
     }
 
     GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: userData.userRef);
-
-    if (userData == null) {
-      // Don't expect to be here, but just in case
-      return Loading();
-    }
 
     void submitForm() async {
       if (_formKey.currentState != null && _formKey.currentState!.validate()) {
@@ -137,9 +136,6 @@ class _PostFormState extends State<PostForm> {
 
   Widget buildSheetRow (Group group) {
 
-
-      bool GroupisChecked=false;
-      bool PublicisChecked=false;
 
      //Two are never equal
 
@@ -185,21 +181,22 @@ class _PostFormState extends State<PostForm> {
                         shape: CircleBorder(),
                         onChanged: (bool? value) {
                           setState(() {
-
                             if (group.name != "Public"){
-                              GroupisChecked= value!;
+                              groupIsChecked= value!;
                               //PublicisChecked=false;
-                              print ("Group: " + GroupisChecked.toString());
-                              print ("Public: " + PublicisChecked.toString());
+                              print ("Group: " + groupIsChecked.toString());
+                              print ("Public: " + publicIsChecked.toString());
                             } else {
-                              PublicisChecked = value!;
+                              publicIsChecked = value!;
                               //GroupisChecked = false;
-                              print ("Group: " + GroupisChecked.toString());
-                              print ("Public: " + PublicisChecked.toString());
+                              print ("Group: " + groupIsChecked.toString());
+                              print ("Public: " + publicIsChecked.toString());
                             }
                             _groupRef = group.groupRef;
+                            intendedPostGroup = group.name;
+                            print (intendedPostGroup);
                           });
-                        }, value: group.name != "Public" ? GroupisChecked: PublicisChecked,
+                        }, value: group.name != "Public" ? groupIsChecked: publicIsChecked,
                       ),
                     ),
 
@@ -216,8 +213,7 @@ class _PostFormState extends State<PostForm> {
       });
     }
 
-
-    Widget buildSheet(List<Group> Groups){
+  Widget buildSheet(List<Group> Groups){
 
       return Container(
         padding: EdgeInsets.fromLTRB( 20.0,0.0, 20.0, 40.0),
@@ -253,7 +249,6 @@ class _PostFormState extends State<PostForm> {
         )
       );
     }
-
 
     return
       Stack(
@@ -297,17 +292,41 @@ class _PostFormState extends State<PostForm> {
                           },
                         ),
                         Spacer(),
-                        TagOutline(
-                          textOnly:false,
-                          widget: TextButton(
+                        Theme(
+                          data: ThemeData(
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                          ),
+                          child: TextButton(
                             onPressed:()=> showModalBottomSheet(context: context,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(20),
-                                  )
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(20),
+                                    )
                                 ),
                                 builder: (context)=> buildSheet(groups)),
-                            child: Text("Lawrenceville"),
+                            child:
+                            Container(
+                                alignment: Alignment.center,
+                                padding: EdgeInsets.fromLTRB(8,6,8,6),
+                                decoration: ShapeDecoration(
+                                  color: ThemeColor.lightGrey,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(9),
+                                  ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Text(intendedPostGroup,
+                                      style:ThemeText.regularSmall(fontSize: 18,
+                                        color: ThemeColor.black,
+                                      ),
+                                    ),
+                                    SizedBox(width:5),
+                                    Icon(Icons.keyboard_arrow_down_rounded),
+                                  ],
+                                )
+                            ),
                           ),
                         ),
                         Spacer(),
