@@ -78,83 +78,79 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
 
     CommentsDatabaseService _comments = CommentsDatabaseService(currUserRef: userData.userRef, postRef: widget.postRef);
 
-    return Container(
-        width: MediaQuery.of(context).size.width,
-        //height: 100,
-        color: ThemeColor.backgroundGrey,
-        child:
-          Form(
-            key:_formKey,
-            child: TextFormField(
-              initialValue: '',
-              decoration: commentReplyInputDecoration(
-                  isReply: widget.isReply,
-                  onPressed: () async {
-                    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-                      if (mounted) {
-                        setState(() => loading = true);
-                      }
-
-                      if (newFile != null) {
-                        // upload newFile
-                        final downloadURL = await _images.uploadImage(file: newFile!);
-                        if (mounted) {
-                          setState(() {
-                            newFileURL = downloadURL;
-                          });
-                        }
-                      }
-
-                      if (widget.isReply){
-                        widget.switchFormBool(null);
-                        await RepliesDatabaseService(currUserRef: userData.userRef).newReply(
-                          postRef: widget.postRef,
-                          commentRef: widget.commentReference!,
-                          text: _text,
-                          media: newFileURL,
-                          onValue: handleValue,
-                          onError: handleError,
-                          groupRef: widget.groupRef,
-                          postCreatorRef: widget.postCreatorRef,
-                        );
-                      } else {
-                        await _comments.newComment(
-                          postRef: widget.postRef,
-                          text: _text,
-                          media: newFileURL,
-                          onValue: handleValue,
-                          onError: handleError,
-                          groupRef: widget.groupRef,
-                          postCreatorRef: widget.postCreatorRef,
-                        );
-                      }
-                    }
-                    _formKey.currentState?.reset();
-                  },
-                  setPic: setPic),
-              validator:
-                widget.isReply!= false ? (val) {
-                    if (val == null) return 'Write a reply...';
-                    if (val.isEmpty)
-                      return 'Can\'t create an empty reply';
-                    else
-                  return null;
+    return
+      Form(
+        key:_formKey,
+        child: TextFormField(
+          maxLines: null,
+          initialValue: '',
+          decoration: commentReplyInputDecoration(
+              isReply: widget.isReply,
+              onPressed: () async {
+                if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+                  if (mounted) {
+                    setState(() => loading = true);
                   }
-                : (val) {
-                  if (val == null) return 'Write a comment...';
-                  if (val.isEmpty)
-                    return 'Can\'t create an empty comment';
-                  else
-                    return null;
+
+                  if (newFile != null) {
+                    // upload newFile
+                    final downloadURL = await _images.uploadImage(file: newFile!);
+                    if (mounted) {
+                      setState(() {
+                        newFileURL = downloadURL;
+                      });
+                    }
+                  }
+
+                  if (widget.isReply){
+                    widget.switchFormBool(null);
+                    await RepliesDatabaseService(currUserRef: userData.userRef).newReply(
+                      postRef: widget.postRef,
+                      commentRef: widget.commentReference!,
+                      text: _text,
+                      media: newFileURL,
+                      onValue: handleValue,
+                      onError: handleError,
+                      groupRef: widget.groupRef,
+                      postCreatorRef: widget.postCreatorRef,
+                    );
+                  } else {
+                    await _comments.newComment(
+                      postRef: widget.postRef,
+                      text: _text,
+                      media: newFileURL,
+                      onValue: handleValue,
+                      onError: handleError,
+                      groupRef: widget.groupRef,
+                      postCreatorRef: widget.postCreatorRef,
+                    );
+                  }
                 }
-               ,
-              onChanged: (val) {
-                if (mounted) {
-                  setState(() => _text = val);
-                }
+                _formKey.currentState?.reset();
               },
-            ),
-          )
+              setPic: setPic),
+          validator:
+            widget.isReply!= false ? (val) {
+                if (val == null) return 'Write a reply...';
+                if (val.isEmpty)
+                  return 'Can\'t create an empty reply';
+                else
+              return null;
+              }
+            : (val) {
+              if (val == null) return 'Write a comment...';
+              if (val.isEmpty)
+                return 'Can\'t create an empty comment';
+              else
+                return null;
+            }
+           ,
+          onChanged: (val) {
+            if (mounted) {
+              setState(() => _text = val);
+            }
+          },
+        ),
       );
   }
 }

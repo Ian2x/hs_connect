@@ -6,6 +6,7 @@ import 'package:hs_connect/models/myNotification.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/postView/postPage.dart';
+import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
@@ -28,12 +29,15 @@ class _NotificationCardState extends State<NotificationCard> {
   String? sourceUserFullDomainName;
   String? postGroupName;
 
+  UserData? userData;
+
   @override
   void initState() {
     fetchPostGroup();
     fetchSourceUser();
     super.initState();
   }
+
 
   void fetchPostGroup() async {
     final postData = await widget.myNotification.parentPostRef.get();
@@ -91,6 +95,7 @@ class _NotificationCardState extends State<NotificationCard> {
               context,
               MaterialPageRoute(
                   builder: (context) => new PostPage(
+                        userData: userData,
                         postRef: widget.myNotification.parentPostRef,
                         currUserRef: userData.userRef,
                       )));
