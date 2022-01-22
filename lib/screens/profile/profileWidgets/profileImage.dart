@@ -43,8 +43,8 @@ class ProfileImage extends StatelessWidget {
         height: 100,
         decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: Colors.white54,
-            border: Border.all(color: ThemeColor.black, width: 1),
+            color: ThemeColor.backgroundGrey,
+            border: Border.all(color: ThemeColor.backgroundGrey, width: 1.5),
             image: profileImage is Image
                 ? DecorationImage(
                     fit: BoxFit.fill,
@@ -66,7 +66,7 @@ class ProfileImage extends StatelessWidget {
           color: Colors.white,
           all: 3,
           child: buildCircle(
-            color: color,
+            color: ThemeColor.secondaryBlue,
             all: 8,
             child: Icon(
               Icons.edit,

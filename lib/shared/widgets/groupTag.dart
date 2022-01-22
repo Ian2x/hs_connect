@@ -26,7 +26,7 @@ class GroupTag extends StatelessWidget {
       decoration: ShapeDecoration(
         color: ThemeColor.lightGrey,
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(fontSize/1.8),
+            borderRadius: BorderRadius.circular(fontSize/2),
             ),
       ),
       child: Row(
@@ -45,7 +45,7 @@ class GroupTag extends StatelessWidget {
           groupImage!=null ? SizedBox(width: fontSize / 3) : Container(),
           Text( groupName,
             style:ThemeText.regularSmall(fontSize: fontSize,
-              color: groupColor,
+              color: groupColor != null ? groupColor : ThemeColor.black,
             ),
           )
         ],

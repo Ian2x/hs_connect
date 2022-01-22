@@ -29,3 +29,9 @@ bool isToday(DateTime dt) {
   final today = DateTime(now.year, now.month, now.day);
   return today==DateTime(dt.year, dt.month, dt.day);
 }
+
+extension IanTime on DateTime {
+  int ianTime() {
+    return this.millisecondsSinceEpoch ~/ (1000 * 60 * 60 * 3);
+  }
+}

@@ -33,7 +33,7 @@ class Reply {
   });
 }
 
-replyFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
+Reply replyFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
   final accessRestriction = querySnapshot.get(C.accessRestriction);
   return Reply(
     replyRef: querySnapshot.reference,

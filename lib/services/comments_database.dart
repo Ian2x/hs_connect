@@ -41,10 +41,10 @@ class CommentsDatabaseService {
       C.extraData: text
     }])});
 
-    // update post's commentsRefs and lastUpdated
+    // update post's commentsRefs and score
     postRef.update({
       C.numComments: FieldValue.increment(1),
-      C.lastUpdated: DateTime.now(),
+      C.score: FieldValue.increment(3)
     });
     // get accessRestriction
     final group = await groupRef.get();
@@ -63,7 +63,6 @@ class CommentsDatabaseService {
           C.likes: [],
           C.dislikes: [],
           C.numReports: 0,
-          C.lastUpdated: DateTime.now(),
         })
         .then(onValue)
         .catchError(onError);
@@ -98,12 +97,9 @@ class CommentsDatabaseService {
   }
 
   Future<void> likeComment(DocumentReference commentCreatorRef, int likeCount) async {
-    // remove dislike if disliked
+    // remove dislike if disliked and like comment
     await commentRef!.update({
-      C.dislikes: FieldValue.arrayRemove([currUserRef])
-    });
-    // like comment
-    await commentRef!.update({
+      C.dislikes: FieldValue.arrayRemove([currUserRef]),
       C.likes: FieldValue.arrayUnion([currUserRef])
     });
     if (likeCount==1 || likeCount==10 || likeCount==20 || likeCount==50 || likeCount==100) {
@@ -137,12 +133,9 @@ class CommentsDatabaseService {
   }
 
   Future<void> dislikeComment() async {
-    // remove like if liked
+    // remove like if liked and dislike comment
     await commentRef!.update({
-      C.likes: FieldValue.arrayRemove([currUserRef])
-    });
-    // dislike comment
-    return await commentRef!.update({
+      C.likes: FieldValue.arrayRemove([currUserRef]),
       C.dislikes: FieldValue.arrayUnion([currUserRef])
     });
   }

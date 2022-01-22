@@ -31,6 +31,9 @@ class _Main2State extends State<Main2> {
             selectionColor: ThemeColor.darkGrey,
             selectionHandleColor: ThemeColor.darkGrey,
           ),
+          textTheme: TextTheme(
+
+          ),
           splashColor: Colors.transparent,
           backgroundColor: ThemeColor.backgroundGrey,
         ),

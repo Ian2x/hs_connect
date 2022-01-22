@@ -9,14 +9,35 @@ import 'package:hs_connect/shared/widgets/postsListView.dart';
 import 'package:provider/provider.dart';
 
 class DomainFeed extends StatefulWidget {
-  const DomainFeed({Key? key}) : super(key: key);
+  final UserData currUser;
+
+  const DomainFeed({Key? key, required this.currUser}) : super(key: key);
 
   @override
   _DomainFeedState createState() => _DomainFeedState();
 }
 
 class _DomainFeedState extends State<DomainFeed> {
-  String groupId = '';
+  final scrollController = ScrollController();
+
+  List<Post> posts = [];
+  DocumentSnapshot? lastVisiblePost;
+
+  late PostsDatabaseService _posts;
+
+  @override
+  void initState() {
+    _posts = PostsDatabaseService(currUserRef: widget.currUser.userRef);
+    getInitialPosts();
+    scrollController.addListener(() {
+      if (scrollController.position.atEdge) {
+        if (scrollController.position.pixels != 0) {
+          getNextPosts();
+        }
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,21 +45,41 @@ class _DomainFeedState extends State<DomainFeed> {
 
     if (userData == null) return Loading();
 
-    PostsDatabaseService _posts = PostsDatabaseService(currUserRef: userData.userRef, groupRefs: [FirebaseFirestore.instance.collection(C.groups).doc(userData.domain)]);
-
-    return StreamBuilder(
-      stream: _posts.posts,
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Loading();
-        } else {
-          List<Post?> postss = (snapshot.data as List<Post?>);
-          postss.removeWhere((value) => value == null);
-          List<Post> posts = postss.map((item) => item!).toList();
-
-          return postsListView(posts: posts, currUserRef: userData.userRef);
-        }
-      },
+    return RefreshIndicator(
+        child: postsListView(posts: posts, controller: scrollController, currUserRef: userData.userRef),
+        onRefresh: getInitialPosts
     );
+  }
+
+  Future getInitialPosts() async {
+    List<Post?> tempPosts = await _posts.getPostsByGroups(
+        [FirebaseFirestore.instance.collection(C.groups).doc(widget.currUser.domain)],
+        setStartFrom: setLastVisiblePost);
+    tempPosts.removeWhere((value) => value == null);
+    if (mounted) {
+      setState(() {
+        posts = tempPosts.map((item) => item!).toList();
+      });
+    }
+  }
+
+  Future getNextPosts() async {
+    List<Post?> tempPosts = await _posts.getPostsByGroups(
+        [FirebaseFirestore.instance.collection(C.groups).doc(widget.currUser.domain)],
+        startingFrom: lastVisiblePost!, setStartFrom: setLastVisiblePost);
+    tempPosts.removeWhere((value) => value == null);
+    if (mounted) {
+      setState(() {
+        posts = posts + tempPosts.map((item) => item!).toList();
+      });
+    }
+  }
+
+  void setLastVisiblePost(DocumentSnapshot ds) {
+    if (mounted) {
+      setState(() {
+        lastVisiblePost = ds;
+      });
+    }
   }
 }

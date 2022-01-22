@@ -13,6 +13,7 @@ import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/groupTag.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
+import 'package:hs_connect/shared/widgets/reportSheet.dart';
 import 'package:hs_connect/shared/widgets/widgetDisplay.dart';
 
 
@@ -161,13 +162,30 @@ class _PostCardState extends State<PostCard> {
                       children: [
                         Row(
                           children: [
-                            Text("in ", style: ThemeText.inter(fontSize: 14, color: groupColor!=null ? HexColor(groupColor!) : ThemeColor.black)),
+                            //Text("in ", style: ThemeText.inter(fontSize: 14, color: groupColor!=null ? HexColor(groupColor!) : ThemeColor.mediumGrey)),
                             GroupTag( groupColor: groupColor != null ? HexColor(groupColor!) : null, groupImage:groupImage, groupName: groupName, fontSize:12),
                             Text(
                             " • " + convertTime(widget.post.createdAt.toDate()), style: ThemeText.inter(color: ThemeColor.mediumGrey, fontSize:14),
                             ),
                             Spacer(),
-                            Icon(Icons.more_horiz),
+                            IconButton(
+                              constraints: BoxConstraints(),
+                              splashRadius:.1,
+                              icon:Icon(Icons.more_horiz, size: 20, color: ThemeColor.mediumGrey),
+                              onPressed: (){
+                                 showModalBottomSheet(
+                                  context: context,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(20),
+                                  )),
+                                  builder: (context) => new reportSheet(
+                                      reportType: ReportType.post,
+                                      entityRef: widget.post.postRef,
+                                      reporterRef: widget.currUserRef,
+                                      ));
+                           },
+                          ),
                             SizedBox(width: 6),
                           ],
                         ),

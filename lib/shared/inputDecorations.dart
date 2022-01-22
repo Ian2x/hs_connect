@@ -9,6 +9,7 @@ import 'package:hs_connect/shared/widgets/picPickerButton.dart';
 
 import 'constants.dart';
 
+// used for authentication and profile form
 const textInputDecoration = InputDecoration(
   fillColor: Colors.white,
   filled: true,
@@ -24,9 +25,13 @@ typedef VoidDocParamFunction = void Function (DocumentReference?);
 
 typedef VoidFileParamFunction = void Function (File?);
 
-InputDecoration commentReplyInputDecoration({required VoidFunction onPressed, required Function setPic, required bool isReply}) {
-  return InputDecoration(
+typedef VoidPollDataParamFunction = void Function (int, String);
 
+typedef VoidDocSnapParamFunction = void Function (DocumentSnapshot);
+
+
+InputDecoration commentReplyInputDecoration({required VoidFunction onPressed, required Function setPic, required bool isReply, required bool isFocused}) {
+  return InputDecoration(
     fillColor: ThemeColor.white, filled: true,
     hintText: isReply != false ? "Reply..." : "Comment...",
     hintStyle: ThemeText.roboto(fontSize: 16, color: ThemeColor.lightMediumGrey),
@@ -42,7 +47,7 @@ InputDecoration commentReplyInputDecoration({required VoidFunction onPressed, re
     focusedBorder: OutlineInputBorder(
         borderRadius: new BorderRadius.circular(25.7),
         borderSide: new BorderSide(width: 3.0, color: ThemeColor.lightGrey)),
-    suffixIcon: Row(mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.min, children: <Widget>[
+    suffixIcon: isFocused ? Row(mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.min, children: <Widget>[
       picPickerButton(setPic: setPic, iconSize: 16.0),
       IconButton(
           icon: Icon(Icons.send),
@@ -52,13 +57,13 @@ InputDecoration commentReplyInputDecoration({required VoidFunction onPressed, re
           splashColor: Colors.transparent,
           onPressed: onPressed,
           constraints: BoxConstraints()),
-    ]),
+    ]) : null,
   );
 }
 
-InputDecoration messageInputDecoration({required VoidFunction onPressed, required Function setPic, required String hintText}) {
+InputDecoration messageInputDecoration({required VoidFunction onPressed, required Function setPic}) {
   return InputDecoration(
-    hintText: hintText,
+    hintText: 'Message...',
     fillColor: ThemeColor.white,
     filled: true,
     hintStyle: ThemeText.roboto(fontSize: 16, color: ThemeColor.lightMediumGrey),

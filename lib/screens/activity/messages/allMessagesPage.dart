@@ -120,7 +120,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
               alignment: AlignmentDirectional.centerStart,
               children: <Widget>[
                 Container(
-                    margin: EdgeInsets.only(top: index == 0 ? 4.5 : 2),
+                    margin: EdgeInsets.only(top: index == 0 ? 4.5 : 2, bottom: index == cache.length - 1 ? 2.5 : 0),
                     padding: EdgeInsets.fromLTRB(20, 14, 14, 16),
                     color: ThemeColor.white,
                     child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
@@ -156,7 +156,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                     ? Container(
                         width: 10,
                         height: 10,
-                        margin: EdgeInsets.only(left: 6),
+                        margin: EdgeInsets.only(top: index == 0 ? 4.5 : 2, left: 6, bottom: index == cache.length - 1 ? 2.5 : 0),
                         decoration: new BoxDecoration(
                           color: ThemeColor.secondaryBlue,
                           shape: BoxShape.circle,

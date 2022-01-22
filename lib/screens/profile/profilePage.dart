@@ -17,7 +17,7 @@ class ProfilePage extends StatelessWidget {
       return Scaffold(
         backgroundColor: ThemeColor.white,
         appBar: profileAppBar(context),
-        body: ProfileBody(profileRef: profileRef, currUserRef: currUserRef,),
+        body: ProfileBody(profileUserRef: profileRef, currUserRef: currUserRef,),
         bottomNavigationBar: MyNavigationBar(
           currentIndex: 2,
         ),
@@ -25,7 +25,7 @@ class ProfilePage extends StatelessWidget {
     } else {
       return Scaffold(
         appBar: profileAppBar(context),
-        body: ProfileBody(profileRef: profileRef, currUserRef: currUserRef,),
+        body: ProfileBody(profileUserRef: profileRef, currUserRef: currUserRef,),
       );
     }
   }

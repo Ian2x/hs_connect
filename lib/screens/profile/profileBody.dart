@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/authenticate/authenticate.dart';
+import 'package:hs_connect/screens/profile/profilePostFeed.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/newMessageButton.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileName.dart';
 import 'package:hs_connect/services/groups_database.dart';
@@ -15,10 +16,10 @@ import 'package:hs_connect/screens/profile/profileWidgets/profileStats.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileImage.dart';
 
 class ProfileBody extends StatefulWidget {
-  final DocumentReference profileRef;
+  final DocumentReference profileUserRef;
   final DocumentReference currUserRef;
 
-  ProfileBody({Key? key, required this.profileRef, required this.currUserRef}) : super(key: key);
+  ProfileBody({Key? key, required this.profileUserRef, required this.currUserRef}) : super(key: key);
 
   @override
   _ProfileBodyState createState() => _ProfileBodyState();
@@ -36,7 +37,7 @@ class _ProfileBodyState extends State<ProfileBody> {
 
   void getProfileUserData() async {
     UserDataDatabaseService _userInfoDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserRef);
-    final UserData? fetchUserData = await _userInfoDatabaseService.getUserData(userRef: widget.profileRef);
+    final UserData? fetchUserData = await _userInfoDatabaseService.getUserData(userRef: widget.profileUserRef);
     if (fetchUserData != null && mounted) {
       setState(() {
         profileUsername = fetchUserData.displayedName;
@@ -79,7 +80,7 @@ class _ProfileBodyState extends State<ProfileBody> {
           profileImage: profileImage,
           profileImageURL: profileImageURL,
           currUserName: profileUsername,
-          showEditIcon: widget.profileRef == widget.currUserRef && widget.currUserRef == userData.userRef,
+          showEditIcon: widget.profileUserRef == widget.currUserRef && widget.currUserRef == userData.userRef,
         ),
         SizedBox(height: 10),
         ProfileName(name: profileUsername, domain: userData.domain),
@@ -106,24 +107,24 @@ class _ProfileBodyState extends State<ProfileBody> {
             Spacer(),
           ],
         ),
-        widget.profileRef != widget.currUserRef
+        widget.profileUserRef != widget.currUserRef
             ? Column(
                 children: <Widget>[
                   SizedBox(height: MediaQuery.of(context).size.height / 10),
                   Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
                     SizedBox(width: 45),
                     NewMessageButton(
-                      otherUserRef: widget.profileRef,
+                      otherUserRef: widget.profileUserRef,
                       currUserRef: widget.currUserRef,
                     )
                   ])
                 ],
               )
             : Column(
-          children: <Widget>[
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
             SizedBox(height: MediaQuery.of(context).size.height / 10),
-            Text("Not finished: Yur Posts")
-
+            profilePostFeed(profUserRef: widget.profileUserRef),
           ]
         )
       ],

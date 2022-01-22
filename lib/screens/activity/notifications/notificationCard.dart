@@ -86,7 +86,10 @@ class _NotificationCardState extends State<NotificationCard> {
         sourceUserFullDomainName == null ||
         postGroupName == null) {
       return Container(
-          margin: EdgeInsets.only(top: 5, bottom: 5), height: 70, color: ThemeColor.white, child: Container());
+          margin: EdgeInsets.only(top: 2),
+          padding: EdgeInsets.fromLTRB(14, 14, 14, 16),
+          height: 70,
+          color: ThemeColor.white);
     }
 
     return GestureDetector(

@@ -11,17 +11,16 @@ import 'package:hs_connect/services/replies_database.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 
 void defaultFunc(dynamic parameter) {}
 
 class PostsDatabaseService {
   final DocumentReference currUserRef;
-  List<DocumentReference>? groupRefs;
-  List<String>? searchTags;
-  final DocumentReference? postRef;
+  final DocumentReference? postRef; // for liking/disliking posts
 
-  PostsDatabaseService({required this.currUserRef, this.groupRefs, this.searchTags, this.postRef});
+  PostsDatabaseService({required this.currUserRef, this.postRef});
 
   ImageStorage _images = ImageStorage();
 
@@ -61,7 +60,8 @@ class PostsDatabaseService {
       C.numReports: 0,
       C.pollRef: pollRef,
       C.tag: tagString == '' ? null : tagString,
-      C.lastUpdated: DateTime.now(),
+      C.score: 0,
+      C.ianTime: DateTime.now().ianTime()
     })
         .then(onValue)
         .catchError(onError);
@@ -70,12 +70,15 @@ class PostsDatabaseService {
     return result;
   }
 
-  Future _delReplyHelper(DocumentReference replyRef, DocumentReference postRef) async {
-    final reply = await replyRef.get();
-    RepliesDatabaseService _tempReplies = RepliesDatabaseService(currUserRef: reply.get(C.creatorRef));
-    // delete reply
+  Future _delReplyHelper(Reply reply, DocumentReference postRef) async {
+    RepliesDatabaseService _tempReplies = RepliesDatabaseService(currUserRef: reply.creatorRef);
     _tempReplies.deleteReply(
-        replyRef: replyRef, commentRef: reply.get(C.commentRef), postRef: postRef, weakDelete: false);
+        replyRef: reply.replyRef, commentRef: reply.commentRef, postRef: postRef, weakDelete: false, media: reply.media);
+  }
+
+  Future _delCommentHelper(Comment comment, DocumentReference postRef) async {
+    CommentsDatabaseService _tempComments = CommentsDatabaseService(currUserRef: comment.creatorRef);
+    _tempComments.deleteComment(commentRef: comment.commentRef, postRef: postRef, weakDelete: false, media: comment.media);
   }
 
   Future<dynamic> deletePost({required DocumentReference postRef,
@@ -93,27 +96,16 @@ class PostsDatabaseService {
         groupRef.update({C.numPosts: FieldValue.increment(-1)});
 
         // delete post's replies in parallel
-        //final delReplies = Future.wait([for (DocumentReference replyRef in post.get(C.repliesRefs)) _delReplyHelper(replyRef, postRef)]);
-
-        // delete post's replies one by one
         final delReplies = Future(() async {
           final repliesData = await FirebaseFirestore.instance.collection(C.replies).where(C.postRef, isEqualTo: postRef).get();
-          repliesData.docs.forEach((replyData) {
-            Reply reply = replyFromQuerySnapshot(replyData);
-            RepliesDatabaseService _tempReplies = RepliesDatabaseService(currUserRef: reply.creatorRef);
-            // delete reply
-            _tempReplies.deleteReply(
-                replyRef: replyData.reference, commentRef: reply.commentRef, postRef: postRef, weakDelete: false);
-          });
+          final replies = repliesData.docs.map((replyData) => replyFromQuerySnapshot(replyData));
+          Future.wait([for (Reply reply in replies) _delReplyHelper(reply, postRef)]);
         });
+        // delete post's comments in parallel
         final delComments = Future(() async {
           final commentsData = await FirebaseFirestore.instance.collection(C.comments).where(C.postRef, isEqualTo: postRef).get();
-          commentsData.docs.forEach((commentData) {
-            Comment comment = commentFromQuerySnapshot(commentData);
-            CommentsDatabaseService _tempComments = CommentsDatabaseService(currUserRef: comment.creatorRef);
-            // delete comment
-            _tempComments.deleteComment(commentRef: commentData.reference, postRef: postRef, weakDelete: false);
-          });
+          final comments = commentsData.docs.map((commentData) => commentFromQuerySnapshot(commentData));
+          Future.wait([for (Comment comment in comments) _delCommentHelper(comment, postRef)]);
         });
 
         var delPoll;
@@ -135,15 +127,14 @@ class PostsDatabaseService {
     return null;
   }
 
-  Future<void> likePost(DocumentReference postCreatorRef, int likeCount) async {
-    // remove dislike if disliked
+  Future likePost(DocumentReference postCreatorRef, int likeCount) async {
+    // remove dislike if disliked, like post, and +2 to score
     await postRef!.update({
-      C.dislikes: FieldValue.arrayRemove([currUserRef])
+      C.dislikes: FieldValue.arrayRemove([currUserRef]),
+      C.likes: FieldValue.arrayUnion([currUserRef]),
+      C.score: FieldValue.increment(2)
     });
-    // like post
-    await postRef!.update({
-      C.likes: FieldValue.arrayUnion([currUserRef])
-    });
+    // send notification if applicable
     if (likeCount==1 || likeCount==10 || likeCount==20 || likeCount==50 || likeCount==100) {
       bool update = true;
       final postCreatorData = await postCreatorRef.get();
@@ -167,28 +158,28 @@ class PostsDatabaseService {
     }
   }
 
-  Future<void> unLikePost() async {
-    // remove like
+  Future unLikePost() async {
+    // remove like and -2 to score
     await postRef!.update({
-      C.likes: FieldValue.arrayRemove([currUserRef])
+      C.likes: FieldValue.arrayRemove([currUserRef]),
+      C.score: FieldValue.increment(-2)
     });
   }
 
-  Future<void> dislikePost() async {
-    // remove like if liked
+  Future dislikePost() async {
+    // remove like if liked, dislike post, and +1 to score
     await postRef!.update({
-      C.likes: FieldValue.arrayRemove([currUserRef])
-    });
-    // dislike post
-    return await postRef!.update({
-      C.dislikes: FieldValue.arrayUnion([currUserRef])
+      C.likes: FieldValue.arrayRemove([currUserRef]),
+      C.dislikes: FieldValue.arrayUnion([currUserRef]),
+      C.score: FieldValue.increment(1)
     });
   }
 
-  Future<void> unDislikePost() async {
-    // remove like
+  Future unDislikePost() async {
+    // remove like and -1 to score
     await postRef!.update({
-      C.dislikes: FieldValue.arrayRemove([currUserRef])
+      C.dislikes: FieldValue.arrayRemove([currUserRef]),
+      C.score: FieldValue.increment(-1)
     });
   }
 
@@ -224,7 +215,62 @@ class PostsDatabaseService {
     return results;
   }
 
-  Stream<List<Post?>> get posts {
+  Future<List<Post?>> getPostsByGroups (List<DocumentReference> groupRefs, {DocumentSnapshot? startingFrom, VoidDocSnapParamFunction? setStartFrom}) async {
+    if (startingFrom!=null) {
+      final data = await postsCollection
+          .where(C.groupRef, whereIn: groupRefs)
+          .orderBy(C.createdAt, descending: true)
+          .startAfterDocument(startingFrom)
+          .limit(2)
+          .get();
+      if (setStartFrom!=null) {
+        setStartFrom(data.docs.last);
+      }
+      return data.docs.map(_postFromQuerySnapshot).toList();
+    } else {
+      final data = await postsCollection
+          .where(C.groupRef, whereIn: groupRefs)
+          .orderBy(C.createdAt, descending: true)
+          .limit(5).get();
+      if (setStartFrom!=null) {
+        setStartFrom(data.docs.last);
+      }
+      return data.docs.map(_postFromQuerySnapshot).toList();
+    }
+  }
+
+  Future<List<Post?>> getTrendingPosts (List<DocumentReference> groupRefs, {DocumentSnapshot? startingFrom, VoidDocSnapParamFunction? setStartFrom}) async {
+    final int ianTime = DateTime.now().ianTime();
+    if (startingFrom!=null) {
+      final data = await postsCollection
+          .where(C.ianTime, whereIn: [for (var i = 0; i < 10; i++) ianTime - i])
+          .orderBy(C.score, descending: true)
+          .startAfterDocument(startingFrom)
+          .limit(2)
+          .get();
+      if (setStartFrom!=null) {
+        setStartFrom(data.docs.last);
+      }
+      return data.docs.map(_postFromQuerySnapshot).toList();
+    } else {
+      final data = await postsCollection
+          .where(C.ianTime, whereIn: [for (var i = 0; i < 10; i++) ianTime - i])
+          .orderBy(C.score, descending: true)
+          .limit(5)
+          .get();
+      if (setStartFrom!=null) {
+        setStartFrom(data.docs.last);
+      }
+      return data.docs.map(_postFromQuerySnapshot).toList();
+    }
+  }
+
+  Future<List<Post?>> getUserPosts() async {
+    final snapshot = await postsCollection.where(C.creatorRef, isEqualTo: currUserRef).get();
+    return snapshot.docs.map(_postFromQuerySnapshot).toList();
+  }
+
+  /*Stream<List<Post?>> get posts {
     return postsCollection
         .where(C.groupRef, whereIn: groupRefs)
         .orderBy(C.createdAt, descending: true)
@@ -234,6 +280,11 @@ class PostsDatabaseService {
 
   Future<List<Post?>> getMultiGroupPosts() async {
     final snapshot = await postsCollection.where(C.groupRef, whereIn: groupRefs).get();
+    return snapshot.docs.map(_postFromQuerySnapshot).toList();
+  }
+
+  Future<List<Post?>> getUserPosts() async {
+    final snapshot = await postsCollection.where(C.creatorRef, isEqualTo: currUserRef).get();
     return snapshot.docs.map(_postFromQuerySnapshot).toList();
   }
 
@@ -251,7 +302,7 @@ class PostsDatabaseService {
         .where(C.tag, whereIn: searchTags)
         .snapshots()
         .map((snapshot) => snapshot.docs.map(_postFromQuerySnapshot).toList());
-  }
+  }*/
 
   SearchResult _searchResultFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
     return SearchResult(
