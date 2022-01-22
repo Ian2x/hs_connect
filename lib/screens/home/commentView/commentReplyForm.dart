@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart';
 
 class CommentReplyForm extends StatefulWidget {
+  final DocumentReference currUserRef;
   final DocumentReference postRef;
   final DocumentReference groupRef;
   final bool isReply;
@@ -22,6 +23,7 @@ class CommentReplyForm extends StatefulWidget {
   final VoidDocParamFunction switchFormBool;
 
   CommentReplyForm({Key? key,
+    required this.currUserRef,
     required this.postRef,
     required this.groupRef,
     required this.isReply,
@@ -35,6 +37,7 @@ class CommentReplyForm extends StatefulWidget {
 }
 
 class _CommentReplyFormState extends State<CommentReplyForm> {
+  late FocusNode myFocusNode;
   final _formKey = GlobalKey<FormState>();
 
   void handleError(err) {
@@ -58,6 +61,8 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
   bool loading = false;
 
   ImageStorage _images = ImageStorage();
+  CommentsDatabaseService? _comments;
+
 
   void setPic(File newFile2) {
     if (mounted) {
@@ -68,15 +73,74 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    myFocusNode = FocusNode();
+    if (mounted) setState(() {
+      _comments = CommentsDatabaseService(currUserRef: widget.currUserRef, postRef: widget.postRef);
+    });
+  }
+
+  @override
+  void dispose() {
+    // Clean up the focus node when the Form is disposed.
+    myFocusNode.dispose();
+    super.dispose();
+  }
+
+  void onSubmit() async {
+    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+      if (mounted) {
+        setState(() => loading = true);
+      }
+
+      if (newFile != null) {
+        // upload newFile
+        final downloadURL = await _images.uploadImage(file: newFile!);
+        if (mounted) {
+          setState(() {
+            newFileURL = downloadURL;
+          });
+        }
+      }
+
+      if (widget.isReply){
+        widget.switchFormBool(null);
+        await RepliesDatabaseService(currUserRef: widget.currUserRef).newReply(
+          postRef: widget.postRef,
+          commentRef: widget.commentReference!,
+          text: _text,
+          media: newFileURL,
+          onValue: handleValue,
+          onError: handleError,
+          groupRef: widget.groupRef,
+          postCreatorRef: widget.postCreatorRef,
+        );
+      } else {
+        await _comments!.newComment(
+          postRef: widget.postRef,
+          text: _text,
+          media: newFileURL,
+          onValue: handleValue,
+          onError: handleError,
+          groupRef: widget.groupRef,
+          postCreatorRef: widget.postCreatorRef,
+        );
+      }
+      _formKey.currentState?.reset();
+
+    }
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
 
-    if (userData == null) {
+    if (userData == null || _comments == null) {
       // Don't expect to be here, but just in case
       return Loading();
     }
-
-    CommentsDatabaseService _comments = CommentsDatabaseService(currUserRef: userData.userRef, postRef: widget.postRef);
 
     return
       Form(
@@ -84,51 +148,17 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
         child: TextFormField(
           maxLines: null,
           initialValue: '',
+          focusNode: myFocusNode,
+          /*onFieldSubmitted: (value) {
+            // was working on submitting upon "enter" key press, but probably not necessary/wanted
+            onSubmit();
+          },*/
           decoration: commentReplyInputDecoration(
               isReply: widget.isReply,
               onPressed: () async {
-                if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-                  if (mounted) {
-                    setState(() => loading = true);
-                  }
-
-                  if (newFile != null) {
-                    // upload newFile
-                    final downloadURL = await _images.uploadImage(file: newFile!);
-                    if (mounted) {
-                      setState(() {
-                        newFileURL = downloadURL;
-                      });
-                    }
-                  }
-
-                  if (widget.isReply){
-                    widget.switchFormBool(null);
-                    await RepliesDatabaseService(currUserRef: userData.userRef).newReply(
-                      postRef: widget.postRef,
-                      commentRef: widget.commentReference!,
-                      text: _text,
-                      media: newFileURL,
-                      onValue: handleValue,
-                      onError: handleError,
-                      groupRef: widget.groupRef,
-                      postCreatorRef: widget.postCreatorRef,
-                    );
-                  } else {
-                    await _comments.newComment(
-                      postRef: widget.postRef,
-                      text: _text,
-                      media: newFileURL,
-                      onValue: handleValue,
-                      onError: handleError,
-                      groupRef: widget.groupRef,
-                      postCreatorRef: widget.postCreatorRef,
-                    );
-                  }
-                }
-                _formKey.currentState?.reset();
+                onSubmit();
               },
-              setPic: setPic),
+              setPic: setPic, isFocused: myFocusNode.hasFocus),
           validator:
             widget.isReply!= false ? (val) {
                 if (val == null) return 'Write a reply...';

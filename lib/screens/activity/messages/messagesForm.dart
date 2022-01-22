@@ -82,7 +82,6 @@ class _MessagesFormState extends State<MessagesForm> {
                     style: ThemeText.roboto(fontSize: 16, color: ThemeColor.darkGrey),
                     decoration: messageInputDecoration(
                         setPic: setPic,
-                        hintText: "Message...",
                         onPressed: () async {
                           if (_formKey.currentState != null && _formKey.currentState!.validate()) {
                             if (mounted) {

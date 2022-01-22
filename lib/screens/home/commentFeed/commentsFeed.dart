@@ -55,7 +55,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
               List<Comment> comments = commentss.map((item) => item!).toList();
               // sort by most recent
               comments.sort((a,b) {
-                return b.createdAt.compareTo(a.createdAt);
+                return a.createdAt.compareTo(b.createdAt);
               });
 
               return ListView.builder(
@@ -92,6 +92,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
             padding: EdgeInsets.fromLTRB(10.0, 10, 10.0, 10.0),
             color: ThemeColor.backgroundGrey,
             child: CommentReplyForm(
+              currUserRef: userData.userRef,
               switchFormBool: switchFormBool,
               commentReference: commentRef,
               isReply: isReply,

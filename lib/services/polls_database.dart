@@ -11,20 +11,15 @@ class PollsDatabaseService {
   final CollectionReference pollsCollection = FirebaseFirestore.instance.collection(C.polls);
 
   Future<DocumentReference> newPoll({
-    required DocumentReference postRef,
-    required String prompt,
     required List<String> choices,
   }) async {
     final newPollRef = await pollsCollection.add({
-      C.postRef: postRef,
-      C.prompt: prompt,
       C.choices: choices,
       C.createdAt: DateTime.now(),
     });
     for (int i = 0; i < choices.length; i++) {
       await newPollRef.update({i.toString(): []});
     }
-    await postRef.update({C.pollRef: newPollRef});
     return newPollRef;
   }
 

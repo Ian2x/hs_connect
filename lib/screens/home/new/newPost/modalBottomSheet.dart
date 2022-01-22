@@ -80,7 +80,20 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                               Spacer(),
                               ConstrainedBox(
                                   constraints: BoxConstraints(maxHeight: 40),
-                                child: Radio<Group>(
+                                child:
+                                Checkbox(
+                                  value: selectedGroup == widget.groups[index - 1],
+                                  onChanged: (bool? value) {
+                                    if (value==true) {
+                                      if (mounted) {
+                                        setState(() {
+                                          selectedGroup = widget.groups[index - 1];
+                                        });
+                                      }
+                                    }
+                                  },
+
+                                )/*Radio<Group>(
                                   value: widget.groups[index - 1],
                                   groupValue: selectedGroup,
                                   onChanged: (Group? value) {
@@ -91,7 +104,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                                       });
                                     }
                                   },
-                                )
+                                )*/
                               )
                             ]
                           ),

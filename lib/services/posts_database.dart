@@ -11,17 +11,16 @@ import 'package:hs_connect/services/replies_database.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 
 void defaultFunc(dynamic parameter) {}
 
 class PostsDatabaseService {
   final DocumentReference currUserRef;
-  List<DocumentReference>? groupRefs;
-  List<String>? searchTags;
-  final DocumentReference? postRef;
+  final DocumentReference? postRef; // for liking/disliking posts
 
-  PostsDatabaseService({required this.currUserRef, this.groupRefs, this.searchTags, this.postRef});
+  PostsDatabaseService({required this.currUserRef, this.postRef});
 
   ImageStorage _images = ImageStorage();
 
@@ -70,12 +69,15 @@ class PostsDatabaseService {
     return result;
   }
 
-  Future _delReplyHelper(DocumentReference replyRef, DocumentReference postRef) async {
-    final reply = await replyRef.get();
-    RepliesDatabaseService _tempReplies = RepliesDatabaseService(currUserRef: reply.get(C.creatorRef));
-    // delete reply
+  Future _delReplyHelper(Reply reply, DocumentReference postRef) async {
+    RepliesDatabaseService _tempReplies = RepliesDatabaseService(currUserRef: reply.creatorRef);
     _tempReplies.deleteReply(
-        replyRef: replyRef, commentRef: reply.get(C.commentRef), postRef: postRef, weakDelete: false);
+        replyRef: reply.replyRef, commentRef: reply.commentRef, postRef: postRef, weakDelete: false, media: reply.media);
+  }
+
+  Future _delCommentHelper(Comment comment, DocumentReference postRef) async {
+    CommentsDatabaseService _tempComments = CommentsDatabaseService(currUserRef: comment.creatorRef);
+    _tempComments.deleteComment(commentRef: comment.commentRef, postRef: postRef, weakDelete: false, media: comment.media);
   }
 
   Future<dynamic> deletePost({required DocumentReference postRef,
@@ -93,27 +95,16 @@ class PostsDatabaseService {
         groupRef.update({C.numPosts: FieldValue.increment(-1)});
 
         // delete post's replies in parallel
-        //final delReplies = Future.wait([for (DocumentReference replyRef in post.get(C.repliesRefs)) _delReplyHelper(replyRef, postRef)]);
-
-        // delete post's replies one by one
         final delReplies = Future(() async {
           final repliesData = await FirebaseFirestore.instance.collection(C.replies).where(C.postRef, isEqualTo: postRef).get();
-          repliesData.docs.forEach((replyData) {
-            Reply reply = replyFromQuerySnapshot(replyData);
-            RepliesDatabaseService _tempReplies = RepliesDatabaseService(currUserRef: reply.creatorRef);
-            // delete reply
-            _tempReplies.deleteReply(
-                replyRef: replyData.reference, commentRef: reply.commentRef, postRef: postRef, weakDelete: false);
-          });
+          final replies = repliesData.docs.map((replyData) => replyFromQuerySnapshot(replyData));
+          Future.wait([for (Reply reply in replies) _delReplyHelper(reply, postRef)]);
         });
+        // delete post's comments in parallel
         final delComments = Future(() async {
           final commentsData = await FirebaseFirestore.instance.collection(C.comments).where(C.postRef, isEqualTo: postRef).get();
-          commentsData.docs.forEach((commentData) {
-            Comment comment = commentFromQuerySnapshot(commentData);
-            CommentsDatabaseService _tempComments = CommentsDatabaseService(currUserRef: comment.creatorRef);
-            // delete comment
-            _tempComments.deleteComment(commentRef: commentData.reference, postRef: postRef, weakDelete: false);
-          });
+          final comments = commentsData.docs.map((commentData) => commentFromQuerySnapshot(commentData));
+          Future.wait([for (Comment comment in comments) _delCommentHelper(comment, postRef)]);
         });
 
         var delPoll;
@@ -224,7 +215,58 @@ class PostsDatabaseService {
     return results;
   }
 
-  Stream<List<Post?>> get posts {
+  Future<List<Post?>> getPostsByGroups (List<DocumentReference> groupRefs, {DocumentSnapshot? startingFrom, VoidDocSnapParamFunction? setStartFrom}) async {
+    if (startingFrom!=null) {
+      final data = await postsCollection
+          .where(C.groupRef, whereIn: groupRefs)
+          .orderBy(C.createdAt, descending: true)
+          .startAfterDocument(startingFrom)
+          .limit(2)
+          .get();
+      if (setStartFrom!=null) {
+        setStartFrom(data.docs.last);
+      }
+      return data.docs.map(_postFromQuerySnapshot).toList();
+    } else {
+      final data = await postsCollection
+          .where(C.groupRef, whereIn: groupRefs)
+          .orderBy(C.createdAt, descending: true)
+          .limit(5).get();
+      if (setStartFrom!=null) {
+        setStartFrom(data.docs.last);
+      }
+      return data.docs.map(_postFromQuerySnapshot).toList();
+    }
+  }
+
+  Future<List<Post?>> getPotentialTrendingPosts (List<DocumentReference> groupRefs, {DocumentSnapshot? startingFrom, VoidDocSnapParamFunction? setStartFrom}) async {
+
+    if (startingFrom!=null) {
+      final data = await postsCollection
+          .where(C.createdAt,
+          isGreaterThan: Timestamp.fromDate(DateTime.now().subtract(new Duration(hours: hoursTrending))))
+          .where(C.groupRef, whereIn: groupRefs)
+          .orderBy(C.createdAt, descending: true)
+          .startAfterDocument(startingFrom)
+          .limit(2)
+          .get();
+      if (setStartFrom!=null) {
+        setStartFrom(data.docs.last);
+      }
+      return data.docs.map(_postFromQuerySnapshot).toList();
+    } else {
+      final data = await postsCollection
+          .where(C.groupRef, whereIn: groupRefs)
+          .orderBy(C.createdAt, descending: true)
+          .limit(5).get();
+      if (setStartFrom!=null) {
+        setStartFrom(data.docs.last);
+      }
+      return data.docs.map(_postFromQuerySnapshot).toList();
+    }
+  }
+
+  /*Stream<List<Post?>> get posts {
     return postsCollection
         .where(C.groupRef, whereIn: groupRefs)
         .orderBy(C.createdAt, descending: true)
@@ -251,7 +293,7 @@ class PostsDatabaseService {
         .where(C.tag, whereIn: searchTags)
         .snapshots()
         .map((snapshot) => snapshot.docs.map(_postFromQuerySnapshot).toList());
-  }
+  }*/
 
   SearchResult _searchResultFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
     return SearchResult(

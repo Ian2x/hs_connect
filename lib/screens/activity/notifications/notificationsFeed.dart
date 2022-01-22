@@ -54,6 +54,26 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
       return Loading();
     }
     int numberNotifications = userData.myNotifications.length;
+    return ListView.builder(
+        itemCount: numberNotifications,
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        padding: EdgeInsets.zero,
+        physics: BouncingScrollPhysics(),
+        itemBuilder: (BuildContext context, int index) {
+          int trueIndex = numberNotifications - index - 1;
+          if (trueIndex == numberNotifications-1) {
+            return Container(
+                padding: EdgeInsets.only(top: 2.5),
+                child: NotificationCard(myNotification: userData.myNotifications[trueIndex]));
+          } else if (trueIndex == 0) {
+            return Container(
+                padding: EdgeInsets.only(bottom: 2.5),
+                child: NotificationCard(myNotification: userData.myNotifications[trueIndex]));
+          } else {
+            return NotificationCard(myNotification: userData.myNotifications[trueIndex]);
+          }
+        });
     return Column(children: [
       ListView.builder(
           itemCount: numberNotifications,
