@@ -192,7 +192,6 @@ class C {
   static const postsOverTime = 'postsOverTime';
   static const membersOverTime = 'membersOverTime';
   static const lastOverTimeUpdate = 'lastOverTimeUpdate';
-  static const lastUpdated = 'lastUpdated';
   static const hexColor = 'hexColor';
   static const otherUserRef = 'otherUserRef';
   static const lastMessage = 'lastMessage';
@@ -224,4 +223,5 @@ class C {
   static const commentVotes = 'commentVotes';
   static const postVotes = 'postVotes';
   static const extraData = 'extraData';
+  static const ianTime = 'ianTime';
 }

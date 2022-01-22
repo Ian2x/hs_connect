@@ -16,8 +16,6 @@ class Comment {
   final List<DocumentReference> likes;
   final List<DocumentReference> dislikes;
   final int numReports;
-  final Timestamp lastUpdated;
-  bool? newActivity;
 
   Comment({
     required this.commentRef,
@@ -32,8 +30,6 @@ class Comment {
     required this.likes,
     required this.dislikes,
     required this.numReports,
-    required this.lastUpdated,
-    this.newActivity,
   });
 }
 
@@ -52,7 +48,6 @@ commentFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
       likes: docRefList(querySnapshot[C.likes]),
       dislikes: docRefList(querySnapshot[C.dislikes]),
       numReports: querySnapshot[C.numReports],
-      lastUpdated: querySnapshot[C.lastUpdated]
   );
   return temp;
 }
@@ -72,7 +67,6 @@ commentFromSnapshot(DocumentSnapshot snapshot) {
       likes: docRefList(snapshot[C.likes]),
       dislikes: docRefList(snapshot[C.dislikes]),
       numReports: snapshot[C.numReports],
-      lastUpdated: snapshot[C.lastUpdated],
   );
   return temp;
 }

@@ -38,13 +38,12 @@ class UserData {
   final List<UserMessage> userMessages;
   final List<DocumentReference> savedPostsRefs;
   final List<MyNotification> myNotifications;
-  final int numReplies;
-  final Image profileImage;
   final String? profileImageURL;
   final int score;
   final int numReports;
   final bool private;
   // extracted data
+  final Image profileImage;
   final String? fullDomainName;
   final Color? domainColor;
   final String? currCounty;
@@ -67,7 +66,6 @@ class UserData {
     required this.userMessages,
     required this.savedPostsRefs,
     required this.myNotifications,
-    required this.numReplies,
     required this.profileImage,
     required this.profileImageURL,
     required this.score,
@@ -93,13 +91,12 @@ Future<UserData> userDataFromSnapshot(DocumentSnapshot snapshot, DocumentReferen
     userMessages: snapshot.get(C.userMessages).map<UserMessage>((userMessage) => userMessageFromMap(map: userMessage)).toList(),
     savedPostsRefs: docRefList(snapshot.get(C.savedPostsRefs)),
     myNotifications: myNotificationList(snapshot.get(C.myNotifications)),
-    numReplies: snapshot.get(C.numReplies),
-    profileImage: snapshot.get(C.profileImageURL) != null ? Image.network(snapshot.get(C.profileImageURL)) : Image(image: AssetImage('assets/me.png')),
     profileImageURL: snapshot.get(C.profileImageURL),
     score: snapshot.get(C.score),
     numReports: snapshot.get(C.numReports),
     private: snapshot.get(C.private),
     // extracted data
+    profileImage: snapshot.get(C.profileImageURL) != null ? Image.network(snapshot.get(C.profileImageURL)) : Image(image: AssetImage('assets/blankProfile.png')),
     fullDomainName: domainData.fullName,
     domainColor: domainData.color != null ? HexColor(domainData.color!) : null,
     currCounty: snapshot.get(C.overrideCounty) != null ? snapshot.get(C.overrideCounty) : domainData.county,

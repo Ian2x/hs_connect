@@ -274,6 +274,7 @@ class _PostFormState extends State<PostForm> {
                       fontSize: 22,
                     ),
                     maxLines: null,
+                    autocorrect: false,
                     decoration: InputDecoration(
                         hintStyle: TextStyle(
                           color: HexColor("223E52"),
@@ -312,6 +313,7 @@ class _PostFormState extends State<PostForm> {
                               //fontWeight: ,
                             ),
                             maxLines: null,
+                            autocorrect: false,
                             decoration: InputDecoration(
                                 hintStyle: TextStyle(
                                   color: HexColor("B5BABE"),

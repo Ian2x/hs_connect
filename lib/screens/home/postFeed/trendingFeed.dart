@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
@@ -24,8 +23,6 @@ class _TrendingFeedState extends State<TrendingFeed> {
 
   List<Post> posts = [];
   DocumentSnapshot? lastVisiblePost;
-
-  List<DocumentReference>? allowableGroupsRefs;
 
   late PostsDatabaseService _posts;
 
@@ -49,14 +46,17 @@ class _TrendingFeedState extends State<TrendingFeed> {
 
     final userData = Provider.of<UserData?>(context);
 
-    if (userData == null || allowableGroupsRefs == null) return Loading();
+    if (userData == null) return Loading();
 
-    return Container();
+    return RefreshIndicator(
+        child: postsListView(posts: posts, controller: scrollController, currUserRef: userData.userRef),
+        onRefresh: getInitialPosts
+    );
   }
 
   Future getInitialPosts() async {
-    List<Post?> tempPosts = await _posts.getPostsByGroups(
-        [FirebaseFirestore.instance.collection(C.groups).doc(widget.currUser.domain), ],
+    List<Post?> tempPosts = await _posts.getTrendingPosts(
+        [FirebaseFirestore.instance.collection(C.groups).doc(widget.currUser.domain), FirebaseFirestore.instance.collection(C.groups).doc(C.public)],
         setStartFrom: setLastVisiblePost);
     tempPosts.removeWhere((value) => value == null);
     if (mounted) {
@@ -67,7 +67,7 @@ class _TrendingFeedState extends State<TrendingFeed> {
   }
 
   Future getNextPosts() async {
-    List<Post?> tempPosts = await _posts.getPostsByGroups(
+    List<Post?> tempPosts = await _posts.getTrendingPosts(
         [FirebaseFirestore.instance.collection(C.groups).doc(widget.currUser.domain)],
         startingFrom: lastVisiblePost!, setStartFrom: setLastVisiblePost);
     tempPosts.removeWhere((value) => value == null);

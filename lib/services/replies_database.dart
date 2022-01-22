@@ -63,19 +63,10 @@ class RepliesDatabaseService {
           }
         }
     );
-    // update user's replies
-    currUserRef.update({
-      C.numReplies: FieldValue.increment(1)
-    });
-    // update post's repliesRefs and lastUpdated
+    // update post's numReplies and score
     postRef.update({
       C.numReplies: FieldValue.increment(1),
-      C.lastUpdated: DateTime.now()
-    });
-    // update comment's numReplies and lastUpdated
-    commentRef.update({
-      C.numReplies: FieldValue.increment(1),
-      C.lastUpdated: DateTime.now()
+      C.score: FieldValue.increment(4)
     });
     // get accessRestriction
     final group = await groupRef.get();
@@ -136,12 +127,9 @@ class RepliesDatabaseService {
   }
 
   Future<void> likeReply(DocumentReference replyCreatorRef, int likeCount) async {
-    // remove dislike if disliked
+    // remove dislike if disliked and like reply
     await replyRef!.update({
-      C.dislikes: FieldValue.arrayRemove([currUserRef])
-    });
-    // like reply
-    await replyRef!.update({
+      C.dislikes: FieldValue.arrayRemove([currUserRef]),
       C.likes: FieldValue.arrayUnion([currUserRef])
     });
     if (likeCount==1 || likeCount==10 || likeCount==20 || likeCount==50 || likeCount==100) {
@@ -175,12 +163,9 @@ class RepliesDatabaseService {
   }
 
   Future<void> dislikeReply() async {
-    // remove like if liked
+    // remove like if liked and dislike reply
     await replyRef!.update({
-      C.likes: FieldValue.arrayRemove([currUserRef])
-    });
-    // dislike reply
-    return await replyRef!.update({
+      C.likes: FieldValue.arrayRemove([currUserRef]),
       C.dislikes: FieldValue.arrayUnion([currUserRef])
     });
   }

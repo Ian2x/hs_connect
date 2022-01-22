@@ -65,8 +65,8 @@ class Post {
   final int numReports;
   final DocumentReference? pollRef;
   final Tag? tag;
-  final Timestamp lastUpdated;
-  bool? newActivity;
+  final int score;
+  final int ianTime;
 
   Post({
     required this.postRef,
@@ -85,8 +85,8 @@ class Post {
     required this.numReports,
     required this.pollRef,
     required this.tag,
-    required this.lastUpdated,
-    this.newActivity,
+    required this.score,
+    required this.ianTime
   });
 }
 
@@ -109,7 +109,8 @@ postFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
     numReports: querySnapshot[C.numReports],
     pollRef: querySnapshot[C.pollRef],
     tag: tagFrom(querySnapshot[C.tag]),
-    lastUpdated: querySnapshot[C.lastUpdated],
+    score: querySnapshot[C.score],
+    ianTime: querySnapshot[C.ianTime],
   );
 }
 
@@ -132,6 +133,7 @@ Post postFromSnapshot(DocumentSnapshot snapshot) {
     numReports: snapshot[C.numReports],
     pollRef: snapshot[C.pollRef],
     tag: tagFrom(snapshot[C.tag]),
-    lastUpdated: snapshot[C.lastUpdated],
+    score: snapshot[C.score],
+    ianTime: snapshot[C.ianTime],
   );
 }

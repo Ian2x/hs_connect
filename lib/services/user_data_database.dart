@@ -37,7 +37,6 @@ class UserDataDatabaseService {
       C.modGroupRefs: [],
       C.userMessages: [],
       C.myNotifications: [],
-      C.numReplies: 0,
       C.savedPostsRefs: [],
       C.profileImageURL: null,
       C.score: 0,

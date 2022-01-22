@@ -60,7 +60,8 @@ class PostsDatabaseService {
       C.numReports: 0,
       C.pollRef: pollRef,
       C.tag: tagString == '' ? null : tagString,
-      C.lastUpdated: DateTime.now(),
+      C.score: 0,
+      C.ianTime: DateTime.now().ianTime()
     })
         .then(onValue)
         .catchError(onError);
@@ -126,15 +127,14 @@ class PostsDatabaseService {
     return null;
   }
 
-  Future<void> likePost(DocumentReference postCreatorRef, int likeCount) async {
-    // remove dislike if disliked
+  Future likePost(DocumentReference postCreatorRef, int likeCount) async {
+    // remove dislike if disliked, like post, and +2 to score
     await postRef!.update({
-      C.dislikes: FieldValue.arrayRemove([currUserRef])
+      C.dislikes: FieldValue.arrayRemove([currUserRef]),
+      C.likes: FieldValue.arrayUnion([currUserRef]),
+      C.score: FieldValue.increment(2)
     });
-    // like post
-    await postRef!.update({
-      C.likes: FieldValue.arrayUnion([currUserRef])
-    });
+    // send notification if applicable
     if (likeCount==1 || likeCount==10 || likeCount==20 || likeCount==50 || likeCount==100) {
       bool update = true;
       final postCreatorData = await postCreatorRef.get();
@@ -158,28 +158,28 @@ class PostsDatabaseService {
     }
   }
 
-  Future<void> unLikePost() async {
-    // remove like
+  Future unLikePost() async {
+    // remove like and -2 to score
     await postRef!.update({
-      C.likes: FieldValue.arrayRemove([currUserRef])
+      C.likes: FieldValue.arrayRemove([currUserRef]),
+      C.score: FieldValue.increment(-2)
     });
   }
 
-  Future<void> dislikePost() async {
-    // remove like if liked
+  Future dislikePost() async {
+    // remove like if liked, dislike post, and +1 to score
     await postRef!.update({
-      C.likes: FieldValue.arrayRemove([currUserRef])
-    });
-    // dislike post
-    return await postRef!.update({
-      C.dislikes: FieldValue.arrayUnion([currUserRef])
+      C.likes: FieldValue.arrayRemove([currUserRef]),
+      C.dislikes: FieldValue.arrayUnion([currUserRef]),
+      C.score: FieldValue.increment(1)
     });
   }
 
-  Future<void> unDislikePost() async {
-    // remove like
+  Future unDislikePost() async {
+    // remove like and -1 to score
     await postRef!.update({
-      C.dislikes: FieldValue.arrayRemove([currUserRef])
+      C.dislikes: FieldValue.arrayRemove([currUserRef]),
+      C.score: FieldValue.increment(-1)
     });
   }
 
@@ -239,14 +239,12 @@ class PostsDatabaseService {
     }
   }
 
-  Future<List<Post?>> getPotentialTrendingPosts (List<DocumentReference> groupRefs, {DocumentSnapshot? startingFrom, VoidDocSnapParamFunction? setStartFrom}) async {
-
+  Future<List<Post?>> getTrendingPosts (List<DocumentReference> groupRefs, {DocumentSnapshot? startingFrom, VoidDocSnapParamFunction? setStartFrom}) async {
+    final int ianTime = DateTime.now().ianTime();
     if (startingFrom!=null) {
       final data = await postsCollection
-          .where(C.createdAt,
-          isGreaterThan: Timestamp.fromDate(DateTime.now().subtract(new Duration(hours: hoursTrending))))
-          .where(C.groupRef, whereIn: groupRefs)
-          .orderBy(C.createdAt, descending: true)
+          .where(C.ianTime, whereIn: [for (var i = 0; i < 10; i++) ianTime - i])
+          .orderBy(C.score, descending: true)
           .startAfterDocument(startingFrom)
           .limit(2)
           .get();
@@ -256,9 +254,10 @@ class PostsDatabaseService {
       return data.docs.map(_postFromQuerySnapshot).toList();
     } else {
       final data = await postsCollection
-          .where(C.groupRef, whereIn: groupRefs)
-          .orderBy(C.createdAt, descending: true)
-          .limit(5).get();
+          .where(C.ianTime, whereIn: [for (var i = 0; i < 10; i++) ianTime - i])
+          .orderBy(C.score, descending: true)
+          .limit(5)
+          .get();
       if (setStartFrom!=null) {
         setStartFrom(data.docs.last);
       }

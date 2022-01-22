@@ -153,6 +153,7 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
             // was working on submitting upon "enter" key press, but probably not necessary/wanted
             onSubmit();
           },*/
+          autocorrect: false,
           decoration: commentReplyInputDecoration(
               isReply: widget.isReply,
               onPressed: () async {
