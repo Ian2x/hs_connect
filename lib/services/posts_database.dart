@@ -278,6 +278,11 @@ class PostsDatabaseService {
     return snapshot.docs.map(_postFromQuerySnapshot).toList();
   }
 
+  Future<List<Post?>> getUserPosts() async {
+    final snapshot = await postsCollection.where(C.creatorRef, isEqualTo: currUserRef).get();
+    return snapshot.docs.map(_postFromQuerySnapshot).toList();
+  }
+
   Stream<List<Post?>> get potentialTrendingPosts {
     return postsCollection
         .where(C.createdAt,

@@ -92,19 +92,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                                       }
                                     }
                                   },
-
-                                )/*Radio<Group>(
-                                  value: widget.groups[index - 1],
-                                  groupValue: selectedGroup,
-                                  onChanged: (Group? value) {
-                                    if (mounted) {
-                                      setState(() {
-                                        selectedGroup = value;
-                                        widget.onSelectGroup(value);
-                                      });
-                                    }
-                                  },
-                                )*/
+                                )
                               )
                             ]
                           ),

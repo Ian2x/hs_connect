@@ -26,7 +26,7 @@ class GroupTag extends StatelessWidget {
       decoration: ShapeDecoration(
         color: ThemeColor.lightGrey,
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(fontSize/1.8),
+            borderRadius: BorderRadius.circular(fontSize/2),
             ),
       ),
       child: Row(

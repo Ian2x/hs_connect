@@ -15,8 +15,6 @@ class CommentsFeed extends StatefulWidget {
   final Post post;
   final DocumentReference groupRef;
 
-
-
   CommentsFeed({Key? key, required this.post, required this.groupRef}) : super(key: key);
 
   @override

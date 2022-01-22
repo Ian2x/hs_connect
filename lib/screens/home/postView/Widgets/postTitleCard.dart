@@ -12,6 +12,7 @@ import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/widgets/groupTag.dart';
+import 'package:hs_connect/shared/widgets/reportSheet.dart';
 import 'package:hs_connect/shared/widgets/widgetDisplay.dart';
 
 class PostTitleCard extends StatefulWidget {
@@ -163,7 +164,20 @@ class _PostTitleCardState extends State<PostTitleCard> {
                   IconButton(
                     icon: Icon(Icons.more_horiz),
                     iconSize: 20,
-                    onPressed: (){},
+                    onPressed: (){
+                      showModalBottomSheet(
+                          context: context,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(20),
+                              )),
+                          builder: (context) => new reportSheet(
+                            reportType: ReportType.post,
+                            entityRef: widget.post.postRef,
+                            reporterRef: widget.currUserRef,
+                          ));
+
+                    },
                   )
                 ]
               ), //introRow
