@@ -45,7 +45,7 @@ class GroupTag extends StatelessWidget {
           groupImage!=null ? SizedBox(width: fontSize / 3) : Container(),
           Text( groupName,
             style:ThemeText.regularSmall(fontSize: fontSize,
-              color: groupColor,
+              color: groupColor != null ? groupColor : ThemeColor.black,
             ),
           )
         ],

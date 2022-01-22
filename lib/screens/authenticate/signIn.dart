@@ -45,7 +45,7 @@ class _SignInState extends State<SignIn> {
                 Positioned(
                   bottom:0,
                   right:0,
-                  child: authBar(buttonText: "Sign in"),
+                  child: AuthBar(buttonText: "Sign in"),
                 ),
                 Container(
                   padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),

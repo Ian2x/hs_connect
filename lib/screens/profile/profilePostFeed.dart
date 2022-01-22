@@ -32,8 +32,6 @@ class _profilePostFeedState extends State<profilePostFeed> {
   @override
   void initState() {
     getUserPosts();
-    CommentsDatabaseService _comments = CommentsDatabaseService(currUserRef: widget.profUserRef);
-
     super.initState();
   }
 
@@ -44,13 +42,6 @@ class _profilePostFeedState extends State<profilePostFeed> {
 
   @override
   Widget build(BuildContext context) {
-
-    switchFormBool(DocumentReference? passedRef){
-      setState(() {
-        isReply=!isReply;
-        commentRef= passedRef;
-      });
-    }
     if (_userPosts == null) {
       return Text("No Posts");
     } else {
@@ -81,7 +72,7 @@ class _profilePostFeedState extends State<profilePostFeed> {
                 itemBuilder: (BuildContext context, int index) {
                   return Column(
                     children: [
-                      profilePostCard(
+                      ProfilePostCard(
                         post: _userPosts![index]!,
                         currUserRef: widget.profUserRef,
                       ),

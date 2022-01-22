@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/constants.dart';
 
 
-class authBar extends StatefulWidget {
+class AuthBar extends StatefulWidget {
 
   final String buttonText;
 
-  const authBar({Key? key, required this.buttonText}) : super(key: key);
+  const AuthBar({Key? key, required this.buttonText}) : super(key: key);
 
   @override
-  _authBarState createState() => _authBarState();
+  _AuthBarState createState() => _AuthBarState();
 }
 
-class _authBarState extends State<authBar> {
+class _AuthBarState extends State<AuthBar> {
 
 
   @override

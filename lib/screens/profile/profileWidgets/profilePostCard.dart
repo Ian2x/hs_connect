@@ -9,18 +9,18 @@ import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/groupTag.dart';
 
 
-class profilePostCard extends StatefulWidget {
+class ProfilePostCard extends StatefulWidget {
 
   final Post post;
   final DocumentReference currUserRef;
 
-  profilePostCard({Key? key, required this.post, required this.currUserRef}) : super(key: key);
+  ProfilePostCard({Key? key, required this.post, required this.currUserRef}) : super(key: key);
 
   @override
-  _profilePostCardState createState() => _profilePostCardState();
+  _ProfilePostCardState createState() => _ProfilePostCardState();
 }
 
-class _profilePostCardState extends State<profilePostCard> {
+class _ProfilePostCardState extends State<ProfilePostCard> {
 
   String groupName = '';
   String? groupImageString;
@@ -84,8 +84,7 @@ class _profilePostCardState extends State<profilePostCard> {
         children: [
           Row(
             children: [
-              GroupTag(groupImage: groupImage, groupColor:
-              groupColor !=null ? HexColor(groupColor!): ThemeColor.mediumGrey,
+              GroupTag(groupImage: groupImage, groupColor: groupColor !=null ? HexColor(groupColor!): null,
                   groupName: groupName, fontSize: 14),
               Spacer(),
               IconButton(

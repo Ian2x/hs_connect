@@ -265,6 +265,11 @@ class PostsDatabaseService {
     }
   }
 
+  Future<List<Post?>> getUserPosts() async {
+    final snapshot = await postsCollection.where(C.creatorRef, isEqualTo: currUserRef).get();
+    return snapshot.docs.map(_postFromQuerySnapshot).toList();
+  }
+
   /*Stream<List<Post?>> get posts {
     return postsCollection
         .where(C.groupRef, whereIn: groupRefs)
