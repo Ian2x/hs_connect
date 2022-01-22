@@ -340,62 +340,71 @@ class _PostFormState extends State<PostForm> {
       Positioned(
           bottom: 0,
           left: 0,
-          child: Row(children: <Widget>[
-            picPickerButton(
-                iconSize: 30.0,
-                color: newFile == null ? ThemeColor.mediumGrey : ThemeColor.secondaryBlue,
-                setPic: ((File? f) {
-                  if (mounted) {
-                    setState(() {
-                      newFile = f;
-                      poll = null;
-                    });
-                  }
-                })),
-            SizedBox(width: phoneWidth * 0.005),
-            IconButton(
-                onPressed: () {
-                  if (mounted) {
-                    setState(() {
-                      pollChoices = [];
-                      pollChoices!.add('');
-                      pollChoices!.add('');
-                      poll = NewPoll(onDeletePoll: () {
-                        if (mounted) {
-                          setState(() {
-                            poll = null;
-                            pollChoices = null;
-                            if (error == emptyPollChoiceError) {
-                              error = null;
-                            }
-                          });
-                        }
-                      }, onUpdatePoll: (int index, String newChoice) {
-                        if (mounted) {
-                          setState(() {
-                            pollChoices![index] = newChoice;
-                            if (error == emptyPollChoiceError) {
-                              for (String choice in pollChoices!) {
-                                if (choice == '') return;
-                              }
-                            }
-                            error = null;
-                          });
-                        }
-                      }, onAddPollChoice: () {
-                        if (mounted) {
-                          setState(() {
-                            pollChoices!.add('');
-                          });
-                        }
+          child: Container(
+            width:MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              color: ThemeColor.white,
+              border: Border(
+                top: BorderSide(width: 1.0, color: ThemeColor.lightMediumGrey),
+              ),
+            ),
+            child: Row(children: <Widget>[
+              picPickerButton(
+                  iconSize: 30.0,
+                  color: newFile == null ? ThemeColor.mediumGrey : ThemeColor.secondaryBlue,
+                  setPic: ((File? f) {
+                    if (mounted) {
+                      setState(() {
+                        newFile = f;
+                        poll = null;
                       });
-                      newFile = null;
-                    });
-                  }
-                },
-                icon: Icon(Icons.assessment,
-                    size: 30, color: poll == null ? ThemeColor.mediumGrey : ThemeColor.secondaryBlue))
-          ])),
+                    }
+                  })),
+              SizedBox(width: phoneWidth * 0.005),
+              IconButton(
+                  onPressed: () {
+                    if (mounted) {
+                      setState(() {
+                        pollChoices = [];
+                        pollChoices!.add('');
+                        pollChoices!.add('');
+                        poll = NewPoll(onDeletePoll: () {
+                          if (mounted) {
+                            setState(() {
+                              poll = null;
+                              pollChoices = null;
+                              if (error == emptyPollChoiceError) {
+                                error = null;
+                              }
+                            });
+                          }
+                        }, onUpdatePoll: (int index, String newChoice) {
+                          if (mounted) {
+                            setState(() {
+                              pollChoices![index] = newChoice;
+                              if (error == emptyPollChoiceError) {
+                                for (String choice in pollChoices!) {
+                                  if (choice == '') return;
+                                }
+                              }
+                              error = null;
+                            });
+                          }
+                        }, onAddPollChoice: () {
+                          if (mounted) {
+                            setState(() {
+                              pollChoices!.add('');
+                            });
+                          }
+                        });
+                        newFile = null;
+                      });
+                    }
+                  },
+                  icon: Icon(Icons.assessment,
+                      size: 30, color: poll == null ? ThemeColor.mediumGrey : ThemeColor.secondaryBlue))
+            ]),
+          )),
     ]);
   }
 }

@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/inputDecorations.dart';
 
 
 class AuthBar extends StatefulWidget {
 
   final String buttonText;
+  final VoidFunction onPressed;
 
-  const AuthBar({Key? key, required this.buttonText}) : super(key: key);
+  const AuthBar({Key? key, required this.buttonText,
+    required this.onPressed
+  }) : super(key: key);
 
   @override
   _AuthBarState createState() => _AuthBarState();
 }
 
 class _AuthBarState extends State<AuthBar> {
-
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +47,7 @@ class _AuthBarState extends State<AuthBar> {
                       ))),
               child:
                 TextButton(
-                  onPressed: (){},
+                  onPressed: widget.onPressed,
                   child:
                   Text(widget.buttonText,
                       style: ThemeText.regularSmall(fontSize:18, color: ThemeColor.white)),

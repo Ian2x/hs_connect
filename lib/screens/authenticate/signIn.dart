@@ -27,10 +27,6 @@ class _SignInState extends State<SignIn> {
   String error = '';
 
 
-
-
-
-
   @override
   Widget build(BuildContext context) {
 
@@ -44,14 +40,32 @@ class _SignInState extends State<SignIn> {
               children: [
                 Positioned(
                   bottom:0,
-                  right:0,
-                  child: AuthBar(buttonText: "Sign in"),
+                  left:0,
+                  child: AuthBar(buttonText: "Sign in",
+                    onPressed: () async {
+                      if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+                        if (mounted) {
+                          setState(() => loading = true);
+                        }
+                        dynamic result = await _auth.signInWithUsernameAndPassword(username, password);
+                        if (!(result is User?)) {
+                          if (mounted) {
+                            setState(() {
+                              error = 'Could not sign in with those credentials';
+                              loading = false;
+                            });
+                          }
+                        }
+                      }
+                    },
+                  ),
                 ),
                 Container(
                   padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
                   child: Form(
                     key: _formKey,
-                    child: Column(
+                    child:
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                       SizedBox(height: unit),
@@ -76,36 +90,38 @@ class _SignInState extends State<SignIn> {
                           ],
                         )
                       ),
-                        TextFormField(
-                          style: TextStyle(
-                            color: ThemeColor.mediumGrey,
-                            fontSize: 18,
-                            //fontWeight: ,
-                          ),
-                          maxLines: null,
-                          decoration: InputDecoration(
-                              hintStyle: TextStyle(
-                                color: ThemeColor.mediumGrey,
-                                fontSize: 18,
-                                //fontWeight: ,
-                              ),
-                              border: InputBorder.none,
-                              hintText: "Username"),
-                            validator: (val) {
-                              if (val == null) return 'Error: null value';
-                              if (val.isEmpty)
-                                return 'Enter username';
-                              else
-                                return null;
-                            },
-                            onChanged: (val) {
-                              if (mounted) {
-                                setState(() => username = val);
-                              }
-                          }
+                      TextFormField(
+                        autocorrect:false,
+                        style: TextStyle(
+                          color: ThemeColor.mediumGrey,
+                          fontSize: 18,
+                          //fontWeight: ,
+                        ),
+                        maxLines: null,
+                        decoration: InputDecoration(
+                            hintStyle: TextStyle(
+                              color: ThemeColor.mediumGrey,
+                              fontSize: 18,
+                              //fontWeight: ,
+                            ),
+                            border: InputBorder.none,
+                            hintText: "Username"),
+                          validator: (val) {
+                            if (val == null) return 'Error: null value';
+                            if (val.isEmpty)
+                              return 'Enter username';
+                            else
+                              return null;
+                          },
+                          onChanged: (val) {
+                            if (mounted) {
+                              setState(() => username = val);
+                            }
+                        }
                       ),
                       Divider(height:20, thickness: 2, color: ThemeColor.lightMediumGrey),
                         TextFormField(
+                            autocorrect:false,
                             style: TextStyle(
                               color: ThemeColor.mediumGrey,
                               fontSize: 18,
@@ -132,45 +148,20 @@ class _SignInState extends State<SignIn> {
                                 setState(() => password = val);
                               }
                             }),
-
                       Divider(height:20, thickness: 2, color: ThemeColor.lightMediumGrey),
                       SizedBox(height: 20.0),
-                      Align(
-                        alignment: Alignment.bottomLeft,
-                        child:
-                          TextButton(
-                              child: Text('Register here',
-                                  style: ThemeText.regularSmall(fontSize: 16, color: ThemeColor.secondaryBlue)),
-                              onPressed: () {
-                              widget.toggleView();
-                          }),
-                      ),
-                      ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.pink[400],
-                          ),
-                          onPressed: () async {
-                            if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-                              if (mounted) {
-                                setState(() => loading = true);
-                              }
-                              dynamic result = await _auth.signInWithUsernameAndPassword(username, password);
-                              if (!(result is User?)) {
-                                if (mounted) {
-                                  setState(() {
-                                    error = 'Could not sign in with those credentials';
-                                    loading = false;
-                                  });
-                                }
-                              }
-                            }
-                          },
-                      child: Text('Sign in', style: TextStyle(color: Colors.white))),
+                      TextButton(
+                          child: Text('Register here',
+                              style: ThemeText.regularSmall(fontSize: 16, color: ThemeColor.secondaryBlue)),
+                          onPressed: () {
+                          widget.toggleView();
+                      }),
                       SizedBox(height: 12.0),
                       Text(
                         error,
                         style: TextStyle(color: Colors.red, fontSize: 14.0),
-                      )
+                      ),
+                      Container(height:50, color: Colors.black),
                     ]),
                   ),
                 ),
