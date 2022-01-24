@@ -18,7 +18,6 @@ class NewPost extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
-
         children: <Widget>[
           Container(
             padding: EdgeInsets.fromLTRB(15.0, 30.0,15.0,0.0), //TODO May need to adjust to phone height?

@@ -27,10 +27,6 @@ class _SignInState extends State<SignIn> {
   String error = '';
 
 
-
-
-
-
   @override
   Widget build(BuildContext context) {
 
@@ -45,7 +41,25 @@ class _SignInState extends State<SignIn> {
                 Positioned(
                   bottom:0,
                   right:0,
-                  child: AuthBar(buttonText: "Sign in", hp: hp, wp: wp),
+                  left:0,
+                  child: AuthBar(buttonText: "Sign in", hp: hp, wp: wp,
+                    onPressed: () async {
+                      if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+                        if (mounted) {
+                          setState(() => loading = true);
+                        }
+                        dynamic result = await _auth.signInWithUsernameAndPassword(username, password);
+                        if (!(result is User?)) {
+                          if (mounted) {
+                            setState(() {
+                              error = 'Could not sign in with those credentials';
+                              loading = false;
+                            });
+                          }
+                        }
+                      }
+                    },
+                  ),
                 ),
                 Container(
                   padding: EdgeInsets.symmetric(vertical: 20*hp, horizontal: 50*wp),
@@ -77,7 +91,8 @@ class _SignInState extends State<SignIn> {
                         )
                       ),
                         TextFormField(
-                          style: ThemeText.inter(
+                            autocorrect:false,
+                            style: ThemeText.inter(
                             color: ThemeColor.mediumGrey,
                             fontSize: 18*hp,
                             //fontWeight: ,
@@ -106,6 +121,7 @@ class _SignInState extends State<SignIn> {
                       ),
                       Divider(height:20*hp, thickness: 2*hp, color: ThemeColor.lightMediumGrey),
                         TextFormField(
+                            autocorrect:false,
                             style: ThemeText.inter(
                               color: ThemeColor.mediumGrey,
                               fontSize: 18*hp,
@@ -132,45 +148,20 @@ class _SignInState extends State<SignIn> {
                                 setState(() => password = val);
                               }
                             }),
-
-                      Divider(height:20*hp, thickness: 2*hp, color: ThemeColor.lightMediumGrey),
-                      SizedBox(height: 20*hp),
-                      Align(
-                        alignment: Alignment.bottomLeft,
-                        child:
-                          TextButton(
-                              child: Text('Register here',
-                                  style: ThemeText.regularSmall(fontSize: 16*hp, color: ThemeColor.secondaryBlue)),
-                              onPressed: () {
-                              widget.toggleView();
-                          }),
-                      ),
-                      ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.pink[400],
-                          ),
-                          onPressed: () async {
-                            if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-                              if (mounted) {
-                                setState(() => loading = true);
-                              }
-                              dynamic result = await _auth.signInWithUsernameAndPassword(username, password);
-                              if (!(result is User?)) {
-                                if (mounted) {
-                                  setState(() {
-                                    error = 'Could not sign in with those credentials';
-                                    loading = false;
-                                  });
-                                }
-                              }
-                            }
-                          },
-                      child: Text('Sign in', style: ThemeText.inter(color: Colors.white))),
-                      SizedBox(height: 12*hp),
+                      Divider(height:20, thickness: 2, color: ThemeColor.lightMediumGrey),
+                      SizedBox(height: 20.0),
+                      TextButton(
+                          child: Text('Register here',
+                              style: ThemeText.regularSmall(fontSize: 16, color: ThemeColor.secondaryBlue)),
+                          onPressed: () {
+                          widget.toggleView();
+                      }),
+                      SizedBox(height: 12.0),
                       Text(
                         error,
-                        style: ThemeText.inter(color: Colors.red, fontSize: 14*hp),
-                      )
+                        style: TextStyle(color: Colors.red, fontSize: 14.0),
+                      ),
+                      Container(height:50, color: Colors.black),
                     ]),
                   ),
                 ),

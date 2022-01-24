@@ -5,6 +5,8 @@ import 'package:hs_connect/services/auth.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 
+import 'authBar.dart';
+
 class RegisterEmail extends StatefulWidget {
   final Function toggleView;
 
@@ -16,53 +18,28 @@ class RegisterEmail extends StatefulWidget {
 
 class _RegisterEmailState extends State<RegisterEmail> {
   final AuthService _auth = AuthService();
-  String email = '';
-  String error = '';
+  final _formKey = GlobalKey<FormState>();
   bool loading = false;
+
+  // text field state
+  String email='';
+  String error="";
+
 
   @override
   Widget build(BuildContext context) {
     final hp = getHp(context);
 
     return loading
-        ? Scaffold(
-        backgroundColor: ThemeColor.backgroundGrey,
-        body: Loading()
-    )
+        ? Scaffold(backgroundColor: ThemeColor.backgroundGrey, body: Loading())
         : Scaffold(
-      appBar: AppBar(
-        title: Text('Verify your school email'),
-        actions: <Widget>[
-          TextButton.icon(
-              icon: Icon(Icons.person),
-              label: Text('Register'),
-              style: TextButton.styleFrom(
-                primary: Colors.red[400],
-              ),
-              onPressed: () {
-                widget.toggleView();
-              })
-        ],
-      ),
-      body: Column(
+      backgroundColor: ThemeColor.white,
+      body: Stack(
         children: [
-          Padding(
-            padding: EdgeInsets.all(8*hp),
-            child: TextField(
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(hintText: 'Email'),
-              onChanged: (value) {
-                if (mounted) {
-                  setState(() {
-                    email = value.trim();
-                  });
-                }
-              },
-            ),
-          ),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-            ElevatedButton(
-                child: Text('Verify'),
+          Positioned(
+            bottom:0,
+            left:0,
+            child: AuthBar(buttonText: "Register",
                 onPressed: () async {
                   if (mounted) {
                     setState(() => loading = true);
@@ -95,13 +72,71 @@ class _RegisterEmailState extends State<RegisterEmail> {
                       });
                     }
                   }
-                })
-          ]),
-          SizedBox(height: 12*hp),
-          Text(
-            error,
-            style: TextStyle(color: Colors.red, fontSize: 14*hp),
-          )
+                }),
+            ),
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+            child: Form(
+              key: _formKey,
+              child:
+              Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(height: unit),
+                    Center(
+                        child:
+                        Column(
+                          children: [
+                            Container(
+                              height: unit*.8,
+                              width: unit * .8,
+                              decoration: new BoxDecoration(
+                                color: ThemeColor.secondaryBlue,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                            SizedBox(height: unit*.9),
+                            Text("Make your Account", style: ThemeText.inter(fontSize: 23,
+                              fontWeight: FontWeight.w700,
+                              color: ThemeColor.black,
+                            )),
+                            SizedBox(height:15),
+                            Text('Register with your school email.',
+                                style: ThemeText.regularSmall(fontSize: 16, color: ThemeColor.secondaryBlue)),
+                            SizedBox(height: unit/2),
+                          ],
+                        )
+                    ),
+                    SizedBox(height: unit),
+                    TextField(
+                      autocorrect:false,
+                      style: TextStyle(
+                        color: ThemeColor.mediumGrey,
+                        fontSize: 18,
+                        //fontWeight: ,
+                      ),
+                      maxLines: null,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                            hintStyle: TextStyle(
+                              color: ThemeColor.mediumGrey,
+                              fontSize: 18,
+                              //fontWeight: ,
+                            ),
+                            border: InputBorder.none,
+                            hintText: "Your School Email"),
+                        onChanged: (value) {
+                        if (mounted) {
+                          setState(() {
+                            email = value.trim();
+                          });
+                        }
+                      },
+                    ),
+                    Divider(height:20, thickness: 2, color: ThemeColor.lightMediumGrey),
+                  ]),
+            ),
+          ),
         ],
       ),
     );
