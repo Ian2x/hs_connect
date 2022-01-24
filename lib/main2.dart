@@ -41,3 +41,42 @@ class _Main2State extends State<Main2> {
     );
   }
 }
+
+/*
+
+class Main2 extends StatefulWidget {
+  const Main2({Key? key}) : super(key: key);
+
+  @override
+  _Main2State createState() => _Main2State();
+}
+
+class _Main2State extends State<Main2> {
+  @override
+  Widget build(BuildContext context) {
+    final user = Provider.of<User?>(context);
+    return StreamProvider<UserData?>.value(
+      value: user != null ? UserDataDatabaseService(
+              currUserRef: FirebaseFirestore.instance.collection(C.userData).doc(user.uid))
+          .userData : null,
+      initialData: null,
+      child: MaterialApp(
+        home: Wrapper(),
+        theme: ThemeData(
+          textSelectionTheme: TextSelectionThemeData(
+            cursorColor: ThemeColor.darkGrey,
+            selectionColor: ThemeColor.darkGrey,
+            selectionHandleColor: ThemeColor.darkGrey,
+          ),
+          textTheme: TextTheme(
+
+          ),
+          splashColor: Colors.transparent,
+          backgroundColor: ThemeColor.backgroundGrey,
+        ),
+      ),
+    );
+  }
+}
+
+ */

@@ -5,18 +5,18 @@ import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 
-class ModalBottomSheet extends StatefulWidget {
+class GroupSelectionSheet extends StatefulWidget {
   final List<Group> groups;
   final Group initialSelectedGroup;
   final VoidGroupParamFunction onSelectGroup;
 
-  const ModalBottomSheet({Key? key, required this.groups, required this.initialSelectedGroup, required this.onSelectGroup}) : super(key: key);
+  const GroupSelectionSheet({Key? key, required this.groups, required this.initialSelectedGroup, required this.onSelectGroup}) : super(key: key);
 
   @override
-  _ModalBottomSheetState createState() => _ModalBottomSheetState();
+  _GroupSelectionSheetState createState() => _GroupSelectionSheetState();
 }
 
-class _ModalBottomSheetState extends State<ModalBottomSheet> {
+class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
 
   Group? selectedGroup;
 
@@ -61,9 +61,9 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                       if (mounted) {
                         setState(() {
                           selectedGroup = widget.groups[index - 1];
-                          widget.onSelectGroup(widget.groups[index - 1]);
                         });
                       }
+                      widget.onSelectGroup(widget.groups[index - 1]);
                     },
                     child: Container(
                       child: Column(
@@ -90,6 +90,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                                           selectedGroup = widget.groups[index - 1];
                                         });
                                       }
+                                      widget.onSelectGroup(widget.groups[index - 1]);
                                     }
                                   },
                                 )

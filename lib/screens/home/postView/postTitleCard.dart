@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
+import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/postView/likeDislikePost.dart';
 import 'package:hs_connect/screens/profile/profilePage.dart';
@@ -171,10 +172,9 @@ class _PostTitleCardState extends State<PostTitleCard> {
                               borderRadius: BorderRadius.vertical(
                                 top: Radius.circular(20),
                               )),
-                          builder: (context) => new reportSheet(
+                          builder: (context) => new ReportSheet(
                             reportType: ReportType.post,
                             entityRef: widget.post.postRef,
-                            reporterRef: widget.currUserRef,
                           ));
 
                     },

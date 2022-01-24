@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/comment.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/screens/home/commentView/commentCard.dart';
-import 'package:hs_connect/screens/home/commentView/commentReplyForm.dart';
-import 'package:hs_connect/screens/home/postView/Widgets/postTitleCard.dart';
+import 'package:hs_connect/screens/home/comments/commentCard.dart';
+import 'package:hs_connect/screens/home/comments/commentReplyForm.dart';
+import 'package:hs_connect/screens/home/postView/postTitleCard.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
@@ -69,6 +69,15 @@ class _CommentsFeedState extends State<CommentsFeed> {
                     );
                   } else if (index == 1) {
                     return Divider(thickness: 3, color: ThemeColor.backgroundGrey, height: 20);
+                  } else if (index == comments.length + 1) {
+                    return Container(
+                      padding: EdgeInsets.only(bottom: 70),
+                      child: CommentCard(
+                        switchFormBool: switchFormBool,
+                        comment: comments[index - 2],
+                        currUserRef: userData.userRef,
+                      )
+                    );
                   } else {
                     return CommentCard(
                       switchFormBool: switchFormBool,

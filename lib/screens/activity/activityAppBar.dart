@@ -13,6 +13,5 @@ AppBar activityAppBar() {
                 TextStyle(fontFamily: "Inter", fontSize: 28.0, color: ThemeColor.black, fontWeight: FontWeight.w600))
       ],
       ),
-
   );
 }

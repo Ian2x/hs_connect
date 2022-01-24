@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/shared/constants.dart';
 
-class MessagesDatabaseService {
+class ReportsDatabaseService {
   final DocumentReference currUserRef;
 
-  MessagesDatabaseService({required this.currUserRef});
+  ReportsDatabaseService({required this.currUserRef});
 
   // collection reference
   final CollectionReference reportsCollection = FirebaseFirestore.instance.collection(C.reports);
@@ -16,8 +16,9 @@ class MessagesDatabaseService {
     required DocumentReference reporterRef,
     required String text,
   }) async {
+    entityRef.update({C.numReports: FieldValue.increment(1)});
     return await reportsCollection.add({
-      C.reportType: reportType,
+      C.reportType: reportType.string,
       C.entityRef: entityRef,
       C.reporterRef: reporterRef,
       C.text: text,
@@ -34,7 +35,7 @@ class MessagesDatabaseService {
     }
   }
 
-  Future<Report?> getGroupData({required DocumentReference reportRef}) async {
+  Future<Report?> getReportData({required DocumentReference reportRef}) async {
     final snapshot = await reportRef.get();
     return _reportFromSnapshot(snapshot: snapshot);
   }

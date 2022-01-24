@@ -9,7 +9,7 @@ class Message {
   final String text;
   final bool? isMedia;
   final Timestamp? createdAt;
-  final int? numReports;
+  final int numReports;
   final bool timeMessage;
 
   Message({

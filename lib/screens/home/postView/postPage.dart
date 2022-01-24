@@ -4,7 +4,7 @@ import 'package:hs_connect/models/accessRestriction.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/screens/home/commentFeed/commentsFeed.dart';
+import 'package:hs_connect/screens/home/comments/commentsFeed.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
