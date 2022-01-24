@@ -31,15 +31,17 @@ class RepliesDatabaseService {
       Function(void) onValue = defaultFunc,
       Function onError = defaultFunc}) async {
     DocumentReference newReplyRef = repliesCollection.doc();
-    // update comment creator's activity
-    postCreatorRef.update({C.myNotifications: FieldValue.arrayUnion([{
-      C.parentPostRef: postRef,
-      C.myNotificationType: MyNotificationType.replyToComment.string,
-      C.sourceRef: newReplyRef,
-      C.sourceUserRef: currUserRef,
-      C.createdAt: Timestamp.now(),
-      C.extraData: text
-    }])});
+    // update comment creator's activity if not self
+    if (postCreatorRef != currUserRef) {
+      postCreatorRef.update({C.myNotifications: FieldValue.arrayUnion([{
+        C.parentPostRef: postRef,
+        C.myNotificationType: MyNotificationType.replyToComment.string,
+        C.sourceRef: newReplyRef,
+        C.sourceUserRef: currUserRef,
+        C.createdAt: Timestamp.now(),
+        C.extraData: text
+      }])});
+    }
     // update other repliers' activity
     repliesCollection.where(C.commentRef, isEqualTo: commentRef).get().then(
         (QuerySnapshot QS) {

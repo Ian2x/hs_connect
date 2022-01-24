@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:hs_connect/models/accessRestriction.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/userData.dart';
@@ -17,7 +16,7 @@ import 'package:provider/provider.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 
-import 'modalBottomSheet.dart';
+import 'groupSelectionSheet.dart';
 
 const String emptyPollChoiceError = 'Can\'t create a poll with an empty choice';
 const String emptyTitleError = 'Can\'t create a post with an empty title';
@@ -44,7 +43,6 @@ class _PostFormState extends State<PostForm> {
   }
 
   void handleValue(val) {
-    loading = false;
     Navigator.pop(context);
   }
 
@@ -61,9 +59,6 @@ class _PostFormState extends State<PostForm> {
 
   ImageStorage _images = ImageStorage();
   PollsDatabaseService _polls = PollsDatabaseService();
-
-  bool groupIsChecked = false;
-  bool publicIsChecked = false;
 
   List<Group>? groupChoices;
 
@@ -151,7 +146,7 @@ class _PostFormState extends State<PostForm> {
                             borderRadius: BorderRadius.vertical(
                           top: Radius.circular(20),
                         )),
-                        builder: (context) => new ModalBottomSheet(
+                        builder: (context) => new GroupSelectionSheet(
                               initialSelectedGroup: selectedGroup!,
                               onSelectGroup: (Group? group) {
                                 if (mounted) {
@@ -247,10 +242,9 @@ class _PostFormState extends State<PostForm> {
               Container(
                 //TextInput Container
                 constraints: BoxConstraints(
-                  maxHeight: double.infinity,
                   minHeight: phoneHeight * 0.75,
                 ),
-                padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
                 child: Column(children: <Widget>[
                   SizedBox(height: phoneHeight * 0.02),
                   error != null
@@ -301,7 +295,6 @@ class _PostFormState extends State<PostForm> {
                     },
                     child: Container(
                       constraints: BoxConstraints(
-                        maxHeight: double.infinity,
                         minHeight: newFile == null ? phoneHeight * 0.63 : phoneHeight * 0.31,
                       ),
                       child: Column(

@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/reply.dart';
+import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/screens/home/commentView/likeDislikeComment.dart';
+import 'package:hs_connect/screens/home/comments/likeDislikeComment.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
@@ -93,10 +94,9 @@ class _ReplyCardState extends State<ReplyCard> {
                       borderRadius: BorderRadius.vertical(
                         top: Radius.circular(20),
                       )),
-                  builder: (context) => new reportSheet(
+                  builder: (context) => new ReportSheet(
                     reportType: ReportType.reply,
                     entityRef: widget.reply.replyRef,
-                    reporterRef: widget.currUserRef,
                   ));
 
             },

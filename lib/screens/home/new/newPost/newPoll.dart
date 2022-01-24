@@ -66,7 +66,7 @@ class _NewPollState extends State<NewPoll> {
                     onPressed: () {
                       widget.onDeletePoll();
                     },
-                    icon: Icon(Icons.cancel_outlined),
+                    icon: Icon(Icons.close),
                   )
                 ]);
               } else if (index == numOptions + 1) {

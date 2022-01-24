@@ -1,16 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/models/comment.dart';
-import 'package:hs_connect/screens/home/commentView/likeDislikeComment.dart';
-import 'package:hs_connect/screens/home/postView/likeDislikePost.dart';
-import 'package:hs_connect/screens/home/replyFeed/replyFeed.dart';
-import 'package:hs_connect/services/groups_database.dart';
+import 'package:hs_connect/screens/home/comments/likeDislikeComment.dart';
+import 'package:hs_connect/screens/home/replies/replyFeed.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
-import 'package:hs_connect/shared/tools/formListener.dart';
 import 'package:hs_connect/shared/widgets/reportSheet.dart';
 
 class CommentCard extends StatefulWidget {
@@ -118,10 +116,9 @@ class _CommentCardState extends State<CommentCard> {
                       borderRadius: BorderRadius.vertical(
                         top: Radius.circular(20),
                       )),
-                  builder: (context) => new reportSheet(
+                  builder: (context) => new ReportSheet(
                     reportType: ReportType.comment,
                     entityRef: widget.comment.commentRef,
-                    reporterRef: widget.currUserRef,
                   ));
 
             },

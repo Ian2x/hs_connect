@@ -31,15 +31,17 @@ class CommentsDatabaseService {
       Function(void) onValue = defaultFunc,
       Function onError = defaultFunc}) async {
     DocumentReference newCommentRef = commentsCollection.doc();
-    // update post creator's activity
-    postCreatorRef.update({C.myNotifications: FieldValue.arrayUnion([{
-      C.parentPostRef: postRef,
-      C.myNotificationType: MyNotificationType.commentToPost.string,
-      C.sourceRef: newCommentRef,
-      C.sourceUserRef: currUserRef,
-      C.createdAt: Timestamp.now(),
-      C.extraData: text
-    }])});
+    // update post creator's activity if not self
+    if (postCreatorRef!=currUserRef) {
+      postCreatorRef.update({C.myNotifications: FieldValue.arrayUnion([{
+        C.parentPostRef: postRef,
+        C.myNotificationType: MyNotificationType.commentToPost.string,
+        C.sourceRef: newCommentRef,
+        C.sourceUserRef: currUserRef,
+        C.createdAt: Timestamp.now(),
+        C.extraData: text
+      }])});
+    }
 
     // update post's commentsRefs and score
     postRef.update({
