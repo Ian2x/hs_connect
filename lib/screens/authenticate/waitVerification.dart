@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/screens/authenticate/registerUser.dart';
 import 'dart:async';
 
+import 'package:hs_connect/shared/constants.dart';
+
 class WaitVerification extends StatefulWidget {
   const WaitVerification({Key? key, required this.domain}) : super(key: key);
 
@@ -36,10 +38,32 @@ class _WaitVerificationState extends State<WaitVerification> {
 
   @override
   Widget build(BuildContext context) {
+
+    double unit = MediaQuery.of(context).size.height/10;
+
     return Scaffold(
       body: Center(
-        child: Text(
-            'An email has been sent to ${user!.email}, please press the link to verify. This may take a few seconds...'),
+        child: Column(
+          children: [
+            Container(
+              height: unit*.8,
+              width: unit * .8,
+              decoration: new BoxDecoration(
+                color: ThemeColor.secondaryBlue,
+                shape: BoxShape.circle,
+              ),
+            ),
+            SizedBox(height: unit*.9),
+            Text("Make your Account", style: ThemeText.inter(fontSize: 23,
+              fontWeight: FontWeight.w700,
+              color: ThemeColor.black,
+            )),
+            SizedBox(height:15),
+            Text('Register with your school email.',
+                style: ThemeText.regularSmall(fontSize: 16, color: ThemeColor.secondaryBlue)),
+            SizedBox(height: unit/2),
+          ],
+        ),
       ),
     );
   }

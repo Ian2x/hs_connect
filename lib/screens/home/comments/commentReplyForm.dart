@@ -4,14 +4,10 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/services/replies_database.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
-import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
-import 'package:hs_connect/shared/tools/formListener.dart';
-import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/foundation.dart';
 
 class CommentReplyForm extends StatefulWidget {
   final DocumentReference currUserRef;
@@ -153,6 +149,9 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
             // was working on submitting upon "enter" key press, but probably not necessary/wanted
             onSubmit();
           },*/
+          style: TextStyle(
+
+          ),
           autocorrect: false,
           decoration: commentReplyInputDecoration(
               isReply: widget.isReply,
