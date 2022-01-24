@@ -123,7 +123,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
                     dislikeStatus = false;
                   });
                 }
-                _comments.likeComment(widget.comment.creatorRef, likeCount);
+                _comments.likeComment(widget.comment.creatorRef!, likeCount);
               },
             );
           }

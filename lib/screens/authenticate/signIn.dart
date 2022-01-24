@@ -34,8 +34,8 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
 
-    double unit = MediaQuery.of(context).size.height/10;
-
+    final hp = getHp(context);
+    final wp = getWp(context);
     return loading
         ? Scaffold(backgroundColor: ThemeColor.backgroundGrey, body: Loading())
         : Scaffold(
@@ -45,48 +45,48 @@ class _SignInState extends State<SignIn> {
                 Positioned(
                   bottom:0,
                   right:0,
-                  child: AuthBar(buttonText: "Sign in"),
+                  child: AuthBar(buttonText: "Sign in", hp: hp, wp: wp),
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+                  padding: EdgeInsets.symmetric(vertical: 20*hp, horizontal: 50*wp),
                   child: Form(
                     key: _formKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                      SizedBox(height: unit),
+                      SizedBox(height: 78*hp),
                       Center(
                         child:
                         Column(
                           children: [
                             Container(
-                              height: unit*.8,
-                              width: unit * .8,
+                              height: 62*hp,
+                              width: 62*hp,
                               decoration: new BoxDecoration(
                                 color: ThemeColor.secondaryBlue,
                                 shape: BoxShape.circle,
                               ),
                             ),
-                            SizedBox(height: unit/3),
-                            Text("Sign in", style: ThemeText.inter(fontSize: 23,
+                            SizedBox(height: 26*hp),
+                            Text("Sign in", style: ThemeText.inter(fontSize: 23*hp,
                               fontWeight: FontWeight.w700,
                               color: ThemeColor.black,
                             )),
-                            SizedBox(height: unit/3),
+                            SizedBox(height: 26*hp),
                           ],
                         )
                       ),
                         TextFormField(
-                          style: TextStyle(
+                          style: ThemeText.inter(
                             color: ThemeColor.mediumGrey,
-                            fontSize: 18,
+                            fontSize: 18*hp,
                             //fontWeight: ,
                           ),
                           maxLines: null,
                           decoration: InputDecoration(
-                              hintStyle: TextStyle(
+                              hintStyle: ThemeText.inter(
                                 color: ThemeColor.mediumGrey,
-                                fontSize: 18,
+                                fontSize: 18*hp,
                                 //fontWeight: ,
                               ),
                               border: InputBorder.none,
@@ -104,17 +104,17 @@ class _SignInState extends State<SignIn> {
                               }
                           }
                       ),
-                      Divider(height:20, thickness: 2, color: ThemeColor.lightMediumGrey),
+                      Divider(height:20*hp, thickness: 2*hp, color: ThemeColor.lightMediumGrey),
                         TextFormField(
-                            style: TextStyle(
+                            style: ThemeText.inter(
                               color: ThemeColor.mediumGrey,
-                              fontSize: 18,
+                              fontSize: 18*hp,
                               //fontWeight: ,
                             ),
                             decoration: InputDecoration(
-                                hintStyle: TextStyle(
+                                hintStyle: ThemeText.inter(
                                   color: ThemeColor.mediumGrey,
-                                  fontSize: 18,
+                                  fontSize: 18*hp,
                                   //fontWeight: ,
                                 ),
                                 border: InputBorder.none,
@@ -133,14 +133,14 @@ class _SignInState extends State<SignIn> {
                               }
                             }),
 
-                      Divider(height:20, thickness: 2, color: ThemeColor.lightMediumGrey),
-                      SizedBox(height: 20.0),
+                      Divider(height:20*hp, thickness: 2*hp, color: ThemeColor.lightMediumGrey),
+                      SizedBox(height: 20*hp),
                       Align(
                         alignment: Alignment.bottomLeft,
                         child:
                           TextButton(
                               child: Text('Register here',
-                                  style: ThemeText.regularSmall(fontSize: 16, color: ThemeColor.secondaryBlue)),
+                                  style: ThemeText.regularSmall(fontSize: 16*hp, color: ThemeColor.secondaryBlue)),
                               onPressed: () {
                               widget.toggleView();
                           }),
@@ -165,11 +165,11 @@ class _SignInState extends State<SignIn> {
                               }
                             }
                           },
-                      child: Text('Sign in', style: TextStyle(color: Colors.white))),
-                      SizedBox(height: 12.0),
+                      child: Text('Sign in', style: ThemeText.inter(color: Colors.white))),
+                      SizedBox(height: 12*hp),
                       Text(
                         error,
-                        style: TextStyle(color: Colors.red, fontSize: 14.0),
+                        style: ThemeText.inter(color: Colors.red, fontSize: 14*hp),
                       )
                     ]),
                   ),

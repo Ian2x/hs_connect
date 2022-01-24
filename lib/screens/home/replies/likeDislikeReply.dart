@@ -128,7 +128,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
                     dislikeStatus = false;
                   });
                 }
-                _replies.likeReply(widget.reply.creatorRef, likeCount);
+                _replies.likeReply(widget.reply.creatorRef!, likeCount);
               },
             );
           }

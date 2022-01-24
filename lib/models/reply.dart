@@ -5,7 +5,7 @@ import 'package:hs_connect/shared/tools/helperFunctions.dart';
 
 class Reply {
   final DocumentReference replyRef;
-  final DocumentReference creatorRef;
+  final DocumentReference? creatorRef;
   final DocumentReference commentRef;
   final DocumentReference postRef;
   final DocumentReference groupRef;

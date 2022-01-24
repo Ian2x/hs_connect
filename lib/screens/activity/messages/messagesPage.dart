@@ -25,37 +25,42 @@ class MessagesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double wp = getWp(context);
+    double hp = getHp(context);
+
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: ThemeColor.white,
         appBar: PreferredSize(
-            preferredSize: Size.fromHeight(50),
-            child: MessagesPageAppBar(currUserRef: currUserRef, otherUserRef: otherUserRef)),
+            preferredSize: Size.fromHeight(50*hp),
+            child: MessagesPageAppBar(currUserRef: currUserRef, otherUserRef: otherUserRef, hp: hp)),
         body: Container(
-          padding: EdgeInsets.only(bottom: 10),
+          padding: EdgeInsets.only(bottom: 10*hp),
           child: Column(children: <Widget>[
             Expanded(
                 child: Container(
-              padding: EdgeInsets.only(left: 10, right: 10),
+              padding: EdgeInsets.only(left: 10*wp, right: 10*wp),
               child: MessagesFeed(
                 currUserRef: currUserRef,
                 otherUserRef: otherUserRef,
                 onUpdateLastViewed: onUpdateLastViewed,
+                wp: wp, hp: hp
               ),
             )),
-            Divider(height: 0.5, color: ThemeColor.mediumGrey),
+            Divider(height: 0.5*hp, color: ThemeColor.mediumGrey),
             Container(
-              child: SizedBox(height: 10),
+              child: SizedBox(height: 10*hp),
             ),
             Container(
-                padding: EdgeInsets.only(left: 10, right: 10),
+                padding: EdgeInsets.only(left: 10*wp, right: 10*wp),
                 child: MessagesForm(
                     currUserRef: currUserRef,
                     otherUserRef: otherUserRef,
                     onUpdateLastMessage: onUpdateLastMessage,
-                    onUpdateLastViewed: onUpdateLastViewed))
+                    onUpdateLastViewed: onUpdateLastViewed,
+                    wp: wp, hp: hp))
           ]),
         ),
       ),
@@ -66,8 +71,9 @@ class MessagesPage extends StatelessWidget {
 class MessagesPageAppBar extends StatefulWidget {
   final DocumentReference currUserRef;
   final DocumentReference otherUserRef;
+  final double hp;
 
-  const MessagesPageAppBar({Key? key, required this.currUserRef, required this.otherUserRef}) : super(key: key);
+  const MessagesPageAppBar({Key? key, required this.currUserRef, required this.otherUserRef, required this.hp}) : super(key: key);
 
   @override
   _MessagesPageAppBarState createState() => _MessagesPageAppBarState();
@@ -94,6 +100,7 @@ class _MessagesPageAppBarState extends State<MessagesPageAppBar> {
 
   @override
   Widget build(BuildContext context) {
+    double hp = getHp(context);
     return AppBar(
       backgroundColor: ThemeColor.white,
       title: Text(otherUserUsername, style: ThemeText.titleRegular()),
@@ -102,9 +109,9 @@ class _MessagesPageAppBarState extends State<MessagesPageAppBar> {
       bottom: PreferredSize(
           child: Container(
             color: ThemeColor.mediumGrey,
-            height: 0.5,
+            height: 0.5*hp,
           ),
-          preferredSize: Size.fromHeight(0.5)),
+          preferredSize: Size.fromHeight(0.5*hp)),
     );
   }
 }

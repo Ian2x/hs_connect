@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class DomainData {
   final String? county;
   final String? state;

@@ -9,18 +9,23 @@ import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
+import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/reportSheet.dart';
 
 class CommentCard extends StatefulWidget {
   final Comment comment;
   final DocumentReference currUserRef;
   final VoidDocParamFunction switchFormBool;
+  final double hp;
+  final double wp;
 
   CommentCard({
     Key? key,
     required this.switchFormBool,
     required this.comment,
     required this.currUserRef,
+    required this.hp,
+    required this.wp,
   }) : super(key: key);
 
   @override
@@ -36,11 +41,17 @@ class _CommentCardState extends State<CommentCard> {
   Image? userImage;
   Color? groupColor;
   String userGroupName='';
+  double? hp;
+  double? wp;
 
   @override
   void initState() {
-    super.initState();
-
+    if (mounted) {
+      setState(() {
+        wp = widget.wp;
+        hp = widget.hp;
+      });
+    }
     // initialize liked/disliked
     if (widget.comment.likes.contains(widget.currUserRef)) {
       if (mounted) {
@@ -56,12 +67,13 @@ class _CommentCardState extends State<CommentCard> {
       }
     }
     getUserData();
+    super.initState();
   }
 
   void getUserData() async {
     if (widget.comment.creatorRef != null) {
       UserDataDatabaseService _userDataDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserRef);
-      final UserData? fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.comment.creatorRef);
+      final UserData? fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.comment.creatorRef!);
       if (mounted) {
         setState(() {
           username = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
@@ -85,27 +97,12 @@ class _CommentCardState extends State<CommentCard> {
   @override
   Widget build(BuildContext context) {
 
-    double imageSide= (MediaQuery.of(context).size.width)/12;
-
-    /*
-    if (imageString != null && imageString != "") {
-      var tempImage = Image.network(imageString!);
-      tempImage.image
-          .resolve(ImageConfiguration())
-          .addListener(ImageStreamListener((ImageInfo image, bool syncrhonousCall) {
-        if (mounted) {
-          setState(() => userImage = tempImage);
-        }
-      }));
-    } else {
-      userImage=  Image(image: AssetImage('assets/lville.jpeg'), height: 20, width: 20);
-    }
-    */
+    if (wp==null || hp == null) return Loading();
 
     return Stack(
       children: [
         Positioned(
-          top:-10,
+          top:-10*hp!,
           right:0,
           child:IconButton(icon: Icon(Icons.more_horiz),
             iconSize: 20,
@@ -120,7 +117,6 @@ class _CommentCardState extends State<CommentCard> {
                     reportType: ReportType.comment,
                     entityRef: widget.comment.commentRef,
                   ));
-
             },
           ),
         ),
@@ -137,21 +133,6 @@ class _CommentCardState extends State<CommentCard> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  /*Column(
-                    children: [
-                      Container(
-                        width: imageSide,
-                        height: imageSide,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              image: userImage!.image,
-                              fit: BoxFit.fill,
-                            )
-                        ),
-                      ),
-                    ],
-                  ),*/
                   Flexible(
                     fit:FlexFit.loose,
                     child: Column(
@@ -180,10 +161,10 @@ class _CommentCardState extends State<CommentCard> {
                                   widget.switchFormBool(widget.comment.commentRef);
                                 }
                             ),
-                            LikeDislikeComment(
+                            widget.comment.creatorRef != null ? LikeDislikeComment(
                                 comment: widget.comment,
                                 currUserRef: widget.currUserRef,
-                            ),
+                            ) : Container()
                           ],
                         ),
                       ],

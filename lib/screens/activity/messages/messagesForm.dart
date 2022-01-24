@@ -15,8 +15,10 @@ class MessagesForm extends StatefulWidget {
   final DocumentReference otherUserRef;
   final VoidFunction onUpdateLastMessage;
   final VoidFunction onUpdateLastViewed;
+  final double wp;
+  final double hp;
 
-  const MessagesForm({Key? key, required this.currUserRef, required this.otherUserRef, required this.onUpdateLastMessage, required this.onUpdateLastViewed}) : super(key: key);
+  const MessagesForm({Key? key, required this.currUserRef, required this.otherUserRef, required this.onUpdateLastMessage, required this.onUpdateLastViewed, required this.wp, required this.hp}) : super(key: key);
 
   @override
   _MessagesFormState createState() => _MessagesFormState();
@@ -24,8 +26,9 @@ class MessagesForm extends StatefulWidget {
 
 class _MessagesFormState extends State<MessagesForm> {
   final imageBorderRadius = BorderRadius.circular(0);
-
   final _formKey = GlobalKey<FormState>();
+  double? wp;
+  double? hp;
 
   File? newFile;
 
@@ -44,10 +47,21 @@ class _MessagesFormState extends State<MessagesForm> {
   }
 
   @override
+  void initState() {
+    if (mounted) {
+      setState(() {
+        wp = widget.wp;
+        hp = widget.hp;
+      });
+    }
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
 
-    if (userData == null) {
+    if (userData == null || wp == null || hp == null) {
       return Loading();
     }
 
@@ -62,16 +76,16 @@ class _MessagesFormState extends State<MessagesForm> {
                     ? Semantics(
                         label: 'new_message_image',
                         child: Container(
-                          width: 150,
-                          height: 150,
-                          padding: EdgeInsets.all(3),
+                          width: 150*wp!,
+                          height: 150*hp!,
+                          padding: EdgeInsets.all(3*hp!),
                           decoration: BoxDecoration(color: ThemeColor.lightGrey, borderRadius: imageBorderRadius),
                           child: ClipRRect(
                               borderRadius: imageBorderRadius,
                               child: DeletableImage(
                                 image: Image.file(File(newFile!.path), fit: BoxFit.scaleDown),
                                 onDelete: () => setPic(null),
-                                buttonSize: 30.0,
+                                buttonSize: 30*hp!,
                               )),
                         ))
                     : Container(),
@@ -79,7 +93,7 @@ class _MessagesFormState extends State<MessagesForm> {
                     initialValue: null,
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
-                    style: ThemeText.roboto(fontSize: 16, color: ThemeColor.darkGrey),
+                    style: ThemeText.roboto(fontSize: 16*hp!, color: ThemeColor.darkGrey),
                     decoration: messageInputDecoration(
                         setPic: setPic,
                         onPressed: () async {

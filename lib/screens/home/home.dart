@@ -38,6 +38,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
     final user = Provider.of<User?>(context);
     final userData = Provider.of<UserData?>(context);
+    final hp = getHp(context);
+    final wp = getWp(context);
+
 
     if(user==null) {
       return Authenticate();
@@ -52,7 +55,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     // this sliver app bar is only use to hide/show the tabBar, the AppBar
     // is invisible at all times. The to the user visible AppBar is below
     return Scaffold(
-      backgroundColor: ThemeColor.backgroundGrey,
       body: Stack(
         children: <Widget>[
           NestedScrollView(
@@ -60,19 +62,20 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 (BuildContext context, bool innerBoxIsScrolled) {
               return <Widget>[
                 SliverAppBar(
-                  elevation: 0.0,
+                  elevation: 0,
                   primary: true,
                   floating: true,
-                  backgroundColor: HexColor('FFFFFF'),//.withOpacity(0.3),
+                  backgroundColor: ThemeColor.white,
                   snap: true,
                   pinned: false,
                   bottom: TabBar(
                     indicatorColor: ThemeColor.darkGrey,
                     tabs: <Widget>[
                       Tab(
-                          icon: Text(userData.domain,
+                          icon: Text(userData.fullDomainName!=null ? userData.fullDomainName! : userData.domain,
                               style:
-                              TextStyle(
+                              ThemeText.inter(
+                                fontSize: 14*hp,
                                 color: ThemeColor.black,
                               )
                           )
@@ -80,7 +83,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       Tab(
                           icon: Text("Trending",
                               style:
-                              TextStyle(
+                              ThemeText.inter(
+                                fontSize: 14*hp,
                                 color: ThemeColor.black,
                               )
                           )
@@ -102,9 +106,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           ),
 
           Positioned(
-            top: 0.0,
-            left: 0.0,
-            right: 0.0,
+            top: 0,
+            left: 0,
+            right: 0,
             child: Container(
               child: SafeArea(
                 top: false,
@@ -113,7 +117,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   elevation: 0,
                   title: Text('HS Connect',
                       style:
-                      TextStyle(
+                      ThemeText.inter(
+                        fontSize: 20*hp,
                         color: ThemeColor.black,
                       )
                   ),
@@ -123,7 +128,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       icon: Icon(Icons.person),
                       label: Text('Logout',
                           style:
-                          TextStyle(
+                          ThemeText.inter(
+                            fontSize: 14*hp,
                             color: ThemeColor.black,
                           )
                       ),

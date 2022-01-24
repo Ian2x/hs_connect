@@ -49,8 +49,8 @@ class RepliesDatabaseService {
           for (Reply? r in replies) {
             if (r!=null) {
               // check not updating for multiple replies by self
-              if (r.creatorRef!=currUserRef) {
-                r.creatorRef.update({
+              if (r.creatorRef!=currUserRef && r.creatorRef!=null) {
+                r.creatorRef!.update({
                   C.myNotifications: FieldValue.arrayUnion([{
                     C.parentPostRef: postRef,
                     C.myNotificationType: MyNotificationType.replyToReply.string,
