@@ -50,7 +50,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  NoAnimationMaterialPageRoute(builder: (context) => new Home()),
+                  NoAnimationMaterialPageRoute(builder: (context) => Home()),
                 );
               },
             ),
@@ -65,7 +65,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  NoAnimationMaterialPageRoute(builder: (context) => new ActivityPage()),
+                  NoAnimationMaterialPageRoute(builder: (context) => ActivityPage()),
                 );
               },
             ),
@@ -80,7 +80,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  NoAnimationMaterialPageRoute(builder: (context) => new ProfilePage(profileRef: userData.userRef, currUserRef: userData.userRef)),
+                  NoAnimationMaterialPageRoute(builder: (context) => ProfilePage(profileRef: userData.userRef, currUserRef: userData.userRef)),
                 );
               },
             ),

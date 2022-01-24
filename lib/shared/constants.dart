@@ -17,7 +17,6 @@ const double groupPicHeight = 400;
 //TODO: May have to do sizing based on Media.context(of)
 
 
-
 class ThemeLayout {
   static double borderRadius = 15.0;
 }
@@ -224,4 +223,12 @@ class C {
   static const postVotes = 'postVotes';
   static const extraData = 'extraData';
   static const ianTime = 'ianTime';
+}
+
+double getWp (context) {
+  return MediaQuery.of(context).size.width / 392.7;
+}
+
+double getHp (context) {
+  return MediaQuery.of(context).size.height / 781.1;
 }

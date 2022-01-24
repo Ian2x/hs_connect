@@ -8,6 +8,7 @@ import 'package:hs_connect/screens/home/comments/commentsFeed.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
+import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
@@ -76,11 +77,15 @@ class _PostPageState extends State<PostPage> {
 
   @override
   Widget build(BuildContext context) {
-
     final userData = Provider.of<UserData?>(context);
     if (userData == null || post == null) {
       return Loading();
     }
+
+    final hp = getHp(context);
+    final wp = getWp(context);
+
+
     return Scaffold(
       backgroundColor: HexColor("FFFFFF"),
       appBar: AppBar(
@@ -100,7 +105,7 @@ class _PostPageState extends State<PostPage> {
                   minHeight: MediaQuery.of(context).size.height,
                 ),
                 child:
-                  CommentsFeed(post: post!, groupRef: post!.groupRef),
+                  CommentsFeed(post: post!, groupRef: post!.groupRef, wp: wp, hp: hp,),
               ),
             ],
           )

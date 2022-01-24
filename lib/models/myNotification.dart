@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/shared/constants.dart';
-import 'package:flutter/material.dart';
 
 enum MyNotificationType {
   commentToPost,

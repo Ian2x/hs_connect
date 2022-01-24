@@ -71,13 +71,13 @@ class PostsDatabaseService {
   }
 
   Future _delReplyHelper(Reply reply, DocumentReference postRef) async {
-    RepliesDatabaseService _tempReplies = RepliesDatabaseService(currUserRef: reply.creatorRef);
+    RepliesDatabaseService _tempReplies = RepliesDatabaseService(currUserRef: reply.creatorRef!);
     _tempReplies.deleteReply(
         replyRef: reply.replyRef, commentRef: reply.commentRef, postRef: postRef, weakDelete: false, media: reply.media);
   }
 
   Future _delCommentHelper(Comment comment, DocumentReference postRef) async {
-    CommentsDatabaseService _tempComments = CommentsDatabaseService(currUserRef: comment.creatorRef);
+    CommentsDatabaseService _tempComments = CommentsDatabaseService(currUserRef: comment.creatorRef!);
     _tempComments.deleteComment(commentRef: comment.commentRef, postRef: postRef, weakDelete: false, media: comment.media);
   }
 

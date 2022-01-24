@@ -61,7 +61,7 @@ class _ReplyCardState extends State<ReplyCard> {
   void getUserData() async {
     if (widget.reply.creatorRef != null) {
       UserDataDatabaseService _userInfoDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserRef);
-      final UserData? fetchUserData = await _userInfoDatabaseService.getUserData(userRef: widget.reply.creatorRef);
+      final UserData? fetchUserData = await _userInfoDatabaseService.getUserData(userRef: widget.reply.creatorRef!);
       if (mounted) {
         setState(() {
           username = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
@@ -152,10 +152,10 @@ class _ReplyCardState extends State<ReplyCard> {
                                   convertTime(widget.reply.createdAt.toDate()), style: ThemeText.groupBold(color:ThemeColor.mediumGrey, fontSize:14),
                                 ),
                                 Spacer(flex:1),
-                                LikeDislikeReply(
+                                widget.reply.creatorRef != null ? LikeDislikeReply(
                                     reply: widget.reply,
                                     currUserRef: widget.currUserRef,
-                                ),
+                                ) : Container()
                               ],
                             ),
                           ],

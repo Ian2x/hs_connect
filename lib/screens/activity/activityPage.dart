@@ -28,11 +28,13 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
+    double wp = getWp(context);
+    double hp = getHp(context);
 
     if (userData == null) {
       return Scaffold(
         backgroundColor: Colors.white,
-        appBar: activityAppBar(),
+        appBar: activityAppBar(wp: wp, hp: hp),
         body: Loading(),
         bottomNavigationBar: MyNavigationBar(
           currentIndex: 1,
@@ -43,7 +45,7 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100),
+        preferredSize: Size.fromHeight(100*hp),
         child: Theme(
           data: ThemeData(
             splashColor: Colors.transparent,
@@ -51,16 +53,16 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
           ),
           child: AppBar(
             backgroundColor: ThemeColor.white,
-            elevation: 0.0,
+            elevation: 0,
             title: Row(
               children: <Widget>[
-                SizedBox(width: 18.0),
+                SizedBox(width: 18*wp),
                 Column(
                   children: <Widget>[
-                    SizedBox(height: 15),
+                    SizedBox(height: 15*hp),
                     Text('Activity',
                         style: TextStyle(
-                            fontFamily: "Inter", fontSize: 24.0, color: ThemeColor.black, fontWeight: FontWeight.w600))
+                            fontFamily: "Inter", fontSize: 24*hp, color: ThemeColor.black, fontWeight: FontWeight.w600))
                   ],
                 )
               ],
@@ -86,8 +88,8 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
       body: Container(
         color: ThemeColor.backgroundGrey,
         child: TabBarView(children: <Widget>[
-            NotificationsFeed(userData: userData),
-            AllMessagesPage(userData: userData,)
+            NotificationsFeed(userData: userData, hp: hp, wp: wp),
+            AllMessagesPage(userData: userData, hp: hp, wp: wp,)
           ], controller: _tabController, physics: BouncingScrollPhysics()),
       ),
       bottomNavigationBar: MyNavigationBar(

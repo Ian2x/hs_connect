@@ -7,7 +7,7 @@ class Comment {
   final DocumentReference commentRef;
   final DocumentReference postRef;
   final DocumentReference groupRef;
-  final DocumentReference creatorRef;
+  final DocumentReference? creatorRef;
   final String text;
   final String? media;
   final Timestamp createdAt;

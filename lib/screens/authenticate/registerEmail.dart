@@ -22,6 +22,8 @@ class _RegisterEmailState extends State<RegisterEmail> {
 
   @override
   Widget build(BuildContext context) {
+    final hp = getHp(context);
+
     return loading
         ? Scaffold(
         backgroundColor: ThemeColor.backgroundGrey,
@@ -45,7 +47,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8*hp),
             child: TextField(
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(hintText: 'Email'),
@@ -95,10 +97,10 @@ class _RegisterEmailState extends State<RegisterEmail> {
                   }
                 })
           ]),
-          SizedBox(height: 12.0),
+          SizedBox(height: 12*hp),
           Text(
             error,
-            style: TextStyle(color: Colors.red, fontSize: 14.0),
+            style: TextStyle(color: Colors.red, fontSize: 14*hp),
           )
         ],
       ),

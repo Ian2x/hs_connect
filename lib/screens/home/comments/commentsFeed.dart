@@ -14,8 +14,10 @@ import 'package:provider/provider.dart';
 class CommentsFeed extends StatefulWidget {
   final Post post;
   final DocumentReference groupRef;
+  final double wp;
+  final double hp;
 
-  CommentsFeed({Key? key, required this.post, required this.groupRef}) : super(key: key);
+  CommentsFeed({Key? key, required this.post, required this.groupRef, required this.wp, required this.hp}) : super(key: key);
 
   @override
   _CommentsFeedState createState() => _CommentsFeedState();
@@ -25,6 +27,19 @@ class _CommentsFeedState extends State<CommentsFeed> {
 
   bool isReply=false;
   DocumentReference? commentRef;
+  double? hp;
+  double? wp;
+
+  @override
+  void initState() {
+    if (mounted) {
+      setState(() {
+        wp = widget.wp;
+        hp = widget.hp;
+      });
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +52,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
       });
     }
 
-    if (userData == null) return Loading();
+    if (userData == null || wp == null || hp == null) return Loading();
     CommentsDatabaseService _comments = CommentsDatabaseService(currUserRef: userData.userRef, postRef: widget.post.postRef);
 
     return Stack(
@@ -75,14 +90,14 @@ class _CommentsFeedState extends State<CommentsFeed> {
                       child: CommentCard(
                         switchFormBool: switchFormBool,
                         comment: comments[index - 2],
-                        currUserRef: userData.userRef,
+                        currUserRef: userData.userRef, wp: wp!, hp: hp!,
                       )
                     );
                   } else {
                     return CommentCard(
                       switchFormBool: switchFormBool,
                       comment: comments[index - 2],
-                      currUserRef: userData.userRef,
+                      currUserRef: userData.userRef, hp: hp!, wp: wp!,
                     );
                   }
                 },

@@ -1,10 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:intl/intl.dart';
@@ -21,8 +18,10 @@ class UMUD {
 
 class AllMessagesPage extends StatefulWidget {
   final UserData userData;
+  final double hp;
+  final double wp;
 
-  const AllMessagesPage({Key? key, required this.userData}) : super(key: key);
+  const AllMessagesPage({Key? key, required this.userData, required this.hp, required this.wp}) : super(key: key);
 
   @override
   _AllMessagesPageState createState() => _AllMessagesPageState();
@@ -32,14 +31,17 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
   List<UserMessage>? UMs;
   List<UserData>? otherUsers;
   List<UMUD> cache = [];
+  double? wp;
+  double? hp;
 
   @override
   void initState() {
     List<UserMessage> tempUMs = widget.userData.userMessages;
     // sorted by latest first
-    // tempUMs.sort((a, b) => b.lastMessage.compareTo(a.lastMessage));
     if (mounted) {
       setState(() {
+        wp = widget.wp;
+        hp = widget.hp;
         for (UserMessage UM in tempUMs) {
           cache.add(UMUD(UM: UM, UD: null));
         }
@@ -77,13 +79,13 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
 
-    if (userData == null || UMs == null || otherUsers == null) {
+    if (userData == null || UMs == null || otherUsers == null || wp == null || hp == null) {
       return Loading();
     }
 
     if (otherUsers!.length == 0) {
       return Container(
-          padding: EdgeInsets.all(10.0),
+          padding: EdgeInsets.all(10*hp!),
           child: Text("No messages :/\n\n... maybe try finding a friend",
               style: ThemeText.titleRegular(color: ThemeColor.black)));
     }
@@ -120,24 +122,24 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
               alignment: AlignmentDirectional.centerStart,
               children: <Widget>[
                 Container(
-                    margin: EdgeInsets.only(top: index == 0 ? 4.5 : 2, bottom: index == cache.length - 1 ? 2.5 : 0),
-                    padding: EdgeInsets.fromLTRB(20, 14, 14, 16),
+                    margin: EdgeInsets.only(top: index == 0 ? 4.5*hp! : 2*hp!, bottom: index == cache.length - 1 ? 2.5*hp! : 0*hp!),
+                    padding: EdgeInsets.fromLTRB(20*wp!, 14*hp!, 14*wp!, 16*hp!),
                     color: ThemeColor.white,
                     child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
                       Container(
-                          width: 40,
-                          height: 40,
+                          width: 40*hp!,
+                          height: 40*hp!,
                           decoration: new BoxDecoration(
                               shape: BoxShape.circle,
                               image: new DecorationImage(fit: BoxFit.fill, image: otherUser.profileImage.image))),
-                      SizedBox(width: 14),
+                      SizedBox(width: 14*wp!),
                       Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                         Text(otherUser.displayedName,
                             style:
-                                ThemeText.inter(fontSize: 15, color: ThemeColor.darkGrey, fontWeight: FontWeight.bold)),
-                        SizedBox(height: 4),
+                                ThemeText.inter(fontSize: 15*hp!, color: ThemeColor.darkGrey, fontWeight: FontWeight.bold)),
+                        SizedBox(height: 4*hp!),
                         Text(otherUser.fullDomainName != null ? otherUser.fullDomainName! : otherUser.domain,
-                            style: ThemeText.inter(fontSize: 15, color: ThemeColor.mediumGrey))
+                            style: ThemeText.inter(fontSize: 15*hp!, color: ThemeColor.mediumGrey))
                       ]),
                       Flexible(
                           child: Column(children: <Widget>[
@@ -145,18 +147,18 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                           Spacer(),
                           isToday(cache[index].UM!.lastMessage.toDate())
                               ? Text(DateFormat.jm().format(cache[index].UM!.lastMessage.toDate()),
-                                  style: ThemeText.inter(color: ThemeColor.mediumGrey, fontSize: 14))
+                                  style: ThemeText.inter(color: ThemeColor.mediumGrey, fontSize: 14*hp!))
                               : Text(DateFormat.yMd().format(cache[index].UM!.lastMessage.toDate()),
-                                  style: ThemeText.inter(color: ThemeColor.mediumGrey, fontSize: 14))
+                                  style: ThemeText.inter(color: ThemeColor.mediumGrey, fontSize: 14*hp!))
                         ])
                       ]))
                     ])),
                 (cache[index].UM!.lastViewed == null ||
                         cache[index].UM!.lastViewed!.compareTo(cache[index].UM!.lastMessage) < 0)
                     ? Container(
-                        width: 10,
-                        height: 10,
-                        margin: EdgeInsets.only(top: index == 0 ? 4.5 : 2, left: 6, bottom: index == cache.length - 1 ? 2.5 : 0),
+                        width: 10*wp!,
+                        height: 10*wp!,
+                        margin: EdgeInsets.only(top: index == 0 ? 4.5*hp! : 2*hp!, left: 6*wp!, bottom: index == cache.length - 1 ? 2.5*hp! : 0*hp!),
                         decoration: new BoxDecoration(
                           color: ThemeColor.secondaryBlue,
                           shape: BoxShape.circle,

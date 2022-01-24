@@ -6,18 +6,17 @@ import 'package:hs_connect/models/myNotification.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/postView/postPage.dart';
-import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
-import 'package:hs_connect/shared/tools/hexColor.dart';
-import 'package:hs_connect/shared/widgets/groupTag.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
 class NotificationCard extends StatefulWidget {
   final MyNotification myNotification;
+  final double wp;
+  final double hp;
 
-  const NotificationCard({Key? key, required this.myNotification}) : super(key: key);
+  const NotificationCard({Key? key, required this.myNotification, required this.wp, required this.hp}) : super(key: key);
 
   @override
   _NotificationCardState createState() => _NotificationCardState();
@@ -31,10 +30,19 @@ class _NotificationCardState extends State<NotificationCard> {
 
   UserData? userData;
 
+  double? wp;
+  double? hp;
+
   @override
   void initState() {
     fetchPostGroup();
     fetchSourceUser();
+    if (mounted) {
+      setState(() {
+        wp = widget.wp;
+        hp = widget.hp;
+      });
+    }
     super.initState();
   }
 
@@ -80,15 +88,17 @@ class _NotificationCardState extends State<NotificationCard> {
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
 
+    if (wp == null || hp == null) return Loading();
+
     if (userData == null ||
         profileImage == null ||
         sourceUserDisplayedName == null ||
         sourceUserFullDomainName == null ||
         postGroupName == null) {
       return Container(
-          margin: EdgeInsets.only(top: 2),
-          padding: EdgeInsets.fromLTRB(14, 14, 14, 16),
-          height: 70,
+          margin: EdgeInsets.only(top: 2*hp!),
+          padding: EdgeInsets.fromLTRB(14*wp!, 14*hp!, 14*wp!, 16*hp!),
+          height: 70*hp!,
           color: ThemeColor.white);
     }
 
@@ -104,20 +114,20 @@ class _NotificationCardState extends State<NotificationCard> {
                       )));
         },
         child: Container(
-            margin: EdgeInsets.only(top: 2),
-            padding: EdgeInsets.fromLTRB(14, 14, 14, 16),
+            margin: EdgeInsets.only(top: 2*hp!),
+            padding: EdgeInsets.fromLTRB(14*wp!, 14*hp!, 14*wp!, 16*hp!),
             color: ThemeColor.white,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Container(
-                    height: 40,
-                    width: 40,
+                    height: 40*hp!,
+                    width: 40*hp!,
                     decoration: BoxDecoration(
                         shape: BoxShape.circle, image: DecorationImage(fit: BoxFit.fill, image: profileImage!.image))),
-                SizedBox(width: 14),
+                SizedBox(width: 14*wp!),
                 SizedBox(
-                  width: 260,
+                  width: 260*wp!,
                   child: RichText(
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
@@ -127,20 +137,20 @@ class _NotificationCardState extends State<NotificationCard> {
                             text: widget.myNotification
                                 .printA(sourceUserDisplayedName!, sourceUserFullDomainName!, postGroupName!),
                             style: ThemeText.inter(
-                                color: ThemeColor.black, fontSize: 14, fontWeight: FontWeight.bold, height: 1.35)),
+                                color: ThemeColor.black, fontSize: 14*hp!, fontWeight: FontWeight.bold, height: 1.35)),
                         TextSpan(
                             text: widget.myNotification
                                 .printB(sourceUserDisplayedName!, sourceUserFullDomainName!, postGroupName!),
-                            style: ThemeText.inter(color: ThemeColor.black, fontSize: 14, height: 1.35)),
+                            style: ThemeText.inter(color: ThemeColor.black, fontSize: 14*hp!, height: 1.35)),
                         TextSpan(
                             text: widget.myNotification
                                 .printC(sourceUserDisplayedName!, sourceUserFullDomainName!, postGroupName!),
                             style: ThemeText.inter(
-                                color: ThemeColor.black, fontSize: 14, fontWeight: FontWeight.bold, height: 1.35)),
+                                color: ThemeColor.black, fontSize: 14*hp!, fontWeight: FontWeight.bold, height: 1.35)),
                         TextSpan(
                             text: widget.myNotification
                                 .printD(sourceUserDisplayedName!, sourceUserFullDomainName!, postGroupName!),
-                            style: ThemeText.inter(color: ThemeColor.black, fontSize: 14, height: 1.35)),
+                            style: ThemeText.inter(color: ThemeColor.black, fontSize: 14*hp!, height: 1.35)),
                       ],
                     ),
                   ),
@@ -151,7 +161,7 @@ class _NotificationCardState extends State<NotificationCard> {
                       children: [
                         Spacer(),
                         Text(convertTime(widget.myNotification.createdAt.toDate()),
-                            style: ThemeText.inter(color: ThemeColor.mediumGrey, fontSize: 14))
+                            style: ThemeText.inter(color: ThemeColor.mediumGrey, fontSize: 14*hp!))
                       ],
                     )
                   ]),
@@ -160,101 +170,3 @@ class _NotificationCardState extends State<NotificationCard> {
             )));
   }
 }
-
-/*
-Container(
-            margin: EdgeInsets.only(top: 5),
-            padding: EdgeInsets.fromLTRB(20,20,15,12),
-            color: ThemeColor.white,
-            child: Column(children: <Widget>[
-              Row(children: <Widget>[
-                Container(
-                    height: 42,
-                    width: 42,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle, image: DecorationImage(fit: BoxFit.fill, image: profileImage!.image))),
-                SizedBox(width: 15),
-                SizedBox(
-                  width: 280,
-                  child: RichText(
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    text: TextSpan(
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: widget.myNotification
-                                .printA(sourceUserDisplayedName!, sourceUserFullDomainName!, postGroupName!),
-                            style: ThemeText.inter(
-                                color: ThemeColor.black, fontSize: 14.5, fontWeight: FontWeight.bold, height: 1.5)),
-                        TextSpan(
-                            text: widget.myNotification
-                                .printB(sourceUserDisplayedName!, sourceUserFullDomainName!, postGroupName!),
-                            style: ThemeText.inter(color: ThemeColor.black, fontSize: 14.5, height: 1.5)),
-                        TextSpan(
-                            text: widget.myNotification
-                                .printC(sourceUserDisplayedName!, sourceUserFullDomainName!, postGroupName!),
-                            style: ThemeText.inter(
-                                color: ThemeColor.black, fontSize: 14.5, fontWeight: FontWeight.bold, height: 1.5)),
-                        TextSpan(
-                            text: widget.myNotification
-                                .printD(sourceUserDisplayedName!, sourceUserFullDomainName!, postGroupName!),
-                            style: ThemeText.inter(color: ThemeColor.black, fontSize: 14.5, height: 1.5)),
-                      ],
-                    ),
-                  ),
-                ),
-              ]),
-              Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
-                Text(convertTime(widget.myNotification.createdAt.toDate()),
-                    style: ThemeText.inter(color: ThemeColor.mediumGrey, fontSize: 14))
-              ])
-            ]))
- */
-
-/*
-Container(
-            margin: EdgeInsets.only(top: 5),
-            padding: EdgeInsets.fromLTRB(20,20,15,12),
-            color: ThemeColor.white,
-            child: Row(crossAxisAlignment: CrossAxisAlignment.end,children: <Widget>[
-              Container(
-                  height: 42,
-                  width: 42,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle, image: DecorationImage(fit: BoxFit.fill, image: profileImage!.image))),
-              SizedBox(
-                width: 280,
-                child: RichText(
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                  text: TextSpan(
-                    children: <TextSpan>[
-                      TextSpan(
-                          text: widget.myNotification
-                              .printA(sourceUserDisplayedName!, sourceUserFullDomainName!, postGroupName!),
-                          style: ThemeText.inter(
-                              color: ThemeColor.black, fontSize: 14.5, fontWeight: FontWeight.bold, height: 1.5)),
-                      TextSpan(
-                          text: widget.myNotification
-                              .printB(sourceUserDisplayedName!, sourceUserFullDomainName!, postGroupName!),
-                          style: ThemeText.inter(color: ThemeColor.black, fontSize: 14.5, height: 1.5)),
-                      TextSpan(
-                          text: widget.myNotification
-                              .printC(sourceUserDisplayedName!, sourceUserFullDomainName!, postGroupName!),
-                          style: ThemeText.inter(
-                              color: ThemeColor.black, fontSize: 14.5, fontWeight: FontWeight.bold, height: 1.5)),
-                      TextSpan(
-                          text: widget.myNotification
-                              .printD(sourceUserDisplayedName!, sourceUserFullDomainName!, postGroupName!),
-                          style: ThemeText.inter(color: ThemeColor.black, fontSize: 14.5, height: 1.5)),
-                    ],
-                  ),
-                ),
-              ),
-              Spacer(),
-              Column(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
-                Text(convertTime(widget.myNotification.createdAt.toDate()),
-                    style: ThemeText.inter(color: ThemeColor.mediumGrey, fontSize: 14))
-              ])
-            ]))
- */

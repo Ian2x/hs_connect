@@ -8,12 +8,12 @@ import 'package:provider/provider.dart';
 
 import 'notificationCard.dart';
 
-const circleSize = 35.0;
-
 class NotificationsFeed extends StatefulWidget {
   final UserData userData;
+  final double hp;
+  final double wp;
 
-  const NotificationsFeed({Key? key, required this.userData}) : super(key: key);
+  const NotificationsFeed({Key? key, required this.userData, required this.hp, required this.wp}) : super(key: key);
 
   @override
   _NotificationsFeedState createState() => _NotificationsFeedState();
@@ -21,11 +21,19 @@ class NotificationsFeed extends StatefulWidget {
 
 class _NotificationsFeedState extends State<NotificationsFeed> {
   bool loading = true;
+  double? hp;
+  double? wp;
 
   @override
   initState() {
     // remove old notifications
     removeOldNotifications();
+    if (mounted) {
+      setState(() {
+        hp = widget.hp;
+        wp = widget.wp;
+      });
+    }
     super.initState();
   }
 
@@ -50,7 +58,7 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
 
-    if (userData == null || loading) {
+    if (userData == null || loading || hp == null || wp == null) {
       return Loading();
     }
     int numberNotifications = userData.myNotifications.length;
@@ -64,33 +72,15 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
           int trueIndex = numberNotifications - index - 1;
           if (trueIndex == numberNotifications-1) {
             return Container(
-                padding: EdgeInsets.only(top: 2.5),
-                child: NotificationCard(myNotification: userData.myNotifications[trueIndex]));
+                padding: EdgeInsets.only(top: 2.5*hp!),
+                child: NotificationCard(myNotification: userData.myNotifications[trueIndex], hp: hp!, wp: wp!));
           } else if (trueIndex == 0) {
             return Container(
-                padding: EdgeInsets.only(bottom: 2.5),
-                child: NotificationCard(myNotification: userData.myNotifications[trueIndex]));
+                padding: EdgeInsets.only(bottom: 2.5*hp!),
+                child: NotificationCard(myNotification: userData.myNotifications[trueIndex], hp: hp!, wp: wp!));
           } else {
-            return NotificationCard(myNotification: userData.myNotifications[trueIndex]);
+            return NotificationCard(myNotification: userData.myNotifications[trueIndex], hp: hp!, wp: wp!);
           }
         });
-    return Column(children: [
-      ListView.builder(
-          itemCount: numberNotifications,
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          padding: EdgeInsets.zero,
-          reverse: true,
-          physics: BouncingScrollPhysics(),
-          itemBuilder: (BuildContext context, int index) {
-            if (index == numberNotifications-1) {
-              return Container(
-                  padding: EdgeInsets.only(top: 2.5),
-                  child: NotificationCard(myNotification: userData.myNotifications[index]));
-            }
-            return NotificationCard(myNotification: userData.myNotifications[index]);
-          }),
-      Spacer()
-    ]);
   }
 }

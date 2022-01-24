@@ -27,6 +27,10 @@ class _RegisterUserState extends State<RegisterUser> {
 
   @override
   Widget build(BuildContext context) {
+    final hp = getHp(context);
+    final wp = getWp(context);
+
+
     return loading
         ? Scaffold(
       backgroundColor: ThemeColor.backgroundGrey,
@@ -36,16 +40,16 @@ class _RegisterUserState extends State<RegisterUser> {
             backgroundColor: Colors.brown[100],
             appBar: AppBar(
               backgroundColor: Colors.brown[400],
-              elevation: 0.0,
+              elevation: 0,
               title: Text(
                   'Your email has been verified! Sign up now! [WARNING: DO NOT LEAVE THIS PAGE AS YOUR EMAIL CAN NOT BE RE-USED ANYMORE'),
             ),
             body: Container(
-              padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+              padding: EdgeInsets.symmetric(vertical: 20*hp, horizontal: 50*wp),
               child: Form(
                 key: _formKey,
                 child: Column(children: <Widget>[
-                  SizedBox(height: 20.0),
+                  SizedBox(height: 20*hp),
                   TextFormField(
                       decoration: textInputDecoration.copyWith(hintText: 'Username'),
                       validator: (val) {
@@ -60,7 +64,7 @@ class _RegisterUserState extends State<RegisterUser> {
                           setState(() => username = val);
                         }
                       }),
-                  SizedBox(height: 20.0),
+                  SizedBox(height: 20*hp),
                   TextFormField(
                       decoration: textInputDecoration.copyWith(hintText: 'Password'),
                       obscureText: true,
@@ -76,7 +80,7 @@ class _RegisterUserState extends State<RegisterUser> {
                           setState(() => password = val);
                         }
                       }),
-                  SizedBox(height: 20.0),
+                  SizedBox(height: 20*hp),
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         primary: Colors.pink[400],
@@ -119,10 +123,10 @@ class _RegisterUserState extends State<RegisterUser> {
                         }
                       },
                       child: Text('Register', style: TextStyle(color: Colors.white))),
-                  SizedBox(height: 12.0),
+                  SizedBox(height: 12*hp),
                   Text(
                     error,
-                    style: TextStyle(color: Colors.red, fontSize: 14.0),
+                    style: TextStyle(color: Colors.red, fontSize: 14*hp),
                   )
                 ]),
               ),
