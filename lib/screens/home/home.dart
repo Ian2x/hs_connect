@@ -13,6 +13,8 @@ import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
+
+
   const Home({Key? key}) : super(key: key);
 
   @override
@@ -36,14 +38,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
 
-    final user = Provider.of<User?>(context);
+
     final userData = Provider.of<UserData?>(context);
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
 
-    if(user==null) {
-      return Authenticate();
-    }
 
     if(userData==null) {
       return Scaffold(
