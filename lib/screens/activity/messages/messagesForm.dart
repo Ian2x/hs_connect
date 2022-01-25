@@ -18,7 +18,9 @@ class MessagesForm extends StatefulWidget {
   final double wp;
   final double hp;
 
-  const MessagesForm({Key? key, required this.currUserRef, required this.otherUserRef, required this.onUpdateLastMessage, required this.onUpdateLastViewed, required this.wp, required this.hp}) : super(key: key);
+  const MessagesForm({Key? key, required this.currUserRef, required this.otherUserRef,
+    required this.onUpdateLastMessage, required this.onUpdateLastViewed,
+    required this.wp, required this.hp}) : super(key: key);
 
   @override
   _MessagesFormState createState() => _MessagesFormState();

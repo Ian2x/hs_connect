@@ -24,7 +24,7 @@ class GroupTag extends StatelessWidget {
       alignment: Alignment.center,
       padding: EdgeInsets.fromLTRB(fontSize/2,fontSize/2.5,fontSize/2,fontSize/2.5),
       decoration: ShapeDecoration(
-        color: ThemeColor.lightGrey,
+        color: Colors.transparent,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(fontSize/2),
             ),

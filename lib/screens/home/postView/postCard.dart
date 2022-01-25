@@ -146,7 +146,7 @@ class _PostCardState extends State<PostCard> {
       },
       child: Card(
           //if border then ShapeDecoration
-          shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(10)),
+          shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(20)),
           margin: EdgeInsets.fromLTRB(5, 5, 5, 0),
           //color: HexColor("#292929"),
           elevation: 0,
@@ -164,7 +164,7 @@ class _PostCardState extends State<PostCard> {
                         Row(
                           children: [
                             //Text("in ", style: ThemeText.inter(fontSize: 14, color: groupColor!=null ? HexColor(groupColor!) : ThemeColor.mediumGrey)),
-                            GroupTag( groupColor: groupColor != null ? HexColor(groupColor!) : null, groupImage:groupImage, groupName: groupName, fontSize:12),
+                            GroupTag( groupColor: groupColor != null ? HexColor(groupColor!) : null, groupImage:groupImage, groupName: groupName, fontSize:14),
                             Text(
                             " • " + convertTime(widget.post.createdAt.toDate()), style: ThemeText.inter(color: ThemeColor.mediumGrey, fontSize:14),
                             ),

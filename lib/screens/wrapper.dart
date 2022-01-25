@@ -4,7 +4,9 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:provider/provider.dart';
 
 import 'authenticate/authenticate.dart';
+import 'home/home2.dart';
 import 'home/home.dart';
+
 
 class Wrapper extends StatelessWidget {
   const Wrapper({Key? key}) : super(key: key);
@@ -13,6 +15,7 @@ class Wrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = Provider.of<User?>(context);
     final userData = Provider.of<UserData?>(context);
-    return (user == null || userData == null || !user.email!.endsWith('@ianeric.com')) ? Authenticate() : Home();
+    return (user == null || userData == null || !user.email!.endsWith('@ianeric.com')) ? Authenticate()
+        : Home2(userData: userData);
   }
 }
