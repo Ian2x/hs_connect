@@ -24,6 +24,7 @@ class Main2 extends StatelessWidget {
           theme: ThemeData(
             brightness: Brightness.light,
             primaryColor: ThemeColor.secondaryBlue,
+
             textSelectionTheme: TextSelectionThemeData(
               cursorColor: ThemeColor.darkGrey,
               selectionColor: ThemeColor.darkGrey,
@@ -99,8 +100,15 @@ class Main2 extends StatelessWidget {
             backgroundColor: ThemeColor.backgroundGrey,
             dividerColor: ThemeColor.lightGrey,
             scaffoldBackgroundColor: ThemeColor.white,
-            hintColor: ThemeColor.mediumGrey,
+            hintColor: ThemeColor.lightMediumGrey,
             unselectedWidgetColor: ThemeColor.mediumGrey,
+            cardColor: ThemeColor.white,
+            primaryColorDark: ThemeColor.black,
+            errorColor: ThemeColor.mediumGrey,
+            indicatorColor: ThemeColor.darkGrey
+
+
+
             //primaryColorDark:
             //color: ThemeColor.mediumGrey,
           ),

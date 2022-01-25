@@ -110,7 +110,6 @@ class ThemeColor extends Color {
 
   static Color white = HexColor("FFFFFF");
   static Color black = HexColor("000000");
-  static Color errorRed = Colors.red;
   static Color profilePicEditColor = HexColor('787878');
 }
 

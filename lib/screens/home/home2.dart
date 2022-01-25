@@ -6,7 +6,6 @@ import 'package:hs_connect/screens/authenticate/authenticate.dart';
 import 'package:hs_connect/screens/home/postFeed/domainFeed.dart';
 import 'package:hs_connect/screens/home/new/floatingNewButton.dart';
 import 'package:hs_connect/screens/home/postFeed/trendingFeed.dart';
-import 'package:hs_connect/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/shared/constants.dart';
