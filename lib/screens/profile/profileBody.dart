@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/authenticate/authenticate.dart';
 import 'package:hs_connect/screens/profile/profilePostFeed.dart';
@@ -9,10 +8,10 @@ import 'package:hs_connect/screens/profile/profileWidgets/profileName.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/groupTag.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
-import 'package:hs_connect/screens/profile/profileWidgets/profileStats.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileImage.dart';
 
 class ProfileBody extends StatefulWidget {
@@ -68,6 +67,9 @@ class _ProfileBodyState extends State<ProfileBody> {
   @override
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
+    final hp = Provider.of<HeightPixel>(context).value;
+    final wp = Provider.of<WidthPixel>(context).value;
+
 
     if (userData == null) {
       return Authenticate();
@@ -75,32 +77,32 @@ class _ProfileBodyState extends State<ProfileBody> {
     return ListView(
       physics: BouncingScrollPhysics(),
       children: [
-        SizedBox(height:(MediaQuery.of(context).size.height)/8),
+        SizedBox(height:98*hp),
         ProfileImage(
           profileImage: profileImage,
           profileImageURL: profileImageURL,
           currUserName: profileUsername,
           showEditIcon: widget.profileUserRef == widget.currUserRef && widget.currUserRef == userData.userRef,
         ),
-        SizedBox(height: 10),
+        SizedBox(height: 10*hp),
         ProfileName(name: profileUsername, domain: userData.domain),
-        SizedBox(height: 15),
+        SizedBox(height: 15*hp),
         Row(
           children: [
             Spacer(),
             GroupTag(groupImage: domainImage!= null ? Image.network(domainImage!) :
                  null, groupName: domainName,
-                fontSize: 18, groupColor: domainColor != null ? domainColor!:
+                fontSize: 18*hp, groupColor: domainColor != null ? domainColor!:
                     null,
             ),
-            SizedBox(width:20),
+            SizedBox(width:20*wp),
             RichText(
               text: TextSpan(
                 children: <TextSpan>[
                   TextSpan(text: profileScore.toString(),
-                      style: ThemeText.groupBold(color: ThemeColor.black, fontSize: 18 )),
+                      style: Theme.of(context).textTheme.headline6),
                   TextSpan(text: " Likes ",
-                      style: ThemeText.regularSmall(color: ThemeColor.darkGrey, fontSize: 18)),
+                      style: Theme.of(context).textTheme.headline6),
                 ],
               ),
             ),
@@ -110,9 +112,9 @@ class _ProfileBodyState extends State<ProfileBody> {
         widget.profileUserRef != widget.currUserRef
             ? Column(
                 children: <Widget>[
-                  SizedBox(height: MediaQuery.of(context).size.height / 10),
+                  SizedBox(height: 78*hp),
                   Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
-                    SizedBox(width: 45),
+                    SizedBox(width: 45*wp),
                     NewMessageButton(
                       otherUserRef: widget.profileUserRef,
                       currUserRef: widget.currUserRef,
@@ -123,8 +125,8 @@ class _ProfileBodyState extends State<ProfileBody> {
             : Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-            SizedBox(height: MediaQuery.of(context).size.height / 10),
-            profilePostFeed(profUserRef: widget.profileUserRef),
+            SizedBox(height: 78*hp),
+            ProfilePostFeed(profUserRef: widget.profileUserRef),
           ]
         )
       ],

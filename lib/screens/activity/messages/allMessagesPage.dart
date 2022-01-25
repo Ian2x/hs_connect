@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/pageRoutes.dart';
+import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:intl/intl.dart';
@@ -19,7 +21,7 @@ class UMUD {
 class AllMessagesPage extends StatefulWidget {
   final UserData userData;
 
-  const AllMessagesPage({Key? key, required this.userData, required this.hp, required this.wp}) : super(key: key);
+  const AllMessagesPage({Key? key, required this.userData}) : super(key: key);
 
   @override
   _AllMessagesPageState createState() => _AllMessagesPageState();
@@ -29,8 +31,6 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
   List<UserMessage>? UMs;
   List<UserData>? otherUsers;
   List<UMUD> cache = [];
-  double? wp;
-  double? hp;
 
   @override
   void initState() {
@@ -38,8 +38,6 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
     // sorted by latest first
     if (mounted) {
       setState(() {
-        wp = widget.wp;
-        hp = widget.hp;
         for (UserMessage UM in tempUMs) {
           cache.add(UMUD(UM: UM, UD: null));
         }
@@ -76,14 +74,16 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
   @override
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
+    final wp = Provider.of<WidthPixel>(context).value;
+    final hp = Provider.of<HeightPixel>(context).value;
 
-    if (userData == null || UMs == null || otherUsers == null || wp == null || hp == null) {
+    if (userData == null || UMs == null || otherUsers == null) {
       return Loading();
     }
 
     if (otherUsers!.length == 0) {
       return Container(
-          padding: EdgeInsets.all(10*hp!),
+          padding: EdgeInsets.all(10*hp),
           child: Text("No messages :/\n\n... maybe try finding a friend",
               style: ThemeText.titleRegular(color: ThemeColor.black)));
     }
@@ -109,35 +109,35 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => MessagesPage(
-                            currUserRef: userData.userRef,
-                            otherUserRef: otherUser.userRef,
-                            onUpdateLastMessage: updateLastMessage,
-                            onUpdateLastViewed: updateLastViewed,
-                          )));
+                      builder: (context) => pixelProvider(context, child: MessagesPage(
+                        currUserRef: userData.userRef,
+                        otherUserRef: otherUser.userRef,
+                        onUpdateLastMessage: updateLastMessage,
+                        onUpdateLastViewed: updateLastViewed,
+                      ))));
             },
             child: Stack(
               alignment: AlignmentDirectional.centerStart,
               children: <Widget>[
                 Container(
-                    margin: EdgeInsets.only(top: index == 0 ? 4.5*hp! : 2*hp!, bottom: index == cache.length - 1 ? 2.5*hp! : 0*hp!),
-                    padding: EdgeInsets.fromLTRB(20*wp!, 14*hp!, 14*wp!, 16*hp!),
+                    margin: EdgeInsets.only(top: index == 0 ? 4.5*hp : 2*hp, bottom: index == cache.length - 1 ? 2.5*hp : 0*hp),
+                    padding: EdgeInsets.fromLTRB(20*wp, 14*hp, 14*wp, 16*hp),
                     color: ThemeColor.white,
                     child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
                       Container(
-                          width: 40*hp!,
-                          height: 40*hp!,
+                          width: 40*hp,
+                          height: 40*hp,
                           decoration: new BoxDecoration(
                               shape: BoxShape.circle,
                               image: new DecorationImage(fit: BoxFit.fill, image: otherUser.profileImage.image))),
-                      SizedBox(width: 14*wp!),
+                      SizedBox(width: 14*wp),
                       Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                         Text(otherUser.displayedName,
                             style:
-                                ThemeText.inter(fontSize: 15*hp!, color: ThemeColor.darkGrey, fontWeight: FontWeight.bold)),
-                        SizedBox(height: 4*hp!),
+                                ThemeText.inter(fontSize: 15*hp, color: ThemeColor.darkGrey, fontWeight: FontWeight.bold)),
+                        SizedBox(height: 4*hp),
                         Text(otherUser.fullDomainName != null ? otherUser.fullDomainName! : otherUser.domain,
-                            style: ThemeText.inter(fontSize: 15*hp!, color: ThemeColor.mediumGrey))
+                            style: ThemeText.inter(fontSize: 15*hp, color: ThemeColor.mediumGrey))
                       ]),
                       Flexible(
                           child: Column(children: <Widget>[
@@ -145,18 +145,18 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                           Spacer(),
                           isToday(cache[index].UM!.lastMessage.toDate())
                               ? Text(DateFormat.jm().format(cache[index].UM!.lastMessage.toDate()),
-                                  style: ThemeText.inter(color: ThemeColor.mediumGrey, fontSize: 14*hp!))
+                                  style: ThemeText.inter(color: ThemeColor.mediumGrey, fontSize: 14*hp))
                               : Text(DateFormat.yMd().format(cache[index].UM!.lastMessage.toDate()),
-                                  style: ThemeText.inter(color: ThemeColor.mediumGrey, fontSize: 14*hp!))
+                                  style: ThemeText.inter(color: ThemeColor.mediumGrey, fontSize: 14*hp))
                         ])
                       ]))
                     ])),
                 (cache[index].UM!.lastViewed == null ||
                         cache[index].UM!.lastViewed!.compareTo(cache[index].UM!.lastMessage) < 0)
                     ? Container(
-                        width: 10*wp!,
-                        height: 10*wp!,
-                        margin: EdgeInsets.only(top: index == 0 ? 4.5*hp! : 2*hp!, left: 6*wp!, bottom: index == cache.length - 1 ? 2.5*hp! : 0*hp!),
+                        width: 10*wp,
+                        height: 10*wp,
+                        margin: EdgeInsets.only(top: index == 0 ? 4.5*hp : 2*hp, left: 6*wp, bottom: index == cache.length - 1 ? 2.5*hp : 0*hp),
                         decoration: new BoxDecoration(
                           color: ThemeColor.secondaryBlue,
                           shape: BoxShape.circle,

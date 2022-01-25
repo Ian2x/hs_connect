@@ -10,6 +10,7 @@ import 'package:hs_connect/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
@@ -27,8 +28,6 @@ class Home2 extends StatefulWidget {
 
 class _Home2State extends State<Home2> with SingleTickerProviderStateMixin {
 
-  final AuthService _auth = AuthService();
-
   bool isDomain=true;
 
   String? groupImageString;
@@ -38,7 +37,6 @@ class _Home2State extends State<Home2> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
-
     getGroupData();
     super.initState();
   }
@@ -63,7 +61,7 @@ class _Home2State extends State<Home2> with SingleTickerProviderStateMixin {
             }));
           }
         } else {
-          groupImageString = '';
+          groupImageString = null;
         }
       });
     }
@@ -71,18 +69,19 @@ class _Home2State extends State<Home2> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-
     final user = Provider.of<User?>(context);
     final userData = Provider.of<UserData?>(context);
-    final hp = getHp(context);
-    final wp = getWp(context);
+    final hp = Provider.of<HeightPixel>(context).value;
+    final wp = Provider.of<WidthPixel>(context).value;
+
+
 
     Color pressedColor= ThemeColor.secondaryBlue;
     Color defaultColor= ThemeColor.mediumGrey;
 
     if (isDomain){
       groupColor != null ?
-          pressedColor= HexColor(groupColor!): ThemeColor.secondaryBlue;
+          pressedColor = HexColor(groupColor!): pressedColor = ThemeColor.secondaryBlue;
     } else {
       pressedColor= ThemeColor.secondaryBlue;
     }
@@ -117,8 +116,8 @@ class _Home2State extends State<Home2> with SingleTickerProviderStateMixin {
                       color: Colors.white,
                       image: DecorationImage(
                         fit: BoxFit.fill,
-                        image: groupImageString != "" ?
-                        NetworkImage(groupImageString!) : AssetImage("/assets/me.png") as ImageProvider,
+                        image: groupImageString != null ?
+                        NetworkImage(groupImageString!) : AssetImage("assets/me.png") as ImageProvider,
                       ),
                     ),
                   ),

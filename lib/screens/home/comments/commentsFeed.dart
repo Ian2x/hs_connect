@@ -8,16 +8,15 @@ import 'package:hs_connect/screens/home/comments/commentReplyForm.dart';
 import 'package:hs_connect/screens/home/postView/postTitleCard.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
 class CommentsFeed extends StatefulWidget {
   final Post post;
   final DocumentReference groupRef;
-  final double wp;
-  final double hp;
 
-  CommentsFeed({Key? key, required this.post, required this.groupRef, required this.wp, required this.hp}) : super(key: key);
+  CommentsFeed({Key? key, required this.post, required this.groupRef}) : super(key: key);
 
   @override
   _CommentsFeedState createState() => _CommentsFeedState();
@@ -27,23 +26,14 @@ class _CommentsFeedState extends State<CommentsFeed> {
 
   bool isReply=false;
   DocumentReference? commentRef;
-  double? hp;
-  double? wp;
-
-  @override
-  void initState() {
-    if (mounted) {
-      setState(() {
-        wp = widget.wp;
-        hp = widget.hp;
-      });
-    }
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
+    final hp = Provider.of<HeightPixel>(context).value;
+    final wp = Provider.of<WidthPixel>(context).value;
+
+
 
     switchFormBool(DocumentReference? passedRef){
       setState(() {
@@ -52,7 +42,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
       });
     }
 
-    if (userData == null || wp == null || hp == null) return Loading();
+    if (userData == null) return Loading();
     CommentsDatabaseService _comments = CommentsDatabaseService(currUserRef: userData.userRef, postRef: widget.post.postRef);
 
     return Stack(
@@ -83,21 +73,21 @@ class _CommentsFeedState extends State<CommentsFeed> {
                       currUserRef: userData.userRef,
                     );
                   } else if (index == 1) {
-                    return Divider(thickness: 3, color: ThemeColor.backgroundGrey, height: 20);
+                    return Divider(thickness: 3*hp, color: ThemeColor.backgroundGrey, height: 20*hp);
                   } else if (index == comments.length + 1) {
                     return Container(
-                      padding: EdgeInsets.only(bottom: 70),
+                      padding: EdgeInsets.only(bottom: 70*hp),
                       child: CommentCard(
                         switchFormBool: switchFormBool,
                         comment: comments[index - 2],
-                        currUserRef: userData.userRef, wp: wp!, hp: hp!,
+                        currUserRef: userData.userRef,
                       )
                     );
                   } else {
                     return CommentCard(
                       switchFormBool: switchFormBool,
                       comment: comments[index - 2],
-                      currUserRef: userData.userRef, hp: hp!, wp: wp!,
+                      currUserRef: userData.userRef,
                     );
                   }
                 },
@@ -111,7 +101,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
             right:0,
             child: Container (
             width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.fromLTRB(10.0, 10, 10.0, 10.0),
+            padding: EdgeInsets.fromLTRB(10*wp, 10*hp, 10*wp, 10*hp),
             color: ThemeColor.backgroundGrey,
             child: CommentReplyForm(
               currUserRef: userData.userRef,
@@ -120,7 +110,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
               isReply: isReply,
               postRef: widget.post.postRef,
               groupRef: widget.groupRef,
-              postCreatorRef: widget.post.creatorRef, wp: wp!, hp: hp!)
+              postCreatorRef: widget.post.creatorRef)
             )
               ,
           ),

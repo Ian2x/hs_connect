@@ -4,7 +4,9 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/services/replies_database.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
+import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
+import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,8 +19,6 @@ class CommentReplyForm extends StatefulWidget {
   final DocumentReference? commentReference;
   final DocumentReference postCreatorRef;
   final VoidDocParamFunction switchFormBool;
-  final double hp;
-  final double wp;
 
   CommentReplyForm({Key? key,
     required this.currUserRef,
@@ -28,8 +28,6 @@ class CommentReplyForm extends StatefulWidget {
     required this.switchFormBool,
     required this.commentReference,
     required this.postCreatorRef,
-    required this.hp,
-    required this.wp,
   }) : super(key: key);
 
   @override
@@ -39,9 +37,6 @@ class CommentReplyForm extends StatefulWidget {
 class _CommentReplyFormState extends State<CommentReplyForm> {
   late FocusNode myFocusNode;
   final _formKey = GlobalKey<FormState>();
-
-  double? hp;
-  double? wp;
 
   void handleError(err) {
     if (mounted) {
@@ -80,8 +75,6 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
     super.initState();
     myFocusNode = FocusNode();
     if (mounted) setState(() {
-      wp = widget.wp;
-      hp = widget.hp;
       _comments = CommentsDatabaseService(currUserRef: widget.currUserRef, postRef: widget.postRef);
     });
   }
@@ -142,9 +135,12 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
 
-    if (userData == null || _comments == null || wp == null || hp == null) {
+    if (userData == null || _comments == null) {
       return Loading();
     }
+
+    final wp = Provider.of<WidthPixel>(context).value;
+    final hp = Provider.of<HeightPixel>(context).value;
 
     return
       Form(
@@ -157,13 +153,11 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
             // was working on submitting upon "enter" key press, but probably not necessary/wanted
             onSubmit();
           },*/
-          style: TextStyle(
-
-          ),
+          style: ThemeText.inter(fontSize: 16*hp, color: ThemeColor.black),
           autocorrect: false,
           decoration: commentReplyInputDecoration(
-              wp: wp!,
-              hp: hp!,
+              wp: wp,
+              hp: hp,
               isReply: widget.isReply,
               onPressed: () async {
                 onSubmit();

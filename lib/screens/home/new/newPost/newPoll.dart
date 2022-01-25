@@ -1,10 +1,10 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
-import 'package:hs_connect/shared/widgets/loading.dart';
+import 'package:hs_connect/shared/pixels.dart';
+import 'package:provider/provider.dart';
 
 const maxNumOptions = 6;
 
@@ -12,10 +12,8 @@ class NewPoll extends StatefulWidget {
   final VoidFunction onDeletePoll;
   final VoidPollDataParamFunction onUpdatePoll;
   final VoidFunction onAddPollChoice;
-  final double wp;
-  final double hp;
 
-  const NewPoll({Key? key, required this.onDeletePoll, required this.onUpdatePoll, required this.onAddPollChoice, required this.wp, required this.hp})
+  const NewPoll({Key? key, required this.onDeletePoll, required this.onUpdatePoll, required this.onAddPollChoice})
       : super(key: key);
 
   @override
@@ -27,17 +25,9 @@ class _NewPollState extends State<NewPoll> {
   int numOptions = 2;
   List<String> choices = [];
   List<int> choicesLengths = [];
-  double? wp;
-  double? hp;
 
   @override
   void initState() {
-    if (mounted) {
-      setState(() {
-        wp = widget.wp;
-        hp = widget.hp;
-      });
-    }
     for (int i = 0; i < 2; i++) {
       choices.add('');
       choicesLengths.add(0);
@@ -47,19 +37,21 @@ class _NewPollState extends State<NewPoll> {
 
   @override
   Widget build(BuildContext context) {
-    if (wp==null || hp==null) return Loading();
+    final hp = Provider.of<HeightPixel>(context).value;
+    final wp = Provider.of<WidthPixel>(context).value;
+
     return Container(
         width: MediaQuery.of(context).size.width * 0.9,
         decoration: ShapeDecoration(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5*hp!),
+            borderRadius: BorderRadius.circular(5*hp),
             side: BorderSide(
               color: ThemeColor.lightMediumGrey,
-              width: 1*hp!,
+              width: 1*hp,
             ),
           ),
         ),
-        padding: EdgeInsets.all(10*hp!),
+        padding: EdgeInsets.all(10*hp),
         margin: EdgeInsets.all(0),
         child: Form(
           key: _formKey,
@@ -99,14 +91,14 @@ class _NewPollState extends State<NewPoll> {
               } else {
                 int trueIndex = index - 1;
                 return Container(
-                    margin: EdgeInsets.all(5*hp!),
-                    padding: EdgeInsets.only(left: 5*wp!, right: 5*wp!),
+                    margin: EdgeInsets.all(5*hp),
+                    padding: EdgeInsets.only(left: 5*wp, right: 5*wp),
                     decoration: ShapeDecoration(
                         shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5),
                       side: BorderSide(
                         color: ThemeColor.lightMediumGrey,
-                        width: 1*wp!,
+                        width: 1*wp,
                       ),
                     )),
                     child: TextFormField(
@@ -114,13 +106,13 @@ class _NewPollState extends State<NewPoll> {
                           LengthLimitingTextInputFormatter(25),
                         ],
                         style: ThemeText.inter(
-                          fontSize: 14*hp!,
+                          fontSize: 14*hp,
                         ),
                         maxLines: 1,
                         decoration: InputDecoration(
                             suffixText: '${choicesLengths[trueIndex].toString()}/${25.toString()}',
-                            suffixStyle: ThemeText.roboto(fontSize: 14*hp!),
-                            hintStyle: ThemeText.roboto(fontSize: 16*hp!),
+                            suffixStyle: ThemeText.roboto(fontSize: 14*hp),
+                            hintStyle: ThemeText.roboto(fontSize: 16*hp),
                             border: InputBorder.none,
                             hintText: "Option " + (trueIndex + 1).toString()),
                         validator: (val) {

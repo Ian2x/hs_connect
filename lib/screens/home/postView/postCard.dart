@@ -10,21 +10,21 @@ import 'package:hs_connect/screens/home/postView/postPage.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/pageRoutes.dart';
+import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/groupTag.dart';
-import 'package:hs_connect/shared/widgets/loading.dart';
-import 'package:hs_connect/shared/widgets/reportSheet.dart';
+import 'package:hs_connect/shared/reports/reportSheet.dart';
 import 'package:hs_connect/shared/widgets/widgetDisplay.dart';
+import 'package:provider/provider.dart';
 
 
 class PostCard extends StatefulWidget {
   final Post post;
   final DocumentReference currUserRef;
-  final double hp;
-  final double wp;
 
-  PostCard({Key? key, required this.post, required this.currUserRef, required this.hp, required this.wp}) : super(key: key);
+  PostCard({Key? key, required this.post, required this.currUserRef}) : super(key: key);
 
   @override
   _PostCardState createState() => _PostCardState();
@@ -135,29 +135,30 @@ class _PostCardState extends State<PostCard> {
 
   @override
   Widget build(BuildContext context) {
+    final hp = Provider.of<HeightPixel>(context).value;
+    final wp = Provider.of<WidthPixel>(context).value;
 
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) =>
-              PostPage(postRef: widget.post.postRef, currUserRef: widget.currUserRef,
-                userData: fetchUserData!,
-              )),
+          MaterialPageRoute(builder: (context) => pixelProvider(context, child: PostPage(postRef: widget.post.postRef, currUserRef: widget.currUserRef,
+            userData: fetchUserData!,
+          ))),
         );
       },
       child: Card(
           //if border then ShapeDecoration
-          shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(20)),
-          margin: EdgeInsets.fromLTRB(5, 5, 5, 0),
+          shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(10*hp)),
+          margin: EdgeInsets.fromLTRB(5*wp, 5*hp, 5*wp, 0),
           //color: HexColor("#292929"),
           elevation: 0,
           child: Container(
-              padding: const EdgeInsets.fromLTRB(2,12,10,10),
+              padding: EdgeInsets.fromLTRB(2*wp,12*hp,10*wp,10*hp),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(width: 10),
+                  SizedBox(width: 10*wp),
                   Flexible(
                     //Otherwise horizontal renderflew of row
                     child: Column(
@@ -166,21 +167,21 @@ class _PostCardState extends State<PostCard> {
                         Row(
                           children: [
                             //Text("in ", style: ThemeText.inter(fontSize: 14, color: groupColor!=null ? HexColor(groupColor!) : ThemeColor.mediumGrey)),
-                            GroupTag( groupColor: groupColor != null ? HexColor(groupColor!) : null, groupImage:groupImage, groupName: groupName, fontSize:14),
+                            GroupTag( groupColor: groupColor != null ? HexColor(groupColor!) : null, groupImage:groupImage, groupName: groupName, fontSize:14*hp),
                             Text(
-                            " • " + convertTime(widget.post.createdAt.toDate()), style: ThemeText.inter(color: ThemeColor.mediumGrey, fontSize:14),
+                            " • " + convertTime(widget.post.createdAt.toDate()), style: ThemeText.inter(color: ThemeColor.mediumGrey, fontSize:14*hp),
                             ),
                             Spacer(),
                             IconButton(
                               constraints: BoxConstraints(),
                               splashRadius:.1,
-                              icon:Icon(Icons.more_horiz, size: 20, color: ThemeColor.mediumGrey),
+                              icon:Icon(Icons.more_horiz, size: 20*hp, color: ThemeColor.mediumGrey),
                               onPressed: (){
                                  showModalBottomSheet(
                                   context: context,
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(20),
+                                    top: Radius.circular(20*hp),
                                   )),
                                   builder: (context) => new ReportSheet(
                                       reportType: ReportType.post,
@@ -188,33 +189,33 @@ class _PostCardState extends State<PostCard> {
                                       ));
                            },
                           ),
-                            SizedBox(width: 6),
+                            SizedBox(width: 6*wp),
                           ],
                         ),
-                        SizedBox(height: 10),
+                        SizedBox(height: 10*hp),
                         Text(
                           //TODO: Need to figure out ways to ref
                           widget.post.title,
-                          style: ThemeText.roboto(fontSize: 18, color: ThemeColor.black), overflow: TextOverflow.ellipsis, // default is .clip
+                          style: ThemeText.roboto(fontSize: 18*hp, color: ThemeColor.black), overflow: TextOverflow.ellipsis, // default is .clip
                           maxLines: 3
                         ),
                         widget.post.mediaURL != null ?
-                            imageContainer(imageString: widget.post.mediaURL!)
+                            ImageContainer(imageString: widget.post.mediaURL!)
                             :
                             Container(),
-                        SizedBox(height: 8),
+                        SizedBox(height: 8*hp),
                         Row( //Icon Row
                           children: [
-                            SizedBox(width:1),
+                            SizedBox(width:1*wp),
                             Text(
                               (widget.post.numComments + widget.post.numReplies).toString()
                               + " Comments",
-                              style: ThemeText.regularSmall(fontSize: 14, color: ThemeColor.mediumGrey),
+                              style: ThemeText.regularSmall(fontSize: 14*hp, color: ThemeColor.mediumGrey),
                             ),
                             Spacer(),
                             LikeDislikePost(
                                 currUserRef: widget.currUserRef,
-                                post: widget.post, hp: 1, wp: 1,),
+                                post: widget.post),
                           ],
                         )
                       ], //Column Children ARRAY

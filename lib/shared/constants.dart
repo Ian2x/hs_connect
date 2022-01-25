@@ -110,6 +110,8 @@ class ThemeColor extends Color {
 
   static Color white = HexColor("FFFFFF");
   static Color black = HexColor("000000");
+  static Color errorRed = Colors.red;
+  static Color profilePicEditColor = HexColor('787878');
 }
 
 class C {
@@ -223,22 +225,4 @@ class C {
   static const postVotes = 'postVotes';
   static const extraData = 'extraData';
   static const ianTime = 'ianTime';
-}
-
-double getWp (context) {
-  return MediaQuery.of(context).size.width / 392.7;
-}
-
-double getHp (context) {
-  return MediaQuery.of(context).size.height / 781.1;
-}
-
-class WidthPixel {
-  final double value;
-  WidthPixel(this.value);
-}
-
-class HeightPixel {
-  final double value;
-  HeightPixel(this.value);
 }

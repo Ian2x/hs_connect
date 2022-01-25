@@ -22,16 +22,94 @@ class Main2 extends StatelessWidget {
       child: MaterialApp(
           home: Wrapper(),
           theme: ThemeData(
+            brightness: Brightness.light,
+            primaryColor: ThemeColor.secondaryBlue,
             textSelectionTheme: TextSelectionThemeData(
               cursorColor: ThemeColor.darkGrey,
               selectionColor: ThemeColor.darkGrey,
               selectionHandleColor: ThemeColor.darkGrey,
             ),
-            textTheme: TextTheme(),
+            textTheme: TextTheme(
+              headline1: TextStyle(
+                  fontFamily: "Inter",
+                  fontSize: 93,
+                  fontWeight: FontWeight.w300,
+                  letterSpacing: -1.5
+              ),
+              headline2: TextStyle(
+                  fontSize: 58,
+                  fontWeight: FontWeight.w300,
+                  letterSpacing: -0.5
+              ),
+              headline3: TextStyle(
+                  fontSize: 47,
+                  fontWeight: FontWeight.w400
+              ),
+              headline4: TextStyle(
+                  fontSize: 33,
+                  fontWeight: FontWeight.w400,
+                  letterSpacing: 0.25
+              ),
+              headline5: TextStyle(
+                  fontSize: 23,
+                  fontWeight: FontWeight.w400
+              ),
+              headline6: TextStyle(
+                  fontSize: 19,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0.15
+              ),
+              subtitle1: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  letterSpacing: 0.15,
+              ),
+              subtitle2: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0.1
+              ),
+              bodyText1: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  letterSpacing: 0.5
+              ),
+              bodyText2: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  letterSpacing: 0.25
+              ),
+              button: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 1.25
+              ),
+              caption: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                  letterSpacing: 0.4
+              ),
+              overline: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w400,
+                  letterSpacing: 1.5
+              ),
+            ),
             splashColor: Colors.transparent,
             backgroundColor: ThemeColor.backgroundGrey,
+            dividerColor: ThemeColor.lightGrey,
+            scaffoldBackgroundColor: ThemeColor.white,
+            hintColor: ThemeColor.mediumGrey,
+            unselectedWidgetColor: ThemeColor.mediumGrey,
+            //primaryColorDark:
+            //color: ThemeColor.mediumGrey,
           ),
-        ),
+          darkTheme: ThemeData(
+            brightness: Brightness.dark,
+            /* dark theme settings */
+          ),
+          themeMode: ThemeMode.light,
+          ),
     );
   }
 }

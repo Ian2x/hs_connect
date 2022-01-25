@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
+import 'package:provider/provider.dart';
 
 import '../constants.dart';
+import '../pixels.dart';
 
 class DeletableImage extends StatelessWidget {
   final Image image;
   final VoidFunction onDelete;
   final double width;
   final double height;
-  final double buttonSize;
+  final double buttonSizeNotPixelAdjusted;
 
-  const DeletableImage({Key? key, required this.image, required this.onDelete, this.width = 250, this.height = 250, this.buttonSize = 40})
+  const DeletableImage({Key? key, required this.image, required this.onDelete, this.width = 250, this.height = 250, this.buttonSizeNotPixelAdjusted = 40})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final hp = Provider.of<HeightPixel>(context).value;
+    final wp = Provider.of<HeightPixel>(context).value;
+
+
     return Container(
         width: width,
         height: height,
@@ -31,11 +37,11 @@ class DeletableImage extends StatelessWidget {
               return Row(children: <Widget>[
                 Spacer(),
                 Column(children: <Widget>[
-                  SizedBox(height: buttonSize/3),
-                  DeleteImageButton(onDelete: onDelete, buttonSize: buttonSize),
+                  SizedBox(height: buttonSizeNotPixelAdjusted/3),
+                  DeleteImageButton(onDelete: onDelete, buttonSize: buttonSizeNotPixelAdjusted),
                   Spacer()
                 ]),
-                SizedBox(width: buttonSize/3),
+                SizedBox(width: buttonSizeNotPixelAdjusted/3),
               ]);
             }),
           ],

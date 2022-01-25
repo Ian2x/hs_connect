@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/tools/hexColor.dart';
-import 'package:hs_connect/shared/widgets/loading.dart';
+import 'package:hs_connect/shared/pageRoutes.dart';
 import '../profileForm.dart';
 
 class ProfileImage extends StatelessWidget {
@@ -20,7 +19,7 @@ class ProfileImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = HexColor('787878'); // Theme.of(context).colorScheme.primary;
+    final color = ThemeColor.profilePicEditColor; // Theme.of(context).colorScheme.primary;
 
     return Center(
       child: Stack(
@@ -59,7 +58,7 @@ class ProfileImage extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => ProfileForm(currDisplayName: currUserName, currImageURL: profileImageURL)),
+                builder: (context) => pixelProvider(context, child: ProfileForm(currDisplayName: currUserName, currImageURL: profileImageURL))),
           );
         },
         child: buildCircle(

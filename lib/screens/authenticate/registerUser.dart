@@ -4,7 +4,10 @@ import 'package:hs_connect/screens/wrapper.dart';
 import 'package:hs_connect/services/auth.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
+import 'package:hs_connect/shared/pageRoutes.dart';
+import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
+import 'package:provider/provider.dart';
 
 class RegisterUser extends StatefulWidget {
   const RegisterUser({Key? key, required this.domain}) : super(key: key);
@@ -27,8 +30,8 @@ class _RegisterUserState extends State<RegisterUser> {
 
   @override
   Widget build(BuildContext context) {
-    final hp = getHp(context);
-    final wp = getWp(context);
+    final wp = Provider.of<WidthPixel>(context).value;
+    final hp = Provider.of<HeightPixel>(context).value;
 
 
     return loading
@@ -95,7 +98,7 @@ class _RegisterUserState extends State<RegisterUser> {
                               await _auth.registerWithUsernameAndPassword(username, password, widget.domain);
 
                           if (result is User?) {
-                            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => Wrapper()), (Route<dynamic> route) => false);
+                            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => pixelProvider(context, child: Wrapper())), (Route<dynamic> route) => false);
                           } else if (result is FirebaseAuthException && result.code == 'email-already-in-use') {
                             if (mounted) {
                               setState(() {

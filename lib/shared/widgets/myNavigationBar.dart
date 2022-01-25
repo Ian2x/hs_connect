@@ -7,8 +7,9 @@ import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:provider/provider.dart';
 
 import '../constants.dart';
-import '../noAnimationMaterialPageRoute.dart';
+import '../pageRoutes.dart';
 
+import '../pixels.dart';
 import 'loading.dart';
 
 class MyNavigationBar extends StatefulWidget {
@@ -21,17 +22,17 @@ class MyNavigationBar extends StatefulWidget {
 }
 
 class _MyNavigationBarState extends State<MyNavigationBar> {
-
   bool loading = false;
 
   @override
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
+    final hp = Provider.of<HeightPixel>(context).value;
 
     if (loading || userData == null) return Loading();
 
     return Container(
-      decoration: BoxDecoration(boxShadow: [BoxShadow(color: HexColor("#FFFFFF"), spreadRadius: 1.0)]),
+      decoration: BoxDecoration(boxShadow: [BoxShadow(color: HexColor("#FFFFFF"), spreadRadius: 1*hp)]),
       child: BottomNavigationBar(
         backgroundColor: HexColor("#FFFFFF"),
         type: BottomNavigationBarType.fixed,
@@ -46,16 +47,12 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
               padding: EdgeInsets.zero,
               // color: ThemeColor.black,
               constraints: BoxConstraints(),
-              icon: Icon(Icons.school, size: 18.0),
+              icon: Icon(Icons.school, size: 18*hp),
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  NoAnimationMaterialPageRoute(builder: (context) => Provider<HeightPixel>.value(
-                      value: HeightPixel(MediaQuery.of(context).size.height / 781.1),
-                      child: Provider<WidthPixel>.value(
-                          value: WidthPixel(MediaQuery.of(context).size.width / 392.7),
-                          child: Home()))
-                  ),
+                  NoAnimationMaterialPageRoute(
+                      builder: (context) => pixelProvider(context, child: Home())),
                 );
               },
             ),
@@ -66,15 +63,12 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
               padding: EdgeInsets.zero,
               // color: ThemeColor.black,
               constraints: BoxConstraints(),
-              icon: Icon(Icons.notifications, size: 18.0),
+              icon: Icon(Icons.notifications, size: 18*hp),
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  NoAnimationMaterialPageRoute(builder: (context) => Provider<HeightPixel>.value(
-                      value: HeightPixel(MediaQuery.of(context).size.height / 781.1),
-                      child: Provider<WidthPixel>.value(
-                          value: WidthPixel(MediaQuery.of(context).size.width / 392.7),
-                          child: ActivityPage()))),
+                  NoAnimationMaterialPageRoute(
+                      builder: (context) => pixelProvider(context, child: ActivityPage())),
                 );
               },
             ),
@@ -85,15 +79,13 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
               padding: EdgeInsets.zero,
               // color: ThemeColor.black,
               constraints: BoxConstraints(),
-              icon: Icon(Icons.person, size: 18.0),
+              icon: Icon(Icons.person, size: 18*hp),
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  NoAnimationMaterialPageRoute(builder: (context) => Provider<HeightPixel>.value(
-                      value: HeightPixel(MediaQuery.of(context).size.height / 781.1),
-                      child: Provider<WidthPixel>.value(
-                          value: WidthPixel(MediaQuery.of(context).size.width / 392.7),
-                          child: ProfilePage(profileRef: userData.userRef, currUserRef: userData.userRef)))),
+                  NoAnimationMaterialPageRoute(
+                      builder: (context) => pixelProvider(context,
+                          child: ProfilePage(profileRef: userData.userRef, currUserRef: userData.userRef))),
                 );
               },
             ),

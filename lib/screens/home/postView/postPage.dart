@@ -78,12 +78,10 @@ class _PostPageState extends State<PostPage> {
   @override
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
+
     if (userData == null || post == null) {
       return Loading();
     }
-
-    final hp = getHp(context);
-    final wp = getWp(context);
 
 
     return Scaffold(
@@ -94,7 +92,7 @@ class _PostPageState extends State<PostPage> {
               color: HexColor('222426'), //fontFamily)
             )),
         backgroundColor: HexColor("FFFFFF"),
-        elevation: 0.0,
+        elevation: 0,
         leading: myBackButtonIcon(context),
       ),
       body:
@@ -105,7 +103,7 @@ class _PostPageState extends State<PostPage> {
                   minHeight: MediaQuery.of(context).size.height,
                 ),
                 child:
-                  CommentsFeed(post: post!, groupRef: post!.groupRef, wp: wp, hp: hp,),
+                  CommentsFeed(post: post!, groupRef: post!.groupRef),
               ),
             ],
           )

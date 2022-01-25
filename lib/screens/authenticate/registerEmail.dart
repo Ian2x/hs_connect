@@ -3,7 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hs_connect/screens/authenticate/waitVerification.dart';
 import 'package:hs_connect/services/auth.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/pageRoutes.dart';
+import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
+import 'package:provider/provider.dart';
 
 import 'authBar.dart';
 
@@ -23,14 +26,13 @@ class _RegisterEmailState extends State<RegisterEmail> {
 
   // text field state
   String email='';
-  String error="";
+  String? error;
 
 
   @override
   Widget build(BuildContext context) {
-    final hp = getHp(context);
-    final wp = getWp(context);
-
+    final wp = Provider.of<WidthPixel>(context).value;
+    final hp = Provider.of<HeightPixel>(context).value;
 
     return loading
         ? Scaffold(backgroundColor: ThemeColor.backgroundGrey, body: Loading())
@@ -47,12 +49,12 @@ class _RegisterEmailState extends State<RegisterEmail> {
                     setState(() => loading = true);
                   }
                   dynamic result = await _auth.createEmailUser(email);
-
+                  print(result);
                   if (result is User?) {
                     final int tempIndex = email.lastIndexOf('@');
                     final String domain = email.substring(tempIndex);
                     Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (context) => WaitVerification(domain: domain)));
+                        .push(MaterialPageRoute(builder: (context) => pixelProvider(context, child: WaitVerification(domain: domain))));
                   } else if (result is FirebaseAuthException) {
                     if (mounted) {
                       setState(() {
@@ -74,7 +76,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                       });
                     }
                   }
-                }, wp: wp, hp: hp),
+                }),
             ),
           Container(
             padding: EdgeInsets.symmetric(vertical: 20*hp, horizontal: 50*wp),
@@ -109,7 +111,8 @@ class _RegisterEmailState extends State<RegisterEmail> {
                           ],
                         )
                     ),
-                    SizedBox(height: 78*hp),
+                    SizedBox(height: error!=null ? 10*hp : 78*hp),
+                    error!=null ? Text(error!, style: ThemeText.inter(fontSize: 14*hp, color: ThemeColor.errorRed)) : Container(),
                     TextField(
                       autocorrect:false,
                       style: ThemeText.inter(

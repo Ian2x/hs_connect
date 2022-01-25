@@ -16,7 +16,7 @@ ListView postsListView({required List<Post> posts, required ScrollController con
         return Center(
             child: PostCard(
           post: posts[index],
-          currUserRef: currUserRef, hp: 1, wp: 1,
+          currUserRef: currUserRef,
         ));
       });
 }

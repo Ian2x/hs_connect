@@ -5,7 +5,9 @@ import 'package:hs_connect/screens/activity/Messages/messagesForm.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
+import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
+import 'package:provider/provider.dart';
 
 import 'messagesFeed.dart';
 
@@ -25,8 +27,8 @@ class MessagesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double wp = getWp(context);
-    double hp = getHp(context);
+    final wp = Provider.of<WidthPixel>(context).value;
+    final hp = Provider.of<HeightPixel>(context).value;
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -46,7 +48,6 @@ class MessagesPage extends StatelessWidget {
                 currUserRef: currUserRef,
                 otherUserRef: otherUserRef,
                 onUpdateLastViewed: onUpdateLastViewed,
-                wp: wp, hp: hp
               ),
             )),
             Divider(height: 0.5*hp, color: ThemeColor.mediumGrey),
@@ -59,8 +60,7 @@ class MessagesPage extends StatelessWidget {
                     currUserRef: currUserRef,
                     otherUserRef: otherUserRef,
                     onUpdateLastMessage: onUpdateLastMessage,
-                    onUpdateLastViewed: onUpdateLastViewed,
-                    wp: wp, hp: hp))
+                    onUpdateLastViewed: onUpdateLastViewed))
           ]),
         ),
       ),
@@ -100,7 +100,8 @@ class _MessagesPageAppBarState extends State<MessagesPageAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    double hp = getHp(context);
+    final hp = Provider.of<HeightPixel>(context).value;
+
     return AppBar(
       backgroundColor: ThemeColor.white,
       title: Text(otherUserUsername, style: ThemeText.titleRegular()),

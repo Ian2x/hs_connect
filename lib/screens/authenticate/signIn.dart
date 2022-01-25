@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/services/auth.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
@@ -43,13 +44,14 @@ class _SignInState extends State<SignIn> {
                   bottom:0,
                   right:0,
                   left:0,
-                  child: AuthBar(buttonText: "Sign in", hp: hp, wp: wp,
+                  child: AuthBar(buttonText: "Sign in",
                     onPressed: () async {
                       if (_formKey.currentState != null && _formKey.currentState!.validate()) {
                         if (mounted) {
                           setState(() => loading = true);
                         }
                         dynamic result = await _auth.signInWithUsernameAndPassword(username, password);
+                        print(result);
                         if (!(result is User?)) {
                           if (mounted) {
                             setState(() {
