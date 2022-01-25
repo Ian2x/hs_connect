@@ -163,7 +163,7 @@ class _CommentCardState extends State<CommentCard> {
                             ),
                             widget.comment.creatorRef != null ? LikeDislikeComment(
                                 comment: widget.comment,
-                                currUserRef: widget.currUserRef,
+                                currUserRef: widget.currUserRef, wp: wp!, hp: hp!,
                             ) : Container()
                           ],
                         ),

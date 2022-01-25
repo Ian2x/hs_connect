@@ -14,6 +14,6 @@ FloatingActionButton floatingNewButton(BuildContext context) {
     },
     backgroundColor: ThemeColor.secondaryBlue,
     foregroundColor: HexColor('FFFFFF'),
-    elevation: 6.0,
+    elevation: 6,
   );
 }

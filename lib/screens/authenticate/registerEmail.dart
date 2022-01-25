@@ -51,7 +51,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                     final int tempIndex = email.lastIndexOf('@');
                     final String domain = email.substring(tempIndex);
                     Navigator.of(context)
-                        .pushReplacement(MaterialPageRoute(builder: (context) => WaitVerification(domain: domain)));
+                        .push(MaterialPageRoute(builder: (context) => WaitVerification(domain: domain)));
                   } else if (result is FirebaseAuthException) {
                     if (mounted) {
                       setState(() {

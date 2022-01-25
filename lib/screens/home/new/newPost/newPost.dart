@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
+import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 import 'PostForm.dart';
@@ -15,14 +16,18 @@ class NewPost extends StatelessWidget {
       return Loading();
     }
 
+    final hp = getHp(context);
+    final wp = getWp(context);
+
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.fromLTRB(15.0, 30.0,15.0,0.0), //TODO May need to adjust to phone height?
+            padding: EdgeInsets.fromLTRB(15*wp, 30*hp,15*wp,0*hp),
             constraints: BoxConstraints.expand(),
-            child: PostForm(userData: userData),
+            child: PostForm(userData: userData, hp: hp, wp: wp),
           ),
         ],
       ),

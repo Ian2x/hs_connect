@@ -10,12 +10,14 @@ import 'package:hs_connect/shared/widgets/picPickerButton.dart';
 import 'constants.dart';
 
 // used for authentication and profile form
-const textInputDecoration = InputDecoration(
-  fillColor: Colors.white,
-  filled: true,
-  enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent, width: 2.0)),
-  focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.pink, width: 2.0)),
-);
+InputDecoration textInputDecoration({required double hp, required double wp, }) {
+  return InputDecoration(
+    fillColor: Colors.white,
+    filled: true,
+    enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent, width: 2*wp)),
+    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.pink, width: 2*wp)),
+  );
+}
 
 typedef VoidFunction = void Function();
 
@@ -30,30 +32,30 @@ typedef VoidPollDataParamFunction = void Function (int, String);
 typedef VoidDocSnapParamFunction = void Function (DocumentSnapshot);
 
 
-InputDecoration commentReplyInputDecoration({required VoidFunction onPressed, required Function setPic, required bool isReply, required bool isFocused}) {
+InputDecoration commentReplyInputDecoration({required VoidFunction onPressed, required Function setPic, required bool isReply, required bool isFocused, required double hp, required double wp}) {
   return InputDecoration(
     fillColor: ThemeColor.white, filled: true,
     hintText: isReply != false ? "Reply..." : "Comment...",
-    hintStyle: ThemeText.roboto(fontSize: 16, color: ThemeColor.lightMediumGrey),
-    labelStyle: ThemeText.roboto(fontSize: 16, color: ThemeColor.lightMediumGrey),
-    contentPadding: EdgeInsets.fromLTRB(20, 14, 0, 14),
+    hintStyle: ThemeText.roboto(fontSize: 16*hp, color: ThemeColor.lightMediumGrey),
+    labelStyle: ThemeText.roboto(fontSize: 16*hp, color: ThemeColor.lightMediumGrey),
+    contentPadding: EdgeInsets.fromLTRB(20*wp, 14*hp, 0*wp, 14*hp),
     border: new OutlineInputBorder(
-      borderRadius: new BorderRadius.circular(25.7),
-      borderSide: new BorderSide(width: 3.0, color: ThemeColor.lightGrey),
+      borderRadius: new BorderRadius.circular(25.7*hp),
+      borderSide: new BorderSide(width: 3*wp, color: ThemeColor.lightGrey),
     ),
     enabledBorder: new OutlineInputBorder(
-        borderRadius: new BorderRadius.circular(25.7),
-        borderSide: new BorderSide(width: 3.0, color: ThemeColor.lightGrey)),
+        borderRadius: new BorderRadius.circular(25.7*hp),
+        borderSide: new BorderSide(width: 3*wp, color: ThemeColor.lightGrey)),
     focusedBorder: OutlineInputBorder(
-        borderRadius: new BorderRadius.circular(25.7),
-        borderSide: new BorderSide(width: 3.0, color: ThemeColor.lightGrey)),
+        borderRadius: new BorderRadius.circular(25.7*hp),
+        borderSide: new BorderSide(width: 3*wp, color: ThemeColor.lightGrey)),
     suffixIcon: isFocused ? Row(mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.min, children: <Widget>[
-      picPickerButton(setPic: setPic, iconSize: 16.0),
+      picPickerButton(setPic: setPic, iconSize: 16*hp),
       IconButton(
           icon: Icon(Icons.send),
           color: ThemeColor.lightMediumGrey,
-          iconSize: 16.0,
-          padding: EdgeInsets.only(left: 5, right: 15),
+          iconSize: 16*hp,
+          padding: EdgeInsets.only(left: 5*wp, right: 15*wp),
           splashColor: Colors.transparent,
           onPressed: onPressed,
           constraints: BoxConstraints()),
@@ -61,31 +63,31 @@ InputDecoration commentReplyInputDecoration({required VoidFunction onPressed, re
   );
 }
 
-InputDecoration messageInputDecoration({required VoidFunction onPressed, required Function setPic}) {
+InputDecoration messageInputDecoration({required VoidFunction onPressed, required Function setPic, required double hp, required double wp}) {
   return InputDecoration(
     hintText: 'Message...',
     fillColor: ThemeColor.white,
     filled: true,
-    hintStyle: ThemeText.roboto(fontSize: 16, color: ThemeColor.lightMediumGrey),
-    labelStyle: ThemeText.roboto(fontSize: 16, color: ThemeColor.lightMediumGrey),
-    contentPadding: EdgeInsets.fromLTRB(20, 14, 0, 14),
+    hintStyle: ThemeText.roboto(fontSize: 16*hp, color: ThemeColor.lightMediumGrey),
+    labelStyle: ThemeText.roboto(fontSize: 16*hp, color: ThemeColor.lightMediumGrey),
+    contentPadding: EdgeInsets.fromLTRB(20*wp, 14*hp, 0*wp, 14*hp),
     border: new OutlineInputBorder(
-        borderRadius: new BorderRadius.circular(25.7),
-        borderSide: new BorderSide(width: 3.0, color: ThemeColor.lightGrey),
+        borderRadius: new BorderRadius.circular(25.7*hp),
+        borderSide: new BorderSide(width: 3*wp, color: ThemeColor.lightGrey),
     ),
     enabledBorder: new OutlineInputBorder(
-        borderRadius: new BorderRadius.circular(25.7),
-        borderSide: new BorderSide(width: 3.0, color: ThemeColor.lightGrey)),
+        borderRadius: new BorderRadius.circular(25.7*hp),
+        borderSide: new BorderSide(width: 3*wp, color: ThemeColor.lightGrey)),
     focusedBorder: OutlineInputBorder(
-        borderRadius: new BorderRadius.circular(25.7),
-        borderSide: new BorderSide(width: 3.0, color: ThemeColor.lightGrey)),
+        borderRadius: new BorderRadius.circular(25.7*hp),
+        borderSide: new BorderSide(width: 3*wp, color: ThemeColor.lightGrey)),
     suffixIcon: Row(mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.min, children: <Widget>[
-      picPickerButton(setPic: setPic, iconSize: 16.0),
+      picPickerButton(setPic: setPic, iconSize: 16*hp),
       IconButton(
           icon: Icon(Icons.send),
           color: ThemeColor.lightMediumGrey,
-          iconSize: 16.0,
-          padding: EdgeInsets.only(left: 5, right: 15),
+          iconSize: 16*hp,
+          padding: EdgeInsets.only(left: 5*wp, right: 15*wp),
           splashColor: Colors.transparent,
           onPressed: onPressed,
           constraints: BoxConstraints()),

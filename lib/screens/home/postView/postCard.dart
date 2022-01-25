@@ -21,8 +21,10 @@ import 'package:hs_connect/shared/widgets/widgetDisplay.dart';
 class PostCard extends StatefulWidget {
   final Post post;
   final DocumentReference currUserRef;
+  final double hp;
+  final double wp;
 
-  PostCard({Key? key, required this.post, required this.currUserRef}) : super(key: key);
+  PostCard({Key? key, required this.post, required this.currUserRef, required this.hp, required this.wp}) : super(key: key);
 
   @override
   _PostCardState createState() => _PostCardState();
@@ -212,7 +214,7 @@ class _PostCardState extends State<PostCard> {
                             Spacer(),
                             LikeDislikePost(
                                 currUserRef: widget.currUserRef,
-                                post: widget.post),
+                                post: widget.post, hp: 1, wp: 1,),
                           ],
                         )
                       ], //Column Children ARRAY

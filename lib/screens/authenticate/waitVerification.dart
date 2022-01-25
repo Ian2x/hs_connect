@@ -74,7 +74,7 @@ class _WaitVerificationState extends State<WaitVerification> {
     if (user!.emailVerified) {
       timer!.cancel();
       Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (context) => RegisterUser(domain: widget.domain)));
+          .push(MaterialPageRoute(builder: (context) => RegisterUser(domain: widget.domain)));
     }
   }
 }

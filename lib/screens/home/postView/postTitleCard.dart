@@ -199,7 +199,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
                   GroupTag(groupImage: groupImage, groupName: groupName,
                       groupColor: groupColor != null ? HexColor(groupColor!) : null, fontSize: 16,),
                   Spacer(),
-                  LikeDislikePost(currUserRef: widget.currUserRef, post: widget.post),
+                  LikeDislikePost(currUserRef: widget.currUserRef, post: widget.post, wp: 1, hp: 1,),
                 ],
               ),
               SizedBox(height:30),

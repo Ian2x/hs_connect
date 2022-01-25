@@ -80,7 +80,7 @@ class _ProfileFormState extends State<ProfileForm> {
               SizedBox(height: 20.0),
               TextFormField(
                 initialValue: userData.displayedName,
-                decoration: textInputDecoration,
+                decoration: textInputDecoration(hp: 1, wp: 1),
                 validator: (val) {
                   if (val == null) return 'Error: null value';
                   if (val.isEmpty)
@@ -166,10 +166,8 @@ class _ProfileFormState extends State<ProfileForm> {
                         onValue: handleValue,
                         onError: handleError,
                       );
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ProfilePage(profileRef: userData.userRef, currUserRef: userData.userRef)),
+                      Navigator.pop(
+                        context
                       );
                     }
                   },
@@ -182,10 +180,8 @@ class _ProfileFormState extends State<ProfileForm> {
                     primary: Colors.pink[400],
                   ),
                   onPressed: () async {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ProfilePage(profileRef: userData.userRef, currUserRef: userData.userRef)),
+                    Navigator.pop(
+                      context
                     );
                   },
                   child: Text(

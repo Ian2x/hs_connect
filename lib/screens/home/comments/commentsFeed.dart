@@ -120,7 +120,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
               isReply: isReply,
               postRef: widget.post.postRef,
               groupRef: widget.groupRef,
-              postCreatorRef: widget.post.creatorRef,)
+              postCreatorRef: widget.post.creatorRef, wp: wp!, hp: hp!)
             )
               ,
           ),

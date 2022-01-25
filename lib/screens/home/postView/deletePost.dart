@@ -29,10 +29,7 @@ class _DeletePostState extends State<DeletePost> {
     PostsDatabaseService _posts = PostsDatabaseService(currUserRef: widget.currUserRef);
 
     if (widget.currUserRef != widget.postUserRef) {
-      return Container(
-        height: 0.0,
-        width: 0.0,
-      );
+      return Container();
     } else {
       return IconButton(
         icon: Icon(Icons.delete),

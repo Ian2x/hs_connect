@@ -51,7 +51,7 @@ class _RegisterUserState extends State<RegisterUser> {
                 child: Column(children: <Widget>[
                   SizedBox(height: 20*hp),
                   TextFormField(
-                      decoration: textInputDecoration.copyWith(hintText: 'Username'),
+                      decoration: textInputDecoration(wp: wp, hp: hp).copyWith(hintText: 'Username'),
                       validator: (val) {
                         if (val == null) return 'Error: null value';
                         if (val.isEmpty)
@@ -66,7 +66,7 @@ class _RegisterUserState extends State<RegisterUser> {
                       }),
                   SizedBox(height: 20*hp),
                   TextFormField(
-                      decoration: textInputDecoration.copyWith(hintText: 'Password'),
+                      decoration: textInputDecoration(wp: wp, hp: hp).copyWith(hintText: 'Password'),
                       obscureText: true,
                       validator: (val) {
                         if (val == null) return 'Error: null value';
@@ -95,7 +95,7 @@ class _RegisterUserState extends State<RegisterUser> {
                               await _auth.registerWithUsernameAndPassword(username, password, widget.domain);
 
                           if (result is User?) {
-                            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Wrapper()));
+                            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => Wrapper()), (Route<dynamic> route) => false);
                           } else if (result is FirebaseAuthException && result.code == 'email-already-in-use') {
                             if (mounted) {
                               setState(() {

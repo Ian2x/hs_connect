@@ -50,7 +50,12 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  NoAnimationMaterialPageRoute(builder: (context) => Home()),
+                  NoAnimationMaterialPageRoute(builder: (context) => Provider<HeightPixel>.value(
+                      value: HeightPixel(MediaQuery.of(context).size.height / 781.1),
+                      child: Provider<WidthPixel>.value(
+                          value: WidthPixel(MediaQuery.of(context).size.width / 392.7),
+                          child: Home()))
+                  ),
                 );
               },
             ),
@@ -65,7 +70,11 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  NoAnimationMaterialPageRoute(builder: (context) => ActivityPage()),
+                  NoAnimationMaterialPageRoute(builder: (context) => Provider<HeightPixel>.value(
+                      value: HeightPixel(MediaQuery.of(context).size.height / 781.1),
+                      child: Provider<WidthPixel>.value(
+                          value: WidthPixel(MediaQuery.of(context).size.width / 392.7),
+                          child: ActivityPage()))),
                 );
               },
             ),
@@ -80,7 +89,11 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  NoAnimationMaterialPageRoute(builder: (context) => ProfilePage(profileRef: userData.userRef, currUserRef: userData.userRef)),
+                  NoAnimationMaterialPageRoute(builder: (context) => Provider<HeightPixel>.value(
+                      value: HeightPixel(MediaQuery.of(context).size.height / 781.1),
+                      child: Provider<WidthPixel>.value(
+                          value: WidthPixel(MediaQuery.of(context).size.width / 392.7),
+                          child: ProfilePage(profileRef: userData.userRef, currUserRef: userData.userRef)))),
                 );
               },
             ),

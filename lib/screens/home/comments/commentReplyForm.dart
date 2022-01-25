@@ -17,6 +17,8 @@ class CommentReplyForm extends StatefulWidget {
   final DocumentReference? commentReference;
   final DocumentReference postCreatorRef;
   final VoidDocParamFunction switchFormBool;
+  final double hp;
+  final double wp;
 
   CommentReplyForm({Key? key,
     required this.currUserRef,
@@ -26,6 +28,8 @@ class CommentReplyForm extends StatefulWidget {
     required this.switchFormBool,
     required this.commentReference,
     required this.postCreatorRef,
+    required this.hp,
+    required this.wp,
   }) : super(key: key);
 
   @override
@@ -35,6 +39,9 @@ class CommentReplyForm extends StatefulWidget {
 class _CommentReplyFormState extends State<CommentReplyForm> {
   late FocusNode myFocusNode;
   final _formKey = GlobalKey<FormState>();
+
+  double? hp;
+  double? wp;
 
   void handleError(err) {
     if (mounted) {
@@ -73,6 +80,8 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
     super.initState();
     myFocusNode = FocusNode();
     if (mounted) setState(() {
+      wp = widget.wp;
+      hp = widget.hp;
       _comments = CommentsDatabaseService(currUserRef: widget.currUserRef, postRef: widget.postRef);
     });
   }
@@ -133,8 +142,7 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
 
-    if (userData == null || _comments == null) {
-      // Don't expect to be here, but just in case
+    if (userData == null || _comments == null || wp == null || hp == null) {
       return Loading();
     }
 
@@ -154,6 +162,8 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
           ),
           autocorrect: false,
           decoration: commentReplyInputDecoration(
+              wp: wp!,
+              hp: hp!,
               isReply: widget.isReply,
               onPressed: () async {
                 onSubmit();

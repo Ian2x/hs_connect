@@ -9,28 +9,37 @@ class GroupSelectionSheet extends StatefulWidget {
   final List<Group> groups;
   final Group initialSelectedGroup;
   final VoidGroupParamFunction onSelectGroup;
+  final double hp;
+  final double wp;
 
-  const GroupSelectionSheet({Key? key, required this.groups, required this.initialSelectedGroup, required this.onSelectGroup}) : super(key: key);
+  const GroupSelectionSheet({Key? key, required this.groups, required this.initialSelectedGroup, required this.onSelectGroup, required this.hp, required this.wp}) : super(key: key);
 
   @override
   _GroupSelectionSheetState createState() => _GroupSelectionSheetState();
 }
 
 class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
-
+  double? wp;
+  double? hp;
   Group? selectedGroup;
 
   @override
   void initState() {
     selectedGroup = widget.initialSelectedGroup;
+    if (mounted) {
+      setState(() {
+        wp = widget.wp;
+        hp = widget.hp;
+      });
+    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (selectedGroup==null) return Loading();
+    if (selectedGroup==null || wp == null || hp == null) return Loading();
     return Container(
-        padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 40.0),
+        padding: EdgeInsets.fromLTRB(20*wp!, 0*hp!, 20*wp!, 40*hp!),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,11 +54,11 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 40),
+                      SizedBox(height: 40*hp!),
                       Text("Pick a group",
                           style: ThemeText.groupBold(
                             color: ThemeColor.black,
-                            fontSize: 18,
+                            fontSize: 18*hp!,
                           )),
                     ],
                   );
@@ -69,17 +78,17 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Divider(color: ThemeColor.backgroundGrey, thickness: 2),
+                          Divider(color: ThemeColor.backgroundGrey, thickness: 2*hp!),
                           Row(
                             children: <Widget>[
                               Text(group.name,
                                   style: ThemeText.groupBold(
                                     color: ThemeColor.darkGrey,
-                                    fontSize: 16,
+                                    fontSize: 16*hp!,
                                   )),
                               Spacer(),
                               ConstrainedBox(
-                                  constraints: BoxConstraints(maxHeight: 40),
+                                  constraints: BoxConstraints(maxHeight: 40*hp!),
                                 child:
                                 Checkbox(
                                   value: selectedGroup == widget.groups[index - 1],
@@ -98,10 +107,10 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
                             ]
                           ),
                           group.name == "Public"
-                              ? Text("Anyone can see", style: ThemeText.groupBold(color: ThemeColor.mediumGrey, fontSize: 16))
+                              ? Text("Anyone can see", style: ThemeText.groupBold(color: ThemeColor.mediumGrey, fontSize: 16*hp!))
                               : Container(),
                           group.accessRestriction.restrictionType == AccessRestrictionType.domain
-                              ? Text("Only for your school", style: ThemeText.groupBold(color: ThemeColor.mediumGrey, fontSize: 16))
+                              ? Text("Only for your school", style: ThemeText.groupBold(color: ThemeColor.mediumGrey, fontSize: 16*hp!))
                               : Container()
                         ]
                       ),

@@ -18,8 +18,6 @@ class UMUD {
 
 class AllMessagesPage extends StatefulWidget {
   final UserData userData;
-  final double hp;
-  final double wp;
 
   const AllMessagesPage({Key? key, required this.userData, required this.hp, required this.wp}) : super(key: key);
 

@@ -95,6 +95,7 @@ class _MessagesFormState extends State<MessagesForm> {
                     maxLines: null,
                     style: ThemeText.roboto(fontSize: 16*hp!, color: ThemeColor.darkGrey),
                     decoration: messageInputDecoration(
+                        wp: wp!, hp: hp!,
                         setPic: setPic,
                         onPressed: () async {
                           if (_formKey.currentState != null && _formKey.currentState!.validate()) {

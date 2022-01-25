@@ -38,9 +38,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
     final user = Provider.of<User?>(context);
     final userData = Provider.of<UserData?>(context);
-    final hp = getHp(context);
-    final wp = getWp(context);
-
+    final hp = Provider.of<HeightPixel>(context).value;
+    final wp = Provider.of<WidthPixel>(context).value;
 
     if(user==null) {
       return Authenticate();

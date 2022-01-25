@@ -56,7 +56,7 @@ class ProfileImage extends StatelessWidget {
 
   Widget buildEditIcon(Color color, BuildContext context) => GestureDetector(
         onTap: () {
-          Navigator.pushReplacement(
+          Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => ProfileForm(currDisplayName: currUserName, currImageURL: profileImageURL)),
