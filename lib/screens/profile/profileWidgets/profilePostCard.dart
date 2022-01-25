@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/services/groups_database.dart';
-import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/groupTag.dart';
+import 'package:provider/provider.dart';
 
 
 class ProfilePostCard extends StatefulWidget {
-
   final Post post;
   final DocumentReference currUserRef;
 
@@ -33,7 +33,6 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
 
   @override
   void initState() {
-    // TODO: implement initState
     getGroupData();
     super.initState();
   }
@@ -66,16 +65,18 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
 
   @override
   Widget build(BuildContext context) {
+    final hp = Provider.of<HeightPixel>(context).value;
+    final wp = Provider.of<WidthPixel>(context).value;
+
     getGroupData();
     return Container(
-      padding: const EdgeInsets.fromLTRB(10,0,5,10),
+      padding: EdgeInsets.fromLTRB(10*wp,0,5*wp,10*hp),
       decoration: ShapeDecoration(
-        color: ThemeColor.white,
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.0),
+            borderRadius: BorderRadius.circular(16*hp),
             side: BorderSide(
-              color: ThemeColor.backgroundGrey,
-              width: 3.0,
+              color: Theme.of(context).dividerColor,
+              width: 3*hp,
             )),
       ),
       child:
@@ -85,37 +86,36 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
           Row(
             children: [
               GroupTag(groupImage: groupImage, groupColor: groupColor !=null ? HexColor(groupColor!): null,
-                  groupName: groupName, fontSize: 14),
+                  groupName: groupName, fontSize: 14*hp),
               Spacer(),
               IconButton(
-                  icon: Icon(Icons.more_horiz_rounded, color: ThemeColor.mediumGrey),
+                  icon: Icon(Icons.more_horiz_rounded, color: Theme.of(context).unselectedWidgetColor),
                   onPressed:(){}
               )
             ],
           ),
-          SizedBox(height:10),
-          Text(widget.post.title, style: ThemeText.postViewTitle( fontSize: 18)),
-          SizedBox(height:10),
+          SizedBox(height:10*hp),
+          Text(widget.post.title, style: Theme.of(context).textTheme.headline6),
+          SizedBox(height:10*hp),
           Row(
             children: [
               Text( (widget.post.numComments + widget.post.numReplies).toString() + " Comments",
-                style: ThemeText.regularSmall( fontSize: 14),
-              ),
+                style: Theme.of(context).textTheme.bodyText2),
               Spacer(),
               RichText(
                 text: TextSpan(
                   children: <TextSpan>[
                     TextSpan(text: (widget.post.likes.length - widget.post.dislikes.length).toString(),
-                        style: ThemeText.groupBold(color: ThemeColor.black, fontSize: 14 )),
+                        style: Theme.of(context).textTheme.subtitle2),
                     TextSpan(text: " Likes ",
-                        style: ThemeText.regularSmall(color: ThemeColor.darkGrey, fontSize: 14)),
+                        style: Theme.of(context).textTheme.bodyText2),
                   ],
                 ),
               ),
             ],
           ),
         ],
-      ),
+      )
     );
   }
 }

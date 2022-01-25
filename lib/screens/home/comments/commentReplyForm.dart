@@ -4,7 +4,9 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/services/replies_database.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
+import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
+import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -134,9 +136,11 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
     final userData = Provider.of<UserData?>(context);
 
     if (userData == null || _comments == null) {
-      // Don't expect to be here, but just in case
       return Loading();
     }
+
+    final wp = Provider.of<WidthPixel>(context).value;
+    final hp = Provider.of<HeightPixel>(context).value;
 
     return
       Form(
@@ -149,11 +153,11 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
             // was working on submitting upon "enter" key press, but probably not necessary/wanted
             onSubmit();
           },*/
-          style: TextStyle(
-
-          ),
+          style: ThemeText.inter(fontSize: 16*hp, color: ThemeColor.black),
           autocorrect: false,
           decoration: commentReplyInputDecoration(
+              wp: wp,
+              hp: hp,
               isReply: widget.isReply,
               onPressed: () async {
                 onSubmit();

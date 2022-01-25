@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class imageContainer extends StatelessWidget {
+import '../pixels.dart';
 
-  String imageString;
+class ImageContainer extends StatelessWidget {
 
-  imageContainer ({Key? key, required this.imageString}) : super(key: key);
+  final String imageString;
+
+  ImageContainer ({Key? key, required this.imageString}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final hp = Provider.of<HeightPixel>(context).value;
+    final wp = Provider.of<WidthPixel>(context).value;
+
     return Container(
-    margin: const EdgeInsets.only(left: 5.0, right: 5.0, top: 10.0, bottom: 0.0),
-    child:Row(
+    margin: EdgeInsets.only(left: 5*wp, right: 5*wp, top: 10*hp, bottom: 0),
+    child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.network(imageString),

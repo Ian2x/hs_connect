@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/models/comment.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/pixels.dart';
+import 'package:provider/provider.dart';
 
 const double iconSize = 25;
-const EdgeInsets iconPadding = EdgeInsets.all(3.0);
 
 class LikeDislikeComment extends StatefulWidget {
   final DocumentReference currUserRef;
@@ -38,6 +39,8 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
 
   @override
   Widget build(BuildContext context) {
+    final hp = Provider.of<HeightPixel>(context).value;
+
     CommentsDatabaseService _comments = CommentsDatabaseService(
         currUserRef: widget.currUserRef, commentRef: widget.comment.commentRef, postRef: widget.comment.postRef);
 
@@ -47,9 +50,9 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
         () {
           if (dislikeStatus == true) {
             return IconButton(
-              iconSize: iconSize,
+              iconSize: iconSize*hp,
               splashColor: Colors.transparent,
-              padding: iconPadding,
+              padding: EdgeInsets.all(3*hp),
               constraints: BoxConstraints(),
               color: ThemeColor.secondaryBlue,
               icon: Icon(Icons.keyboard_arrow_down_rounded),
@@ -67,7 +70,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
             return IconButton(
               iconSize: iconSize,
               splashColor: Colors.transparent,
-              padding: iconPadding,
+              padding: EdgeInsets.all(3*hp),
               constraints: BoxConstraints(),
               color: ThemeColor.darkGrey,
               icon: Icon(Icons.keyboard_arrow_down_rounded),
@@ -92,7 +95,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
             return IconButton(
               iconSize: iconSize,
               splashColor: Colors.transparent,
-              padding: iconPadding,
+              padding: EdgeInsets.all(3*hp),
               constraints: BoxConstraints(),
               color: ThemeColor.secondaryBlue,
               icon: Icon(Icons.keyboard_arrow_up_rounded, color: ThemeColor.secondaryBlue),
@@ -110,7 +113,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
             return IconButton(
               iconSize: iconSize,
               splashColor: Colors.transparent,
-              padding: iconPadding,
+              padding: EdgeInsets.all(3*hp),
               constraints: BoxConstraints(),
               color: ThemeColor.darkGrey,
               icon: Icon(Icons.keyboard_arrow_up_rounded),

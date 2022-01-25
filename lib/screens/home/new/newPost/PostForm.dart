@@ -7,6 +7,7 @@ import 'package:hs_connect/screens/home/new/newPost/newPoll.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/polls_database.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
+import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/deletableImage.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
@@ -23,7 +24,7 @@ const String emptyTitleError = 'Can\'t create a post with an empty title';
 
 class PostForm extends StatefulWidget {
   final UserData userData;
-
+  
   const PostForm({Key? key, required this.userData}) : super(key: key);
 
   @override
@@ -112,8 +113,9 @@ class _PostFormState extends State<PostForm> {
   @override
   Widget build(BuildContext context) {
     double phoneHeight = MediaQuery.of(context).size.height;
-    double phoneWidth = MediaQuery.of(context).size.height;
-
+    final hp = Provider.of<HeightPixel>(context).value;
+    final wp = Provider.of<WidthPixel>(context).value;
+    
     final userData = Provider.of<UserData?>(context);
     if (userData == null || groupChoices == null || selectedGroup == null || loading) {
       // Don't expect to be here, but just in case
@@ -127,13 +129,13 @@ class _PostFormState extends State<PostForm> {
           key: _formKey,
           child: Column(
             children: <Widget>[
-              SizedBox(height: phoneHeight * 0.07),
+              SizedBox(height: 55*hp),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 //Top ROW
                 children: [
                   TextButton(
-                    child: Text("Cancel", style: ThemeText.regularSmall(color: ThemeColor.mediumGrey, fontSize: 16)),
+                    child: Text("Cancel", style: ThemeText.regularSmall(color: ThemeColor.mediumGrey, fontSize: 16*hp)),
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -144,7 +146,7 @@ class _PostFormState extends State<PostForm> {
                         context: context,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(20),
+                          top: Radius.circular(20*hp),
                         )),
                         builder: (context) => new GroupSelectionSheet(
                               initialSelectedGroup: selectedGroup!,
@@ -155,15 +157,15 @@ class _PostFormState extends State<PostForm> {
                                   });
                                 }
                               },
-                              groups: groupChoices!,
+                              groups: groupChoices!
                             )),
                     child: Container(
                         alignment: Alignment.center,
-                        padding: EdgeInsets.fromLTRB(8, 6, 8, 6),
+                        padding: EdgeInsets.fromLTRB(8*wp, 6*hp, 8*wp, 6*hp),
                         decoration: ShapeDecoration(
                           color: ThemeColor.lightGrey,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(9),
+                            borderRadius: BorderRadius.circular(9*hp),
                           ),
                         ),
                         child: Row(
@@ -171,7 +173,7 @@ class _PostFormState extends State<PostForm> {
                             Text(
                               selectedGroup!.name,
                               style: ThemeText.regularSmall(
-                                fontSize: 18,
+                                fontSize: 18*hp,
                                 color: ThemeColor.black,
                               ),
                             ),
@@ -183,7 +185,7 @@ class _PostFormState extends State<PostForm> {
                   TextButton(
                       child: Text(
                         "Post",
-                        style: ThemeText.regularSmall(color: ThemeColor.secondaryBlue, fontSize: 16),
+                        style: ThemeText.regularSmall(color: ThemeColor.secondaryBlue, fontSize: 16*hp),
                       ),
                       onPressed: () async {
                         // check header isn't empty
@@ -244,11 +246,11 @@ class _PostFormState extends State<PostForm> {
                 constraints: BoxConstraints(
                   minHeight: phoneHeight * 0.75,
                 ),
-                padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                padding: EdgeInsets.fromLTRB(15*wp, 10*hp, 15*wp, 10*hp),
                 child: Column(children: <Widget>[
-                  SizedBox(height: phoneHeight * 0.02),
+                  SizedBox(height: 16*hp),
                   error != null
-                      ? Text(error!, style: ThemeText.inter(fontSize: 14, color: Colors.red.shade700))
+                      ? Text(error!, style: ThemeText.inter(fontSize: 14*hp, color: Colors.red.shade700))
                       : Container(),
                   newFile != null
                       ? Semantics(
@@ -265,14 +267,14 @@ class _PostFormState extends State<PostForm> {
                   TextFormField(
                     style: TextStyle(
                       color: HexColor("223E52"),
-                      fontSize: 22,
+                      fontSize: 22*hp,
                     ),
                     maxLines: null,
                     autocorrect: false,
                     decoration: InputDecoration(
                         hintStyle: TextStyle(
                           color: HexColor("223E52"),
-                          fontSize: 22,
+                          fontSize: 22*hp,
                           //fontWeight: ,
                         ),
                         border: InputBorder.none,
@@ -295,14 +297,14 @@ class _PostFormState extends State<PostForm> {
                     },
                     child: Container(
                       constraints: BoxConstraints(
-                        minHeight: newFile == null ? phoneHeight * 0.63 : phoneHeight * 0.31,
+                        minHeight: newFile == null ? 492*hp : 242*hp,
                       ),
                       child: Column(
                         children: [
                           TextFormField(
                             style: TextStyle(
                               color: HexColor("B5BABE"),
-                              fontSize: 18,
+                              fontSize: 18*hp
                               //fontWeight: ,
                             ),
                             maxLines: null,
@@ -310,7 +312,7 @@ class _PostFormState extends State<PostForm> {
                             decoration: InputDecoration(
                                 hintStyle: TextStyle(
                                   color: HexColor("B5BABE"),
-                                  fontSize: 18,
+                                  fontSize: 18*hp,
                                   //fontWeight: ,
                                 ),
                                 border: InputBorder.none,
@@ -318,7 +320,7 @@ class _PostFormState extends State<PostForm> {
                             onChanged: (val) => setState(() => _text = val),
                             focusNode: myFocusNode,
                           ),
-                          SizedBox(height: 30),
+                          SizedBox(height: 30*hp),
                           poll != null ? poll! : Container(),
                         ],
                       ),
@@ -338,12 +340,12 @@ class _PostFormState extends State<PostForm> {
             decoration: BoxDecoration(
               color: ThemeColor.white,
               border: Border(
-                top: BorderSide(width: 1.0, color: ThemeColor.lightMediumGrey),
+                top: BorderSide(width: 1*hp, color: ThemeColor.lightMediumGrey),
               ),
             ),
             child: Row(children: <Widget>[
               picPickerButton(
-                  iconSize: 30.0,
+                  iconSize: 30*hp,
                   color: newFile == null ? ThemeColor.mediumGrey : ThemeColor.secondaryBlue,
                   setPic: ((File? f) {
                     if (mounted) {
@@ -353,7 +355,7 @@ class _PostFormState extends State<PostForm> {
                       });
                     }
                   })),
-              SizedBox(width: phoneWidth * 0.005),
+              SizedBox(width: 2 * wp),
               IconButton(
                   onPressed: () {
                     if (mounted) {
@@ -395,7 +397,7 @@ class _PostFormState extends State<PostForm> {
                     }
                   },
                   icon: Icon(Icons.assessment,
-                      size: 30, color: poll == null ? ThemeColor.mediumGrey : ThemeColor.secondaryBlue))
+                      size: 30*hp, color: poll == null ? ThemeColor.mediumGrey : ThemeColor.secondaryBlue))
             ]),
           )),
     ]);

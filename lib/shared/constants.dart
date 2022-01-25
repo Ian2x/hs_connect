@@ -100,16 +100,17 @@ class ThemeColor extends Color {
 
   static Color hintTextGrey = HexColor("C8CED2");
 
-  static Color secondaryBlue = HexColor("54a0dc");
+  static Color secondaryBlue = HexColor("13A1F0");
 
 
   static Color lightGrey = HexColor("F4F4F4");
   static Color lightMediumGrey = HexColor("C9C9C9");
-  static Color mediumGrey = HexColor("8D8D8D");
+  static Color mediumGrey = HexColor("b2b2b2");
   static Color darkGrey = HexColor("373a3d");
 
   static Color white = HexColor("FFFFFF");
   static Color black = HexColor("000000");
+  static Color profilePicEditColor = HexColor('787878');
 }
 
 class C {
@@ -223,12 +224,4 @@ class C {
   static const postVotes = 'postVotes';
   static const extraData = 'extraData';
   static const ianTime = 'ianTime';
-}
-
-double getWp (context) {
-  return MediaQuery.of(context).size.width / 392.7;
-}
-
-double getHp (context) {
-  return MediaQuery.of(context).size.height / 781.1;
 }

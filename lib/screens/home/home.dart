@@ -7,12 +7,15 @@ import 'package:hs_connect/screens/home/postFeed/trendingFeed.dart';
 import 'package:hs_connect/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
+
+
   const Home({Key? key}) : super(key: key);
 
   @override
@@ -36,15 +39,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
 
-    final user = Provider.of<User?>(context);
+
     final userData = Provider.of<UserData?>(context);
-    final hp = getHp(context);
-    final wp = getWp(context);
+    final hp = Provider.of<HeightPixel>(context).value;
 
-
-    if(user==null) {
-      return Authenticate();
-    }
 
     if(userData==null) {
       return Scaffold(
@@ -55,6 +53,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     // this sliver app bar is only use to hide/show the tabBar, the AppBar
     // is invisible at all times. The to the user visible AppBar is below
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
       body: Stack(
         children: <Widget>[
           NestedScrollView(

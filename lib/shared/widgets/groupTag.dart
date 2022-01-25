@@ -3,8 +3,6 @@ import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 
 class GroupTag extends StatelessWidget {
-  // TODO: use circleFromGroup (which uses myCircle) instead of groupImage
-  // NOTE: use circleFromGroup takes in a group, not groupImage and groupName
   final Image? groupImage;
   final String groupName;
   final Color? groupColor;
@@ -24,7 +22,7 @@ class GroupTag extends StatelessWidget {
       alignment: Alignment.center,
       padding: EdgeInsets.fromLTRB(fontSize/2,fontSize/2.5,fontSize/2,fontSize/2.5),
       decoration: ShapeDecoration(
-        color: ThemeColor.lightGrey,
+        color: Colors.transparent,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(fontSize/2),
             ),

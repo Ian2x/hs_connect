@@ -2,17 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/message.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:bubble/bubble.dart';
+import 'package:hs_connect/shared/pixels.dart';
+import 'package:provider/provider.dart';
 
 class MessagesBubble extends StatelessWidget {
   final Message message;
   final bool isSentMessage;
-  final double wp;
-  final double hp;
 
-  const MessagesBubble({Key? key, required this.message, required this.isSentMessage, required this.wp, required this.hp}) : super(key: key);
+  const MessagesBubble({Key? key, required this.message, required this.isSentMessage}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final wp = Provider.of<WidthPixel>(context).value;
+    final hp = Provider.of<HeightPixel>(context).value;
 
     if (message.timeMessage) {
       return Container(

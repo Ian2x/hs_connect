@@ -2,7 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/services/auth.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
+import 'package:provider/provider.dart';
 
 import 'authBar.dart';
 
@@ -29,8 +31,9 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
 
-    final hp = getHp(context);
-    final wp = getWp(context);
+    final hp = Provider.of<HeightPixel>(context).value;
+    final wp = Provider.of<WidthPixel>(context).value;
+
     return loading
         ? Scaffold(backgroundColor: ThemeColor.backgroundGrey, body: Loading())
         : Scaffold(
@@ -41,13 +44,14 @@ class _SignInState extends State<SignIn> {
                   bottom:0,
                   right:0,
                   left:0,
-                  child: AuthBar(buttonText: "Sign in", hp: hp, wp: wp,
+                  child: AuthBar(buttonText: "Sign in",
                     onPressed: () async {
                       if (_formKey.currentState != null && _formKey.currentState!.validate()) {
                         if (mounted) {
                           setState(() => loading = true);
                         }
                         dynamic result = await _auth.signInWithUsernameAndPassword(username, password);
+                        print(result);
                         if (!(result is User?)) {
                           if (mounted) {
                             setState(() {
@@ -147,20 +151,20 @@ class _SignInState extends State<SignIn> {
                                 setState(() => password = val);
                               }
                             }),
-                      Divider(height:20, thickness: 2, color: ThemeColor.lightMediumGrey),
-                      SizedBox(height: 20.0),
+                      Divider(height:20*hp, thickness: 2*hp, color: ThemeColor.lightMediumGrey),
+                      SizedBox(height: 20*hp),
                       TextButton(
                           child: Text('Register here',
-                              style: ThemeText.regularSmall(fontSize: 16, color: ThemeColor.secondaryBlue)),
+                              style: ThemeText.regularSmall(fontSize: 16*hp, color: ThemeColor.secondaryBlue)),
                           onPressed: () {
                           widget.toggleView();
                       }),
-                      SizedBox(height: 12.0),
+                      SizedBox(height: 12*hp),
                       Text(
                         error,
-                        style: TextStyle(color: Colors.red, fontSize: 14.0),
+                        style: TextStyle(color: Colors.red, fontSize: 14*hp),
                       ),
-                      Container(height:50, color: Colors.black),
+                      Container(height:50*hp, color: Colors.black),
                     ]),
                   ),
                 ),

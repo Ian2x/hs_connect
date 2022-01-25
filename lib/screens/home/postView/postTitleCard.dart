@@ -10,11 +10,14 @@ import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/pageRoutes.dart';
+import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/widgets/groupTag.dart';
-import 'package:hs_connect/shared/widgets/reportSheet.dart';
+import 'package:hs_connect/shared/reports/reportSheet.dart';
 import 'package:hs_connect/shared/widgets/widgetDisplay.dart';
+import 'package:provider/provider.dart';
 
 class PostTitleCard extends StatefulWidget {
   final Post post;
@@ -118,14 +121,16 @@ class _PostTitleCardState extends State<PostTitleCard> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => ProfilePage(
-                profileRef: widget.post.creatorRef, currUserRef: widget.currUserRef,
-              )),
+          builder: (context) => pixelProvider(context, child: ProfilePage(
+            profileRef: widget.post.creatorRef, currUserRef: widget.currUserRef,
+          ))),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final hp = Provider.of<HeightPixel>(context).value;
+    final wp = Provider.of<WidthPixel>(context).value;
 
     if (imageString != null && imageString!="") {
       var tempImage = Image.network(imageString!);
@@ -137,7 +142,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
         }
       }));
     } else {
-      groupImage=  Image(image: AssetImage('assets/masonic-G.png'), height: 20, width: 20);
+      groupImage=  Image(image: AssetImage('assets/masonic-G.png'), height: 20*hp, width: 20*hp);
     }
 
     if (commentCount <2) {
@@ -151,7 +156,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
         openCreatorProfile();
       },
       child: Container(
-          padding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
+          padding: EdgeInsets.fromLTRB(20*wp, 10*hp, 10*wp, 10*hp),
           child:
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,18 +164,18 @@ class _PostTitleCardState extends State<PostTitleCard> {
               Row(  //intro row + three dots
                 children: [
                   Text("from " + creatorName + " • " + convertTime(widget.post.createdAt.toDate()),
-                    style: ThemeText.regularSmall(color:ThemeColor.mediumGrey,fontSize:14)
+                    style: ThemeText.regularSmall(color:ThemeColor.mediumGrey,fontSize:14*hp)
                   ),
                   Spacer(flex:1),
                   IconButton(
                     icon: Icon(Icons.more_horiz),
-                    iconSize: 20,
+                    iconSize: 20*hp,
                     onPressed: (){
                       showModalBottomSheet(
                           context: context,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(20),
+                                top: Radius.circular(20*hp),
                               )),
                           builder: (context) => new ReportSheet(
                             reportType: ReportType.post,
@@ -182,30 +187,30 @@ class _PostTitleCardState extends State<PostTitleCard> {
                 ]
               ), //introRow
               Text( widget.post.title,
-                style: ThemeText.postViewTitle(fontSize:19, color: ThemeColor.black, height:1.5),
+                style: ThemeText.postViewTitle(fontSize:19*hp, color: ThemeColor.black, height:1.5),
               ),
-              SizedBox(height:8),
+              SizedBox(height:8*hp),
               widget.post.text!= null && widget.post.text!=""?
                 Text( widget.post.text!,
-                  style: ThemeText.postViewText(fontSize:16, color: ThemeColor.mediumGrey, height: 1.5)) : Container(),
+                  style: ThemeText.postViewText(fontSize:16*hp, color: ThemeColor.mediumGrey, height: 1.5)) : Container(),
               widget.post.mediaURL != null ?
-                imageContainer(imageString: widget.post.mediaURL!)
+                ImageContainer(imageString: widget.post.mediaURL!)
                   : Container(),
               widget.post.text!= null && widget.post.text!=""?
-                  SizedBox(height:10): Container(),
-              SizedBox(height:10),
+                  SizedBox(height:10*hp): Container(),
+              SizedBox(height:10*hp),
               Row(
                 children: [
                   GroupTag(groupImage: groupImage, groupName: groupName,
-                      groupColor: groupColor != null ? HexColor(groupColor!) : null, fontSize: 16,),
+                      groupColor: groupColor != null ? HexColor(groupColor!) : null, fontSize: 16*hp),
                   Spacer(),
                   LikeDislikePost(currUserRef: widget.currUserRef, post: widget.post),
                 ],
               ),
-              SizedBox(height:30),
+              SizedBox(height:30*hp),
               Text(
                   commentString,
-                  style: ThemeText.groupBold( fontSize:20, color: ThemeColor.darkGrey),
+                  style: ThemeText.groupBold( fontSize:20*hp, color: ThemeColor.darkGrey),
               ),
 
             ],

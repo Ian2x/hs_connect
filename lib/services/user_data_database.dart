@@ -25,6 +25,13 @@ class UserDataDatabaseService {
         description: 'Default group for ' + domain,
         creatorRef: null);
 
+    final domainsDataRef = FirebaseFirestore.instance.collection(C.domainsData).doc(domain);
+    domainsDataRef.get().then((doc) => {
+      if (!doc.exists) {
+        domainsDataRef.set({C.color: null, C.country: null, C.county: null, C.fullName: null, C.state: null})
+      }
+    });
+
     await currUserRef.set({
       C.displayedName: username,
       C.displayedNameLC: username.toLowerCase(),

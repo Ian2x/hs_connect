@@ -8,24 +8,21 @@ import 'package:hs_connect/screens/home/replies/replyFeed.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
+import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
-import 'package:hs_connect/shared/widgets/loading.dart';
-import 'package:hs_connect/shared/widgets/reportSheet.dart';
+import 'package:hs_connect/shared/reports/reportSheet.dart';
+import 'package:provider/provider.dart';
 
 class CommentCard extends StatefulWidget {
   final Comment comment;
   final DocumentReference currUserRef;
   final VoidDocParamFunction switchFormBool;
-  final double hp;
-  final double wp;
 
   CommentCard({
     Key? key,
     required this.switchFormBool,
     required this.comment,
     required this.currUserRef,
-    required this.hp,
-    required this.wp,
   }) : super(key: key);
 
   @override
@@ -41,17 +38,9 @@ class _CommentCardState extends State<CommentCard> {
   Image? userImage;
   Color? groupColor;
   String userGroupName='';
-  double? hp;
-  double? wp;
 
   @override
   void initState() {
-    if (mounted) {
-      setState(() {
-        wp = widget.wp;
-        hp = widget.hp;
-      });
-    }
     // initialize liked/disliked
     if (widget.comment.likes.contains(widget.currUserRef)) {
       if (mounted) {
@@ -96,22 +85,22 @@ class _CommentCardState extends State<CommentCard> {
 
   @override
   Widget build(BuildContext context) {
-
-    if (wp==null || hp == null) return Loading();
-
+    final wp = Provider.of<WidthPixel>(context).value;
+    final hp = Provider.of<HeightPixel>(context).value;
+    
     return Stack(
       children: [
         Positioned(
-          top:-10*hp!,
-          right:0*wp!,
+          top:-10*hp,
+          right:0*wp,
           child:IconButton(icon: Icon(Icons.more_horiz),
-            iconSize: 20*hp!,
+            iconSize: 20*hp,
             onPressed: (){
               showModalBottomSheet(
                   context: context,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(20*hp!),
+                        top: Radius.circular(20*hp),
                       )),
                   builder: (context) => new ReportSheet(
                     reportType: ReportType.comment,
@@ -121,15 +110,15 @@ class _CommentCardState extends State<CommentCard> {
           ),
         ),
         Container(
-          padding: EdgeInsets.fromLTRB(20*wp!, 5*hp!, 10*wp!, 0*hp!),
+          padding: EdgeInsets.fromLTRB(20*wp, 5*hp, 10*wp, 0*hp),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(username + " • " + userGroupName,
                   style: ThemeText.groupBold(color: groupColor !=null ? groupColor :ThemeColor.mediumGrey,
-                      fontSize: 13*hp!)),
-              SizedBox(height:10*hp!),
+                      fontSize: 13*hp)),
+              SizedBox(height:10*hp),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -144,7 +133,7 @@ class _CommentCardState extends State<CommentCard> {
                             text: TextSpan(
                               children: <TextSpan>[
                                 TextSpan(text: widget.comment.text,
-                                    style: ThemeText.postViewText(color: ThemeColor.black, fontSize: 14*hp!, height: 1.5)),
+                                    style: ThemeText.postViewText(color: ThemeColor.black, fontSize: 14*hp, height: 1.5)),
                               ],
                             ),
                           ),
@@ -152,11 +141,11 @@ class _CommentCardState extends State<CommentCard> {
                         Row(
                           children: [
                             Text(
-                              convertTime(widget.comment.createdAt.toDate()), style: ThemeText.groupBold(color: ThemeColor.mediumGrey, fontSize:14*hp!),
+                              convertTime(widget.comment.createdAt.toDate()), style: ThemeText.groupBold(color: ThemeColor.mediumGrey, fontSize:14*hp),
                             ),
                             Spacer(flex:1),
                             TextButton(
-                                child: Text("Reply", style: ThemeText.groupBold(color: ThemeColor.secondaryBlue, fontSize:15*hp!)),
+                                child: Text("Reply", style: ThemeText.groupBold(color: ThemeColor.secondaryBlue, fontSize:15*hp)),
                                 onPressed: (){
                                   widget.switchFormBool(widget.comment.commentRef);
                                 }
@@ -173,7 +162,7 @@ class _CommentCardState extends State<CommentCard> {
                 ],
               ),
           RepliesFeed(commentRef: widget.comment.commentRef, postRef: widget.comment.postRef, groupRef: widget.comment.groupRef),
-          Divider(thickness: 3*hp!, color: ThemeColor.backgroundGrey, height: 20*hp!),
+          Divider(thickness: 3*hp, color: ThemeColor.backgroundGrey, height: 20*hp),
             ]
           )
         ),

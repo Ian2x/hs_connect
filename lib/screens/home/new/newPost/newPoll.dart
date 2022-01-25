@@ -1,9 +1,10 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
+import 'package:hs_connect/shared/pixels.dart';
+import 'package:provider/provider.dart';
 
 const maxNumOptions = 6;
 
@@ -31,24 +32,26 @@ class _NewPollState extends State<NewPoll> {
       choices.add('');
       choicesLengths.add(0);
     }
-    // TODO: implement initState
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final hp = Provider.of<HeightPixel>(context).value;
+    final wp = Provider.of<WidthPixel>(context).value;
+
     return Container(
         width: MediaQuery.of(context).size.width * 0.9,
         decoration: ShapeDecoration(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5),
+            borderRadius: BorderRadius.circular(5*hp),
             side: BorderSide(
               color: ThemeColor.lightMediumGrey,
-              width: 1,
+              width: 1*hp,
             ),
           ),
         ),
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.all(10*hp),
         margin: EdgeInsets.all(0),
         child: Form(
           key: _formKey,
@@ -88,14 +91,14 @@ class _NewPollState extends State<NewPoll> {
               } else {
                 int trueIndex = index - 1;
                 return Container(
-                    margin: EdgeInsets.all(5),
-                    padding: EdgeInsets.only(left: 5, right: 5),
+                    margin: EdgeInsets.all(5*hp),
+                    padding: EdgeInsets.only(left: 5*wp, right: 5*wp),
                     decoration: ShapeDecoration(
                         shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5),
                       side: BorderSide(
                         color: ThemeColor.lightMediumGrey,
-                        width: 1,
+                        width: 1*wp,
                       ),
                     )),
                     child: TextFormField(
@@ -103,13 +106,13 @@ class _NewPollState extends State<NewPoll> {
                           LengthLimitingTextInputFormatter(25),
                         ],
                         style: ThemeText.inter(
-                          fontSize: 14,
+                          fontSize: 14*hp,
                         ),
                         maxLines: 1,
                         decoration: InputDecoration(
                             suffixText: '${choicesLengths[trueIndex].toString()}/${25.toString()}',
-                            suffixStyle: ThemeText.roboto(fontSize: 14),
-                            hintStyle: ThemeText.roboto(fontSize: 16),
+                            suffixStyle: ThemeText.roboto(fontSize: 14*hp),
+                            hintStyle: ThemeText.roboto(fontSize: 16*hp),
                             border: InputBorder.none,
                             hintText: "Option " + (trueIndex + 1).toString()),
                         validator: (val) {

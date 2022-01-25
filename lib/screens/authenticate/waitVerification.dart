@@ -4,6 +4,9 @@ import 'package:hs_connect/screens/authenticate/registerUser.dart';
 import 'dart:async';
 
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/pageRoutes.dart';
+import 'package:hs_connect/shared/pixels.dart';
+import 'package:provider/provider.dart';
 
 class WaitVerification extends StatefulWidget {
   const WaitVerification({Key? key, required this.domain}) : super(key: key);
@@ -39,29 +42,29 @@ class _WaitVerificationState extends State<WaitVerification> {
   @override
   Widget build(BuildContext context) {
 
-    double unit = MediaQuery.of(context).size.height/10;
+    final hp = Provider.of<HeightPixel>(context).value;
 
     return Scaffold(
       body: Center(
         child: Column(
           children: [
             Container(
-              height: unit*.8,
-              width: unit * .8,
+              height: 625*hp,
+              width: 314*hp,
               decoration: new BoxDecoration(
                 color: ThemeColor.secondaryBlue,
                 shape: BoxShape.circle,
               ),
             ),
-            SizedBox(height: unit*.9),
-            Text("Make your Account", style: ThemeText.inter(fontSize: 23,
+            SizedBox(height: 703*hp),
+            Text("Make your Account", style: ThemeText.inter(fontSize: 23*hp,
               fontWeight: FontWeight.w700,
               color: ThemeColor.black,
             )),
-            SizedBox(height:15),
+            SizedBox(height:15*hp),
             Text('Register with your school email.',
-                style: ThemeText.regularSmall(fontSize: 16, color: ThemeColor.secondaryBlue)),
-            SizedBox(height: unit/2),
+                style: ThemeText.regularSmall(fontSize: 16*hp, color: ThemeColor.secondaryBlue)),
+            SizedBox(height: 39*hp),
           ],
         ),
       ),
@@ -74,7 +77,7 @@ class _WaitVerificationState extends State<WaitVerification> {
     if (user!.emailVerified) {
       timer!.cancel();
       Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (context) => RegisterUser(domain: widget.domain)));
+          .push(MaterialPageRoute(builder: (context) => pixelProvider(context, child: RegisterUser(domain: widget.domain))));
     }
   }
 }

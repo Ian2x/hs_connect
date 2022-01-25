@@ -7,16 +7,15 @@ import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/postView/postPage.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/pageRoutes.dart';
+import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
-import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
 class NotificationCard extends StatefulWidget {
   final MyNotification myNotification;
-  final double wp;
-  final double hp;
 
-  const NotificationCard({Key? key, required this.myNotification, required this.wp, required this.hp}) : super(key: key);
+  const NotificationCard({Key? key, required this.myNotification}) : super(key: key);
 
   @override
   _NotificationCardState createState() => _NotificationCardState();
@@ -30,19 +29,10 @@ class _NotificationCardState extends State<NotificationCard> {
 
   UserData? userData;
 
-  double? wp;
-  double? hp;
-
   @override
   void initState() {
     fetchPostGroup();
     fetchSourceUser();
-    if (mounted) {
-      setState(() {
-        wp = widget.wp;
-        hp = widget.hp;
-      });
-    }
     super.initState();
   }
 
@@ -87,8 +77,8 @@ class _NotificationCardState extends State<NotificationCard> {
   @override
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
-
-    if (wp == null || hp == null) return Loading();
+    final wp = Provider.of<WidthPixel>(context).value;
+    final hp = Provider.of<HeightPixel>(context).value;
 
     if (userData == null ||
         profileImage == null ||
@@ -96,9 +86,9 @@ class _NotificationCardState extends State<NotificationCard> {
         sourceUserFullDomainName == null ||
         postGroupName == null) {
       return Container(
-          margin: EdgeInsets.only(top: 2*hp!),
-          padding: EdgeInsets.fromLTRB(14*wp!, 14*hp!, 14*wp!, 16*hp!),
-          height: 70*hp!,
+          margin: EdgeInsets.only(top: 2*hp),
+          padding: EdgeInsets.fromLTRB(14*wp, 14*hp, 14*wp, 16*hp),
+          height: 70*hp,
           color: ThemeColor.white);
     }
 
@@ -107,27 +97,27 @@ class _NotificationCardState extends State<NotificationCard> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => new PostPage(
-                        userData: userData,
-                        postRef: widget.myNotification.parentPostRef,
-                        currUserRef: userData.userRef,
-                      )));
+                  builder: (context) => pixelProvider(context, child: PostPage(
+                    userData: userData,
+                    postRef: widget.myNotification.parentPostRef,
+                    currUserRef: userData.userRef,
+                  ))));
         },
         child: Container(
-            margin: EdgeInsets.only(top: 2*hp!),
-            padding: EdgeInsets.fromLTRB(14*wp!, 14*hp!, 14*wp!, 16*hp!),
+            margin: EdgeInsets.only(top: 2*hp),
+            padding: EdgeInsets.fromLTRB(14*wp, 14*hp, 14*wp, 16*hp),
             color: ThemeColor.white,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Container(
-                    height: 40*hp!,
-                    width: 40*hp!,
+                    height: 40*hp,
+                    width: 40*hp,
                     decoration: BoxDecoration(
                         shape: BoxShape.circle, image: DecorationImage(fit: BoxFit.fill, image: profileImage!.image))),
-                SizedBox(width: 14*wp!),
+                SizedBox(width: 14*wp),
                 SizedBox(
-                  width: 260*wp!,
+                  width: 260*wp,
                   child: RichText(
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
@@ -137,20 +127,20 @@ class _NotificationCardState extends State<NotificationCard> {
                             text: widget.myNotification
                                 .printA(sourceUserDisplayedName!, sourceUserFullDomainName!, postGroupName!),
                             style: ThemeText.inter(
-                                color: ThemeColor.black, fontSize: 14*hp!, fontWeight: FontWeight.bold, height: 1.35)),
+                                color: ThemeColor.black, fontSize: 14*hp, fontWeight: FontWeight.bold, height: 1.35)),
                         TextSpan(
                             text: widget.myNotification
                                 .printB(sourceUserDisplayedName!, sourceUserFullDomainName!, postGroupName!),
-                            style: ThemeText.inter(color: ThemeColor.black, fontSize: 14*hp!, height: 1.35)),
+                            style: ThemeText.inter(color: ThemeColor.black, fontSize: 14*hp, height: 1.35)),
                         TextSpan(
                             text: widget.myNotification
                                 .printC(sourceUserDisplayedName!, sourceUserFullDomainName!, postGroupName!),
                             style: ThemeText.inter(
-                                color: ThemeColor.black, fontSize: 14*hp!, fontWeight: FontWeight.bold, height: 1.35)),
+                                color: ThemeColor.black, fontSize: 14*hp, fontWeight: FontWeight.bold, height: 1.35)),
                         TextSpan(
                             text: widget.myNotification
                                 .printD(sourceUserDisplayedName!, sourceUserFullDomainName!, postGroupName!),
-                            style: ThemeText.inter(color: ThemeColor.black, fontSize: 14*hp!, height: 1.35)),
+                            style: ThemeText.inter(color: ThemeColor.black, fontSize: 14*hp, height: 1.35)),
                       ],
                     ),
                   ),
@@ -161,7 +151,7 @@ class _NotificationCardState extends State<NotificationCard> {
                       children: [
                         Spacer(),
                         Text(convertTime(widget.myNotification.createdAt.toDate()),
-                            style: ThemeText.inter(color: ThemeColor.mediumGrey, fontSize: 14*hp!))
+                            style: ThemeText.inter(color: ThemeColor.mediumGrey, fontSize: 14*hp))
                       ],
                     )
                   ]),

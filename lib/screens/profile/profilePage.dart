@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/screens/profile/profileBody.dart';
-import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileAppBar.dart';
 
@@ -15,7 +14,7 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     if (profileRef==currUserRef) {
       return Scaffold(
-        backgroundColor: ThemeColor.white,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: profileAppBar(context),
         body: ProfileBody(profileUserRef: profileRef, currUserRef: currUserRef,),
         bottomNavigationBar: MyNavigationBar(
@@ -24,6 +23,7 @@ class ProfilePage extends StatelessWidget {
       );
     } else {
       return Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: profileAppBar(context),
         body: ProfileBody(profileUserRef: profileRef, currUserRef: currUserRef,),
       );
