@@ -112,7 +112,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                         )
                     ),
                     SizedBox(height: error!=null ? 10*hp : 78*hp),
-                    error!=null ? Text(error!, style: ThemeText.inter(fontSize: 14*hp, color: ThemeColor.errorRed)) : Container(),
+                    error!=null ? Text(error!, style: ThemeText.inter(fontSize: 14*hp, color: ThemeColor.mediumGrey)) : Container(),
                     TextField(
                       autocorrect:false,
                       style: ThemeText.inter(
