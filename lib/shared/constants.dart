@@ -14,14 +14,22 @@ const double profilePicHeight = 400;
 const double groupPicWidth = 400;
 const double groupPicHeight = 400;
 
-//TODO: May have to do sizing based on Media.context(of)
+const double commentPicWidth = 400;
+const double commentPicHeight = 400;
 
+const double messagePicWidth = 400;
+const double messagePicHeight = 400;
 
-class ThemeLayout {
-  static double borderRadius = 15.0;
-}
+const double postPicWidth = 400;
+const double postPicHeight = 400;
 
-class ThemeText {
+const numHeightPixels = 781.1;
+const numWidthPixels = 392.7;
+
+const initialPostsFetchSize = 5;
+const nextPostsFetchSize = 2;
+
+/*class ThemeText {
 
   static TextStyle postViewText({Color? color, double fontSize=18, double height=1.0}) {
     return TextStyle(
@@ -29,7 +37,7 @@ class ThemeText {
       fontFamily: "Roboto",
       height: height,
       fontWeight: FontWeight.normal,
-      color: color != null ? color: ThemeColor.mediumGrey,
+      color: color != null ? color: Colors.black,
     );
   }
 
@@ -39,7 +47,7 @@ class ThemeText {
       fontFamily: "Roboto",
       height: height,
       fontWeight: FontWeight.w500,
-      color: color != null ? color: ThemeColor.darkGrey,
+      color: color != null ? color: Colors.black,
     );
   }
 
@@ -47,7 +55,7 @@ class ThemeText {
     return TextStyle(
       fontSize: fontSize,
       fontFamily: "Inter",
-      color: color != null ? color: ThemeColor.darkGrey,
+      color: color != null ? color: Colors.black,
     );
   }
 
@@ -56,7 +64,7 @@ class ThemeText {
       fontSize: fontSize,
       fontFamily: "Inter",
       fontWeight: FontWeight.w500,
-      color: color != null ? color : ThemeColor.darkGrey,
+      color: color != null ? color : Colors.black,
       );
   }
 
@@ -66,7 +74,7 @@ class ThemeText {
       height: height,
       fontWeight: FontWeight.normal,
       fontFamily: "Inter",
-      color: color != null ? color: ThemeColor.darkGrey,
+      color: color != null ? color: Colors.black,
     );
   }
 
@@ -111,7 +119,7 @@ class ThemeColor extends Color {
   static Color white = HexColor("FFFFFF");
   static Color black = HexColor("000000");
   static Color profilePicEditColor = HexColor('787878');
-}
+}*/
 
 class C {
   static const displayedName = 'displayedName';

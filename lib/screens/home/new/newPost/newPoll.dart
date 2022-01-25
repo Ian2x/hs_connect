@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:provider/provider.dart';
@@ -39,6 +38,7 @@ class _NewPollState extends State<NewPoll> {
   Widget build(BuildContext context) {
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
         width: MediaQuery.of(context).size.width * 0.9,
@@ -46,7 +46,7 @@ class _NewPollState extends State<NewPoll> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5*hp),
             side: BorderSide(
-              color: ThemeColor.lightMediumGrey,
+              color: colorScheme.onError,
               width: 1*hp,
             ),
           ),
@@ -97,7 +97,7 @@ class _NewPollState extends State<NewPoll> {
                         shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5),
                       side: BorderSide(
-                        color: ThemeColor.lightMediumGrey,
+                        color: colorScheme.onError,
                         width: 1*wp,
                       ),
                     )),
@@ -105,14 +105,12 @@ class _NewPollState extends State<NewPoll> {
                         inputFormatters: [
                           LengthLimitingTextInputFormatter(25),
                         ],
-                        style: ThemeText.inter(
-                          fontSize: 14*hp,
-                        ),
+                        style: Theme.of(context).textTheme.subtitle2,
                         maxLines: 1,
                         decoration: InputDecoration(
                             suffixText: '${choicesLengths[trueIndex].toString()}/${25.toString()}',
-                            suffixStyle: ThemeText.roboto(fontSize: 14*hp),
-                            hintStyle: ThemeText.roboto(fontSize: 16*hp),
+                            suffixStyle: Theme.of(context).textTheme.subtitle2,
+                            hintStyle: Theme.of(context).textTheme.subtitle1,
                             border: InputBorder.none,
                             hintText: "Option " + (trueIndex + 1).toString()),
                         validator: (val) {

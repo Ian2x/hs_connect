@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:provider/provider.dart';
 
@@ -16,7 +15,7 @@ class ProfileName extends StatelessWidget {
       children: [
         Text(
           name,
-          style: ThemeText.groupBold(fontSize: 22*hp),
+          style: Theme.of(context).textTheme.headline5,
         ),
         SizedBox(height: 4*hp),
       ],

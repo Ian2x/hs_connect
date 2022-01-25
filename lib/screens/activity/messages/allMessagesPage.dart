@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
@@ -76,6 +75,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
     final userData = Provider.of<UserData?>(context);
     final wp = Provider.of<WidthPixel>(context).value;
     final hp = Provider.of<HeightPixel>(context).value;
+    final colorScheme = Theme.of(context).colorScheme;
 
     if (userData == null || UMs == null || otherUsers == null) {
       return Loading();
@@ -85,7 +85,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
       return Container(
           padding: EdgeInsets.all(10*hp),
           child: Text("No messages :/\n\n... maybe try finding a friend",
-              style: ThemeText.titleRegular(color: ThemeColor.black)));
+              style: Theme.of(context).textTheme.headline6));
     }
 
     // sorted by latest first
@@ -122,7 +122,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                 Container(
                     margin: EdgeInsets.only(top: index == 0 ? 4.5*hp : 2*hp, bottom: index == cache.length - 1 ? 2.5*hp : 0*hp),
                     padding: EdgeInsets.fromLTRB(20*wp, 14*hp, 14*wp, 16*hp),
-                    color: ThemeColor.white,
+                    color: colorScheme.surface,
                     child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
                       Container(
                           width: 40*hp,
@@ -133,11 +133,10 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                       SizedBox(width: 14*wp),
                       Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                         Text(otherUser.displayedName,
-                            style:
-                                ThemeText.inter(fontSize: 15*hp, color: ThemeColor.darkGrey, fontWeight: FontWeight.bold)),
+                            style: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.bold)),
                         SizedBox(height: 4*hp),
                         Text(otherUser.fullDomainName != null ? otherUser.fullDomainName! : otherUser.domain,
-                            style: ThemeText.inter(fontSize: 15*hp, color: ThemeColor.mediumGrey))
+                            style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.primary))
                       ]),
                       Flexible(
                           child: Column(children: <Widget>[
@@ -145,9 +144,9 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                           Spacer(),
                           isToday(cache[index].UM!.lastMessage.toDate())
                               ? Text(DateFormat.jm().format(cache[index].UM!.lastMessage.toDate()),
-                                  style: ThemeText.inter(color: ThemeColor.mediumGrey, fontSize: 14*hp))
+                                  style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary))
                               : Text(DateFormat.yMd().format(cache[index].UM!.lastMessage.toDate()),
-                                  style: ThemeText.inter(color: ThemeColor.mediumGrey, fontSize: 14*hp))
+                                  style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary))
                         ])
                       ]))
                     ])),
@@ -158,7 +157,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                         height: 10*wp,
                         margin: EdgeInsets.only(top: index == 0 ? 4.5*hp : 2*hp, left: 6*wp, bottom: index == cache.length - 1 ? 2.5*hp : 0*hp),
                         decoration: new BoxDecoration(
-                          color: ThemeColor.secondaryBlue,
+                          color: colorScheme.secondary,
                           shape: BoxShape.circle,
                         ),
                       )

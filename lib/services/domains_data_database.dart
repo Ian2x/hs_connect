@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/domainData.dart';
 import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/tools/hexColor.dart';
 
 class DomainsDataDatabaseService {
   // collection reference
@@ -16,7 +15,8 @@ class DomainsDataDatabaseService {
           state: documentSnapshot.get(C.state),
           country: documentSnapshot.get(C.county),
           fullName: documentSnapshot.get(C.fullName),
-          color: documentSnapshot.get(C.color)
+          color: documentSnapshot.get(C.color),
+          image: documentSnapshot.get(C.image)
       );
     } else {
       return null;

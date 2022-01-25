@@ -4,7 +4,7 @@ import 'package:hs_connect/models/reply.dart';
 import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/user_data_database.dart';
-import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/reports/reportSheet.dart';
@@ -66,7 +66,7 @@ class _ReplyCardState extends State<ReplyCard> {
       if (mounted) {
         setState(() {
           username = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
-          groupColor = fetchUserData != null ? fetchUserData.domainColor :ThemeColor.black;
+          groupColor = fetchUserData != null ? fetchUserData.domainColor : null;
           groupName = fetchUserData != null ? fetchUserData.domain : '<Failed to retrieve user name>';
         });
       }
@@ -83,6 +83,7 @@ class _ReplyCardState extends State<ReplyCard> {
   Widget build(BuildContext context) {
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Stack(
       children: [
@@ -98,10 +99,10 @@ class _ReplyCardState extends State<ReplyCard> {
                       borderRadius: BorderRadius.vertical(
                         top: Radius.circular(20*hp),
                       )),
-                  builder: (context) => new ReportSheet(
+                  builder: (context) => pixelProvider(context, child: ReportSheet(
                     reportType: ReportType.reply,
                     entityRef: widget.reply.replyRef,
-                  ));
+                  )));
 
             },
           ),
@@ -113,7 +114,7 @@ class _ReplyCardState extends State<ReplyCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(username + " • " + groupName,
-                      style: ThemeText.groupBold(color: groupColor != null ? groupColor: ThemeColor.mediumGrey, fontSize: 13*hp)),
+                      style: Theme.of(context).textTheme.subtitle2?.copyWith(color: groupColor != null ? groupColor: colorScheme.primary, fontSize: 13*hp)),
                   SizedBox(height:10*hp),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,7 +130,7 @@ class _ReplyCardState extends State<ReplyCard> {
                                 text: TextSpan(
                                   children: <TextSpan>[
                                     TextSpan(text: widget.reply.text,
-                                        style: ThemeText.postViewText(color: ThemeColor.black, fontSize: 15*hp, height: 1.5)),
+                                        style: Theme.of(context).textTheme.bodyText1),
                                   ],
                                 ),
                               ),
@@ -137,8 +138,7 @@ class _ReplyCardState extends State<ReplyCard> {
                             Row(
                               children: [
                                 Text(
-                                  convertTime(widget.reply.createdAt.toDate()), style: ThemeText.groupBold(color:ThemeColor.mediumGrey, fontSize:14*hp),
-                                ),
+                                  convertTime(widget.reply.createdAt.toDate()), style: Theme.of(context).textTheme.bodyText2),
                                 Spacer(flex:1),
                                 widget.reply.creatorRef != null ? LikeDislikeReply(
                                     reply: widget.reply,
@@ -153,7 +153,7 @@ class _ReplyCardState extends State<ReplyCard> {
                   ),
                   widget.isLast !=false ?
                     Container() :
-                    Divider(thickness: 3*hp, color: ThemeColor.backgroundGrey, height: 40*hp),
+                    Divider(thickness: 3*hp, color: colorScheme.background, height: 40*hp),
                 ]
             )
         ),

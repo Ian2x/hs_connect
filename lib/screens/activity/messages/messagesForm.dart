@@ -50,6 +50,7 @@ class _MessagesFormState extends State<MessagesForm> {
     final userData = Provider.of<UserData?>(context);
     final wp = Provider.of<WidthPixel>(context).value;
     final hp = Provider.of<HeightPixel>(context).value;
+    final colorScheme = Theme.of(context).colorScheme;
 
     if (userData == null) {
       return Loading();
@@ -69,13 +70,13 @@ class _MessagesFormState extends State<MessagesForm> {
                           width: 150*wp,
                           height: 150*hp,
                           padding: EdgeInsets.all(3*hp),
-                          decoration: BoxDecoration(color: ThemeColor.lightGrey, borderRadius: imageBorderRadius),
+                          decoration: BoxDecoration(color: colorScheme.background, borderRadius: imageBorderRadius),
                           child: ClipRRect(
                               borderRadius: imageBorderRadius,
                               child: DeletableImage(
                                 image: Image.file(File(newFile!.path), fit: BoxFit.scaleDown),
                                 onDelete: () => setPic(null),
-                                buttonSizeNotPixelAdjusted: 30*hp,
+                                buttonSize: 30*hp, height: messagePicHeight, width: messagePicWidth,
                               )),
                         ))
                     : Container(),
@@ -83,9 +84,9 @@ class _MessagesFormState extends State<MessagesForm> {
                     initialValue: null,
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
-                    style: ThemeText.roboto(fontSize: 16*hp, color: ThemeColor.darkGrey),
+                    style: Theme.of(context).textTheme.subtitle1,
                     decoration: messageInputDecoration(
-                        wp: wp, hp: hp,
+                        context: context,
                         setPic: setPic,
                         onPressed: () async {
                           if (_formKey.currentState != null && _formKey.currentState!.validate()) {

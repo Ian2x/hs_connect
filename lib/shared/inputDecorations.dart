@@ -1,21 +1,22 @@
-
-
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
+import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/picPickerButton.dart';
+import 'package:provider/provider.dart';
 
 import 'constants.dart';
 
 // used for authentication and profile form
-InputDecoration textInputDecoration({required double hp, required double wp, }) {
+InputDecoration textInputDecoration({required BuildContext context}) {
+  final wp = MediaQuery.of(context).size.width / numWidthPixels;
+  final colorScheme = Theme.of(context).colorScheme;
   return InputDecoration(
-    fillColor: Colors.white,
+    fillColor: colorScheme.surface,
     filled: true,
     enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent, width: 2*wp)),
-    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.pink, width: 2*wp)),
+    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: colorScheme.primary, width: 2*wp)),
   );
 }
 
@@ -32,28 +33,31 @@ typedef VoidPollDataParamFunction = void Function (int, String);
 typedef VoidDocSnapParamFunction = void Function (DocumentSnapshot);
 
 
-InputDecoration commentReplyInputDecoration({required VoidFunction onPressed, required Function setPic, required bool isReply, required bool isFocused, required double hp, required double wp}) {
+InputDecoration commentReplyInputDecoration({required VoidFunction onPressed, required Function setPic, required bool isReply, required bool isFocused, required BuildContext context}) {
+  final colorScheme = Theme.of(context).colorScheme;
+  final hp = Provider.of<HeightPixel>(context).value;
+  final wp = Provider.of<WidthPixel>(context).value;
   return InputDecoration(
-    fillColor: ThemeColor.white, filled: true,
+    fillColor: colorScheme.surface, filled: true,
     hintText: isReply != false ? "Reply..." : "Comment...",
-    hintStyle: ThemeText.roboto(fontSize: 16*hp, color: ThemeColor.lightMediumGrey),
-    labelStyle: ThemeText.roboto(fontSize: 16*hp, color: ThemeColor.lightMediumGrey),
+    hintStyle: Theme.of(context).textTheme.bodyText1,
+    labelStyle: Theme.of(context).textTheme.bodyText1,
     contentPadding: EdgeInsets.fromLTRB(20*wp, 14*hp, 0*wp, 14*hp),
     border: new OutlineInputBorder(
       borderRadius: new BorderRadius.circular(25.7*hp),
-      borderSide: new BorderSide(width: 3*wp, color: ThemeColor.lightGrey),
+      borderSide: new BorderSide(width: 3*wp, color: colorScheme.background),
     ),
     enabledBorder: new OutlineInputBorder(
         borderRadius: new BorderRadius.circular(25.7*hp),
-        borderSide: new BorderSide(width: 3*wp, color: ThemeColor.lightGrey)),
+        borderSide: new BorderSide(width: 3*wp, color: colorScheme.background)),
     focusedBorder: OutlineInputBorder(
         borderRadius: new BorderRadius.circular(25.7*hp),
-        borderSide: new BorderSide(width: 3*wp, color: ThemeColor.lightGrey)),
+        borderSide: new BorderSide(width: 3*wp, color: colorScheme.background)),
     suffixIcon: isFocused ? Row(mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.min, children: <Widget>[
-      picPickerButton(setPic: setPic, iconSize: 16*hp),
+      picPickerButton(setPic: setPic, iconSize: 16*hp, context: context, maxWidth: commentPicWidth*hp, maxHeight: commentPicHeight*hp),
       IconButton(
           icon: Icon(Icons.send),
-          color: ThemeColor.lightMediumGrey,
+          color: colorScheme.onError,
           iconSize: 16*hp,
           padding: EdgeInsets.only(left: 5*wp, right: 15*wp),
           splashColor: Colors.transparent,
@@ -63,29 +67,32 @@ InputDecoration commentReplyInputDecoration({required VoidFunction onPressed, re
   );
 }
 
-InputDecoration messageInputDecoration({required VoidFunction onPressed, required Function setPic, required double hp, required double wp}) {
+InputDecoration messageInputDecoration({required VoidFunction onPressed, required Function setPic, required BuildContext context}) {
+  final hp = Provider.of<HeightPixel>(context).value;
+  final wp = Provider.of<WidthPixel>(context).value;
+  final colorScheme = Theme.of(context).colorScheme;
   return InputDecoration(
     hintText: 'Message...',
-    fillColor: ThemeColor.white,
+    fillColor: colorScheme.surface,
     filled: true,
-    hintStyle: ThemeText.roboto(fontSize: 16*hp, color: ThemeColor.lightMediumGrey),
-    labelStyle: ThemeText.roboto(fontSize: 16*hp, color: ThemeColor.lightMediumGrey),
+    hintStyle: Theme.of(context).textTheme.bodyText1,
+    labelStyle: Theme.of(context).textTheme.bodyText1,
     contentPadding: EdgeInsets.fromLTRB(20*wp, 14*hp, 0*wp, 14*hp),
     border: new OutlineInputBorder(
         borderRadius: new BorderRadius.circular(25.7*hp),
-        borderSide: new BorderSide(width: 3*wp, color: ThemeColor.lightGrey),
+        borderSide: new BorderSide(width: 3*wp, color: colorScheme.background),
     ),
     enabledBorder: new OutlineInputBorder(
         borderRadius: new BorderRadius.circular(25.7*hp),
-        borderSide: new BorderSide(width: 3*wp, color: ThemeColor.lightGrey)),
+        borderSide: new BorderSide(width: 3*wp, color: colorScheme.background)),
     focusedBorder: OutlineInputBorder(
         borderRadius: new BorderRadius.circular(25.7*hp),
-        borderSide: new BorderSide(width: 3*wp, color: ThemeColor.lightGrey)),
+        borderSide: new BorderSide(width: 3*wp, color: colorScheme.background)),
     suffixIcon: Row(mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.min, children: <Widget>[
-      picPickerButton(setPic: setPic, iconSize: 16*hp),
+      picPickerButton(setPic: setPic, iconSize: 16*hp, context: context, maxWidth: messagePicWidth*hp, maxHeight: messagePicHeight*hp),
       IconButton(
           icon: Icon(Icons.send),
-          color: ThemeColor.lightMediumGrey,
+          color: colorScheme.onError,
           iconSize: 16*hp,
           padding: EdgeInsets.only(left: 5*wp, right: 15*wp),
           splashColor: Colors.transparent,

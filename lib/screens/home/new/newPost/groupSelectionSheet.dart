@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/accessRestriction.dart';
 import 'package:hs_connect/models/group.dart';
-import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
@@ -31,6 +30,7 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
   Widget build(BuildContext context) {
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
+    final colorScheme = Theme.of(context).colorScheme;
 
     if (selectedGroup==null) return Loading();
     return Container(
@@ -51,10 +51,7 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
                     children: [
                       SizedBox(height: 40*hp),
                       Text("Pick a group",
-                          style: ThemeText.groupBold(
-                            color: ThemeColor.black,
-                            fontSize: 18*hp,
-                          )),
+                          style: Theme.of(context).textTheme.headline6),
                     ],
                   );
                 } else {
@@ -73,14 +70,11 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Divider(color: ThemeColor.backgroundGrey, thickness: 2*hp),
+                          Divider(color: colorScheme.background, thickness: 2*hp),
                           Row(
                             children: <Widget>[
                               Text(group.name,
-                                  style: ThemeText.groupBold(
-                                    color: ThemeColor.darkGrey,
-                                    fontSize: 16*hp,
-                                  )),
+                                  style: Theme.of(context).textTheme.subtitle1),
                               Spacer(),
                               ConstrainedBox(
                                   constraints: BoxConstraints(maxHeight: 40*hp),
@@ -102,10 +96,10 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
                             ]
                           ),
                           group.name == "Public"
-                              ? Text("Anyone can see", style: ThemeText.groupBold(color: ThemeColor.mediumGrey, fontSize: 16*hp))
+                              ? Text("Anyone can see", style: Theme.of(context).textTheme.subtitle1)
                               : Container(),
                           group.accessRestriction.restrictionType == AccessRestrictionType.domain
-                              ? Text("Only for your school", style: ThemeText.groupBold(color: ThemeColor.mediumGrey, fontSize: 16*hp))
+                              ? Text("Only for your school", style: Theme.of(context).textTheme.subtitle1)
                               : Container()
                         ]
                       ),

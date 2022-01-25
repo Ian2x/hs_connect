@@ -1,14 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/screens/authenticate/authenticate.dart';
 import 'package:hs_connect/screens/home/postFeed/domainFeed.dart';
 import 'package:hs_connect/screens/home/new/floatingNewButton.dart';
 import 'package:hs_connect/screens/home/postFeed/trendingFeed.dart';
 import 'package:hs_connect/services/auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/pixels.dart';
-import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
 import 'package:provider/provider.dart';
@@ -41,19 +36,18 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
 
     final userData = Provider.of<UserData?>(context);
-    final hp = Provider.of<HeightPixel>(context).value;
-
+    final colorScheme = Theme.of(context).colorScheme;
 
     if(userData==null) {
       return Scaffold(
-        backgroundColor: ThemeColor.backgroundGrey,
+        backgroundColor: colorScheme.background,
         body: Loading()
       );
     }
     // this sliver app bar is only use to hide/show the tabBar, the AppBar
     // is invisible at all times. The to the user visible AppBar is below
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: colorScheme.background,
       body: Stack(
         children: <Widget>[
           NestedScrollView(
@@ -64,28 +58,22 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   elevation: 0,
                   primary: true,
                   floating: true,
-                  backgroundColor: ThemeColor.white,
+                  backgroundColor: colorScheme.surface,
                   snap: true,
                   pinned: false,
                   bottom: TabBar(
-                    indicatorColor: ThemeColor.darkGrey,
+                    indicatorColor: colorScheme.primaryVariant,
                     tabs: <Widget>[
                       Tab(
                           icon: Text(userData.fullDomainName!=null ? userData.fullDomainName! : userData.domain,
                               style:
-                              ThemeText.inter(
-                                fontSize: 14*hp,
-                                color: ThemeColor.black,
-                              )
+                              Theme.of(context).textTheme.subtitle2
                           )
                       ),
                       Tab(
                           icon: Text("Trending",
                               style:
-                              ThemeText.inter(
-                                fontSize: 14*hp,
-                                color: ThemeColor.black,
-                              )
+                              Theme.of(context).textTheme.subtitle2
                           )
                       )
                     ],
@@ -116,21 +104,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   elevation: 0,
                   title: Text('HS Connect',
                       style:
-                      ThemeText.inter(
-                        fontSize: 20*hp,
-                        color: ThemeColor.black,
-                      )
+                      Theme.of(context).textTheme.headline6
                   ),
-                  backgroundColor: HexColor("#FFFFFF"),
+                  backgroundColor: colorScheme.surface,
                   actions: <Widget>[
                     TextButton.icon(
                       icon: Icon(Icons.person),
                       label: Text('Logout',
                           style:
-                          ThemeText.inter(
-                            fontSize: 14*hp,
-                            color: ThemeColor.black,
-                          )
+                          Theme.of(context).textTheme.headline6
                       ),
                       onPressed: () async {
                         await _auth.signOut();

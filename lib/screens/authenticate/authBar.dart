@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:provider/provider.dart';
@@ -15,14 +14,16 @@ class AuthBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final wp = Provider.of<WidthPixel>(context).value;
     final hp = Provider.of<HeightPixel>(context).value;
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Container(
         padding: EdgeInsets.fromLTRB(0*wp, 3*hp, 10*wp, 0*hp),
         height: MediaQuery.of(context).size.height/15,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
-          color: ThemeColor.white,
+          color: colorScheme.surface,
           border: Border(
-            top: BorderSide(width: 1*wp, color: ThemeColor.lightMediumGrey),
+            top: BorderSide(width: 1*wp, color: colorScheme.onError),
           ),
         ),
         child:
@@ -35,7 +36,7 @@ class AuthBar extends StatelessWidget {
                 height: 10*wp,
                 padding: EdgeInsets.all(0),
                 decoration: ShapeDecoration(
-                  color: ThemeColor.secondaryBlue,
+                  color: colorScheme.secondary,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.vertical(
                         top: Radius.circular(20*hp),
@@ -45,7 +46,7 @@ class AuthBar extends StatelessWidget {
                   onPressed: onPressed,
                   child:
                   Text(buttonText,
-                      style: ThemeText.regularSmall(fontSize:18*hp, color: ThemeColor.white)),
+                      style: Theme.of(context).textTheme.headline6),
                 ),
              ),
           ]

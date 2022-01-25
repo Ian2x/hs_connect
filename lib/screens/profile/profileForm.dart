@@ -4,6 +4,7 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileAppBar.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/services/user_data_database.dart';
+import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/deletableImage.dart';
@@ -46,7 +47,6 @@ class _ProfileFormState extends State<ProfileForm> {
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
     final hp = Provider.of<HeightPixel>(context).value;
-    final wp = Provider.of<WidthPixel>(context).value;
 
     void handleError(err) {
       if (mounted) {
@@ -81,7 +81,7 @@ class _ProfileFormState extends State<ProfileForm> {
               SizedBox(height: 20*hp),
               TextFormField(
                 initialValue: userData.displayedName,
-                decoration: textInputDecoration(hp: hp, wp: wp),
+                decoration: textInputDecoration(context: context),
                 validator: (val) {
                   if (val == null) return 'Error: null value';
                   if (val.isEmpty)
@@ -105,7 +105,7 @@ class _ProfileFormState extends State<ProfileForm> {
                             newFile = f;
                           });
                         }
-                      }))
+                      }), context: context, maxHeight: profilePicHeight*hp, maxWidth: profilePicWidth*hp)
                   : Container(),
               Container(
                   child: Row(children: <Widget>[
@@ -120,14 +120,14 @@ class _ProfileFormState extends State<ProfileForm> {
                                   if (mounted) {
                                     setState(() => newFile = null);
                                   }
-                                })
+                                }, width: profilePicWidth*hp, height: profilePicHeight*hp, buttonSize: 25.0*hp,)
                             : DeletableImage(
                                 image: Image.file(File(newFile!.path)),
                                 onDelete: () {
                                   if (mounted) {
                                     setState(() => newFile = null);
                                   }
-                                }),
+                                }, width: profilePicWidth*hp, height: profilePicHeight*hp, buttonSize: 25.0*hp,),
                       )
                     : _initialImageURL != null
                         ? Semantics(
@@ -139,7 +139,7 @@ class _ProfileFormState extends State<ProfileForm> {
                                     setState(() => _initialImageURL = null);
                                   }
                                   _images.deleteImage(imageURL: _initialImageURL!);
-                                }),
+                                }, width: profilePicWidth*hp, height: profilePicHeight*hp, buttonSize: 25.0*hp,),
                           )
                         : Container(),
                 Spacer(),

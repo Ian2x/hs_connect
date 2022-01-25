@@ -4,6 +4,13 @@ class DomainData {
   final String? country;
   final String? fullName;
   final String? color;
+  final String? image;
 
-  DomainData({required this.county, required this.state, required this.country, required this.fullName, required this.color});
+  DomainData(
+      {required this.county,
+      required this.state,
+      required this.country,
+      required this.fullName,
+      required this.color,
+      required this.image});
 }

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/tools/hexColor.dart';
 
 class GroupTag extends StatelessWidget {
   final Image? groupImage;
@@ -18,6 +16,7 @@ class GroupTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       alignment: Alignment.center,
       padding: EdgeInsets.fromLTRB(fontSize/2,fontSize/2.5,fontSize/2,fontSize/2.5),
@@ -42,9 +41,7 @@ class GroupTag extends StatelessWidget {
           ) : Container(),
           groupImage!=null ? SizedBox(width: fontSize / 3) : Container(),
           Text( groupName,
-            style:ThemeText.regularSmall(fontSize: fontSize,
-              color: groupColor != null ? groupColor : ThemeColor.black,
-            ),
+            style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: fontSize, color: groupColor != null ? groupColor : colorScheme.onSurface)
           )
         ],
       )
