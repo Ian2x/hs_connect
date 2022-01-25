@@ -32,11 +32,14 @@ class _Home2State extends State<Home2> with SingleTickerProviderStateMixin {
   String? groupImageString;
   Image? groupImage;
   String? groupColor;
+  late TabController _tabController;
 
 
   @override
   void initState() {
     getGroupData();
+    _tabController = TabController(length: 2, vsync: this);
+
     super.initState();
   }
 
@@ -98,18 +101,72 @@ class _Home2State extends State<Home2> with SingleTickerProviderStateMixin {
     // this sliver app bar is only use to hide/show the tabBar, the AppBar
     // is invisible at all times. The to the user visible AppBar is below
     return Scaffold(
+      bottomNavigationBar: MyNavigationBar(currentIndex: 0),
+      floatingActionButton: floatingNewButton(context),
       body:
-      ListView(
-        children: [
-          Column(
+      NestedScrollView(
+      floatHeaderSlivers:true,
+      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+        return <Widget> [
+        SliverAppBar(
+          bottom:
+            TabBar(
+            controller: _tabController,
+            // give the indicator a decoration (color and border radius)
+            indicator: BoxDecoration(
+              borderRadius: BorderRadius.circular(
+                25.0,
+              ),
+              color: isDomain != false ? pressedColor: defaultColor,
+            ),
+            labelColor: Colors.white,
+            unselectedLabelColor: Colors.black,
+            tabs: [
+              // first tab [you can add an icon using the icon property]
+              Tab(
+                child: TextButton(
+                  onPressed: (){
+                    setState(() {
+                      isDomain=true;
+                      _tabController.animateTo((_tabController.index + 1) % 2);
+                    });
+                  },
+                  child: Text ( widget.userData.fullDomainName!,
+                    style: ThemeText.inter(color: isDomain != false ?ThemeColor.white : defaultColor,
+                      fontSize: 16, fontWeight: FontWeight.normal,
+                    ),
+                  )
+                )
+              ),
+              Tab(
+                  child: TextButton(
+                      onPressed: (){
+                        setState(() {
+                          isDomain=false;
+                          _tabController.animateTo((_tabController.index + 1) % 2);
+                        });
+                      },
+                      child: Text ("Trending",
+                        style: ThemeText.inter(color: isDomain != false ? defaultColor : ThemeColor.white,
+                        fontSize: 16, fontWeight: FontWeight.normal,
+                      ),)
+                  )
+              ),
+            ],
+          ),
+          floating: true,
+          pinned:true,
+          toolbarHeight: 150,
+          elevation: 0,
+          backgroundColor: ThemeColor.white,
+          title: Column(
             children: [
-              SizedBox(height:35),
+              SizedBox(height:50),
               Row(
                 children: [
-                  SizedBox(width:20),
                   Container(
-                    width: 35,
-                    height: 35,
+                    width: 40,
+                    height: 40,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Colors.white,
@@ -125,66 +182,28 @@ class _Home2State extends State<Home2> with SingleTickerProviderStateMixin {
                     fontSize: 25, fontWeight: FontWeight.w700,
                   )),
                   Spacer(),
-                  Icon(Icons.more_horiz),
+                  Icon(Icons.settings, color: ThemeColor.mediumGrey),
                   SizedBox(width:20),
-                ]   ,
-              ),
-              SizedBox(height:10),
-              Row(  //Domain Button
-                children: [
-                  SizedBox(width:10),
-
-                  InputChip(
-                      padding: EdgeInsets.fromLTRB(5.0, 1.0, 5.0, 1.0),
-                      side: BorderSide(
-                        width: 2,
-                        color: isDomain != false ? pressedColor: defaultColor,
-                      ),
-                      label: Text( widget.userData.fullDomainName!),
-                      backgroundColor: isDomain != false ? pressedColor: ThemeColor.white,
-                      labelStyle: ThemeText.inter(color: isDomain != false ?ThemeColor.white : defaultColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.normal,
-                      ),
-                      onPressed: (){
-                        setState(() {
-                          isDomain=true;
-                        });
-                      },
-                  ),
-                  SizedBox(width:10),
-                  InputChip(
-                    padding: EdgeInsets.fromLTRB(5.0, 1.0, 5.0, 1.0),
-                    side: BorderSide(
-                      width: 2,
-                      color: isDomain != false ? defaultColor: ThemeColor.secondaryBlue,
-                    ),
-                    label: Text( "Trending"),
-                    backgroundColor: isDomain != false ? ThemeColor.white: ThemeColor.secondaryBlue,
-                    labelStyle: ThemeText.inter(color: isDomain != false ?defaultColor : ThemeColor.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.normal,
-                    ),
-                    onPressed: (){
-                      setState(() {
-                        isDomain=false;
-                      });
-                    },
-                  ),
-                  SizedBox(height:60),
-
-                ],
-              ),
-              isDomain == false ? DomainFeed(currUser: userData)
-                  :TrendingFeed(currUser: userData),
-            ],
+                  ]   ,
+                ),
+              ],
+            ),
           ),
+          ];
+        } ,
+        body:
+        TabBarView(
+          children: [
+            DomainFeed( currUser: userData),
+            TrendingFeed(currUser: userData),
+          ],
+          controller: _tabController,
+          physics: new NeverScrollableScrollPhysics(),
+        ),
+        //header SliverBuilder
 
-        ],
-      ),
-      bottomNavigationBar: MyNavigationBar(currentIndex: 0),
-      floatingActionButton: floatingNewButton(context),
+      ),//Nested ScrolLView
     );
-  }
+  } //Build
 
 }
