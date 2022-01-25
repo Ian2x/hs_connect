@@ -1,12 +1,11 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/screens/profile/profileBody.dart';
-import 'package:hs_connect/screens/profile/profilePage.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileAppBar.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
+import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/deletableImage.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
@@ -46,6 +45,8 @@ class _ProfileFormState extends State<ProfileForm> {
   @override
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
+    final hp = Provider.of<HeightPixel>(context).value;
+    final wp = Provider.of<WidthPixel>(context).value;
 
     void handleError(err) {
       if (mounted) {
@@ -71,16 +72,16 @@ class _ProfileFormState extends State<ProfileForm> {
           key: _formKey,
           child: ListView(
             shrinkWrap: true,
-            padding: EdgeInsets.all(15.0),
+            padding: EdgeInsets.all(15*hp),
             children: <Widget>[
               Text(
                 'Update your profile.',
-                style: TextStyle(fontSize: 18.0),
+                style: TextStyle(fontSize: 18*hp),
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 20*hp),
               TextFormField(
                 initialValue: userData.displayedName,
-                decoration: textInputDecoration,
+                decoration: textInputDecoration(hp: hp, wp: wp),
                 validator: (val) {
                   if (val == null) return 'Error: null value';
                   if (val.isEmpty)
@@ -94,10 +95,10 @@ class _ProfileFormState extends State<ProfileForm> {
                   }
                 },
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 20*hp),
               newFile == null && _initialImageURL == null
                   ? picPickerButton(
-                      iconSize: 50.0,
+                      iconSize: 50*hp,
                       setPic: ((File? f) {
                         if (mounted) {
                           setState(() {
@@ -107,7 +108,6 @@ class _ProfileFormState extends State<ProfileForm> {
                       }))
                   : Container(),
               Container(
-                  // constraints: BoxConstraints(minWidth: 50, maxWidth: 100),
                   child: Row(children: <Widget>[
                 Spacer(),
                 newFile != null
@@ -144,7 +144,7 @@ class _ProfileFormState extends State<ProfileForm> {
                         : Container(),
                 Spacer(),
               ])),
-              SizedBox(height: 20.0),
+              SizedBox(height: 20*hp),
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: Colors.pink[400],
@@ -166,10 +166,8 @@ class _ProfileFormState extends State<ProfileForm> {
                         onValue: handleValue,
                         onError: handleError,
                       );
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ProfilePage(profileRef: userData.userRef, currUserRef: userData.userRef)),
+                      Navigator.pop(
+                        context
                       );
                     }
                   },
@@ -182,20 +180,18 @@ class _ProfileFormState extends State<ProfileForm> {
                     primary: Colors.pink[400],
                   ),
                   onPressed: () async {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ProfilePage(profileRef: userData.userRef, currUserRef: userData.userRef)),
+                    Navigator.pop(
+                      context
                     );
                   },
                   child: Text(
                     'Cancel',
                     style: TextStyle(color: Colors.white),
                   )),
-              SizedBox(height: 12.0),
+              SizedBox(height: 12*hp),
               Text(
                 error,
-                style: TextStyle(color: Colors.red, fontSize: 14.0),
+                style: TextStyle(color: Colors.red, fontSize: 14*hp),
               ),
             ],
           ),

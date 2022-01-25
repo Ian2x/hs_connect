@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/reply.dart';
 import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/screens/home/comments/likeDislikeComment.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
-import 'package:hs_connect/shared/widgets/reportSheet.dart';
+import 'package:hs_connect/shared/reports/reportSheet.dart';
+import 'package:provider/provider.dart';
 
 import 'likeDislikeReply.dart';
 
@@ -80,19 +81,22 @@ class _ReplyCardState extends State<ReplyCard> {
 
   @override
   Widget build(BuildContext context) {
+    final hp = Provider.of<HeightPixel>(context).value;
+    final wp = Provider.of<WidthPixel>(context).value;
+
     return Stack(
       children: [
         Positioned(
-          top:-10,
-          right:-10,
+          top:-10*hp,
+          right:-10*wp,
           child:IconButton(icon: Icon(Icons.more_horiz),
-            iconSize: 20,
+            iconSize: 20*hp,
             onPressed: (){
               showModalBottomSheet(
                   context: context,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(20),
+                        top: Radius.circular(20*hp),
                       )),
                   builder: (context) => new ReportSheet(
                     reportType: ReportType.reply,
@@ -103,33 +107,17 @@ class _ReplyCardState extends State<ReplyCard> {
           ),
         ),
         Container(
-            padding: EdgeInsets.fromLTRB(20.0, 5, 0.0, 5.0),
+            padding: EdgeInsets.fromLTRB(20*wp, 5*hp, 0, 5*hp),
             child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(username + " • " + groupName,
-                      style: ThemeText.groupBold(color: groupColor != null ? groupColor: ThemeColor.mediumGrey, fontSize: 13)),
-                  SizedBox(height:10),
+                      style: ThemeText.groupBold(color: groupColor != null ? groupColor: ThemeColor.mediumGrey, fontSize: 13*hp)),
+                  SizedBox(height:10*hp),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      /*Column(
-                    children: [
-                      Container(
-                        width: imageSide,
-                        height: imageSide,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              image: userImage!.image,
-                              fit: BoxFit.fill,
-                            )
-                        ),
-                      ),
-                    ],
-                  ),*/
-
                       Flexible(
                         fit:FlexFit.loose,
                         child: Column(
@@ -141,7 +129,7 @@ class _ReplyCardState extends State<ReplyCard> {
                                 text: TextSpan(
                                   children: <TextSpan>[
                                     TextSpan(text: widget.reply.text,
-                                        style: ThemeText.postViewText(color: ThemeColor.black, fontSize: 15, height: 1.5)),
+                                        style: ThemeText.postViewText(color: ThemeColor.black, fontSize: 15*hp, height: 1.5)),
                                   ],
                                 ),
                               ),
@@ -149,7 +137,7 @@ class _ReplyCardState extends State<ReplyCard> {
                             Row(
                               children: [
                                 Text(
-                                  convertTime(widget.reply.createdAt.toDate()), style: ThemeText.groupBold(color:ThemeColor.mediumGrey, fontSize:14),
+                                  convertTime(widget.reply.createdAt.toDate()), style: ThemeText.groupBold(color:ThemeColor.mediumGrey, fontSize:14*hp),
                                 ),
                                 Spacer(flex:1),
                                 widget.reply.creatorRef != null ? LikeDislikeReply(
@@ -165,7 +153,7 @@ class _ReplyCardState extends State<ReplyCard> {
                   ),
                   widget.isLast !=false ?
                     Container() :
-                    Divider(thickness: 3, color: ThemeColor.backgroundGrey, height: 40),
+                    Divider(thickness: 3*hp, color: ThemeColor.backgroundGrey, height: 40*hp),
                 ]
             )
         ),

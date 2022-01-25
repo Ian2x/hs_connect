@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/pixels.dart';
+import 'package:provider/provider.dart';
 
 const double iconSize = 32;
 
@@ -25,7 +27,7 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
   bool dislikeStatus = false;
   int likeCount = 0;
   int dislikeCount = 0;
-
+  
   @override
   void initState() {
     if (mounted) {
@@ -41,6 +43,9 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
 
   @override
   Widget build(BuildContext context) {
+    final hp = Provider.of<HeightPixel>(context).value;
+    final wp = Provider.of<WidthPixel>(context).value;
+    
     PostsDatabaseService _posts = PostsDatabaseService(currUserRef: widget.currUserRef, postRef: widget.post.postRef);
 
     return Row(
@@ -49,7 +54,7 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
         () {
           if (dislikeStatus == true) {
             return IconButton(
-              iconSize: iconSize,
+              iconSize: iconSize*hp,
               splashColor: Colors.transparent,
               padding: iconPadding,
               constraints: BoxConstraints(),
@@ -67,7 +72,7 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
             );
           } else {
             return IconButton(
-              iconSize: iconSize,
+              iconSize: iconSize*hp,
               splashColor: Colors.transparent,
               padding: iconPadding,
               constraints: BoxConstraints(),
@@ -87,16 +92,16 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
             );
           }
         }(),
-        SizedBox(width: 5),
+        SizedBox(width: 5*wp),
         Text(
           (likeCount - dislikeCount).toString(),
-          style: ThemeText.inter(fontSize: 16),
+          style: ThemeText.inter(fontSize: 16*hp),
         ),
-        SizedBox(width: 5),
+        SizedBox(width: 5*wp),
         () {
           if (likeStatus == true) {
             return IconButton(
-              iconSize: iconSize,
+              iconSize: iconSize*hp,
               splashColor: Colors.transparent,
               padding: iconPadding,
               constraints: BoxConstraints(),
@@ -114,7 +119,7 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
             );
           } else {
             return IconButton(
-              iconSize: iconSize,
+              iconSize: iconSize*hp,
               splashColor: Colors.transparent,
               padding: iconPadding,
               constraints: BoxConstraints(),

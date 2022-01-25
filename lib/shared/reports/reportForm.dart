@@ -6,7 +6,8 @@ import 'package:hs_connect/services/reports_database.dart';
 import 'package:provider/provider.dart';
 
 import '../constants.dart';
-import 'loading.dart';
+import '../pixels.dart';
+import '../widgets/loading.dart';
 
 class ReportForm extends StatefulWidget {
   final ReportType reportType;
@@ -48,33 +49,37 @@ class _ReportFormState extends State<ReportForm> {
     double phoneWidth = MediaQuery.of(context).size.width;
 
     final userData = Provider.of<UserData?>(context);
+    final hp = Provider.of<HeightPixel>(context).value;
+    final wp = Provider.of<WidthPixel>(context).value;
+
+
     if (userData == null || loading) {
       return Container(
           height: phoneHeight * 0.6 + MediaQuery.of(context).viewInsets.bottom,
           decoration: BoxDecoration(
               color: ThemeColor.backgroundGrey,
-              borderRadius: BorderRadius.only(topLeft: const Radius.circular(20), topRight: const Radius.circular(20))),
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(20*hp), topRight: Radius.circular(20*hp))),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             Container(
               width: phoneWidth,
               constraints: BoxConstraints(),
-              padding: EdgeInsets.fromLTRB(10, 7, 10, 4),
+              padding: EdgeInsets.fromLTRB(10*wp, 7*hp, 10*wp, 4*hp),
               child: Row(children: <Widget>[
                 IconButton(
                   constraints: BoxConstraints(),
                   icon: Icon(Icons.close),
                   color: Colors.transparent,
-                  iconSize: 30,
+                  iconSize: 30*hp,
                   onPressed: () {},
                 ),
-                Text("", style: ThemeText.inter(fontSize: 22)),
+                Text("", style: ThemeText.inter(fontSize: 22*hp)),
               ]),
             ),
             Divider(height: 0),
             Spacer(),
             Loading(),
             Spacer(),
-            SizedBox(height: 30)
+            SizedBox(height: 30*hp)
           ]));
     }
     if (submitted) {
@@ -82,17 +87,17 @@ class _ReportFormState extends State<ReportForm> {
           height: phoneHeight * 0.6 + MediaQuery.of(context).viewInsets.bottom,
           decoration: BoxDecoration(
               color: ThemeColor.backgroundGrey,
-              borderRadius: BorderRadius.only(topLeft: const Radius.circular(20), topRight: const Radius.circular(20))),
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(20*hp), topRight: Radius.circular(20*hp))),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             Container(
               width: phoneWidth,
               constraints: BoxConstraints(),
-              padding: EdgeInsets.fromLTRB(10, 7, 10, 4),
+              padding: EdgeInsets.fromLTRB(10*wp, 7*hp, 10*wp, 4*hp),
               child: Row(children: <Widget>[
                 IconButton(
                   constraints: BoxConstraints(),
                   icon: Icon(Icons.close),
-                  iconSize: 30,
+                  iconSize: 30*hp,
                   onPressed: () {
                     int count = 0;
                     Navigator.popUntil(context, (route) {
@@ -101,18 +106,18 @@ class _ReportFormState extends State<ReportForm> {
                   },
                 ),
                 Spacer(),
-                Text("Report received.", style: ThemeText.inter(fontSize: 22)),
+                Text("Report received.", style: ThemeText.inter(fontSize: 22*hp)),
                 Spacer(),
-                SizedBox(width: 30)
+                SizedBox(width: 30*wp)
               ]),
             ),
             Divider(height: 0),
             Spacer(),
             Container(
-              padding: EdgeInsets.fromLTRB(35, 0, 35, 30),
+              padding: EdgeInsets.fromLTRB(35*wp, 0, 35*wp, 30*hp),
               child: Text(
                   'Thank you for reporting harmful content. You are making this platform a better place. We will review your report very soon.',
-                  style: ThemeText.inter(fontSize: 18),
+                  style: ThemeText.inter(fontSize: 18*hp),
                   textAlign: TextAlign.center),
             ),
             Spacer()
@@ -123,19 +128,19 @@ class _ReportFormState extends State<ReportForm> {
       height: phoneHeight * 0.6 + MediaQuery.of(context).viewInsets.bottom,
       decoration: BoxDecoration(
           color: ThemeColor.backgroundGrey,
-          borderRadius: BorderRadius.only(topLeft: const Radius.circular(20), topRight: const Radius.circular(20))),
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(20*hp), topRight: Radius.circular(20*hp))),
       child: Form(
         key: _formKey,
         child: Column(children: <Widget>[
           Container(
             width: phoneWidth,
             constraints: BoxConstraints(),
-            padding: EdgeInsets.fromLTRB(10, 7, 10, 4),
+            padding: EdgeInsets.fromLTRB(10*wp, 7*hp, 10*wp, 4*hp),
             child: Row(children: <Widget>[
               IconButton(
                 constraints: BoxConstraints(),
                 icon: Icon(Icons.close),
-                iconSize: 30,
+                iconSize: 30*hp,
                 onPressed: () {
                   int count = 0;
                   Navigator.popUntil(context, (route) {
@@ -144,13 +149,13 @@ class _ReportFormState extends State<ReportForm> {
                 },
               ),
               Spacer(),
-              Text("Submit a Report", style: ThemeText.inter(fontSize: 22)),
+              Text("Submit a Report", style: ThemeText.inter(fontSize: 22*hp)),
               Spacer(),
-              SizedBox(width: 8),
+              SizedBox(width: 8*wp),
               IconButton(
                 constraints: BoxConstraints(),
                 icon: Icon(Icons.send),
-                iconSize: 22,
+                iconSize: 22*hp,
                 onPressed: () async {
                   // check report isn't empty
                   if (_text.isEmpty) {
@@ -185,18 +190,18 @@ class _ReportFormState extends State<ReportForm> {
           Divider(height: 0),
           error != null
               ? Container(
-                  padding: EdgeInsets.only(top: 12),
-                  child: Text(error!, style: ThemeText.inter(fontSize: 14, color: Colors.red.shade700)))
+                  padding: EdgeInsets.only(top: 12*hp),
+                  child: Text(error!, style: ThemeText.inter(fontSize: 14*hp, color: Colors.red.shade700)))
               : Container(height: 0),
           Container(
-            padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+            padding: EdgeInsets.fromLTRB(15*wp, 0, 15*wp, 0),
             child: TextFormField(
-              style: ThemeText.roboto(fontSize: 16, height: 1.4),
+              style: ThemeText.roboto(fontSize: 16*hp, height: 1.4),
               maxLines: 15,
               autocorrect: false,
               maxLength: 400,
               decoration: InputDecoration(
-                  hintStyle: ThemeText.roboto(fontSize: 16), border: InputBorder.none, hintText: "Description..."),
+                  hintStyle: ThemeText.roboto(fontSize: 16*hp), border: InputBorder.none, hintText: "Description..."),
               onChanged: (val) {
                 setState(() => _text = val);
                 if (error == emptyTextError) {

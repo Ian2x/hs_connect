@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/reply.dart';
 import 'package:hs_connect/services/replies_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/pixels.dart';
+import 'package:provider/provider.dart';
 
 const double iconSize = 25;
-const EdgeInsets iconPadding = EdgeInsets.all(3.0);
 
 class LikeDislikeReply extends StatefulWidget {
   final DocumentReference currUserRef;
@@ -38,6 +39,8 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
 
   @override
   Widget build(BuildContext context) {
+    final hp = Provider.of<HeightPixel>(context).value;
+
     RepliesDatabaseService _replies = RepliesDatabaseService(
         currUserRef: widget.currUserRef,
         replyRef: widget.reply.replyRef,
@@ -50,9 +53,9 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
         () {
           if (dislikeStatus == true) {
             return IconButton(
-              iconSize: iconSize,
+              iconSize: iconSize*hp,
               splashColor: Colors.transparent,
-              padding: iconPadding,
+              padding: EdgeInsets.all(3*hp),
               constraints: BoxConstraints(),
               color: ThemeColor.secondaryBlue,
               icon: Icon(Icons.keyboard_arrow_down_rounded),
@@ -68,9 +71,9 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
             );
           } else {
             return IconButton(
-              iconSize: iconSize,
+              iconSize: iconSize*hp,
               splashColor: Colors.transparent,
-              padding: iconPadding,
+              padding: EdgeInsets.all(3*hp),
               constraints: BoxConstraints(),
               color: ThemeColor.darkGrey,
               icon: Icon(Icons.keyboard_arrow_down_rounded),
@@ -90,14 +93,14 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
         }(),
         Text(
           (likeCount - dislikeCount).toString(),
-          style: ThemeText.inter(fontSize: 14)
+          style: ThemeText.inter(fontSize: 14*hp)
         ),
         () {
           if (likeStatus == true) {
             return IconButton(
-              iconSize: iconSize,
+              iconSize: iconSize*hp,
               splashColor: Colors.transparent,
-              padding: iconPadding,
+              padding: EdgeInsets.all(3*hp),
               constraints: BoxConstraints(),
               color: ThemeColor.secondaryBlue,
               icon: Icon(Icons.keyboard_arrow_up_rounded, color: ThemeColor.secondaryBlue),
@@ -113,9 +116,9 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
             );
           } else {
             return IconButton(
-              iconSize: iconSize,
+              iconSize: iconSize*hp,
               splashColor: Colors.transparent,
-              padding: iconPadding,
+              padding: EdgeInsets.all(3*hp),
               constraints: BoxConstraints(),
               color: ThemeColor.darkGrey,
               icon: Icon(Icons.keyboard_arrow_up_rounded),

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
+import 'package:provider/provider.dart';
+
+import '../pixels.dart';
 
 
 class TagOutline extends StatelessWidget {
@@ -24,17 +27,20 @@ class TagOutline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final hp = Provider.of<HeightPixel>(context).value;
+    final wp = Provider.of<WidthPixel>(context).value;
+
     return Container(
       alignment: Alignment.center,
       height: height,
-      padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+      padding: EdgeInsets.fromLTRB(10*wp, 5*hp, 10*wp, 5*hp),
       decoration: ShapeDecoration(
         color: fillColor != null ? fillColor!: HexColor('FFFFFF'),
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.0),
+            borderRadius: BorderRadius.circular(16*hp),
             side: BorderSide(
               color: borderColor != null? borderColor! :HexColor("E9EDF0"),
-              width: 3.0,
+              width: 3*wp,
             )),
       ),
       child:
@@ -42,7 +48,7 @@ class TagOutline extends StatelessWidget {
           : Text(text!,
           style: TextStyle(
             color: textColor !=null ? textColor! : HexColor("b5babe"),
-            fontSize:16,
+            fontSize:16*hp,
             fontFamily: "",
           )),
     );

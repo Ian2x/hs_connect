@@ -1,28 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:hs_connect/models/comment.dart';
 import 'package:hs_connect/models/post.dart';
-import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/screens/home/comments/commentCard.dart';
-import 'package:hs_connect/screens/home/comments/commentReplyForm.dart';
-import 'package:hs_connect/screens/home/postView/postTitleCard.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profilePostCard.dart';
-import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
-import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/widgets/loading.dart';
+import 'package:hs_connect/shared/pixels.dart';
 import 'package:provider/provider.dart';
 
-class profilePostFeed extends StatefulWidget {
+class ProfilePostFeed extends StatefulWidget {
   final DocumentReference profUserRef;
 
-  profilePostFeed({Key? key, required this.profUserRef}) : super(key: key);
+  ProfilePostFeed({Key? key, required this.profUserRef}) : super(key: key);
 
   @override
-  _profilePostFeedState createState() => _profilePostFeedState();
+  _ProfilePostFeedState createState() => _ProfilePostFeedState();
 }
 
-class _profilePostFeedState extends State<profilePostFeed> {
+class _ProfilePostFeedState extends State<ProfilePostFeed> {
 
   bool isReply=false;
   DocumentReference? commentRef;
@@ -42,6 +35,9 @@ class _profilePostFeedState extends State<profilePostFeed> {
 
   @override
   Widget build(BuildContext context) {
+    final hp = Provider.of<HeightPixel>(context).value;
+    final wp = Provider.of<WidthPixel>(context).value;
+
     if (_userPosts == null) {
       return Text("No Posts");
     } else {
@@ -52,16 +48,16 @@ class _profilePostFeedState extends State<profilePostFeed> {
             children: <Widget>[
               Row(
                 children: [
-                  SizedBox(width:10), Text("Your Posts", style: ThemeText.groupBold(fontSize: 24), textAlign: TextAlign.left),
+                  SizedBox(width:10*wp), Text("Your Posts", style: Theme.of(context).textTheme.headline5, textAlign: TextAlign.left),
                 ],
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 10*hp),
               Row(
                 children: [
-                  SizedBox(width:10), Text("Visible to only you", style: ThemeText.regularSmall(fontSize: 16, color: ThemeColor.mediumGrey), textAlign: TextAlign.left),
+                  SizedBox(width:10*wp), Text("Visible to only you", style: Theme.of(context).textTheme.subtitle1, textAlign: TextAlign.left),
                 ],
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 20*hp),
               Container(
               child:
               ListView.builder(
@@ -76,7 +72,7 @@ class _profilePostFeedState extends State<profilePostFeed> {
                         post: _userPosts![index]!,
                         currUserRef: widget.profUserRef,
                       ),
-                      SizedBox(height:10),
+                      SizedBox(height:10*hp),
                     ],
                   );
                 },

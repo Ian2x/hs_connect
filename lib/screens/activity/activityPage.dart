@@ -4,6 +4,7 @@ import 'package:hs_connect/screens/activity/messages/allMessagesPage.dart';
 import 'package:hs_connect/screens/activity/activityAppBar.dart';
 import 'package:hs_connect/screens/activity/notifications/notificationsFeed.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
 import 'package:provider/provider.dart';
@@ -28,8 +29,8 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
-    double wp = getWp(context);
-    double hp = getHp(context);
+    final wp = Provider.of<WidthPixel>(context).value;
+    final hp = Provider.of<HeightPixel>(context).value;
 
     if (userData == null) {
       return Scaffold(
@@ -88,8 +89,8 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
       body: Container(
         color: ThemeColor.backgroundGrey,
         child: TabBarView(children: <Widget>[
-            NotificationsFeed(userData: userData, hp: hp, wp: wp),
-            AllMessagesPage(userData: userData, hp: hp, wp: wp,)
+            NotificationsFeed(userData: userData),
+            AllMessagesPage(userData: userData)
           ], controller: _tabController, physics: BouncingScrollPhysics()),
       ),
       bottomNavigationBar: MyNavigationBar(

@@ -2,9 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/message.dart';
 import 'package:hs_connect/services/messages_database.dart';
+import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
+import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import 'messagesBubble.dart';
 
@@ -12,11 +15,9 @@ class MessagesFeed extends StatefulWidget {
   final DocumentReference otherUserRef;
   final DocumentReference currUserRef;
   final VoidFunction onUpdateLastViewed;
-  final double wp;
-  final double hp;
 
   const MessagesFeed(
-      {Key? key, required this.otherUserRef, required this.currUserRef, required this.onUpdateLastViewed, required this.wp, required this.hp})
+      {Key? key, required this.otherUserRef, required this.currUserRef, required this.onUpdateLastViewed})
       : super(key: key);
 
   @override
@@ -24,19 +25,6 @@ class MessagesFeed extends StatefulWidget {
 }
 
 class _MessagesFeedState extends State<MessagesFeed> {
-
-  double? wp;
-  double? hp;
-  @override
-  void initState() {
-    if (mounted) {
-      setState(() {
-        wp = widget.wp;
-        hp = widget.hp;
-      });
-    }
-    super.initState();
-  }
 
   @override
   void dispose() {
@@ -49,7 +37,7 @@ class _MessagesFeedState extends State<MessagesFeed> {
 
   @override
   Widget build(BuildContext context) {
-    if (wp==null || hp == null) return Loading();
+    final hp = Provider.of<HeightPixel>(context).value;
 
     MessagesDatabaseService _messages =
         new MessagesDatabaseService(currUserRef: widget.currUserRef, otherUserRef: widget.otherUserRef);
@@ -94,23 +82,23 @@ class _MessagesFeedState extends State<MessagesFeed> {
               itemBuilder: (BuildContext context, int index) {
                 if (index == 0) {
                   return Container(
-                      padding: EdgeInsets.only(bottom: 5*hp!),
+                      padding: EdgeInsets.only(bottom: 5*hp),
                       child: MessagesBubble(
                         message: messages[index],
-                        isSentMessage: messages[index].senderRef == widget.currUserRef, wp: wp!, hp: hp!,
+                        isSentMessage: messages[index].senderRef == widget.currUserRef,
                       ));
                 }
                 if (index == messages.length - 1) {
                   return Container(
-                      padding: EdgeInsets.only(top: 5*hp!),
+                      padding: EdgeInsets.only(top: 5*hp),
                       child: MessagesBubble(
                         message: messages[index],
-                        isSentMessage: messages[index].senderRef == widget.currUserRef, wp: wp!, hp: hp!,
+                        isSentMessage: messages[index].senderRef == widget.currUserRef,
                       ));
                 }
                 return MessagesBubble(
                   message: messages[index],
-                  isSentMessage: messages[index].senderRef == widget.currUserRef, wp: wp!, hp: hp!,
+                  isSentMessage: messages[index].senderRef == widget.currUserRef,
                 );
               },
             );

@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/widgets/reportForm.dart';
+import 'package:hs_connect/shared/reports/reportForm.dart';
 import 'package:provider/provider.dart';
 
-import 'loading.dart';
+import '../pixels.dart';
+import '../widgets/loading.dart';
 
 class ReportSheet extends StatefulWidget {
 
@@ -45,6 +46,8 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
+    final hp = Provider.of<HeightPixel>(context).value;
+    final wp = Provider.of<WidthPixel>(context).value;
 
     double sheetHeight= MediaQuery.of(context).size.height * 0.15;
 
@@ -56,7 +59,7 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
       constraints: BoxConstraints(
         maxHeight: sheetHeight,
       ),
-      padding: EdgeInsets.fromLTRB(13, 0, 0, 0),
+      padding: EdgeInsets.fromLTRB(13*wp, 0, 0, 0),
       child: Column(
         children: [
           TextButton(
@@ -76,14 +79,14 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
                     child:
                     Row(
                       children: [
-                        Icon(Icons.flag, color: ThemeColor.black, size: iconSize),
-                        SizedBox(width:20),
-                        Text("Report", style: ThemeText.groupBold(color: ThemeColor.black, fontSize: fontSize),
+                        Icon(Icons.flag, color: ThemeColor.black, size: iconSize*hp),
+                        SizedBox(width:20*wp),
+                        Text("Report", style: ThemeText.groupBold(color: ThemeColor.black, fontSize: fontSize*hp),
                         ),
                       ],
                     ),
                   ),
-                  Divider(color: ThemeColor.backgroundGrey, thickness: 2, height: 0),
+                  Divider(color: ThemeColor.backgroundGrey, thickness: 2*hp, height: 0),
                   Container(
                     //color: Colors.orange,
                     child: TextButton(
@@ -93,9 +96,9 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
                       child:
                         Row(
                         children: [
-                          Icon(Icons.close_rounded, size: iconSize, color: ThemeColor.mediumGrey),
-                          SizedBox(width:20),
-                          Text("Cancel", style: ThemeText.groupBold(color: ThemeColor.mediumGrey, fontSize: fontSize),
+                          Icon(Icons.close_rounded, size: iconSize*hp, color: ThemeColor.mediumGrey),
+                          SizedBox(width:20*wp),
+                          Text("Cancel", style: ThemeText.groupBold(color: ThemeColor.mediumGrey, fontSize: fontSize*hp),
                           ),
                         ],
                       )

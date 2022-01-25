@@ -3,7 +3,9 @@ import 'package:hs_connect/models/accessRestriction.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
+import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
+import 'package:provider/provider.dart';
 
 class GroupSelectionSheet extends StatefulWidget {
   final List<Group> groups;
@@ -17,7 +19,6 @@ class GroupSelectionSheet extends StatefulWidget {
 }
 
 class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
-
   Group? selectedGroup;
 
   @override
@@ -28,9 +29,12 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final hp = Provider.of<HeightPixel>(context).value;
+    final wp = Provider.of<WidthPixel>(context).value;
+
     if (selectedGroup==null) return Loading();
     return Container(
-        padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 40.0),
+        padding: EdgeInsets.fromLTRB(20*wp, 0*hp, 20*wp, 40*hp),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,11 +49,11 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 40),
+                      SizedBox(height: 40*hp),
                       Text("Pick a group",
                           style: ThemeText.groupBold(
                             color: ThemeColor.black,
-                            fontSize: 18,
+                            fontSize: 18*hp,
                           )),
                     ],
                   );
@@ -69,17 +73,17 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Divider(color: ThemeColor.backgroundGrey, thickness: 2),
+                          Divider(color: ThemeColor.backgroundGrey, thickness: 2*hp),
                           Row(
                             children: <Widget>[
                               Text(group.name,
                                   style: ThemeText.groupBold(
                                     color: ThemeColor.darkGrey,
-                                    fontSize: 16,
+                                    fontSize: 16*hp,
                                   )),
                               Spacer(),
                               ConstrainedBox(
-                                  constraints: BoxConstraints(maxHeight: 40),
+                                  constraints: BoxConstraints(maxHeight: 40*hp),
                                 child:
                                 Checkbox(
                                   value: selectedGroup == widget.groups[index - 1],
@@ -98,10 +102,10 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
                             ]
                           ),
                           group.name == "Public"
-                              ? Text("Anyone can see", style: ThemeText.groupBold(color: ThemeColor.mediumGrey, fontSize: 16))
+                              ? Text("Anyone can see", style: ThemeText.groupBold(color: ThemeColor.mediumGrey, fontSize: 16*hp))
                               : Container(),
                           group.accessRestriction.restrictionType == AccessRestrictionType.domain
-                              ? Text("Only for your school", style: ThemeText.groupBold(color: ThemeColor.mediumGrey, fontSize: 16))
+                              ? Text("Only for your school", style: ThemeText.groupBold(color: ThemeColor.mediumGrey, fontSize: 16*hp))
                               : Container()
                         ]
                       ),
