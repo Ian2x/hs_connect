@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hs_connect/screens/authenticate/waitVerification.dart';
 import 'package:hs_connect/services/auth.dart';
-import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
@@ -33,11 +32,12 @@ class _RegisterEmailState extends State<RegisterEmail> {
   Widget build(BuildContext context) {
     final wp = Provider.of<WidthPixel>(context).value;
     final hp = Provider.of<HeightPixel>(context).value;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return loading
-        ? Scaffold(backgroundColor: ThemeColor.backgroundGrey, body: Loading())
+        ? Scaffold(backgroundColor: colorScheme.background, body: Loading())
         : Scaffold(
-      backgroundColor: ThemeColor.white,
+      backgroundColor: colorScheme.surface,
       body: Stack(
         children: [
           Positioned(
@@ -95,39 +95,28 @@ class _RegisterEmailState extends State<RegisterEmail> {
                               height: 62*hp,
                               width: 62*hp,
                               decoration: new BoxDecoration(
-                                color: ThemeColor.secondaryBlue,
+                                color: colorScheme.secondary,
                                 shape: BoxShape.circle,
                               ),
                             ),
                             SizedBox(height: 70*hp),
-                            Text("Make your Account", style: ThemeText.inter(fontSize: 23*hp,
-                              fontWeight: FontWeight.w700,
-                              color: ThemeColor.black,
-                            )),
+                            Text("Make your Account", style: Theme.of(context).textTheme.headline5),
                             SizedBox(height:15*hp),
                             Text('Register with your school email.',
-                                style: ThemeText.regularSmall(fontSize: 16*hp, color: ThemeColor.secondaryBlue)),
+                                style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.secondary)),
                             SizedBox(height: 39*hp),
                           ],
                         )
                     ),
                     SizedBox(height: error!=null ? 10*hp : 78*hp),
-                    error!=null ? Text(error!, style: ThemeText.inter(fontSize: 14*hp, color: ThemeColor.mediumGrey)) : Container(),
+                    error!=null ? Text(error!, style: Theme.of(context).textTheme.subtitle2) : Container(),
                     TextField(
                       autocorrect:false,
-                      style: ThemeText.inter(
-                        color: ThemeColor.mediumGrey,
-                        fontSize: 18*hp,
-                        //fontWeight: ,
-                      ),
+                      style: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.primary),
                       maxLines: null,
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
-                            hintStyle: ThemeText.inter(
-                              color: ThemeColor.mediumGrey,
-                              fontSize: 18*hp,
-                              //fontWeight: ,
-                            ),
+                            hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.onError),
                             border: InputBorder.none,
                             hintText: "Your School Email"),
                         onChanged: (value) {
@@ -138,7 +127,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                         }
                       },
                     ),
-                    Divider(height:20*hp, thickness: 2*hp, color: ThemeColor.lightMediumGrey),
+                    Divider(height:20*hp, thickness: 2*hp, color: colorScheme.onError),
                   ]),
             ),
           ),

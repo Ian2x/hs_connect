@@ -79,7 +79,7 @@ Future<UserData> userDataFromSnapshot(DocumentSnapshot snapshot, DocumentReferen
   final domain = snapshot.get(C.domain);
   final _domainsData = DomainsDataDatabaseService();
   DomainData? domainData = await _domainsData.getDomainData(domain: domain);
-  if (domainData==null) domainData = DomainData(county: null, state: null, country: null, fullName: null, color: null);
+  if (domainData==null) domainData = DomainData(county: null, state: null, country: null, fullName: null, color: null, image: null);
   return UserData(
     userRef: userRef,
     displayedName: snapshot.get(C.displayedName),

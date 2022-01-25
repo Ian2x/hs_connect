@@ -75,17 +75,17 @@ class _Home2State extends State<Home2> with SingleTickerProviderStateMixin {
     final userData = Provider.of<UserData?>(context);
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
+    final colorScheme = Theme.of(context).colorScheme;
 
 
 
-    Color pressedColor= ThemeColor.secondaryBlue;
-    Color defaultColor= ThemeColor.mediumGrey;
+    Color pressedColor= colorScheme.secondary;
+    Color defaultColor= colorScheme.primary;
 
     if (isDomain){
-      groupColor != null ?
-          pressedColor = HexColor(groupColor!): pressedColor = ThemeColor.secondaryBlue;
-    } else {
-      pressedColor= ThemeColor.secondaryBlue;
+      if (groupColor!=null) {
+        pressedColor = HexColor(groupColor!);
+      }
     }
 
     if(user==null) {
@@ -94,7 +94,7 @@ class _Home2State extends State<Home2> with SingleTickerProviderStateMixin {
 
     if(userData==null) {
       return Scaffold(
-          backgroundColor: ThemeColor.backgroundGrey,
+          backgroundColor: colorScheme.background,
           body: Loading()
       );
     }
@@ -132,9 +132,7 @@ class _Home2State extends State<Home2> with SingleTickerProviderStateMixin {
                     });
                   },
                   child: Text ( widget.userData.fullDomainName!,
-                    style: ThemeText.inter(color: isDomain != false ?ThemeColor.white : defaultColor,
-                      fontSize: 16, fontWeight: FontWeight.normal,
-                    ),
+                    style: Theme.of(context).textTheme.subtitle1?.copyWith(color: isDomain != false ? colorScheme.surface : defaultColor)
                   )
                 )
               ),
@@ -147,9 +145,7 @@ class _Home2State extends State<Home2> with SingleTickerProviderStateMixin {
                         });
                       },
                       child: Text ("Trending",
-                        style: ThemeText.inter(color: isDomain != false ? defaultColor : ThemeColor.white,
-                        fontSize: 16, fontWeight: FontWeight.normal,
-                      ),)
+                        style: Theme.of(context).textTheme.subtitle1?.copyWith(color: isDomain != false ? defaultColor : colorScheme.surface))
                   )
               ),
             ],
@@ -158,7 +154,7 @@ class _Home2State extends State<Home2> with SingleTickerProviderStateMixin {
           pinned:true,
           toolbarHeight: 150,
           elevation: 0,
-          backgroundColor: ThemeColor.white,
+          backgroundColor: colorScheme.surface,
           title: Column(
             children: [
               SizedBox(height:50),
@@ -178,11 +174,9 @@ class _Home2State extends State<Home2> with SingleTickerProviderStateMixin {
                     ),
                   ),
                   SizedBox(width:20),
-                  Text( isDomain != false ? userData.fullDomainName! : "Trending", style: ThemeText.inter(color: ThemeColor.black,
-                    fontSize: 25, fontWeight: FontWeight.w700,
-                  )),
+                  Text( isDomain != false ? userData.fullDomainName! : "Trending", style: Theme.of(context).textTheme.headline5?.copyWith(fontWeight: FontWeight.bold)),
                   Spacer(),
-                  Icon(Icons.settings, color: ThemeColor.mediumGrey),
+                  Icon(Icons.settings, color: colorScheme.primary),
                   SizedBox(width:20),
                   ]   ,
                 ),

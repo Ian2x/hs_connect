@@ -1,5 +1,3 @@
-import 'package:intl/intl.dart';
-
 import 'package:hs_connect/shared/tools/convertTimeMessage.dart';
 
 //taken from Timeago library if new implementations

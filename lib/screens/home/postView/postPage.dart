@@ -7,9 +7,6 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/comments/commentsFeed.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
-import 'package:hs_connect/services/user_data_database.dart';
-import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
 import 'package:provider/provider.dart';
@@ -78,6 +75,7 @@ class _PostPageState extends State<PostPage> {
   @override
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
+    final colorScheme = Theme.of(context).colorScheme;
 
     if (userData == null || post == null) {
       return Loading();
@@ -85,13 +83,13 @@ class _PostPageState extends State<PostPage> {
 
 
     return Scaffold(
-      backgroundColor: HexColor("FFFFFF"),
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
         title: Text(groupName,
             style: TextStyle(
-              color: HexColor('222426'), //fontFamily)
+              color: colorScheme.onSurface, //fontFamily)
             )),
-        backgroundColor: HexColor("FFFFFF"),
+        backgroundColor: colorScheme.surface,
         elevation: 0,
         leading: myBackButtonIcon(context),
       ),

@@ -6,8 +6,8 @@ import 'package:hs_connect/models/comment.dart';
 import 'package:hs_connect/screens/home/comments/likeDislikeComment.dart';
 import 'package:hs_connect/screens/home/replies/replyFeed.dart';
 import 'package:hs_connect/services/user_data_database.dart';
-import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
+import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/reports/reportSheet.dart';
@@ -68,7 +68,7 @@ class _CommentCardState extends State<CommentCard> {
           username = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
           userGroupName = fetchUserData != null ? fetchUserData.domain : '<Failed to retrieve user name>';
           imageString = fetchUserData != null ? fetchUserData.profileImageURL : '<Failed to retrieve user name>';
-          groupColor = fetchUserData != null ? fetchUserData.domainColor :ThemeColor.black;
+          groupColor = fetchUserData != null ? fetchUserData.domainColor : null;
         });
       }
     } else {
@@ -87,7 +87,9 @@ class _CommentCardState extends State<CommentCard> {
   Widget build(BuildContext context) {
     final wp = Provider.of<WidthPixel>(context).value;
     final hp = Provider.of<HeightPixel>(context).value;
-    
+    final colorScheme = Theme.of(context).colorScheme;
+
+
     return Stack(
       children: [
         Positioned(
@@ -102,10 +104,10 @@ class _CommentCardState extends State<CommentCard> {
                       borderRadius: BorderRadius.vertical(
                         top: Radius.circular(20*hp),
                       )),
-                  builder: (context) => new ReportSheet(
+                  builder: (context) => pixelProvider(context, child: ReportSheet(
                     reportType: ReportType.comment,
                     entityRef: widget.comment.commentRef,
-                  ));
+                  )));
             },
           ),
         ),
@@ -116,8 +118,7 @@ class _CommentCardState extends State<CommentCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(username + " • " + userGroupName,
-                  style: ThemeText.groupBold(color: groupColor !=null ? groupColor :ThemeColor.mediumGrey,
-                      fontSize: 13*hp)),
+                  style: Theme.of(context).textTheme.subtitle2?.copyWith(color: groupColor !=null ? groupColor :colorScheme.primary)),
               SizedBox(height:10*hp),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,7 +134,7 @@ class _CommentCardState extends State<CommentCard> {
                             text: TextSpan(
                               children: <TextSpan>[
                                 TextSpan(text: widget.comment.text,
-                                    style: ThemeText.postViewText(color: ThemeColor.black, fontSize: 14*hp, height: 1.5)),
+                                    style: Theme.of(context).textTheme.bodyText2),
                               ],
                             ),
                           ),
@@ -141,11 +142,10 @@ class _CommentCardState extends State<CommentCard> {
                         Row(
                           children: [
                             Text(
-                              convertTime(widget.comment.createdAt.toDate()), style: ThemeText.groupBold(color: ThemeColor.mediumGrey, fontSize:14*hp),
-                            ),
+                              convertTime(widget.comment.createdAt.toDate()), style: Theme.of(context).textTheme.subtitle2),
                             Spacer(flex:1),
                             TextButton(
-                                child: Text("Reply", style: ThemeText.groupBold(color: ThemeColor.secondaryBlue, fontSize:15*hp)),
+                                child: Text("Reply", style: Theme.of(context).textTheme.bodyText2?.copyWith(color: colorScheme.secondary)),
                                 onPressed: (){
                                   widget.switchFormBool(widget.comment.commentRef);
                                 }
@@ -162,7 +162,7 @@ class _CommentCardState extends State<CommentCard> {
                 ],
               ),
           RepliesFeed(commentRef: widget.comment.commentRef, postRef: widget.comment.postRef, groupRef: widget.comment.groupRef),
-          Divider(thickness: 3*hp, color: ThemeColor.backgroundGrey, height: 20*hp),
+          Divider(thickness: 3*hp, color: colorScheme.background, height: 20*hp),
             ]
           )
         ),

@@ -1,25 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
-import 'package:provider/provider.dart';
-
-import '../constants.dart';
-import '../pixels.dart';
 
 class DeletableImage extends StatelessWidget {
   final Image image;
   final VoidFunction onDelete;
   final double width;
   final double height;
-  final double buttonSizeNotPixelAdjusted;
+  final double buttonSize;
 
-  const DeletableImage({Key? key, required this.image, required this.onDelete, this.width = 250, this.height = 250, this.buttonSizeNotPixelAdjusted = 40})
+  const DeletableImage({Key? key, required this.image, required this.onDelete, required this.width, required this.height, required this.buttonSize})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final hp = Provider.of<HeightPixel>(context).value;
-    final wp = Provider.of<HeightPixel>(context).value;
-
 
     return Container(
         width: width,
@@ -31,17 +24,16 @@ class DeletableImage extends StatelessWidget {
                 child: image,
                 fit: BoxFit.fill,
               );
-              return image;
             }),
             OverlayEntry(builder: (BuildContext context) {
               return Row(children: <Widget>[
                 Spacer(),
                 Column(children: <Widget>[
-                  SizedBox(height: buttonSizeNotPixelAdjusted/3),
-                  DeleteImageButton(onDelete: onDelete, buttonSize: buttonSizeNotPixelAdjusted),
+                  SizedBox(height: buttonSize/3),
+                  DeleteImageButton(onDelete: onDelete, buttonSize: buttonSize),
                   Spacer()
                 ]),
-                SizedBox(width: buttonSizeNotPixelAdjusted/3),
+                SizedBox(width: buttonSize/3),
               ]);
             }),
           ],
@@ -56,6 +48,7 @@ class DeleteImageButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return GestureDetector(
       child: Container(
         height: buttonSize,
@@ -67,7 +60,7 @@ class DeleteImageButton extends StatelessWidget {
               width: buttonSize,
               height: buttonSize,
               decoration: new BoxDecoration(
-                color: ThemeColor.black.withOpacity(0.35),
+                color: colorScheme.onSurface.withOpacity(0.35),
                 shape: BoxShape.circle,
               ),
             ),

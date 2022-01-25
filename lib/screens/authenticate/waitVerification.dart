@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/screens/authenticate/registerUser.dart';
 import 'dart:async';
 
-import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:provider/provider.dart';
@@ -41,8 +40,8 @@ class _WaitVerificationState extends State<WaitVerification> {
 
   @override
   Widget build(BuildContext context) {
-
     final hp = Provider.of<HeightPixel>(context).value;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       body: Center(
@@ -52,18 +51,15 @@ class _WaitVerificationState extends State<WaitVerification> {
               height: 625*hp,
               width: 314*hp,
               decoration: new BoxDecoration(
-                color: ThemeColor.secondaryBlue,
+                color: colorScheme.secondary,
                 shape: BoxShape.circle,
               ),
             ),
             SizedBox(height: 703*hp),
-            Text("Make your Account", style: ThemeText.inter(fontSize: 23*hp,
-              fontWeight: FontWeight.w700,
-              color: ThemeColor.black,
-            )),
+            Text("Make your Account", style: Theme.of(context).textTheme.headline5),
             SizedBox(height:15*hp),
             Text('Register with your school email.',
-                style: ThemeText.regularSmall(fontSize: 16*hp, color: ThemeColor.secondaryBlue)),
+                style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.secondary)),
             SizedBox(height: 39*hp),
           ],
         ),

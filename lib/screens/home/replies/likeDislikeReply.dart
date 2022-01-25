@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/reply.dart';
 import 'package:hs_connect/services/replies_database.dart';
-import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:provider/provider.dart';
 
@@ -40,6 +39,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
   @override
   Widget build(BuildContext context) {
     final hp = Provider.of<HeightPixel>(context).value;
+    final colorScheme = Theme.of(context).colorScheme;
 
     RepliesDatabaseService _replies = RepliesDatabaseService(
         currUserRef: widget.currUserRef,
@@ -57,7 +57,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
               splashColor: Colors.transparent,
               padding: EdgeInsets.all(3*hp),
               constraints: BoxConstraints(),
-              color: ThemeColor.secondaryBlue,
+              color: colorScheme.secondary,
               icon: Icon(Icons.keyboard_arrow_down_rounded),
               onPressed: () {
                 _replies.unDislikeReply();
@@ -75,7 +75,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
               splashColor: Colors.transparent,
               padding: EdgeInsets.all(3*hp),
               constraints: BoxConstraints(),
-              color: ThemeColor.darkGrey,
+              color: colorScheme.primaryVariant,
               icon: Icon(Icons.keyboard_arrow_down_rounded),
               onPressed: () {
                 _replies.dislikeReply();
@@ -93,7 +93,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
         }(),
         Text(
           (likeCount - dislikeCount).toString(),
-          style: ThemeText.inter(fontSize: 14*hp)
+          style: Theme.of(context).textTheme.subtitle2
         ),
         () {
           if (likeStatus == true) {
@@ -102,8 +102,8 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
               splashColor: Colors.transparent,
               padding: EdgeInsets.all(3*hp),
               constraints: BoxConstraints(),
-              color: ThemeColor.secondaryBlue,
-              icon: Icon(Icons.keyboard_arrow_up_rounded, color: ThemeColor.secondaryBlue),
+              color: colorScheme.secondary,
+              icon: Icon(Icons.keyboard_arrow_up_rounded, color: colorScheme.secondary),
               onPressed: () {
                 _replies.unLikeReply();
                 if (mounted) {
@@ -120,7 +120,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
               splashColor: Colors.transparent,
               padding: EdgeInsets.all(3*hp),
               constraints: BoxConstraints(),
-              color: ThemeColor.darkGrey,
+              color: colorScheme.primaryVariant,
               icon: Icon(Icons.keyboard_arrow_up_rounded),
               onPressed: () {
                 if (mounted) {

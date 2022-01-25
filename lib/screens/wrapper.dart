@@ -5,6 +5,7 @@ import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:provider/provider.dart';
 
 import 'authenticate/authenticate.dart';
+import 'home/home.dart';
 import 'home/home2.dart';
 
 

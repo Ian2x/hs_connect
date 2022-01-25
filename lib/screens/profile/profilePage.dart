@@ -14,7 +14,7 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     if (profileRef==currUserRef) {
       return Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Theme.of(context).colorScheme.background,
         appBar: profileAppBar(context),
         body: ProfileBody(profileUserRef: profileRef, currUserRef: currUserRef,),
         bottomNavigationBar: MyNavigationBar(
@@ -23,7 +23,7 @@ class ProfilePage extends StatelessWidget {
       );
     } else {
       return Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Theme.of(context).colorScheme.background,
         appBar: profileAppBar(context),
         body: ProfileBody(profileUserRef: profileRef, currUserRef: currUserRef,),
       );

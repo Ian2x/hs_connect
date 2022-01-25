@@ -41,19 +41,8 @@ class _NotificationCardState extends State<NotificationCard> {
     final postData = await widget.myNotification.parentPostRef.get();
     final post = postFromSnapshot(postData);
     final groupData = await post.groupRef.get();
-    final group = groupFromSnapshot(groupData);
+    final group = await groupFromSnapshot(groupData);
     if (group != null) {
-      if (group.accessRestriction.restrictionType == AccessRestrictionType.domain) {
-        final domainData = await FirebaseFirestore.instance.collection(C.domainsData).doc(group.name).get();
-        if (domainData[C.fullName] != null) {
-          if (mounted) {
-            setState(() {
-              postGroupName = domainData[C.fullName];
-            });
-            return;
-          }
-        }
-      }
       if (mounted) {
         setState(() {
           postGroupName = group.name;
@@ -79,6 +68,7 @@ class _NotificationCardState extends State<NotificationCard> {
     final userData = Provider.of<UserData?>(context);
     final wp = Provider.of<WidthPixel>(context).value;
     final hp = Provider.of<HeightPixel>(context).value;
+    final colorScheme = Theme.of(context).colorScheme;
 
     if (userData == null ||
         profileImage == null ||
@@ -89,7 +79,7 @@ class _NotificationCardState extends State<NotificationCard> {
           margin: EdgeInsets.only(top: 2*hp),
           padding: EdgeInsets.fromLTRB(14*wp, 14*hp, 14*wp, 16*hp),
           height: 70*hp,
-          color: ThemeColor.white);
+          color: colorScheme.surface);
     }
 
     return GestureDetector(
@@ -106,7 +96,7 @@ class _NotificationCardState extends State<NotificationCard> {
         child: Container(
             margin: EdgeInsets.only(top: 2*hp),
             padding: EdgeInsets.fromLTRB(14*wp, 14*hp, 14*wp, 16*hp),
-            color: ThemeColor.white,
+            color: colorScheme.surface,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
@@ -126,21 +116,19 @@ class _NotificationCardState extends State<NotificationCard> {
                         TextSpan(
                             text: widget.myNotification
                                 .printA(sourceUserDisplayedName!, sourceUserFullDomainName!, postGroupName!),
-                            style: ThemeText.inter(
-                                color: ThemeColor.black, fontSize: 14*hp, fontWeight: FontWeight.bold, height: 1.35)),
+                            style: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.bold)),
                         TextSpan(
                             text: widget.myNotification
                                 .printB(sourceUserDisplayedName!, sourceUserFullDomainName!, postGroupName!),
-                            style: ThemeText.inter(color: ThemeColor.black, fontSize: 14*hp, height: 1.35)),
+                            style: Theme.of(context).textTheme.subtitle2),
                         TextSpan(
                             text: widget.myNotification
                                 .printC(sourceUserDisplayedName!, sourceUserFullDomainName!, postGroupName!),
-                            style: ThemeText.inter(
-                                color: ThemeColor.black, fontSize: 14*hp, fontWeight: FontWeight.bold, height: 1.35)),
+                            style: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.bold)),
                         TextSpan(
                             text: widget.myNotification
                                 .printD(sourceUserDisplayedName!, sourceUserFullDomainName!, postGroupName!),
-                            style: ThemeText.inter(color: ThemeColor.black, fontSize: 14*hp, height: 1.35)),
+                            style: Theme.of(context).textTheme.subtitle2),
                       ],
                     ),
                   ),
@@ -151,7 +139,7 @@ class _NotificationCardState extends State<NotificationCard> {
                       children: [
                         Spacer(),
                         Text(convertTime(widget.myNotification.createdAt.toDate()),
-                            style: ThemeText.inter(color: ThemeColor.mediumGrey, fontSize: 14*hp))
+                            style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary))
                       ],
                     )
                   ]),
