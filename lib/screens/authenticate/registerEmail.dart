@@ -31,6 +31,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
     final hp = getHp(context);
     final wp = getWp(context);
 
+
     return loading
         ? Scaffold(backgroundColor: ThemeColor.backgroundGrey, body: Loading())
         : Scaffold(
