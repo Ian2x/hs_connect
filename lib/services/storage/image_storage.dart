@@ -100,6 +100,7 @@ class ImageStorage {
   }
 
   Future deleteImage({required String imageURL}) async {
+    defaultCacheManager.removeFile(imageURL); // remove from cache
     final index = imageURL.indexOf("images%2F") + "images%2F".length;
     final imagePath = imageURL.substring(index, index + 36);
     await imagesRef.child(imagePath).delete();
@@ -118,6 +119,7 @@ class ImageStorage {
     });
     // delete old profilePic
     if (oldImageURL != null) {
+      defaultCacheManager.removeFile(oldImageURL); // remove from cache
       final index = oldImageURL.indexOf("profilePics%2F") + "profilePics%2F".length;
       final oldImagePath = oldImageURL.substring(index, index + 36);
       await profilePicsRef.child(oldImagePath).delete();

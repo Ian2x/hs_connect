@@ -32,6 +32,8 @@ typedef VoidPollDataParamFunction = void Function (int, String);
 
 typedef VoidDocSnapParamFunction = void Function (DocumentSnapshot);
 
+typedef VoidBoolParamFunction = void Function(bool);
+
 
 InputDecoration commentReplyInputDecoration({required VoidFunction onPressed, required Function setPic, required bool isReply, required bool isFocused, required BuildContext context}) {
   final colorScheme = Theme.of(context).colorScheme;

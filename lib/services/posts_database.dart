@@ -137,6 +137,8 @@ class PostsDatabaseService {
   }
 
   Future likePost(DocumentReference postCreatorRef, int likeCount) async {
+    // update creator's likeCount
+    postCreatorRef.update({C.score: FieldValue.increment(1)});
     // remove dislike if disliked, like post, and +2 to score
     await postRef!.update({
       C.dislikes: FieldValue.arrayRemove([currUserRef]),
@@ -173,7 +175,9 @@ class PostsDatabaseService {
     }
   }
 
-  Future unLikePost() async {
+  Future unLikePost(DocumentReference postCreatorRef) async {
+    // update creator's likeCount
+    postCreatorRef.update({C.score: FieldValue.increment(-1)});
     // remove like and -2 to score
     await postRef!.update({
       C.likes: FieldValue.arrayRemove([currUserRef]),

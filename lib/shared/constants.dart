@@ -140,4 +140,5 @@ class C {
   static const postVotes = 'postVotes';
   static const extraData = 'extraData';
   static const ianTime = 'ianTime';
+  static const fromMe = 'fromMe';
 }

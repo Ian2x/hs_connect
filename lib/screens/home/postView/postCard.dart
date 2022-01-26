@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
+import 'package:hs_connect/models/postLikesManager.dart';
 import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/postView/likeDislikePost.dart';
@@ -28,31 +29,20 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> {
-  bool liked = false;
-  bool disliked = false;
   String? username;
   Group? group;
-
+  late bool likeStatus;
+  late bool dislikeStatus;
+  late int likeCount;
+  late int dislikeCount;
   UserData? fetchUserData;
 
   @override
   void initState() {
-    // initialize liked/disliked
-    if (widget.post.likes.contains(widget.currUserRef)) {
-      if (mounted) {
-        setState(() {
-          liked = true;
-        });
-      }
-    } else if (widget.post.dislikes.contains(widget.currUserRef)) {
-      if (mounted) {
-        setState(() {
-          disliked = true;
-        });
-      }
-    }
-
-    // find username for userId
+    likeStatus = widget.post.likes.contains(widget.currUserRef);
+    dislikeStatus = widget.post.dislikes.contains(widget.currUserRef);
+    likeCount = widget.post.likes.length;
+    dislikeCount = widget.post.dislikes.length;
     getUserData();
     getGroupData();
     super.initState();
@@ -79,6 +69,37 @@ class _PostCardState extends State<PostCard> {
       }
     }
   }
+  void onLike() {
+    if (mounted) { setState(() {
+      likeCount += 1;
+      if (dislikeStatus == true) dislikeCount -= 1;
+      likeStatus = true;
+      dislikeStatus = false;
+    });}
+  }
+
+  void onUnLike() {
+    if (mounted) { setState(() {
+      likeCount -= 1;
+      likeStatus = false;
+    });}
+  }
+
+  void onDislike () {
+    if (mounted) { setState(() {
+      dislikeCount += 1;
+      if (likeStatus == true) likeCount -= 1;
+      dislikeStatus = true;
+      likeStatus = false;
+    });}
+  }
+
+  void onUnDislike () {
+    if (mounted) { setState(() {
+      dislikeCount-=1;
+      dislikeStatus=false;
+    });}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,6 +119,17 @@ class _PostCardState extends State<PostCard> {
       );
     }
 
+    final postLikesManager = PostLikesManager(
+        onLike: onLike,
+        onUnLike: onUnLike,
+        onDislike: onDislike,
+        onUnDislike: onUnDislike,
+        likeStatus: likeStatus,
+        dislikeStatus: dislikeStatus,
+        likeCount: likeCount,
+        dislikeCount: dislikeCount
+    );
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -108,6 +140,7 @@ class _PostCardState extends State<PostCard> {
                     post: widget.post,
                     group: group!,
                     creatorData: fetchUserData!,
+                    postLikesManager: postLikesManager
                   ))),
         );
       },
@@ -178,7 +211,11 @@ class _PostCardState extends State<PostCard> {
                               style: Theme.of(context).textTheme.subtitle2,
                             ),
                             Spacer(),
-                            LikeDislikePost(currUserRef: widget.currUserRef, post: widget.post),
+                            LikeDislikePost(
+                                currUserRef: widget.currUserRef,
+                                post: widget.post,
+                                postLikesManager: postLikesManager
+                            ),
                           ],
                         )
                       ], //Column Children ARRAY

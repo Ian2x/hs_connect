@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/screens/home/home.dart';
 import 'package:hs_connect/screens/activity/activityPage.dart';
+import 'package:hs_connect/screens/home/home2.dart';
 import 'package:hs_connect/screens/profile/profilePage.dart';
 import 'package:provider/provider.dart';
 
@@ -50,7 +50,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
                 Navigator.pushReplacement(
                   context,
                   NoAnimationMaterialPageRoute(
-                      builder: (context) => pixelProvider(context, child: Home())),
+                      builder: (context) => pixelProvider(context, child: Home2(userData: userData))),
                 );
               },
             ),
@@ -83,7 +83,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
                   context,
                   NoAnimationMaterialPageRoute(
                       builder: (context) => pixelProvider(context,
-                          child: ProfilePage(profileRef: userData.userRef, currUserRef: userData.userRef))),
+                          child: ProfilePage(profileRef: userData.userRef, currUserData: userData))),
                 );
               },
             ),

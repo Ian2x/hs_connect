@@ -35,21 +35,17 @@ class _RepliesFeedState extends State<RepliesFeed> {
           return Container();
         } else {
           final replies = (snapshot.data as List<Reply?>).map((reply) => reply!).toList();
-
-
             return ListView.builder(
               physics: NeverScrollableScrollPhysics(),
               itemCount: replies.length,
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               itemBuilder: (BuildContext context, int index) {
-
                   bool isLast=false;
 
                   if (index==replies.length-1){
                     isLast=true;
                   }
-
                 // when scroll up/down, fires once
                   return Center(
                       child: ReplyCard(

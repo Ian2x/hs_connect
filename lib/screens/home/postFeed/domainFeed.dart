@@ -22,7 +22,6 @@ class DomainFeed extends StatefulWidget {
 }
 
 class _DomainFeedState extends State<DomainFeed> {
-  //final ScrollController scrollController= ScrollController();
 
   List<Post> posts = [];
   DocumentSnapshot? lastVisiblePost;
@@ -33,13 +32,6 @@ class _DomainFeedState extends State<DomainFeed> {
   void initState() {
     _posts = PostsDatabaseService(currUserRef: widget.currUser.userRef);
     getInitialPosts();
-    /*scrollController.addListener(() {
-      if (scrollController.position.atEdge) {
-        if (scrollController.position.pixels != 0) {
-          getNextPosts();
-        }
-      }
-    });*/
     widget.parentScrollController.addListener(() {
       if (widget.parentScrollController.position.atEdge) {
         if (widget.parentScrollController.position.pixels != 0) {

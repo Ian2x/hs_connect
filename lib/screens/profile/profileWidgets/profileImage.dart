@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
-import '../profileForm.dart';
+import 'profileForm.dart';
 
 class ProfileImage extends StatelessWidget {
   final String currUserName;
@@ -83,9 +83,5 @@ class ProfileImage extends StatelessWidget {
         child: child,
       ),
     );
-  }
-
-  Widget buildDefaultImage() {
-    return Icon(Icons.person);
   }
 }
