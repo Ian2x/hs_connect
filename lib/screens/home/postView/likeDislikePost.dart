@@ -4,6 +4,7 @@ import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:provider/provider.dart';
+import 'package:hs_connect/shared/widgets/arrows_icons.dart';
 
 const double iconSize = 32;
 
@@ -59,7 +60,7 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
               padding: iconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
-              icon: Icon(Icons.keyboard_arrow_down_rounded),
+              icon: Icon(Arrows.down_open_big, size:20),
               onPressed: () {
                 _posts.unDislikePost();
                 if (mounted) {
@@ -77,7 +78,7 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
               padding: iconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.primaryVariant,
-              icon: Icon(Icons.keyboard_arrow_down_rounded),
+              icon: Icon(Arrows.down_open_big, size:20),
               onPressed: () {
                 _posts.dislikePost();
                 if (mounted) {
@@ -106,7 +107,7 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
               padding: iconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
-              icon: Icon(Icons.keyboard_arrow_up_rounded, color: colorScheme.secondary),
+              icon: Icon(Arrows.down_open_big, color: colorScheme.secondary),
               onPressed: () {
                 _posts.unLikePost();
                 if (mounted) {

@@ -25,7 +25,7 @@ class Main2 extends StatelessWidget {
           home: Wrapper(),
           theme: ThemeData(
             brightness: Brightness.light,
-            backgroundColor: Color(0xFFf4f4f4), // background
+            backgroundColor: Color(0xFFf2f2f2), // background
             colorScheme: ColorScheme(
               brightness: Brightness.light,
               background: Color(0xFFf4f4f4), // background grey / light grey
