@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import '../profileForm.dart';
 
 class ProfileImage extends StatelessWidget {
   final String currUserName;
   final bool showEditIcon;
-  final Widget profileImage;
   final String? profileImageURL;
+  final ImageStorage _images = ImageStorage();
 
-  const ProfileImage({
+  ProfileImage({
     Key? key,
     required this.currUserName,
     required this.showEditIcon,
-    required this.profileImage,
     required this.profileImageURL,
   }) : super(key: key);
 
@@ -43,13 +43,9 @@ class ProfileImage extends StatelessWidget {
             shape: BoxShape.circle,
             color: colorScheme.background,
             border: Border.all(color: colorScheme.background, width: 1.5),
-            image: profileImage is Image
-                ? DecorationImage(
-                    fit: BoxFit.fill,
-                    image: (profileImage as Image).image,
-                  )
-                : null),
-        child: profileImage is Image ? null : profileImage);
+            image: DecorationImage(fit: BoxFit.fill, image: _images.profileImageProvider(profileImageURL))
+        )
+    );
   }
 
   Widget buildEditIcon(Color color, BuildContext context) => GestureDetector(

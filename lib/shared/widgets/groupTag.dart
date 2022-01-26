@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:hs_connect/services/storage/image_storage.dart';
 
 class GroupTag extends StatelessWidget {
-  final Image? groupImage;
+  final String? groupImageURL;
   final String groupName;
   final Color? groupColor;
   final double fontSize;
 
   GroupTag({Key? key,
-    required this.groupImage,
+    required this.groupImageURL,
     required this.groupName,
     required this.fontSize,
     required this.groupColor,
@@ -28,18 +29,18 @@ class GroupTag extends StatelessWidget {
       ),
       child: Row(
         children: [
-          groupImage!=null ? Container(
+          groupImageURL!=null ? Container(
             height: fontSize * 1.5,
             width: fontSize * 1.5,
             decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
-                  image: groupImage!.image,
+                  image: ImageStorage().groupImageProvider(groupImageURL),
                   fit: BoxFit.fill,
                 )
             ),
           ) : Container(),
-          groupImage!=null ? SizedBox(width: fontSize / 3) : Container(),
+          groupImageURL!=null ? SizedBox(width: fontSize / 3) : Container(),
           Text( groupName,
             style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: fontSize, color: groupColor != null ? groupColor : colorScheme.onSurface)
           )

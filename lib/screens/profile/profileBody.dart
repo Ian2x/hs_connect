@@ -10,7 +10,6 @@ import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/groupTag.dart';
-import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileImage.dart';
 
@@ -27,7 +26,6 @@ class ProfileBody extends StatefulWidget {
 class _ProfileBodyState extends State<ProfileBody> {
   String profileUsername = '';
 
-  Widget profileImage = Loading(size: 30.0);
   String? profileImageURL;
   int profileScore = 0;
   String? domainImage;
@@ -41,7 +39,6 @@ class _ProfileBodyState extends State<ProfileBody> {
       setState(() {
         profileUsername = fetchUserData.displayedName;
         profileScore = fetchUserData.score;
-        profileImage = fetchUserData.profileImage;
         profileImageURL = fetchUserData.profileImageURL;
         domainColor = fetchUserData.domainColor;
         domainName = fetchUserData.fullDomainName != null ? fetchUserData.fullDomainName! : fetchUserData.domain;
@@ -79,7 +76,6 @@ class _ProfileBodyState extends State<ProfileBody> {
       children: [
         SizedBox(height:98*hp),
         ProfileImage(
-          profileImage: profileImage,
           profileImageURL: profileImageURL,
           currUserName: profileUsername,
           showEditIcon: widget.profileUserRef == widget.currUserRef && widget.currUserRef == userData.userRef,
@@ -90,8 +86,7 @@ class _ProfileBodyState extends State<ProfileBody> {
         Row(
           children: [
             Spacer(),
-            GroupTag(groupImage: domainImage!= null ? Image.network(domainImage!) :
-                 null, groupName: domainName,
+            GroupTag(groupImageURL: domainImage, groupName: domainName,
                 fontSize: 18*hp, groupColor: domainColor != null ? domainColor!:
                     null,
             ),

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/comment.dart';
+import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/comments/commentCard.dart';
@@ -13,9 +14,9 @@ import 'package:provider/provider.dart';
 
 class CommentsFeed extends StatefulWidget {
   final Post post;
-  final DocumentReference groupRef;
+  final Group group;
 
-  CommentsFeed({Key? key, required this.post, required this.groupRef}) : super(key: key);
+  CommentsFeed({Key? key, required this.post, required this.group}) : super(key: key);
 
   @override
   _CommentsFeedState createState() => _CommentsFeedState();
@@ -69,6 +70,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
                   if (index == 0) {
                     return PostTitleCard(
                       post: widget.post,
+                      group: widget.group,
                       currUserRef: userData.userRef,
                     );
                   } else if (index == 1) {
@@ -107,9 +109,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
               switchFormBool: switchFormBool,
               commentReference: commentRef,
               isReply: isReply,
-              postRef: widget.post.postRef,
-              groupRef: widget.groupRef,
-              postCreatorRef: widget.post.creatorRef)
+              post: widget.post)
             )
               ,
           ),

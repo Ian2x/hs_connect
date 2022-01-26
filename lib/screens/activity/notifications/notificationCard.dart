@@ -1,15 +1,16 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:hs_connect/models/accessRestriction.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/myNotification.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/postView/postPage.dart';
-import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
+import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
 class NotificationCard extends StatefulWidget {
@@ -22,12 +23,13 @@ class NotificationCard extends StatefulWidget {
 }
 
 class _NotificationCardState extends State<NotificationCard> {
-  Image? profileImage;
+  String? profileImageURL;
   String? sourceUserDisplayedName;
   String? sourceUserFullDomainName;
   String? postGroupName;
+  bool loading = false;
 
-  UserData? userData;
+  final ImageStorage _images = ImageStorage();
 
   @override
   void initState() {
@@ -56,7 +58,7 @@ class _NotificationCardState extends State<NotificationCard> {
     final sourceUser = await userDataFromSnapshot(sourceUserData, widget.myNotification.sourceUserRef);
     if (mounted) {
       setState(() {
-        profileImage = sourceUser.profileImage;
+        profileImageURL = sourceUser.profileImage;
         sourceUserDisplayedName = sourceUser.displayedName;
         sourceUserFullDomainName = sourceUser.fullDomainName != null ? sourceUser.fullDomainName : sourceUser.domain;
       });
@@ -71,7 +73,6 @@ class _NotificationCardState extends State<NotificationCard> {
     final colorScheme = Theme.of(context).colorScheme;
 
     if (userData == null ||
-        profileImage == null ||
         sourceUserDisplayedName == null ||
         sourceUserFullDomainName == null ||
         postGroupName == null) {
@@ -79,19 +80,37 @@ class _NotificationCardState extends State<NotificationCard> {
           margin: EdgeInsets.only(top: 2*hp),
           padding: EdgeInsets.fromLTRB(14*wp, 14*hp, 14*wp, 16*hp),
           height: 70*hp,
-          color: colorScheme.surface);
+          color: colorScheme.surface,
+        child: loading ? Loading(backgroundColor: Colors.transparent) : null
+      );
     }
 
     return GestureDetector(
-        onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => pixelProvider(context, child: PostPage(
-                    userData: userData,
-                    postRef: widget.myNotification.parentPostRef,
-                    currUserRef: userData.userRef,
-                  ))));
+        onTap: () async {
+          if (mounted) {
+            setState(() {
+              loading = true;
+            });
+          }
+          final post = postFromSnapshot(await widget.myNotification.parentPostRef.get());
+          final group = await groupFromSnapshot(await post.groupRef.get());
+          if (group!=null) {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => pixelProvider(context, child: PostPage(
+                      creatorData: userData,
+                      post: post,
+                      group: group,
+                    ))));
+          } else {
+            log('Error fetching group');
+            if (mounted) {
+              setState(() {
+                loading = false;
+              });
+            }
+          }
         },
         child: Container(
             margin: EdgeInsets.only(top: 2*hp),
@@ -104,7 +123,7 @@ class _NotificationCardState extends State<NotificationCard> {
                     height: 40*hp,
                     width: 40*hp,
                     decoration: BoxDecoration(
-                        shape: BoxShape.circle, image: DecorationImage(fit: BoxFit.fill, image: profileImage!.image))),
+                        shape: BoxShape.circle, image: DecorationImage(fit: BoxFit.fill, image: _images.profileImageProvider(profileImageURL)))),
                 SizedBox(width: 14*wp),
                 SizedBox(
                   width: 260*wp,

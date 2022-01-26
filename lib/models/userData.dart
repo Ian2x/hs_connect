@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:hs_connect/models/myNotification.dart';
 import 'package:hs_connect/services/domains_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
@@ -43,7 +44,7 @@ class UserData {
   final int numReports;
   final bool private;
   // extracted data
-  final Image profileImage;
+  final String? profileImage;
   final String? fullDomainName;
   final Color? domainColor;
   final String? currCounty;
@@ -74,11 +75,14 @@ class UserData {
   });
 }
 
-Future<UserData> userDataFromSnapshot(DocumentSnapshot snapshot, DocumentReference userRef) async {
+Future<UserData> userDataFromSnapshot(DocumentSnapshot snapshot, DocumentReference userRef, {bool? noDomainData}) async {
 
   final domain = snapshot.get(C.domain);
   final _domainsData = DomainsDataDatabaseService();
-  DomainData? domainData = await _domainsData.getDomainData(domain: domain);
+  DomainData? domainData;
+  if (noDomainData==null || noDomainData==false) {
+    domainData = await _domainsData.getDomainData(domain: domain);
+  }
   if (domainData==null) domainData = DomainData(county: null, state: null, country: null, fullName: null, color: null, image: null);
   return UserData(
     userRef: userRef,
@@ -96,7 +100,7 @@ Future<UserData> userDataFromSnapshot(DocumentSnapshot snapshot, DocumentReferen
     numReports: snapshot.get(C.numReports),
     private: snapshot.get(C.private),
     // extracted data
-    profileImage: snapshot.get(C.profileImageURL) != null ? Image.network(snapshot.get(C.profileImageURL)) : Image(image: AssetImage('assets/blankProfile.png')),
+    profileImage: snapshot.get(C.profileImageURL),
     fullDomainName: domainData.fullName,
     domainColor: domainData.color != null ? HexColor(domainData.color!) : null,
     currCounty: snapshot.get(C.overrideCounty) != null ? snapshot.get(C.overrideCounty) : domainData.county,

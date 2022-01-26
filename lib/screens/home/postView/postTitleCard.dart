@@ -6,8 +6,6 @@ import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/postView/likeDislikePost.dart';
 import 'package:hs_connect/screens/profile/profilePage.dart';
-import 'package:hs_connect/services/groups_database.dart';
-import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
@@ -20,11 +18,13 @@ import 'package:provider/provider.dart';
 
 class PostTitleCard extends StatefulWidget {
   final Post post;
+  final Group group;
   final DocumentReference currUserRef;
 
   PostTitleCard({
     Key? key,
     required this.post,
+    required this.group,
     required this.currUserRef,
   }) : super(key: key);
 
@@ -38,20 +38,8 @@ class _PostTitleCardState extends State<PostTitleCard> {
 
   bool liked = false;
   bool disliked = false;
-  int commentCount=0;
-  String commentString="Comments";
 
-  String? imageString;
-  Image? groupImage;
-  String? groupColor;
-
-  String userDomain = '';
-  String creatorName = '';
-  String groupName = '';
-
-  String? postImageString;
-  Image? postImage;
-
+  String? creatorName;
 
   @override
   void initState() {
@@ -70,49 +58,17 @@ class _PostTitleCardState extends State<PostTitleCard> {
       }
     }
     // find username for userId
-    getUserData();
-    getGroupData();
+    getPostCreatorData();
     super.initState();
-    getCommentCount();
   }
 
-  void getCommentCount()async {
-    PostsDatabaseService _posts = PostsDatabaseService(currUserRef: widget.currUserRef);
-    final post = await  _posts.getPost(widget.post.postRef);
-    setState(() {
-      commentCount= post != null ? post.numComments + post.numReplies: 0;
-    });
-  }
-
-
-
-  void getUserData() async {
+  void getPostCreatorData() async {
     UserDataDatabaseService _userDataDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserRef);
     final UserData? fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.post.creatorRef);
     if (mounted) {
       setState(() {
-        creatorName = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
-        userDomain = fetchUserData != null ? fetchUserData.domain : '<Failed to retrieve user domain>';
+        creatorName = fetchUserData != null ? fetchUserData.displayedName : null;
       });
-    }
-  }
-
-  void getGroupData() async {
-    GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserRef);
-    final Group? fetchGroupData = await _groups.groupFromRef(widget.post.groupRef);
-    if (fetchGroupData != null) {
-      if (mounted) {
-        setState(() {
-          groupName = fetchGroupData.name;
-          groupColor= fetchGroupData.hexColor;
-        });
-      }
-    } else {
-      if (mounted) {
-        setState(() {
-          groupName = '<Failed to retrieve group name>';
-        });
-      }
     }
   }
 
@@ -131,24 +87,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
 
-    if (imageString != null && imageString!="") {
-      var tempImage = Image.network(imageString!);
-      tempImage.image
-          .resolve(ImageConfiguration())
-          .addListener(ImageStreamListener((ImageInfo image, bool synchronousCall) {
-        if (mounted) {
-          setState(() => groupImage = tempImage);
-        }
-      }));
-    } else {
-      groupImage=  Image(image: AssetImage('assets/masonic-G.png'), height: 20*hp, width: 20*hp);
-    }
-
-    if (commentCount <2) {
-      commentString="Comments";
-    } else {
-      commentString = commentCount.toString() + " Comments";
-    }
+    final localCreatorName = creatorName != null ? creatorName! : '';
 
     return GestureDetector(
       onTap: () {
@@ -162,7 +101,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
             children: [
               Row(  //intro row + three dots
                 children: [
-                  Text("from " + creatorName + " • " + convertTime(widget.post.createdAt.toDate()),
+                  Text("from " + localCreatorName + " • " + convertTime(widget.post.createdAt.toDate()),
                     style: Theme.of(context).textTheme.subtitle2
                   ),
                   Spacer(flex:1),
@@ -200,15 +139,15 @@ class _PostTitleCardState extends State<PostTitleCard> {
               SizedBox(height:10*hp),
               Row(
                 children: [
-                  GroupTag(groupImage: groupImage, groupName: groupName,
-                      groupColor: groupColor != null ? HexColor(groupColor!) : null, fontSize: 16*hp),
+                  GroupTag(groupImageURL: widget.group.image, groupName: widget.group.name,
+                      groupColor: widget.group.hexColor != null ? HexColor(widget.group.hexColor!) : null, fontSize: 16*hp),
                   Spacer(),
                   LikeDislikePost(currUserRef: widget.currUserRef, post: widget.post),
                 ],
               ),
               SizedBox(height:30*hp),
               Text(
-                  commentString,
+                  widget.post.numComments + widget.post.numReplies < 2 ? 'Comments' : (widget.post.numComments + widget.post.numReplies).toString() + ' Comments',
                   style: Theme.of(context).textTheme.headline6,
               ),
 

@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:hs_connect/models/accessRestriction.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/report.dart';
@@ -31,14 +30,8 @@ class PostCard extends StatefulWidget {
 class _PostCardState extends State<PostCard> {
   bool liked = false;
   bool disliked = false;
-  String userDomain = '';
-  String username = '';
-  String groupName = '';
-  String? groupImageString;
-  Image? groupImage;
-  String? groupColor;
-  bool inDomain = false;
-  Image? postImage;
+  String? username;
+  Group? group;
 
   UserData? fetchUserData;
 
@@ -62,30 +55,15 @@ class _PostCardState extends State<PostCard> {
     // find username for userId
     getUserData();
     getGroupData();
-    getPostMedia();
     super.initState();
-  }
-
-  void getPostMedia() async {
-    if (widget.post.mediaURL != null) {
-      var tempImage = Image.network(widget.post.mediaURL!);
-      tempImage.image
-          .resolve(ImageConfiguration())
-          .addListener(ImageStreamListener((ImageInfo image, bool synchronousCall) {
-        if (mounted) {
-          setState(() => postImage = tempImage);
-        }
-      }));
-    }
   }
 
   void getUserData() async {
     UserDataDatabaseService _userDataDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserRef);
-    fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.post.creatorRef);
+    fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.post.creatorRef, noDomainData: true);
     if (mounted) {
       setState(() {
-        username = fetchUserData != null ? fetchUserData!.displayedName : '<Failed to retrieve user name>';
-        userDomain = fetchUserData != null ? fetchUserData!.domain : '<Failed to retrieve user domain>';
+        username = fetchUserData != null ? fetchUserData!.displayedName : null;
       });
     }
   }
@@ -93,43 +71,10 @@ class _PostCardState extends State<PostCard> {
   void getGroupData() async {
     GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserRef);
     final Group? fetchGroup = await _groups.groupFromRef(widget.post.groupRef);
-    if (mounted) {
-      setState(() {
-        if (fetchGroup != null) {
-          groupImageString = fetchGroup.image;
-          groupName = fetchGroup.name;
-          groupColor = fetchGroup.hexColor;
-          if (fetchGroup.accessRestriction ==
-              AccessRestriction(restriction: groupName, restrictionType: AccessRestrictionType.domain)) {
-            inDomain = true;
-          }
-          if (groupImageString != null && groupImageString != "") {
-            var tempImage = Image.network(groupImageString!);
-            tempImage.image
-                .resolve(ImageConfiguration())
-                .addListener(ImageStreamListener((ImageInfo image, bool synchronousCall) {
-              if (mounted) {
-                setState(() => groupImage = tempImage);
-              }
-            }));
-          }
-        } else {
-          groupName = '<Failed to retrieve group name>';
-        }
-      });
-    }
-    // TODO: look at this
-    /*
-    if (widget.post.accessRestriction.restrictionType==AccessRestrictionType.domain) {
-      GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserRef);
-      final groupData = await _groups.getGroup(widget.post.groupRef);
-    }*/
-    if (widget.post.groupRef.id[0] == '@') {
-      UserDataDatabaseService _userDataDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserRef);
-      final tempUserData = await _userDataDatabaseService.getUserData(userRef: widget.post.creatorRef);
-      if (tempUserData != null && mounted && tempUserData.fullDomainName != null) {
+    if (fetchGroup != null) {
+      if (mounted) {
         setState(() {
-          groupName = tempUserData.fullDomainName!;
+          group = fetchGroup;
         });
       }
     }
@@ -141,6 +86,18 @@ class _PostCardState extends State<PostCard> {
     final wp = Provider.of<WidthPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
 
+    if (group==null || username==null) {
+      return Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10 * hp)),
+        margin: EdgeInsets.fromLTRB(5 * wp, 5 * hp, 5 * wp, 0),
+        elevation: 0,
+        child: Container(
+          padding: EdgeInsets.fromLTRB(2 * wp, 12 * hp, 10 * wp, 10 * hp),
+          height: 50 * hp
+        )
+      );
+    }
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -148,9 +105,9 @@ class _PostCardState extends State<PostCard> {
           MaterialPageRoute(
               builder: (context) => pixelProvider(context,
                   child: PostPage(
-                    postRef: widget.post.postRef,
-                    currUserRef: widget.currUserRef,
-                    userData: fetchUserData!,
+                    post: widget.post,
+                    group: group!,
+                    creatorData: fetchUserData!,
                   ))),
         );
       },
@@ -158,7 +115,6 @@ class _PostCardState extends State<PostCard> {
           //if border then ShapeDecoration
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10 * hp)),
           margin: EdgeInsets.fromLTRB(5 * wp, 5 * hp, 5 * wp, 0),
-          //color: HexColor("#292929"),
           elevation: 0,
           child: Container(
               padding: EdgeInsets.fromLTRB(2 * wp, 12 * hp, 10 * wp, 10 * hp),
@@ -175,9 +131,9 @@ class _PostCardState extends State<PostCard> {
                           children: [
                             //Text("in ", style: ThemeText.inter(fontSize: 14, color: groupColor!=null ? HexColor(groupColor!) : colorScheme.primary)),
                             GroupTag(
-                                groupColor: groupColor != null ? HexColor(groupColor!) : null,
-                                groupImage: groupImage,
-                                groupName: groupName,
+                                groupColor: group!.hexColor != null? HexColor(group!.hexColor!) : null,
+                                groupImageURL: group!.image,
+                                groupName: group!.name,
                                 fontSize: 14 * hp),
                             Text(
                               " • " + convertTime(widget.post.createdAt.toDate()),
@@ -207,7 +163,6 @@ class _PostCardState extends State<PostCard> {
                         ),
                         SizedBox(height: 10 * hp),
                         Text(
-                            //TODO: Need to figure out ways to ref
                             widget.post.title,
                             style: Theme.of(context).textTheme.headline6,
                             overflow: TextOverflow.ellipsis, // default is .clip

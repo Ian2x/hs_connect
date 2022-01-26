@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/message.dart';
 import 'package:bubble/bubble.dart';
+import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:provider/provider.dart';
 
@@ -8,7 +9,9 @@ class MessagesBubble extends StatelessWidget {
   final Message message;
   final bool isSentMessage;
 
-  const MessagesBubble({Key? key, required this.message, required this.isSentMessage}) : super(key: key);
+  MessagesBubble({Key? key, required this.message, required this.isSentMessage}) : super(key: key);
+
+  final ImageStorage _images = ImageStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +37,7 @@ class MessagesBubble extends StatelessWidget {
           margin: EdgeInsets.only(top: 5*hp, bottom: 5*hp),
           child: Align(
               alignment: isSentMessage ? Alignment.centerRight : Alignment.centerLeft,
-              child: Image.network(message.text, fit: BoxFit.scaleDown)));
+              child: _images.getCachedImage(message.text, fit: BoxFit.scaleDown)));
     }
     return Container(
       child: Bubble(
