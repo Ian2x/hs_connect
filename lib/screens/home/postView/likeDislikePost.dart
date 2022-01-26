@@ -7,7 +7,7 @@ import 'package:hs_connect/shared/pixels.dart';
 import 'package:provider/provider.dart';
 import 'package:hs_connect/shared/widgets/arrows_icons.dart';
 
-const double iconSize = 32;
+const double iconSize = 16;
 
 const EdgeInsets iconPadding = EdgeInsets.all(0);
 
@@ -40,7 +40,7 @@ class LikeDislikePost extends StatelessWidget {
               padding: iconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
-              icon: Icon(Icons.keyboard_arrow_down_rounded),
+              icon: Icon(Arrows.down_open_big, color: colorScheme.secondary),
               onPressed: () {
                 _posts.unDislikePost();
                 postLikesManager.onUnDislike();
@@ -53,7 +53,7 @@ class LikeDislikePost extends StatelessWidget {
               padding: iconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.primaryVariant,
-              icon: Icon(Icons.keyboard_arrow_down_rounded),
+              icon: Icon(Arrows.down_open_big),
               onPressed: () {
                 _posts.dislikePost();
                 postLikesManager.onDislike();
@@ -75,7 +75,7 @@ class LikeDislikePost extends StatelessWidget {
               padding: iconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
-              icon: Icon(Icons.keyboard_arrow_up_rounded, color: colorScheme.secondary),
+              icon: Icon(Arrows.up_open_big, color: colorScheme.secondary),
               onPressed: () {
                 _posts.unLikePost(post.creatorRef);
                 postLikesManager.onUnLike();
@@ -88,7 +88,7 @@ class LikeDislikePost extends StatelessWidget {
               padding: iconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.primaryVariant,
-              icon: Icon(Icons.keyboard_arrow_up_rounded),
+              icon: Icon(Arrows.up_open_big),
               onPressed: () {
                 _posts.likePost(post.creatorRef, postLikesManager.likeCount);
                 postLikesManager.onLike();
@@ -153,7 +153,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
               padding: iconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
-              icon: Icon(Arrows.down_open_big, size:20),
+              icon: Icon(Arrows.down_open_big, color: colorScheme.secondary),
               onPressed: () {
                 _posts.unDislikePost();
                 widget.postLikesManager.onUnDislike();
@@ -172,7 +172,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
               padding: iconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.primaryVariant,
-              icon: Icon(Arrows.down_open_big, size:20),
+              icon: Icon(Arrows.down_open_big),
               onPressed: () {
                 _posts.dislikePost();
                 widget.postLikesManager.onDislike();
@@ -202,7 +202,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
               padding: iconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
-              icon: Icon(Arrows.down_open_big, color: colorScheme.secondary),
+              icon: Icon(Arrows.up_open_big, color: colorScheme.secondary),
               onPressed: () {
                 _posts.unLikePost(widget.post.creatorRef);
                 widget.postLikesManager.onUnLike();
@@ -221,7 +221,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
               padding: iconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.primaryVariant,
-              icon: Icon(Icons.keyboard_arrow_up_rounded),
+              icon: Icon(Arrows.up_open_big),
               onPressed: () {
                 _posts.likePost(widget.post.creatorRef, likeCount);
                 widget.postLikesManager.onLike();
