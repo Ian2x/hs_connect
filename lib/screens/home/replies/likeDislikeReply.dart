@@ -105,7 +105,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
               color: colorScheme.secondary,
               icon: Icon(Icons.keyboard_arrow_up_rounded, color: colorScheme.secondary),
               onPressed: () {
-                _replies.unLikeReply();
+                _replies.unLikeReply(widget.reply.creatorRef!);
                 if (mounted) {
                   setState(() {
                     likeCount -= 1;

@@ -21,8 +21,13 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
-
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override

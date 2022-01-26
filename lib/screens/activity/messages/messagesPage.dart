@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/activity/Messages/messagesForm.dart';
-import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
@@ -11,14 +10,14 @@ import 'package:provider/provider.dart';
 import 'messagesFeed.dart';
 
 class MessagesPage extends StatelessWidget {
-  final DocumentReference otherUserRef;
+  final UserData otherUserData;
   final DocumentReference currUserRef;
   final VoidFunction onUpdateLastMessage;
   final VoidFunction onUpdateLastViewed;
 
   const MessagesPage(
       {Key? key,
-      required this.otherUserRef,
+      required this.otherUserData,
       required this.currUserRef,
       required this.onUpdateLastMessage,
       required this.onUpdateLastViewed})
@@ -37,7 +36,7 @@ class MessagesPage extends StatelessWidget {
         backgroundColor: colorScheme.surface,
         appBar: PreferredSize(
             preferredSize: Size.fromHeight(50*hp),
-            child: MessagesPageAppBar(currUserRef: currUserRef, otherUserRef: otherUserRef, hp: hp)),
+            child: MessagesPageAppBar(otherUserData: otherUserData,)),
         body: Container(
           padding: EdgeInsets.only(bottom: 10*hp),
           child: Column(children: <Widget>[
@@ -46,7 +45,7 @@ class MessagesPage extends StatelessWidget {
               padding: EdgeInsets.only(left: 10*wp, right: 10*wp),
               child: MessagesFeed(
                 currUserRef: currUserRef,
-                otherUserRef: otherUserRef,
+                otherUserRef: otherUserData.userRef,
                 onUpdateLastViewed: onUpdateLastViewed,
               ),
             )),
@@ -58,7 +57,7 @@ class MessagesPage extends StatelessWidget {
                 padding: EdgeInsets.only(left: 10*wp, right: 10*wp),
                 child: MessagesForm(
                     currUserRef: currUserRef,
-                    otherUserRef: otherUserRef,
+                    otherUserRef: otherUserData.userRef,
                     onUpdateLastMessage: onUpdateLastMessage,
                     onUpdateLastViewed: onUpdateLastViewed))
           ]),
@@ -68,35 +67,10 @@ class MessagesPage extends StatelessWidget {
   }
 }
 
-class MessagesPageAppBar extends StatefulWidget {
-  final DocumentReference currUserRef;
-  final DocumentReference otherUserRef;
-  final double hp;
+class MessagesPageAppBar extends StatelessWidget {
+  final UserData otherUserData;
 
-  const MessagesPageAppBar({Key? key, required this.currUserRef, required this.otherUserRef, required this.hp}) : super(key: key);
-
-  @override
-  _MessagesPageAppBarState createState() => _MessagesPageAppBarState();
-}
-
-class _MessagesPageAppBarState extends State<MessagesPageAppBar> {
-  String otherUserUsername = '';
-
-  @override
-  void initState() {
-    getUserData();
-    super.initState();
-  }
-
-  void getUserData() async {
-    UserDataDatabaseService _userDataDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserRef);
-    final UserData? fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.otherUserRef);
-    if (mounted) {
-      setState(() {
-        otherUserUsername = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
-      });
-    }
-  }
+  const MessagesPageAppBar({Key? key, required this.otherUserData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +79,7 @@ class _MessagesPageAppBarState extends State<MessagesPageAppBar> {
 
     return AppBar(
       backgroundColor: colorScheme.surface,
-      title: Text(otherUserUsername, style: Theme.of(context).textTheme.headline6),
+      title: Text(otherUserData.displayedName, style: Theme.of(context).textTheme.headline6),
       leading: myBackButtonIcon(context),
       elevation: 0,
       bottom: PreferredSize(

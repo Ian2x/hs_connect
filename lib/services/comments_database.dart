@@ -1,12 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/comment.dart';
 import 'package:hs_connect/models/myNotification.dart';
-import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/tools/helperFunctions.dart';
-import 'package:rxdart/rxdart.dart';
 
 void defaultFunc(dynamic parameter) {}
 
@@ -99,6 +96,8 @@ class CommentsDatabaseService {
   }
 
   Future<void> likeComment(DocumentReference commentCreatorRef, int likeCount) async {
+    // update creator's likeCount
+    commentCreatorRef.update({C.score: FieldValue.increment(1)});
     // remove dislike if disliked and like comment
     await commentRef!.update({
       C.dislikes: FieldValue.arrayRemove([currUserRef]),
@@ -127,7 +126,9 @@ class CommentsDatabaseService {
     }
   }
 
-  Future<void> unLikeComment() async {
+  Future<void> unLikeComment(DocumentReference commentCreatorRef) async {
+    // update creator's likeCount
+    commentCreatorRef.update({C.score: FieldValue.increment(-1)});
     // remove like
     await commentRef!.update({
       C.likes: FieldValue.arrayRemove([currUserRef])
