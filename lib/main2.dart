@@ -38,8 +38,8 @@ class Main2 extends StatelessWidget {
               primary: Color(0xFFa1a1a1), // medium grey
               onError: Color(0xFFc9c9c9), // light medium grey
               onPrimary: Color(0xFF000000),
-              onSecondary: Color(0xFF000000),
               onBackground: Color(0xFF000000),
+              onSecondary: Color(0xFF000000),
             ),
             primarySwatch: createMaterialColor(Color(0xFFA1A1A1)),// from primary color
             textTheme: TextTheme(

@@ -129,6 +129,8 @@ class RepliesDatabaseService {
   }
 
   Future<void> likeReply(DocumentReference replyCreatorRef, int likeCount) async {
+    // update creator's likeCount
+    replyCreatorRef.update({C.score: FieldValue.increment(1)});
     // remove dislike if disliked and like reply
     await replyRef!.update({
       C.dislikes: FieldValue.arrayRemove([currUserRef]),
@@ -157,7 +159,9 @@ class RepliesDatabaseService {
     }
   }
 
-  Future<void> unLikeReply() async {
+  Future<void> unLikeReply(DocumentReference replyCreatorRef) async {
+    // update creator's likeCount
+    replyCreatorRef.update({C.score: FieldValue.increment(-1)});
     // remove like
     await replyRef!.update({
       C.likes: FieldValue.arrayRemove([currUserRef])

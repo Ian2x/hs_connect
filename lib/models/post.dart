@@ -60,8 +60,8 @@ class Post {
   final int numComments;
   final int numReplies;
   final AccessRestriction accessRestriction;
-  final List<DocumentReference> likes;
-  final List<DocumentReference> dislikes;
+  List<DocumentReference> likes;
+  List<DocumentReference> dislikes;
   final int numReports;
   final DocumentReference? pollRef;
   final Tag? tag;

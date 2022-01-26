@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/screens/profile/profileWidgets/profileAppBar.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
@@ -67,7 +66,6 @@ class _ProfileFormState extends State<ProfileForm> {
       return Scaffold(body: Loading());
     } else {
       return Scaffold(
-        appBar: profileAppBar(context),
         body: Form(
           key: _formKey,
           child: ListView(

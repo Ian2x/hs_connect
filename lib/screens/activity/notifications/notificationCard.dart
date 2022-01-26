@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/myNotification.dart';
 import 'package:hs_connect/models/post.dart';
+import 'package:hs_connect/models/postLikesManager.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/postView/postPage.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
@@ -102,7 +103,16 @@ class _NotificationCardState extends State<NotificationCard> {
                       creatorData: userData,
                       post: post,
                       group: group,
-                    ))));
+                      postLikesManager: PostLikesManager(
+                        likeStatus: post.likes.contains(userData.userRef),
+                        dislikeStatus: post.dislikes.contains(userData.userRef),
+                        likeCount: post.likes.length,
+                        dislikeCount: post.dislikes.length,
+                        onLike: () {},
+                        onUnLike: () {},
+                        onDislike: () {},
+                        onUnDislike: () {},
+                    )))));
           } else {
             log('Error fetching group');
             if (mounted) {

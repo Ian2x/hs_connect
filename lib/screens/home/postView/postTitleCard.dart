@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
+import 'package:hs_connect/models/postLikesManager.dart';
 import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/postView/likeDislikePost.dart';
@@ -33,30 +34,11 @@ class PostTitleCard extends StatefulWidget {
 }
 
 class _PostTitleCardState extends State<PostTitleCard> {
-  
-  //final userData = Provider.of<UserData?>(context);
-
-  bool liked = false;
-  bool disliked = false;
 
   String? creatorName;
 
   @override
   void initState() {
-    // initialize liked/disliked
-    if (widget.post.likes.contains(widget.currUserRef)) {
-      if (mounted) {
-        setState(() {
-          liked = true;
-        });
-      }
-    } else if (widget.post.dislikes.contains(widget.currUserRef)) {
-      if (mounted) {
-        setState(() {
-          disliked = true;
-        });
-      }
-    }
     // find username for userId
     getPostCreatorData();
     super.initState();
@@ -72,26 +54,26 @@ class _PostTitleCardState extends State<PostTitleCard> {
     }
   }
 
-  void openCreatorProfile() async {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => pixelProvider(context, child: ProfilePage(
-            profileRef: widget.post.creatorRef, currUserRef: widget.currUserRef,
-          ))),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
+    final postLikesManager = Provider.of<PostLikesManager>(context);
+    UserData? userData = Provider.of<UserData?>(context);
 
     final localCreatorName = creatorName != null ? creatorName! : '';
 
     return GestureDetector(
       onTap: () {
-        openCreatorProfile();
+        if (userData!=null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => pixelProvider(context, child: ProfilePage(
+                  profileRef: widget.post.creatorRef, currUserData: userData,
+                ))),
+          );
+        }
       },
       child: Container(
           padding: EdgeInsets.fromLTRB(20*wp, 10*hp, 10*wp, 10*hp),
@@ -142,7 +124,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
                   GroupTag(groupImageURL: widget.group.image, groupName: widget.group.name,
                       groupColor: widget.group.hexColor != null ? HexColor(widget.group.hexColor!) : null, fontSize: 16*hp),
                   Spacer(),
-                  LikeDislikePost(currUserRef: widget.currUserRef, post: widget.post),
+                  LikeDislikePostStateful(currUserRef: widget.currUserRef, post: widget.post, postLikesManager: postLikesManager),
                 ],
               ),
               SizedBox(height:30*hp),

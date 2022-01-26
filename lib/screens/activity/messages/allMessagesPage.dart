@@ -29,17 +29,16 @@ class AllMessagesPage extends StatefulWidget {
 class _AllMessagesPageState extends State<AllMessagesPage> {
   List<UserMessage>? UMs;
   List<UserData>? otherUsers;
-  List<UMUD> cache = [];
+  List<UMUD> UMUDcache = [];
   final ImageStorage _images = ImageStorage();
 
   @override
   void initState() {
     List<UserMessage> tempUMs = widget.userData.userMessages;
-    // sorted by latest first
     if (mounted) {
       setState(() {
         for (UserMessage UM in tempUMs) {
-          cache.add(UMUD(UM: UM, UD: null));
+          UMUDcache.add(UMUD(UM: UM, UD: null));
         }
         UMs = tempUMs;
       });
@@ -63,7 +62,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
       setState(() {
         if (tempTempOtherUsers.length == UMs.length) {
           for (int i = 0; i < tempTempOtherUsers.length; i++) {
-            cache[i].UD = tempTempOtherUsers[i];
+            UMUDcache[i].UD = tempTempOtherUsers[i];
           }
           otherUsers = tempTempOtherUsers;
         }
@@ -73,12 +72,11 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
 
   @override
   Widget build(BuildContext context) {
-    final userData = Provider.of<UserData?>(context);
     final wp = Provider.of<WidthPixel>(context).value;
     final hp = Provider.of<HeightPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
 
-    if (userData == null || UMs == null || otherUsers == null) {
+    if (UMs == null || otherUsers == null) {
       return Loading();
     }
 
@@ -90,20 +88,20 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
     }
 
     // sorted by latest first
-    cache.sort((UMUD a, UMUD b) => b.UM!.lastMessage.compareTo(a.UM!.lastMessage));
+    UMUDcache.sort((UMUD a, UMUD b) => b.UM!.lastMessage.compareTo(a.UM!.lastMessage));
 
     return ListView.builder(
-        itemCount: cache.length,
+        itemCount: UMUDcache.length,
         physics: BouncingScrollPhysics(),
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
         itemBuilder: (BuildContext context, int index) {
-          final otherUser = cache[index].UD!;
+          final otherUser = UMUDcache[index].UD!;
           final updateLastMessage = () {
-            cache[index].UM!.lastMessage = Timestamp.now();
+            UMUDcache[index].UM!.lastMessage = Timestamp.now();
           };
           final updateLastViewed = () {
-            cache[index].UM!.lastViewed = Timestamp.now();
+            UMUDcache[index].UM!.lastViewed = Timestamp.now();
           };
           return GestureDetector(
             onTap: () {
@@ -111,8 +109,8 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => pixelProvider(context, child: MessagesPage(
-                        currUserRef: userData.userRef,
-                        otherUserRef: otherUser.userRef,
+                        currUserRef: widget.userData.userRef,
+                        otherUserData: otherUser,
                         onUpdateLastMessage: updateLastMessage,
                         onUpdateLastViewed: updateLastViewed,
                       ))));
@@ -121,7 +119,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
               alignment: AlignmentDirectional.centerStart,
               children: <Widget>[
                 Container(
-                    margin: EdgeInsets.only(top: index == 0 ? 4.5*hp : 2*hp, bottom: index == cache.length - 1 ? 2.5*hp : 0*hp),
+                    margin: EdgeInsets.only(top: index == 0 ? 4.5*hp : 2*hp, bottom: index == UMUDcache.length - 1 ? 2.5*hp : 0*hp),
                     padding: EdgeInsets.fromLTRB(20*wp, 14*hp, 14*wp, 16*hp),
                     color: colorScheme.surface,
                     child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
@@ -143,20 +141,20 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                           child: Column(children: <Widget>[
                         Row(children: <Widget>[
                           Spacer(),
-                          isToday(cache[index].UM!.lastMessage.toDate())
-                              ? Text(DateFormat.jm().format(cache[index].UM!.lastMessage.toDate()),
+                          isToday(UMUDcache[index].UM!.lastMessage.toDate())
+                              ? Text(DateFormat.jm().format(UMUDcache[index].UM!.lastMessage.toDate()),
                                   style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary))
-                              : Text(DateFormat.yMd().format(cache[index].UM!.lastMessage.toDate()),
+                              : Text(DateFormat.yMd().format(UMUDcache[index].UM!.lastMessage.toDate()),
                                   style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary))
                         ])
                       ]))
                     ])),
-                (cache[index].UM!.lastViewed == null ||
-                        cache[index].UM!.lastViewed!.compareTo(cache[index].UM!.lastMessage) < 0)
+                (UMUDcache[index].UM!.lastViewed == null ||
+                        UMUDcache[index].UM!.lastViewed!.compareTo(UMUDcache[index].UM!.lastMessage) < 0)
                     ? Container(
                         width: 10*wp,
                         height: 10*wp,
-                        margin: EdgeInsets.only(top: index == 0 ? 4.5*hp : 2*hp, left: 6*wp, bottom: index == cache.length - 1 ? 2.5*hp : 0*hp),
+                        margin: EdgeInsets.only(top: index == 0 ? 4.5*hp : 2*hp, left: 6*wp, bottom: index == UMUDcache.length - 1 ? 2.5*hp : 0*hp),
                         decoration: new BoxDecoration(
                           color: colorScheme.secondary,
                           shape: BoxShape.circle,

@@ -100,7 +100,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               color: colorScheme.secondary,
               icon: Icon(Icons.keyboard_arrow_up_rounded, color: colorScheme.secondary),
               onPressed: () {
-                _comments.unLikeComment();
+                _comments.unLikeComment(widget.comment.creatorRef!);
                 if (mounted) {
                   setState(() {
                     likeCount -= 1;

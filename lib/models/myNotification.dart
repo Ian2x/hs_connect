@@ -7,7 +7,8 @@ enum MyNotificationType {
   replyToComment,
   replyVotes,
   commentVotes,
-  postVotes
+  postVotes,
+  fromMe,
 }
 
 extension MyNotificationTypeExtension on MyNotificationType {
@@ -25,6 +26,8 @@ extension MyNotificationTypeExtension on MyNotificationType {
         return C.commentVotes;
       case MyNotificationType.postVotes:
         return C.postVotes;
+      case MyNotificationType.fromMe:
+        return C.fromMe;
     }
   }
 }
@@ -43,6 +46,8 @@ MyNotificationType myNotificationTypeFrom(String myNotificationType) {
       return MyNotificationType.commentVotes;
     case C.postVotes:
       return MyNotificationType.postVotes;
+    case C.fromMe:
+      return MyNotificationType.fromMe;
   }
   throw Exception("Given string does not match any NotificationType enum values");
 }
@@ -89,6 +94,8 @@ class MyNotification {
         return '';
       case MyNotificationType.postVotes:
         return '';
+      case MyNotificationType.fromMe:
+        return 'The creators';
     }
   }
   String printB(String sourceUserDisplayedName, String sourceUserFullDomainName, String postGroupName) {
@@ -105,6 +112,8 @@ class MyNotification {
         return 'Your comment in ';
       case MyNotificationType.postVotes:
         return 'Your post in ';
+      case MyNotificationType.fromMe:
+        return ' have a message: ';
     }
   }
   String printC(String sourceUserDisplayedName, String sourceUserFullDomainName, String postGroupName) {
@@ -121,6 +130,8 @@ class MyNotification {
         return postGroupName;
       case MyNotificationType.postVotes:
         return postGroupName;
+      case MyNotificationType.fromMe:
+        return '';
     }
   }
   String printD(String sourceUserDisplayedName, String sourceUserFullDomainName, String postGroupName) {
@@ -152,6 +163,8 @@ class MyNotification {
         if (extraData! == '50') return ' got 50 likes! Check it out.';
         if (extraData! == '100') return ' got 100 likes! Legendary.';
         return '<Error: Unexpected data in MyNotificationType.replyVotes.extraData>';
+      case MyNotificationType.fromMe:
+        return extraData!=null ? extraData! : 'ummm something went wrong :/';
     }
   }
 }

@@ -26,8 +26,6 @@ class MessagesForm extends StatefulWidget {
 class _MessagesFormState extends State<MessagesForm> {
   final imageBorderRadius = BorderRadius.circular(0);
   final _formKey = GlobalKey<FormState>();
-  double? wp;
-  double? hp;
 
   File? newFile;
 
@@ -63,7 +61,7 @@ class _MessagesFormState extends State<MessagesForm> {
               key: _formKey,
               child: Column(crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
-                newFile != null
+                newFile != null && !loading
                     ? Semantics(
                         label: 'new_message_image',
                         child: Container(
@@ -115,7 +113,8 @@ class _MessagesFormState extends State<MessagesForm> {
                             }
                             if (mounted) {
                               setState(() {
-                                loading = false; newFile = null;
+                                loading = false;
+                                newFile = null;
                               });
                             }
                             _formKey.currentState?.reset();
