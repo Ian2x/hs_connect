@@ -89,15 +89,15 @@ class UserDataDatabaseService {
   }
 
   // get other users from userRef
-  Future<UserData?> getUserData({required DocumentReference userRef}) async {
+  Future<UserData?> getUserData({required DocumentReference userRef, bool? noDomainData}) async {
     final snapshot = await userRef.get();
-    return await _userDataFromSnapshot(snapshot, overrideUserRef: userRef);
+    return await _userDataFromSnapshot(snapshot, overrideUserRef: userRef, noDomainData: noDomainData);
   }
 
   // home data from snapshot
-  Future<UserData?> _userDataFromSnapshot(DocumentSnapshot snapshot, {DocumentReference? overrideUserRef}) async {
+  Future<UserData?> _userDataFromSnapshot(DocumentSnapshot snapshot, {DocumentReference? overrideUserRef, bool? noDomainData}) async {
     if (snapshot.exists) {
-      return await userDataFromSnapshot(snapshot, overrideUserRef != null ? overrideUserRef : currUserRef);
+      return await userDataFromSnapshot(snapshot, overrideUserRef != null ? overrideUserRef : currUserRef, noDomainData: noDomainData);
     } else {
       return null;
     }

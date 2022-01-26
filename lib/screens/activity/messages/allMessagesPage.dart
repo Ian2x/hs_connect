@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
+import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
@@ -19,7 +20,6 @@ class UMUD {
 
 class AllMessagesPage extends StatefulWidget {
   final UserData userData;
-
   const AllMessagesPage({Key? key, required this.userData}) : super(key: key);
 
   @override
@@ -30,6 +30,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
   List<UserMessage>? UMs;
   List<UserData>? otherUsers;
   List<UMUD> cache = [];
+  final ImageStorage _images = ImageStorage();
 
   @override
   void initState() {
@@ -127,9 +128,9 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                       Container(
                           width: 40*hp,
                           height: 40*hp,
-                          decoration: new BoxDecoration(
+                          decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              image: new DecorationImage(fit: BoxFit.fill, image: otherUser.profileImage.image))),
+                              image: new DecorationImage(fit: BoxFit.fill, image: _images.profileImageProvider(otherUser.profileImage)))),
                       SizedBox(width: 14*wp),
                       Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                         Text(otherUser.displayedName,

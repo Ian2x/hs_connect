@@ -33,11 +33,9 @@ class _CommentCardState extends State<CommentCard> {
 
   bool liked = false;
   bool disliked = false;
-  String username = '';
-  String? imageString;
-  Image? userImage;
-  Color? groupColor;
-  String userGroupName='';
+  String? creatorName;
+  Color? creatorGroupColor;
+  String? creatorGroupName;
 
   @override
   void initState() {
@@ -65,16 +63,15 @@ class _CommentCardState extends State<CommentCard> {
       final UserData? fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.comment.creatorRef!);
       if (mounted) {
         setState(() {
-          username = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
-          userGroupName = fetchUserData != null ? fetchUserData.domain : '<Failed to retrieve user name>';
-          imageString = fetchUserData != null ? fetchUserData.profileImageURL : '<Failed to retrieve user name>';
-          groupColor = fetchUserData != null ? fetchUserData.domainColor : null;
+          creatorName = fetchUserData != null ? fetchUserData.displayedName : null;
+          creatorGroupName = fetchUserData != null ? fetchUserData.domain : null;
+          creatorGroupColor = fetchUserData != null ? fetchUserData.domainColor : null;
         });
       }
     } else {
       if (mounted) {
         setState(() {
-          username = '[Removed]';
+          creatorName = '[Removed]';
         });
       }
     }
@@ -89,7 +86,8 @@ class _CommentCardState extends State<CommentCard> {
     final hp = Provider.of<HeightPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
 
-
+    final localCreatorName = creatorName!=null ? creatorName! : '';
+    final localCreatorGroupName = creatorGroupName!=null ? creatorGroupName! : '';
     return Stack(
       children: [
         Positioned(
@@ -117,8 +115,8 @@ class _CommentCardState extends State<CommentCard> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(username + " • " + userGroupName,
-                  style: Theme.of(context).textTheme.subtitle2?.copyWith(color: groupColor !=null ? groupColor :colorScheme.primary)),
+              Text(localCreatorName + " • " + localCreatorGroupName,
+                  style: Theme.of(context).textTheme.subtitle2?.copyWith(color: creatorGroupColor !=null ? creatorGroupColor :colorScheme.primary)),
               SizedBox(height:10*hp),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -128,6 +126,7 @@ class _CommentCardState extends State<CommentCard> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+
                         SizedBox(
                           width: (MediaQuery.of(context).size.width)*.85,
                           child: RichText(

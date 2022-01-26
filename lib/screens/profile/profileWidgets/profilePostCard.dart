@@ -23,7 +23,6 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
 
   String groupName = '';
   String? groupImageString;
-  Image? groupImage;
   String? groupColor;
   Color? groupHex;
   Image? postImage;
@@ -45,16 +44,6 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
           groupImageString = fetchGroup.image;
           groupName = fetchGroup.name;
           groupColor = fetchGroup.hexColor;
-          if (groupImageString != null && groupImageString!="") {
-            var tempImage = Image.network(groupImageString!);
-            tempImage.image
-                .resolve(ImageConfiguration())
-                .addListener(ImageStreamListener((ImageInfo image, bool synchronousCall) {
-              if (mounted) {
-                setState(() => groupImage = tempImage);
-              }
-            }));
-          }
         } else {
           groupName = '<Failed to retrieve group name>';
         }
@@ -84,7 +73,7 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
         children: [
           Row(
             children: [
-              GroupTag(groupImage: groupImage, groupColor: groupColor !=null ? HexColor(groupColor!): null,
+              GroupTag(groupImageURL: groupImageString, groupColor: groupColor !=null ? HexColor(groupColor!): null,
                   groupName: groupName, fontSize: 14*hp),
               Spacer(),
               IconButton(

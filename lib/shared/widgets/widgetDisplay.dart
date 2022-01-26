@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:provider/provider.dart';
 
 import '../pixels.dart';
@@ -6,7 +7,7 @@ import '../pixels.dart';
 class ImageContainer extends StatelessWidget {
 
   final String imageString;
-
+  final ImageStorage _images = ImageStorage();
   ImageContainer ({Key? key, required this.imageString}) : super(key: key);
 
   @override
@@ -19,7 +20,7 @@ class ImageContainer extends StatelessWidget {
     child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.network(imageString),
+          _images.getCachedImage(imageString)
         ],
       )
 

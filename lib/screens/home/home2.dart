@@ -14,6 +14,9 @@ import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
 import 'package:provider/provider.dart';
+import 'dart:ui' as ui;
+
+
 
 class Home2 extends StatefulWidget {
 
@@ -27,6 +30,7 @@ class Home2 extends StatefulWidget {
 
 class _Home2State extends State<Home2> with SingleTickerProviderStateMixin {
 
+  var scrollController = ScrollController();
   bool isDomain=true;
 
   String? groupImageString;
@@ -39,6 +43,7 @@ class _Home2State extends State<Home2> with SingleTickerProviderStateMixin {
   void initState() {
     getGroupData();
     _tabController = TabController(length: 2, vsync: this);
+
 
     super.initState();
   }
@@ -104,98 +109,115 @@ class _Home2State extends State<Home2> with SingleTickerProviderStateMixin {
       bottomNavigationBar: MyNavigationBar(currentIndex: 0),
       floatingActionButton: floatingNewButton(context),
       body:
-      NestedScrollView(
-      floatHeaderSlivers:true,
-      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-        return <Widget> [
-        SliverAppBar(
-          bottom:
-            TabBar(
-            controller: _tabController,
-            // give the indicator a decoration (color and border radius)
-            indicator: BoxDecoration(
-              borderRadius: BorderRadius.circular(
-                25.0,
-              ),
-              color: isDomain != false ? pressedColor: defaultColor,
-            ),
-            labelColor: Colors.white,
-            unselectedLabelColor: Colors.black,
-            tabs: [
-              // first tab [you can add an icon using the icon property]
-              Tab(
-                child: TextButton(
-                  onPressed: (){
-                    setState(() {
-                      isDomain=true;
-                      _tabController.animateTo((_tabController.index + 1) % 2);
-                    });
-                  },
-                  child: Text ( widget.userData.fullDomainName!,
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(color: isDomain != false ? colorScheme.surface : defaultColor)
-                  )
-                )
-              ),
-              Tab(
-                  child: TextButton(
-                      onPressed: (){
-                        setState(() {
-                          isDomain=false;
-                          _tabController.animateTo((_tabController.index + 1) % 2);
-                        });
-                      },
-                      child: Text ("Trending",
-                        style: Theme.of(context).textTheme.subtitle1?.copyWith(color: isDomain != false ? defaultColor : colorScheme.surface))
-                  )
-              ),
-            ],
-          ),
-          floating: true,
-          pinned:true,
-          toolbarHeight: 150,
-          elevation: 0,
-          backgroundColor: colorScheme.surface,
-          title: Column(
-            children: [
-              SizedBox(height:50),
-              Row(
-                children: [
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                      image: DecorationImage(
-                        fit: BoxFit.fill,
-                        image: groupImageString != null ?
-                        NetworkImage(groupImageString!) : AssetImage("assets/me.png") as ImageProvider,
+      Stack(
+        children: [
+          NestedScrollView(
+          physics: ScrollPhysics(),
+          floatHeaderSlivers: true,
+          controller: scrollController,
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return <Widget> [
+            SliverAppBar(
+              floating: true,
+              pinned:true,
+              snap:false,
+              bottom:
+                PreferredSize(
+                  preferredSize: Size.fromHeight(100),
+                  /*child: BackdropFilter(
+                  filter: ui.ImageFilter.blur(
+                  sigmaX: 5.0,
+                  sigmaY: 5.0,
+                  ),*/
+                  child: TabBar(
+                      padding: EdgeInsets.fromLTRB(40.0, 0.0, 10.0, 0.0),
+                      controller: _tabController,
+                      // give the indicator a decoration (color and border radius)
+                      indicator: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          25.0,
+                        ),
+                        color: isDomain != false ? pressedColor: defaultColor,
                       ),
-                    ),
-                  ),
-                  SizedBox(width:20),
-                  Text( isDomain != false ? userData.fullDomainName! : "Trending", style: Theme.of(context).textTheme.headline5?.copyWith(fontWeight: FontWeight.bold)),
-                  Spacer(),
-                  Icon(Icons.settings, color: colorScheme.primary),
-                  SizedBox(width:20),
-                  ]   ,
-                ),
-              ],
-            ),
-          ),
-          ];
-        } ,
-        body:
-        TabBarView(
-          children: [
-            DomainFeed( currUser: userData),
-            TrendingFeed(currUser: userData),
-          ],
-          controller: _tabController,
-          physics: new NeverScrollableScrollPhysics(),
-        ),
-        //header SliverBuilder
+                      labelColor: Colors.white,
+                      unselectedLabelColor: Colors.black,
+                      tabs: [
+                        // first tab [you can add an icon using the icon property]
+                        Tab(
 
+                            child: TextButton(
+                                onPressed: (){
+                                  setState(() {
+                                    isDomain=true;
+                                    _tabController.animateTo((_tabController.index + 1) % 2);
+                                  });
+                                },
+                                child: Text ( widget.userData.fullDomainName!,
+                                    style: Theme.of(context).textTheme.subtitle1?.copyWith(color: isDomain != false ? colorScheme.surface : defaultColor)
+                                )
+                            )
+                        ),
+                        Tab(
+                            child: TextButton(
+                                onPressed: (){
+                                  setState(() {
+                                    isDomain=false;
+                                    _tabController.animateTo((_tabController.index + 1) % 2);
+                                  });
+                                },
+                                child: Text ("Trending",
+                                    style: Theme.of(context).textTheme.subtitle1?.copyWith(color: isDomain != false ? defaultColor : colorScheme.surface))
+                            )
+                        ),
+                      ],
+                    )
+                  //),
+                ),
+              toolbarHeight: 80,
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+              title: Column(
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white,
+                          image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: groupImageString != null ?
+                            NetworkImage(groupImageString!) : AssetImage("assets/me.png") as ImageProvider,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width:20),
+                      Text( isDomain != false ? userData.fullDomainName! : "Trending", style: Theme.of(context).textTheme.headline5?.copyWith(fontWeight: FontWeight.bold)),
+                      Spacer(),
+                      Icon(Icons.settings, color: colorScheme.primary),
+                      SizedBox(width:20),
+                      ]   ,
+                    ),
+                  ],
+                ),
+              ),
+              ];
+            } ,
+            body:
+            TabBarView(
+              children: [
+                DomainFeed( currUser: userData, parentScrollController: scrollController,),
+                TrendingFeed(currUser: userData),
+              ],
+              controller: _tabController,
+              physics: NeverScrollableScrollPhysics(),
+            ),
+            //header SliverBuilder
+
+          ),
+        ],
       ),//Nested ScrolLView
     );
   } //Build

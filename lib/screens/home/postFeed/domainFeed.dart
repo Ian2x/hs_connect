@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/post.dart';
@@ -10,15 +12,17 @@ import 'package:provider/provider.dart';
 
 class DomainFeed extends StatefulWidget {
   final UserData currUser;
+  final ScrollController parentScrollController;
 
-  const DomainFeed({Key? key, required this.currUser}) : super(key: key);
+  const DomainFeed({Key? key, required this.currUser,
+  required this.parentScrollController}) : super(key: key);
 
   @override
   _DomainFeedState createState() => _DomainFeedState();
 }
 
 class _DomainFeedState extends State<DomainFeed> {
-  final scrollController = ScrollController();
+  //final ScrollController scrollController= ScrollController();
 
   List<Post> posts = [];
   DocumentSnapshot? lastVisiblePost;
@@ -29,9 +33,16 @@ class _DomainFeedState extends State<DomainFeed> {
   void initState() {
     _posts = PostsDatabaseService(currUserRef: widget.currUser.userRef);
     getInitialPosts();
-    scrollController.addListener(() {
+    /*scrollController.addListener(() {
       if (scrollController.position.atEdge) {
         if (scrollController.position.pixels != 0) {
+          getNextPosts();
+        }
+      }
+    });*/
+    widget.parentScrollController.addListener(() {
+      if (widget.parentScrollController.position.atEdge) {
+        if (widget.parentScrollController.position.pixels != 0) {
           getNextPosts();
         }
       }
@@ -46,7 +57,7 @@ class _DomainFeedState extends State<DomainFeed> {
     if (userData == null) return Loading();
 
     return RefreshIndicator(
-        child: postsListView(posts: posts, controller: scrollController, currUserRef: userData.userRef),
+        child: postsListView(posts: posts, currUserRef: userData.userRef),
         onRefresh: getInitialPosts
     );
   }

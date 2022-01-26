@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/services/replies_database.dart';
@@ -11,21 +12,17 @@ import 'package:provider/provider.dart';
 
 class CommentReplyForm extends StatefulWidget {
   final DocumentReference currUserRef;
-  final DocumentReference postRef;
-  final DocumentReference groupRef;
+  final Post post;
   final bool isReply;
   final DocumentReference? commentReference;
-  final DocumentReference postCreatorRef;
   final VoidDocParamFunction switchFormBool;
 
   CommentReplyForm({Key? key,
     required this.currUserRef,
-    required this.postRef,
-    required this.groupRef,
+    required this.post,
     required this.isReply,
     required this.switchFormBool,
     required this.commentReference,
-    required this.postCreatorRef,
   }) : super(key: key);
 
   @override
@@ -73,7 +70,7 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
     super.initState();
     myFocusNode = FocusNode();
     if (mounted) setState(() {
-      _comments = CommentsDatabaseService(currUserRef: widget.currUserRef, postRef: widget.postRef);
+      _comments = CommentsDatabaseService(currUserRef: widget.currUserRef, postRef: widget.post.postRef);
     });
   }
 
@@ -103,24 +100,24 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
       if (widget.isReply){
         widget.switchFormBool(null);
         await RepliesDatabaseService(currUserRef: widget.currUserRef).newReply(
-          postRef: widget.postRef,
+          postRef: widget.post.postRef,
           commentRef: widget.commentReference!,
           text: _text,
           media: newFileURL,
           onValue: handleValue,
           onError: handleError,
-          groupRef: widget.groupRef,
-          postCreatorRef: widget.postCreatorRef,
+          groupRef: widget.post.groupRef,
+          postCreatorRef: widget.post.creatorRef,
         );
       } else {
         await _comments!.newComment(
-          postRef: widget.postRef,
+          postRef: widget.post.postRef,
           text: _text,
           media: newFileURL,
           onValue: handleValue,
           onError: handleError,
-          groupRef: widget.groupRef,
-          postCreatorRef: widget.postCreatorRef,
+          groupRef: widget.post.groupRef,
+          postCreatorRef: widget.post.creatorRef,
         );
       }
       _formKey.currentState?.reset();

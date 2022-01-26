@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hs_connect/shared/tools/hexColor.dart';
-
 // Calculate trending by activity within past 1.5 days
 const hoursTrending = 36;
 
@@ -29,97 +27,7 @@ const numWidthPixels = 392.7;
 const initialPostsFetchSize = 5;
 const nextPostsFetchSize = 2;
 
-/*class ThemeText {
-
-  static TextStyle postViewText({Color? color, double fontSize=18, double height=1.0}) {
-    return TextStyle(
-      fontSize: fontSize,
-      fontFamily: "Roboto",
-      height: height,
-      fontWeight: FontWeight.normal,
-      color: color != null ? color: Colors.black,
-    );
-  }
-
-  static TextStyle postViewTitle({Color? color, double fontSize=18, double height=1.0}) {
-    return TextStyle(
-      fontSize: fontSize,
-      fontFamily: "Roboto",
-      height: height,
-      fontWeight: FontWeight.w500,
-      color: color != null ? color: Colors.black,
-    );
-  }
-
-  static TextStyle titleRegular({Color? color, double fontSize=18}) {
-    return TextStyle(
-      fontSize: fontSize,
-      fontFamily: "Inter",
-      color: color != null ? color: Colors.black,
-    );
-  }
-
-  static TextStyle groupBold ({Color? color, double fontSize=13.0}){
-    return TextStyle(
-      fontSize: fontSize,
-      fontFamily: "Inter",
-      fontWeight: FontWeight.w500,
-      color: color != null ? color : Colors.black,
-      );
-  }
-
-  static TextStyle regularSmall ({Color? color, double fontSize=13.0, double height=1.0}){
-    return TextStyle(
-      fontSize: fontSize,
-      height: height,
-      fontWeight: FontWeight.normal,
-      fontFamily: "Inter",
-      color: color != null ? color: Colors.black,
-    );
-  }
-
-  static TextStyle inter({Color? color, double? fontSize, double? height, FontWeight? fontWeight}) {
-    return TextStyle(
-      color: color,
-      fontSize: fontSize,
-      height: height,
-      fontWeight: fontWeight,
-      fontFamily: "Inter"
-    );
-  }
-
-  static TextStyle roboto({Color? color, double? fontSize, double? height, FontWeight? fontWeight}) {
-    return TextStyle(
-      color: color,
-      fontSize: fontSize,
-      height: height,
-      fontWeight: fontWeight,
-      fontFamily: "Roboto"
-    );
-  }
-
-  static double regular = 16.0;
-}
-
-class ThemeColor extends Color {
-  ThemeColor(int value) : super(value);
-
-  static Color backgroundGrey = HexColor ("F4F4F4");
-
-  static Color hintTextGrey = HexColor("C8CED2");
-
-  static Color secondaryBlue = HexColor("13A1F0");
-
-
-  static Color lightGrey = HexColor("F4F4F4");
-  static Color lightMediumGrey = HexColor("C9C9C9");
-  static Color mediumGrey = HexColor("b2b2b2");
-  static Color darkGrey = HexColor("373a3d");
-
-  static Color white = HexColor("FFFFFF");
-  static Color black = HexColor("000000");
-  static Color profilePicEditColor = HexColor('787878');
-}*/
+const defaultProfilePic = AssetImage('assets/me.png');
 
 class C {
   static const displayedName = 'displayedName';

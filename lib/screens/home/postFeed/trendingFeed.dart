@@ -49,7 +49,7 @@ class _TrendingFeedState extends State<TrendingFeed> {
     if (userData == null) return Loading();
 
     return RefreshIndicator(
-        child: postsListView(posts: posts, controller: scrollController, currUserRef: userData.userRef),
+        child: postsListView(posts: posts, currUserRef: userData.userRef),
         onRefresh: getInitialPosts
     );
   }
