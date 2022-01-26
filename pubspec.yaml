@@ -55,6 +55,9 @@ dev_dependencies:
 # The following section is specific to Flutter.
 flutter:
   fonts:
+    - family: Arrows
+      fonts:
+        - asset: assets/icons/Arrows.ttf
     - family: Roboto
       fonts:
         - asset: assets/fonts/Roboto-Regular.ttf
