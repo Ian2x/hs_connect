@@ -9,7 +9,6 @@ import 'package:hs_connect/screens/home/postView/likeDislikePost.dart';
 import 'package:hs_connect/screens/home/postView/postPage.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
-import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
@@ -18,7 +17,6 @@ import 'package:hs_connect/shared/widgets/groupTag.dart';
 import 'package:hs_connect/shared/reports/reportSheet.dart';
 import 'package:hs_connect/shared/widgets/widgetDisplay.dart';
 import 'package:provider/provider.dart';
-
 
 class PostCard extends StatefulWidget {
   final Post post;
@@ -31,7 +29,6 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> {
-
   bool liked = false;
   bool disliked = false;
   String userDomain = '';
@@ -44,7 +41,6 @@ class _PostCardState extends State<PostCard> {
   Image? postImage;
 
   UserData? fetchUserData;
-
 
   @override
   void initState() {
@@ -71,7 +67,7 @@ class _PostCardState extends State<PostCard> {
   }
 
   void getPostMedia() async {
-    if (widget.post.mediaURL!= null) {
+    if (widget.post.mediaURL != null) {
       var tempImage = Image.network(widget.post.mediaURL!);
       tempImage.image
           .resolve(ImageConfiguration())
@@ -88,26 +84,26 @@ class _PostCardState extends State<PostCard> {
     fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.post.creatorRef);
     if (mounted) {
       setState(() {
-        username = fetchUserData != null ? fetchUserData!.displayedName: '<Failed to retrieve user name>';
+        username = fetchUserData != null ? fetchUserData!.displayedName : '<Failed to retrieve user name>';
         userDomain = fetchUserData != null ? fetchUserData!.domain : '<Failed to retrieve user domain>';
       });
     }
   }
 
   void getGroupData() async {
-
     GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserRef);
     final Group? fetchGroup = await _groups.groupFromRef(widget.post.groupRef);
     if (mounted) {
       setState(() {
-        if (fetchGroup!=null) {
+        if (fetchGroup != null) {
           groupImageString = fetchGroup.image;
           groupName = fetchGroup.name;
           groupColor = fetchGroup.hexColor;
-          if (fetchGroup.accessRestriction== AccessRestriction(restriction: groupName, restrictionType: AccessRestrictionType.domain)) {
-            inDomain=true;
+          if (fetchGroup.accessRestriction ==
+              AccessRestriction(restriction: groupName, restrictionType: AccessRestrictionType.domain)) {
+            inDomain = true;
           }
-          if (groupImageString != null && groupImageString!="") {
+          if (groupImageString != null && groupImageString != "") {
             var tempImage = Image.network(groupImageString!);
             tempImage.image
                 .resolve(ImageConfiguration())
@@ -122,10 +118,16 @@ class _PostCardState extends State<PostCard> {
         }
       });
     }
-    if (widget.post.groupRef.id[0]=='@') {
+    // TODO: look at this
+    /*
+    if (widget.post.accessRestriction.restrictionType==AccessRestrictionType.domain) {
+      GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserRef);
+      final groupData = await _groups.getGroup(widget.post.groupRef);
+    }*/
+    if (widget.post.groupRef.id[0] == '@') {
       UserDataDatabaseService _userDataDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserRef);
-      final tempUserData = await _userDataDatabaseService.getUserData(userRef: widget.currUserRef);
-      if (tempUserData!=null && mounted && tempUserData.fullDomainName!=null) {
+      final tempUserData = await _userDataDatabaseService.getUserData(userRef: widget.post.creatorRef);
+      if (tempUserData != null && mounted && tempUserData.fullDomainName != null) {
         setState(() {
           groupName = tempUserData.fullDomainName!;
         });
@@ -137,28 +139,33 @@ class _PostCardState extends State<PostCard> {
   Widget build(BuildContext context) {
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => pixelProvider(context, child: PostPage(postRef: widget.post.postRef, currUserRef: widget.currUserRef,
-            userData: fetchUserData!,
-          ))),
+          MaterialPageRoute(
+              builder: (context) => pixelProvider(context,
+                  child: PostPage(
+                    postRef: widget.post.postRef,
+                    currUserRef: widget.currUserRef,
+                    userData: fetchUserData!,
+                  ))),
         );
       },
       child: Card(
           //if border then ShapeDecoration
-          shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(10*hp)),
-          margin: EdgeInsets.fromLTRB(5*wp, 5*hp, 5*wp, 0),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10 * hp)),
+          margin: EdgeInsets.fromLTRB(5 * wp, 5 * hp, 5 * wp, 0),
           //color: HexColor("#292929"),
           elevation: 0,
           child: Container(
-              padding: EdgeInsets.fromLTRB(2*wp,12*hp,10*wp,10*hp),
+              padding: EdgeInsets.fromLTRB(2 * wp, 12 * hp, 10 * wp, 10 * hp),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(width: 10*wp),
+                  SizedBox(width: 10 * wp),
                   Flexible(
                     //Otherwise horizontal renderflew of row
                     child: Column(
@@ -166,56 +173,57 @@ class _PostCardState extends State<PostCard> {
                       children: [
                         Row(
                           children: [
-                            //Text("in ", style: ThemeText.inter(fontSize: 14, color: groupColor!=null ? HexColor(groupColor!) : ThemeColor.mediumGrey)),
-                            GroupTag( groupColor: groupColor != null ? HexColor(groupColor!) : null, groupImage:groupImage, groupName: groupName, fontSize:14*hp),
+                            //Text("in ", style: ThemeText.inter(fontSize: 14, color: groupColor!=null ? HexColor(groupColor!) : colorScheme.primary)),
+                            GroupTag(
+                                groupColor: groupColor != null ? HexColor(groupColor!) : null,
+                                groupImage: groupImage,
+                                groupName: groupName,
+                                fontSize: 14 * hp),
                             Text(
-                            " • " + convertTime(widget.post.createdAt.toDate()), style: ThemeText.inter(color: ThemeColor.mediumGrey, fontSize:14*hp),
+                              " • " + convertTime(widget.post.createdAt.toDate()),
+                              style: Theme.of(context).textTheme.subtitle2,
                             ),
                             Spacer(),
                             IconButton(
                               constraints: BoxConstraints(),
-                              splashRadius:.1,
-                              icon:Icon(Icons.more_horiz, size: 20*hp, color: ThemeColor.mediumGrey),
-                              onPressed: (){
-                                 showModalBottomSheet(
-                                  context: context,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(20*hp),
-                                  )),
-                                  builder: (context) => new ReportSheet(
-                                      reportType: ReportType.post,
-                                      entityRef: widget.post.postRef,
-                                      ));
-                           },
-                          ),
-                            SizedBox(width: 6*wp),
+                              splashRadius: .1,
+                              icon: Icon(Icons.more_horiz, size: 20 * hp, color: colorScheme.primary),
+                              onPressed: () {
+                                showModalBottomSheet(
+                                    context: context,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(20 * hp),
+                                    )),
+                                    builder: (context) => pixelProvider(context,
+                                        child: ReportSheet(
+                                          reportType: ReportType.post,
+                                          entityRef: widget.post.postRef,
+                                        )));
+                              },
+                            ),
+                            SizedBox(width: 6 * wp),
                           ],
                         ),
-                        SizedBox(height: 10*hp),
+                        SizedBox(height: 10 * hp),
                         Text(
-                          //TODO: Need to figure out ways to ref
-                          widget.post.title,
-                          style: ThemeText.roboto(fontSize: 18*hp, color: ThemeColor.black), overflow: TextOverflow.ellipsis, // default is .clip
-                          maxLines: 3
-                        ),
-                        widget.post.mediaURL != null ?
-                            ImageContainer(imageString: widget.post.mediaURL!)
-                            :
-                            Container(),
-                        SizedBox(height: 8*hp),
-                        Row( //Icon Row
+                            //TODO: Need to figure out ways to ref
+                            widget.post.title,
+                            style: Theme.of(context).textTheme.headline6,
+                            overflow: TextOverflow.ellipsis, // default is .clip
+                            maxLines: 3),
+                        widget.post.mediaURL != null ? ImageContainer(imageString: widget.post.mediaURL!) : Container(),
+                        SizedBox(height: 8 * hp),
+                        Row(
+                          //Icon Row
                           children: [
-                            SizedBox(width:1*wp),
+                            SizedBox(width: 1 * wp),
                             Text(
-                              (widget.post.numComments + widget.post.numReplies).toString()
-                              + " Comments",
-                              style: ThemeText.regularSmall(fontSize: 14*hp, color: ThemeColor.mediumGrey),
+                              (widget.post.numComments + widget.post.numReplies).toString() + " Comments",
+                              style: Theme.of(context).textTheme.subtitle2,
                             ),
                             Spacer(),
-                            LikeDislikePost(
-                                currUserRef: widget.currUserRef,
-                                post: widget.post),
+                            LikeDislikePost(currUserRef: widget.currUserRef, post: widget.post),
                           ],
                         )
                       ], //Column Children ARRAY

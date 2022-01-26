@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/services/auth.dart';
-import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
@@ -30,14 +29,14 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
-
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return loading
-        ? Scaffold(backgroundColor: ThemeColor.backgroundGrey, body: Loading())
+        ? Scaffold(backgroundColor: colorScheme.background, body: Loading())
         : Scaffold(
-            backgroundColor: ThemeColor.white,
+            backgroundColor: colorScheme.surface,
             body: Stack(
               children: [
                 Positioned(
@@ -80,33 +79,22 @@ class _SignInState extends State<SignIn> {
                               height: 62*hp,
                               width: 62*hp,
                               decoration: new BoxDecoration(
-                                color: ThemeColor.secondaryBlue,
+                                color: colorScheme.secondary,
                                 shape: BoxShape.circle,
                               ),
                             ),
                             SizedBox(height: 26*hp),
-                            Text("Sign in", style: ThemeText.inter(fontSize: 23*hp,
-                              fontWeight: FontWeight.w700,
-                              color: ThemeColor.black,
-                            )),
+                            Text("Sign in", style: Theme.of(context).textTheme.headline5),
                             SizedBox(height: 26*hp),
                           ],
                         )
                       ),
                         TextFormField(
                             autocorrect:false,
-                            style: ThemeText.inter(
-                            color: ThemeColor.mediumGrey,
-                            fontSize: 18*hp,
-                            //fontWeight: ,
-                          ),
+                            style: Theme.of(context).textTheme.headline6,
                           maxLines: null,
                           decoration: InputDecoration(
-                              hintStyle: ThemeText.inter(
-                                color: ThemeColor.mediumGrey,
-                                fontSize: 18*hp,
-                                //fontWeight: ,
-                              ),
+                              hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.onError),
                               border: InputBorder.none,
                               hintText: "Username"),
                             validator: (val) {
@@ -122,20 +110,12 @@ class _SignInState extends State<SignIn> {
                               }
                           }
                       ),
-                      Divider(height:20*hp, thickness: 2*hp, color: ThemeColor.lightMediumGrey),
+                      Divider(height:20*hp, thickness: 2*hp, color: colorScheme.onError),
                         TextFormField(
                             autocorrect:false,
-                            style: ThemeText.inter(
-                              color: ThemeColor.mediumGrey,
-                              fontSize: 18*hp,
-                              //fontWeight: ,
-                            ),
+                            style: Theme.of(context).textTheme.headline6,
                             decoration: InputDecoration(
-                                hintStyle: ThemeText.inter(
-                                  color: ThemeColor.mediumGrey,
-                                  fontSize: 18*hp,
-                                  //fontWeight: ,
-                                ),
+                                hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.onError),
                                 border: InputBorder.none,
                                 hintText: "Password"),
                             obscureText: true,
@@ -151,11 +131,11 @@ class _SignInState extends State<SignIn> {
                                 setState(() => password = val);
                               }
                             }),
-                      Divider(height:20*hp, thickness: 2*hp, color: ThemeColor.lightMediumGrey),
+                      Divider(height:20*hp, thickness: 2*hp, color: colorScheme.onError),
                       SizedBox(height: 20*hp),
                       TextButton(
                           child: Text('Register here',
-                              style: ThemeText.regularSmall(fontSize: 16*hp, color: ThemeColor.secondaryBlue)),
+                              style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.secondary)),
                           onPressed: () {
                           widget.toggleView();
                       }),

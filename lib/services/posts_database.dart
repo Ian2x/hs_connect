@@ -28,14 +28,15 @@ class PostsDatabaseService {
   final CollectionReference postsCollection = FirebaseFirestore.instance.collection(C.posts);
   late UserDataDatabaseService _userData = new UserDataDatabaseService(currUserRef: currUserRef);
 
-  Future<dynamic> newPost({required String title,
-    required String? text,
-    required String? media,
-    required DocumentReference groupRef,
-    required String? tagString,
-    required DocumentReference? pollRef,
-    Function(void) onValue = defaultFunc,
-    Function onError = defaultFunc}) async {
+  Future<dynamic> newPost(
+      {required String title,
+      required String? text,
+      required String? media,
+      required DocumentReference groupRef,
+      required String? tagString,
+      required DocumentReference? pollRef,
+      Function(void) onValue = defaultFunc,
+      Function onError = defaultFunc}) async {
     DocumentReference newPostRef = postsCollection.doc();
     // update group's numPosts
     groupRef.update({C.numPosts: FieldValue.increment(1)});
@@ -45,24 +46,24 @@ class PostsDatabaseService {
 
     final result = await newPostRef
         .set({
-      C.groupRef: groupRef,
-      C.creatorRef: currUserRef,
-      C.title: title,
-      C.titleLC: title.toLowerCase(),
-      C.text: text,
-      C.mediaURL: media,
-      C.createdAt: DateTime.now(),
-      C.numComments: 0,
-      C.numReplies: 0,
-      C.accessRestriction: accessRestriction,
-      C.likes: List<String>.empty(),
-      C.dislikes: List<String>.empty(),
-      C.numReports: 0,
-      C.pollRef: pollRef,
-      C.tag: tagString == '' ? null : tagString,
-      C.score: 0,
-      C.ianTime: DateTime.now().ianTime()
-    })
+          C.groupRef: groupRef,
+          C.creatorRef: currUserRef,
+          C.title: title,
+          C.titleLC: title.toLowerCase(),
+          C.text: text,
+          C.mediaURL: media,
+          C.createdAt: DateTime.now(),
+          C.numComments: 0,
+          C.numReplies: 0,
+          C.accessRestriction: accessRestriction,
+          C.likes: List<String>.empty(),
+          C.dislikes: List<String>.empty(),
+          C.numReports: 0,
+          C.pollRef: pollRef,
+          C.tag: tagString == '' ? null : tagString,
+          C.score: 0,
+          C.ianTime: DateTime.now().ianTime()
+        })
         .then(onValue)
         .catchError(onError);
     GroupsDatabaseService _tempGroups = GroupsDatabaseService(currUserRef: currUserRef);
@@ -73,18 +74,24 @@ class PostsDatabaseService {
   Future _delReplyHelper(Reply reply, DocumentReference postRef) async {
     RepliesDatabaseService _tempReplies = RepliesDatabaseService(currUserRef: reply.creatorRef!);
     _tempReplies.deleteReply(
-        replyRef: reply.replyRef, commentRef: reply.commentRef, postRef: postRef, weakDelete: false, media: reply.media);
+        replyRef: reply.replyRef,
+        commentRef: reply.commentRef,
+        postRef: postRef,
+        weakDelete: false,
+        media: reply.media);
   }
 
   Future _delCommentHelper(Comment comment, DocumentReference postRef) async {
     CommentsDatabaseService _tempComments = CommentsDatabaseService(currUserRef: comment.creatorRef!);
-    _tempComments.deleteComment(commentRef: comment.commentRef, postRef: postRef, weakDelete: false, media: comment.media);
+    _tempComments.deleteComment(
+        commentRef: comment.commentRef, postRef: postRef, weakDelete: false, media: comment.media);
   }
 
-  Future<dynamic> deletePost({required DocumentReference postRef,
-    required DocumentReference groupRef,
-    required DocumentReference userRef,
-    String? media}) async {
+  Future<dynamic> deletePost(
+      {required DocumentReference postRef,
+      required DocumentReference groupRef,
+      required DocumentReference userRef,
+      String? media}) async {
     // check post exists and matches current user
     final post = await postRef.get();
     if (post.exists) {
@@ -97,13 +104,15 @@ class PostsDatabaseService {
 
         // delete post's replies in parallel
         final delReplies = Future(() async {
-          final repliesData = await FirebaseFirestore.instance.collection(C.replies).where(C.postRef, isEqualTo: postRef).get();
+          final repliesData =
+              await FirebaseFirestore.instance.collection(C.replies).where(C.postRef, isEqualTo: postRef).get();
           final replies = repliesData.docs.map((replyData) => replyFromQuerySnapshot(replyData));
           Future.wait([for (Reply reply in replies) _delReplyHelper(reply, postRef)]);
         });
         // delete post's comments in parallel
         final delComments = Future(() async {
-          final commentsData = await FirebaseFirestore.instance.collection(C.comments).where(C.postRef, isEqualTo: postRef).get();
+          final commentsData =
+              await FirebaseFirestore.instance.collection(C.comments).where(C.postRef, isEqualTo: postRef).get();
           final comments = commentsData.docs.map((commentData) => commentFromQuerySnapshot(commentData));
           Future.wait([for (Comment comment in comments) _delCommentHelper(comment, postRef)]);
         });
@@ -135,25 +144,31 @@ class PostsDatabaseService {
       C.score: FieldValue.increment(2)
     });
     // send notification if applicable
-    if (likeCount==1 || likeCount==10 || likeCount==20 || likeCount==50 || likeCount==100) {
+    if (likeCount == 1 || likeCount == 10 || likeCount == 20 || likeCount == 50 || likeCount == 100) {
       bool update = true;
       final postCreatorData = await postCreatorRef.get();
       final postCreator = await userDataFromSnapshot(postCreatorData, postCreatorRef);
       for (MyNotification MN in postCreator.myNotifications) {
-        if (MN.sourceRef == postRef! && MN.myNotificationType==MyNotificationType.postVotes && MN.extraData==likeCount.toString()) {
+        if (MN.sourceRef == postRef! &&
+            MN.myNotificationType == MyNotificationType.postVotes &&
+            MN.extraData == likeCount.toString()) {
           update = false;
           break;
         }
       }
       if (update) {
-        postCreatorRef.update({C.myNotifications: FieldValue.arrayUnion([{
-          C.parentPostRef: postRef!,
-          C.myNotificationType: MyNotificationType.postVotes.string,
-          C.sourceRef: postRef!,
-          C.sourceUserRef: currUserRef,
-          C.createdAt: Timestamp.now(),
-          C.extraData: likeCount.toString()
-        }])});
+        postCreatorRef.update({
+          C.myNotifications: FieldValue.arrayUnion([
+            {
+              C.parentPostRef: postRef!,
+              C.myNotificationType: MyNotificationType.postVotes.string,
+              C.sourceRef: postRef!,
+              C.sourceUserRef: currUserRef,
+              C.createdAt: Timestamp.now(),
+              C.extraData: likeCount.toString()
+            }
+          ])
+        });
       }
     }
   }
@@ -211,19 +226,20 @@ class PostsDatabaseService {
   // preserves order
   Future<List<Post?>> getPosts(List<DocumentReference> postsRefs) async {
     List<Post?> results = List.filled(postsRefs.length, null);
-    await Future.wait([for (int i=0; i<postsRefs.length; i++) _getPostsHelper(postsRefs[i], i, results)]);
+    await Future.wait([for (int i = 0; i < postsRefs.length; i++) _getPostsHelper(postsRefs[i], i, results)]);
     return results;
   }
 
-  Future<List<Post?>> getPostsByGroups (List<DocumentReference> groupRefs, {DocumentSnapshot? startingFrom, VoidDocSnapParamFunction? setStartFrom}) async {
-    if (startingFrom!=null) {
+  Future<List<Post?>> getPostsByGroups(List<DocumentReference> groupRefs,
+      {DocumentSnapshot? startingFrom, VoidDocSnapParamFunction? setStartFrom}) async {
+    if (startingFrom != null) {
       final data = await postsCollection
           .where(C.groupRef, whereIn: groupRefs)
           .orderBy(C.createdAt, descending: true)
           .startAfterDocument(startingFrom)
           .limit(2)
           .get();
-      if (setStartFrom!=null) {
+      if (setStartFrom != null) {
         setStartFrom(data.docs.last);
       }
       return data.docs.map(_postFromQuerySnapshot).toList();
@@ -231,35 +247,83 @@ class PostsDatabaseService {
       final data = await postsCollection
           .where(C.groupRef, whereIn: groupRefs)
           .orderBy(C.createdAt, descending: true)
-          .limit(5).get();
-      if (setStartFrom!=null) {
+          .limit(5)
+          .get();
+      if (setStartFrom != null) {
         setStartFrom(data.docs.last);
       }
       return data.docs.map(_postFromQuerySnapshot).toList();
     }
   }
 
-  Future<List<Post?>> getTrendingPosts (List<DocumentReference> groupRefs, {DocumentSnapshot? startingFrom, VoidDocSnapParamFunction? setStartFrom}) async {
+  Future<List<Post?>> getTrendingPosts(List<DocumentReference> groupRefs,
+      {DocumentSnapshot? startingFrom, VoidDocSnapParamFunction? setStartFrom}) async {
     final int ianTime = DateTime.now().ianTime();
-    if (startingFrom!=null) {
+    if (startingFrom != null) {
+      List<Post?> results = [];
+      DocumentSnapshot localStartingFrom = startingFrom;
+      while (results.length < nextPostsFetchSize) {
+        final data = await postsCollection
+            .where(C.groupRef, whereIn: groupRefs)
+            .orderBy(C.score, descending: true)
+            .startAfterDocument(localStartingFrom)
+            .limit(nextPostsFetchSize)
+            .get();
+        // break if nothing left
+        if (data.docs.isEmpty || data.size==0) {
+          break;
+        }
+        // update starting from
+        if (setStartFrom != null) {
+          setStartFrom(data.docs.last);
+        }
+        localStartingFrom = data.docs.last;
+        // add to results if ianTime is right
+        results.addAll(data.docs
+            .map(_postFromQuerySnapshot)
+            .toList()
+            .where((Post? p) => p != null && [for (var i = 0; i < 10; i++) ianTime - i].contains(p.ianTime)));
+      }
+      return results;
+    } else {
+      List<Post?> results = [];
       final data = await postsCollection
-          .where(C.ianTime, whereIn: [for (var i = 0; i < 10; i++) ianTime - i])
+          .where(C.groupRef, whereIn: groupRefs)
           .orderBy(C.score, descending: true)
-          .startAfterDocument(startingFrom)
-          .limit(2)
+          .limit(initialPostsFetchSize)
           .get();
-      if (setStartFrom!=null) {
+      // update starting from
+      if (setStartFrom != null) {
         setStartFrom(data.docs.last);
       }
-      return data.docs.map(_postFromQuerySnapshot).toList();
-    } else {
-      final data = await postsCollection
-          .where(C.ianTime, whereIn: [for (var i = 0; i < 10; i++) ianTime - i])
-          .orderBy(C.score, descending: true)
-          .limit(5)
-          .get();
-      if (setStartFrom!=null) {
-        setStartFrom(data.docs.last);
+      DocumentSnapshot localStartingFrom = data.docs.last;
+      // add to results if ianTime is right
+      results.addAll(data.docs
+          .map(_postFromQuerySnapshot)
+          .toList()
+          .where((Post? p) => p != null && [for (var i = 0; i < 10; i++) ianTime - i].contains(p.ianTime)));
+
+      while (results.length < initialPostsFetchSize) {
+        final data = await postsCollection
+            .where(C.groupRef, whereIn: groupRefs)
+            .orderBy(C.score, descending: true)
+            .startAfterDocument(localStartingFrom)
+            .limit(initialPostsFetchSize)
+            .get();
+        // break if nothing left
+        if (data.docs.isEmpty || data.size==0) {
+          break;
+        }
+        // update starting from
+        if (setStartFrom != null) {
+          setStartFrom(data.docs.last);
+        }
+        localStartingFrom = data.docs.last;
+        // add to results if ianTime is right
+        results.addAll(data.docs
+            .map(_postFromQuerySnapshot)
+            .toList()
+            .where((Post? p) => p != null && [for (var i = 0; i < 10; i++) ianTime - i].contains(p.ianTime)));
       }
       return data.docs.map(_postFromQuerySnapshot).toList();
     }

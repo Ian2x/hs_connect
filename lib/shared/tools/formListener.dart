@@ -1,13 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 
-class formListener{
+class FormListener{
 
   bool isReply;
   DocumentReference? commentReference;
   int test=0;
 
-  formListener({required this.isReply});
+  FormListener({required this.isReply});
 }
 
 

@@ -9,7 +9,6 @@ import 'package:hs_connect/screens/profile/profilePage.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
-import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
@@ -164,7 +163,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
               Row(  //intro row + three dots
                 children: [
                   Text("from " + creatorName + " • " + convertTime(widget.post.createdAt.toDate()),
-                    style: ThemeText.regularSmall(color:ThemeColor.mediumGrey,fontSize:14*hp)
+                    style: Theme.of(context).textTheme.subtitle2
                   ),
                   Spacer(flex:1),
                   IconButton(
@@ -177,22 +176,22 @@ class _PostTitleCardState extends State<PostTitleCard> {
                               borderRadius: BorderRadius.vertical(
                                 top: Radius.circular(20*hp),
                               )),
-                          builder: (context) => new ReportSheet(
+                          builder: (context) => pixelProvider(context, child: ReportSheet(
                             reportType: ReportType.post,
                             entityRef: widget.post.postRef,
-                          ));
+                          )));
 
                     },
                   )
                 ]
               ), //introRow
               Text( widget.post.title,
-                style: ThemeText.postViewTitle(fontSize:19*hp, color: ThemeColor.black, height:1.5),
+                style: Theme.of(context).textTheme.headline6
               ),
               SizedBox(height:8*hp),
               widget.post.text!= null && widget.post.text!=""?
-                Text( widget.post.text!,
-                  style: ThemeText.postViewText(fontSize:16*hp, color: ThemeColor.mediumGrey, height: 1.5)) : Container(),
+                Text(widget.post.text!,
+                  style: Theme.of(context).textTheme.headline5) : Container(),
               widget.post.mediaURL != null ?
                 ImageContainer(imageString: widget.post.mediaURL!)
                   : Container(),
@@ -210,7 +209,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
               SizedBox(height:30*hp),
               Text(
                   commentString,
-                  style: ThemeText.groupBold( fontSize:20*hp, color: ThemeColor.darkGrey),
+                  style: Theme.of(context).textTheme.headline6,
               ),
 
             ],

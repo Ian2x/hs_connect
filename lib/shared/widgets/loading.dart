@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:hs_connect/shared/tools/hexColor.dart';
-
-import '../constants.dart';
 
 class Loading extends StatelessWidget {
   final double size;
@@ -12,11 +9,12 @@ class Loading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
-      color: backgroundColor!= null ? backgroundColor : ThemeColor.backgroundGrey,
+      color: backgroundColor!= null ? backgroundColor : colorScheme.background,
       child: Center(
         child: SpinKitFadingCircle(
-          color: HexColor("222426"),
+          color: colorScheme.primaryVariant,
           size: size,
         ),
       ),

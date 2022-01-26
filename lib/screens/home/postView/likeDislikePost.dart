@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/services/posts_database.dart';
-import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:provider/provider.dart';
 
@@ -45,7 +44,8 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
   Widget build(BuildContext context) {
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
-    
+    final colorScheme = Theme.of(context).colorScheme;
+
     PostsDatabaseService _posts = PostsDatabaseService(currUserRef: widget.currUserRef, postRef: widget.post.postRef);
 
     return Row(
@@ -58,7 +58,7 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
               splashColor: Colors.transparent,
               padding: iconPadding,
               constraints: BoxConstraints(),
-              color: ThemeColor.secondaryBlue,
+              color: colorScheme.secondary,
               icon: Icon(Icons.keyboard_arrow_down_rounded),
               onPressed: () {
                 _posts.unDislikePost();
@@ -76,7 +76,7 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
               splashColor: Colors.transparent,
               padding: iconPadding,
               constraints: BoxConstraints(),
-              color: ThemeColor.darkGrey,
+              color: colorScheme.primaryVariant,
               icon: Icon(Icons.keyboard_arrow_down_rounded),
               onPressed: () {
                 _posts.dislikePost();
@@ -95,7 +95,7 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
         SizedBox(width: 5*wp),
         Text(
           (likeCount - dislikeCount).toString(),
-          style: ThemeText.inter(fontSize: 16*hp),
+          style: Theme.of(context).textTheme.subtitle1,
         ),
         SizedBox(width: 5*wp),
         () {
@@ -105,8 +105,8 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
               splashColor: Colors.transparent,
               padding: iconPadding,
               constraints: BoxConstraints(),
-              color: ThemeColor.secondaryBlue,
-              icon: Icon(Icons.keyboard_arrow_up_rounded, color: ThemeColor.secondaryBlue),
+              color: colorScheme.secondary,
+              icon: Icon(Icons.keyboard_arrow_up_rounded, color: colorScheme.secondary),
               onPressed: () {
                 _posts.unLikePost();
                 if (mounted) {
@@ -123,7 +123,7 @@ class _LikeDislikePostState extends State<LikeDislikePost> {
               splashColor: Colors.transparent,
               padding: iconPadding,
               constraints: BoxConstraints(),
-              color: ThemeColor.darkGrey,
+              color: colorScheme.primaryVariant,
               icon: Icon(Icons.keyboard_arrow_up_rounded),
               onPressed: () {
                 if (mounted) {

@@ -28,7 +28,7 @@ class UserDataDatabaseService {
     final domainsDataRef = FirebaseFirestore.instance.collection(C.domainsData).doc(domain);
     domainsDataRef.get().then((doc) => {
       if (!doc.exists) {
-        domainsDataRef.set({C.color: null, C.country: null, C.county: null, C.fullName: null, C.state: null})
+        domainsDataRef.set({C.color: null, C.country: null, C.county: null, C.fullName: null, C.state: null, C.image: null})
       }
     });
 

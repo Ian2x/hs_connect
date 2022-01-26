@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import '../profileForm.dart';
 
@@ -19,31 +18,31 @@ class ProfileImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = ThemeColor.profilePicEditColor; // Theme.of(context).colorScheme.primary;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Center(
       child: Stack(
         children: [
-          buildImage(),
+          buildImage(context: context),
           Positioned(
             bottom: -2,
             right: -2,
-            child: showEditIcon ? buildEditIcon(color, context) : Container(),
+            child: showEditIcon ? buildEditIcon(colorScheme.primary, context) : Container(),
           )
         ],
       ),
     );
   }
 
-  Widget buildImage() {
-
+  Widget buildImage({required BuildContext context}) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
         width: 100,
         height: 100,
         decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: ThemeColor.backgroundGrey,
-            border: Border.all(color: ThemeColor.backgroundGrey, width: 1.5),
+            color: colorScheme.background,
+            border: Border.all(color: colorScheme.background, width: 1.5),
             image: profileImage is Image
                 ? DecorationImage(
                     fit: BoxFit.fill,
@@ -62,10 +61,10 @@ class ProfileImage extends StatelessWidget {
           );
         },
         child: buildCircle(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
           all: 3,
           child: buildCircle(
-            color: ThemeColor.secondaryBlue,
+            color: Theme.of(context).colorScheme.secondary,
             all: 8,
             child: Icon(
               Icons.edit,

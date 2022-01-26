@@ -5,7 +5,6 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/reports_database.dart';
 import 'package:provider/provider.dart';
 
-import '../constants.dart';
 import '../pixels.dart';
 import '../widgets/loading.dart';
 
@@ -51,13 +50,14 @@ class _ReportFormState extends State<ReportForm> {
     final userData = Provider.of<UserData?>(context);
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
+    final colorScheme = Theme.of(context).colorScheme;
 
 
     if (userData == null || loading) {
       return Container(
           height: phoneHeight * 0.6 + MediaQuery.of(context).viewInsets.bottom,
           decoration: BoxDecoration(
-              color: ThemeColor.backgroundGrey,
+              color: colorScheme.background,
               borderRadius: BorderRadius.only(topLeft: Radius.circular(20*hp), topRight: Radius.circular(20*hp))),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             Container(
@@ -72,7 +72,6 @@ class _ReportFormState extends State<ReportForm> {
                   iconSize: 30*hp,
                   onPressed: () {},
                 ),
-                Text("", style: ThemeText.inter(fontSize: 22*hp)),
               ]),
             ),
             Divider(height: 0),
@@ -86,7 +85,7 @@ class _ReportFormState extends State<ReportForm> {
       return Container(
           height: phoneHeight * 0.6 + MediaQuery.of(context).viewInsets.bottom,
           decoration: BoxDecoration(
-              color: ThemeColor.backgroundGrey,
+              color: colorScheme.background,
               borderRadius: BorderRadius.only(topLeft: Radius.circular(20*hp), topRight: Radius.circular(20*hp))),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             Container(
@@ -106,7 +105,7 @@ class _ReportFormState extends State<ReportForm> {
                   },
                 ),
                 Spacer(),
-                Text("Report received.", style: ThemeText.inter(fontSize: 22*hp)),
+                Text("Report received.", style: Theme.of(context).textTheme.headline5),
                 Spacer(),
                 SizedBox(width: 30*wp)
               ]),
@@ -117,7 +116,7 @@ class _ReportFormState extends State<ReportForm> {
               padding: EdgeInsets.fromLTRB(35*wp, 0, 35*wp, 30*hp),
               child: Text(
                   'Thank you for reporting harmful content. You are making this platform a better place. We will review your report very soon.',
-                  style: ThemeText.inter(fontSize: 18*hp),
+                  style: Theme.of(context).textTheme.headline6,
                   textAlign: TextAlign.center),
             ),
             Spacer()
@@ -127,7 +126,7 @@ class _ReportFormState extends State<ReportForm> {
     return Container(
       height: phoneHeight * 0.6 + MediaQuery.of(context).viewInsets.bottom,
       decoration: BoxDecoration(
-          color: ThemeColor.backgroundGrey,
+          color: colorScheme.background,
           borderRadius: BorderRadius.only(topLeft: Radius.circular(20*hp), topRight: Radius.circular(20*hp))),
       child: Form(
         key: _formKey,
@@ -149,7 +148,7 @@ class _ReportFormState extends State<ReportForm> {
                 },
               ),
               Spacer(),
-              Text("Submit a Report", style: ThemeText.inter(fontSize: 22*hp)),
+              Text("Submit a Report", style: Theme.of(context).textTheme.headline5),
               Spacer(),
               SizedBox(width: 8*wp),
               IconButton(
@@ -191,17 +190,17 @@ class _ReportFormState extends State<ReportForm> {
           error != null
               ? Container(
                   padding: EdgeInsets.only(top: 12*hp),
-                  child: Text(error!, style: ThemeText.inter(fontSize: 14*hp, color: Colors.red.shade700)))
+                  child: Text(error!, style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.error)))
               : Container(height: 0),
           Container(
             padding: EdgeInsets.fromLTRB(15*wp, 0, 15*wp, 0),
             child: TextFormField(
-              style: ThemeText.roboto(fontSize: 16*hp, height: 1.4),
+              style: Theme.of(context).textTheme.subtitle1,
               maxLines: 15,
               autocorrect: false,
               maxLength: 400,
               decoration: InputDecoration(
-                  hintStyle: ThemeText.roboto(fontSize: 16*hp), border: InputBorder.none, hintText: "Description..."),
+                  hintStyle: Theme.of(context).textTheme.subtitle1, border: InputBorder.none, hintText: "Description..."),
               onChanged: (val) {
                 setState(() => _text = val);
                 if (error == emptyTextError) {

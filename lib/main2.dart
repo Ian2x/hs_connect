@@ -4,6 +4,8 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/wrapper.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/tools/createMaterialColor.dart';
+import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -23,13 +25,23 @@ class Main2 extends StatelessWidget {
           home: Wrapper(),
           theme: ThemeData(
             brightness: Brightness.light,
-            primaryColor: ThemeColor.secondaryBlue,
-
-            textSelectionTheme: TextSelectionThemeData(
-              cursorColor: ThemeColor.darkGrey,
-              selectionColor: ThemeColor.darkGrey,
-              selectionHandleColor: ThemeColor.darkGrey,
+            backgroundColor: Color(0xFFf4f4f4), // background
+            colorScheme: ColorScheme(
+              brightness: Brightness.light,
+              background: Color(0xFFf4f4f4), // background grey / light grey
+              onSurface: Color(0xFF000000), // black
+              error: Color(0xFFb2b2b2),
+              primaryVariant: Color(0xFF373a3d), // dark grey
+              secondaryVariant: Color(0xFF3b84ad), // darker secondary blue
+              secondary: Color(0xFF4caee6), // secondary blue
+              surface: Color(0xFFffffff), // white
+              primary: Color(0xFFa1a1a1), // medium grey
+              onError: Color(0xFFc9c9c9), // light medium grey
+              onPrimary: Color(0xFF000000),
+              onSecondary: Color(0xFF000000),
+              onBackground: Color(0xFF000000),
             ),
+            primarySwatch: createMaterialColor(Color(0xFFA1A1A1)),// from primary color
             textTheme: TextTheme(
               headline1: TextStyle(
                   fontFamily: "Inter",
@@ -38,79 +50,77 @@ class Main2 extends StatelessWidget {
                   letterSpacing: -1.5
               ),
               headline2: TextStyle(
+                  fontFamily: "Inter",
                   fontSize: 58,
                   fontWeight: FontWeight.w300,
                   letterSpacing: -0.5
               ),
               headline3: TextStyle(
+                  fontFamily: "Inter",
                   fontSize: 47,
                   fontWeight: FontWeight.w400
               ),
               headline4: TextStyle(
+                  fontFamily: "Inter",
                   fontSize: 33,
                   fontWeight: FontWeight.w400,
                   letterSpacing: 0.25
               ),
               headline5: TextStyle(
+                  fontFamily: "Inter",
                   fontSize: 23,
                   fontWeight: FontWeight.w400
               ),
               headline6: TextStyle(
+                  fontFamily: "Inter",
                   fontSize: 19,
                   fontWeight: FontWeight.w500,
                   letterSpacing: 0.15
               ),
               subtitle1: TextStyle(
+                  fontFamily: "Inter",
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
                   letterSpacing: 0.15,
               ),
               subtitle2: TextStyle(
+                  fontFamily: "Inter",
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   letterSpacing: 0.1
               ),
               bodyText1: TextStyle(
+                  fontFamily: "Inter",
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
                   letterSpacing: 0.5
               ),
               bodyText2: TextStyle(
+                  fontFamily: "Inter",
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
                   letterSpacing: 0.25
               ),
               button: TextStyle(
+                  fontFamily: "Inter",
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   letterSpacing: 1.25
               ),
               caption: TextStyle(
+                  fontFamily: "Inter",
                   fontSize: 12,
                   fontWeight: FontWeight.w400,
                   letterSpacing: 0.4
               ),
               overline: TextStyle(
+                  fontFamily: "Inter",
                   fontSize: 10,
                   fontWeight: FontWeight.w400,
                   letterSpacing: 1.5
               ),
             ),
             splashColor: Colors.transparent,
-            backgroundColor: ThemeColor.backgroundGrey,
-            dividerColor: ThemeColor.lightGrey,
-            scaffoldBackgroundColor: ThemeColor.white,
-            hintColor: ThemeColor.lightMediumGrey,
-            unselectedWidgetColor: ThemeColor.mediumGrey,
-            cardColor: ThemeColor.white,
-            primaryColorDark: ThemeColor.black,
-            errorColor: ThemeColor.mediumGrey,
-            indicatorColor: ThemeColor.darkGrey
-
-
-
-            //primaryColorDark:
-            //color: ThemeColor.mediumGrey,
           ),
           darkTheme: ThemeData(
             brightness: Brightness.dark,

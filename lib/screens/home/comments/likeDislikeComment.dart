@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/models/comment.dart';
-import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:provider/provider.dart';
 
@@ -40,6 +39,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
   @override
   Widget build(BuildContext context) {
     final hp = Provider.of<HeightPixel>(context).value;
+    final colorScheme = Theme.of(context).colorScheme;
 
     CommentsDatabaseService _comments = CommentsDatabaseService(
         currUserRef: widget.currUserRef, commentRef: widget.comment.commentRef, postRef: widget.comment.postRef);
@@ -54,7 +54,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               splashColor: Colors.transparent,
               padding: EdgeInsets.all(3*hp),
               constraints: BoxConstraints(),
-              color: ThemeColor.secondaryBlue,
+              color: colorScheme.secondary,
               icon: Icon(Icons.keyboard_arrow_down_rounded),
               onPressed: () {
                 _comments.unDislikeComment();
@@ -72,7 +72,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               splashColor: Colors.transparent,
               padding: EdgeInsets.all(3*hp),
               constraints: BoxConstraints(),
-              color: ThemeColor.darkGrey,
+              color: colorScheme.primaryVariant,
               icon: Icon(Icons.keyboard_arrow_down_rounded),
               onPressed: () {
                 _comments.dislikeComment();
@@ -88,7 +88,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
         }(),
         Text(
           (likeCount - dislikeCount).toString(),
-          style: ThemeText.inter(fontSize: 14)
+          style: Theme.of(context).textTheme.subtitle2
         ),
         () {
           if (likeStatus == true) {
@@ -97,8 +97,8 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               splashColor: Colors.transparent,
               padding: EdgeInsets.all(3*hp),
               constraints: BoxConstraints(),
-              color: ThemeColor.secondaryBlue,
-              icon: Icon(Icons.keyboard_arrow_up_rounded, color: ThemeColor.secondaryBlue),
+              color: colorScheme.secondary,
+              icon: Icon(Icons.keyboard_arrow_up_rounded, color: colorScheme.secondary),
               onPressed: () {
                 _comments.unLikeComment();
                 if (mounted) {
@@ -115,7 +115,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               splashColor: Colors.transparent,
               padding: EdgeInsets.all(3*hp),
               constraints: BoxConstraints(),
-              color: ThemeColor.darkGrey,
+              color: colorScheme.primaryVariant,
               icon: Icon(Icons.keyboard_arrow_up_rounded),
               onPressed: () {
                 if (mounted) {

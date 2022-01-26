@@ -7,7 +7,6 @@ import 'package:hs_connect/screens/home/comments/commentCard.dart';
 import 'package:hs_connect/screens/home/comments/commentReplyForm.dart';
 import 'package:hs_connect/screens/home/postView/postTitleCard.dart';
 import 'package:hs_connect/services/comments_database.dart';
-import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
@@ -32,7 +31,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
     final userData = Provider.of<UserData?>(context);
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
-
+    final colorScheme = Theme.of(context).colorScheme;
 
 
     switchFormBool(DocumentReference? passedRef){
@@ -73,7 +72,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
                       currUserRef: userData.userRef,
                     );
                   } else if (index == 1) {
-                    return Divider(thickness: 3*hp, color: ThemeColor.backgroundGrey, height: 20*hp);
+                    return Divider(thickness: 3*hp, color: colorScheme.background, height: 20*hp);
                   } else if (index == comments.length + 1) {
                     return Container(
                       padding: EdgeInsets.only(bottom: 70*hp),
@@ -102,7 +101,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
             child: Container (
             width: MediaQuery.of(context).size.width,
             padding: EdgeInsets.fromLTRB(10*wp, 10*hp, 10*wp, 10*hp),
-            color: ThemeColor.backgroundGrey,
+            color: colorScheme.background,
             child: CommentReplyForm(
               currUserRef: userData.userRef,
               switchFormBool: switchFormBool,

@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/screens/wrapper.dart';
 import 'package:hs_connect/services/auth.dart';
-import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
@@ -32,11 +31,11 @@ class _RegisterUserState extends State<RegisterUser> {
   Widget build(BuildContext context) {
     final wp = Provider.of<WidthPixel>(context).value;
     final hp = Provider.of<HeightPixel>(context).value;
-
+    final colorScheme = Theme.of(context).colorScheme;
 
     return loading
         ? Scaffold(
-      backgroundColor: ThemeColor.backgroundGrey,
+      backgroundColor: colorScheme.background,
       body: Loading()
     )
         : Scaffold(
@@ -54,7 +53,7 @@ class _RegisterUserState extends State<RegisterUser> {
                 child: Column(children: <Widget>[
                   SizedBox(height: 20*hp),
                   TextFormField(
-                      decoration: textInputDecoration(wp: wp, hp: hp).copyWith(hintText: 'Username'),
+                      decoration: textInputDecoration(context: context).copyWith(hintText: 'Username'),
                       validator: (val) {
                         if (val == null) return 'Error: null value';
                         if (val.isEmpty)
@@ -69,7 +68,7 @@ class _RegisterUserState extends State<RegisterUser> {
                       }),
                   SizedBox(height: 20*hp),
                   TextFormField(
-                      decoration: textInputDecoration(wp: wp, hp: hp).copyWith(hintText: 'Password'),
+                      decoration: textInputDecoration(context: context).copyWith(hintText: 'Password'),
                       obscureText: true,
                       validator: (val) {
                         if (val == null) return 'Error: null value';

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/activity/Messages/messagesForm.dart';
 import 'package:hs_connect/services/user_data_database.dart';
-import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
@@ -29,12 +28,13 @@ class MessagesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final wp = Provider.of<WidthPixel>(context).value;
     final hp = Provider.of<HeightPixel>(context).value;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         resizeToAvoidBottomInset: true,
-        backgroundColor: ThemeColor.white,
+        backgroundColor: colorScheme.surface,
         appBar: PreferredSize(
             preferredSize: Size.fromHeight(50*hp),
             child: MessagesPageAppBar(currUserRef: currUserRef, otherUserRef: otherUserRef, hp: hp)),
@@ -50,7 +50,7 @@ class MessagesPage extends StatelessWidget {
                 onUpdateLastViewed: onUpdateLastViewed,
               ),
             )),
-            Divider(height: 0.5*hp, color: ThemeColor.mediumGrey),
+            Divider(height: 0.5*hp, color: colorScheme.primary),
             Container(
               child: SizedBox(height: 10*hp),
             ),
@@ -101,15 +101,16 @@ class _MessagesPageAppBarState extends State<MessagesPageAppBar> {
   @override
   Widget build(BuildContext context) {
     final hp = Provider.of<HeightPixel>(context).value;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return AppBar(
-      backgroundColor: ThemeColor.white,
-      title: Text(otherUserUsername, style: ThemeText.titleRegular()),
+      backgroundColor: colorScheme.surface,
+      title: Text(otherUserUsername, style: Theme.of(context).textTheme.headline6),
       leading: myBackButtonIcon(context),
       elevation: 0,
       bottom: PreferredSize(
           child: Container(
-            color: ThemeColor.mediumGrey,
+            color: colorScheme.primary,
             height: 0.5*hp,
           ),
           preferredSize: Size.fromHeight(0.5*hp)),
