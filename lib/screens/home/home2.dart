@@ -107,102 +107,149 @@ class _Home2State extends State<Home2> with SingleTickerProviderStateMixin {
     // is invisible at all times. The to the user visible AppBar is below
     return Scaffold(
       bottomNavigationBar: MyNavigationBar(currentIndex: 0),
-      floatingActionButton: floatingNewButton(context),
+      //floatingActionButton: ,
       body:
       Stack(
         children: [
+          //can set is scrollable on tab bar to true
           NestedScrollView(
           physics: ScrollPhysics(),
-          floatHeaderSlivers: true,
+          floatHeaderSlivers: false,
           controller: scrollController,
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget> [
             SliverAppBar(
               floating: true,
               pinned:true,
-              snap:false,
+              snap:true,
               bottom:
                 PreferredSize(
-                  preferredSize: Size.fromHeight(100),
-                  /*child: BackdropFilter(
-                  filter: ui.ImageFilter.blur(
-                  sigmaX: 5.0,
-                  sigmaY: 5.0,
-                  ),*/
-                  child: TabBar(
-                      padding: EdgeInsets.fromLTRB(40.0, 0.0, 10.0, 0.0),
-                      controller: _tabController,
-                      // give the indicator a decoration (color and border radius)
-                      indicator: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                          25.0,
+                  preferredSize: Size.fromHeight(60),
+                  child: Container(
+                    height:45,
+                    color: Colors.white,
+                    child: TabBar(
+                        padding: EdgeInsets.fromLTRB(40.0, 0.0, 10.0, 0.0),
+                        controller: _tabController,
+                        // give the indicator a decoration (color and border radius)
+                        indicator: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                            25.0,
+                          ),
+                          color: isDomain != false ? pressedColor: defaultColor,
                         ),
-                        color: isDomain != false ? pressedColor: defaultColor,
+                        labelColor: Colors.white,
+                        unselectedLabelColor: Colors.black,
+                        tabs: [
+                          // first tab [you can add an icon using the icon property]
+                          Tab(
+                              child: TextButton(
+                                  onPressed: (){
+                                    setState(() {
+                                      isDomain=true;
+                                      _tabController.animateTo((_tabController.index + 1) % 2);
+                                    });
+                                  },
+                                  child: Text ( widget.userData.fullDomainName!,
+                                      style: Theme.of(context).textTheme.subtitle1?.copyWith(color: isDomain != false ? colorScheme.surface : defaultColor)
+                                  )
+                              )
+                          ),
+                          Tab(
+                              child: TextButton(
+                                  onPressed: (){
+                                    setState(() {
+                                      isDomain=false;
+                                      _tabController.animateTo((_tabController.index + 1) % 2);
+                                    });
+                                  },
+                                  child: Text ("Trending",
+                                      style: Theme.of(context).textTheme.subtitle1?.copyWith(color: isDomain != false ? defaultColor : colorScheme.surface))
+                              )
+                          ),
+                        ],
                       ),
-                      labelColor: Colors.white,
-                      unselectedLabelColor: Colors.black,
-                      tabs: [
-                        // first tab [you can add an icon using the icon property]
-                        Tab(
-
-                            child: TextButton(
-                                onPressed: (){
-                                  setState(() {
-                                    isDomain=true;
-                                    _tabController.animateTo((_tabController.index + 1) % 2);
-                                  });
-                                },
-                                child: Text ( widget.userData.fullDomainName!,
-                                    style: Theme.of(context).textTheme.subtitle1?.copyWith(color: isDomain != false ? colorScheme.surface : defaultColor)
-                                )
-                            )
-                        ),
-                        Tab(
-                            child: TextButton(
-                                onPressed: (){
-                                  setState(() {
-                                    isDomain=false;
-                                    _tabController.animateTo((_tabController.index + 1) % 2);
-                                  });
-                                },
-                                child: Text ("Trending",
-                                    style: Theme.of(context).textTheme.subtitle1?.copyWith(color: isDomain != false ? defaultColor : colorScheme.surface))
-                            )
-                        ),
-                      ],
-                    )
-                  //),
+                    ),
                 ),
               toolbarHeight: 80,
               elevation: 0,
-              backgroundColor: Colors.transparent,
-              title: Column(
-                children: [
-                  Row(
+              backgroundColor: Colors.white,
+              title: Container(
+                color: Colors.white,
+                width: MediaQuery.of(context).size.width,
+                height:50,
+                  child: Column(
                     children: [
-                      Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white,
-                          image: DecorationImage(
-                            fit: BoxFit.fill,
-                            image: groupImageString != null ?
-                            NetworkImage(groupImageString!) : AssetImage("assets/me.png") as ImageProvider,
+                      Row(
+                        children: [
+                          Container(
+                            width: 40,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                              image: DecorationImage(
+                                fit: BoxFit.fill,
+                                image: groupImageString != null ?
+                                NetworkImage(groupImageString!) : AssetImage("assets/me.png") as ImageProvider,
+                              ),
+                            ),
                           ),
+                          SizedBox(width:20),
+                          /*
+                          TabBar(
+                            padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+                            controller: _tabController,
+                            // give the indicator a decoration (color and border radius)
+                            indicator: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                25.0,
+                              ),
+                              color: isDomain != false ? pressedColor: defaultColor,
+                            ),
+                            labelColor: Colors.white,
+                            unselectedLabelColor: Colors.black,
+                            tabs: [
+                              // first tab [you can add an icon using the icon property]
+                              Tab(
+
+                                  child: TextButton(
+                                      onPressed: (){
+                                        setState(() {
+                                          isDomain=true;
+                                          _tabController.animateTo((_tabController.index + 1) % 2);
+                                        });
+                                      },
+                                      child: Text ( widget.userData.fullDomainName!,
+                                          style: Theme.of(context).textTheme.subtitle1?.copyWith(color: isDomain != false ? colorScheme.surface : defaultColor)
+                                      )
+                                  )
+                              ),
+                              Tab(
+                                  child: TextButton(
+                                      onPressed: (){
+                                        setState(() {
+                                          isDomain=false;
+                                          _tabController.animateTo((_tabController.index + 1) % 2);
+                                        });
+                                      },
+                                      child: Text ("Trending",
+                                          style: Theme.of(context).textTheme.subtitle1?.copyWith(color: isDomain != false ? defaultColor : colorScheme.surface))
+                                  )
+                              ),
+                            ],
+                          ),
+
+                           */
+                          Spacer(),
+                          Icon(Icons.settings, color: colorScheme.primary),
+                          SizedBox(width:20),
+                          ]   ,
                         ),
-                      ),
-                      SizedBox(width:20),
-                      Text( isDomain != false ? userData.fullDomainName! : "Trending", style: Theme.of(context).textTheme.headline5?.copyWith(fontWeight: FontWeight.bold)),
-                      Spacer(),
-                      Icon(Icons.settings, color: colorScheme.primary),
-                      SizedBox(width:20),
-                      ]   ,
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
               ];
             } ,
             body:

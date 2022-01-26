@@ -5,6 +5,7 @@ import 'package:hs_connect/models/postLikesManager.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:provider/provider.dart';
+import 'package:hs_connect/shared/widgets/arrows_icons.dart';
 
 const double iconSize = 32;
 
@@ -152,7 +153,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
               padding: iconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
-              icon: Icon(Icons.keyboard_arrow_down_rounded),
+              icon: Icon(Arrows.down_open_big, size:20),
               onPressed: () {
                 _posts.unDislikePost();
                 widget.postLikesManager.onUnDislike();
@@ -171,7 +172,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
               padding: iconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.primaryVariant,
-              icon: Icon(Icons.keyboard_arrow_down_rounded),
+              icon: Icon(Arrows.down_open_big, size:20),
               onPressed: () {
                 _posts.dislikePost();
                 widget.postLikesManager.onDislike();
@@ -201,7 +202,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
               padding: iconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
-              icon: Icon(Icons.keyboard_arrow_up_rounded, color: colorScheme.secondary),
+              icon: Icon(Arrows.down_open_big, color: colorScheme.secondary),
               onPressed: () {
                 _posts.unLikePost(widget.post.creatorRef);
                 widget.postLikesManager.onUnLike();
