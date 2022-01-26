@@ -14,7 +14,6 @@ import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
 import 'package:provider/provider.dart';
-import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'dart:ui' as ui;
 
 
@@ -125,11 +124,11 @@ class _Home2State extends State<Home2> with SingleTickerProviderStateMixin {
               bottom:
                 PreferredSize(
                   preferredSize: Size.fromHeight(100),
-                  child: BackdropFilter(
+                  /*child: BackdropFilter(
                   filter: ui.ImageFilter.blur(
                   sigmaX: 5.0,
                   sigmaY: 5.0,
-                  ),
+                  ),*/
                   child: TabBar(
                       padding: EdgeInsets.fromLTRB(40.0, 0.0, 10.0, 0.0),
                       controller: _tabController,
@@ -172,7 +171,7 @@ class _Home2State extends State<Home2> with SingleTickerProviderStateMixin {
                         ),
                       ],
                     )
-                  ),
+                  //),
                 ),
               toolbarHeight: 80,
               elevation: 0,
