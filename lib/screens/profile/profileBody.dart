@@ -62,6 +62,7 @@ class _ProfileBodyState extends State<ProfileBody> {
   void initState() {
     getProfileUserData();
     super.initState();
+
   }
 
   @override
@@ -72,67 +73,86 @@ class _ProfileBodyState extends State<ProfileBody> {
 
     if (profileData==null) return Loading();
 
-    return ListView(
-      physics: BouncingScrollPhysics(),
-      children: [
-        SizedBox(height:98*hp),
-        ProfileImage(
-          profileImageURL: profileData!.profileImageURL,
-          currUserName: profileData!.displayedName,
-          showEditIcon: widget.profileUserRef == widget.currUserData.userRef && userData != null && widget.currUserData.userRef == userData.userRef,
-        ),
-        SizedBox(height: 10*hp),
-        Text(
-          profileData!.displayedName,
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.headline5,
-        ),
-        SizedBox(height: 10*hp),
-        Row(
-          children: [
-            Spacer(),
-            Container(
-              height: 60*hp,
-              child: GroupTag(groupImageURL: domainImage, groupName: profileData!.fullDomainName!=null ? profileData!.fullDomainName! : profileData!.domain,
-                  fontSize: 18*hp, groupColor: profileData!.domainColor != null ? profileData!.domainColor!:
-                      null,
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      body: ListView(
+        physics: BouncingScrollPhysics(),
+        children: [
+          SizedBox(height:98*hp),
+          ProfileImage(
+            profileImageURL: profileData!.profileImageURL,
+            currUserName: profileData!.displayedName,
+            showEditIcon: widget.profileUserRef == widget.currUserData.userRef && userData != null && widget.currUserData.userRef == userData.userRef,
+          ),
+          SizedBox(height: 10*hp),
+          Text(
+            profileData!.displayedName,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.headline5?.copyWith(fontWeight:FontWeight.w500),
+          ),
+          SizedBox(height: 10*hp),
+          Row(
+            children: [
+              Spacer(),
+              Container(
+                height: 60*hp,
+                child: Chip(
+                  padding: EdgeInsets.all(5),
+                  backgroundColor: profileData!.domainColor != null ?
+                    profileData!.domainColor!: Theme.of(context).colorScheme.background,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(9*hp),
+                  ),
+                  avatar: CircleAvatar(
+                    backgroundColor: Colors.grey.shade800,
+                    child: domainImage != null ?
+                      Image.network( domainImage!): null,
+                  ),
+                  label: Text(
+                    profileData!.fullDomainName!=null ? profileData!.fullDomainName! : profileData!.domain,
+                    style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                    color: profileData!.domainColor != null ? profileData!.domainColor!:
+                    Theme.of(context).colorScheme.onBackground,
+                  )
+                  ),
+                ),
               ),
-            ),
-            SizedBox(width:20*wp),
-            RichText(
-              text: TextSpan(
-                children: <TextSpan>[
-                  TextSpan(text: profileData!.score.toString(),
-                      style: Theme.of(context).textTheme.headline6),
-                  TextSpan(text: " Likes ",
-                      style: Theme.of(context).textTheme.headline6),
-                ],
+              SizedBox(width:20*wp),
+              RichText(
+                text: TextSpan(
+                  children: <TextSpan>[
+                    TextSpan(text: profileData!.score.toString(),
+                        style: Theme.of(context).textTheme.headline6),
+                    TextSpan(text: " Likes ",
+                        style: Theme.of(context).textTheme.headline6),
+                  ],
+                ),
               ),
-            ),
-            Spacer(),
-          ],
-        ),
-        widget.profileUserRef != widget.currUserData.userRef
-            ? Column(
+              Spacer(),
+            ],
+          ),
+          widget.profileUserRef != widget.currUserData.userRef
+              ? Column(
+                  children: <Widget>[
+                    SizedBox(height: 78*hp),
+                    Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
+                      SizedBox(width: 45*wp),
+                      NewMessageButton(
+                        otherUserData: profileData!,
+                        currUserRef: widget.currUserData.userRef,
+                      )
+                    ])
+                  ],
+                )
+              : Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  SizedBox(height: 78*hp),
-                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
-                    SizedBox(width: 45*wp),
-                    NewMessageButton(
-                      otherUserData: profileData!,
-                      currUserRef: widget.currUserData.userRef,
-                    )
-                  ])
-                ],
-              )
-            : Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-            SizedBox(height: 78*hp),
-            ProfilePostFeed(profUserRef: widget.profileUserRef),
-          ]
-        )
-      ],
+              SizedBox(height: 78*hp),
+              ProfilePostFeed(profUserRef: widget.profileUserRef),
+            ]
+          )
+        ],
+      ),
     );
   }
 }

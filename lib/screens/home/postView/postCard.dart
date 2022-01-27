@@ -150,7 +150,7 @@ class _PostCardState extends State<PostCard> {
           margin: EdgeInsets.fromLTRB(7 * wp, 12 * hp, 7 * wp, 0),
           elevation: 0,
           child: Container(
-              padding: EdgeInsets.fromLTRB(2 * wp, 12 * hp, 10 * wp, 10 * hp),
+              padding: EdgeInsets.fromLTRB(2 * wp, 2 * hp, 5 * wp, 5 * hp),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -163,16 +163,49 @@ class _PostCardState extends State<PostCard> {
                         Row(
                           children: [
                             //Text("in ", style: ThemeText.inter(fontSize: 14, color: groupColor!=null ? HexColor(groupColor!) : colorScheme.primary)),
-                            GroupTag(
-                                groupColor: group!.hexColor != null? HexColor(group!.hexColor!) : null,
-                                groupImageURL: group!.image,
-                                groupName: group!.name,
-                                fontSize: 14 * hp),
+                            Chip(
+                              padding: EdgeInsets.all(0),
+                              backgroundColor: Theme.of(context).colorScheme.surface,
+                              avatar: CircleAvatar(
+                                backgroundColor: Colors.grey.shade800,
+                                  child: Image.network(group!.image!),
+                              ),
+                              label: Text(
+                                group!.name, style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                                color: group!.hexColor != null? HexColor(group!.hexColor!) : null,
+                                fontSize: 15 * hp, fontWeight: FontWeight.w500,
+                                )
+                              ),
+                            ),
                             Text(
                               " • " + convertTime(widget.post.createdAt.toDate()),
-                              style: Theme.of(context).textTheme.subtitle2,
+                              style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                             ),
                             Spacer(),
+                          ],
+                        ),
+                        SizedBox(height: 6 * hp),
+                        Text(
+                            widget.post.title,
+                            style: Theme.of(context).textTheme.headline6?.copyWith(
+                              fontSize:18 * hp, fontWeight: FontWeight.w500,
+                            ),
+                            overflow: TextOverflow.ellipsis, // default is .clip
+                            maxLines: 3),
+                        widget.post.mediaURL != null ? ImageContainer(imageString: widget.post.mediaURL!)
+                            : Container(),
+                        SizedBox(height: 4 * hp),
+                        Row(
+                          //Icon Row
+                          children: [
+                            SizedBox(width: 1 * wp),
+                            Text(
+                              (widget.post.numComments + widget.post.numReplies).toString() + " Comments",
+                              style: Theme.of(context).textTheme.subtitle2?.copyWith
+                                (color: HexColor("B2b2b2"), fontSize: 14 * hp, fontWeight: FontWeight.normal),
+                            ),
                             IconButton(
                               constraints: BoxConstraints(),
                               splashRadius: .1,
@@ -182,8 +215,8 @@ class _PostCardState extends State<PostCard> {
                                     context: context,
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(20 * hp),
-                                    )),
+                                          top: Radius.circular(20 * hp),
+                                        )),
                                     builder: (context) => pixelProvider(context,
                                         child: ReportSheet(
                                           reportType: ReportType.post,
@@ -191,31 +224,13 @@ class _PostCardState extends State<PostCard> {
                                         )));
                               },
                             ),
-                            SizedBox(width: 6 * wp),
-                          ],
-                        ),
-                        SizedBox(height: 10 * hp),
-                        Text(
-                            widget.post.title,
-                            style: Theme.of(context).textTheme.headline6,
-                            overflow: TextOverflow.ellipsis, // default is .clip
-                            maxLines: 3),
-                        widget.post.mediaURL != null ? ImageContainer(imageString: widget.post.mediaURL!) : Container(),
-                        SizedBox(height: 8 * hp),
-                        Row(
-                          //Icon Row
-                          children: [
-                            SizedBox(width: 1 * wp),
-                            Text(
-                              (widget.post.numComments + widget.post.numReplies).toString() + " Comments",
-                              style: Theme.of(context).textTheme.subtitle2,
-                            ),
                             Spacer(),
                             LikeDislikePost(
                                 currUserRef: widget.currUserRef,
                                 post: widget.post,
                                 postLikesManager: postLikesManager
                             ),
+                            SizedBox(width: 5*hp),
                           ],
                         )
                       ], //Column Children ARRAY

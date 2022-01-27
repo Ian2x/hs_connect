@@ -7,6 +7,7 @@ import 'package:hs_connect/screens/home/postFeed/domainFeed.dart';
 import 'package:hs_connect/screens/home/new/floatingNewButton.dart';
 import 'package:hs_connect/screens/home/postFeed/trendingFeed.dart';
 import 'package:flutter/material.dart';
+import 'package:hs_connect/services/auth.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pixels.dart';
@@ -15,6 +16,8 @@ import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
 import 'package:provider/provider.dart';
 import 'dart:ui' as ui;
+
+import 'new/newPost/PostForm.dart';
 
 
 
@@ -32,6 +35,8 @@ class _Home2State extends State<Home2> with SingleTickerProviderStateMixin {
 
   var scrollController = ScrollController();
   bool isDomain=true;
+
+  final AuthService _auth = AuthService();
 
   String? groupImageString;
   Image? groupImage;
@@ -106,8 +111,9 @@ class _Home2State extends State<Home2> with SingleTickerProviderStateMixin {
     // this sliver app bar is only use to hide/show the tabBar, the AppBar
     // is invisible at all times. The to the user visible AppBar is below
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       bottomNavigationBar: MyNavigationBar(currentIndex: 0),
-      //floatingActionButton: ,
+      floatingActionButton: floatingNewButton(context),
       body:
       Stack(
         children: [
@@ -242,7 +248,18 @@ class _Home2State extends State<Home2> with SingleTickerProviderStateMixin {
 
                            */
                           Spacer(),
-                          Icon(Icons.settings, color: colorScheme.primary),
+                          TextButton.icon(
+                            icon: Icon(Icons.person),
+                            label: Text('Logout',
+                                style:
+                                TextStyle(
+                                  color: Colors.black,
+                                )
+                            ),
+                            onPressed: () async {
+                              await _auth.signOut();
+                            },
+                          ),
                           SizedBox(width:20),
                           ]   ,
                         ),
