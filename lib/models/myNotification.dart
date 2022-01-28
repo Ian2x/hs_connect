@@ -72,7 +72,7 @@ class MyNotification {
   Map<String, dynamic> asMap() {
     return {
       C.parentPostRef: parentPostRef,
-      C.myNotificationType: myNotificationType,
+      C.myNotificationType: myNotificationType.string,
       C.sourceRef: sourceRef,
       C.sourceUserRef: sourceUserRef,
       C.createdAt: createdAt,

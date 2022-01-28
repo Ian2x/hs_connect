@@ -138,8 +138,8 @@ class _PostCardState extends State<PostCard> {
       },
       child: Card(
           //if border then ShapeDecoration
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10 * hp)),
-          margin: EdgeInsets.fromLTRB(7 * wp, 12 * hp, 7 * wp, 0),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12 * hp)),
+          margin: EdgeInsets.fromLTRB(5 * wp, 3 * hp, 5 * wp, 3*hp),
           elevation: 0,
           child: Container(
               padding: EdgeInsets.fromLTRB(2 * wp, 2 * hp, 5 * wp, 5 * hp),
@@ -163,11 +163,13 @@ class _PostCardState extends State<PostCard> {
                                   child: Image.network(group!.image!),
                               ),
                               label: Text(
-                                group!.name, style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                                color: group!.hexColor != null? HexColor(group!.hexColor!) : null,
-                                fontSize: 15 * hp, fontWeight: FontWeight.w500,
+                                //color: group!.hexColor != null? HexColor(group!.hexColor!)
+                                //
+                                group!.name,
+                                  style: Theme.of(context).textTheme.subtitle2?.copyWith
+                                    (color: Theme.of(context).primaryColorDark,
+                                      fontSize: 15 * hp, fontWeight: FontWeight.w500),
                                 )
-                              ),
                             ),
                             Text(
                               " • " + convertTime(widget.post.createdAt.toDate()),

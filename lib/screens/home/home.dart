@@ -10,7 +10,8 @@ import 'package:provider/provider.dart';
 import 'mySliverAppBar.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  final UserData userData;
+  const Home({Key? key, required this.userData}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
@@ -59,6 +60,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         children: <Widget>[
           NestedScrollView(
             headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+              print('something');
               return [
                 SliverPersistentHeader(
                   delegate: MySliverAppBar(tabController: tabController, userData: userData, isDomain: isDomain),

@@ -46,7 +46,6 @@ class _SignInState extends State<SignIn> {
         backgroundColor: Colors.white,
         body: Stack(
             children: [
-
               SingleChildScrollView(
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,66 +93,69 @@ class _SignInState extends State<SignIn> {
                               SizedBox(height: 30*hp),
                               Container(
                                 padding:EdgeInsets.fromLTRB(20.0,0,20,0),
-                                child: Column(
-                                  children: [
-                                    TextFormField(
-                                        autocorrect:false,
-                                        style: Theme.of(context).textTheme.headline6,
-                                        maxLines: null,
-                                        decoration: InputDecoration(
-                                            hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.onError),
-                                            border: InputBorder.none,
-                                            hintText: "Username"),
-                                        validator: (val) {
-                                          if (val == null) return 'Error: null value';
-                                          if (val.isEmpty)
-                                            return 'Enter username';
-                                          else
-                                            return null;
-                                        },
-                                        onChanged: (val) {
-                                          if (mounted) {
-                                            setState(() => username = val);
+                                child: Form(
+                                  key: _formKey,
+                                  child: Column(
+                                    children: [
+                                      TextFormField(
+                                          autocorrect:false,
+                                          style: Theme.of(context).textTheme.headline6,
+                                          maxLines: null,
+                                          decoration: InputDecoration(
+                                              hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.onError),
+                                              border: InputBorder.none,
+                                              hintText: "Username"),
+                                          validator: (val) {
+                                            if (val == null) return 'Error: null value';
+                                            if (val.isEmpty)
+                                              return 'Enter username';
+                                            else
+                                              return null;
+                                          },
+                                          onChanged: (val) {
+                                            if (mounted) {
+                                              setState(() => username = val);
+                                            }
                                           }
-                                        }
-                                    ),
-                                    Divider(height:15*hp, thickness: 2*hp, color: colorScheme.onError),
-                                    TextFormField(
-                                        autocorrect:false,
-                                        style: Theme.of(context).textTheme.headline6,
-                                        decoration: InputDecoration(
-                                            hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.onError),
-                                            border: InputBorder.none,
-                                            hintText: "Password"),
-                                        obscureText: true,
-                                        validator: (val) {
-                                          if (val == null) return 'Error: null value';
-                                          if (val.length < 1)
-                                            return 'Password is empty';
-                                          else
-                                            return null;
-                                        },
-                                        onChanged: (val) {
-                                          if (mounted) {
-                                            setState(() => password = val);
-                                          }
-                                        }),
-                                    Divider(height:15*hp, thickness: 2*hp, color: colorScheme.onError),
-                                    error != '' ? Text(
-                                      'Login', style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 28*hp, color: Colors.black))
-                                            : Container(),
-                                  ],
+                                      ),
+                                      Divider(height:15*hp, thickness: 2*hp, color: colorScheme.onError),
+                                      TextFormField(
+                                          autocorrect:false,
+                                          style: Theme.of(context).textTheme.headline6,
+                                          decoration: InputDecoration(
+                                              hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.onError),
+                                              border: InputBorder.none,
+                                              hintText: "Password"),
+                                          obscureText: true,
+                                          validator: (val) {
+                                            if (val == null) return 'Error: null value';
+                                            if (val.length < 1)
+                                              return 'Password is empty';
+                                            else
+                                              return null;
+                                          },
+                                          onChanged: (val) {
+                                            if (mounted) {
+                                              setState(() => password = val);
+                                            }
+                                          }),
+                                      Divider(height:15*hp, thickness: 2*hp, color: colorScheme.onError),
+                                      error != '' ? Text(
+                                        'Login', style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 28*hp, color: Colors.black))
+                                              : Container(),
+                                    ],
+                                  ),
                                 ),
                               ),
 
-                              SizedBox(height: 20*hp),
-                              SizedBox(height:15*hp),
-                              SizedBox(height: 50*hp),
-                            ],
-                          )
-                      ),
-                    ]),
-              ),
+                                SizedBox(height: 20*hp),
+                                SizedBox(height:15*hp),
+                                SizedBox(height: 50*hp),
+                              ],
+                            )
+                        ),
+                      ]),
+                ),
               Positioned(
                 bottom:0,
                 right:0,
@@ -173,12 +175,15 @@ class _SignInState extends State<SignIn> {
                             loading = false;
                           });
                         }
+                      } else {
+                        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => pixelProvider(context, child: Wrapper())), (Route<dynamic> route) => false);
                       }
                     }
                   },
                 ),
               ),
-            ])
+            ]
+    )
     );
   }
 }

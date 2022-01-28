@@ -24,14 +24,15 @@ class Gradients {
       colors: [ _Gradient.gBlue, _Gradient.gRed],
     );
   }
-  static LinearGradient black ({
+  static LinearGradient solid ({
     AlignmentGeometry begin = Alignment.topLeft,
     AlignmentGeometry end = Alignment. bottomRight,
+    required Color color
   }){
     return LinearGradient(
       begin: begin,
       end: end,
-      colors: [ _Gradient.gBlack, _Gradient.gBlack],
+      colors: [color, color],
     );
   }
 }
@@ -190,4 +191,5 @@ class C {
   static const extraData = 'extraData';
   static const ianTime = 'ianTime';
   static const fromMe = 'fromMe';
+  static const fundamentalName = 'fundamentalName';
 }
