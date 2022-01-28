@@ -149,7 +149,6 @@ class _RegisterEmailState extends State<RegisterEmail> {
                     setState(() => loading = true);
                   }
                   dynamic result = await _auth.createEmailUser(email);
-                  print(result);
                   if (result is User?) {
                     final int tempIndex = email.lastIndexOf('@');
                     final String domain = email.substring(tempIndex);

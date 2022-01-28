@@ -26,7 +26,7 @@ class PollsDatabaseService {
   // home data from snapshot
   Poll? _pollFromSnapshot({required DocumentSnapshot snapshot}) {
     if (snapshot.exists) {
-      pollFromSnapshot(snapshot);
+      return pollFromSnapshot(snapshot);
     } else {
       return null;
     }

@@ -108,15 +108,7 @@ class _PostCardState extends State<PostCard> {
     final colorScheme = Theme.of(context).colorScheme;
 
     if (group==null || username==null) {
-      return Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10 * hp)),
-        margin: EdgeInsets.fromLTRB(5 * wp, 5 * hp, 5 * wp, 0),
-        elevation: 0,
-        child: Container(
-          padding: EdgeInsets.fromLTRB(2 * wp, 12 * hp, 10 * wp, 10 * hp),
-          height: 50 * hp
-        )
-      );
+      return Container();
     }
 
     final postLikesManager = PostLikesManager(

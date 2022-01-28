@@ -241,7 +241,7 @@ class PostsDatabaseService {
           .where(C.groupRef, whereIn: groupRefs)
           .orderBy(C.createdAt, descending: true)
           .startAfterDocument(startingFrom)
-          .limit(2)
+          .limit(5)
           .get();
       if (setStartFrom != null) {
         setStartFrom(data.docs.last);
