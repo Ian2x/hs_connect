@@ -6,6 +6,8 @@ import 'dart:async';
 
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
+import 'package:hs_connect/shared/tools/gradientText.dart';
+import 'package:hs_connect/shared/widgets/outlineButton.dart';
 import 'package:provider/provider.dart';
 
 import 'authBar.dart';
@@ -47,8 +49,10 @@ class _WaitVerificationState extends State<WaitVerification> {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
+      backgroundColor: Colors.white,
         body: Stack(
           children: [
+
           Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -64,7 +68,7 @@ class _WaitVerificationState extends State<WaitVerification> {
         Row(
           children: [
             SizedBox(width: 10*hp),
-            TextButton(
+            /*TextButton(
                 onPressed: (){
                 },
                 child:Text(
@@ -72,7 +76,7 @@ class _WaitVerificationState extends State<WaitVerification> {
                   style: ThemeText.inter(fontWeight: FontWeight.normal,
                       fontSize: 16*hp, color: Colors.grey),
                 )
-            ),
+            ),*/
           ],
         ),
         SizedBox(height: 30*hp),
@@ -85,41 +89,61 @@ class _WaitVerificationState extends State<WaitVerification> {
                   child:
                   Image.asset('assets/logo1background.png'),
                 ),
-                SizedBox(height: 20*hp),
+                SizedBox(height: 15*hp),
                 Text(
                   'We sent you a link',
-                  style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 28*hp, color: Colors.black //TODO: Convertto HP
+                  style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 24*hp, color: Colors.black //TODO: Convertto HP
                   ),
                 ),
-                SizedBox(height:20*hp),
+                SizedBox(height:15*hp),
                 Center(
-                  child:Text("Check your school email to verify your account.",
-                      style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontSize: 14)),
+                  child:Text("Check the link in your school email.",
+                      style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontSize: 16)),
                 ),
-                SizedBox(height:5*hp),
-                Center(
-                  child:Text("This info is never shown.",
-                      style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontSize: 14)),
-                ),
-                /*GradientText(
-                        'Sign up',
-                        style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 28*hp, //TODO: Convertto HP
+                SizedBox(height:65 *hp),
+                MyOutlinedButton(  //TODO: Add Gmail LInk
+                  onPressed: () {},
+                  gradient: Gradients.blueRed(begin: Alignment.topCenter, end: Alignment.bottomCenter),
+                  borderRadius: 20.0,
+                  thickness:1.5,
+                  child: Container(
+                    height: MediaQuery.of(context).size.height*.13,
+                    width: MediaQuery.of(context).size.width*.7,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GradientText(
+                          "Your email is for verification only.",
+                          style: ThemeText.inter(fontWeight: FontWeight.w600, fontSize: 16*hp, //TODO: Convertto HP
+                          ),
+                          gradient: Gradients.blueRed(),
                         ),
-                        gradient: Gradients.blueRed(),
-                      ),  */                          SizedBox(height:15*hp),
-                SizedBox(height: 50*hp),
+                        SizedBox(height:15 *hp),
+                        GradientText(
+                          " It'll never be linked to your account.",
+                          style: ThemeText.inter(fontWeight: FontWeight.w600, fontSize: 14.8*hp, //TODO: Convertto HP
+                          ),
+                          gradient: Gradients.blueRed(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(height:245*hp),
+                TextButton(
+                  onPressed:(){}, //TODO: Resend Email
+                  child:Text(
+                      " Didn't get it? Click here.",
+                      style: ThemeText.inter(fontWeight: FontWeight.normal,
+                        fontSize: 15*hp, color: Colors.black,
+                      )
+                  ),
+                ),
               ],
             )
           ),
       ]),
-            Positioned(
-              bottom:0,
-              left:0,
-              child: AuthBar(buttonText: "Register",
-                  onPressed: () async {
-                  }),
-            ),
-          ])
+    ])
   );
 }
 

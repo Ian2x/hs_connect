@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/screens/authenticate/signIn.dart';
 import 'package:hs_connect/screens/authenticate/waitVerification.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/tools/gradientText.dart';
 import 'package:hs_connect/shared/pixels.dart';
 
@@ -79,7 +80,7 @@ class previewPage extends StatelessWidget {
               //TODO: Convertto HP
               onPressed: (){
                 Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => SignIn(toggleView: toggleView)));
+                    .push(MaterialPageRoute(builder: (context) => pixelProvider(context, child: SignIn(toggleView: toggleView))));
               },
             ),
             SizedBox(height:height*.1),

@@ -7,6 +7,7 @@ class MyOutlinedButton extends StatelessWidget {
   final Gradient? gradient;
   final double thickness;
   final double borderRadius;
+  final EdgeInsetsGeometry? padding;
 
   const MyOutlinedButton({
     Key? key,
@@ -15,6 +16,7 @@ class MyOutlinedButton extends StatelessWidget {
     required this.child,
     this.style,
     this.gradient,
+    this.padding,
     this.thickness = 2,
   }) : super(key: key);
 
@@ -26,13 +28,14 @@ class MyOutlinedButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(borderRadius),
       ),
       child: Container(
-        padding: EdgeInsets.all(0),
+        padding: padding != null ? padding : EdgeInsets.all(0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(borderRadius),
           color: Colors.white,
         ),
         margin: EdgeInsets.all(thickness),
         child: ActionChip(
+          pressElevation: 0,
           padding: EdgeInsets.fromLTRB(6, 0, 6, 0),
           backgroundColor: Colors.white,
           onPressed: onPressed,
