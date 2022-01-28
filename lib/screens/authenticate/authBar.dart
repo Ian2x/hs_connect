@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pixels.dart';
+import 'package:hs_connect/shared/tools/gradientText.dart';
+import 'package:hs_connect/shared/widgets/outlineButton.dart';
 import 'package:provider/provider.dart';
 
 
@@ -16,41 +19,38 @@ class AuthBar extends StatelessWidget {
     final hp = Provider.of<HeightPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Container(
-        padding: EdgeInsets.fromLTRB(0*wp, 3*hp, 10*wp, 0*hp),
-        height: MediaQuery.of(context).size.height/15,
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          color: colorScheme.surface,
-          border: Border(
-            top: BorderSide(width: 1*wp, color: colorScheme.onError),
-          ),
-        ),
-        child:
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Spacer(),
-             Container(
-                height: 10*wp,
-                padding: EdgeInsets.all(0),
-                decoration: ShapeDecoration(
-                  color: colorScheme.secondary,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(20*hp),
-                      ))),
-              child:
-                TextButton(
-                  onPressed: onPressed,
-                  child:
-                  Text(buttonText,
-                      style: Theme.of(context).textTheme.headline6),
+    return Material(
+      child: Container(
+          color:Colors.white,
+          padding: EdgeInsets.fromLTRB(10*wp, 3*hp, 10*wp, 5*hp),
+          height: MediaQuery.of(context).size.height/15,
+          width: MediaQuery.of(context).size.width,
+          /*decoration: BoxDecoration(
+            color: colorScheme.surface,
+            border: Border(
+              top: BorderSide(width: 1*wp, color: colorScheme.onError),
+            ),
+          ),*/
+          child:
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+             Spacer(),
+              MyOutlinedButton(
+                onPressed: () {onPressed();},
+                gradient: LinearGradient(colors: [Colors.indigo, Colors.pink]),
+                borderRadius: 40.0,
+                child: GradientText(
+                  'Sign up',
+                  style: ThemeText.inter(fontWeight: FontWeight.w500, fontSize: 15*hp, //TODO: Convertto HP
+                  ),
+                  gradient: Gradients.blueRed(),
                 ),
-             ),
-          ]
-        ),
+              )
+            ]
+          ),
+      ),
     );
   }
 }
