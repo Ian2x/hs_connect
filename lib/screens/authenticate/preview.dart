@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hs_connect/screens/authenticate/signIn.dart';
+import 'package:hs_connect/screens/authenticate/authenticate.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/widgets/gradientText.dart';
@@ -7,16 +7,10 @@ import 'package:hs_connect/shared/widgets/gradientText.dart';
 
 class PreviewPage extends StatelessWidget {
 
-  final Function toggleView;
-
-
   const PreviewPage({Key? key,
-    required this.toggleView,
   }) : super(key: key);
 
   @override
-
-
   Widget build(BuildContext context) {
 
     double height =MediaQuery.of(context).size.height;
@@ -65,7 +59,8 @@ class PreviewPage extends StatelessWidget {
                 gradient: Gradients.blueRed(),
               ),
               onPressed: (){
-                toggleView();
+                Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => pixelProvider(context, child: Authenticate(signIn: false))));
               },
             ),
             SizedBox(height:height*.02),
@@ -78,7 +73,7 @@ class PreviewPage extends StatelessWidget {
               //TODO: Convertto HP
               onPressed: (){
                 Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => pixelProvider(context, child: SignIn(toggleView: toggleView))));
+                    .push(MaterialPageRoute(builder: (context) => pixelProvider(context, child: Authenticate(signIn: true))));
               },
             ),
             SizedBox(height:height*.1),
@@ -99,8 +94,7 @@ class PreviewPage extends StatelessWidget {
                   ),
                   //TODO: Convertto HP
                   onPressed: (){
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (context) => SignIn(toggleView: toggleView)));
+
                   },
                 ),
               ],

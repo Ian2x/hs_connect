@@ -39,11 +39,11 @@ class AuthBar extends StatelessWidget {
               MyOutlinedButton(
                 padding: EdgeInsets.fromLTRB(30.0, 0.0, 30, 0),
                 onPressed: () {onPressed();},
-                gradient: LinearGradient(colors: [Colors.indigo, Colors.pink]),
+                gradient: Gradients.blueRed(begin: Alignment.topCenter, end: Alignment.bottomCenter),
                 borderRadius: 40.0,
                 child: GradientText(
                   buttonText,
-                  style: ThemeText.inter(fontWeight: FontWeight.w500, fontSize: 15*hp, //TODO: Convertto HP
+                  style: ThemeText.inter(fontWeight: FontWeight.w500, fontSize: 17*hp, //TODO: Convertto HP
                   ),
                   gradient: Gradients.blueRed(),
                 ),
