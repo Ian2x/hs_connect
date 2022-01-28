@@ -4,14 +4,17 @@ import 'package:hs_connect/screens/authenticate/signIn.dart';
 import 'package:flutter/material.dart';
 
 class Authenticate extends StatefulWidget {
-  const Authenticate({Key? key}) : super(key: key);
+
+  bool signIn;
+
+  Authenticate({Key? key,required this.signIn }) : super(key: key);
 
   @override
   _AuthenticateState createState() => _AuthenticateState();
 }
 
 class _AuthenticateState extends State<Authenticate> {
-  bool showSignIn = true;
+  late bool showSignIn;
 
   void toggleView() {
     if (mounted) {
@@ -20,9 +23,16 @@ class _AuthenticateState extends State<Authenticate> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    showSignIn= widget.signIn;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     if (showSignIn) {
-      return PreviewPage(toggleView: toggleView);
+      return SignIn(toggleView: toggleView);
     } else {
       return RegisterEmail(toggleView: toggleView);
     }

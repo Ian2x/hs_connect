@@ -90,7 +90,7 @@ class _Home2State extends State<Home2> with SingleTickerProviderStateMixin {
     final colorScheme = Theme.of(context).colorScheme;
 
     if (user == null) {
-      return Authenticate();
+      return Authenticate(signIn: false);
     }
 
     if (userData == null) {
