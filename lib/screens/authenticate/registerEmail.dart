@@ -43,98 +43,100 @@ class _RegisterEmailState extends State<RegisterEmail> {
       backgroundColor: colorScheme.surface,
       body: Stack(
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                height: 110*hp,
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  gradient: Gradients.blueRed(begin: Alignment.topLeft , end: Alignment.bottomRight),
-                ),
-                child: SizedBox(),
-              ),
-              SizedBox(height: 10*hp),
-              Row(
-                children: [
-                  SizedBox(width: 10*hp),
-                  TextButton(
-                      onPressed: (){
-                        Navigator.pushReplacement(
-                          context,
-                          NoAnimationMaterialPageRoute(
-                              builder: (context) => pixelProvider(context, child: previewPage(toggleView: widget.toggleView))),
-                        );
-                      },
-                      child:Text(
-                        "Cancel",
-                        style: ThemeText.inter(fontWeight: FontWeight.normal,
-                            fontSize: 16*hp, color: Colors.grey),
-                      )
-                  ),
-                ],
-              ),
-              SizedBox(height: 20*hp),
-              Center(
-                  child:
-                  Column(
-                    children: [
-                      SizedBox(
-                        height: 80 *hp,
-                        child:
-                        Image.asset('assets/logo1background.png'),
-                      ),
-                      SizedBox(height: 20*hp),
-                      Text(
-                        'Sign Up',
-                        style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 28*hp, color: Colors.black //TODO: Convertto HP
-                        ),
-                      ),
-                      SizedBox(height: 15*hp),
-                      Center(
-                        child:Text("Verify your school with your email.",
-                            style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontSize: 14)),
-                      ),
-                      SizedBox(height: 55*hp),
-                    ],
-                  )
-              ),
-              Form(
-                key: _formKey,
-                child:
+          SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
                 Container(
-                    padding:EdgeInsets.fromLTRB(20.0,0,20,0),
-                    child:
-                      Column(
-                        children: [
-                          TextField(
-                            autocorrect:false,
-                            style: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.primary),
-                            maxLines: null,
-                            keyboardType: TextInputType.emailAddress,
-                            decoration: InputDecoration(
-                                hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.onError),
-                                border: InputBorder.none,
-                                hintText: "Your School Email"),
-                            onChanged: (value) {
-                              if (mounted) {
-                                setState(() {
-                                  email = value.trim();
-                                });
-                              }
-                            },
-                          ),
-                          Divider(height:20*hp, thickness: 2*hp, color: colorScheme.onError),
-                        ],
-                      )
+                  height: 110*hp,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    gradient: Gradients.blueRed(begin: Alignment.topLeft , end: Alignment.bottomRight),
+                  ),
+                  child: SizedBox(),
                 ),
-              ),
-              SizedBox(height:10*hp) ,
-              error != null ? Center(
-                child: Text(
-                    'Error', style: ThemeText.inter(fontWeight: FontWeight.w500, fontSize: 13*hp, color: Colors.black)),
-              )
-                  : SizedBox(height:80*hp),],
+                SizedBox(height: 10*hp),
+                Row(
+                  children: [
+                    SizedBox(width: 10*hp),
+                    TextButton(
+                        onPressed: (){
+                          Navigator.pushReplacement(
+                            context,
+                            NoAnimationMaterialPageRoute(
+                                builder: (context) => pixelProvider(context, child: previewPage())),
+                          );
+                        },
+                        child:Text(
+                          "Cancel",
+                          style: ThemeText.inter(fontWeight: FontWeight.normal,
+                              fontSize: 16*hp, color: Colors.grey),
+                        )
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20*hp),
+                Center(
+                    child:
+                    Column(
+                      children: [
+                        SizedBox(
+                          height: 80 *hp,
+                          child:
+                          Image.asset('assets/logo1background.png'),
+                        ),
+                        SizedBox(height: 20*hp),
+                        Text(
+                          'Sign Up',
+                          style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 28*hp, color: Colors.black //TODO: Convertto HP
+                          ),
+                        ),
+                        SizedBox(height: 20*hp),
+                        Center(
+                          child:
+                          error != null ? Center(
+                            child: Text(
+                                error!, style: ThemeText.inter(fontWeight: FontWeight.w500, fontSize: 13*hp, color: Colors.black)),
+                          ) :
+                          Text("Verify your school with your email.",
+                              style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontSize: 14)),
+                        ),
+                        SizedBox(height: 50*hp),
+                      ],
+                    )
+                ),
+                Form(
+                  key: _formKey,
+                  child:
+                  Container(
+                      padding:EdgeInsets.fromLTRB(20.0,0,20,0),
+                      child:
+                        Column(
+                          children: [
+                            TextField(
+                              autocorrect:false,
+                              style: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.primary),
+                              maxLines: null,
+                              keyboardType: TextInputType.emailAddress,
+                              decoration: InputDecoration(
+                                  hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.onError),
+                                  border: InputBorder.none,
+                                  hintText: "Your School Email"),
+                              onChanged: (value) {
+                                if (mounted) {
+                                  setState(() {
+                                    email = value.trim();
+                                  });
+                                }
+                              },
+                            ),
+                            Divider(height:20*hp, thickness: 2*hp, color: colorScheme.onError),
+                          ],
+                        )
+                  ),
+                ),
+                SizedBox(height:90*hp) ],
+            ),
           ),
           Positioned(
             bottom:0,
@@ -156,10 +158,10 @@ class _RegisterEmailState extends State<RegisterEmail> {
                       setState(() {
                         String errorMsg = '';
                         if (result.message != null) errorMsg += result.message!;
-                        errorMsg +=
+                        /*errorMsg +=
                             'If you think this is a mistake, please contact us at ___ for support. [Error Code: ' +
                                 result.code +
-                                ']';
+                                ']';*/
                         error = errorMsg;
                         loading = false;
                       });
@@ -167,7 +169,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                   } else {
                     if (mounted) {
                       setState(() {
-                        error = 'ERROR: [' + result.toString() + ']. Please contact us at ___ for support.';
+                        error =  result.toString();
                         loading = false;
                       });
                     }
