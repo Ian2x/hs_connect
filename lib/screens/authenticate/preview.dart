@@ -79,7 +79,7 @@ class previewPage extends StatelessWidget {
               //TODO: Convertto HP
               onPressed: (){
                 Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => SignIn(toggleView: toggleView)));
+                    .push(MaterialPageRoute(builder: (context) => pixelProvider(context, child: SignIn(toggleView: toggleView))));
               },
             ),
             SizedBox(height:height*.1),
