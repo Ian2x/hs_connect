@@ -4,7 +4,6 @@ import 'package:hs_connect/models/searchResult.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/tools/helperFunctions.dart';
 
 class UserDataDatabaseService {
   DocumentReference currUserRef;
@@ -15,17 +14,18 @@ class UserDataDatabaseService {
   final CollectionReference userDataCollection = FirebaseFirestore.instance.collection(C.userData);
 
   Future<void> initUserData(String domain, String username, {String? overrideCounty, String? overrideState, String? overrideCountry}) async {
+    final domainLC = domain.toLowerCase();
     final GroupsDatabaseService _groupDatabaseService = GroupsDatabaseService(currUserRef: currUserRef);
 
     // Create domain group if not already created
     final domainGroupRef = await _groupDatabaseService.newGroup(
-        accessRestriction: AccessRestriction(restrictionType: AccessRestrictionType.domain, restriction: domain),
-        name: domain,
+        accessRestriction: AccessRestriction(restrictionType: AccessRestrictionType.domain, restriction: domainLC),
+        name: domainLC,
         image: null,
-        description: 'Default group for ' + domain,
+        description: 'Default group for ' + domainLC,
         creatorRef: null);
 
-    final domainsDataRef = FirebaseFirestore.instance.collection(C.domainsData).doc(domain);
+    final domainsDataRef = FirebaseFirestore.instance.collection(C.domainsData).doc(domainLC);
     domainsDataRef.get().then((doc) => {
       if (!doc.exists) {
         domainsDataRef.set({C.color: null, C.country: null, C.county: null, C.fullName: null, C.state: null, C.image: null})
@@ -36,7 +36,7 @@ class UserDataDatabaseService {
       C.displayedName: username,
       C.displayedNameLC: username.toLowerCase(),
       C.bio: null,
-      C.domain: domain,
+      C.domain: domainLC,
       C.overrideCounty: overrideCounty,
       C.overrideState: overrideState,
       C.overrideCountry: overrideCountry,

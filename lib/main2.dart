@@ -14,14 +14,15 @@ class Main2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User?>(context);
-    return StreamProvider<UserData?>.value(
-      value: user != null
-          ? UserDataDatabaseService(currUserRef: FirebaseFirestore.instance.collection(C.userData).doc(user.uid))
-              .userData
-          : null,
-      initialData: null,
-      child: MaterialApp(
+    {
+      final user = Provider.of<User?>(context);
+      return StreamProvider<UserData?>.value(
+        value: user != null
+            ? UserDataDatabaseService(currUserRef: FirebaseFirestore.instance.collection(C.userData).doc(user.uid))
+            .userData
+            : null,
+        initialData: null,
+        child: MaterialApp(
           home: Wrapper(),
           theme: ThemeData(
             brightness: Brightness.light,
@@ -78,10 +79,10 @@ class Main2 extends StatelessWidget {
                   letterSpacing: 0.15
               ),
               subtitle1: TextStyle(
-                  fontFamily: "Inter",
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  letterSpacing: 0.15,
+                fontFamily: "Inter",
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+                letterSpacing: 0.15,
               ),
               subtitle2: TextStyle(
                   fontFamily: "Inter",
@@ -127,7 +128,8 @@ class Main2 extends StatelessWidget {
             /* dark theme settings */
           ),
           themeMode: ThemeMode.light,
-          ),
-    );
+        ),
+      );
+    }
   }
 }

@@ -3,14 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/screens/authenticate/registerUser.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'dart:async';
-
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/gradientText.dart';
 import 'package:hs_connect/shared/widgets/outlineButton.dart';
 import 'package:provider/provider.dart';
-
-import 'authBar.dart';
 
 class WaitVerification extends StatefulWidget {
   const WaitVerification({Key? key, required this.domain}) : super(key: key);

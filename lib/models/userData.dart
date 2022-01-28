@@ -29,6 +29,7 @@ UserMessage userMessageFromMap({required Map map}) {
 
 class UserData {
   final DocumentReference userRef;
+  //final String fundamentalName;
   final String displayedName;
   final String displayedNameLC;
   final String? bio;
@@ -53,6 +54,7 @@ class UserData {
 
   UserData({
     required this.userRef,
+    //required this.fundamentalName,
     required this.displayedName,
     required this.displayedNameLC,
     required this.bio,
@@ -87,6 +89,7 @@ Future<UserData> userDataFromSnapshot(DocumentSnapshot snapshot, DocumentReferen
   if (domainData==null) domainData = DomainData(county: null, state: null, country: null, fullName: null, color: null, image: null);
   return UserData(
     userRef: userRef,
+    //fundamentalName: snapshot.get(C.fundamentalName),
     displayedName: snapshot.get(C.displayedName),
     displayedNameLC: snapshot.get(C.displayedNameLC),
     bio: snapshot.get(C.bio),
