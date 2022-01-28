@@ -20,7 +20,6 @@ class TrendingFeed extends StatefulWidget {
 
 class _TrendingFeedState extends State<TrendingFeed> {
   final scrollController = ScrollController();
-
   List<Post> posts = [];
   DocumentSnapshot? lastVisiblePost;
 
@@ -49,7 +48,7 @@ class _TrendingFeedState extends State<TrendingFeed> {
     if (userData == null) return Loading();
 
     return RefreshIndicator(
-        child: postsListView(posts: posts, currUserRef: userData.userRef),
+        child: postsListView(posts: posts, currUserRef: userData.userRef, scrollController: scrollController),
         onRefresh: getInitialPosts
     );
   }

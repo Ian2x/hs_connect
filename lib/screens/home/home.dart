@@ -1,6 +1,7 @@
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/postFeed/domainFeed.dart';
 import 'package:hs_connect/screens/home/new/floatingNewButton.dart';
+import 'package:hs_connect/screens/home/postFeed/domainFeed2.dart';
 import 'package:hs_connect/screens/home/postFeed/trendingFeed.dart';
 import 'package:hs_connect/services/auth.dart';
 import 'package:flutter/material.dart';
@@ -84,8 +85,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             },
             body: TabBarView(
               children: [
-                //DomainFeed(currUser: userData, parentScrollController: scrollController,),
-                //TrendingFeed(currUser: userData),
+                DomainFeed2(currUser: userData),
+                TrendingFeed(currUser: userData),
               ],
               controller: _tabController,
               physics: new NeverScrollableScrollPhysics(),

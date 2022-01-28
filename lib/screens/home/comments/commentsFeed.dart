@@ -62,7 +62,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
               });
 
               return ListView.builder(
-                itemCount: comments.length + 2,
+                itemCount: comments.length + 3,
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 physics: BouncingScrollPhysics(),
@@ -74,16 +74,9 @@ class _CommentsFeedState extends State<CommentsFeed> {
                       currUserRef: userData.userRef,
                     );
                   } else if (index == 1) {
-                    return Divider(thickness: 3*hp, color: colorScheme.background, height: 20*hp);
-                  } else if (index == comments.length + 1) {
-                    return Container(
-                      padding: EdgeInsets.only(bottom: 70*hp),
-                      child: CommentCard(
-                        switchFormBool: switchFormBool,
-                        comment: comments[index - 2],
-                        currUserRef: userData.userRef,
-                      )
-                    );
+                    return Divider(thickness: 3 * hp, color: colorScheme.background, height: 20 * hp);
+                  } else if (index == comments.length+2){
+                    return SizedBox(height: 70*hp);
                   } else {
                     return CommentCard(
                       switchFormBool: switchFormBool,

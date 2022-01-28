@@ -5,7 +5,7 @@ import 'package:hs_connect/shared/tools/helperFunctions.dart';
 class Poll {
   final DocumentReference pollRef;
   final List<String> choices; // [a,b,c,d]
-  final Map votes; // {0: [userRef1, userRef2], 1: [], 2: [userRef3, userRef4, userRef5], 3: [userRef6]}
+  final Map<int, List<DocumentReference>> votes; // {0: [userRef1, userRef2], 1: [], 2: [userRef3, userRef4, userRef5], 3: [userRef6]}
 
   Poll({
     required this.pollRef,
@@ -14,14 +14,15 @@ class Poll {
   });
 }
 
-pollFromSnapshot(DocumentSnapshot snapshot) {
+Poll pollFromSnapshot(DocumentSnapshot snapshot) {
   final choices = stringList(snapshot.get(C.choices));
-  var votes = Map();
+  var votes = Map<int, List<DocumentReference>>();
   for (int i = 0; i < choices.length; i++) {
+    print(i);
     votes[i] = docRefList(snapshot.get(i.toString()));
   }
   return Poll(
-    pollRef: snapshot[C.pollRef],
+    pollRef: snapshot.reference,
     choices: choices,
     votes: votes,
   );

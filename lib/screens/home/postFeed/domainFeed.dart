@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/post.dart';
@@ -12,17 +10,15 @@ import 'package:provider/provider.dart';
 
 class DomainFeed extends StatefulWidget {
   final UserData currUser;
-  final ScrollController parentScrollController;
 
-  const DomainFeed({Key? key, required this.currUser,
-  required this.parentScrollController}) : super(key: key);
+  const DomainFeed({Key? key, required this.currUser}) : super(key: key);
 
   @override
   _DomainFeedState createState() => _DomainFeedState();
 }
 
 class _DomainFeedState extends State<DomainFeed> {
-
+  final scrollController = ScrollController();
   List<Post> posts = [];
   DocumentSnapshot? lastVisiblePost;
 
@@ -32,11 +28,20 @@ class _DomainFeedState extends State<DomainFeed> {
   void initState() {
     _posts = PostsDatabaseService(currUserRef: widget.currUser.userRef);
     getInitialPosts();
-    widget.parentScrollController.addListener(() {
-      if (widget.parentScrollController.position.atEdge) {
-        if (widget.parentScrollController.position.pixels != 0) {
+    scrollController.addListener(() {
+      //print(widget.scrollController.position.extentBefore);
+      //widget.scrollController.position.pixels;
+      //if (widget.scrollController.position.extentAfter())
+      /*if (widget.scrollController.position.atEdge) {
+        if (widget.scrollController.position.pixels != 0) {
           getNextPosts();
         }
+      }*/
+      if (scrollController.position.atEdge && scrollController.position.pixels != 0 || scrollController.position.extentAfter<10) {
+        print('doing something');
+        getNextPosts();
+        //widget.scrollController.notifyListeners();
+        //widget.scrollController.animateTo(widget.scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
       }
     });
     super.initState();
@@ -49,7 +54,7 @@ class _DomainFeedState extends State<DomainFeed> {
     if (userData == null) return Loading();
 
     return RefreshIndicator(
-        child: postsListView(posts: posts, currUserRef: userData.userRef),
+        child: postsListView(posts: posts, currUserRef: userData.userRef, scrollController: scrollController),
         onRefresh: getInitialPosts
     );
   }
@@ -67,6 +72,7 @@ class _DomainFeedState extends State<DomainFeed> {
   }
 
   Future getNextPosts() async {
+    print('getting next posts');
     List<Post?> tempPosts = await _posts.getPostsByGroups(
         [FirebaseFirestore.instance.collection(C.groups).doc(widget.currUser.domain)],
         startingFrom: lastVisiblePost!, setStartFrom: setLastVisiblePost);

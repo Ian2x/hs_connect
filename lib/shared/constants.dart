@@ -25,7 +25,7 @@ const numHeightPixels = 781.1;
 const numWidthPixels = 392.7;
 
 const initialPostsFetchSize = 5;
-const nextPostsFetchSize = 2;
+const nextPostsFetchSize = 5;
 
 const defaultProfilePic = AssetImage('assets/me.png');
 

@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:hs_connect/models/myNotification.dart';
 import 'package:hs_connect/services/domains_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
@@ -43,13 +42,14 @@ class UserData {
   final int score;
   final int numReports;
   final bool private;
-  // extracted data
   final String? profileImage;
+  // extracted data
   final String? fullDomainName;
   final Color? domainColor;
   final String? currCounty;
   final String? currState;
   final String? currCountry;
+  final String? domainImage;
 
   UserData({
     required this.userRef,
@@ -62,6 +62,7 @@ class UserData {
     required this.currCounty,
     required this.currState,
     required this.currCountry,
+    required this.domainImage,
     required this.groups,
     required this.modGroupsRefs,
     required this.userMessages,
@@ -71,7 +72,7 @@ class UserData {
     required this.profileImageURL,
     required this.score,
     required this.numReports,
-    required this.private
+    required this.private,
   });
 }
 
@@ -99,12 +100,13 @@ Future<UserData> userDataFromSnapshot(DocumentSnapshot snapshot, DocumentReferen
     score: snapshot.get(C.score),
     numReports: snapshot.get(C.numReports),
     private: snapshot.get(C.private),
-    // extracted data
     profileImage: snapshot.get(C.profileImageURL),
+    // extracted data
     fullDomainName: domainData.fullName,
     domainColor: domainData.color != null ? HexColor(domainData.color!) : null,
     currCounty: snapshot.get(C.overrideCounty) != null ? snapshot.get(C.overrideCounty) : domainData.county,
     currState: snapshot.get(C.overrideState) != null ? snapshot.get(C.overrideState) : domainData.state,
     currCountry: snapshot.get(C.overrideCountry) != null ? snapshot.get(C.overrideCountry) : domainData.country,
+    domainImage: domainData.image
   );
 }
