@@ -1,6 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:hs_connect/shared/tools/hexColor.dart';
 // Calculate trending by activity within past 1.5 days
 const hoursTrending = 36;
+
+class gradient extends Color {
+  gradient(int value) : super(value);
+
+  static Color gRed = HexColor ("FF004D");
+
+  static Color gBlue = HexColor("13A1F0");
+
+}
+
+class Gradients {
+  static LinearGradient blueRed ({
+    AlignmentGeometry begin = Alignment.topLeft,
+    AlignmentGeometry end = Alignment. bottomRight,
+  }){
+    return LinearGradient(
+      begin: begin,
+      end: end,
+      colors: [ gradient.gBlue, gradient.gRed],
+    );
+  }
+}
+
+class ThemeText {
+  static TextStyle inter({Color? color, double? fontSize, double? height,
+    TextDecoration? decoration1, FontWeight? fontWeight}) {
+    return TextStyle(
+        color: color,
+        fontSize: fontSize,
+        height: height,
+        decoration: decoration1,
+        fontWeight: fontWeight,
+        fontFamily: "Inter"
+    );
+  }
+}
+
 
 const maxDataCollectionRate = 3; // in hours
 const maxDataCollectionDays = 2; // in days
@@ -25,7 +63,7 @@ const numHeightPixels = 781.1;
 const numWidthPixels = 392.7;
 
 const initialPostsFetchSize = 5;
-const nextPostsFetchSize = 2;
+const nextPostsFetchSize = 5;
 
 const defaultProfilePic = AssetImage('assets/me.png');
 

@@ -35,7 +35,7 @@ typedef VoidDocSnapParamFunction = void Function (DocumentSnapshot);
 typedef VoidBoolParamFunction = void Function(bool);
 
 
-InputDecoration commentReplyInputDecoration({required VoidFunction onPressed, required Function setPic, required bool isReply, required bool isFocused, required BuildContext context}) {
+InputDecoration commentReplyInputDecoration({required VoidFunction onPressed, required bool isReply, required bool isFocused, required BuildContext context}) {
   final colorScheme = Theme.of(context).colorScheme;
   final hp = Provider.of<HeightPixel>(context).value;
   final wp = Provider.of<WidthPixel>(context).value;
@@ -56,7 +56,6 @@ InputDecoration commentReplyInputDecoration({required VoidFunction onPressed, re
         borderRadius: new BorderRadius.circular(25.7*hp),
         borderSide: new BorderSide(width: 3*wp, color: colorScheme.background)),
     suffixIcon: isFocused ? Row(mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.min, children: <Widget>[
-      picPickerButton(setPic: setPic, iconSize: 16*hp, context: context, maxWidth: commentPicWidth*hp, maxHeight: commentPicHeight*hp),
       IconButton(
           icon: Icon(Icons.send),
           color: colorScheme.onError,

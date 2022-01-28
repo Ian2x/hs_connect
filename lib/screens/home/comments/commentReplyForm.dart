@@ -56,15 +56,6 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
   ImageStorage _images = ImageStorage();
   CommentsDatabaseService? _comments;
 
-
-  void setPic(File newFile2) {
-    if (mounted) {
-      setState(() {
-        newFile = newFile2;
-      });
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -152,8 +143,7 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
               isReply: widget.isReply,
               onPressed: () async {
                 onSubmit();
-              },
-              setPic: setPic, isFocused: myFocusNode.hasFocus),
+              }, isFocused: myFocusNode.hasFocus),
           validator:
             widget.isReply!= false ? (val) {
                 if (val == null) return 'Write a reply...';

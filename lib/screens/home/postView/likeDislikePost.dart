@@ -61,14 +61,12 @@ class LikeDislikePost extends StatelessWidget {
             );
           }
         }(),
-        SizedBox(width: 7*wp),
+        SizedBox(width: 5*wp),
         Text(
           (postLikesManager.likeCount - postLikesManager.dislikeCount).toString(),
-          style: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black,
-            fontSize: 14*hp, fontWeight: FontWeight.w500,
-          ),
+          style: Theme.of(context).textTheme.subtitle1,
         ),
-        SizedBox(width: 7*wp),
+        SizedBox(width: 5*wp),
         () {
           if (postLikesManager.likeStatus == true) {
             return IconButton(
