@@ -1,7 +1,6 @@
 import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/screens/home/postFeed/domainFeed.dart';
 import 'package:hs_connect/screens/home/new/floatingNewButton.dart';
-import 'package:hs_connect/screens/home/postFeed/domainFeed2.dart';
+import 'package:hs_connect/screens/home/postFeed/domainFeed.dart';
 import 'package:hs_connect/screens/home/postFeed/trendingFeed.dart';
 import 'package:hs_connect/services/auth.dart';
 import 'package:flutter/material.dart';
@@ -57,35 +56,41 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               return <Widget>[
                 SliverAppBar(
                   elevation: 0,
-                  primary: true,
+                  //primary: true,
                   floating: true,
                   backgroundColor: colorScheme.surface,
-                  snap: true,
-                  pinned: false,
-                  bottom: TabBar(
-                    indicatorColor: colorScheme.primaryVariant,
-                    tabs: <Widget>[
-                      Tab(
-                          icon: Text(userData.fullDomainName!=null ? userData.fullDomainName! : userData.domain,
-                              style:
-                              Theme.of(context).textTheme.subtitle2
-                          )
-                      ),
-                      Tab(
-                          icon: Text("Trending",
-                              style:
-                              Theme.of(context).textTheme.subtitle2
-                          )
-                      )
-                    ],
-                    controller: _tabController,
+                  //snap: true,
+                  //pinned: false,
+                  title: Container(
+                    child: Text("hi")
+                  ),
+                  bottom: PreferredSize(
+                    preferredSize: Size.fromHeight(20),
+                    child: TabBar(
+                      indicatorColor: colorScheme.primaryVariant,
+                      tabs: <Widget>[
+                        Tab(
+                            icon: Text(userData.fullDomainName!=null ? userData.fullDomainName! : userData.domain,
+                                style:
+                                Theme.of(context).textTheme.subtitle2
+                            )
+                        ),
+                        Tab(
+                            icon: Text("Trending",
+                                style:
+                                Theme.of(context).textTheme.subtitle2
+                            )
+                        )
+                      ],
+                      controller: _tabController,
+                    ),
                   ),
                 ),
               ];
             },
             body: TabBarView(
               children: [
-                DomainFeed2(currUser: userData),
+                DomainFeed(currUser: userData),
                 TrendingFeed(currUser: userData),
               ],
               controller: _tabController,
@@ -93,7 +98,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             ),
           ),
 
-          Positioned(
+          /*Positioned(
             top: 0,
             left: 0,
             right: 0,
@@ -122,7 +127,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   ],),
               ),
             ),
-          ),
+          ),*/
 
         ],
       ),

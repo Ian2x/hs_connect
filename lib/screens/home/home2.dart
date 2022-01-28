@@ -7,7 +7,6 @@ import 'package:hs_connect/screens/home/postFeed/domainFeed.dart';
 import 'package:hs_connect/screens/home/postFeed/trendingFeed.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/services/groups_database.dart';
-import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
