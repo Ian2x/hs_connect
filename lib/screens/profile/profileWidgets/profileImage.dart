@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
+import 'package:hs_connect/shared/tools/buildCircle.dart';
 import 'profileForm.dart';
 
 class ProfileImage extends StatelessWidget {
@@ -56,10 +57,10 @@ class ProfileImage extends StatelessWidget {
                 builder: (context) => pixelProvider(context, child: ProfileForm(currDisplayName: currUserName, currImageURL: profileImageURL))),
           );
         },
-        child: buildCircle(
+        child: buildProfileCircle(
           color: Theme.of(context).colorScheme.surface,
           all: 3,
-          child: buildCircle(
+          child: buildProfileCircle(
             color: Theme.of(context).colorScheme.secondary,
             all: 8,
             child: Icon(
@@ -70,18 +71,4 @@ class ProfileImage extends StatelessWidget {
           ),
         ),
       );
-
-  Widget buildCircle({
-    required Widget child,
-    required double all,
-    required Color color,
-  }) {
-    return ClipOval(
-      child: Container(
-        padding: EdgeInsets.all(all),
-        color: color,
-        child: child,
-      ),
-    );
-  }
 }

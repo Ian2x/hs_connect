@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/screens/authenticate/signIn.dart';
 import 'package:hs_connect/screens/authenticate/waitVerification.dart';
 import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/tools/gradientText.dart';
+import 'package:hs_connect/shared/widgets/gradientText.dart';
 import 'package:hs_connect/shared/pixels.dart';
 
 

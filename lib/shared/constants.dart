@@ -3,13 +3,14 @@ import 'package:hs_connect/shared/tools/hexColor.dart';
 // Calculate trending by activity within past 1.5 days
 const hoursTrending = 36;
 
-class gradient extends Color {
-  gradient(int value) : super(value);
+class _Gradient extends Color {
+  _Gradient(int value) : super(value);
 
   static Color gRed = HexColor ("FF004D");
 
   static Color gBlue = HexColor("13A1F0");
 
+  static Color gBlack = Colors.black;
 }
 
 class Gradients {
@@ -20,7 +21,17 @@ class Gradients {
     return LinearGradient(
       begin: begin,
       end: end,
-      colors: [ gradient.gBlue, gradient.gRed],
+      colors: [ _Gradient.gBlue, _Gradient.gRed],
+    );
+  }
+  static LinearGradient black ({
+    AlignmentGeometry begin = Alignment.topLeft,
+    AlignmentGeometry end = Alignment. bottomRight,
+  }){
+    return LinearGradient(
+      begin: begin,
+      end: end,
+      colors: [ _Gradient.gBlack, _Gradient.gBlack],
     );
   }
 }
