@@ -184,7 +184,10 @@ class _PostFormState extends State<PostForm> {
                   TextButton(
                       child: Text(
                         "Post",
-                        style: Theme.of(context).textTheme.subtitle1,
+                        style:
+                          Theme.of(context).textTheme.subtitle1?.copyWith(
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
                       ),
                       onPressed: () async {
                         // check header isn't empty
@@ -268,9 +271,9 @@ class _PostFormState extends State<PostForm> {
                     maxLines: null,
                     autocorrect: false,
                     decoration: InputDecoration(
-                        hintStyle: Theme.of(context).textTheme.headline5?.copyWith(color: colorScheme.onError),
+                        hintStyle: Theme.of(context).textTheme.headline5?.copyWith(color: colorScheme.primaryVariant),
                         border: InputBorder.none,
-                        hintText: "What's up?"),
+                        hintText: "What's up?", ),
                     onChanged: (val) {
                       setState(() => _title = val);
                       if (error == emptyTitleError) {

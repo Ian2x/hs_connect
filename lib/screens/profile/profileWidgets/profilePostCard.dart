@@ -60,7 +60,7 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16*hp),
                 side: BorderSide(
-                  color: Theme.of(context).colorScheme.background,
+                  color: Theme.of(context).colorScheme.surface,
                   width: 3*hp,
                 )),
           ),
@@ -71,6 +71,7 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
     return Container(
       padding: EdgeInsets.fromLTRB(10*wp,0,5*wp,10*hp),
       decoration: ShapeDecoration(
+        color: Theme.of(context).colorScheme.surface,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16*hp),
             side: BorderSide(

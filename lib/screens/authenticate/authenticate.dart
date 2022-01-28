@@ -1,3 +1,4 @@
+import 'package:hs_connect/screens/authenticate/preview.dart';
 import 'package:hs_connect/screens/authenticate/registerEmail.dart';
 import 'package:hs_connect/screens/authenticate/signIn.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ class _AuthenticateState extends State<Authenticate> {
   @override
   Widget build(BuildContext context) {
     if (showSignIn) {
-      return SignIn(toggleView: toggleView);
+      return previewPage(toggleView: toggleView);
     } else {
       return RegisterEmail(toggleView: toggleView);
     }
