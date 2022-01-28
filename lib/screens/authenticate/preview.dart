@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/screens/authenticate/signIn.dart';
-import 'package:hs_connect/screens/authenticate/waitVerification.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/widgets/gradientText.dart';
-import 'package:hs_connect/shared/pixels.dart';
 
 
-class previewPage extends StatelessWidget {
+class PreviewPage extends StatelessWidget {
 
   final Function toggleView;
 
 
-  const previewPage({Key? key,
+  const PreviewPage({Key? key,
     required this.toggleView,
   }) : super(key: key);
 

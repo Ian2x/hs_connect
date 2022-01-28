@@ -63,7 +63,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                         Navigator.pushReplacement(
                           context,
                           NoAnimationMaterialPageRoute(
-                              builder: (context) => pixelProvider(context, child: previewPage(toggleView: widget.toggleView))),
+                              builder: (context) => pixelProvider(context, child: PreviewPage(toggleView: widget.toggleView))),
                         );
                       },
                       child:Text(

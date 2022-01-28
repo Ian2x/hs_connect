@@ -22,7 +22,7 @@ class _AuthenticateState extends State<Authenticate> {
   @override
   Widget build(BuildContext context) {
     if (showSignIn) {
-      return previewPage(toggleView: toggleView);
+      return PreviewPage(toggleView: toggleView);
     } else {
       return RegisterEmail(toggleView: toggleView);
     }
