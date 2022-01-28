@@ -17,6 +17,10 @@ class Wrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = Provider.of<User?>(context);
     final userData = Provider.of<UserData?>(context);
+    print(user.runtimeType);
+    print(userData.runtimeType);
+    print(user == null || user.email==null);
+    print(user==null || !user.email!.endsWith('@ianeric.com'));
     return pixelProvider(context, child: (user == null || userData == null || user.email==null || !user.email!.endsWith('@ianeric.com')) ? PreviewPage() : Home());
   }
 }
