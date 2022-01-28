@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pixels.dart';
-import 'package:hs_connect/shared/tools/gradientText.dart';
+import 'package:hs_connect/shared/widgets/gradientText.dart';
 import 'package:hs_connect/shared/widgets/outlineButton.dart';
 import 'package:provider/provider.dart';
 
@@ -33,16 +33,16 @@ class AuthBar extends StatelessWidget {
           ),*/
           child:
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-             Spacer(),
               MyOutlinedButton(
+                padding: EdgeInsets.fromLTRB(30.0, 0.0, 30, 0),
                 onPressed: () {onPressed();},
                 gradient: LinearGradient(colors: [Colors.indigo, Colors.pink]),
                 borderRadius: 40.0,
                 child: GradientText(
-                  'Sign up',
+                  buttonText,
                   style: ThemeText.inter(fontWeight: FontWeight.w500, fontSize: 15*hp, //TODO: Convertto HP
                   ),
                   gradient: Gradients.blueRed(),

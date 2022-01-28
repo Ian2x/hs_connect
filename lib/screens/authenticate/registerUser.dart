@@ -2,11 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/screens/wrapper.dart';
 import 'package:hs_connect/services/auth.dart';
+import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
+
+import 'authBar.dart';
 
 class RegisterUser extends StatefulWidget {
   const RegisterUser({Key? key, required this.domain}) : super(key: key);
@@ -39,60 +42,103 @@ class _RegisterUserState extends State<RegisterUser> {
       body: Loading()
     )
         : Scaffold(
-            backgroundColor: Colors.brown[100],
-            appBar: AppBar(
-              backgroundColor: Colors.brown[400],
-              elevation: 0,
-              title: Text(
-                  'Your email has been verified! Sign up now! [WARNING: DO NOT LEAVE THIS PAGE AS YOUR EMAIL CAN NOT BE RE-USED ANYMORE'),
-            ),
-            body: Container(
-              padding: EdgeInsets.symmetric(vertical: 20*hp, horizontal: 50*wp),
-              child: Form(
-                key: _formKey,
-                child: Column(children: <Widget>[
-                  SizedBox(height: 20*hp),
-                  TextFormField(
-                      decoration: textInputDecoration(context: context).copyWith(hintText: 'Username'),
-                      validator: (val) {
-                        if (val == null) return 'Error: null value';
-                        if (val.isEmpty)
-                          return 'Enter a username';
-                        else
-                          return null;
-                      },
-                      onChanged: (val) {
-                        if (mounted) {
-                          setState(() => username = val);
-                        }
-                      }),
-                  SizedBox(height: 20*hp),
-                  TextFormField(
-                      decoration: textInputDecoration(context: context).copyWith(hintText: 'Password'),
-                      obscureText: true,
-                      validator: (val) {
-                        if (val == null) return 'Error: null value';
-                        if (val.length < 6)
-                          return 'Enter a password 6+ chars long';
-                        else
-                          return null;
-                      },
-                      onChanged: (val) {
-                        if (mounted) {
-                          setState(() => password = val);
-                        }
-                      }),
-                  SizedBox(height: 20*hp),
-                  ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.pink[400],
+      backgroundColor: Colors.white,
+        body: Stack(
+            children: [
+
+              SingleChildScrollView(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 110*hp,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          gradient: Gradients.blueRed(begin: Alignment.topLeft , end: Alignment.bottomRight),
+                        ),
+                        child: SizedBox(),
                       ),
-                      onPressed: () async {
+                      SizedBox(height: 10*hp),
+                      Row(
+                        children: [
+                          SizedBox(width: 10*hp),
+                          TextButton(
+                              onPressed: (){
+                              },
+                              child:Text(
+                                "Cancel",
+                                style: ThemeText.inter(fontWeight: FontWeight.normal,
+                                    fontSize: 16*hp, color: Colors.grey),
+                              )
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 20*hp),
+                      Center(
+                          child:
+                          Column(
+                            children: [
+                              SizedBox(
+                                height: 80 *hp,
+                                child:
+                                Image.asset('assets/logo1background.png'),
+                              ),
+                              SizedBox(height: 20*hp),
+                              Text(
+                                'Make a Password',
+                                style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 28*hp, color: Colors.black //TODO: Convertto HP
+                                ),
+                              ),
+                              SizedBox(height: 15*hp),
+                              Text("Make sure it's longer than 6 characters.",
+                                  style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontSize: 14)),
+                              SizedBox(height: 50*hp),
+                              Container(
+                                padding:EdgeInsets.fromLTRB(20.0,0,20,0),
+                                child: Column(
+                                  children: [
+                                    TextFormField(
+                                        style: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.primary),
+                                        autocorrect:false,
+                                        obscureText: true,
+                                        decoration: InputDecoration(
+                                            hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.onError),
+                                            border: InputBorder.none,
+                                            hintText: "Password..."),
+                                        validator: (val) {
+                                          if (val == null) return 'Error: null value';
+                                          if (val.length < 6)
+                                            return 'Enter a password 6+ chars long';
+                                          else
+                                            return null;
+                                        },
+                                        onChanged: (val) {
+                                          if (mounted) {
+                                            setState(() => password = val);
+                                          }
+                                        }),
+                                    Divider(height:20*hp, thickness: 2*hp, color: colorScheme.onError),
+                                  ],
+                                ),
+                              ),
+
+                              SizedBox(height: 20*hp),
+                              SizedBox(height:15*hp),
+                              SizedBox(height: 50*hp),
+                            ],
+                          )
+                      ),
+                    ]),
+              ),
+              Positioned(
+                bottom:0,
+                left:0,
+                child: new AuthBar(buttonText: "Register",
+                    onPressed: () async {
                         if (_formKey.currentState != null && _formKey.currentState!.validate()) {
                           if (mounted) {
                             setState(() => loading = true);
                           }
-
                           dynamic result =
                               await _auth.registerWithUsernameAndPassword(username, password, widget.domain);
 
@@ -123,16 +169,9 @@ class _RegisterUserState extends State<RegisterUser> {
                             }
                           }
                         }
-                      },
-                      child: Text('Register', style: TextStyle(color: Colors.white))),
-                  SizedBox(height: 12*hp),
-                  Text(
-                    error,
-                    style: TextStyle(color: Colors.red, fontSize: 14*hp),
-                  )
-                ]),
+                      },),
               ),
-            ),
-          );
+            ])
+    );
   }
 }

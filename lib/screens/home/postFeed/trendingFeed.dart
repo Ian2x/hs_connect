@@ -48,10 +48,12 @@ class _TrendingFeedState extends State<TrendingFeed> {
       final newPosts = tempPosts.map((item) => item!).toList();
 
       final isLastPage = newPosts.length < _pageSize;
-      if (isLastPage) {
-        _pagingController.appendLastPage(newPosts);
-      } else {
-        _pagingController.appendPage(newPosts, tempKey!);
+      if (mounted) {
+        if (isLastPage) {
+          _pagingController.appendLastPage(newPosts);
+        } else {
+          _pagingController.appendPage(newPosts, tempKey!);
+        }
       }
     } catch (error) {
       _pagingController.error = error;

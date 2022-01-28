@@ -6,7 +6,7 @@ import 'package:hs_connect/services/auth.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
-import 'package:hs_connect/shared/tools/gradientText.dart';
+import 'package:hs_connect/shared/widgets/gradientText.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
@@ -43,7 +43,6 @@ class _RegisterEmailState extends State<RegisterEmail> {
       backgroundColor: colorScheme.surface,
       body: Stack(
         children: [
-
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -64,7 +63,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                         Navigator.pushReplacement(
                           context,
                           NoAnimationMaterialPageRoute(
-                              builder: (context) => pixelProvider(context, child: previewPage(toggleView: widget.toggleView))),
+                              builder: (context) => pixelProvider(context, child: PreviewPage(toggleView: widget.toggleView))),
                         );
                       },
                       child:Text(
@@ -75,7 +74,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                   ),
                 ],
               ),
-              SizedBox(height: 30*hp),
+              SizedBox(height: 20*hp),
               Center(
                   child:
                   Column(
@@ -91,13 +90,12 @@ class _RegisterEmailState extends State<RegisterEmail> {
                         style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 28*hp, color: Colors.black //TODO: Convertto HP
                         ),
                       ),
-                      /*GradientText(
-                        'Sign up',
-                        style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 28*hp, //TODO: Convertto HP
-                        ),
-                        gradient: Gradients.blueRed(),
-                      ),  */                          SizedBox(height:15*hp),
-                      SizedBox(height: 50*hp),
+                      SizedBox(height: 15*hp),
+                      Center(
+                        child:Text("Verify your school with your email.",
+                            style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontSize: 14)),
+                      ),
+                      SizedBox(height: 55*hp),
                     ],
                   )
               ),
@@ -131,20 +129,19 @@ class _RegisterEmailState extends State<RegisterEmail> {
                       )
                 ),
               ),
-              SizedBox(height:12*hp) ,
-              Center(
-                child:Text("We'll send you an email to verify your school.",
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontSize: 14)),
-              ),
-              error!= null ? SizedBox(height:12*hp): Container(),
-              error!=null ? Text(error!, style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontSize:14)) : Container(),
-            ],
+              SizedBox(height:10*hp) ,
+              error != null ? Center(
+                child: Text(
+                    'Error', style: ThemeText.inter(fontWeight: FontWeight.w500, fontSize: 13*hp, color: Colors.black)),
+              )
+                  : SizedBox(height:80*hp),],
           ),
           Positioned(
             bottom:0,
             left:0,
             child: AuthBar(buttonText: "Register",
                 onPressed: () async {
+              print(error);
                   if (mounted) {
                     setState(() => loading = true);
                   }
