@@ -55,6 +55,15 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
     final hp = Provider.of<HeightPixel>(context).value;
 
     int numberNotifications = userData.myNotifications.length;
+
+    if (numberNotifications == 0) {
+      return Container(
+          padding: EdgeInsets.only(top: 50*hp),
+          alignment: Alignment.topCenter,
+          child: Text("No notifications",
+              style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.normal)));
+    }
+
     return ListView.builder(
         itemCount: numberNotifications,
         scrollDirection: Axis.vertical,

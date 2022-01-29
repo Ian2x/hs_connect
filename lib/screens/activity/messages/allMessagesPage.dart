@@ -82,9 +82,10 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
 
     if (otherUsers!.length == 0) {
       return Container(
-          padding: EdgeInsets.all(10*hp),
-          child: Text("No messages :/\n\n... maybe try finding a friend",
-              style: Theme.of(context).textTheme.headline6));
+          padding: EdgeInsets.only(top: 50*hp),
+          alignment: Alignment.topCenter,
+          child: Text("No messages :/",
+              style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.normal)));
     }
 
     // sorted by latest first

@@ -7,7 +7,7 @@ import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
 import 'package:provider/provider.dart';
 
-import 'mySliverAppBar.dart';
+import 'homeAppBar.dart';
 
 class Home extends StatefulWidget {
   final UserData userData;
@@ -57,7 +57,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
               return [
                 SliverPersistentHeader(
-                  delegate: MySliverAppBar(tabController: tabController, userData: userData, isDomain: isDomain),
+                  delegate: HomeAppBar(tabController: tabController, userData: userData, isDomain: isDomain),
                   pinned: true,
                   floating: true,
                 )
@@ -75,7 +75,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         ],
       ),
       bottomNavigationBar: MyNavigationBar(currentIndex: 0),
-      floatingActionButton: floatingNewButton(context),
     );
   }
 }

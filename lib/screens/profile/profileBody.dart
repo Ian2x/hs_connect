@@ -42,11 +42,6 @@ class _ProfileBodyState extends State<ProfileBody> {
     if (fetchUserData != null && mounted) {
       setState(() {
         profileData = fetchUserData;
-        /*profileUsername = fetchUserData!.displayedName;
-        profileScore = fetchUserData.score;
-        profileImageURL = fetchUserData.profileImageURL;
-        domainColor = fetchUserData.domainColor;
-        domainName = fetchUserData.fullDomainName != null ? fetchUserData.fullDomainName! : fetchUserData.domain;*/
       });
     }
     GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserData.userRef);

@@ -7,7 +7,7 @@ import 'package:hs_connect/shared/tools/buildCircle.dart';
 import 'package:hs_connect/shared/widgets/gradientText.dart';
 import 'package:provider/provider.dart';
 
-class MySliverAppBar extends SliverPersistentHeaderDelegate {
+class HomeAppBar extends SliverPersistentHeaderDelegate {
   static const tabBarHeight = 35.0;
   static const expandedHeight = 170.0;
   static const epsilon = 0.0001;
@@ -17,7 +17,7 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
   final UserData userData;
   final bool isDomain;
 
-  MySliverAppBar({required this.tabController, required this.userData, required this.isDomain});
+  HomeAppBar({required this.tabController, required this.userData, required this.isDomain});
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
