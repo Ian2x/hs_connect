@@ -8,6 +8,7 @@ import 'package:hs_connect/screens/home/comments/commentCard.dart';
 import 'package:hs_connect/screens/home/comments/commentReplyForm.dart';
 import 'package:hs_connect/screens/home/postView/postTitleCard.dart';
 import 'package:hs_connect/services/comments_database.dart';
+import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
@@ -74,7 +75,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
                       currUserRef: userData.userRef,
                     );
                   } else if (index == 1) {
-                    return Divider(thickness: 3 * hp, color: colorScheme.background, height: 20 * hp);
+                    return Divider(thickness: 3 * hp, color: colorScheme.background, height: 10 * hp);
                   } else if (index == comments.length+2){
                     return SizedBox(height: 70*hp);
                   } else {
@@ -93,16 +94,22 @@ class _CommentsFeedState extends State<CommentsFeed> {
           Positioned(
             bottom:0,
             right:0,
-            child: Container (
-            width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.fromLTRB(10*wp, 10*hp, 10*wp, 10*hp),
-            color: colorScheme.background,
-            child: CommentReplyForm(
-              currUserRef: userData.userRef,
-              switchFormBool: switchFormBool,
-              commentReference: commentRef,
-              isReply: isReply,
-              post: widget.post)
+            child: Container(
+            padding: EdgeInsets.only(top: 1.5 * hp),
+            decoration: BoxDecoration(
+              gradient: Gradients.blueRed(),
+            ),
+            child: Container(
+                width: MediaQuery.of(context).size.width,
+                padding: EdgeInsets.fromLTRB(10 * wp, 10 * hp, 10 * wp, 10 * hp),
+                color: colorScheme.background,
+              child: CommentReplyForm(
+                currUserRef: userData.userRef,
+                switchFormBool: switchFormBool,
+                commentReference: commentRef,
+                isReply: isReply,
+                post: widget.post)
+              ),
             )
               ,
           ),

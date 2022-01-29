@@ -25,7 +25,7 @@ class NotificationCard extends StatefulWidget {
 
 class _NotificationCardState extends State<NotificationCard> {
   String? profileImageURL;
-  String? sourceUserDisplayedName;
+  String? sourceUserName;
   String? sourceUserFullDomainName;
   String? postGroupName;
   bool loading = false;
@@ -60,7 +60,7 @@ class _NotificationCardState extends State<NotificationCard> {
     if (mounted) {
       setState(() {
         profileImageURL = sourceUser.profileImageURL;
-        sourceUserDisplayedName = sourceUser.displayedName;
+        sourceUserName = sourceUser.fundamentalName;
         sourceUserFullDomainName = sourceUser.fullDomainName != null ? sourceUser.fullDomainName : sourceUser.domain;
       });
     }
@@ -74,7 +74,7 @@ class _NotificationCardState extends State<NotificationCard> {
     final colorScheme = Theme.of(context).colorScheme;
 
     if (userData == null ||
-        sourceUserDisplayedName == null ||
+        sourceUserName == null ||
         sourceUserFullDomainName == null ||
         postGroupName == null) {
       return Container(
@@ -123,7 +123,7 @@ class _NotificationCardState extends State<NotificationCard> {
           }
         },
         child: Container(
-            margin: EdgeInsets.only(top: 2*hp),
+            margin: EdgeInsets.only(top: 2.5*hp),
             padding: EdgeInsets.fromLTRB(14*wp, 14*hp, 14*wp, 16*hp),
             color: colorScheme.surface,
             child: Row(
@@ -144,20 +144,20 @@ class _NotificationCardState extends State<NotificationCard> {
                       children: <TextSpan>[
                         TextSpan(
                             text: widget.myNotification
-                                .printA(sourceUserDisplayedName!, sourceUserFullDomainName!, postGroupName!),
-                            style: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.bold)),
+                                .printA(sourceUserName!, sourceUserFullDomainName!, postGroupName!),
+                            style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold)),
                         TextSpan(
                             text: widget.myNotification
-                                .printB(sourceUserDisplayedName!, sourceUserFullDomainName!, postGroupName!),
-                            style: Theme.of(context).textTheme.subtitle2),
+                                .printB(sourceUserName!, sourceUserFullDomainName!, postGroupName!),
+                            style: Theme.of(context).textTheme.bodyText2),
                         TextSpan(
                             text: widget.myNotification
-                                .printC(sourceUserDisplayedName!, sourceUserFullDomainName!, postGroupName!),
-                            style: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.bold)),
+                                .printC(sourceUserName!, sourceUserFullDomainName!, postGroupName!),
+                            style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold)),
                         TextSpan(
                             text: widget.myNotification
-                                .printD(sourceUserDisplayedName!, sourceUserFullDomainName!, postGroupName!),
-                            style: Theme.of(context).textTheme.subtitle2),
+                                .printD(sourceUserName!, sourceUserFullDomainName!, postGroupName!),
+                            style: Theme.of(context).textTheme.bodyText2),
                       ],
                     ),
                   ),

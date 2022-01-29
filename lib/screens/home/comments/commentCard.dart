@@ -64,7 +64,7 @@ class _CommentCardState extends State<CommentCard> {
       if (mounted) {
         setState(() {
           creatorName = fetchUserData != null ? fetchUserData.fundamentalName : null;
-          creatorGroupName = fetchUserData != null ? fetchUserData.domain : null;
+          creatorGroupName = fetchUserData != null ? fetchUserData.fullDomainName : null;
           creatorGroupColor = fetchUserData != null ? fetchUserData.domainColor : null;
         });
       }
@@ -92,7 +92,7 @@ class _CommentCardState extends State<CommentCard> {
       children: [
         Positioned(
           top:-10*hp,
-          right:0*wp,
+          right:3*wp,
           child:IconButton(icon: Icon(Icons.more_horiz),
             iconSize: 20*hp,
             onPressed: (){
@@ -110,7 +110,7 @@ class _CommentCardState extends State<CommentCard> {
           ),
         ),
         Container(
-          padding: EdgeInsets.fromLTRB(20*wp, 5*hp, 10*wp, 0*hp),
+          padding: EdgeInsets.fromLTRB(18*wp, 10*hp, 13*wp, 0*hp),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,7 +133,7 @@ class _CommentCardState extends State<CommentCard> {
                             text: TextSpan(
                               children: <TextSpan>[
                                 TextSpan(text: widget.comment.text,
-                                    style: Theme.of(context).textTheme.bodyText2),
+                                    style: Theme.of(context).textTheme.bodyText1),
                               ],
                             ),
                           ),
@@ -141,8 +141,8 @@ class _CommentCardState extends State<CommentCard> {
                         Row(
                           children: [
                             Text(
-                              convertTime(widget.comment.createdAt.toDate()), style: Theme.of(context).textTheme.subtitle2),
-                            Spacer(flex:1),
+                              convertTime(widget.comment.createdAt.toDate()), style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary)),
+                            Spacer(),
                             TextButton(
                                 child: Text("Reply", style: Theme.of(context).textTheme.bodyText2?.copyWith(color: colorScheme.secondary)),
                                 onPressed: (){
@@ -161,7 +161,7 @@ class _CommentCardState extends State<CommentCard> {
                 ],
               ),
           RepliesFeed(commentRef: widget.comment.commentRef, postRef: widget.comment.postRef, groupRef: widget.comment.groupRef),
-          Divider(thickness: 3*hp, color: colorScheme.background, height: 20*hp),
+          Divider(thickness: 3*hp, color: colorScheme.background, height: 3*hp),
             ]
           )
         ),

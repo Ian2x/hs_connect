@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/models/comment.dart';
 import 'package:hs_connect/shared/pixels.dart';
+import 'package:hs_connect/shared/widgets/arrows_icons.dart';
 import 'package:provider/provider.dart';
 
-const double iconSize = 25;
+const double iconSize = 15;
 
 class LikeDislikeComment extends StatefulWidget {
   final DocumentReference currUserRef;
@@ -39,6 +40,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
   @override
   Widget build(BuildContext context) {
     final hp = Provider.of<HeightPixel>(context).value;
+    final wp = Provider.of<WidthPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
 
     CommentsDatabaseService _comments = CommentsDatabaseService(
@@ -55,7 +57,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               padding: EdgeInsets.all(3*hp),
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
-              icon: Icon(Icons.keyboard_arrow_down_rounded),
+              icon: Icon(Arrows.down_open_big, color: colorScheme.secondary),
               onPressed: () {
                 _comments.unDislikeComment();
                 if (mounted) {
@@ -73,7 +75,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               padding: EdgeInsets.all(3*hp),
               constraints: BoxConstraints(),
               color: colorScheme.primaryVariant,
-              icon: Icon(Icons.keyboard_arrow_down_rounded),
+              icon: Icon(Arrows.down_open_big),
               onPressed: () {
                 _comments.dislikeComment();
                 setState(() {
@@ -86,10 +88,12 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
             );
           }
         }(),
+        SizedBox(width: 3*wp),
         Text(
           (likeCount - dislikeCount).toString(),
           style: Theme.of(context).textTheme.subtitle2
         ),
+        SizedBox(width: 3*wp),
         () {
           if (likeStatus == true) {
             return IconButton(
@@ -98,7 +102,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               padding: EdgeInsets.all(3*hp),
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
-              icon: Icon(Icons.keyboard_arrow_up_rounded, color: colorScheme.secondary),
+              icon: Icon(Arrows.up_open_big, color: colorScheme.secondary),
               onPressed: () {
                 _comments.unLikeComment(widget.comment.creatorRef!);
                 if (mounted) {
@@ -116,7 +120,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               padding: EdgeInsets.all(3*hp),
               constraints: BoxConstraints(),
               color: colorScheme.primaryVariant,
-              icon: Icon(Icons.keyboard_arrow_up_rounded),
+              icon: Icon(Arrows.up_open_big),
               onPressed: () {
                 if (mounted) {
                   setState(() {

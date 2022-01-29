@@ -3,7 +3,7 @@ import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/gradientText.dart';
-import 'package:hs_connect/shared/widgets/outlineButton.dart';
+import 'package:hs_connect/shared/widgets/myOutlinedButton.dart';
 import 'package:provider/provider.dart';
 
 
@@ -23,24 +23,17 @@ class AuthBar extends StatelessWidget {
       child: Container(
           color:Colors.white,
           padding: EdgeInsets.fromLTRB(10*wp, 3*hp, 10*wp, 5*hp),
-          height: MediaQuery.of(context).size.height/15,
           width: MediaQuery.of(context).size.width,
-          /*decoration: BoxDecoration(
-            color: colorScheme.surface,
-            border: Border(
-              top: BorderSide(width: 1*wp, color: colorScheme.onError),
-            ),
-          ),*/
           child:
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               MyOutlinedButton(
-                padding: EdgeInsets.fromLTRB(30.0, 0.0, 30, 0),
-                onPressed: () {onPressed();},
+                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 40),
+                onPressed: onPressed,
                 gradient: Gradients.blueRed(begin: Alignment.topCenter, end: Alignment.bottomCenter),
-                borderRadius: 40.0,
+                borderRadius: 40,
                 child: GradientText(
                   buttonText,
                   style: ThemeText.inter(fontWeight: FontWeight.w500, fontSize: 17*hp, //TODO: Convertto HP

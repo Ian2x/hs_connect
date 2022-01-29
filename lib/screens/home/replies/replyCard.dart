@@ -108,7 +108,7 @@ class _ReplyCardState extends State<ReplyCard> {
           ),
         ),
         Container(
-            padding: EdgeInsets.fromLTRB(20*wp, 5*hp, 0, 5*hp),
+            padding: EdgeInsets.fromLTRB(25*wp, 5*hp, 0, 5*hp),
             child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,

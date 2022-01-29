@@ -18,7 +18,6 @@ Poll pollFromSnapshot(DocumentSnapshot snapshot) {
   final choices = stringList(snapshot.get(C.choices));
   var votes = Map<int, List<DocumentReference>>();
   for (int i = 0; i < choices.length; i++) {
-    print(i);
     votes[i] = docRefList(snapshot.get(i.toString()));
   }
   return Poll(

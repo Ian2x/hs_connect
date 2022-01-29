@@ -74,6 +74,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
   Widget build(BuildContext context) {
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
+    final colorScheme = Theme.of(context).colorScheme;
     final postLikesManager = Provider.of<PostLikesManager>(context);
     UserData? userData = Provider.of<UserData?>(context);
 
@@ -100,7 +101,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
                     }
                   },
                   child: Text("from " + localCreatorName + " • " + convertTime(widget.post.createdAt.toDate()),
-                    style: Theme.of(context).textTheme.subtitle2
+                    style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary)
                   ),
                 ),
                 Spacer(flex:1),
@@ -124,12 +125,12 @@ class _PostTitleCardState extends State<PostTitleCard> {
               ]
             ), //introRow
             Text( widget.post.title,
-              style: Theme.of(context).textTheme.headline5
+              style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 22)
             ),
             SizedBox(height:8*hp),
             widget.post.text!= null && widget.post.text!=""?
               Text(widget.post.text!,
-                style: Theme.of(context).textTheme.bodyText2) : Container(),
+                style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16)) : Container(),
             widget.post.mediaURL != null ?
               ImageContainer(imageString: widget.post.mediaURL!)
                 : Container(),
@@ -137,8 +138,14 @@ class _PostTitleCardState extends State<PostTitleCard> {
             SizedBox(height:20*hp),
             Row(
               children: [
-                GroupTag(groupImageURL: widget.group.image, groupName: widget.group.name,
-                    groupColor: widget.group.hexColor != null ? HexColor(widget.group.hexColor!) : null, fontSize: 16*hp),
+                GroupTag(
+                    groupImageURL: widget.group.image,
+                    groupName: widget.group.name,
+                    borderRadius: 20,
+                    padding: EdgeInsets.fromLTRB(12*wp, 4*hp, 12*wp, 4*hp),
+                    thickness: 1.5,
+                    fontSize: 15,
+                ),
                 Spacer(),
                 LikeDislikePostStateful(currUserRef: widget.currUserRef, post: widget.post, postLikesManager: postLikesManager),
               ],
@@ -146,7 +153,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
             SizedBox(height:30*hp),
             Text(
                 widget.post.numComments + widget.post.numReplies < 2 ? 'Comments' : (widget.post.numComments + widget.post.numReplies).toString() + ' Comments',
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
             ),
 
           ],

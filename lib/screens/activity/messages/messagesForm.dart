@@ -115,6 +115,7 @@ class _MessagesFormState extends State<MessagesForm> {
                               setState(() {
                                 loading = false;
                                 newFile = null;
+                                _message = null;
                               });
                             }
                             _formKey.currentState?.reset();

@@ -85,8 +85,8 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
         children: [
           Row(
             children: [
-              GroupTag(groupImageURL: groupImageString, groupColor: groupColor !=null ? HexColor(groupColor!): null,
-                  groupName: groupName!, fontSize: 14*hp),
+              /*GroupTag(groupImageURL: groupImageString, groupColor: groupColor !=null ? HexColor(groupColor!): null,
+                  groupName: groupName!, fontSize: 14*hp),*/
               Spacer(),
               IconButton(
                   icon: Icon(Icons.more_horiz_rounded, color: Theme.of(context).unselectedWidgetColor),
