@@ -59,7 +59,7 @@ class _NotificationCardState extends State<NotificationCard> {
     final sourceUser = await userDataFromSnapshot(sourceUserData, widget.myNotification.sourceUserRef);
     if (mounted) {
       setState(() {
-        profileImageURL = sourceUser.profileImage;
+        profileImageURL = sourceUser.profileImageURL;
         sourceUserDisplayedName = sourceUser.displayedName;
         sourceUserFullDomainName = sourceUser.fullDomainName != null ? sourceUser.fullDomainName : sourceUser.domain;
       });

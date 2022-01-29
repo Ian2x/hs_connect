@@ -43,7 +43,6 @@ class _DomainFeedState extends State<DomainFeed> {
           startingFrom: pageKey, setStartFrom: (DocumentSnapshot ds) {tempKey = ds;});
       tempPosts.removeWhere((value) => value == null);
       final newPosts = tempPosts.map((item) => item!).toList();
-
       final isLastPage = newPosts.length < _pageSize;
       if (mounted) {
         if (isLastPage) {

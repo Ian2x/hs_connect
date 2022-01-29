@@ -4,11 +4,13 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profilePostFeed.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/newMessageButton.dart';
 import 'package:hs_connect/services/groups_database.dart';
+import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/groupTag.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
+import 'package:hs_connect/shared/widgets/outlineButton.dart';
 import 'package:provider/provider.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileImage.dart';
 
@@ -26,12 +28,12 @@ class _ProfileBodyState extends State<ProfileBody> {
   UserData? profileData;
   String? domainImage;
 
-
   void getProfileUserData() async {
     UserData? fetchUserData;
-    if (widget.profileUserRef!=widget.currUserData.userRef) {
+    if (widget.profileUserRef != widget.currUserData.userRef) {
       // get other profile data
-      UserDataDatabaseService _userInfoDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserData.userRef);
+      UserDataDatabaseService _userInfoDatabaseService =
+          UserDataDatabaseService(currUserRef: widget.currUserData.userRef);
       fetchUserData = await _userInfoDatabaseService.getUserData(userRef: widget.profileUserRef);
     } else {
       // use own profile data
@@ -49,7 +51,8 @@ class _ProfileBodyState extends State<ProfileBody> {
     }
     GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserData.userRef);
     if (fetchUserData != null) {
-      var fetchUserDomain = await _groups.getGroup(FirebaseFirestore.instance.collection(C.groups).doc(fetchUserData.domain));
+      var fetchUserDomain =
+          await _groups.getGroup(FirebaseFirestore.instance.collection(C.groups).doc(fetchUserData.domain));
       if (fetchUserDomain != null && mounted) {
         setState(() {
           domainImage = fetchUserDomain.image;
@@ -62,7 +65,6 @@ class _ProfileBodyState extends State<ProfileBody> {
   void initState() {
     getProfileUserData();
     super.initState();
-
   }
 
   @override
@@ -70,61 +72,67 @@ class _ProfileBodyState extends State<ProfileBody> {
     final userData = Provider.of<UserData?>(context);
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
+    final colorScheme = Theme.of(context).colorScheme;
 
-    if (profileData==null) return Loading();
+    if (profileData == null) return Loading();
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: ListView(
         physics: BouncingScrollPhysics(),
         children: [
-          SizedBox(height:98*hp),
+          SizedBox(height: 98 * hp),
           ProfileImage(
             profileImageURL: profileData!.profileImageURL,
             currUserName: profileData!.displayedName,
-            showEditIcon: widget.profileUserRef == widget.currUserData.userRef && userData != null && widget.currUserData.userRef == userData.userRef,
+            showEditIcon: widget.profileUserRef == widget.currUserData.userRef &&
+                userData != null &&
+                widget.currUserData.userRef == userData.userRef,
           ),
-          SizedBox(height: 10*hp),
+          SizedBox(height: 10 * hp),
           Text(
             profileData!.displayedName,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.headline5?.copyWith(fontWeight:FontWeight.w500),
+            style: Theme.of(context).textTheme.headline5?.copyWith(fontWeight: FontWeight.w500),
           ),
-          SizedBox(height: 10*hp),
+          SizedBox(height: 10 * hp),
           Row(
             children: [
               Spacer(),
               Container(
-                height: 60*hp,
-                child: Chip(
+                height: 40 * hp,
+                child:
+
+                Chip(
                   padding: EdgeInsets.all(5),
-                  backgroundColor: profileData!.domainColor != null ?
-                    profileData!.domainColor!: Theme.of(context).colorScheme.background,
+                  backgroundColor: colorScheme.surface,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(9*hp),
+                    borderRadius: BorderRadius.circular(9 * hp),
                   ),
+                  side: BorderSide(),
                   avatar: CircleAvatar(
-                    backgroundColor: Colors.grey.shade800,
-                    child: domainImage != null ?
-                      Image.network( domainImage!): null,
+                    backgroundColor: colorScheme.surface,
+                    child: Container(
+                        margin: EdgeInsets.all(2*hp),
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image:
+                                DecorationImage(image: ImageStorage().groupImageProvider(profileData!.domainImage)))),
                   ),
-                  label: Text(
-                    profileData!.fullDomainName!=null ? profileData!.fullDomainName! : profileData!.domain,
-                    style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                    color: profileData!.domainColor != null ? profileData!.domainColor!:
-                    Theme.of(context).colorScheme.onBackground,
-                  )
-                  ),
+                  label: Text(profileData!.fullDomainName != null ? profileData!.fullDomainName! : profileData!.domain,
+                      style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                            color: profileData!.domainColor != null
+                                ? profileData!.domainColor!
+                                : colorScheme.onBackground,
+                          )),
                 ),
               ),
-              SizedBox(width:20*wp),
+              SizedBox(width: 20 * wp),
               RichText(
                 text: TextSpan(
                   children: <TextSpan>[
-                    TextSpan(text: profileData!.score.toString(),
-                        style: Theme.of(context).textTheme.headline6),
-                    TextSpan(text: " Likes ",
-                        style: Theme.of(context).textTheme.headline6),
+                    TextSpan(text: profileData!.score.toString(), style: Theme.of(context).textTheme.headline6),
+                    TextSpan(text: " Likes ", style: Theme.of(context).textTheme.headline6),
                   ],
                 ),
               ),
@@ -134,9 +142,9 @@ class _ProfileBodyState extends State<ProfileBody> {
           widget.profileUserRef != widget.currUserData.userRef
               ? Column(
                   children: <Widget>[
-                    SizedBox(height: 78*hp),
+                    SizedBox(height: 78 * hp),
                     Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
-                      SizedBox(width: 45*wp),
+                      SizedBox(width: 45 * wp),
                       NewMessageButton(
                         otherUserData: profileData!,
                         currUserRef: widget.currUserData.userRef,
@@ -144,13 +152,10 @@ class _ProfileBodyState extends State<ProfileBody> {
                     ])
                   ],
                 )
-              : Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-              SizedBox(height: 78*hp),
-              ProfilePostFeed(profUserRef: widget.profileUserRef),
-            ]
-          )
+              : Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
+                  SizedBox(height: 78 * hp),
+                  ProfilePostFeed(profUserRef: widget.profileUserRef),
+                ])
         ],
       ),
     );

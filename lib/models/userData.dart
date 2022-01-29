@@ -29,7 +29,7 @@ UserMessage userMessageFromMap({required Map map}) {
 
 class UserData {
   final DocumentReference userRef;
-  //final String fundamentalName;
+  final String fundamentalName;
   final String displayedName;
   final String displayedNameLC;
   final String? bio;
@@ -43,7 +43,6 @@ class UserData {
   final int score;
   final int numReports;
   final bool private;
-  final String? profileImage;
   // extracted data
   final String? fullDomainName;
   final Color? domainColor;
@@ -54,7 +53,7 @@ class UserData {
 
   UserData({
     required this.userRef,
-    //required this.fundamentalName,
+    required this.fundamentalName,
     required this.displayedName,
     required this.displayedNameLC,
     required this.bio,
@@ -70,7 +69,6 @@ class UserData {
     required this.userMessages,
     required this.savedPostsRefs,
     required this.myNotifications,
-    required this.profileImage,
     required this.profileImageURL,
     required this.score,
     required this.numReports,
@@ -89,7 +87,7 @@ Future<UserData> userDataFromSnapshot(DocumentSnapshot snapshot, DocumentReferen
   if (domainData==null) domainData = DomainData(county: null, state: null, country: null, fullName: null, color: null, image: null);
   return UserData(
     userRef: userRef,
-    //fundamentalName: snapshot.get(C.fundamentalName),
+    fundamentalName: snapshot.get(C.fundamentalName),
     displayedName: snapshot.get(C.displayedName),
     displayedNameLC: snapshot.get(C.displayedNameLC),
     bio: snapshot.get(C.bio),
@@ -103,7 +101,6 @@ Future<UserData> userDataFromSnapshot(DocumentSnapshot snapshot, DocumentReferen
     score: snapshot.get(C.score),
     numReports: snapshot.get(C.numReports),
     private: snapshot.get(C.private),
-    profileImage: snapshot.get(C.profileImageURL),
     // extracted data
     fullDomainName: domainData.fullName,
     domainColor: domainData.color != null ? HexColor(domainData.color!) : null,

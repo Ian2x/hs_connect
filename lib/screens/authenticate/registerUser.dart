@@ -26,7 +26,7 @@ class _RegisterUserState extends State<RegisterUser> {
   bool loading = false;
 
   // text field state
-  String username = '';
+  String username = 'username';
   String password = '';
   String error = '';
 
@@ -46,89 +46,92 @@ class _RegisterUserState extends State<RegisterUser> {
         body: Stack(
             children: [
 
-              SingleChildScrollView(
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        height: 110*hp,
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          gradient: Gradients.blueRed(begin: Alignment.topLeft , end: Alignment.bottomRight),
-                        ),
-                        child: SizedBox(),
-                      ),
-                      SizedBox(height: 10*hp),
-                      Row(
-                        children: [
-                          SizedBox(width: 10*hp),
-                          TextButton(
-                              onPressed: (){
-                              },
-                              child:Text(
-                                "Cancel",
-                                style: ThemeText.inter(fontWeight: FontWeight.normal,
-                                    fontSize: 16*hp, color: Colors.grey),
-                              )
+              Form(
+                key: _formKey,
+                child: SingleChildScrollView(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 110*hp,
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                            gradient: Gradients.blueRed(begin: Alignment.topLeft , end: Alignment.bottomRight),
                           ),
-                        ],
-                      ),
-                      SizedBox(height: 20*hp),
-                      Center(
-                          child:
-                          Column(
-                            children: [
-                              SizedBox(
-                                height: 80 *hp,
-                                child:
-                                Image.asset('assets/logo1background.png'),
-                              ),
-                              SizedBox(height: 20*hp),
-                              Text(
-                                'Make a Password',
-                                style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 28*hp, color: Colors.black //TODO: Convertto HP
+                          child: SizedBox(),
+                        ),
+                        SizedBox(height: 10*hp),
+                        Row(
+                          children: [
+                            SizedBox(width: 10*hp),
+                            TextButton(
+                                onPressed: (){
+                                },
+                                child:Text(
+                                  "Cancel",
+                                  style: ThemeText.inter(fontWeight: FontWeight.normal,
+                                      fontSize: 16*hp, color: Colors.grey),
+                                )
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 20*hp),
+                        Center(
+                            child:
+                            Column(
+                              children: [
+                                SizedBox(
+                                  height: 80 *hp,
+                                  child:
+                                  Image.asset('assets/logo1background.png'),
                                 ),
-                              ),
-                              SizedBox(height: 15*hp),
-                              Text("Make sure it's longer than 6 characters.",
-                                  style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontSize: 14)),
-                              SizedBox(height: 50*hp),
-                              Container(
-                                padding:EdgeInsets.fromLTRB(20.0,0,20,0),
-                                child: Column(
-                                  children: [
-                                    TextFormField(
-                                        style: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.primary),
-                                        autocorrect:false,
-                                        obscureText: true,
-                                        decoration: InputDecoration(
-                                            hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.onError),
-                                            border: InputBorder.none,
-                                            hintText: "Password..."),
-                                        validator: (val) {
-                                          if (val == null) return 'Error: null value';
-                                          if (val.length < 6)
-                                            return 'Enter a password 6+ chars long';
-                                          else
-                                            return null;
-                                        },
-                                        onChanged: (val) {
-                                          if (mounted) {
-                                            setState(() => password = val);
-                                          }
-                                        }),
-                                    Divider(height:20*hp, thickness: 2*hp, color: colorScheme.onError),
-                                  ],
+                                SizedBox(height: 20*hp),
+                                Text(
+                                  'Make a Password',
+                                  style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 28*hp, color: Colors.black //TODO: Convertto HP
+                                  ),
                                 ),
-                              ),
+                                SizedBox(height: 15*hp),
+                                Text("Make sure it's longer than 6 characters.",
+                                    style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontSize: 14)),
+                                SizedBox(height: 50*hp),
+                                Container(
+                                  padding:EdgeInsets.fromLTRB(20.0,0,20,0),
+                                  child: Column(
+                                    children: [
+                                      TextFormField(
+                                          style: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.primary),
+                                          autocorrect:false,
+                                          obscureText: true,
+                                          decoration: InputDecoration(
+                                              hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.onError),
+                                              border: InputBorder.none,
+                                              hintText: "Password..."),
+                                          validator: (val) {
+                                            if (val == null) return 'Error: null value';
+                                            if (val.length < 6)
+                                              return 'Enter a password 6+ chars long';
+                                            else
+                                              return null;
+                                          },
+                                          onChanged: (val) {
+                                            if (mounted) {
+                                              setState(() => password = val);
+                                            }
+                                          }),
+                                      Divider(height:20*hp, thickness: 2*hp, color: colorScheme.onError),
+                                    ],
+                                  ),
+                                ),
 
-                              SizedBox(height: 20*hp),
-                              SizedBox(height:15*hp),
-                              SizedBox(height: 50*hp),
-                            ],
-                          )
-                      ),
-                    ]),
+                                SizedBox(height: 20*hp),
+                                SizedBox(height:15*hp),
+                                SizedBox(height: 50*hp),
+                              ],
+                            )
+                        ),
+                      ]),
+                ),
               ),
               Positioned(
                 bottom:0,
