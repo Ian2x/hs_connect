@@ -243,7 +243,7 @@ class PostsDatabaseService {
           .startAfterDocument(startingFrom)
           .limit(5)
           .get();
-      if (setStartFrom != null) {
+      if (setStartFrom != null && data.docs.isNotEmpty) {
         setStartFrom(data.docs.last);
       }
       return data.docs.map(_postFromQuerySnapshot).toList();
@@ -253,7 +253,7 @@ class PostsDatabaseService {
           .orderBy(C.createdAt, descending: true)
           .limit(5)
           .get();
-      if (setStartFrom != null) {
+      if (setStartFrom != null && data.docs.isNotEmpty) {
         setStartFrom(data.docs.last);
       }
       return data.docs.map(_postFromQuerySnapshot).toList();
@@ -278,10 +278,12 @@ class PostsDatabaseService {
           break;
         }
         // update starting from
-        if (setStartFrom != null) {
-          setStartFrom(data.docs.last);
+        if (data.docs.isNotEmpty) {
+          localStartingFrom = data.docs.last;
+          if (setStartFrom != null) {
+            setStartFrom(data.docs.last);
+          }
         }
-        localStartingFrom = data.docs.last;
         // add to results if ianTime is right
         results.addAll(data.docs
             .map(_postFromQuerySnapshot)
@@ -297,6 +299,7 @@ class PostsDatabaseService {
           .limit(initialPostsFetchSize)
           .get();
       // update starting from
+      if (data.docs.isEmpty) return [];
       if (setStartFrom != null) {
         setStartFrom(data.docs.last);
       }
@@ -319,10 +322,12 @@ class PostsDatabaseService {
           break;
         }
         // update starting from
-        if (setStartFrom != null) {
-          setStartFrom(data.docs.last);
+        if (data.docs.isNotEmpty) {
+          localStartingFrom = data.docs.last;
+          if (setStartFrom != null) {
+            setStartFrom(data.docs.last);
+          }
         }
-        localStartingFrom = data.docs.last;
         // add to results if ianTime is right
         results.addAll(data.docs
             .map(_postFromQuerySnapshot)

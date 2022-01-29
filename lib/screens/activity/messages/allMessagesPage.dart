@@ -128,7 +128,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                           height: 40*hp,
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              image: new DecorationImage(fit: BoxFit.fill, image: _images.profileImageProvider(otherUser.profileImage)))),
+                              image: new DecorationImage(fit: BoxFit.fill, image: _images.profileImageProvider(otherUser.profileImageURL)))),
                       SizedBox(width: 14*wp),
                       Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                         Text(otherUser.displayedName,

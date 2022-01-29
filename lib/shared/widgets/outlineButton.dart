@@ -31,13 +31,13 @@ class MyOutlinedButton extends StatelessWidget {
         padding: padding != null ? padding : EdgeInsets.all(0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(borderRadius),
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
         ),
         margin: EdgeInsets.all(thickness),
         child: ActionChip(
           pressElevation: 0,
           padding: EdgeInsets.fromLTRB(6, 0, 6, 0),
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           onPressed: onPressed,
           label: child,
         ),

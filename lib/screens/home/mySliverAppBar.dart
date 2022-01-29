@@ -97,7 +97,6 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
                       child: isDomain
                           ? buildGroupCircle(
                               child: Container(
-                                clipBehavior: Clip.hardEdge,
                                 decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     image: DecorationImage(
@@ -105,7 +104,15 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
                               ),
                               all: 2.0,
                               backgroundColor: colorScheme.surface)
-                          : Container(
+                          : buildGroupCircle(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(image: AssetImage('assets/logo1background.png'))),
+                              ),
+                              all: 2.0,
+                              backgroundColor: colorScheme.surface)
+                      /*Container(
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 gradient: Gradients.blueRed(),
@@ -114,16 +121,19 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
                                 margin: EdgeInsets.all(2.5),
                                   decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      image: DecorationImage(image: AssetImage('assets/logo1background.png')))))),
+                                      image: DecorationImage(image: AssetImage('assets/logo1background.png')))))*/
+                      ),
                   SizedBox(width: 10),
                   Text("Circles",
                       style: Theme.of(context)
                           .textTheme
                           .headline4
-                          ?.copyWith(fontSize: 28.0, color: colorScheme.primaryVariant)),
-                  IconButton(icon: Icon(Icons.height), onPressed: () {
-                    AuthService().signOut();}
-                  )
+                          ?.copyWith(fontSize: 30, color: colorScheme.primaryVariant, fontWeight: FontWeight.w600, letterSpacing: 5)),
+                  IconButton(
+                      icon: Icon(Icons.height, size: 5),
+                      onPressed: () {
+                        AuthService().signOut();
+                      })
                 ],
               ),
             ),

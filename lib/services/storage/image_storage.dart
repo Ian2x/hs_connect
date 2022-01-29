@@ -75,7 +75,7 @@ class ImageStorage {
     if (imageURL != null) {
       return CachedNetworkImageProvider(imageURL);
     } else {
-      return defaultProfilePic;
+      return defaultGroupPic;
     }
   }
 

@@ -14,7 +14,7 @@ class UserDataDatabaseService {
   final CollectionReference userDataCollection = FirebaseFirestore.instance.collection(C.userData);
 
   Future<void> initUserData(String domain, String username, {String? overrideCounty, String? overrideState, String? overrideCountry}) async {
-    final domainLC = domain.toLowerCase();
+    String domainLC = domain.toLowerCase();
     final GroupsDatabaseService _groupDatabaseService = GroupsDatabaseService(currUserRef: currUserRef);
 
     // Create domain group if not already created
@@ -25,6 +25,11 @@ class UserDataDatabaseService {
         description: 'Default group for ' + domainLC,
         creatorRef: null);
 
+    // assign fundamental name
+    final int fundamentalNumber = (await domainGroupRef.get()).get(C.numMembers) + 1;
+    final String fundamentalName = domainLC.replaceAll(RegExp(r'(.com|.org|.info|.edu|.net|.co|.us)'), '') + fundamentalNumber.toString();
+
+    // Create domainsData if not already created
     final domainsDataRef = FirebaseFirestore.instance.collection(C.domainsData).doc(domainLC);
     domainsDataRef.get().then((doc) => {
       if (!doc.exists) {
@@ -33,6 +38,7 @@ class UserDataDatabaseService {
     });
 
     await currUserRef.set({
+      C.fundamentalName: fundamentalName,
       C.displayedName: username,
       C.displayedNameLC: username.toLowerCase(),
       C.bio: null,

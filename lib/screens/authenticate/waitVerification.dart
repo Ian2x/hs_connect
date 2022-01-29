@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hs_connect/screens/authenticate/emailVerificationErrorSheet.dart';
 import 'package:hs_connect/screens/authenticate/registerUser.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'dart:async';
@@ -126,10 +127,19 @@ class _WaitVerificationState extends State<WaitVerification> {
                     ),
                   ),
                 ),
-                SizedBox(height:245*hp),
+                SizedBox(height:210*hp),
                 TextButton(
-                  onPressed:(){}, //TODO: Resend Email
-                  child:Text(
+                  onPressed:(){
+                    showModalBottomSheet(
+                        context: context,
+                        constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.40),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(20*hp),
+                            )),
+                        builder: (context) => pixelProvider(context, child: EmailVerificationErrorSheet(cancelTimer: ()=>timer!.cancel())));
+                  },
+                  child: Text(
                       " Didn't get it? Click here.",
                       style: ThemeText.inter(fontWeight: FontWeight.normal,
                         fontSize: 15*hp, color: Colors.black,

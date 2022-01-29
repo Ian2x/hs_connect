@@ -77,7 +77,8 @@ const numWidthPixels = 392.7;
 const initialPostsFetchSize = 5;
 const nextPostsFetchSize = 5;
 
-const defaultProfilePic = AssetImage('assets/me.png');
+const defaultProfilePic = AssetImage('assets/blankProfile.png');
+const defaultGroupPic = AssetImage('assets/logo1background.png');
 
 class C {
   static const displayedName = 'displayedName';

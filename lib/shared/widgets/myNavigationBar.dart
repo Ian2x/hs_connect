@@ -5,6 +5,7 @@ import 'package:hs_connect/screens/home/home.dart';
 import 'package:hs_connect/screens/profile/profilePage.dart';
 import 'package:provider/provider.dart';
 
+import '../constants.dart';
 import '../pageRoutes.dart';
 
 import '../pixels.dart';
@@ -31,7 +32,8 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
     if (loading || userData == null) return Loading();
 
     return Container(
-      decoration: BoxDecoration(boxShadow: [BoxShadow(color: colorScheme.primary, spreadRadius: 0.4*hp)]),
+      decoration: BoxDecoration(gradient: Gradients.blueRed()),//,boxShadow: [BoxShadow(color: colorScheme.primary, spreadRadius: 0.4*hp
+      padding: EdgeInsets.only(top: 1.5*hp),
       child: BottomNavigationBar(
         backgroundColor: colorScheme.surface,
         type: BottomNavigationBarType.fixed,
@@ -41,6 +43,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
         selectedItemColor: colorScheme.onSurface,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
+            backgroundColor: Colors.green,
             icon: IconButton(
               padding: EdgeInsets.zero,
               // color: colorScheme.onSurface,

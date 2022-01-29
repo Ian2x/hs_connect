@@ -43,24 +43,18 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    //print(MediaQuery.of(context).padding.top + kToolbarHeight);
     final userData = Provider.of<UserData?>(context);
     final colorScheme = Theme.of(context).colorScheme;
 
     if (userData == null) {
       return Scaffold(backgroundColor: colorScheme.background, body: Loading());
     }
-    // this sliver app bar is only use to hide/show the tabBar, the AppBar
-    // is invisible at all times. The to the user visible AppBar is below
     return Scaffold(
       backgroundColor: colorScheme.background,
-      //extendBody: true,
-      //extendBodyBehindAppBar: true,
       body: Stack(
         children: <Widget>[
           NestedScrollView(
             headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-              print('something');
               return [
                 SliverPersistentHeader(
                   delegate: MySliverAppBar(tabController: tabController, userData: userData, isDomain: isDomain),
