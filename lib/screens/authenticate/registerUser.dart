@@ -28,7 +28,12 @@ class _RegisterUserState extends State<RegisterUser> {
   // text field state
   String username = 'username';
   String password = '';
-  String error = '';
+
+  String error='';
+
+  String authTakenErr ='';
+  String usernameError = '';
+  String passwordError = '';
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +80,7 @@ class _RegisterUserState extends State<RegisterUser> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 20*hp),
+                        SizedBox(height: 15*hp),
                         Center(
                             child:
                             Column(
@@ -85,16 +90,27 @@ class _RegisterUserState extends State<RegisterUser> {
                                   child:
                                   Image.asset('assets/logo1background.png'),
                                 ),
-                                SizedBox(height: 20*hp),
+                                SizedBox(height: 15*hp),
                                 Text(
-                                  'Make a Password',
+                                  'Make an Account',
                                   style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 28*hp, color: Colors.black //TODO: Convertto HP
                                   ),
                                 ),
-                                SizedBox(height: 15*hp),
-                                Text("Make sure it's longer than 6 characters.",
+                                SizedBox(height: 8*hp),
+                                usernameError != '' || passwordError != '' ?
+                                    Column(
+                                      children: [
+                                        Text("Username and Password should be 6+ characters long.",
+                                            style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontSize: 12)),
+                                        authTakenErr != '' ?
+                                          Text(authTakenErr,
+                                            style: Theme.of(context).textTheme.subtitle1?.copyWith
+                                              (color: colorScheme.onSurface, fontSize: 14)) : Container(),
+                                        ],
+                                    ) :
+                                    Text("Your username is only for logging in.",
                                     style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontSize: 14)),
-                                SizedBox(height: 50*hp),
+                                SizedBox(height: 25*hp),
                                 Container(
                                   padding:EdgeInsets.fromLTRB(20.0,0,20,0),
                                   child: Column(
@@ -106,27 +122,48 @@ class _RegisterUserState extends State<RegisterUser> {
                                           decoration: InputDecoration(
                                               hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.onError),
                                               border: InputBorder.none,
+                                              hintText: "Login Username..."),
+                                          validator: (val) {
+                                            setState(() {
+                                              if (val == null || val.length <6)
+                                              {
+                                                usernameError = "Enter a username 6+ characters long";
+                                              }
+                                            });
+                                          },
+                                          onChanged: (val) {
+                                            if (mounted) {
+                                              setState(() => username = val);
+                                            }
+                                          }),
+                                      Divider(height:8*hp, thickness: 2*hp, color: colorScheme.onError),
+                                      TextFormField(
+                                          style: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.primary),
+                                          autocorrect:false,
+                                          obscureText: true,
+                                          decoration: InputDecoration(
+                                              hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.onError),
+                                              border: InputBorder.none,
                                               hintText: "Password..."),
                                           validator: (val) {
-                                            if (val == null) return 'Error: null value';
-                                            if (val.length < 6)
-                                              return 'Enter a password 6+ chars long';
-                                            else
-                                              return null;
+                                            setState(() {
+                                              if (val == null || val.length <6)
+                                              {
+                                                passwordError = "Enter a password 6+ characters long";
+                                              }
+                                            });
                                           },
                                           onChanged: (val) {
                                             if (mounted) {
                                               setState(() => password = val);
                                             }
                                           }),
-                                      Divider(height:20*hp, thickness: 2*hp, color: colorScheme.onError),
+                                      Divider(height:8*hp, thickness: 2*hp, color: colorScheme.onError),
                                     ],
                                   ),
                                 ),
 
-                                SizedBox(height: 20*hp),
-                                SizedBox(height:15*hp),
-                                SizedBox(height: 50*hp),
+                                SizedBox(height: 100*hp),
                               ],
                             )
                         ),
@@ -150,7 +187,7 @@ class _RegisterUserState extends State<RegisterUser> {
                           } else if (result is FirebaseAuthException && result.code == 'email-already-in-use') {
                             if (mounted) {
                               setState(() {
-                                error = 'Username already in use.';
+                                authTakenErr = 'Username already in use.';
                                 loading = false;
                               });
                             }

@@ -91,49 +91,47 @@ class _ProfileBodyState extends State<ProfileBody> {
             style: Theme.of(context).textTheme.headline5?.copyWith(fontWeight: FontWeight.w500),
           ),
           SizedBox(height: 10 * hp),
-          Row(
-            children: [
-              Spacer(),
-              Container(
-                height: 40 * hp,
-                child:
-
-                Chip(
-                  padding: EdgeInsets.all(5),
-                  backgroundColor: colorScheme.surface,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(9 * hp),
-                  ),
-                  side: BorderSide(),
-                  avatar: CircleAvatar(
-                    backgroundColor: colorScheme.surface,
-                    child: Container(
-                        margin: EdgeInsets.all(2*hp),
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image:
-                                DecorationImage(image: ImageStorage().groupImageProvider(profileData!.domainImage)))),
-                  ),
-                  label: Text(profileData!.fullDomainName != null ? profileData!.fullDomainName! : profileData!.domain,
-                      style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                            color: profileData!.domainColor != null
-                                ? profileData!.domainColor!
-                                : colorScheme.onBackground,
-                          )),
-                ),
+          Spacer(),
+          Container(
+            height: 40 * hp,
+            child:
+            Chip(
+              padding: EdgeInsets.all(5),
+              backgroundColor: colorScheme.surface,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(9 * hp),
               ),
-              SizedBox(width: 20 * wp),
-              RichText(
-                text: TextSpan(
-                  children: <TextSpan>[
-                    TextSpan(text: profileData!.score.toString(), style: Theme.of(context).textTheme.headline6),
-                    TextSpan(text: " Likes ", style: Theme.of(context).textTheme.headline6),
-                  ],
-                ),
+              side: BorderSide(),
+              avatar: CircleAvatar(
+                backgroundColor: colorScheme.surface,
+                child: Container(
+                    margin: EdgeInsets.all(2*hp),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image:
+                            DecorationImage(image: ImageStorage().groupImageProvider(profileData!.domainImage)))),
               ),
-              Spacer(),
-            ],
+              label: Text(profileData!.fullDomainName != null ? profileData!.fullDomainName! : profileData!.domain,
+                  style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                        color: profileData!.domainColor != null
+                            ? profileData!.domainColor!
+                            : colorScheme.onBackground,
+                      )),
+            ),
           ),
+          SizedBox(height: 15 * hp),
+          Center(
+            child: RichText(
+              text: TextSpan(
+                children: <TextSpan>[
+                  TextSpan(text: profileData!.score.toString(), style: Theme.of(context).textTheme.headline6),
+                  TextSpan(text: " Likes ", style: Theme.of(context).textTheme.headline6?.copyWith
+                      (color: Theme.of(context).colorScheme.error, fontWeight: FontWeight.w500)),
+                ],
+              ),
+            ),
+          ),
+          Spacer(),
           widget.profileUserRef != widget.currUserData.userRef
               ? Column(
                   children: <Widget>[
