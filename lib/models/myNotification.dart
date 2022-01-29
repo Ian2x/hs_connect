@@ -80,14 +80,14 @@ class MyNotification {
     };
   }
 
-  String printA(String sourceUserDisplayedName, String sourceUserFullDomainName, String postGroupName) {
+  String printA(String sourceUserName, String sourceUserFullDomainName, String postGroupName) {
     switch (myNotificationType) {
       case MyNotificationType.commentToPost:
-        return '@' + sourceUserDisplayedName;
+        return sourceUserName;
       case MyNotificationType.replyToReply:
-        return '@' + sourceUserDisplayedName;
+        return sourceUserName;
       case MyNotificationType.replyToComment:
-        return '@' + sourceUserDisplayedName;
+        return sourceUserName;
       case MyNotificationType.replyVotes:
         return '';
       case MyNotificationType.commentVotes:
@@ -98,14 +98,14 @@ class MyNotification {
         return 'The creators';
     }
   }
-  String printB(String sourceUserDisplayedName, String sourceUserFullDomainName, String postGroupName) {
+  String printB(String sourceUserName, String sourceUserFullDomainName, String postGroupName) {
     switch (myNotificationType) {
       case MyNotificationType.commentToPost:
-        return ' from ';
+        return '';//' from ';
       case MyNotificationType.replyToReply:
-        return ' from ';
+        return '';//' from ';
       case MyNotificationType.replyToComment:
-        return ' from ';
+        return '';//' from ';
       case MyNotificationType.replyVotes:
         return 'Your reply in';
       case MyNotificationType.commentVotes:
@@ -116,14 +116,14 @@ class MyNotification {
         return ' have a message: ';
     }
   }
-  String printC(String sourceUserDisplayedName, String sourceUserFullDomainName, String postGroupName) {
+  String printC(String sourceUserName, String sourceUserFullDomainName, String postGroupName) {
     switch (myNotificationType) {
       case MyNotificationType.commentToPost:
-        return sourceUserFullDomainName;
+        return '';//sourceUserFullDomainName;
       case MyNotificationType.replyToReply:
-        return sourceUserFullDomainName;
+        return '';//sourceUserFullDomainName;
       case MyNotificationType.replyToComment:
-        return sourceUserFullDomainName;
+        return '';//sourceUserFullDomainName;
       case MyNotificationType.replyVotes:
         return postGroupName;
       case MyNotificationType.commentVotes:

@@ -64,6 +64,7 @@ class _PollViewState extends State<PollView> {
         child: ListView.builder(
           itemCount: widget.poll.choices.length,
           shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
             return PollChoiceView(
                 voted: voted,

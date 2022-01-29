@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/activity/Messages/messagesForm.dart';
+import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
@@ -33,7 +34,7 @@ class MessagesPage extends StatelessWidget {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         resizeToAvoidBottomInset: true,
-        backgroundColor: colorScheme.surface,
+        backgroundColor: colorScheme.background,
         appBar: PreferredSize(
             preferredSize: Size.fromHeight(50*hp),
             child: MessagesPageAppBar(otherUserData: otherUserData,)),
@@ -49,7 +50,12 @@ class MessagesPage extends StatelessWidget {
                 onUpdateLastViewed: onUpdateLastViewed,
               ),
             )),
-            Divider(height: 0.5*hp, color: colorScheme.primary),
+            Container(
+              height: 1.5*hp,
+              decoration: BoxDecoration(
+                gradient: Gradients.blueRed(),
+              )
+            ),
             Container(
               child: SizedBox(height: 10*hp),
             ),
@@ -84,8 +90,11 @@ class MessagesPageAppBar extends StatelessWidget {
       elevation: 0,
       bottom: PreferredSize(
           child: Container(
-            color: colorScheme.primary,
-            height: 0.5*hp,
+            decoration: BoxDecoration(
+              gradient: Gradients.blueRed()
+            ),
+            //color: colorScheme.primary,
+            height: 1.5*hp,
           ),
           preferredSize: Size.fromHeight(0.5*hp)),
     );

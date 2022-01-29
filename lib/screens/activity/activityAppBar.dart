@@ -74,7 +74,7 @@ PreferredSizeWidget activityAppBar({required BuildContext context, required bool
                     iconMargin: EdgeInsets.only(),
                     height: HomeAppBar.tabBarHeight,
                     icon: Column(children: <Widget>[
-                      GradientText("Trending",
+                      GradientText("Messages",
                           style: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.w500),
                           maxLines: 1,
                           softWrap: false,

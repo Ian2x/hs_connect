@@ -5,14 +5,16 @@ import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/gradientText.dart';
-import 'package:hs_connect/shared/widgets/outlineButton.dart';
+import 'package:hs_connect/shared/widgets/myOutlinedButton.dart';
 import 'package:provider/provider.dart';
 
 import '../wrapper.dart';
 
 class EmailVerificationErrorSheet extends StatefulWidget {
   final VoidFunction cancelTimer;
-  const EmailVerificationErrorSheet({Key? key, required this.cancelTimer}) : super(key: key);
+  final VoidFunction onDeleteEmail;
+  final bool emailDeleted;
+  const EmailVerificationErrorSheet({Key? key, required this.cancelTimer, required this.onDeleteEmail, required this.emailDeleted}) : super(key: key);
 
   @override
   _EmailVerificationErrorSheetState createState() => _EmailVerificationErrorSheetState();
@@ -20,11 +22,24 @@ class EmailVerificationErrorSheet extends StatefulWidget {
 
 class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorSheet> {
   String error = '';
+  late String deleteEmail;
+  @override
+  void initState() {
+    if (widget.emailDeleted) {
+      deleteEmail = 'Email deleted';
+    } else {
+      deleteEmail = 'Delete email';
+    }
+    super.initState();
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<HeightPixel>(context).value;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
         padding: EdgeInsets.symmetric(vertical: 38*hp, horizontal: 30*wp),
@@ -37,19 +52,23 @@ class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorShee
                 style: Theme.of(context).textTheme.bodyText2),
             SizedBox(
                 height: 60*hp,
-                child: Center(child: Text(error))),
+                child: Center(child: Text(error, style: Theme.of(context).textTheme.bodyText2?.copyWith(color: colorScheme.error)))),
             Row(children: <Widget>[
               Spacer(),
               MyOutlinedButton(
                 onPressed: () async {
-                  try {
-                    widget.cancelTimer();
-                    await FirebaseAuth.instance.currentUser!.delete();
-                  } on FirebaseAuthException catch (e) {
-                    if (mounted) {
-                      setState(() {
-                        error = "Error: " + e.code;
-                      });
+                  if (deleteEmail=='Delete email') {
+                    try {
+                      widget.cancelTimer();
+                      await FirebaseAuth.instance.currentUser!.delete();
+                      widget.onDeleteEmail();
+                      if (mounted) {
+                        setState(() => deleteEmail = 'Email deleted');
+                      }
+                    } on FirebaseAuthException catch (e) {
+                      if (mounted) {
+                        setState(() =>error = "Error: " + e.code);
+                      }
                     }
                   }
                 },
@@ -57,13 +76,13 @@ class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorShee
                 borderRadius: 20*hp,
                 thickness: 1.5*hp,
                 child: Container(
-                  height: 30*hp,
-                  width: 110*hp,
+                  height: 40*hp,
+                  width: 140*hp,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       GradientText(
-                        "Delete email",
+                        deleteEmail,
                         style: ThemeText.inter(fontWeight: FontWeight.w600, fontSize: 16*hp,
                         ),
                         gradient: Gradients.blueRed(),
@@ -81,8 +100,8 @@ class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorShee
                 borderRadius: 20*hp,
                 thickness:1.5*hp,
                 child: Container(
-                  height: 30*hp,
-                  width: 110*hp,
+                  height: 40*hp,
+                  width: 140*hp,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

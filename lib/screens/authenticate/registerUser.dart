@@ -26,7 +26,7 @@ class _RegisterUserState extends State<RegisterUser> {
   bool loading = false;
 
   // text field state
-  String username = 'username';
+  String username = '';
   String password = '';
 
   String error='';

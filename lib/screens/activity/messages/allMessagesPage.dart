@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
+import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
@@ -133,10 +134,10 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                       SizedBox(width: 14*wp),
                       Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                         Text(otherUser.displayedName,
-                            style: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.bold)),
+                            style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold)),
                         SizedBox(height: 4*hp),
                         Text(otherUser.fullDomainName != null ? otherUser.fullDomainName! : otherUser.domain,
-                            style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.primary))
+                            style: Theme.of(context).textTheme.bodyText2?.copyWith(color: colorScheme.primary))
                       ]),
                       Flexible(
                           child: Column(children: <Widget>[
@@ -144,9 +145,9 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                           Spacer(),
                           isToday(UMUDcache[index].UM!.lastMessage.toDate())
                               ? Text(DateFormat.jm().format(UMUDcache[index].UM!.lastMessage.toDate()),
-                                  style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary))
+                                  style: Theme.of(context).textTheme.bodyText2?.copyWith(color: colorScheme.primary))
                               : Text(DateFormat.yMd().format(UMUDcache[index].UM!.lastMessage.toDate()),
-                                  style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary))
+                                  style: Theme.of(context).textTheme.bodyText2?.copyWith(color: colorScheme.primary))
                         ])
                       ]))
                     ])),
@@ -157,7 +158,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                         height: 10*wp,
                         margin: EdgeInsets.only(top: index == 0 ? 4.5*hp : 2*hp, left: 6*wp, bottom: index == UMUDcache.length - 1 ? 2.5*hp : 0*hp),
                         decoration: new BoxDecoration(
-                          color: colorScheme.secondary,
+                          gradient: Gradients.blueRed(),
                           shape: BoxShape.circle,
                         ),
                       )

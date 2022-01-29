@@ -41,13 +41,13 @@ class MessagesBubble extends StatelessWidget {
     }
     return Container(
       child: Bubble(
-          color: isSentMessage ? colorScheme.secondary.withOpacity(0.75) : colorScheme.primary.withOpacity(0.7),
+          color: isSentMessage ? colorScheme.secondary.withOpacity(0.55) : colorScheme.onSecondary.withOpacity(0.55),
           margin: BubbleEdges.fromLTRB(isSentMessage ? 50*wp : 0*wp, 5*wp, isSentMessage ? 0 : 50*hp, 5*hp),
           alignment: isSentMessage ? Alignment.centerRight : Alignment.centerLeft,
           // nip: isSentMessage ? BubbleNip.rightTop : BubbleNip.leftTop,
-          radius: Radius.circular(13*hp),
+          radius: Radius.circular(15*hp),
           child: Container(
-            padding: EdgeInsets.only(left:1*wp,right:1*wp,bottom: 1*hp),
+            padding: EdgeInsets.only(left:4*wp,right:4*wp,bottom: 1*hp),
             child: Text(message.text, style: Theme.of(context).textTheme.bodyText1)
           ),
           elevation: 0,

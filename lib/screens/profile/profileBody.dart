@@ -10,7 +10,7 @@ import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/groupTag.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
-import 'package:hs_connect/shared/widgets/outlineButton.dart';
+import 'package:hs_connect/shared/widgets/myOutlinedButton.dart';
 import 'package:provider/provider.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileImage.dart';
 
@@ -79,14 +79,14 @@ class _ProfileBodyState extends State<ProfileBody> {
           SizedBox(height: 98 * hp),
           ProfileImage(
             profileImageURL: profileData!.profileImageURL,
-            currUserName: profileData!.displayedName,
+            currUserName: profileData!.fundamentalName,
             showEditIcon: widget.profileUserRef == widget.currUserData.userRef &&
                 userData != null &&
                 widget.currUserData.userRef == userData.userRef,
           ),
           SizedBox(height: 10 * hp),
           Text(
-            profileData!.displayedName,
+            profileData!.fundamentalName,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headline5?.copyWith(fontWeight: FontWeight.w500),
           ),

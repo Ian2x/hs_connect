@@ -7,7 +7,7 @@ import 'dart:async';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/gradientText.dart';
-import 'package:hs_connect/shared/widgets/outlineButton.dart';
+import 'package:hs_connect/shared/widgets/myOutlinedButton.dart';
 import 'package:provider/provider.dart';
 
 class WaitVerification extends StatefulWidget {
@@ -23,6 +23,7 @@ class _WaitVerificationState extends State<WaitVerification> {
   final auth = FirebaseAuth.instance;
   User? user;
   Timer? timer;
+  bool emailDeleted = false;
 
   @override
   void initState() {
@@ -50,7 +51,6 @@ class _WaitVerificationState extends State<WaitVerification> {
       backgroundColor: Colors.white,
         body: Stack(
           children: [
-
           Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -66,15 +66,6 @@ class _WaitVerificationState extends State<WaitVerification> {
         Row(
           children: [
             SizedBox(width: 10*hp),
-            /*TextButton(
-                onPressed: (){
-                },
-                child:Text(
-                  "Cancel",
-                  style: ThemeText.inter(fontWeight: FontWeight.normal,
-                      fontSize: 16*hp, color: Colors.grey),
-                )
-            ),*/
           ],
         ),
         SizedBox(height: 30*hp),
@@ -104,6 +95,8 @@ class _WaitVerificationState extends State<WaitVerification> {
                   gradient: Gradients.blueRed(begin: Alignment.topCenter, end: Alignment.bottomCenter),
                   borderRadius: 20.0,
                   thickness:1.5,
+                  pressElevation: 0.0,
+                  padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
                   child: Container(
                     height: MediaQuery.of(context).size.height*.13,
                     width: MediaQuery.of(context).size.width*.7,
@@ -137,7 +130,15 @@ class _WaitVerificationState extends State<WaitVerification> {
                             borderRadius: BorderRadius.vertical(
                               top: Radius.circular(20*hp),
                             )),
-                        builder: (context) => pixelProvider(context, child: EmailVerificationErrorSheet(cancelTimer: ()=>timer!.cancel())));
+                        builder: (context) => pixelProvider(context, child: EmailVerificationErrorSheet(
+                          cancelTimer: ()=>timer!.cancel(),
+                          onDeleteEmail: () {
+                            if (mounted) {
+                              setState(()=>emailDeleted = true);
+                            }
+                          },
+                          emailDeleted: emailDeleted,
+                        )));
                   },
                   child: Text(
                       " Didn't get it? Click here.",
