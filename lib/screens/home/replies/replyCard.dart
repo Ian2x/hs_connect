@@ -65,7 +65,7 @@ class _ReplyCardState extends State<ReplyCard> {
       final UserData? fetchUserData = await _userInfoDatabaseService.getUserData(userRef: widget.reply.creatorRef!);
       if (mounted) {
         setState(() {
-          username = fetchUserData != null ? fetchUserData.displayedName : '<Failed to retrieve user name>';
+          username = fetchUserData != null ? fetchUserData.fundamentalName : '<Failed to retrieve user name>';
           groupColor = fetchUserData != null ? fetchUserData.domainColor : null;
           groupName = fetchUserData != null ? fetchUserData.domain : '<Failed to retrieve user name>';
         });

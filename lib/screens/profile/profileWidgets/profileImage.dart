@@ -25,11 +25,11 @@ class ProfileImage extends StatelessWidget {
       child: Stack(
         children: [
           buildImage(context: context),
-          Positioned(
+          /*Positioned(
             bottom: -2,
             right: -2,
             child: showEditIcon ? buildEditIcon(colorScheme.primary, context) : Container(),
-          )
+          )*/
         ],
       ),
     );

@@ -63,7 +63,7 @@ class _CommentCardState extends State<CommentCard> {
       final UserData? fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.comment.creatorRef!);
       if (mounted) {
         setState(() {
-          creatorName = fetchUserData != null ? fetchUserData.displayedName : null;
+          creatorName = fetchUserData != null ? fetchUserData.fundamentalName : null;
           creatorGroupName = fetchUserData != null ? fetchUserData.domain : null;
           creatorGroupColor = fetchUserData != null ? fetchUserData.domainColor : null;
         });

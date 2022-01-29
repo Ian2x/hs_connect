@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/activity/activityPage.dart';
 import 'package:hs_connect/screens/home/home.dart';
+import 'package:hs_connect/screens/home/new/newPost/newPost.dart';
 import 'package:hs_connect/screens/profile/profilePage.dart';
 import 'package:provider/provider.dart';
 
@@ -37,10 +38,12 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
       child: BottomNavigationBar(
         backgroundColor: colorScheme.surface,
         type: BottomNavigationBarType.fixed,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
+        showSelectedLabels: true,
+        showUnselectedLabels: true,
         currentIndex: widget.currentIndex,
         selectedItemColor: colorScheme.onSurface,
+        selectedFontSize: 6,
+        unselectedFontSize: 6,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             backgroundColor: Colors.green,
@@ -48,7 +51,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
               padding: EdgeInsets.zero,
               // color: colorScheme.onSurface,
               constraints: BoxConstraints(),
-              icon: Icon(Icons.school, size: 18*hp),
+              icon: Icon(Icons.home, size: 25*hp),
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
@@ -57,14 +60,14 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
                 );
               },
             ),
-            label: 'Home',
+            label: '',
           ),
           BottomNavigationBarItem(
             icon: IconButton(
               padding: EdgeInsets.zero,
               // color: colorScheme.onSurface,
               constraints: BoxConstraints(),
-              icon: Icon(Icons.notifications, size: 18*hp),
+              icon: Icon(Icons.notifications, size: 25*hp),
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
@@ -73,14 +76,14 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
                 );
               },
             ),
-            label: 'Notifications',
+            label: '',
           ),
           BottomNavigationBarItem(
             icon: IconButton(
               padding: EdgeInsets.zero,
               // color: colorScheme.onSurface,
               constraints: BoxConstraints(),
-              icon: Icon(Icons.person, size: 18*hp),
+              icon: Icon(Icons.person, size: 25*hp),
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
@@ -90,7 +93,27 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
                 );
               },
             ),
-            label: 'Profile',
+            label: '',
+          ),
+          BottomNavigationBarItem(
+            icon: IconButton(
+              padding: EdgeInsets.zero,
+              // color: colorScheme.onSurface,
+              constraints: BoxConstraints(),
+              icon: ShaderMask(
+                shaderCallback: (Rect bounds) {
+                  return Gradients.blueRed().createShader(bounds);
+                },
+                child: Icon(Icons.add, size: 30*hp, color: Colors.white),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => pixelProvider(context, child: NewPost())),
+                );
+              },
+            ),
+            label: '',
           ),
         ],
       ),

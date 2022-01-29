@@ -79,7 +79,7 @@ class MessagesPageAppBar extends StatelessWidget {
 
     return AppBar(
       backgroundColor: colorScheme.surface,
-      title: Text(otherUserData.displayedName, style: Theme.of(context).textTheme.headline6),
+      title: Text(otherUserData.fundamentalName, style: Theme.of(context).textTheme.headline6),
       leading: myBackButtonIcon(context),
       elevation: 0,
       bottom: PreferredSize(

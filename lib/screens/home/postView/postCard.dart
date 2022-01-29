@@ -8,6 +8,7 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/postView/likeDislikePost.dart';
 import 'package:hs_connect/screens/home/postView/postPage.dart';
 import 'package:hs_connect/services/groups_database.dart';
+import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
@@ -160,7 +161,7 @@ class _PostCardState extends State<PostCard> {
                               backgroundColor: Theme.of(context).colorScheme.surface,
                               avatar: CircleAvatar(
                                 backgroundColor: Colors.grey.shade800,
-                                  child: Image.network(group!.image!),
+                                backgroundImage: ImageStorage().groupImageProvider(group!=null ? group!.image : null),
                               ),
                               label: Text(
                                 //color: group!.hexColor != null? HexColor(group!.hexColor!)

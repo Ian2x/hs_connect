@@ -54,7 +54,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
     final UserData? fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.post.creatorRef);
     if (mounted) {
       setState(() {
-        creatorName = fetchUserData != null ? fetchUserData.displayedName : null;
+        creatorName = fetchUserData != null ? fetchUserData.fundamentalName : null;
       });
     }
   }
