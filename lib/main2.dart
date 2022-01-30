@@ -5,7 +5,6 @@ import 'package:hs_connect/screens/wrapper.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/createMaterialColor.dart';
-import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -32,12 +31,12 @@ class Main2 extends StatelessWidget {
               background: Color(0xFFf4f4f4), // background grey / light grey
               onSurface: Color(0xFF000000), // black
               error: Color(0xFFb2b2b2),
-              primaryVariant: Color(0xFF373a3d), // dark grey
+              primaryVariant: Color(0xff60676c), // dark grey
               secondaryVariant: Color(0xFF137ef0), // darker secondary blue
               secondary: Color(0xFF13a1f0), // secondary blue
               surface: Color(0xFFffffff), // white
               primary: Color(0xFFa1a1a1), // medium grey
-              onError: Color(0xFFc9c9c9), // light medium grey
+              onError: Color(0xffdbdada), // light medium grey
               onSecondary: Color(0xFFff004d),// secondary red
               onPrimary: Color(0xFF000000),
               onBackground: Color(0xFF000000),

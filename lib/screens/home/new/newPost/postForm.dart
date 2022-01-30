@@ -10,8 +10,10 @@ import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/deletableImage.dart';
+import 'package:hs_connect/shared/widgets/gradientText.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:hs_connect/shared/widgets/myOutlinedButton.dart';
 import 'package:hs_connect/shared/widgets/picPickerButton.dart';
 import 'package:provider/provider.dart';
 import 'package:hs_connect/services/posts_database.dart';
@@ -137,7 +139,7 @@ class _PostFormState extends State<PostForm> {
                 //Top ROW
                 children: [
                   TextButton(
-                    child: Text("Cancel", style: Theme.of(context).textTheme.subtitle1),
+                    child: Text("Cancel", style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.primary, fontSize: 18.5)),
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -163,84 +165,104 @@ class _PostFormState extends State<PostForm> {
                             ))),
                     child: Container(
                         alignment: Alignment.center,
-                        padding: EdgeInsets.fromLTRB(8*wp, 6*hp, 8*wp, 6*hp),
-                        decoration: ShapeDecoration(
-                          color: colorScheme.background,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(9*hp),
-                          ),
+                        padding: EdgeInsets.fromLTRB(15*wp, 6*hp, 8*wp, 6*hp),
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                              color: colorScheme.onError,
+                              width: 3*hp,
+                            ),
+                            borderRadius: BorderRadius.circular(10)
                         ),
                         child: Row(
                           children: [
                             Text(
                               selectedGroup!.name,
-                              style: Theme.of(context).textTheme.headline6
+                              style: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.primaryVariant)
                             ),
                             Icon(Icons.keyboard_arrow_down_rounded),
                           ],
                         )),
                   ),
                   Spacer(),
-                  TextButton(
-                      child: Text(
-                        "Post",
-                        style:
-                          Theme.of(context).textTheme.subtitle1?.copyWith(
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                      ),
-                      onPressed: () async {
-                        // check header isn't empty
-                        if (_title.isEmpty) {
-                          if (mounted) {
-                            setState(() {
-                              error = emptyTitleError;
-                            });
-                          }
-                          return;
+                  MyOutlinedButton(
+                    child: Row(
+                      children: [
+                        ShaderMask(
+                          shaderCallback: (Rect bounds) {
+                            return Gradients.blueRed().createShader(bounds);
+                          },
+                          child: Icon(Icons.add, size: 20*hp, color: Colors.white),
+                        ),
+                        SizedBox(width: 3*wp),
+                        Container(
+                          padding: EdgeInsets.only(bottom: 2*hp),
+                          child:
+                          GradientText("Post",
+                              style: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w500),
+                              maxLines: 1,
+                              softWrap: false,
+                              overflow: TextOverflow.fade,
+                              gradient: Gradients.blueRed()),
+                        ),
+                      ],
+                    ),
+                    borderRadius: 25*hp,
+                    thickness: 1.5*hp,
+                    padding: EdgeInsets.fromLTRB(8*wp,4.5*hp,13.5*wp,4.5*hp),
+                    gradient: Gradients.blueRed(),
+                    onPressed: () async{
+                      // check header isn't empty
+                      if (_title.isEmpty) {
+                        if (mounted) {
+                          setState(() {
+                            error = emptyTitleError;
+                          });
                         }
-                        // check no empty poll choices
-                        if (poll != null && pollChoices != null) {
-                          for (String choice in pollChoices!) {
-                            if (choice == "") {
-                              if (mounted) {
-                                setState(() {
-                                  error = emptyPollChoiceError;
-                                });
-                              }
-                              return;
+                        return;
+                      }
+                      // check no empty poll choices
+                      if (poll != null && pollChoices != null) {
+                        for (String choice in pollChoices!) {
+                          if (choice == "") {
+                            if (mounted) {
+                              setState(() {
+                                error = emptyPollChoiceError;
+                              });
                             }
+                            return;
                           }
                         }
-                        if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-                          // set to loading screen
-                          if (mounted) {
-                            setState(() => loading = true);
-                          }
-                          // handle image if applicable
-                          String? downloadURL;
-                          if (newFile != null) {
-                            // upload newFile
-                            downloadURL = await _images.uploadImage(file: newFile!);
-                          }
-                          // handle poll if applicable
-                          DocumentReference? pollRef;
-                          if (poll != null && pollChoices != null) {
-                            pollRef = await _polls.newPoll(choices: pollChoices!);
-                          }
+                      }
+                      if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+                        // set to loading screen
+                        if (mounted) {
+                          setState(() => loading = true);
+                        }
+                        // handle image if applicable
+                        String? downloadURL;
+                        if (newFile != null) {
+                          // upload newFile
+                          downloadURL = await _images.uploadImage(file: newFile!);
+                        }
+                        // handle poll if applicable
+                        DocumentReference? pollRef;
+                        if (poll != null && pollChoices != null) {
+                          pollRef = await _polls.newPoll(choices: pollChoices!);
+                        }
 
-                          await PostsDatabaseService(currUserRef: userData.userRef).newPost(
-                            title: _title,
-                            text: _text,
-                            tagString: _tag,
-                            media: downloadURL,
-                            pollRef: pollRef,
-                            groupRef: selectedGroup!.groupRef,
-                            onValue: handleValue,
-                            onError: handleError,
-                          );
-                        }
-                      }),
+                        await PostsDatabaseService(currUserRef: userData.userRef).newPost(
+                          title: _title,
+                          text: _text,
+                          tagString: _tag,
+                          media: downloadURL,
+                          pollRef: pollRef,
+                          groupRef: selectedGroup!.groupRef,
+                          onValue: handleValue,
+                          onError: handleError,
+                        );
+                      }
+                    },
+                  ),
                 ],
               ),
               Container(
@@ -250,7 +272,7 @@ class _PostFormState extends State<PostForm> {
                 ),
                 padding: EdgeInsets.fromLTRB(15*wp, 10*hp, 15*wp, 10*hp),
                 child: Column(children: <Widget>[
-                  SizedBox(height: 16*hp),
+                  SizedBox(height: 14*hp),
                   error != null
                       ? Text(error!, style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.error))
                       : Container(),
@@ -263,15 +285,15 @@ class _PostFormState extends State<PostForm> {
                                 if (mounted) {
                                   setState(() => newFile = null);
                                 }
-                              }, height: postPicHeight, width: postPicWidth, buttonSize: 25.0,),
+                              }, height: postPicHeight, width: postPicWidth, buttonSize: 30.0,),
                         )
                       : Container(),
                   TextFormField(
-                    style: Theme.of(context).textTheme.headline5?.copyWith(color: colorScheme.onError),
+                    style: Theme.of(context).textTheme.headline5,
                     maxLines: null,
                     autocorrect: false,
                     decoration: InputDecoration(
-                        hintStyle: Theme.of(context).textTheme.headline5?.copyWith(color: colorScheme.primaryVariant),
+                        hintStyle: Theme.of(context).textTheme.headline5,
                         border: InputBorder.none,
                         hintText: "What's up?", ),
                     onChanged: (val) {
@@ -297,11 +319,11 @@ class _PostFormState extends State<PostForm> {
                       child: Column(
                         children: [
                           TextFormField(
-                            style: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.primary),
+                            style: Theme.of(context).textTheme.bodyText1?.copyWith(color: colorScheme.primary, fontSize: 20),
                             maxLines: null,
                             autocorrect: false,
                             decoration: InputDecoration(
-                                hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.primary),
+                                hintStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: colorScheme.primary, fontSize: 20),
                                 border: InputBorder.none,
                                 hintText: "optional text"),
                             onChanged: (val) => setState(() => _text = val),
@@ -333,7 +355,7 @@ class _PostFormState extends State<PostForm> {
             child: Row(children: <Widget>[
               picPickerButton(
                   iconSize: 30*hp,
-                  color: newFile == null ? colorScheme.primary : colorScheme.secondary,
+                  color: newFile == null ? colorScheme.primary : colorScheme.primaryVariant,
                   setPic: ((File? f) {
                     if (mounted) {
                       setState(() {
@@ -384,7 +406,7 @@ class _PostFormState extends State<PostForm> {
                     }
                   },
                   icon: Icon(Icons.assessment,
-                      size: 30*hp, color: poll == null ? colorScheme.primary : colorScheme.secondary))
+                      size: 30*hp, color: poll == null ? colorScheme.primary : colorScheme.primaryVariant))
             ]),
           )),
     ]);

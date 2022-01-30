@@ -158,10 +158,19 @@ class _PostCardState extends State<PostCard> {
                             //Text("in ", style: ThemeText.inter(fontSize: 14, color: groupColor!=null ? HexColor(groupColor!) : colorScheme.primary)),
                             Chip(
                               padding: EdgeInsets.all(0),
-                              backgroundColor: Theme.of(context).colorScheme.surface,
-                              avatar: CircleAvatar(
-                                backgroundColor: Colors.grey.shade800,
-                                backgroundImage: ImageStorage().groupImageProvider(group!=null ? group!.image : null),
+                              backgroundColor: colorScheme.surface,
+                              avatar: Container(
+                                /*decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    color: colorScheme.primary,
+                                    border: Border.all(
+                                        width: 0.25*hp
+                                    )
+                                ),*/
+                                child: CircleAvatar(
+                                  backgroundColor: colorScheme.surface,
+                                  backgroundImage: ImageStorage().groupImageProvider(group!=null ? group!.image : null),
+                                ),
                               ),
                               label: Text(
                                 //color: group!.hexColor != null? HexColor(group!.hexColor!)

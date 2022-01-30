@@ -34,7 +34,7 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
 
     if (selectedGroup==null) return Loading();
     return Container(
-        padding: EdgeInsets.fromLTRB(20*wp, 0*hp, 20*wp, 40*hp),
+        padding: EdgeInsets.fromLTRB(25*wp, 0*hp, 25*wp, 40*hp),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,7 +50,7 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(height: 40*hp),
-                      Text("Pick a group",
+                      Text("Pick a circle",
                           style: Theme.of(context).textTheme.headline6),
                     ],
                   );
@@ -96,10 +96,10 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
                             ]
                           ),
                           group.name == "Public"
-                              ? Text("Anyone can see", style: Theme.of(context).textTheme.subtitle1)
+                              ? Text("Anyone can see", style: Theme.of(context).textTheme.subtitle2)
                               : Container(),
                           group.accessRestriction.restrictionType == AccessRestrictionType.domain
-                              ? Text("Only for your school", style: Theme.of(context).textTheme.subtitle1)
+                              ? Text("Only for your school", style: Theme.of(context).textTheme.subtitle2)
                               : Container()
                         ]
                       ),

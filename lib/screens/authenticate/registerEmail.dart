@@ -6,7 +6,6 @@ import 'package:hs_connect/services/auth.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
-import 'package:hs_connect/shared/widgets/gradientText.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
@@ -70,7 +69,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                         child:Text(
                           "Cancel",
                           style: ThemeText.inter(fontWeight: FontWeight.normal,
-                              fontSize: 16*hp, color: Colors.grey),
+                              fontSize: 16*hp, color: colorScheme.primaryVariant),
                         )
                     ),
                   ],
@@ -88,7 +87,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                         SizedBox(height: 20*hp),
                         Text(
                           'Sign Up',
-                          style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 28*hp, color: Colors.black //TODO: Convertto HP
+                          style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 28*hp, color: Colors.black
                           ),
                         ),
                         SizedBox(height: 20*hp),
@@ -98,7 +97,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                             child: Text(
                                 error!, style: ThemeText.inter(fontWeight: FontWeight.w500, fontSize: 13*hp, color: Colors.black)),
                           ) :
-                          Text("Verify your school with your email.",
+                          Text("Verify your school with your email. We ",
                               style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontSize: 14)),
                         ),
                         SizedBox(height: 50*hp),
@@ -109,7 +108,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                   key: _formKey,
                   child:
                   Container(
-                      padding:EdgeInsets.fromLTRB(20.0,0,20,0),
+                      padding:EdgeInsets.fromLTRB(20*wp,0,20*wp,0),
                       child:
                         Column(
                           children: [
@@ -130,7 +129,8 @@ class _RegisterEmailState extends State<RegisterEmail> {
                                 }
                               },
                             ),
-                            Divider(height:20*hp, thickness: 2*hp, color: colorScheme.onError),
+                            Divider(height:4*hp, thickness: 2*hp, color: colorScheme.onError),
+                            SizedBox(height:10*hp)
                           ],
                         )
                   ),

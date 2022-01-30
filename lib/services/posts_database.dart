@@ -262,6 +262,9 @@ class PostsDatabaseService {
 
   Future<List<Post?>> getTrendingPosts(List<DocumentReference> groupRefs,
       {DocumentSnapshot? startingFrom, VoidDocSnapParamFunction? setStartFrom}) async {
+    // add public group
+    groupRefs.add(FirebaseFirestore.instance.collection(C.groups).doc("Public"));
+    print(groupRefs);
     final int ianTime = DateTime.now().ianTime();
     if (startingFrom != null) {
       List<Post?> results = [];

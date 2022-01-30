@@ -5,7 +5,9 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/postView/postCard.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/pixels.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:provider/provider.dart';
 
 class TrendingFeed extends StatefulWidget {
   final UserData currUser;
@@ -61,11 +63,16 @@ class _TrendingFeedState extends State<TrendingFeed> {
   }
 
   @override
-  Widget build(BuildContext context) =>
-      RefreshIndicator(
-        onRefresh: () => Future.sync(
-              () => _pagingController.refresh(),
-        ),
+  Widget build(BuildContext context) {
+    final hp = Provider.of<HeightPixel>(context).value;
+
+    return Container(
+      padding: EdgeInsets.only(top: 3*hp),
+      child: RefreshIndicator(
+        onRefresh: () =>
+            Future.sync(
+                  () => _pagingController.refresh(),
+            ),
         child: PagedListView<DocumentSnapshot?, Post>(
           pagingController: _pagingController,
           physics: AlwaysScrollableScrollPhysics(),
@@ -81,7 +88,9 @@ class _TrendingFeedState extends State<TrendingFeed> {
               }
           ),
         ),
-      );
+      ),
+    );
+  }
 
   @override
   void dispose() {

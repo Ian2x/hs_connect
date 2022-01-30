@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/screens/home/new/floatingNewButton.dart';
 import 'package:hs_connect/screens/home/postFeed/domainFeed.dart';
 import 'package:hs_connect/screens/home/postFeed/trendingFeed.dart';
 import 'package:flutter/material.dart';
