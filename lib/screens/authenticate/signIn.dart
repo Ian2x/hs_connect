@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/screens/wrapper.dart';
 import 'package:hs_connect/services/auth.dart';
 import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
@@ -87,12 +86,12 @@ class _SignInState extends State<SignIn> {
                               SizedBox(height: 20*hp),
                               Text(
                                 'Login',
-                                style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 28*hp, color: Colors.black //TODO: Convertto HP
+                                style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 28*hp, color: Colors.black
                                 ),
                               ),
                               SizedBox(height: 30*hp),
                               Container(
-                                padding:EdgeInsets.fromLTRB(20.0,0,20,0),
+                                padding:EdgeInsets.fromLTRB(20*wp,0,20*wp,0),
                                 child: Form(
                                   key: _formKey,
                                   child: Column(

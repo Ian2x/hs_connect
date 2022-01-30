@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class Authenticate extends StatefulWidget {
 
-  bool signIn;
+  final bool signIn;
 
   Authenticate({Key? key,required this.signIn }) : super(key: key);
 
@@ -24,7 +24,6 @@ class _AuthenticateState extends State<Authenticate> {
 
   @override
   void initState() {
-    // TODO: implement initState
     showSignIn= widget.signIn;
     super.initState();
   }

@@ -126,7 +126,6 @@ class _CommentCardState extends State<CommentCard> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-
                         SizedBox(
                           width: (MediaQuery.of(context).size.width)*.85,
                           child: RichText(

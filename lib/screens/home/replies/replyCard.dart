@@ -108,7 +108,7 @@ class _ReplyCardState extends State<ReplyCard> {
           ),
         ),
         Container(
-            padding: EdgeInsets.fromLTRB(25*wp, 5*hp, 0, 5*hp),
+            padding: EdgeInsets.fromLTRB(25*wp, 10*hp, 0*wp, 0*hp),
             child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,11 +135,12 @@ class _ReplyCardState extends State<ReplyCard> {
                                 ),
                               ),
                             ),
+                            SizedBox(height: 10*hp),
                             Row(
                               children: [
                                 Text(
                                   convertTime(widget.reply.createdAt.toDate()), style: Theme.of(context).textTheme.bodyText2),
-                                Spacer(flex:1),
+                                Spacer(),
                                 widget.reply.creatorRef != null ? LikeDislikeReply(
                                     reply: widget.reply,
                                     currUserRef: widget.currUserRef,
@@ -152,8 +153,8 @@ class _ReplyCardState extends State<ReplyCard> {
                     ],
                   ),
                   widget.isLast !=false ?
-                    Container() :
-                    Divider(thickness: 3*hp, color: colorScheme.background, height: 40*hp),
+                    SizedBox(height: 15*hp) :
+                    Divider(thickness: 3*hp, color: colorScheme.background, height: 30*hp),
                 ]
             )
         ),

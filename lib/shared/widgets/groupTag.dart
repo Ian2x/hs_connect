@@ -53,7 +53,7 @@ class GroupTag extends StatelessWidget {
                     )
                 ),
               ) : Container(),
-              groupImageURL!=null ? SizedBox(width: fontSize/6) : Container(),
+              groupImageURL!=null ? SizedBox(width: fontSize*0.4) : Container(),
               Container(
                 padding: EdgeInsets.only(bottom: 2),
                 child: Text( groupName,
