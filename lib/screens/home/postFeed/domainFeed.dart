@@ -20,10 +20,9 @@ class DomainFeed extends StatefulWidget {
 
 class _DomainFeedState extends State<DomainFeed> {
 
-  static const _pageSize = 5;
+  static const _pageSize = nextPostsFetchSize;
 
   final PagingController<DocumentSnapshot?, Post> _pagingController = PagingController(firstPageKey: null);
-  DocumentSnapshot? myPageKey;
 
   late PostsDatabaseService _posts;
 
@@ -40,9 +39,9 @@ class _DomainFeedState extends State<DomainFeed> {
   Future<void> _fetchPage(DocumentSnapshot? pageKey) async {
     try {
       DocumentSnapshot? tempKey;
-      List<Post?> tempPosts = await _posts.getPostsByGroups(
+      List<Post?> tempPosts = await _posts.getGroupPosts(
           [FirebaseFirestore.instance.collection(C.groups).doc(widget.currUser.domain)],
-          startingFrom: pageKey, setStartFrom: (DocumentSnapshot ds) {tempKey = ds;});
+          startingFrom: pageKey, setStartFrom: (DocumentSnapshot ds) {tempKey = ds;}, withPublic: false, byNew: false);
       tempPosts.removeWhere((value) => value == null);
       final newPosts = tempPosts.map((item) => item!).toList();
       final isLastPage = newPosts.length < _pageSize;
@@ -74,14 +73,18 @@ class _DomainFeedState extends State<DomainFeed> {
           physics: AlwaysScrollableScrollPhysics(),
           padding: EdgeInsets.zero,
           builderDelegate: PagedChildBuilderDelegate<Post>(
-            //animateTransitions: true,
               itemBuilder: (context, item, index) {
                 return Center(
                     child: PostCard(
                       post: item,
-                      currUserRef: widget.currUser.userRef,
-                    ));
-              }
+                currUserRef: widget.currUser.userRef,
+              ));
+            },
+            noItemsFoundIndicatorBuilder: (BuildContext context) => Container(
+                padding: EdgeInsets.only(top: 50 * hp),
+                alignment: Alignment.topCenter,
+                child: Text("No posts found",
+                    style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.normal))),
           ),
         ),
       ),

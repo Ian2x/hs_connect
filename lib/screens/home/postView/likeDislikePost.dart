@@ -79,7 +79,7 @@ class LikeDislikePost extends StatelessWidget {
               color: colorScheme.secondary,
               icon: Icon(Arrows.up_open_big, color: colorScheme.secondary),
               onPressed: () {
-                _posts.unLikePost(post.creatorRef);
+                _posts.unLikePost(post);
                 postLikesManager.onUnLike();
               },
             );
@@ -92,7 +92,7 @@ class LikeDislikePost extends StatelessWidget {
               color: colorScheme.primaryVariant,
               icon: Icon(Arrows.up_open_big),
               onPressed: () {
-                _posts.likePost(post.creatorRef, postLikesManager.likeCount);
+                _posts.likePost(post, postLikesManager.likeCount);
                 postLikesManager.onLike();
               },
             );
@@ -206,7 +206,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
               color: colorScheme.secondary,
               icon: Icon(Arrows.up_open_big, color: colorScheme.secondary),
               onPressed: () {
-                _posts.unLikePost(widget.post.creatorRef);
+                _posts.unLikePost(widget.post);
                 widget.postLikesManager.onUnLike();
                 if (mounted) {
                   setState(() {
@@ -225,7 +225,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
               color: colorScheme.primaryVariant,
               icon: Icon(Arrows.up_open_big),
               onPressed: () {
-                _posts.likePost(widget.post.creatorRef, likeCount);
+                _posts.likePost(widget.post, likeCount);
                 widget.postLikesManager.onLike();
                 if (mounted) {
                   setState(() {

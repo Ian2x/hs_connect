@@ -36,6 +36,7 @@ class _ProfilePostFeedState extends State<ProfilePostFeed> {
   Widget build(BuildContext context) {
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
       width: MediaQuery.of(context).size.width * .9,
@@ -50,7 +51,7 @@ class _ProfilePostFeedState extends State<ProfilePostFeed> {
         Row(
           children: [
             SizedBox(width: 10 * wp),
-            Text("Visible to only you", style: Theme.of(context).textTheme.subtitle2, textAlign: TextAlign.left),
+            Text("Visible to only you", style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary), textAlign: TextAlign.left),
           ],
         ),
         SizedBox(height: 20 * hp),
