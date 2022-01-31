@@ -5,26 +5,25 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/postView/postCard.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/pixels.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:provider/provider.dart';
 
-class TrendingFeed extends StatefulWidget {
+class PublicFeed extends StatefulWidget {
   final UserData currUser;
 
-  const TrendingFeed({Key? key, required this.currUser})
+  const PublicFeed({Key? key, required this.currUser})
       : super(key: key);
 
   @override
-  _TrendingFeedState createState() => _TrendingFeedState();
+  _PublicFeedState createState() => _PublicFeedState();
 }
 
-class _TrendingFeedState extends State<TrendingFeed> {
+class _PublicFeedState extends State<PublicFeed> {
 
-
-
-  static const _pageSize = 5;
+  static const _pageSize = nextPostsFetchSize;
 
   final PagingController<DocumentSnapshot?, Post> _pagingController = PagingController(firstPageKey: null);
-  DocumentSnapshot? myPageKey;
 
   late PostsDatabaseService _posts;
 
@@ -41,12 +40,10 @@ class _TrendingFeedState extends State<TrendingFeed> {
   Future<void> _fetchPage(DocumentSnapshot? pageKey) async {
     try {
       DocumentSnapshot? tempKey;
-      List<Post?> tempPosts = await _posts.getTrendingPosts(
-          [FirebaseFirestore.instance.collection(C.groups).doc(widget.currUser.domain)],
-          startingFrom: pageKey, setStartFrom: (DocumentSnapshot ds) {tempKey = ds;});
+      List<Post?> tempPosts = await _posts.getGroupPosts([],
+          startingFrom: pageKey, setStartFrom: (DocumentSnapshot ds) {tempKey = ds;}, withPublic: true, byNew: false);
       tempPosts.removeWhere((value) => value == null);
       final newPosts = tempPosts.map((item) => item!).toList();
-
       final isLastPage = newPosts.length < _pageSize;
       if (mounted) {
         if (isLastPage) {
@@ -57,15 +54,21 @@ class _TrendingFeedState extends State<TrendingFeed> {
       }
     } catch (error) {
       _pagingController.error = error;
+      print(error.runtimeType);
     }
   }
 
   @override
-  Widget build(BuildContext context) =>
-      RefreshIndicator(
-        onRefresh: () => Future.sync(
-              () => _pagingController.refresh(),
-        ),
+  Widget build(BuildContext context) {
+    final hp = Provider.of<HeightPixel>(context).value;
+
+    return Container(
+      padding: EdgeInsets.only(top: 3*hp),
+      child: RefreshIndicator(
+        onRefresh: () =>
+            Future.sync(
+                  () => _pagingController.refresh(),
+            ),
         child: PagedListView<DocumentSnapshot?, Post>(
           pagingController: _pagingController,
           physics: AlwaysScrollableScrollPhysics(),
@@ -78,10 +81,17 @@ class _TrendingFeedState extends State<TrendingFeed> {
                       post: item,
                       currUserRef: widget.currUser.userRef,
                     ));
-              }
+              },
+              noItemsFoundIndicatorBuilder: (BuildContext context) => Container(
+                  padding: EdgeInsets.only(top: 50*hp),
+                  alignment: Alignment.topCenter,
+                  child: Text("No posts found",
+                      style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.normal))),
           ),
         ),
-      );
+      ),
+    );
+  }
 
   @override
   void dispose() {

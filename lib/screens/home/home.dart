@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/screens/home/new/floatingNewButton.dart';
 import 'package:hs_connect/screens/home/postFeed/domainFeed.dart';
-import 'package:hs_connect/screens/home/postFeed/trendingFeed.dart';
+import 'package:hs_connect/screens/home/postFeed/publicFeed.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
@@ -67,7 +66,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             body: TabBarView(
               children: [
                 DomainFeed(currUser: userData),
-                TrendingFeed(currUser: userData),
+                PublicFeed(currUser: userData),
               ],
               controller: tabController,
               physics: new NeverScrollableScrollPhysics(),

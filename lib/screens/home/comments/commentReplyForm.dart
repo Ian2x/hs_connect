@@ -91,7 +91,7 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
       if (widget.isReply){
         widget.switchFormBool(null);
         await RepliesDatabaseService(currUserRef: widget.currUserRef).newReply(
-          postRef: widget.post.postRef,
+          post: widget.post,
           commentRef: widget.commentReference!,
           text: _text,
           media: newFileURL,
@@ -102,7 +102,7 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
         );
       } else {
         await _comments!.newComment(
-          postRef: widget.post.postRef,
+          post: widget.post,
           text: _text,
           media: newFileURL,
           onValue: handleValue,

@@ -5,7 +5,9 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/postView/postCard.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/pixels.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:provider/provider.dart';
 
 class DomainFeed extends StatefulWidget {
   final UserData currUser;
@@ -18,10 +20,9 @@ class DomainFeed extends StatefulWidget {
 
 class _DomainFeedState extends State<DomainFeed> {
 
-  static const _pageSize = 5;
+  static const _pageSize = nextPostsFetchSize;
 
   final PagingController<DocumentSnapshot?, Post> _pagingController = PagingController(firstPageKey: null);
-  DocumentSnapshot? myPageKey;
 
   late PostsDatabaseService _posts;
 
@@ -38,9 +39,9 @@ class _DomainFeedState extends State<DomainFeed> {
   Future<void> _fetchPage(DocumentSnapshot? pageKey) async {
     try {
       DocumentSnapshot? tempKey;
-      List<Post?> tempPosts = await _posts.getPostsByGroups(
+      List<Post?> tempPosts = await _posts.getGroupPosts(
           [FirebaseFirestore.instance.collection(C.groups).doc(widget.currUser.domain)],
-          startingFrom: pageKey, setStartFrom: (DocumentSnapshot ds) {tempKey = ds;});
+          startingFrom: pageKey, setStartFrom: (DocumentSnapshot ds) {tempKey = ds;}, withPublic: false, byNew: false);
       tempPosts.removeWhere((value) => value == null);
       final newPosts = tempPosts.map((item) => item!).toList();
       final isLastPage = newPosts.length < _pageSize;
@@ -57,27 +58,38 @@ class _DomainFeedState extends State<DomainFeed> {
   }
 
   @override
-  Widget build(BuildContext context) =>
-      RefreshIndicator(
-        onRefresh: () => Future.sync(
-              () => _pagingController.refresh(),
-        ),
+  Widget build(BuildContext context) {
+    final hp = Provider.of<HeightPixel>(context).value;
+
+    return Container(
+      padding: EdgeInsets.only(top: 3*hp),
+      child: RefreshIndicator(
+        onRefresh: () =>
+            Future.sync(
+                  () => _pagingController.refresh(),
+            ),
         child: PagedListView<DocumentSnapshot?, Post>(
           pagingController: _pagingController,
           physics: AlwaysScrollableScrollPhysics(),
           padding: EdgeInsets.zero,
           builderDelegate: PagedChildBuilderDelegate<Post>(
-            //animateTransitions: true,
-            itemBuilder: (context, item, index) {
-              return Center(
-                  child: PostCard(
-                    post: item,
-                    currUserRef: widget.currUser.userRef,
-                  ));
-            }
+              itemBuilder: (context, item, index) {
+                return Center(
+                    child: PostCard(
+                      post: item,
+                currUserRef: widget.currUser.userRef,
+              ));
+            },
+            noItemsFoundIndicatorBuilder: (BuildContext context) => Container(
+                padding: EdgeInsets.only(top: 50 * hp),
+                alignment: Alignment.topCenter,
+                child: Text("No posts found",
+                    style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.normal))),
           ),
         ),
-      );
+      ),
+    );
+  }
 
   @override
   void dispose() {

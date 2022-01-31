@@ -6,6 +6,7 @@ import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
+import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
@@ -93,7 +94,7 @@ class _RegisterUserState extends State<RegisterUser> {
                                 SizedBox(height: 15*hp),
                                 Text(
                                   'Make an Account',
-                                  style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 28*hp, color: Colors.black //TODO: Convertto HP
+                                  style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 28*hp, color: Colors.black
                                   ),
                                 ),
                                 SizedBox(height: 8*hp),
@@ -108,7 +109,7 @@ class _RegisterUserState extends State<RegisterUser> {
                                     style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontSize: 14)),
                                 SizedBox(height: 25*hp),
                                 Container(
-                                  padding:EdgeInsets.fromLTRB(20.0,0,20,0),
+                                  padding:EdgeInsets.fromLTRB(20*wp,0,20*wp,0),
                                   child: Column(
                                     children: [
                                       TextFormField(
@@ -157,18 +158,20 @@ class _RegisterUserState extends State<RegisterUser> {
                                   ),
                                 ),
 
-                                SizedBox(height: 100*hp),
-                              ],
-                            )
-                        ),
-                      ]),
+                                  SizedBox(height: 100*hp),
+                                ],
+                              )
+                          ),
+                        ]),
+                  ),
                 ),
-              ),
               Positioned(
                 bottom:0,
                 left:0,
                 child: new AuthBar(buttonText: "Register",
                     onPressed: () async {
+                        dismissKeyboard(context);
+                        if (_formKey.currentState != null && _formKey.currentState!.validate()) {
                         if (username.length < 6 || password.length < 6){
                           if (mounted) {
                             setState(() {
@@ -211,7 +214,7 @@ class _RegisterUserState extends State<RegisterUser> {
                             }
                           }
                         }
-                      },),
+                      }},),
               ),
             ])
     );

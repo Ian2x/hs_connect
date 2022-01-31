@@ -107,7 +107,7 @@ class MyNotification {
       case MyNotificationType.replyToComment:
         return '';//' from ';
       case MyNotificationType.replyVotes:
-        return 'Your reply in';
+        return 'Your reply in ';
       case MyNotificationType.commentVotes:
         return 'Your comment in ';
       case MyNotificationType.postVotes:

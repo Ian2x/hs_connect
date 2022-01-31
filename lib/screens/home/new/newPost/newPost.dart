@@ -3,7 +3,7 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
-import 'PostForm.dart';
+import 'postForm.dart';
 
 class NewPost extends StatelessWidget {
   const NewPost({Key? key}) : super(key: key);
@@ -19,7 +19,7 @@ class NewPost extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Stack(
         children: <Widget>[
           Container(

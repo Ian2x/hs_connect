@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/myNotification.dart';
+import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/reply.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/tools/helperFunctions.dart';
 
 void defaultFunc(dynamic parameter) {}
 
@@ -25,7 +27,7 @@ class RepliesDatabaseService {
       {required String text,
       required String? media,
       required DocumentReference commentRef,
-      required DocumentReference postRef,
+      required Post post,
       required DocumentReference groupRef,
       required DocumentReference postCreatorRef,
       Function(void) onValue = defaultFunc,
@@ -34,7 +36,7 @@ class RepliesDatabaseService {
     // update comment creator's activity if not self
     if (postCreatorRef != currUserRef) {
       postCreatorRef.update({C.myNotifications: FieldValue.arrayUnion([{
-        C.parentPostRef: postRef,
+        C.parentPostRef: post.postRef,
         C.myNotificationType: MyNotificationType.replyToComment.string,
         C.sourceRef: newReplyRef,
         C.sourceUserRef: currUserRef,
@@ -52,7 +54,7 @@ class RepliesDatabaseService {
               if (r.creatorRef!=currUserRef && r.creatorRef!=null) {
                 r.creatorRef!.update({
                   C.myNotifications: FieldValue.arrayUnion([{
-                    C.parentPostRef: postRef,
+                    C.parentPostRef: post.postRef,
                     C.myNotificationType: MyNotificationType.replyToReply.string,
                     C.sourceRef: newReplyRef,
                     C.sourceUserRef: currUserRef,
@@ -66,9 +68,9 @@ class RepliesDatabaseService {
         }
     );
     // update post's numReplies and score
-    postRef.update({
+    post.postRef.update({
       C.numReplies: FieldValue.increment(1),
-      C.score: FieldValue.increment(4)
+      C.trendingCreatedAt: newTrendingCreatedAt(post.trendingCreatedAt.toDate(), trendingReplyBoost)
     });
     // get accessRestriction
     final group = await groupRef.get();
@@ -78,7 +80,7 @@ class RepliesDatabaseService {
         .set({
           C.creatorRef: currUserRef,
           C.commentRef: commentRef,
-          C.postRef: postRef,
+          C.postRef: post.postRef,
           C.groupRef: groupRef,
           C.accessRestriction: accessRestriction,
           C.text: text,

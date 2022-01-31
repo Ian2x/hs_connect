@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/poll.dart';
+import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/services/polls_database.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pixels.dart';
@@ -10,8 +11,9 @@ import 'package:provider/provider.dart';
 class PollView extends StatefulWidget {
   final Poll poll;
   final DocumentReference currUserRef;
+  final Post post;
 
-  const PollView({Key? key, required this.poll, required this.currUserRef}) : super(key: key);
+  const PollView({Key? key, required this.poll, required this.currUserRef, required this.post}) : super(key: key);
 
   @override
   _PollViewState createState() => _PollViewState();
@@ -84,7 +86,7 @@ class _PollViewState extends State<PollView> {
                     });
                     PollsDatabaseService _polls = PollsDatabaseService();
                     if (!(await _polls.alreadyVoted(pollRef: widget.poll.pollRef, userRef: widget.currUserRef))) {
-                      _polls.vote(pollRef: widget.poll.pollRef, userRef: widget.currUserRef, choice: index);
+                      _polls.vote(pollRef: widget.poll.pollRef, userRef: widget.currUserRef, choice: index, post: widget.post);
                     }
                   }
                 });

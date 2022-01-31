@@ -134,7 +134,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
             widget.post.mediaURL != null ?
               ImageContainer(imageString: widget.post.mediaURL!)
                 : Container(),
-            poll != null ? PollView(poll: poll!, currUserRef: widget.currUserRef,): Container(),
+            poll != null ? PollView(poll: poll!, currUserRef: widget.currUserRef, post: widget.post): Container(),
             SizedBox(height:20*hp),
             Row(
               children: [

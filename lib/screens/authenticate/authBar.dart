@@ -30,13 +30,15 @@ class AuthBar extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               MyOutlinedButton(
-                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 40),
+                padding: EdgeInsets.symmetric(vertical: 12*hp, horizontal: 40*wp),
                 onPressed: onPressed,
                 gradient: Gradients.blueRed(begin: Alignment.topCenter, end: Alignment.bottomCenter),
                 borderRadius: 40,
                 child: GradientText(
                   buttonText,
-                  style: ThemeText.inter(fontWeight: FontWeight.w500, fontSize: 17*hp, //TODO: Convertto HP
+                  softWrap: false,
+                  overflow: TextOverflow.ellipsis,
+                  style: ThemeText.inter(fontWeight: FontWeight.w500, fontSize: 17*hp,
                   ),
                   gradient: Gradients.blueRed(),
                 ),

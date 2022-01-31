@@ -10,6 +10,7 @@ import 'package:hs_connect/screens/home/postView/postTitleCard.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pixels.dart';
+import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
@@ -62,30 +63,33 @@ class _CommentsFeedState extends State<CommentsFeed> {
                 return a.createdAt.compareTo(b.createdAt);
               });
 
-              return ListView.builder(
-                itemCount: comments.length + 3,
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                physics: BouncingScrollPhysics(),
-                itemBuilder: (BuildContext context, int index) {
-                  if (index == 0) {
-                    return PostTitleCard(
-                      post: widget.post,
-                      group: widget.group,
-                      currUserRef: userData.userRef,
-                    );
-                  } else if (index == 1) {
-                    return Divider(thickness: 3 * hp, color: colorScheme.background, height: 10 * hp);
-                  } else if (index == comments.length+2){
-                    return SizedBox(height: 70*hp);
-                  } else {
-                    return CommentCard(
-                      switchFormBool: switchFormBool,
-                      comment: comments[index - 2],
-                      currUserRef: userData.userRef,
-                    );
-                  }
-                },
+              return GestureDetector(
+                onTap: ()=>dismissKeyboard(context),
+                child: ListView.builder(
+                  itemCount: comments.length + 3,
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  physics: BouncingScrollPhysics(),
+                  itemBuilder: (BuildContext context, int index) {
+                    if (index == 0) {
+                      return PostTitleCard(
+                        post: widget.post,
+                        group: widget.group,
+                        currUserRef: userData.userRef,
+                      );
+                    } else if (index == 1) {
+                      return Divider(thickness: 3 * hp, color: colorScheme.background, height: 10 * hp);
+                    } else if (index == comments.length+2){
+                      return SizedBox(height: 70*hp);
+                    } else {
+                      return CommentCard(
+                        switchFormBool: switchFormBool,
+                        comment: comments[index - 2],
+                        currUserRef: userData.userRef,
+                      );
+                    }
+                  },
+                ),
               );
             }
           },

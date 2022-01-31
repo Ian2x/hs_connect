@@ -91,9 +91,7 @@ class _ProfileBodyState extends State<ProfileBody> {
             style: Theme.of(context).textTheme.headline5?.copyWith(fontWeight: FontWeight.w500),
           ),
           SizedBox(height: 10 * hp),
-          SizedBox(height: 10 * hp),
-          Spacer(),
-          Container(
+          /*Container(
             height: 40 * hp,
             child:
             Chip(
@@ -119,6 +117,17 @@ class _ProfileBodyState extends State<ProfileBody> {
                             : colorScheme.onBackground,
                       )),
             ),
+          ),*/
+          Container(
+            width: 100*wp,
+            child: GroupTag(
+              groupImageURL: profileData!.profileImageURL,
+              groupName: profileData!.fullDomainName != null ? profileData!.fullDomainName! : profileData!.domain,
+              borderRadius: 20,
+              padding: EdgeInsets.fromLTRB(12 * wp, 4 * hp, 12 * wp, 4 * hp),
+              thickness: 1.5,
+              fontSize: 15,
+            ),
           ),
           SizedBox(height: 15 * hp),
           Center(
@@ -132,7 +141,6 @@ class _ProfileBodyState extends State<ProfileBody> {
               ),
             ),
           ),
-          Spacer(),
           widget.profileUserRef != widget.currUserData.userRef
               ? Column(
                   children: <Widget>[
