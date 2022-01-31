@@ -32,88 +32,107 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
 
     if (loading || userData == null) return Loading();
 
+    double borderHeight=3;
+
     return Container(
-      decoration: BoxDecoration(gradient: Gradients.blueRed()),//,boxShadow: [BoxShadow(color: colorScheme.primary, spreadRadius: 0.4*hp
+      height: kBottomNavigationBarHeight + borderHeight +1.5,
+        decoration: BoxDecoration(
+          gradient: Gradients.blueRed(
+            begin: Alignment.bottomLeft, end: Alignment.topRight,
+          ),
+        ),//,boxShadow: [BoxShadow(color: colorScheme.primary, spreadRadius: 0.4*hp
       padding: EdgeInsets.only(top: 1.5*hp),
-      child: BottomNavigationBar(
-        backgroundColor: colorScheme.surface,
-        type: BottomNavigationBarType.fixed,
-        showSelectedLabels: true,
-        showUnselectedLabels: true,
-        currentIndex: widget.currentIndex,
-        selectedItemColor: colorScheme.onSurface,
-        selectedFontSize: 6,
-        unselectedFontSize: 6,
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            backgroundColor: Colors.green,
-            icon: IconButton(
-              padding: EdgeInsets.zero,
-              // color: colorScheme.onSurface,
-              constraints: BoxConstraints(),
-              icon: Icon(Icons.home, size: 25*hp),
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  NoAnimationMaterialPageRoute(
-                      builder: (context) => pixelProvider(context, child: Home(userData: userData))),
-                );
-              },
-            ),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: IconButton(
-              padding: EdgeInsets.zero,
-              // color: colorScheme.onSurface,
-              constraints: BoxConstraints(),
-              icon: Icon(Icons.notifications, size: 25*hp),
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  NoAnimationMaterialPageRoute(
-                      builder: (context) => pixelProvider(context, child: ActivityPage())),
-                );
-              },
-            ),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: IconButton(
-              padding: EdgeInsets.zero,
-              // color: colorScheme.onSurface,
-              constraints: BoxConstraints(),
-              icon: Icon(Icons.person, size: 25*hp),
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  NoAnimationMaterialPageRoute(
-                      builder: (context) => pixelProvider(context,
-                          child: ProfilePage(profileRef: userData.userRef, currUserData: userData))),
-                );
-              },
-            ),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: IconButton(
-              padding: EdgeInsets.zero,
-              // color: colorScheme.onSurface,
-              constraints: BoxConstraints(),
-              icon: ShaderMask(
-                shaderCallback: (Rect bounds) {
-                  return Gradients.blueRed().createShader(bounds);
-                },
-                child: Icon(Icons.add, size: 30*hp, color: Colors.white),
+      child: Column(
+        children: [
+          Container(
+            height:borderHeight,
+            decoration: BoxDecoration(
+              gradient: Gradients.blueRed(
+                begin: Alignment.bottomLeft, end: Alignment.topRight,
               ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => pixelProvider(context, child: NewPost())),
-                );
-              },
             ),
-            label: '',
+          ),
+          BottomNavigationBar(
+            backgroundColor: colorScheme.surface,
+            type: BottomNavigationBarType.fixed,
+            showSelectedLabels: true,
+            showUnselectedLabels: true,
+            currentIndex: widget.currentIndex,
+            selectedItemColor: colorScheme.onSurface,
+            selectedFontSize: 6,
+            unselectedFontSize: 6,
+            items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                backgroundColor: Colors.green,
+                icon: IconButton(
+                  padding: EdgeInsets.zero,
+                  // color: colorScheme.onSurface,
+                  constraints: BoxConstraints(),
+                  icon: Icon(Icons.home, size: 25*hp),
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      NoAnimationMaterialPageRoute(
+                          builder: (context) => pixelProvider(context, child: Home(userData: userData))),
+                    );
+                  },
+                ),
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: IconButton(
+                  padding: EdgeInsets.zero,
+                  // color: colorScheme.onSurface,
+                  constraints: BoxConstraints(),
+                  icon: Icon(Icons.notifications, size: 25*hp),
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      NoAnimationMaterialPageRoute(
+                          builder: (context) => pixelProvider(context, child: ActivityPage())),
+                    );
+                  },
+                ),
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: IconButton(
+                  padding: EdgeInsets.zero,
+                  // color: colorScheme.onSurface,
+                  constraints: BoxConstraints(),
+                  icon: Icon(Icons.person, size: 25*hp),
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      NoAnimationMaterialPageRoute(
+                          builder: (context) => pixelProvider(context,
+                              child: ProfilePage(profileRef: userData.userRef, currUserData: userData))),
+                    );
+                  },
+                ),
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: IconButton(
+                  padding: EdgeInsets.zero,
+                  // color: colorScheme.onSurface,
+                  constraints: BoxConstraints(),
+                  icon: ShaderMask(
+                    shaderCallback: (Rect bounds) {
+                      return Gradients.blueRed().createShader(bounds);
+                    },
+                    child: Icon(Icons.add, size: 30*hp, color: Colors.white),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => pixelProvider(context, child: NewPost())),
+                    );
+                  },
+                ),
+                label: '',
+              ),
+            ],
           ),
         ],
       ),

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
+import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:provider/provider.dart';
 import 'authenticate/preview.dart';
@@ -29,7 +30,16 @@ class _WrapperState extends State<Wrapper> {
   Widget build(BuildContext context) {
     final user = Provider.of<User?>(context);
     final userData = Provider.of<UserData?>(context);
-    if (!loadTimed) return Scaffold(backgroundColor: Colors.green,);
+    if (!loadTimed) return Scaffold(
+      backgroundColor: Colors.green,
+        body: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            gradient: Gradients.blueRed(),
+          ),
+        ),
+    );
     if (user == null || userData == null || user.email==null || !user.email!.endsWith('@ianeric.com')) {
       return pixelProvider(context, child: PreviewPage());
     } else {

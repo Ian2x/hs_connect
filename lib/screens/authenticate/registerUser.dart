@@ -31,12 +31,12 @@ class _RegisterUserState extends State<RegisterUser> {
 
   String error='';
 
-  String authTakenErr ='';
-  String usernameError = '';
-  String passwordError = '';
+  String authError = 'That username has already been taken.';
+  String lengthError = 'Username and Password should be 6+ characters long.';
 
   @override
   Widget build(BuildContext context) {
+
     final wp = Provider.of<WidthPixel>(context).value;
     final hp = Provider.of<HeightPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
@@ -97,15 +97,11 @@ class _RegisterUserState extends State<RegisterUser> {
                                   ),
                                 ),
                                 SizedBox(height: 8*hp),
-                                usernameError != '' || passwordError != '' ?
+                                error != '' ?
                                     Column(
                                       children: [
-                                        Text("Username and Password should be 6+ characters long.",
-                                            style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontSize: 12)),
-                                        authTakenErr != '' ?
-                                          Text(authTakenErr,
-                                            style: Theme.of(context).textTheme.subtitle1?.copyWith
-                                              (color: colorScheme.onSurface, fontSize: 14)) : Container(),
+                                          Text(error,
+                                              style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontSize: 12)),
                                         ],
                                     ) :
                                     Text("Your username is only for logging in.",
@@ -118,22 +114,21 @@ class _RegisterUserState extends State<RegisterUser> {
                                       TextFormField(
                                           style: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.primary),
                                           autocorrect:false,
-                                          obscureText: true,
+                                          obscureText: false,
                                           decoration: InputDecoration(
                                               hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.onError),
                                               border: InputBorder.none,
                                               hintText: "Login Username..."),
-                                          validator: (val) {
-                                            setState(() {
-                                              if (val == null || val.length <6)
-                                              {
-                                                usernameError = "Enter a username 6+ characters long";
-                                              }
-                                            });
-                                          },
                                           onChanged: (val) {
                                             if (mounted) {
                                               setState(() => username = val);
+                                              if (username.length >= 6) {
+                                                if (mounted) {
+                                                  setState(() {
+                                                    error = '';
+                                                  });
+                                                }
+                                              }
                                             }
                                           }),
                                       Divider(height:8*hp, thickness: 2*hp, color: colorScheme.onError),
@@ -145,17 +140,16 @@ class _RegisterUserState extends State<RegisterUser> {
                                               hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.onError),
                                               border: InputBorder.none,
                                               hintText: "Password..."),
-                                          validator: (val) {
-                                            setState(() {
-                                              if (val == null || val.length <6)
-                                              {
-                                                passwordError = "Enter a password 6+ characters long";
-                                              }
-                                            });
-                                          },
                                           onChanged: (val) {
                                             if (mounted) {
                                               setState(() => password = val);
+                                              if (val.length >= 6) {
+                                                if (mounted) {
+                                                  setState(() {
+                                                    error = '';
+                                                  });
+                                                }
+                                              }
                                             }
                                           }),
                                       Divider(height:8*hp, thickness: 2*hp, color: colorScheme.onError),
@@ -175,19 +169,27 @@ class _RegisterUserState extends State<RegisterUser> {
                 left:0,
                 child: new AuthBar(buttonText: "Register",
                     onPressed: () async {
-                        if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+                        if (username.length < 6 || password.length < 6){
+                          if (mounted) {
+                            setState(() {
+                                error = lengthError;
+                            });
+                          }
+                          return;
+                        }
+                        if (_formKey.currentState != null && _formKey.currentState!.validate()
+                        ) {
                           if (mounted) {
                             setState(() => loading = true);
                           }
                           dynamic result =
                               await _auth.registerWithUsernameAndPassword(username, password, widget.domain);
-
                           if (result is User?) {
                             Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => pixelProvider(context, child: Wrapper())), (Route<dynamic> route) => false);
                           } else if (result is FirebaseAuthException && result.code == 'email-already-in-use') {
                             if (mounted) {
                               setState(() {
-                                authTakenErr = 'Username already in use.';
+                                error = authError;
                                 loading = false;
                               });
                             }
