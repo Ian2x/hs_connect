@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/myNotification.dart';
+import 'package:flutter/material.dart';
 
 List<DocumentReference> docRefList(dynamic input) {
   return (input as List).map((item) => item as DocumentReference).toList();
@@ -24,8 +25,18 @@ bool isToday(DateTime dt) {
   return today==DateTime(dt.year, dt.month, dt.day);
 }
 
-extension IanTime on DateTime {
-  int ianTime() {
-    return this.millisecondsSinceEpoch ~/ (1000 * 60 * 60 * 3);
+void dismissKeyboard(context) {
+  FocusScopeNode currentFocus = FocusScope.of(context);
+  if (!currentFocus.hasPrimaryFocus) {
+    currentFocus.unfocus();
   }
+}
+
+DateTime newTrendingCreatedAt(DateTime currTrendingCreatedAt, double trendingBoost) {
+  return currTrendingCreatedAt.add(((DateTime.now().add(Duration(days: 1))).difference(currTrendingCreatedAt))*trendingBoost);
+}
+
+DateTime undoNewTrendingCreatedAt(DateTime currTrendingCreatedAt, double trendingBoost) {
+  final double trendingBoostFactor = trendingBoost / (1 - trendingBoost);
+  return currTrendingCreatedAt.subtract(((DateTime.now().add(Duration(days: 1))).difference(currTrendingCreatedAt))*trendingBoostFactor);
 }

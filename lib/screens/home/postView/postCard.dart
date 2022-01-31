@@ -160,21 +160,21 @@ class _PostCardState extends State<PostCard> {
                               padding: EdgeInsets.all(0),
                               backgroundColor: colorScheme.surface,
                               avatar: Container(
-                                /*decoration: BoxDecoration(
+                                height: 35,
+                                width: 35,
+                                decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(100),
                                     color: colorScheme.primary,
                                     border: Border.all(
-                                        width: 0.25*hp
+                                        width: 0.15*hp
                                     )
-                                ),*/
+                                ),
                                 child: CircleAvatar(
                                   backgroundColor: colorScheme.surface,
                                   backgroundImage: ImageStorage().groupImageProvider(group!=null ? group!.image : null),
                                 ),
                               ),
                               label: Text(
-                                //color: group!.hexColor != null? HexColor(group!.hexColor!)
-                                //
                                 group!.name,
                                   style: Theme.of(context).textTheme.subtitle2?.copyWith
                                     (color: Theme.of(context).primaryColorDark,
@@ -190,7 +190,6 @@ class _PostCardState extends State<PostCard> {
                             Spacer(),
                           ],
                         ),
-                        SizedBox(height: 6 * hp),
                         Text(
                             widget.post.title,
                             style: Theme.of(context).textTheme.headline6?.copyWith(
@@ -200,7 +199,6 @@ class _PostCardState extends State<PostCard> {
                             maxLines: 3),
                         widget.post.mediaURL != null ? ImageContainer(imageString: widget.post.mediaURL!)
                             : Container(),
-                        SizedBox(height: 4 * hp),
                         Row(
                           //Icon Row
                           children: [
@@ -208,7 +206,7 @@ class _PostCardState extends State<PostCard> {
                             Text(
                               (widget.post.numComments + widget.post.numReplies).toString() + " Comments",
                               style: Theme.of(context).textTheme.subtitle2?.copyWith
-                                (color: HexColor("B2b2b2"), fontSize: 14 * hp, fontWeight: FontWeight.normal),
+                                (fontSize: 14 * hp, fontWeight: FontWeight.normal),
                             ),
                             IconButton(
                               constraints: BoxConstraints(),

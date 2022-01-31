@@ -53,6 +53,7 @@ class PostsDatabaseService {
           C.text: text,
           C.mediaURL: media,
           C.createdAt: DateTime.now(),
+          C.trendingCreatedAt: DateTime.now(),
           C.numComments: 0,
           C.numReplies: 0,
           C.accessRestriction: accessRestriction,
@@ -61,8 +62,6 @@ class PostsDatabaseService {
           C.numReports: 0,
           C.pollRef: pollRef,
           C.tag: tagString == '' ? null : tagString,
-          C.score: 0,
-          C.ianTime: DateTime.now().ianTime()
         })
         .then(onValue)
         .catchError(onError);
@@ -136,22 +135,24 @@ class PostsDatabaseService {
     return null;
   }
 
-  Future likePost(DocumentReference postCreatorRef, int likeCount) async {
+  Future likePost(Post post, int likeCount) async {
     // update creator's likeCount
-    postCreatorRef.update({C.score: FieldValue.increment(1)});
-    // remove dislike if disliked, like post, and +2 to score
-    await postRef!.update({
+    post.creatorRef.update({C.score: FieldValue.increment(1)});
+    // remove dislike if disliked, like post, and adjust trendingCreatedAt
+    final newTCA = newTrendingCreatedAt(post.trendingCreatedAt.toDate(), trendingPostLikeBoost);
+    post.trendingCreatedAt = Timestamp.fromDate(newTCA);
+    await post.postRef.update({
       C.dislikes: FieldValue.arrayRemove([currUserRef]),
       C.likes: FieldValue.arrayUnion([currUserRef]),
-      C.score: FieldValue.increment(2)
+      C.trendingCreatedAt: newTCA,
     });
     // send notification if applicable
     if (likeCount == 1 || likeCount == 10 || likeCount == 20 || likeCount == 50 || likeCount == 100) {
       bool update = true;
-      final postCreatorData = await postCreatorRef.get();
-      final postCreator = await userDataFromSnapshot(postCreatorData, postCreatorRef);
+      final postCreatorData = await post.creatorRef.get();
+      final postCreator = await userDataFromSnapshot(postCreatorData, post.creatorRef);
       for (MyNotification MN in postCreator.myNotifications) {
-        if (MN.sourceRef == postRef! &&
+        if (MN.sourceRef == post.postRef &&
             MN.myNotificationType == MyNotificationType.postVotes &&
             MN.extraData == likeCount.toString()) {
           update = false;
@@ -159,12 +160,12 @@ class PostsDatabaseService {
         }
       }
       if (update) {
-        postCreatorRef.update({
+        post.creatorRef.update({
           C.myNotifications: FieldValue.arrayUnion([
             {
-              C.parentPostRef: postRef!,
+              C.parentPostRef: post.postRef,
               C.myNotificationType: MyNotificationType.postVotes.string,
-              C.sourceRef: postRef!,
+              C.sourceRef: post.postRef,
               C.sourceUserRef: currUserRef,
               C.createdAt: Timestamp.now(),
               C.extraData: likeCount.toString()
@@ -175,13 +176,15 @@ class PostsDatabaseService {
     }
   }
 
-  Future unLikePost(DocumentReference postCreatorRef) async {
+  Future unLikePost(Post post) async {
     // update creator's likeCount
-    postCreatorRef.update({C.score: FieldValue.increment(-1)});
-    // remove like and -2 to score
-    await postRef!.update({
+    post.creatorRef.update({C.score: FieldValue.increment(-1)});
+    // remove like and adjust trendingCreatedAt
+    final newTCA = undoNewTrendingCreatedAt(post.trendingCreatedAt.toDate(), trendingPostLikeBoost);
+    post.trendingCreatedAt = Timestamp.fromDate(newTCA);
+    await post.postRef.update({
       C.likes: FieldValue.arrayRemove([currUserRef]),
-      C.score: FieldValue.increment(-2)
+      C.trendingCreatedAt: newTCA
     });
   }
 
@@ -234,108 +237,31 @@ class PostsDatabaseService {
     return results;
   }
 
-  Future<List<Post?>> getPostsByGroups(List<DocumentReference> groupRefs,
-      {DocumentSnapshot? startingFrom, VoidDocSnapParamFunction? setStartFrom}) async {
-    if (startingFrom != null) {
-      final data = await postsCollection
-          .where(C.groupRef, whereIn: groupRefs)
-          .orderBy(C.createdAt, descending: true)
-          .startAfterDocument(startingFrom)
-          .limit(5)
-          .get();
-      if (setStartFrom != null && data.docs.isNotEmpty) {
-        setStartFrom(data.docs.last);
-      }
-      return data.docs.map(_postFromQuerySnapshot).toList();
-    } else {
-      final data = await postsCollection
-          .where(C.groupRef, whereIn: groupRefs)
-          .orderBy(C.createdAt, descending: true)
-          .limit(5)
-          .get();
-      if (setStartFrom != null && data.docs.isNotEmpty) {
-        setStartFrom(data.docs.last);
-      }
-      return data.docs.map(_postFromQuerySnapshot).toList();
-    }
-  }
-
-  Future<List<Post?>> getTrendingPosts(List<DocumentReference> groupRefs,
-      {DocumentSnapshot? startingFrom, VoidDocSnapParamFunction? setStartFrom}) async {
+  Future<List<Post?>> getGroupPosts(List<DocumentReference> groupRefs,
+      {DocumentSnapshot? startingFrom, required VoidDocSnapParamFunction setStartFrom, required bool withPublic, required bool byNew}) async {
     // add public group
-    groupRefs.add(FirebaseFirestore.instance.collection(C.groups).doc("Public"));
-    print(groupRefs);
-    final int ianTime = DateTime.now().ianTime();
+    if (withPublic) {
+      groupRefs.add(FirebaseFirestore.instance.collection(C.groups).doc(C.Public));
+    }
     if (startingFrom != null) {
-      List<Post?> results = [];
-      DocumentSnapshot localStartingFrom = startingFrom;
-      while (results.length < nextPostsFetchSize) {
-        final data = await postsCollection
-            .where(C.groupRef, whereIn: groupRefs)
-            .orderBy(C.score, descending: true)
-            .startAfterDocument(localStartingFrom)
-            .limit(nextPostsFetchSize)
-            .get();
-        // break if nothing left
-        if (data.docs.isEmpty || data.size==0) {
-          break;
-        }
-        // update starting from
-        if (data.docs.isNotEmpty) {
-          localStartingFrom = data.docs.last;
-          if (setStartFrom != null) {
-            setStartFrom(data.docs.last);
-          }
-        }
-        // add to results if ianTime is right
-        results.addAll(data.docs
-            .map(_postFromQuerySnapshot)
-            .toList()
-            .where((Post? p) => p != null && [for (var i = 0; i < 10; i++) ianTime - i].contains(p.ianTime)));
-      }
-      return results;
-    } else {
-      List<Post?> results = [];
       final data = await postsCollection
           .where(C.groupRef, whereIn: groupRefs)
-          .orderBy(C.score, descending: true)
+          .orderBy(byNew? C.createdAt : C.trendingCreatedAt, descending: true)
+          .startAfterDocument(startingFrom)
+          .limit(nextPostsFetchSize)
+          .get();
+      if (data.docs.isNotEmpty) {
+        setStartFrom(data.docs.last);
+      }
+      return data.docs.map(_postFromQuerySnapshot).toList();
+    } else {
+      final data = await postsCollection
+          .where(C.groupRef, whereIn: groupRefs)
+          .orderBy(byNew? C.createdAt : C.trendingCreatedAt, descending: true)
           .limit(initialPostsFetchSize)
           .get();
-      // update starting from
-      if (data.docs.isEmpty) return [];
-      if (setStartFrom != null) {
+      if (data.docs.isNotEmpty) {
         setStartFrom(data.docs.last);
-      }
-      DocumentSnapshot localStartingFrom = data.docs.last;
-      // add to results if ianTime is right
-      results.addAll(data.docs
-          .map(_postFromQuerySnapshot)
-          .toList()
-          .where((Post? p) => p != null && [for (var i = 0; i < 10; i++) ianTime - i].contains(p.ianTime)));
-
-      while (results.length < initialPostsFetchSize) {
-        final data = await postsCollection
-            .where(C.groupRef, whereIn: groupRefs)
-            .orderBy(C.score, descending: true)
-            .startAfterDocument(localStartingFrom)
-            .limit(initialPostsFetchSize)
-            .get();
-        // break if nothing left
-        if (data.docs.isEmpty || data.size==0) {
-          break;
-        }
-        // update starting from
-        if (data.docs.isNotEmpty) {
-          localStartingFrom = data.docs.last;
-          if (setStartFrom != null) {
-            setStartFrom(data.docs.last);
-          }
-        }
-        // add to results if ianTime is right
-        results.addAll(data.docs
-            .map(_postFromQuerySnapshot)
-            .toList()
-            .where((Post? p) => p != null && [for (var i = 0; i < 10; i++) ianTime - i].contains(p.ianTime)));
       }
       return data.docs.map(_postFromQuerySnapshot).toList();
     }
@@ -345,40 +271,6 @@ class PostsDatabaseService {
     final snapshot = await postsCollection.where(C.creatorRef, isEqualTo: currUserRef).get();
     return snapshot.docs.map(_postFromQuerySnapshot).toList();
   }
-
-  /*Stream<List<Post?>> get posts {
-    return postsCollection
-        .where(C.groupRef, whereIn: groupRefs)
-        .orderBy(C.createdAt, descending: true)
-        .snapshots()
-        .map((snapshot) => snapshot.docs.map(_postFromQuerySnapshot).toList());
-  }
-
-  Future<List<Post?>> getMultiGroupPosts() async {
-    final snapshot = await postsCollection.where(C.groupRef, whereIn: groupRefs).get();
-    return snapshot.docs.map(_postFromQuerySnapshot).toList();
-  }
-
-  Future<List<Post?>> getUserPosts() async {
-    final snapshot = await postsCollection.where(C.creatorRef, isEqualTo: currUserRef).get();
-    return snapshot.docs.map(_postFromQuerySnapshot).toList();
-  }
-
-  Stream<List<Post?>> get potentialTrendingPosts {
-    return postsCollection
-        .where(C.createdAt,
-        isGreaterThan: Timestamp.fromDate(DateTime.now().subtract(new Duration(hours: hoursTrending))))
-        .where(C.groupRef, whereIn: groupRefs)
-        .snapshots()
-        .map((snapshot) => snapshot.docs.map(_postFromQuerySnapshot).toList());
-  }
-
-  Stream<List<Post?>> get tagPosts {
-    return postsCollection
-        .where(C.tag, whereIn: searchTags)
-        .snapshots()
-        .map((snapshot) => snapshot.docs.map(_postFromQuerySnapshot).toList());
-  }*/
 
   SearchResult _searchResultFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
     return SearchResult(

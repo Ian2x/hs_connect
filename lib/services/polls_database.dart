@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/poll.dart';
+import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/tools/helperFunctions.dart';
 
 class PollsDatabaseService {
   final DocumentReference? pollRef;
@@ -58,7 +60,11 @@ class PollsDatabaseService {
   }
 
   Future<void> vote(
-      {required DocumentReference pollRef, required DocumentReference userRef, required int choice}) async {
+      {required DocumentReference pollRef, required DocumentReference userRef, required int choice, required Post post}) async {
+    // boost post trending
+    post.postRef.update({
+      C.trendingCreatedAt: newTrendingCreatedAt(post.trendingCreatedAt.toDate(), trendingPollVoteBoost)
+    });
     await pollRef.update({
       choice.toString(): FieldValue.arrayUnion([userRef])
     });

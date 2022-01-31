@@ -3,6 +3,40 @@ import 'package:hs_connect/shared/tools/hexColor.dart';
 // Calculate trending by activity within past 1.5 days
 const hoursTrending = 36;
 
+const maxDataCollectionRate = 3; // in hours (for trending groups)
+const maxDataCollectionDays = 2; // in days (for trending groups)
+const notificationStorageDays = 7; // in days
+
+// trendingCreatedAt factors
+const trendingCommentBoost = 0.04;
+const trendingReplyBoost = 0.05;
+const trendingPostLikeBoost = 0.02;
+const trendingPollVoteBoost = 0.03;
+
+const double profilePicWidth = 400;
+const double profilePicHeight = 400;
+
+const double groupPicWidth = 400;
+const double groupPicHeight = 400;
+
+const double commentPicWidth = 400;
+const double commentPicHeight = 400;
+
+const double messagePicWidth = 400;
+const double messagePicHeight = 400;
+
+const double postPicWidth = 400;
+const double postPicHeight = 400;
+
+const numHeightPixels = 781.1;
+const numWidthPixels = 392.7;
+
+const initialPostsFetchSize = 5;
+const nextPostsFetchSize = 5;
+
+const defaultProfilePic = AssetImage('assets/blankProfile.png');
+const defaultGroupPic = AssetImage('assets/logo1background.png');
+
 class _Gradient extends Color {
   _Gradient(int value) : super(value);
 
@@ -50,35 +84,6 @@ class ThemeText {
     );
   }
 }
-
-
-const maxDataCollectionRate = 3; // in hours
-const maxDataCollectionDays = 2; // in days
-const notificationStorageDays = 7; // in days
-
-const double profilePicWidth = 400;
-const double profilePicHeight = 400;
-
-const double groupPicWidth = 400;
-const double groupPicHeight = 400;
-
-const double commentPicWidth = 400;
-const double commentPicHeight = 400;
-
-const double messagePicWidth = 400;
-const double messagePicHeight = 400;
-
-const double postPicWidth = 400;
-const double postPicHeight = 400;
-
-const numHeightPixels = 781.1;
-const numWidthPixels = 392.7;
-
-const initialPostsFetchSize = 5;
-const nextPostsFetchSize = 5;
-
-const defaultProfilePic = AssetImage('assets/blankProfile.png');
-const defaultGroupPic = AssetImage('assets/logo1background.png');
 
 class C {
   static const displayedName = 'displayedName';
@@ -190,7 +195,7 @@ class C {
   static const commentVotes = 'commentVotes';
   static const postVotes = 'postVotes';
   static const extraData = 'extraData';
-  static const ianTime = 'ianTime';
   static const fromMe = 'fromMe';
   static const fundamentalName = 'fundamentalName';
+  static const trendingCreatedAt = 'trendingCreatedAt';
 }

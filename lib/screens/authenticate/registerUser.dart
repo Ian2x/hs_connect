@@ -6,6 +6,7 @@ import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
+import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
@@ -157,18 +158,20 @@ class _RegisterUserState extends State<RegisterUser> {
                                   ),
                                 ),
 
-                                SizedBox(height: 100*hp),
-                              ],
-                            )
-                        ),
-                      ]),
+                                  SizedBox(height: 100*hp),
+                                ],
+                              )
+                          ),
+                        ]),
+                  ),
                 ),
-              ),
               Positioned(
                 bottom:0,
                 left:0,
                 child: new AuthBar(buttonText: "Register",
                     onPressed: () async {
+                        dismissKeyboard(context);
+                        if (_formKey.currentState != null && _formKey.currentState!.validate()) {
                         if (username.length < 6 || password.length < 6){
                           if (mounted) {
                             setState(() {
@@ -211,7 +214,7 @@ class _RegisterUserState extends State<RegisterUser> {
                             }
                           }
                         }
-                      },),
+                      }},),
               ),
             ])
     );

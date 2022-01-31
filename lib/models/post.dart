@@ -57,6 +57,7 @@ class Post {
   final String? text;
   final String? mediaURL;
   final Timestamp createdAt;
+  Timestamp trendingCreatedAt;
   final int numComments;
   final int numReplies;
   final AccessRestriction accessRestriction;
@@ -65,8 +66,6 @@ class Post {
   final int numReports;
   final DocumentReference? pollRef;
   final Tag? tag;
-  final int score;
-  final int ianTime;
 
   Post({
     required this.postRef,
@@ -77,6 +76,7 @@ class Post {
     required this.text,
     required this.mediaURL,
     required this.createdAt,
+    required this.trendingCreatedAt,
     required this.numComments,
     required this.numReplies,
     required this.accessRestriction,
@@ -85,8 +85,6 @@ class Post {
     required this.numReports,
     required this.pollRef,
     required this.tag,
-    required this.score,
-    required this.ianTime
   });
 }
 
@@ -101,6 +99,7 @@ postFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
     text: querySnapshot[C.text],
     mediaURL: querySnapshot[C.mediaURL],
     createdAt: querySnapshot[C.createdAt],
+    trendingCreatedAt: querySnapshot[C.trendingCreatedAt],
     numComments: querySnapshot[C.numComments],
     numReplies: querySnapshot[C.numReplies],
     accessRestriction: accessRestrictionFromMap(accessRestriction),
@@ -109,8 +108,6 @@ postFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
     numReports: querySnapshot[C.numReports],
     pollRef: querySnapshot[C.pollRef],
     tag: tagFrom(querySnapshot[C.tag]),
-    score: querySnapshot[C.score],
-    ianTime: querySnapshot[C.ianTime],
   );
 }
 
@@ -125,6 +122,7 @@ Post postFromSnapshot(DocumentSnapshot snapshot) {
     text: snapshot[C.text],
     mediaURL: snapshot[C.mediaURL],
     createdAt: snapshot[C.createdAt],
+    trendingCreatedAt: snapshot[C.trendingCreatedAt],
     numComments: snapshot[C.numComments],
     numReplies: snapshot[C.numReplies],
     accessRestriction: accessRestrictionFromMap(accessRestriction),
@@ -133,7 +131,5 @@ Post postFromSnapshot(DocumentSnapshot snapshot) {
     numReports: snapshot[C.numReports],
     pollRef: snapshot[C.pollRef],
     tag: tagFrom(snapshot[C.tag]),
-    score: snapshot[C.score],
-    ianTime: snapshot[C.ianTime],
   );
 }

@@ -36,6 +36,8 @@ class AuthBar extends StatelessWidget {
                 borderRadius: 40,
                 child: GradientText(
                   buttonText,
+                  softWrap: false,
+                  overflow: TextOverflow.ellipsis,
                   style: ThemeText.inter(fontWeight: FontWeight.w500, fontSize: 17*hp,
                   ),
                   gradient: Gradients.blueRed(),

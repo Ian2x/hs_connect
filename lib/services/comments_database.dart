@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/comment.dart';
 import 'package:hs_connect/models/myNotification.dart';
+import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/tools/helperFunctions.dart';
 
 void defaultFunc(dynamic parameter) {}
 
@@ -22,7 +24,7 @@ class CommentsDatabaseService {
   Future<dynamic> newComment(
       {required String text,
       required String? media,
-      required DocumentReference postRef,
+      required Post post,
       required DocumentReference groupRef,
       required DocumentReference postCreatorRef,
       Function(void) onValue = defaultFunc,
@@ -31,7 +33,7 @@ class CommentsDatabaseService {
     // update post creator's activity if not self
     if (postCreatorRef!=currUserRef) {
       postCreatorRef.update({C.myNotifications: FieldValue.arrayUnion([{
-        C.parentPostRef: postRef,
+        C.parentPostRef: post.postRef,
         C.myNotificationType: MyNotificationType.commentToPost.string,
         C.sourceRef: newCommentRef,
         C.sourceUserRef: currUserRef,
@@ -40,18 +42,19 @@ class CommentsDatabaseService {
       }])});
     }
 
-    // update post's commentsRefs and score
-    postRef.update({
+    // update post's commentsRefs and trendingCreatedAt
+    post.postRef.update({
       C.numComments: FieldValue.increment(1),
-      C.score: FieldValue.increment(3)
+      C.trendingCreatedAt: newTrendingCreatedAt(post.trendingCreatedAt.toDate(), trendingCommentBoost)
     });
+
     // get accessRestriction
     final group = await groupRef.get();
     final accessRestriction = group.get(C.accessRestriction);
 
     return await newCommentRef
         .set({
-          C.postRef: postRef,
+          C.postRef: post.postRef,
           C.groupRef: groupRef,
           C.creatorRef: currUserRef,
           C.text: text,

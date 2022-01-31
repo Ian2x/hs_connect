@@ -9,6 +9,7 @@ import 'package:hs_connect/services/polls_database.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
+import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/deletableImage.dart';
 import 'package:hs_connect/shared/widgets/gradientText.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
@@ -310,7 +311,11 @@ class _PostFormState extends State<PostForm> {
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
-                      myFocusNode.requestFocus();
+                      if (myFocusNode.hasFocus) {
+                        myFocusNode.unfocus();
+                      } else {
+                        myFocusNode.requestFocus();
+                      }
                     },
                     child: Container(
                       constraints: BoxConstraints(
@@ -344,70 +349,74 @@ class _PostFormState extends State<PostForm> {
       Positioned(
           bottom: 0,
           left: 0,
-          child: Container(
-            width:MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              color: colorScheme.surface,
-              border: Border(
-                top: BorderSide(width: 1*hp, color: colorScheme.onError),
+          child: GestureDetector(
+            onTap: ()=>dismissKeyboard(context),
+            child: Container(
+              width:MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                color: colorScheme.surface,
+                border: Border(
+                  top: BorderSide(width: 1*hp, color: colorScheme.onError),
+                ),
               ),
-            ),
-            child: Row(children: <Widget>[
-              picPickerButton(
-                  iconSize: 30*hp,
-                  color: newFile == null ? colorScheme.primary : colorScheme.primaryVariant,
-                  setPic: ((File? f) {
-                    if (mounted) {
-                      setState(() {
-                        newFile = f;
-                        poll = null;
-                      });
-                    }
-                  }), context: context, maxHeight: postPicHeight, maxWidth: postPicWidth),
-              SizedBox(width: 2 * wp),
-              IconButton(
-                  onPressed: () {
-                    if (mounted) {
-                      setState(() {
-                        pollChoices = [];
-                        pollChoices!.add('');
-                        pollChoices!.add('');
-                        poll = NewPoll(onDeletePoll: () {
-                          if (mounted) {
-                            setState(() {
-                              poll = null;
-                              pollChoices = null;
-                              if (error == emptyPollChoiceError) {
-                                error = null;
-                              }
-                            });
-                          }
-                        }, onUpdatePoll: (int index, String newChoice) {
-                          if (mounted) {
-                            setState(() {
-                              pollChoices![index] = newChoice;
-                              if (error == emptyPollChoiceError) {
-                                for (String choice in pollChoices!) {
-                                  if (choice == '') return;
-                                }
-                              }
-                              error = null;
-                            });
-                          }
-                        }, onAddPollChoice: () {
-                          if (mounted) {
-                            setState(() {
-                              pollChoices!.add('');
-                            });
-                          }
+              child: Row(children: <Widget>[
+                picPickerButton(
+                    iconSize: 30*hp,
+                    color: newFile == null ? colorScheme.primary : colorScheme.primaryVariant,
+                    setPic: ((File? f) {
+                      if (mounted) {
+                        setState(() {
+                          newFile = f;
+                          poll = null;
                         });
-                        newFile = null;
-                      });
-                    }
-                  },
-                  icon: Icon(Icons.assessment,
-                      size: 30*hp, color: poll == null ? colorScheme.primary : colorScheme.primaryVariant))
-            ]),
+                      }
+                    }), context: context, maxHeight: postPicHeight, maxWidth: postPicWidth),
+                SizedBox(width: 2 * wp),
+                IconButton(
+                    onPressed: () {
+                      if (mounted) {
+                        setState(() {
+                          pollChoices = [];
+                          pollChoices!.add('');
+                          pollChoices!.add('');
+                          poll = NewPoll(onDeletePoll: () {
+                            if (mounted) {
+                              setState(() {
+                                poll = null;
+                                pollChoices = null;
+                                if (error == emptyPollChoiceError) {
+                                  error = null;
+                                }
+                              });
+                            }
+                          }, onUpdatePoll: (int index, String newChoice) {
+                            if (mounted) {
+                              setState(() {
+                                pollChoices![index] = newChoice;
+                                if (error == emptyPollChoiceError) {
+                                  for (String choice in pollChoices!) {
+                                    if (choice == '') return;
+                                  }
+                                }
+                                error = null;
+                              });
+                            }
+                          }, onAddPollChoice: () {
+                            if (mounted) {
+                              setState(() {
+                                pollChoices!.add('');
+                              });
+                            }
+                          });
+                          newFile = null;
+                        });
+                      }
+                    },
+                    icon: Icon(Icons.assessment,
+                        size: 30*hp, color: poll == null ? colorScheme.primary : colorScheme.primaryVariant),
+                )
+              ]),
+            ),
           )),
     ]);
   }

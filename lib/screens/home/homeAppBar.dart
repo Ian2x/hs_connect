@@ -3,6 +3,7 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/auth.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/tools/buildCircle.dart';
 import 'package:hs_connect/shared/widgets/gradientText.dart';
 import 'package:provider/provider.dart';
@@ -62,7 +63,7 @@ class HomeAppBar extends SliverPersistentHeaderDelegate {
                       iconMargin: EdgeInsets.only(),
                       height: tabBarHeight,
                       icon: Column(children: <Widget>[
-                        GradientText("Trending",
+                        GradientText("Public",
                             style: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.w500),
                             maxLines: 1,
                             softWrap: false,
@@ -128,12 +129,12 @@ class HomeAppBar extends SliverPersistentHeaderDelegate {
                       style: Theme.of(context)
                           .textTheme
                           .headline4
-                          ?.copyWith(fontSize: 30, color: colorScheme.primaryVariant, fontWeight: FontWeight.w600, letterSpacing: 5)),
+                          ?.copyWith(fontSize: 30, color: colorScheme.primaryVariant, fontWeight: FontWeight.w600, letterSpacing: 2.5)),
                   IconButton(
                       icon: Icon(Icons.height, size: 5),
                       onPressed: () {
                         AuthService().signOut();
-                      })
+                      }),
                 ],
               ),
             ),
