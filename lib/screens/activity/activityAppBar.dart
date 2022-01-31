@@ -39,7 +39,7 @@ PreferredSizeWidget activityAppBar({required BuildContext context, required bool
                       style: Theme.of(context)
                           .textTheme
                           .headline4
-                          ?.copyWith(fontSize: 30, color: colorScheme.primaryVariant, fontWeight: FontWeight.w600, letterSpacing: 5))
+                          ?.copyWith(fontSize: 24, color: colorScheme.primaryVariant, fontWeight: FontWeight.w600, letterSpacing: 1))
                 ],
               )
             ],
