@@ -51,7 +51,7 @@ class MessagesPage extends StatelessWidget {
               ),
             )),
             Container(
-              height: 1.5*hp,
+              height: bottomGradientThickness*hp,
               decoration: BoxDecoration(
                 gradient: Gradients.blueRed(),
               )
@@ -94,9 +94,9 @@ class MessagesPageAppBar extends StatelessWidget {
               gradient: Gradients.blueRed()
             ),
             //color: colorScheme.primary,
-            height: 1.5*hp,
+            height: topGradientThickness*hp,
           ),
-          preferredSize: Size.fromHeight(0.5*hp)),
+          preferredSize: Size.fromHeight(topGradientThickness*hp)),
     );
   }
 }

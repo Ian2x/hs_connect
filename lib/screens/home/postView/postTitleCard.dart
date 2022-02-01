@@ -108,6 +108,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
                 IconButton(
                   icon: Icon(Icons.more_horiz),
                   iconSize: 20*hp,
+                  color: colorScheme.primary,
                   onPressed: (){
                     showModalBottomSheet(
                         context: context,
@@ -141,10 +142,10 @@ class _PostTitleCardState extends State<PostTitleCard> {
                 GroupTag(
                     groupImageURL: widget.group.image,
                     groupName: widget.group.name,
-                    borderRadius: 20,
-                    padding: EdgeInsets.fromLTRB(12*wp, 4*hp, 12*wp, 4*hp),
-                    thickness: 1.5,
-                    fontSize: 15,
+                    borderRadius: 20*hp,
+                    padding: EdgeInsets.fromLTRB(9*wp, 4*hp, 9*wp, 4*hp),
+                    thickness: 1.5*hp,
+                    fontSize: 15*hp,
                 ),
                 Spacer(),
                 LikeDislikePostStateful(currUserRef: widget.currUserRef, post: widget.post, postLikesManager: postLikesManager),

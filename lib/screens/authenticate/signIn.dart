@@ -29,7 +29,10 @@ class _SignInState extends State<SignIn> {
   // text field state
   String username = '';
   String password = '';
+
   String error = '';
+
+  String authError = "Invalid username and password";
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +96,12 @@ class _SignInState extends State<SignIn> {
                                   style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 28*hp, color: Colors.black
                                   ),
                                 ),
-                                SizedBox(height: 30*hp),
+                                error != '' ? SizedBox(height:10*hp) : Container(),
+                                error != '' ?
+                                Text(error,
+                                  style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontSize: 12))
+                                : Container(),
+                                error != '' ? SizedBox(height:15*hp): SizedBox(height: 25*hp),
                                 Container(
                                   padding:EdgeInsets.fromLTRB(20*wp,0,20*wp,0),
                                   child: Form(
@@ -108,13 +116,6 @@ class _SignInState extends State<SignIn> {
                                                 hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.onError),
                                                 border: InputBorder.none,
                                                 hintText: "Username"),
-                                            validator: (val) {
-                                              if (val == null) return 'Error: null value';
-                                              if (val.isEmpty)
-                                                return 'Enter username';
-                                              else
-                                                return null;
-                                            },
                                             onChanged: (val) {
                                               if (mounted) {
                                                 setState(() => username = val);
@@ -131,13 +132,6 @@ class _SignInState extends State<SignIn> {
                                                 border: InputBorder.none,
                                                 hintText: "Password"),
                                             obscureText: true,
-                                            validator: (val) {
-                                              if (val == null) return 'Error: null value';
-                                              if (val.length < 1)
-                                                return 'Password is empty';
-                                              else
-                                                return null;
-                                            },
                                             onChanged: (val) {
                                               if (mounted) {
                                                 setState(() => password = val);
@@ -145,9 +139,6 @@ class _SignInState extends State<SignIn> {
                                             }),
                                         Divider(height:4*hp, thickness: 2*hp, color: colorScheme.onError),
                                         SizedBox(height:10*hp),
-                                        error != '' ? Text(
-                                          'Login', style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 28*hp, color: Colors.black))
-                                                : Container(),
                                       ],
                                     ),
                                   ),
@@ -178,7 +169,7 @@ class _SignInState extends State<SignIn> {
                       if (!(result is User?)) {
                         if (mounted) {
                           setState(() {
-                            error = 'Could not sign in with those credentials';
+                            error = authError;
                             loading = false;
                           });
                         }

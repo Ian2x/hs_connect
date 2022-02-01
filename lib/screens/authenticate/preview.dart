@@ -6,6 +6,8 @@ import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/gradientText.dart';
 import 'package:provider/provider.dart';
 
+import 'aboutUs.dart';
+
 
 class PreviewPage extends StatelessWidget {
 
@@ -99,10 +101,20 @@ class PreviewPage extends StatelessWidget {
 
                   },
                 ),*/
-                Text(
-                  "Beta",
-                  style: ThemeText.inter(fontWeight: FontWeight.w500,
-                      fontSize: 16, color: Colors.white),
+                TextButton(
+                  onPressed: (){
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => pixelProvider(context, child: aboutUs(
+                            )))  );
+                  },
+                  child: Text(
+                    "About Circles",
+                    style: ThemeText.inter(fontWeight: FontWeight.w500,
+                        fontSize: 16, color: Colors.white),
+                  )
+
                 )
               ],
             )

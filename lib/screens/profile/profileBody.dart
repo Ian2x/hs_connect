@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profilePostFeed.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/newMessageButton.dart';
+import 'package:hs_connect/screens/profile/settingsPage.dart';
 import 'package:hs_connect/services/groups_database.dart';
-import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/groupTag.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
-import 'package:hs_connect/shared/widgets/myOutlinedButton.dart';
 import 'package:provider/provider.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileImage.dart';
 
@@ -70,66 +70,62 @@ class _ProfileBodyState extends State<ProfileBody> {
     final colorScheme = Theme.of(context).colorScheme;
 
     if (profileData == null) return Loading();
-
+    bool isOwnProfile = widget.profileUserRef == widget.currUserData.userRef &&
+        userData != null &&
+        widget.currUserData.userRef == userData.userRef;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: ListView(
         physics: BouncingScrollPhysics(),
         children: [
-          SizedBox(height: 98 * hp),
+          Container(
+              alignment: Alignment.topRight,
+              padding: EdgeInsets.fromLTRB(0,10,10,0),
+              height:90,
+              child: isOwnProfile ? IconButton(
+                  icon: Icon(Icons.settings),
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(
+                            builder: (context) => pixelProvider(context, child: SettingsPage(initialIsLightTheme: Theme.of(context).brightness==Brightness.light,))));
+                  }) : Container()
+          ),
+          /*SizedBox(height: 45 * hp),
+          Row(
+            children: [
+              Spacer(),
+              IconButton(
+                  icon: Icon(Icons.settings), onPressed: () {}),
+              SizedBox(width: 20*wp)
+            ]),*/
+          SizedBox(height: 20 * hp),
           ProfileImage(
             profileImageURL: profileData!.profileImageURL,
             currUserName: profileData!.fundamentalName,
-            showEditIcon: widget.profileUserRef == widget.currUserData.userRef &&
-                userData != null &&
-                widget.currUserData.userRef == userData.userRef,
+            showEditIcon: isOwnProfile,
           ),
-          SizedBox(height: 10 * hp),
+          SizedBox(height: 30 * hp),
           Text(
             profileData!.fundamentalName,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headline5?.copyWith(fontWeight: FontWeight.w500),
           ),
-          SizedBox(height: 10 * hp),
-          /*Container(
-            height: 40 * hp,
-            child:
-            Chip(
-              padding: EdgeInsets.all(5),
-              backgroundColor: colorScheme.surface,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(9 * hp),
+          SizedBox(height: 20 * hp),
+          Row(
+            children: <Widget>[
+              Spacer(),
+              GroupTag(
+                groupImageURL: profileData!.domainImage,
+                groupName: profileData!.fullDomainName != null ? profileData!.fullDomainName! : profileData!.domain,
+                borderRadius: 20*hp,
+                padding: EdgeInsets.fromLTRB(9 * wp, 4 * hp, 9 * wp, 4 * hp),
+                thickness: 1.5*hp,
+                fontSize: 19*hp,
               ),
-              side: BorderSide(),
-              avatar: CircleAvatar(
-                backgroundColor: colorScheme.surface,
-                child: Container(
-                    margin: EdgeInsets.all(2*hp),
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image:
-                            DecorationImage(image: ImageStorage().groupImageProvider(profileData!.domainImage)))),
-              ),
-              label: Text(profileData!.fullDomainName != null ? profileData!.fullDomainName! : profileData!.domain,
-                  style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                        color: profileData!.domainColor != null
-                            ? profileData!.domainColor!
-                            : colorScheme.onBackground,
-                      )),
-            ),
-          ),*/
-          Container(
-            width: 100*wp,
-            child: GroupTag(
-              groupImageURL: profileData!.profileImageURL,
-              groupName: profileData!.fullDomainName != null ? profileData!.fullDomainName! : profileData!.domain,
-              borderRadius: 20,
-              padding: EdgeInsets.fromLTRB(12 * wp, 4 * hp, 12 * wp, 4 * hp),
-              thickness: 1.5,
-              fontSize: 15,
-            ),
+              Spacer(),
+            ],
           ),
-          SizedBox(height: 15 * hp),
+          SizedBox(height: 10 * hp),
           Center(
             child: RichText(
               text: TextSpan(
@@ -155,7 +151,7 @@ class _ProfileBodyState extends State<ProfileBody> {
                   ],
                 )
               : Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
-                  SizedBox(height: 78 * hp),
+                  SizedBox(height: 40 * hp),
                   ProfilePostFeed(profUserRef: widget.profileUserRef),
                 ])
         ],
