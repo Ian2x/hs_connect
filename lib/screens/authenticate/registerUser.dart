@@ -40,12 +40,11 @@ class _RegisterUserState extends State<RegisterUser> {
 
     final wp = Provider.of<WidthPixel>(context).value;
     final hp = Provider.of<HeightPixel>(context).value;
-    final colorScheme = Theme.of(context).colorScheme;
 
     return loading
         ? Scaffold(
-      backgroundColor: colorScheme.background,
-      body: Loading()
+      backgroundColor: Colors.white,
+      body: Loading(backgroundColor: Colors.white, spinColor: Color(0xff60676c))
     )
         : Scaffold(
       backgroundColor: Colors.white,
@@ -102,22 +101,22 @@ class _RegisterUserState extends State<RegisterUser> {
                                     Column(
                                       children: [
                                           Text(error,
-                                              style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontSize: 12)),
+                                              style: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 12)),
                                         ],
                                     ) :
                                     Text("Your username is only for logging in.",
-                                    style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontSize: 14)),
+                                    style: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 14)),
                                 SizedBox(height: 25*hp),
                                 Container(
                                   padding:EdgeInsets.fromLTRB(20*wp,0,20*wp,0),
                                   child: Column(
                                     children: [
                                       TextFormField(
-                                          style: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.primary),
+                                          style: Theme.of(context).textTheme.headline6?.copyWith(color: Color(0xFFa1a1a1)),
                                           autocorrect:false,
                                           obscureText: false,
                                           decoration: InputDecoration(
-                                              hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.onError),
+                                              hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: Color(0xffdbdada)),
                                               border: InputBorder.none,
                                               hintText: "Login Username..."),
                                           onChanged: (val) {
@@ -132,13 +131,13 @@ class _RegisterUserState extends State<RegisterUser> {
                                               }
                                             }
                                           }),
-                                      Divider(height:8*hp, thickness: 2*hp, color: colorScheme.onError),
+                                      Divider(height:8*hp, thickness: 2*hp, color: Color(0xffdbdada)),
                                       TextFormField(
-                                          style: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.primary),
+                                          style: Theme.of(context).textTheme.headline6?.copyWith(color: Color(0xFFa1a1a1)),
                                           autocorrect:false,
                                           obscureText: true,
                                           decoration: InputDecoration(
-                                              hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.onError),
+                                              hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: Color(0xffdbdada)),
                                               border: InputBorder.none,
                                               hintText: "Password..."),
                                           onChanged: (val) {
@@ -153,7 +152,7 @@ class _RegisterUserState extends State<RegisterUser> {
                                               }
                                             }
                                           }),
-                                      Divider(height:8*hp, thickness: 2*hp, color: colorScheme.onError),
+                                      Divider(height:8*hp, thickness: 2*hp, color: Color(0xffdbdada)),
                                     ],
                                   ),
                                 ),

@@ -13,8 +13,6 @@ import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
-import 'package:hs_connect/shared/tools/hexColor.dart';
-import 'package:hs_connect/shared/widgets/groupTag.dart';
 import 'package:hs_connect/shared/reports/reportSheet.dart';
 import 'package:hs_connect/shared/widgets/widgetDisplay.dart';
 import 'package:provider/provider.dart';
@@ -139,6 +137,7 @@ class _PostCardState extends State<PostCard> {
       },
       child: Card(
           //if border then ShapeDecoration
+          color: colorScheme.surface,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12 * hp)),
           margin: EdgeInsets.fromLTRB(5 * wp, 3 * hp, 5 * wp, 3*hp),
           elevation: 0,
@@ -155,7 +154,6 @@ class _PostCardState extends State<PostCard> {
                       children: [
                         Row(
                           children: [
-                            //Text("in ", style: ThemeText.inter(fontSize: 14, color: groupColor!=null ? HexColor(groupColor!) : colorScheme.primary)),
                             Chip(
                               padding: EdgeInsets.all(0),
                               backgroundColor: colorScheme.surface,
@@ -177,14 +175,13 @@ class _PostCardState extends State<PostCard> {
                               label: Text(
                                 group!.name,
                                   style: Theme.of(context).textTheme.subtitle2?.copyWith
-                                    (color: Theme.of(context).primaryColorDark,
-                                      fontSize: 15 * hp, fontWeight: FontWeight.w500),
+                                    (fontSize: 15 * hp, fontWeight: FontWeight.w500),
                                 )
                             ),
                             Text(
                               " • " + convertTime(widget.post.createdAt.toDate()),
                               style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                                color: Theme.of(context).colorScheme.primary,
+                                color: colorScheme.primary,
                               ),
                             ),
                             Spacer(),
@@ -205,8 +202,8 @@ class _PostCardState extends State<PostCard> {
                             SizedBox(width: 1 * wp),
                             Text(
                               (widget.post.numComments + widget.post.numReplies).toString() + " Comments",
-                              style: Theme.of(context).textTheme.subtitle2?.copyWith
-                                (fontSize: 14 * hp, fontWeight: FontWeight.normal),
+                              style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                                  fontSize: 14 * hp, fontWeight: FontWeight.normal),
                             ),
                             IconButton(
                               constraints: BoxConstraints(),

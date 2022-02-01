@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profilePostFeed.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/newMessageButton.dart';
-import 'package:hs_connect/screens/profile/settingsPage.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/groupTag.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
@@ -78,26 +76,6 @@ class _ProfileBodyState extends State<ProfileBody> {
       body: ListView(
         physics: BouncingScrollPhysics(),
         children: [
-          Container(
-              alignment: Alignment.topRight,
-              padding: EdgeInsets.fromLTRB(0,10,10,0),
-              height:90,
-              child: isOwnProfile ? IconButton(
-                  icon: Icon(Icons.settings),
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(
-                            builder: (context) => pixelProvider(context, child: SettingsPage(initialIsLightTheme: Theme.of(context).brightness==Brightness.light,))));
-                  }) : Container()
-          ),
-          /*SizedBox(height: 45 * hp),
-          Row(
-            children: [
-              Spacer(),
-              IconButton(
-                  icon: Icon(Icons.settings), onPressed: () {}),
-              SizedBox(width: 20*wp)
-            ]),*/
           SizedBox(height: 20 * hp),
           ProfileImage(
             profileImageURL: profileData!.profileImageURL,

@@ -17,35 +17,33 @@ class AuthBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final wp = Provider.of<WidthPixel>(context).value;
     final hp = Provider.of<HeightPixel>(context).value;
-    final colorScheme = Theme.of(context).colorScheme;
 
-    return Material(
-      child: Container(
-          color:Colors.white,
-          padding: EdgeInsets.fromLTRB(10*wp, 3*hp, 10*wp, 5*hp),
-          width: MediaQuery.of(context).size.width,
-          child:
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              MyOutlinedButton(
-                padding: EdgeInsets.symmetric(vertical: 12*hp, horizontal: 40*wp),
-                onPressed: onPressed,
-                gradient: Gradients.blueRed(begin: Alignment.topCenter, end: Alignment.bottomCenter),
-                borderRadius: 40,
-                child: GradientText(
-                  buttonText,
-                  softWrap: false,
-                  overflow: TextOverflow.ellipsis,
-                  style: ThemeText.inter(fontWeight: FontWeight.w500, fontSize: 17*hp,
-                  ),
-                  gradient: Gradients.blueRed(),
+    return Container(
+        color:Colors.white,
+        padding: EdgeInsets.fromLTRB(10*wp, 3*hp, 10*wp, 5*hp),
+        width: MediaQuery.of(context).size.width,
+        child:
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            MyOutlinedButton(
+              padding: EdgeInsets.symmetric(vertical: 12*hp, horizontal: 40*wp),
+              onPressed: onPressed,
+              gradient: Gradients.blueRed(begin: Alignment.topCenter, end: Alignment.bottomCenter),
+              borderRadius: 40,
+              backgroundColor: Colors.white,
+              child: GradientText(
+                buttonText,
+                softWrap: false,
+                overflow: TextOverflow.ellipsis,
+                style: ThemeText.inter(fontWeight: FontWeight.w500, fontSize: 17*hp,
                 ),
-              )
-            ]
-          ),
-      ),
+                gradient: Gradients.blueRed(),
+              ),
+            )
+          ]
+        ),
     );
   }
 }

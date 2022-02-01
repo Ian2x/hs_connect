@@ -211,6 +211,7 @@ class _PostFormState extends State<PostForm> {
                     thickness: 1.5*hp,
                     padding: EdgeInsets.fromLTRB(8*wp,4.5*hp,13.5*wp,4.5*hp),
                     gradient: Gradients.blueRed(),
+                    backgroundColor: colorScheme.surface,
                     onPressed: () async{
                       // check header isn't empty
                       if (_title.isEmpty) {
