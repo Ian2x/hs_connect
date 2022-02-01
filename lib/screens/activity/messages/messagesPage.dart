@@ -34,16 +34,18 @@ class MessagesPage extends StatelessWidget {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         resizeToAvoidBottomInset: true,
-        backgroundColor: colorScheme.background,
+        backgroundColor: colorScheme.surface,
         appBar: PreferredSize(
-            preferredSize: Size.fromHeight(50*hp),
-            child: MessagesPageAppBar(otherUserData: otherUserData,)),
+            preferredSize: Size.fromHeight(50 * hp),
+            child: MessagesPageAppBar(
+              otherUserData: otherUserData,
+            )),
         body: Container(
-          padding: EdgeInsets.only(bottom: 10*hp),
+          padding: EdgeInsets.only(bottom: 10 * hp),
           child: Column(children: <Widget>[
             Expanded(
                 child: Container(
-              padding: EdgeInsets.only(left: 10*wp, right: 10*wp),
+              padding: EdgeInsets.only(left: 10 * wp, right: 10 * wp),
               child: MessagesFeed(
                 currUserRef: currUserRef,
                 otherUserRef: otherUserData.userRef,
@@ -51,16 +53,15 @@ class MessagesPage extends StatelessWidget {
               ),
             )),
             Container(
-              height: bottomGradientThickness*hp,
-              decoration: BoxDecoration(
-                gradient: Gradients.blueRed(),
-              )
+                height: bottomGradientThickness * hp,
+                decoration: BoxDecoration(
+                  gradient: Gradients.blueRed(),
+                )),
+            Container(
+              child: SizedBox(height: 10 * hp),
             ),
             Container(
-              child: SizedBox(height: 10*hp),
-            ),
-            Container(
-                padding: EdgeInsets.only(left: 10*wp, right: 10*wp),
+                padding: EdgeInsets.only(left: 10 * wp, right: 10 * wp),
                 child: MessagesForm(
                     currUserRef: currUserRef,
                     otherUserRef: otherUserData.userRef,
@@ -85,18 +86,21 @@ class MessagesPageAppBar extends StatelessWidget {
 
     return AppBar(
       backgroundColor: colorScheme.surface,
-      title: Text(otherUserData.fundamentalName, style: Theme.of(context).textTheme.headline6),
+      title: Container(
+          padding: EdgeInsets.fromLTRB(0, 7*hp, 0, 0),
+          child: Text(otherUserData.fundamentalName, style: Theme.of(context).textTheme.headline6)),
       leading: myBackButtonIcon(context),
       elevation: 0,
       bottom: PreferredSize(
-          child: Container(
+          child: Divider(thickness: 1.5*hp),
+          /*Container(
             decoration: BoxDecoration(
               gradient: Gradients.blueRed()
             ),
             //color: colorScheme.primary,
             height: topGradientThickness*hp,
-          ),
-          preferredSize: Size.fromHeight(topGradientThickness*hp)),
+          ),*/
+          preferredSize: Size.fromHeight(topGradientThickness * hp)),
     );
   }
 }

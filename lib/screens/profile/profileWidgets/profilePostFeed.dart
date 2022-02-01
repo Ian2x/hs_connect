@@ -1,15 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/post.dart';
+import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profilePostCard.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePostFeed extends StatefulWidget {
-  final DocumentReference profUserRef;
+  final UserData profileUserData;
 
-  ProfilePostFeed({Key? key, required this.profUserRef}) : super(key: key);
+  ProfilePostFeed({Key? key, required this.profileUserData}) : super(key: key);
 
   @override
   _ProfilePostFeedState createState() => _ProfilePostFeedState();
@@ -19,7 +20,7 @@ class _ProfilePostFeedState extends State<ProfilePostFeed> {
   bool isReply = false;
   DocumentReference? commentRef;
 
-  List<Post?>? _userPosts;
+  List<Post>? _userPosts;
 
   @override
   void initState() {
@@ -28,8 +29,14 @@ class _ProfilePostFeedState extends State<ProfilePostFeed> {
   }
 
   void getUserPosts() async {
-    PostsDatabaseService _posts = PostsDatabaseService(currUserRef: widget.profUserRef);
-    _userPosts = await _posts.getUserPosts();
+    PostsDatabaseService _posts = PostsDatabaseService(currUserRef: widget.profileUserData.userRef);
+    List<Post?> tempPosts = await _posts.getUserPosts();
+    tempPosts.removeWhere((value) => value == null);
+    List<Post> tempTempPosts = tempPosts.map((item)=>item!).toList();
+    tempTempPosts.sort((a,b) => b.createdAt.compareTo(a.createdAt));
+    if (mounted) {
+      setState(()=>_userPosts = tempTempPosts);
+    }
   }
 
   @override
@@ -66,8 +73,8 @@ class _ProfilePostFeedState extends State<ProfilePostFeed> {
                     return Column(
                       children: [
                         ProfilePostCard(
-                          post: _userPosts![index]!,
-                          currUserRef: widget.profUserRef,
+                          post: _userPosts![index],
+                          currUserData: widget.profileUserData,
                         ),
                         SizedBox(height: 10 * hp),
                       ],

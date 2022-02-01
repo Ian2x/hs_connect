@@ -42,7 +42,7 @@ InputDecoration commentReplyInputDecoration({required VoidFunction onPressed, re
   return InputDecoration(
     fillColor: colorScheme.surface, filled: true,
     hintText: isReply != false ? "Reply..." : "Comment...",
-    hintStyle: Theme.of(context).textTheme.bodyText1,
+    hintStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: colorScheme.primary),
     labelStyle: Theme.of(context).textTheme.bodyText1,
     contentPadding: EdgeInsets.fromLTRB(20*wp, 14*hp, 0*wp, 14*hp),
     border: new OutlineInputBorder(

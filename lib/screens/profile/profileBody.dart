@@ -130,7 +130,7 @@ class _ProfileBodyState extends State<ProfileBody> {
                 )
               : Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
                   SizedBox(height: 40 * hp),
-                  ProfilePostFeed(profUserRef: widget.profileUserRef),
+                  ProfilePostFeed(profileUserData: profileData!),
                 ])
         ],
       ),

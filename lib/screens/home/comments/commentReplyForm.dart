@@ -120,6 +120,7 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
   @override
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
+    final colorScheme = Theme.of(context).colorScheme;
 
     if (userData == null || _comments == null) {
       return Loading();
@@ -136,7 +137,7 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
             // was working on submitting upon "enter" key press, but probably not necessary/wanted
             onSubmit();
           },*/
-          style: Theme.of(context).textTheme.subtitle1,
+          style: Theme.of(context).textTheme.bodyText1,
           autocorrect: false,
           decoration: commentReplyInputDecoration(
               context: context,

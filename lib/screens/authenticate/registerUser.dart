@@ -65,22 +65,7 @@ class _RegisterUserState extends State<RegisterUser> {
                           ),
                           child: SizedBox(),
                         ),
-                        SizedBox(height: 10*hp),
-                        Row(
-                          children: [
-                            SizedBox(width: 10*hp),
-                            TextButton(
-                                onPressed: (){
-                                },
-                                child:Text(
-                                  "Cancel",
-                                  style: ThemeText.inter(fontWeight: FontWeight.normal,
-                                      fontSize: 16*hp, color: Colors.grey),
-                                )
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 15*hp),
+                        SizedBox(height: 41*hp),
                         Center(
                             child:
                             Column(

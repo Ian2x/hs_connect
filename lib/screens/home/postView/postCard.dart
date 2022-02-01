@@ -203,7 +203,7 @@ class _PostCardState extends State<PostCard> {
                             Text(
                               (widget.post.numComments + widget.post.numReplies).toString() + " Comments",
                               style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                                  fontSize: 14 * hp, fontWeight: FontWeight.normal),
+                                  fontSize: 14 * hp, fontWeight: FontWeight.normal, color: colorScheme.primary),
                             ),
                             IconButton(
                               constraints: BoxConstraints(),
