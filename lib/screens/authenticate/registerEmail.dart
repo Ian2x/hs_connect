@@ -35,12 +35,11 @@ class _RegisterEmailState extends State<RegisterEmail> {
   Widget build(BuildContext context) {
     final wp = Provider.of<WidthPixel>(context).value;
     final hp = Provider.of<HeightPixel>(context).value;
-    final colorScheme = Theme.of(context).colorScheme;
 
     return loading
-        ? Scaffold(backgroundColor: colorScheme.background, body: Loading())
+        ? Scaffold(backgroundColor: Colors.white, body: Loading(backgroundColor: Colors.white, spinColor: Color(0xff60676c)))
         : Scaffold(
-      backgroundColor: colorScheme.surface,
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
           GestureDetector(
@@ -74,7 +73,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                           child:Text(
                             "Cancel",
                             style: ThemeText.inter(fontWeight: FontWeight.normal,
-                                fontSize: 16*hp, color: colorScheme.primaryVariant),
+                                fontSize: 16*hp, color: Colors.black),
                           )
                       ),
                     ],
@@ -103,7 +102,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                                   error!, style: ThemeText.inter(fontWeight: FontWeight.w500, fontSize: 13*hp, color: Colors.black)),
                             ) :
                             Text("Verify your school with your email. We ",
-                                style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontSize: 14)),
+                                style: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 14)),
                           ),
                           SizedBox(height: 50*hp),
                         ],
@@ -119,11 +118,11 @@ class _RegisterEmailState extends State<RegisterEmail> {
                             children: [
                               TextField(
                                 autocorrect:false,
-                                style: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.primary),
+                                style: Theme.of(context).textTheme.headline6?.copyWith(color: Color(0xFFa1a1a1)),
                                 maxLines: null,
                                 keyboardType: TextInputType.emailAddress,
                                 decoration: InputDecoration(
-                                    hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.onError),
+                                    hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: Color(0xffdbdada)),
                                     border: InputBorder.none,
                                     hintText: "Your School Email"),
                                 onChanged: (value) {
@@ -134,7 +133,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                                   }
                                 },
                               ),
-                              Divider(height:4*hp, thickness: 2*hp, color: colorScheme.onError),
+                              Divider(height:4*hp, thickness: 2*hp, color: Color(0xffdbdada)),
                               SizedBox(height:10*hp)
                             ],
                           )
@@ -158,7 +157,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                     final int tempIndex = email.lastIndexOf('@');
                     final String domain = email.substring(tempIndex);
                     Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (context) => pixelProvider(context, child: WaitVerification(domain: domain))));
+                        .push(MaterialPageRoute(builder: (context) => pixelProvider(context, child: WaitVerification(domain: domain, domainEmail: email))));
                   } else if (result is FirebaseAuthException) {
                     if (mounted) {
                       setState(() {

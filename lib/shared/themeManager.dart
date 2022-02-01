@@ -4,111 +4,78 @@ import 'package:hs_connect/shared/myStorageManager.dart';
 import 'package:hs_connect/shared/tools/createMaterialColor.dart';
 
 class ThemeNotifier with ChangeNotifier {
+
+  static const darkThemeOnSurface = Color(0xffdbdbdb);
   final darkTheme = ThemeData(
     brightness: Brightness.dark,
-    backgroundColor: Color(0xFF0A0A0A),
+    backgroundColor: Color(0xff2d2d2d),
     // background
     colorScheme: ColorScheme(
       brightness: Brightness.dark,
-      background: Color(0xFF0A0A0A),
-      // background grey / light grey
-      onSurface: Color(0xFFe3e3e3),
-      // black
-      error: Color(0xFFb2b2b2),
-      //light medium grey
-      primaryVariant: Color(0xff151515),
-      // postCard Grey
+      background: Color(0xff262626),
+      onSurface: darkThemeOnSurface, //Color(0xffd4d3d3),
+      error: Color(0xFF4d4d4d),
+      primaryVariant: Color(0xffbab9b9),
       secondaryVariant: Color(0xFF137ef0),
-      // darker secondary blue
       secondary: Color(0xFF13a1f0),
-      // secondary blue
-      surface: Color(0xff000000),
-      // black
-      primary: Color(0xFFb2b2b2),
-      // medium grey
-      onError: Color(0xffdbdada),
-      // light medium grey
+      surface: Color(0xff181818),
+      primary: Color(0xffa1a1a1),
+      onError: Color(0xff353636),
       onSecondary: Color(0xFFff004d),
-      // secondary red
       onPrimary: Color(0xFF000000),
       onBackground: Color(0xFF000000),
     ),
     primarySwatch: createMaterialColor(Color(0xFFA1A1A1)),
     // from primary color
-    textTheme: TextTheme(
-      headline1: TextStyle(fontFamily: "Inter", fontSize: 93, fontWeight: FontWeight.w300, letterSpacing: -1.5),
-      headline2: TextStyle(fontFamily: "Inter", fontSize: 58, fontWeight: FontWeight.w300, letterSpacing: -0.5),
-      headline3: TextStyle(fontFamily: "Inter", fontSize: 47, fontWeight: FontWeight.w400),
-      headline4: TextStyle(fontFamily: "Inter", fontSize: 33, fontWeight: FontWeight.w400, letterSpacing: 0.25),
-      headline5: TextStyle(fontFamily: "Inter", fontSize: 23, fontWeight: FontWeight.w400),
-      headline6: TextStyle(fontFamily: "Inter", fontSize: 19, fontWeight: FontWeight.w500, letterSpacing: 0.15),
-      subtitle1: TextStyle(
-        fontFamily: "Inter",
-        fontSize: 16,
-        fontWeight: FontWeight.w400,
-        letterSpacing: 0.15,
-      ),
-      subtitle2: TextStyle(fontFamily: "Inter", fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 0.1),
-      bodyText1: TextStyle(fontFamily: "Inter", fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.5),
-      bodyText2: TextStyle(fontFamily: "Inter", fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.25),
-      button: TextStyle(fontFamily: "Inter", fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 1.25),
-      caption: TextStyle(fontFamily: "Inter", fontSize: 12, fontWeight: FontWeight.w400, letterSpacing: 0.4),
-      overline: TextStyle(fontFamily: "Inter", fontSize: 10, fontWeight: FontWeight.w400, letterSpacing: 1.5),
-    ),
+    textTheme: myTextTheme.apply(bodyColor: darkThemeOnSurface, displayColor: darkThemeOnSurface),
     splashColor: Colors.transparent,
   );
 
+  static const lightThemeOnSurface = Color(0xFF000000);
   final lightTheme = ThemeData(
     brightness: Brightness.light,
     backgroundColor: Color(0xFFf2f2f2),
     // background
     colorScheme: ColorScheme(
       brightness: Brightness.light,
-      background: Color(0xFFf4f4f4),
-      // background grey / light grey
-      onSurface: Color(0xFF000000),
-      // black
+      background: Color(0xFFf4f4f4), // background grey / light grey
+      onSurface: lightThemeOnSurface, // black
       error: Color(0xFFb2b2b2),
-      primaryVariant: Color(0xff60676c),
-      // dark grey
-      secondaryVariant: Color(0xFF137ef0),
-      // darker secondary blue
-      secondary: Color(0xFF13a1f0),
-      // secondary blue
-      surface: Color(0xFFffffff),
-      // white
-      primary: Color(0xFFa1a1a1),
-      // medium grey
-      onError: Color(0xffdbdada),
-      // light medium grey
-      onSecondary: Color(0xFFff004d),
-      // secondary red
+      primaryVariant: Color(0xff60676c), // dark grey
+      secondaryVariant: Color(0xFF137ef0), // darker secondary blue
+      secondary: Color(0xFF13a1f0), // secondary blue
+      surface: Color(0xFFffffff), // white
+      primary: Color(0xFFa1a1a1), // medium grey
+      onError: Color(0xffdbdada), // light medium grey
+      onSecondary: Color(0xFFff004d), // secondary red
       onPrimary: Color(0xFF000000),
       onBackground: Color(0xFF000000),
     ),
     primarySwatch: createMaterialColor(Color(0xFFA1A1A1)),
     // from primary color
-    textTheme: TextTheme(
-      headline1: TextStyle(fontFamily: "Inter", fontSize: 93, fontWeight: FontWeight.w300, letterSpacing: -1.5),
-      headline2: TextStyle(fontFamily: "Inter", fontSize: 58, fontWeight: FontWeight.w300, letterSpacing: -0.5),
-      headline3: TextStyle(fontFamily: "Inter", fontSize: 47, fontWeight: FontWeight.w400),
-      headline4: TextStyle(fontFamily: "Inter", fontSize: 33, fontWeight: FontWeight.w400, letterSpacing: 0.25),
-      headline5: TextStyle(fontFamily: "Inter", fontSize: 23, fontWeight: FontWeight.w400),
-      headline6: TextStyle(fontFamily: "Inter", fontSize: 19, fontWeight: FontWeight.w500, letterSpacing: 0.15),
-      subtitle1: TextStyle(
-        fontFamily: "Inter",
-        fontSize: 16,
-        fontWeight: FontWeight.w400,
-        letterSpacing: 0.15,
-      ),
-      subtitle2: TextStyle(fontFamily: "Inter", fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 0.1),
-      bodyText1: TextStyle(fontFamily: "Inter", fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.5),
-      bodyText2: TextStyle(fontFamily: "Inter", fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.25),
-      button: TextStyle(fontFamily: "Inter", fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 1.25),
-      caption: TextStyle(fontFamily: "Inter", fontSize: 12, fontWeight: FontWeight.w400, letterSpacing: 0.4),
-      overline: TextStyle(fontFamily: "Inter", fontSize: 10, fontWeight: FontWeight.w400, letterSpacing: 1.5),
-    ),
+    textTheme: myTextTheme.apply(bodyColor: lightThemeOnSurface, displayColor: lightThemeOnSurface),
     splashColor: Colors.transparent,
+  );
+
+  static const myTextTheme = TextTheme(
+    headline1: TextStyle(fontFamily: "Inter", fontSize: 93, fontWeight: FontWeight.w300, letterSpacing: -1.5),
+    headline2: TextStyle(fontFamily: "Inter", fontSize: 58, fontWeight: FontWeight.w300, letterSpacing: -0.5),
+    headline3: TextStyle(fontFamily: "Inter", fontSize: 47, fontWeight: FontWeight.w400),
+    headline4: TextStyle(fontFamily: "Inter", fontSize: 33, fontWeight: FontWeight.w400, letterSpacing: 0.25),
+    headline5: TextStyle(fontFamily: "Inter", fontSize: 23, fontWeight: FontWeight.w400),
+    headline6: TextStyle(fontFamily: "Inter", fontSize: 19, fontWeight: FontWeight.w500, letterSpacing: 0.15),
+    subtitle1: TextStyle(
+      fontFamily: "Inter",
+      fontSize: 16,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0.15,
+    ),
+    subtitle2: TextStyle(fontFamily: "Inter", fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 0.1),
+    bodyText1: TextStyle(fontFamily: "Inter", fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.5),
+    bodyText2: TextStyle(fontFamily: "Inter", fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.25),
+    button: TextStyle(fontFamily: "Inter", fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 1.25),
+    caption: TextStyle(fontFamily: "Inter", fontSize: 12, fontWeight: FontWeight.w400, letterSpacing: 0.4),
+    overline: TextStyle(fontFamily: "Inter", fontSize: 10, fontWeight: FontWeight.w400, letterSpacing: 1.5),
   );
 
   late ThemeData _themeData;

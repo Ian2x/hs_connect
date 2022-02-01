@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
@@ -14,7 +15,8 @@ class EmailVerificationErrorSheet extends StatefulWidget {
   final VoidFunction cancelTimer;
   final VoidFunction onDeleteEmail;
   final bool emailDeleted;
-  const EmailVerificationErrorSheet({Key? key, required this.cancelTimer, required this.onDeleteEmail, required this.emailDeleted}) : super(key: key);
+  final String domainEmail;
+  const EmailVerificationErrorSheet({Key? key, required this.cancelTimer, required this.onDeleteEmail, required this.emailDeleted, required this.domainEmail}) : super(key: key);
 
   @override
   _EmailVerificationErrorSheetState createState() => _EmailVerificationErrorSheetState();
@@ -25,6 +27,7 @@ class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorShee
   late String deleteEmail;
   @override
   void initState() {
+    print(shortHash('yianwang29@gmail.com'));
     if (widget.emailDeleted) {
       deleteEmail = 'Email deleted';
     } else {
@@ -39,20 +42,20 @@ class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorShee
   Widget build(BuildContext context) {
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<HeightPixel>(context).value;
-    final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
         padding: EdgeInsets.symmetric(vertical: 38*hp, horizontal: 30*wp),
+        color: Colors.white,
         alignment: Alignment.center,
         child: Column(
           children: <Widget>[
             Text(
                 "If you haven't received an email after 5 minutes, it is recommended that you delete your email from our systems and start over. Otherwise, you'll never be able to make an account from this address. Please contact us at ___ if you still have questions.",
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyText2),
+                style: Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.black)),
             SizedBox(
                 height: 60*hp,
-                child: Center(child: Text(error, style: Theme.of(context).textTheme.bodyText2?.copyWith(color: colorScheme.error)))),
+                child: Center(child: Text(error, style: Theme.of(context).textTheme.bodyText2?.copyWith(color: Color(0xFFb2b2b2))))),
             Row(children: <Widget>[
               Spacer(),
               MyOutlinedButton(
@@ -67,7 +70,7 @@ class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorShee
                       }
                     } on FirebaseAuthException catch (e) {
                       if (mounted) {
-                        setState(() =>error = "Error: " + e.code);
+                        setState(() =>error = "Error: " + e.code + "\nPlease remember this code: " + shortHash(widget.domainEmail.toLowerCase()));
                       }
                     }
                   }
@@ -75,6 +78,7 @@ class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorShee
                 gradient: Gradients.blueRed(begin: Alignment.topCenter, end: Alignment.bottomCenter),
                 borderRadius: 20*hp,
                 thickness: 1.5*hp,
+                backgroundColor: Colors.white,
                 child: Container(
                   height: 40*hp,
                   width: 140*hp,
@@ -99,6 +103,7 @@ class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorShee
                 gradient: Gradients.blueRed(begin: Alignment.topCenter, end: Alignment.bottomCenter),
                 borderRadius: 20*hp,
                 thickness:1.5*hp,
+                backgroundColor: Colors.white,
                 child: Container(
                   height: 40*hp,
                   width: 140*hp,

@@ -32,6 +32,7 @@ class UserData {
   final String fundamentalName;
   final String displayedName;
   final String displayedNameLC;
+  final String loginName;
   final String? bio;
   final String domain;
   final List<DocumentReference> groups;
@@ -56,6 +57,7 @@ class UserData {
     required this.fundamentalName,
     required this.displayedName,
     required this.displayedNameLC,
+    required this.loginName,
     required this.bio,
     required this.domain,
     required this.fullDomainName,
@@ -90,6 +92,7 @@ Future<UserData> userDataFromSnapshot(DocumentSnapshot snapshot, DocumentReferen
     fundamentalName: snapshot.get(C.fundamentalName),
     displayedName: snapshot.get(C.displayedName),
     displayedNameLC: snapshot.get(C.displayedNameLC),
+    loginName: snapshot.get(C.loginName),
     bio: snapshot.get(C.bio),
     domain: snapshot.get(C.domain),
     groups: docRefList(snapshot.get(C.groups)),

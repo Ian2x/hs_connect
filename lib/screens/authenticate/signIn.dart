@@ -38,12 +38,11 @@ class _SignInState extends State<SignIn> {
   Widget build(BuildContext context) {
     final wp = Provider.of<WidthPixel>(context).value;
     final hp = Provider.of<HeightPixel>(context).value;
-    final colorScheme = Theme.of(context).colorScheme;
 
     return loading
         ? Scaffold(
-        backgroundColor: colorScheme.background,
-        body: Loading()
+        backgroundColor: Colors.white,
+        body: Loading(backgroundColor: Colors.white, spinColor: Color(0xff60676c))
     )
         : Scaffold(
         backgroundColor: Colors.white,
@@ -99,7 +98,7 @@ class _SignInState extends State<SignIn> {
                                 error != '' ? SizedBox(height:10*hp) : Container(),
                                 error != '' ?
                                 Text(error,
-                                  style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontSize: 12))
+                                  style: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 12))
                                 : Container(),
                                 error != '' ? SizedBox(height:15*hp): SizedBox(height: 25*hp),
                                 Container(
@@ -113,7 +112,7 @@ class _SignInState extends State<SignIn> {
                                             style: Theme.of(context).textTheme.headline6,
                                             maxLines: null,
                                             decoration: InputDecoration(
-                                                hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.onError),
+                                                hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: Color(0xffdbdada)),
                                                 border: InputBorder.none,
                                                 hintText: "Username"),
                                             onChanged: (val) {
@@ -122,13 +121,13 @@ class _SignInState extends State<SignIn> {
                                               }
                                             }
                                         ),
-                                        Divider(height:4*hp, thickness: 2*hp, color: colorScheme.onError),
+                                        Divider(height:4*hp, thickness: 2*hp, color: Color(0xffdbdada)),
                                         SizedBox(height:10*hp),
                                         TextFormField(
                                             autocorrect:false,
                                             style: Theme.of(context).textTheme.headline6,
                                             decoration: InputDecoration(
-                                                hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.onError),
+                                                hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: Color(0xffdbdada)),
                                                 border: InputBorder.none,
                                                 hintText: "Password"),
                                             obscureText: true,
@@ -137,7 +136,7 @@ class _SignInState extends State<SignIn> {
                                                 setState(() => password = val);
                                               }
                                             }),
-                                        Divider(height:4*hp, thickness: 2*hp, color: colorScheme.onError),
+                                        Divider(height:4*hp, thickness: 2*hp, color: Color(0xffdbdada)),
                                         SizedBox(height:10*hp),
                                       ],
                                     ),

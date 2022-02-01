@@ -60,6 +60,7 @@ class _DomainFeedState extends State<DomainFeed> {
   @override
   Widget build(BuildContext context) {
     final hp = Provider.of<HeightPixel>(context).value;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
       padding: EdgeInsets.only(top: 3*hp),
@@ -84,7 +85,7 @@ class _DomainFeedState extends State<DomainFeed> {
                 padding: EdgeInsets.only(top: 50 * hp),
                 alignment: Alignment.topCenter,
                 child: Text("No posts found",
-                    style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.normal))),
+                    style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.normal, color: colorScheme.onSurface))),
           ),
         ),
       ),

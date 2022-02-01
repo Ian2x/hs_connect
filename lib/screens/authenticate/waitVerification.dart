@@ -11,7 +11,8 @@ import 'package:hs_connect/shared/widgets/myOutlinedButton.dart';
 import 'package:provider/provider.dart';
 
 class WaitVerification extends StatefulWidget {
-  const WaitVerification({Key? key, required this.domain}) : super(key: key);
+  final domainEmail;
+  const WaitVerification({Key? key, required this.domain, required this.domainEmail}) : super(key: key);
 
   final String domain;
 
@@ -45,7 +46,6 @@ class _WaitVerificationState extends State<WaitVerification> {
   @override
   Widget build(BuildContext context) {
     final hp = Provider.of<HeightPixel>(context).value;
-    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -87,7 +87,7 @@ class _WaitVerificationState extends State<WaitVerification> {
                 SizedBox(height:15*hp),
                 Center(
                   child:Text("Check the link in your school email.",
-                      style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontSize: 16)),
+                      style: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 16)),
                 ),
                 SizedBox(height:65 *hp),
                 MyOutlinedButton(  //TODO: Add Gmail LInk
@@ -97,6 +97,7 @@ class _WaitVerificationState extends State<WaitVerification> {
                   thickness:1.5,
                   pressElevation: 0.0,
                   padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                  backgroundColor: Colors.white,
                   child: Container(
                     height: MediaQuery.of(context).size.height*.13,
                     width: MediaQuery.of(context).size.width*.7,
@@ -138,6 +139,7 @@ class _WaitVerificationState extends State<WaitVerification> {
                             }
                           },
                           emailDeleted: emailDeleted,
+                          domainEmail: widget.domainEmail
                         )));
                   },
                   child: Text(

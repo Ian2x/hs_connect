@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/services/auth.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/inputDecorations.dart';
+import 'package:hs_connect/shared/myStorageManager.dart';
 import 'package:hs_connect/shared/tools/buildCircle.dart';
 import 'package:hs_connect/shared/widgets/gradientText.dart';
-import 'package:provider/provider.dart';
 
 class HomeAppBar extends SliverPersistentHeaderDelegate {
-  static const tabBarHeight = 35.0;
+  static const tabBarHeight = 43.0;
   static const expandedHeight = 170.0;
   static const epsilon = 0.0001;
 
@@ -31,52 +29,63 @@ class HomeAppBar extends SliverPersistentHeaderDelegate {
       children: [
         Container(
           padding: EdgeInsets.only(top: safeAreaHeight, right: 15, left: 15),
+          width: MediaQuery.of(context).size.width,
           color: colorScheme.surface,
           child: Column(
             children: [
-              Spacer(), // to push indicators to bottom
+              Spacer(),
               TabBar(
                 controller: tabController,
                 padding: EdgeInsets.zero,
                 indicatorWeight: epsilon,
+                isScrollable: true,
                 tabs: <Widget>[
                   Tab(
                       iconMargin: EdgeInsets.only(),
                       height: tabBarHeight,
-                      icon: Column(children: <Widget>[
-                        GradientText(fullDomainName,
-                            style: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.w500),
-                            maxLines: 1,
-                            softWrap: false,
-                            overflow: TextOverflow.fade,
-                            gradient: isDomain ? Gradients.blueRed() : Gradients.solid(color: colorScheme.primary)),
-                        Spacer(),
-                        isDomain
-                            ? Container(
-                                height: topGradientThickness,
-                                decoration: BoxDecoration(gradient: Gradients.blueRed()),
-                              )
-                            : Container()
-                      ])),
+                      icon: Container(
+                        decoration: BoxDecoration(
+                            gradient: isDomain ? Gradients.blueRed() : Gradients.solid(color: colorScheme.primary),
+                            borderRadius: BorderRadius.circular(25)),
+                        margin: EdgeInsets.fromLTRB(0,0,0,13),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(25),
+                            color: Theme.of(context).colorScheme.surface,
+                          ),
+                          margin: EdgeInsets.all(1.5),
+                          padding: EdgeInsets.fromLTRB(14,3.5,14,3.5),
+                          child: GradientText(fullDomainName,
+                              style: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.w500),
+                              maxLines: 1,
+                              softWrap: false,
+                              overflow: TextOverflow.ellipsis,
+                              gradient: isDomain ? Gradients.blueRed() : Gradients.solid(color: colorScheme.primary)),
+                        ),
+                      )),
                   Tab(
                       iconMargin: EdgeInsets.only(),
                       height: tabBarHeight,
-                      icon: Column(children: <Widget>[
-                        GradientText("Public",
-                            style: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.w500),
-                            maxLines: 1,
-                            softWrap: false,
-                            overflow: TextOverflow.fade,
-                            gradient: !isDomain ? Gradients.blueRed() : Gradients.solid(color: colorScheme.primary)),
-                        //Text("Trending", style: Theme.of(context).textTheme.subtitle1),
-                        Spacer(),
-                        !isDomain
-                            ? Container(
-                                height: topGradientThickness,
-                                decoration: BoxDecoration(gradient: Gradients.blueRed()),
-                              )
-                            : Container()
-                      ]))
+                      icon: Container(
+                        decoration: BoxDecoration(
+                          gradient: !isDomain ? Gradients.blueRed() : Gradients.solid(color: colorScheme.primary),
+                          borderRadius: BorderRadius.circular(25)),
+                        margin: EdgeInsets.fromLTRB(0,0,0,13),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(25),
+                            color: Theme.of(context).colorScheme.surface,
+                          ),
+                          margin: EdgeInsets.all(1.5),
+                          padding: EdgeInsets.fromLTRB(14,3.5,14,3.5),
+                          child: GradientText("Public",
+                              style: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.w500),
+                              maxLines: 1,
+                              softWrap: false,
+                              overflow: TextOverflow.ellipsis,
+                              gradient: !isDomain ? Gradients.blueRed() : Gradients.solid(color: colorScheme.primary)),
+                        ),
+                      ))
                 ],
               ),
             ],
@@ -89,6 +98,7 @@ class HomeAppBar extends SliverPersistentHeaderDelegate {
             opacity: (1 - shrinkOffset / expandedHeight),
             child: Card(
               elevation: 0,
+              color: colorScheme.surface,
               child: Row(
                 children: [
                   SizedBox(
@@ -128,11 +138,12 @@ class HomeAppBar extends SliverPersistentHeaderDelegate {
                       style: Theme.of(context)
                           .textTheme
                           .headline4
-                          ?.copyWith(fontSize: 30, color: colorScheme.primaryVariant, fontWeight: FontWeight.w600, letterSpacing: 2.5)),
+                          ?.copyWith(fontSize: 30, fontWeight: FontWeight.w600, letterSpacing: 2.5)),
                   IconButton(
                       icon: Icon(Icons.height, size: 5),
                       onPressed: () {
-                        AuthService().signOut();
+                        print(MyStorageManager.readData('themeMode').then((value) {print(value);}));
+                        //AuthService().signOut();
                       }),
                 ],
               ),

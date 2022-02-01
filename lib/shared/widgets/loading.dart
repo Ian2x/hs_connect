@@ -4,7 +4,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 class Loading extends StatelessWidget {
   final double size;
   final Color? backgroundColor;
-  const Loading({Key? key, this.size=50.0, this.backgroundColor})
+  final Color? spinColor;
+  const Loading({Key? key, this.size=50.0, this.backgroundColor, this.spinColor})
       : super(key: key);
 
   @override
@@ -14,7 +15,7 @@ class Loading extends StatelessWidget {
       color: backgroundColor!= null ? backgroundColor : colorScheme.background,
       child: Center(
         child: SpinKitFadingCircle(
-          color: colorScheme.primaryVariant,
+          color: spinColor != null ? spinColor! : colorScheme.primaryVariant,
           size: size,
         ),
       ),

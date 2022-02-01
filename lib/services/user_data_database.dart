@@ -41,6 +41,7 @@ class UserDataDatabaseService {
       C.fundamentalName: fundamentalName,
       C.displayedName: username,
       C.displayedNameLC: username.toLowerCase(),
+      C.loginName: username,
       C.bio: null,
       C.domain: domainLC,
       C.overrideCounty: overrideCounty,
