@@ -124,7 +124,22 @@ class Main2 extends StatelessWidget {
           ),
           darkTheme: ThemeData(
             brightness: Brightness.dark,
-            /* dark theme settings */
+              backgroundColor: Color(0xFF0A0A0A), // background
+              colorScheme: ColorScheme(
+                brightness: Brightness.light,
+                background: Color(0xFF0A0A0A), // background grey / light grey
+                onSurface: Color(0xFFe3e3e3), // black
+                error: Color(0xFFb2b2b2), //light medium grey
+                primaryVariant: Color(0xff151515), // postCard Grey
+                secondaryVariant: Color(0xFF137ef0), // darker secondary blue
+                secondary: Color(0xFF13a1f0), // secondary blue
+                surface: Color(0xff000000), // black
+                primary: Color(0xFFb2b2b2), // medium grey
+                onError: Color(0xffdbdada), // light medium grey
+                onSecondary: Color(0xFFff004d),// secondary red
+                onPrimary: Color(0xFF000000),
+                onBackground: Color(0xFF000000),
+              )
           ),
           themeMode: ThemeMode.light,
         ),
