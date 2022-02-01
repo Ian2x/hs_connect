@@ -7,8 +7,8 @@ import 'package:hs_connect/shared/tools/buildCircle.dart';
 import 'package:hs_connect/shared/widgets/gradientText.dart';
 
 class HomeAppBar extends SliverPersistentHeaderDelegate {
-  static const tabBarHeight = 43.0;
-  static const expandedHeight = 170.0;
+  static const tabBarHeight = 30.0;
+  static const expandedHeight = 155.0;
   static const epsilon = 0.0001;
 
   final TabController tabController;
@@ -25,7 +25,7 @@ class HomeAppBar extends SliverPersistentHeaderDelegate {
     final safeAreaHeight = MediaQuery.of(context).padding.top;
     final fullDomainName = userData.fullDomainName != null ? userData.fullDomainName! : userData.domain;
     return Stack(
-      fit: StackFit.expand,
+      //fit: StackFit.expand,
       children: [
         Container(
           padding: EdgeInsets.only(top: safeAreaHeight, right: 15, left: 15),
@@ -41,26 +41,26 @@ class HomeAppBar extends SliverPersistentHeaderDelegate {
                 isScrollable: true,
                 tabs: <Widget>[
                   Tab(
-                      iconMargin: EdgeInsets.only(),
+                      iconMargin: EdgeInsets.all(0),
                       height: tabBarHeight,
                       icon: Container(
                         decoration: BoxDecoration(
                             gradient: isDomain ? Gradients.blueRed() : Gradients.solid(color: colorScheme.primary),
                             borderRadius: BorderRadius.circular(25)),
-                        margin: EdgeInsets.fromLTRB(0,0,0,13),
+                        margin: EdgeInsets.fromLTRB(0,0,0,0),
+                        padding: EdgeInsets.all(0),
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(25),
                             color: Theme.of(context).colorScheme.surface,
                           ),
                           margin: EdgeInsets.all(1.5),
-                          padding: EdgeInsets.fromLTRB(14,3.5,14,3.5),
-                          child: GradientText(fullDomainName,
-                              style: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.w500),
+                          padding: EdgeInsets.fromLTRB(34,3.5,34,3.5),
+                          child: Text(fullDomainName,
+                              style: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.w500, fontSize: 15, color: isDomain ? colorScheme.onSurface : colorScheme.primary),
                               maxLines: 1,
                               softWrap: false,
-                              overflow: TextOverflow.ellipsis,
-                              gradient: isDomain ? Gradients.blueRed() : Gradients.solid(color: colorScheme.primary)),
+                              overflow: TextOverflow.ellipsis),
                         ),
                       )),
                   Tab(
@@ -70,81 +70,44 @@ class HomeAppBar extends SliverPersistentHeaderDelegate {
                         decoration: BoxDecoration(
                           gradient: !isDomain ? Gradients.blueRed() : Gradients.solid(color: colorScheme.primary),
                           borderRadius: BorderRadius.circular(25)),
-                        margin: EdgeInsets.fromLTRB(0,0,0,13),
+                        margin: EdgeInsets.fromLTRB(0,0,0,0),
+                        padding: EdgeInsets.all(0),
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(25),
                             color: Theme.of(context).colorScheme.surface,
                           ),
                           margin: EdgeInsets.all(1.5),
-                          padding: EdgeInsets.fromLTRB(14,3.5,14,3.5),
-                          child: GradientText("Public",
-                              style: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.w500),
+                          padding: EdgeInsets.fromLTRB(34,3.5,34,3.5),
+                          child: Text("Public",
+                              style: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.w500, fontSize: 15, color: !isDomain ? colorScheme.onSurface : colorScheme.primary),
                               maxLines: 1,
                               softWrap: false,
-                              overflow: TextOverflow.ellipsis,
-                              gradient: !isDomain ? Gradients.blueRed() : Gradients.solid(color: colorScheme.primary)),
+                              overflow: TextOverflow.ellipsis),
                         ),
                       ))
                 ],
               ),
+              SizedBox(height: 15),
             ],
           ),
         ),
         Positioned(
           top: safeAreaHeight - shrinkOffset + 10,
-          left: 10,
+          left: MediaQuery.of(context).size.width * 0.37,
           child: Opacity(
             opacity: (1 - shrinkOffset / expandedHeight),
             child: Card(
               elevation: 0,
               color: colorScheme.surface,
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
-                      height: 50,
-                      width: 50,
-                      child: isDomain
-                          ? buildGroupCircle(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                        image: ImageStorage().groupImageProvider(userData.domainImage))),
-                              ),
-                              all: 2.0,
-                              backgroundColor: colorScheme.surface)
-                          : buildGroupCircle(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(image: AssetImage('assets/logo1background.png'))),
-                              ),
-                              all: 2.0,
-                              backgroundColor: colorScheme.surface)
-                      /*Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                gradient: Gradients.blueRed(),
-                              ),
-                              child: Container(
-                                margin: EdgeInsets.all(2.5),
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: DecorationImage(image: AssetImage('assets/logo1background.png')))))*/
-                      ),
-                  SizedBox(width: 10),
-                  Text("Circles",
+                  Text("Circles.",
                       style: Theme.of(context)
                           .textTheme
                           .headline4
-                          ?.copyWith(fontSize: 30, fontWeight: FontWeight.w600, letterSpacing: 2.5)),
-                  IconButton(
-                      icon: Icon(Icons.height, size: 5),
-                      onPressed: () {
-                        print(MyStorageManager.readData('themeMode').then((value) {print(value);}));
-                        //AuthService().signOut();
-                      }),
+                          ?.copyWith(fontSize: 21, fontWeight: FontWeight.w700)),
                 ],
               ),
             ),
@@ -158,7 +121,7 @@ class HomeAppBar extends SliverPersistentHeaderDelegate {
   double get maxExtent => expandedHeight;
 
   @override
-  double get minExtent => kToolbarHeight + tabBarHeight + 20;
+  double get minExtent => kToolbarHeight + tabBarHeight+21.2;
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;

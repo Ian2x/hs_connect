@@ -58,7 +58,7 @@ class _NewMessageButtonState extends State<NewMessageButton> {
                       borderRadius: BorderRadius.circular(16*hp),
                       side: BorderSide(
                         color: Theme.of(context).colorScheme.onError,
-                        width: 3*hp,
+                        width: 1.5*hp,
                       )),
                 ),
                 child: Overlay(initialEntries: <OverlayEntry>[

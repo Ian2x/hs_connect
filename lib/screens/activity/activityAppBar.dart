@@ -32,12 +32,12 @@ PreferredSizeWidget activityAppBar({required BuildContext context, required bool
                       style: Theme.of(context)
                           .textTheme
                           .headline4
-                          ?.copyWith(fontSize: 24, color: colorScheme.primaryVariant, fontWeight: FontWeight.w600, letterSpacing: 1))
+                          ?.copyWith(fontSize: 24, fontWeight: FontWeight.w600, letterSpacing: 1))
                 ],
               )
             ],
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 15),
           Container(
             padding: EdgeInsets.only(right: 15, left: 15),
             child: TabBar(

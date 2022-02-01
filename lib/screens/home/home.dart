@@ -70,7 +70,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 PublicFeed(currUser: userData),
               ],
               controller: tabController,
-              physics: new NeverScrollableScrollPhysics(),
+              physics: NeverScrollableScrollPhysics(),
             ),
           ),
         ],
