@@ -98,7 +98,7 @@ class _NewPollState extends State<NewPoll> {
                       borderRadius: BorderRadius.circular(5),
                       side: BorderSide(
                         color: colorScheme.onError,
-                        width: 1*wp,
+                        width: 1*hp,
                       ),
                     )),
                     child: TextFormField(

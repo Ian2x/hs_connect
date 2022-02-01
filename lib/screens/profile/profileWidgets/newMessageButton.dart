@@ -57,8 +57,8 @@ class _NewMessageButtonState extends State<NewMessageButton> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16*hp),
                       side: BorderSide(
-                        color: Theme.of(context).dividerColor,
-                        width: 3*wp,
+                        color: Theme.of(context).colorScheme.onError,
+                        width: 3*hp,
                       )),
                 ),
                 child: Overlay(initialEntries: <OverlayEntry>[

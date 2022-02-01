@@ -55,30 +55,29 @@ class _ProfilePostFeedState extends State<ProfilePostFeed> {
           ],
         ),
         SizedBox(height: 20 * hp),
-        _userPosts!=null && _userPosts!.length!=0 ? Container(
-          child: ListView.builder(
-            itemCount: _userPosts?.length,
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            physics: BouncingScrollPhysics(),
-            itemBuilder: (BuildContext context, int index) {
-              return Column(
-                children: [
-                  ProfilePostCard(
-                    post: _userPosts![index]!,
-                    currUserRef: widget.profUserRef,
-                  ),
-                  SizedBox(height: 10 * hp),
-                ],
-              );
-            },
+        _userPosts != null && _userPosts!.length != 0
+            ? Container(
+                child: ListView.builder(
+                  itemCount: _userPosts?.length,
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  physics: BouncingScrollPhysics(),
+                  itemBuilder: (BuildContext context, int index) {
+                    return Column(
+                      children: [
+                        ProfilePostCard(
+                          post: _userPosts![index]!,
+                          currUserRef: widget.profUserRef,
+                        ),
+                        SizedBox(height: 10 * hp),
+                      ],
+                    );
+                  },
                 ),
               )
             : Container(
-                height: 70*hp,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                height: 70 * hp,
+                child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Text(
                     "You have no posts",
                     style: Theme.of(context).textTheme.subtitle1,

@@ -99,7 +99,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
             bottom:0,
             right:0,
             child: Container(
-            padding: EdgeInsets.only(top: 1.5 * hp),
+            padding: EdgeInsets.only(top: bottomGradientThickness * hp),
             decoration: BoxDecoration(
               gradient: Gradients.blueRed(),
             ),

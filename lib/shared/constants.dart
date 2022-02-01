@@ -37,6 +37,9 @@ const nextPostsFetchSize = 5;
 const defaultProfilePic = AssetImage('assets/blankProfile.png');
 const defaultGroupPic = AssetImage('assets/logo1background.png');
 
+const bottomGradientThickness = 2.5;
+const topGradientThickness = 1.5;
+
 class _Gradient extends Color {
   _Gradient(int value) : super(value);
 

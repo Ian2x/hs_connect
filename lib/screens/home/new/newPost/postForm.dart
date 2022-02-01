@@ -35,7 +35,7 @@ class PostForm extends StatefulWidget {
 }
 
 class _PostFormState extends State<PostForm> {
-  late FocusNode myFocusNode;
+  late FocusNode optionalTextFocusNode;
   final _formKey = GlobalKey<FormState>();
 
   void handleError(err) {
@@ -73,14 +73,14 @@ class _PostFormState extends State<PostForm> {
   @override
   void initState() {
     getGroupChoices();
-    myFocusNode = FocusNode();
+    optionalTextFocusNode = FocusNode();
     super.initState();
   }
 
   @override
   void dispose() {
     // Clean up the focus node when the Form is disposed.
-    myFocusNode.dispose();
+    optionalTextFocusNode.dispose();
     super.dispose();
   }
 
@@ -311,10 +311,10 @@ class _PostFormState extends State<PostForm> {
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
-                      if (myFocusNode.hasFocus) {
-                        myFocusNode.unfocus();
+                      if (optionalTextFocusNode.hasFocus) {
+                        optionalTextFocusNode.unfocus();
                       } else {
-                        myFocusNode.requestFocus();
+                        optionalTextFocusNode.requestFocus();
                       }
                     },
                     child: Container(
@@ -332,7 +332,7 @@ class _PostFormState extends State<PostForm> {
                                 border: InputBorder.none,
                                 hintText: "optional text"),
                             onChanged: (val) => setState(() => _text = val),
-                            focusNode: myFocusNode,
+                            focusNode: optionalTextFocusNode,
                           ),
                           SizedBox(height: 30*hp),
                           poll != null ? poll! : Container(),

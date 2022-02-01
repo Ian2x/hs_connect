@@ -12,7 +12,6 @@ class HomeAppBar extends SliverPersistentHeaderDelegate {
   static const tabBarHeight = 35.0;
   static const expandedHeight = 170.0;
   static const epsilon = 0.0001;
-  static const indicatorHeight = 1.5;
 
   final TabController tabController;
   final UserData userData;
@@ -54,7 +53,7 @@ class HomeAppBar extends SliverPersistentHeaderDelegate {
                         Spacer(),
                         isDomain
                             ? Container(
-                                height: indicatorHeight,
+                                height: topGradientThickness,
                                 decoration: BoxDecoration(gradient: Gradients.blueRed()),
                               )
                             : Container()
@@ -73,7 +72,7 @@ class HomeAppBar extends SliverPersistentHeaderDelegate {
                         Spacer(),
                         !isDomain
                             ? Container(
-                                height: indicatorHeight,
+                                height: topGradientThickness,
                                 decoration: BoxDecoration(gradient: Gradients.blueRed()),
                               )
                             : Container()
