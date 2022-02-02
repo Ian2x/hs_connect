@@ -5,6 +5,7 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/models/comment.dart';
 import 'package:hs_connect/screens/home/comments/likeDislikeComment.dart';
 import 'package:hs_connect/screens/home/replies/replyFeed.dart';
+import 'package:hs_connect/screens/profile/profilePage.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
@@ -15,14 +16,14 @@ import 'package:provider/provider.dart';
 
 class CommentCard extends StatefulWidget {
   final Comment comment;
-  final DocumentReference currUserRef;
+  final UserData currUserData;
   final VoidDocParamFunction switchFormBool;
 
   CommentCard({
     Key? key,
     required this.switchFormBool,
     required this.comment,
-    required this.currUserRef,
+    required this.currUserData,
   }) : super(key: key);
 
   @override
@@ -40,13 +41,13 @@ class _CommentCardState extends State<CommentCard> {
   @override
   void initState() {
     // initialize liked/disliked
-    if (widget.comment.likes.contains(widget.currUserRef)) {
+    if (widget.comment.likes.contains(widget.currUserData.userRef)) {
       if (mounted) {
         setState(() {
           liked = true;
         });
       }
-    } else if (widget.comment.likes.contains(widget.currUserRef)) {
+    } else if (widget.comment.likes.contains(widget.currUserData.userRef)) {
       if (mounted) {
         setState(() {
           disliked = true;
@@ -59,7 +60,7 @@ class _CommentCardState extends State<CommentCard> {
 
   void getUserData() async {
     if (widget.comment.creatorRef != null) {
-      UserDataDatabaseService _userDataDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserRef);
+      UserDataDatabaseService _userDataDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserData.userRef);
       final UserData? fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.comment.creatorRef!);
       if (mounted) {
         setState(() {
@@ -115,8 +116,22 @@ class _CommentCardState extends State<CommentCard> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(localCreatorName + " • " + localCreatorGroupName,
-                  style: Theme.of(context).textTheme.subtitle2?.copyWith(color: creatorGroupColor !=null ? creatorGroupColor :colorScheme.primary)),
+              TextButton(
+                onPressed: (){
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              pixelProvider(context,
+                                  child: ProfilePage(profileRef:widget.comment.creatorRef!,currUserData: widget.currUserData)
+                      )),
+                  );
+                },
+                child:
+                Text(localCreatorName + " • " + localCreatorGroupName,
+                style: Theme.of(context).textTheme.subtitle2?.copyWith
+                (color: creatorGroupColor !=null ? creatorGroupColor :colorScheme.primary)),
+              ),
               SizedBox(height:10*hp),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -150,7 +165,7 @@ class _CommentCardState extends State<CommentCard> {
                             ),
                             widget.comment.creatorRef != null ? LikeDislikeComment(
                                 comment: widget.comment,
-                                currUserRef: widget.currUserRef,
+                                currUserRef: widget.currUserData.userRef,
                             ) : Container()
                           ],
                         ),
