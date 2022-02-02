@@ -9,6 +9,7 @@ enum MyNotificationType {
   commentVotes,
   postVotes,
   fromMe,
+  featuredPost,
 }
 
 extension MyNotificationTypeExtension on MyNotificationType {
@@ -28,6 +29,8 @@ extension MyNotificationTypeExtension on MyNotificationType {
         return C.postVotes;
       case MyNotificationType.fromMe:
         return C.fromMe;
+      case MyNotificationType.featuredPost:
+        return C.featuredPost;
     }
   }
 }
@@ -48,6 +51,8 @@ MyNotificationType myNotificationTypeFrom(String myNotificationType) {
       return MyNotificationType.postVotes;
     case C.fromMe:
       return MyNotificationType.fromMe;
+    case C.featuredPost:
+      return MyNotificationType.featuredPost;
   }
   throw Exception("Given string does not match any NotificationType enum values");
 }
@@ -96,6 +101,8 @@ class MyNotification {
         return '';
       case MyNotificationType.fromMe:
         return 'The creators';
+      case MyNotificationType.featuredPost:
+        return '';
     }
   }
   String printB(String sourceUserName, String sourceUserFullDomainName, String postGroupName) {
@@ -114,6 +121,8 @@ class MyNotification {
         return 'Your post in ';
       case MyNotificationType.fromMe:
         return ' have a message: ';
+      case MyNotificationType.featuredPost:
+        return '';
     }
   }
   String printC(String sourceUserName, String sourceUserFullDomainName, String postGroupName) {
@@ -131,6 +140,8 @@ class MyNotification {
       case MyNotificationType.postVotes:
         return postGroupName;
       case MyNotificationType.fromMe:
+        return '';
+      case MyNotificationType.featuredPost:
         return '';
     }
   }
@@ -165,6 +176,8 @@ class MyNotification {
         return '<Error: Unexpected data in MyNotificationType.replyVotes.extraData>';
       case MyNotificationType.fromMe:
         return extraData!=null ? extraData! : 'ummm something went wrong :/';
+      case MyNotificationType.featuredPost:
+        return extraData!=null ? extraData! : 'ummm something went wrong :/';;
     }
   }
 }

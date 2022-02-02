@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/themeManager.dart';
@@ -8,7 +10,8 @@ import 'package:toggle_switch/toggle_switch.dart';
 
 class SettingsPage extends StatefulWidget {
   final bool initialIsLightTheme;
-  const SettingsPage({Key? key, required this.initialIsLightTheme}) : super(key: key);
+  final UserData currUserData;
+  const SettingsPage({Key? key, required this.initialIsLightTheme, required this.currUserData}) : super(key: key);
 
   @override
   _SettingsPageState createState() => _SettingsPageState();
@@ -35,7 +38,6 @@ class _SettingsPageState extends State<SettingsPage> {
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
-
 
     return Consumer<ThemeNotifier>(
       builder: (context, theme, _) => Scaffold(
@@ -174,11 +176,10 @@ class _SettingsPageState extends State<SettingsPage> {
                               });
                               }
                             }
-                            /*await ReportsDatabaseService(currUserRef: userData.userRef).newReport(
-                                reportType: widget.reportType,
-                                entityRef: widget.entityRef,
-                                reporterRef: userData.userRef,
-                                text: _text);*/
+                            await FirebaseFirestore.instance.collection(C.feedback).add({
+                              C.feedbackText: _feedbackText,
+                              C.creatorRef: widget.currUserData.userRef
+                            });
                             if (mounted) {
                               setState(() {
                                 feedbackLoading = false;

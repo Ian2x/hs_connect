@@ -61,6 +61,16 @@ class Gradients {
       colors: [ _Gradient.gBlue, _Gradient.gRed],
     );
   }
+  static LinearGradient blueRedHorizontal ({
+    AlignmentGeometry begin = Alignment.centerLeft,
+    AlignmentGeometry end = Alignment.centerRight,
+  }){
+    return LinearGradient(
+      begin: begin,
+      end: end,
+      colors: [ _Gradient.gBlue, _Gradient.gRed],
+    );
+  }
   static LinearGradient solid ({
     AlignmentGeometry begin = Alignment.topLeft,
     AlignmentGeometry end = Alignment. bottomRight,
@@ -202,4 +212,7 @@ class C {
   static const fundamentalName = 'fundamentalName';
   static const trendingCreatedAt = 'trendingCreatedAt';
   static const loginName = 'loginName';
+  static const featuredPost = 'featuredPost';
+  static const feedback = 'feedback';
+  static const feedbackText = 'feedbackText';
 }

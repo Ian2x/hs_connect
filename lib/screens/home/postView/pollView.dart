@@ -58,7 +58,7 @@ class _PollViewState extends State<PollView> {
               color: colorScheme.onError,
               width: 1 * hp,
             ),
-          ),
+          )
         ),
         padding: EdgeInsets.all(10 * hp),
         margin: EdgeInsets.only(top: 20 * hp),
@@ -66,6 +66,7 @@ class _PollViewState extends State<PollView> {
           itemCount: widget.poll.choices.length,
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.zero,
           itemBuilder: (BuildContext context, int index) {
             return PollChoiceView(
                 voted: voted,

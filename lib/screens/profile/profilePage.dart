@@ -30,6 +30,7 @@ class ProfilePage extends StatelessWidget {
                             builder: (context) => pixelProvider(context,
                                 child: SettingsPage(
                                   initialIsLightTheme: Theme.of(context).brightness == Brightness.light,
+                                  currUserData: currUserData,
                                 ))));
                   })
             ],
