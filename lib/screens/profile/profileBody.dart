@@ -109,7 +109,7 @@ class _ProfileBodyState extends State<ProfileBody> {
               text: TextSpan(
                 children: <TextSpan>[
                   TextSpan(text: profileData!.score.toString(), style: Theme.of(context).textTheme.headline6),
-                  TextSpan(text: " Likes ", style: Theme.of(context).textTheme.headline6?.copyWith
+                  TextSpan(text: " Likes", style: Theme.of(context).textTheme.headline6?.copyWith
                       (color: Theme.of(context).colorScheme.error, fontWeight: FontWeight.w500)),
                 ],
               ),

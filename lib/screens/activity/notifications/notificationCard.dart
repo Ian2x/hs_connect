@@ -8,6 +8,7 @@ import 'package:hs_connect/models/postLikesManager.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/postView/postPage.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
+import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
@@ -126,53 +127,76 @@ class _NotificationCardState extends State<NotificationCard> {
             margin: EdgeInsets.only(top: 2.5*hp),
             padding: EdgeInsets.fromLTRB(14*wp, 14*hp, 14*wp, 16*hp),
             color: colorScheme.surface,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                    height: 40*hp,
-                    width: 40*hp,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle, image: DecorationImage(fit: BoxFit.fill, image: _images.profileImageProvider(profileImageURL)))),
-                SizedBox(width: 14*wp),
-                SizedBox(
-                  width: 260*wp,
-                  child: RichText(
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    text: TextSpan(
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: widget.myNotification
-                                .printA(sourceUserName!, sourceUserFullDomainName!, postGroupName!),
-                            style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold)),
-                        TextSpan(
-                            text: widget.myNotification
-                                .printB(sourceUserName!, sourceUserFullDomainName!, postGroupName!),
-                            style: Theme.of(context).textTheme.bodyText2),
-                        TextSpan(
-                            text: widget.myNotification
-                                .printC(sourceUserName!, sourceUserFullDomainName!, postGroupName!),
-                            style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold)),
-                        TextSpan(
-                            text: widget.myNotification
-                                .printD(sourceUserName!, sourceUserFullDomainName!, postGroupName!),
-                            style: Theme.of(context).textTheme.bodyText2),
-                      ],
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                        height: 40*hp,
+                        width: 40*hp,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle, image: DecorationImage(fit: BoxFit.fill, image: _images.profileImageProvider(profileImageURL)))),
+                    SizedBox(width: 14*wp),
+                    SizedBox(
+                      width: 260*wp,
+                      child: RichText(
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        text: TextSpan(
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: widget.myNotification
+                                    .printA(sourceUserName!, sourceUserFullDomainName!, postGroupName!),
+                                style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold)),
+                            TextSpan(
+                                text: widget.myNotification
+                                    .printB(sourceUserName!, sourceUserFullDomainName!, postGroupName!),
+                                style: Theme.of(context).textTheme.bodyText2),
+                            TextSpan(
+                                text: widget.myNotification
+                                    .printC(sourceUserName!, sourceUserFullDomainName!, postGroupName!),
+                                style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold)),
+                            TextSpan(
+                                text: widget.myNotification
+                                    .printD(sourceUserName!, sourceUserFullDomainName!, postGroupName!),
+                                style: Theme.of(context).textTheme.bodyText2),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
+                    Flexible(
+                      child: Column(children: <Widget>[
+                        Row(
+                          children: [
+                            Spacer(),
+                            Text(convertTime(widget.myNotification.createdAt.toDate()),
+                                style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary))
+                          ],
+                        )
+                      ]),
+                    ),
+                  ],
                 ),
-                Flexible(
-                  child: Column(children: <Widget>[
-                    Row(
-                      children: [
-                        Spacer(),
-                        Text(convertTime(widget.myNotification.createdAt.toDate()),
-                            style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary))
-                      ],
+                widget.myNotification.myNotificationType == MyNotificationType.featuredPost ? Container(
+                  padding: EdgeInsets.fromLTRB(54*wp, 5*hp, 0, 0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        gradient: Gradients.blueRed(),
+                        borderRadius: BorderRadius.circular(17*hp)
+                    ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(17*hp),
+                        color: Theme.of(context).colorScheme.surface,
+                      ),
+                      padding: EdgeInsets.fromLTRB(17*wp, 5*hp, 17*wp, 6*hp),
+                      margin: EdgeInsets.all(1),
+                      child: Text('Featured Post')
                     )
-                  ]),
-                ),
+                  ),
+                ) : Container()
               ],
             )));
   }
