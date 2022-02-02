@@ -85,7 +85,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
                       return CommentCard(
                         switchFormBool: switchFormBool,
                         comment: comments[index - 2],
-                        currUserRef: userData.userRef,
+                        currUserData: userData,
                       );
                     }
                   },

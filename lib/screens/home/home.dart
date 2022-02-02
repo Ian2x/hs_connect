@@ -59,7 +59,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               return [
                 SliverPersistentHeader(
                   delegate: HomeAppBar(tabController: tabController, userData: userData, isDomain: isDomain),
-                  pinned: true,
+                  pinned: false,
                   floating: true,
                 )
               ];
@@ -70,7 +70,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 PublicFeed(currUser: userData),
               ],
               controller: tabController,
-              physics: NeverScrollableScrollPhysics(),
+              physics: BouncingScrollPhysics(),
             ),
           ),
         ],
