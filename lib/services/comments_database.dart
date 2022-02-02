@@ -57,7 +57,7 @@ class CommentsDatabaseService {
           C.postRef: post.postRef,
           C.groupRef: groupRef,
           C.creatorRef: currUserRef,
-          C.text: text,
+          C.text: text.trim(),
           C.mediaURL: media,
           C.createdAt: DateTime.now(),
           C.numReplies: 0,

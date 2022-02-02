@@ -13,7 +13,6 @@ import 'package:hs_connect/services/polls_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
-import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/widgets/groupTag.dart';
 import 'package:hs_connect/shared/reports/reportSheet.dart';
@@ -66,7 +65,6 @@ class _PostTitleCardState extends State<PostTitleCard> {
       if (tempPoll!=null && mounted) {
         setState(()=>poll = tempPoll);
       }
-
     }
   }
 

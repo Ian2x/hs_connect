@@ -5,6 +5,7 @@ import 'package:hs_connect/models/postLikesManager.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/comments/commentsFeed.dart';
 import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
+import 'package:hs_connect/shared/widgets/myDivider.dart';
 import 'package:provider/provider.dart';
 
 class PostPage extends StatelessWidget {
@@ -23,13 +24,11 @@ class PostPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
-        title: Text(group.name,
-            style: TextStyle(
-              color: colorScheme.onSurface, //fontFamily)
-            )),
+        title: Text(group.name),
         backgroundColor: colorScheme.surface,
         elevation: 0,
         leading: myBackButtonIcon(context),
+        bottom: MyDivider()
       ),
       body:
           Stack(

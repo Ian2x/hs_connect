@@ -1,13 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
+import 'package:hs_connect/models/poll.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/postLikesManager.dart';
 import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/postView/likeDislikePost.dart';
+import 'package:hs_connect/screens/home/postView/pollView.dart';
 import 'package:hs_connect/screens/home/postView/postPage.dart';
 import 'package:hs_connect/services/groups_database.dart';
+import 'package:hs_connect/services/polls_database.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
@@ -35,6 +38,7 @@ class _PostCardState extends State<PostCard> {
   late int likeCount;
   late int dislikeCount;
   UserData? fetchUserData;
+  Poll? poll;
 
   @override
   void initState() {
@@ -44,6 +48,7 @@ class _PostCardState extends State<PostCard> {
     dislikeCount = widget.post.dislikes.length;
     getUserData();
     getGroupData();
+    getPoll();
     super.initState();
   }
 
@@ -68,6 +73,17 @@ class _PostCardState extends State<PostCard> {
       }
     }
   }
+
+  void getPoll() async {
+    if (widget.post.pollRef!=null) {
+      PollsDatabaseService _polls = PollsDatabaseService(pollRef: widget.post.pollRef!);
+      final tempPoll = await _polls.getPoll();
+      if (tempPoll!=null && mounted) {
+        setState(()=>poll = tempPoll);
+      }
+    }
+  }
+
   void onLike() {
     if (mounted) { setState(() {
       likeCount += 1;
@@ -196,6 +212,7 @@ class _PostCardState extends State<PostCard> {
                             maxLines: 3),
                         widget.post.mediaURL != null ? ImageContainer(imageString: widget.post.mediaURL!)
                             : Container(),
+                        poll != null ? PollView(poll: poll!, currUserRef: widget.currUserRef, post: widget.post): Container(),
                         Row(
                           //Icon Row
                           children: [
