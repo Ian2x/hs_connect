@@ -51,7 +51,6 @@ class _PollViewState extends State<PollView> {
 
     return Container(
         width: MediaQuery.of(context).size.width * 0.9,
-        //height: 300,
         decoration: ShapeDecoration(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5 * hp),

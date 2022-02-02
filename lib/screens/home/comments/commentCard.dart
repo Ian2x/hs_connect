@@ -64,7 +64,7 @@ class _CommentCardState extends State<CommentCard> {
       if (mounted) {
         setState(() {
           creatorName = fetchUserData != null ? fetchUserData.fundamentalName : null;
-          creatorGroupName = fetchUserData != null ? fetchUserData.fullDomainName : null;
+          creatorGroupName = fetchUserData != null ? (fetchUserData.fullDomainName!=null ? fetchUserData.fullDomainName : fetchUserData.domain) : null;
           creatorGroupColor = fetchUserData != null ? fetchUserData.domainColor : null;
         });
       }
@@ -95,6 +95,7 @@ class _CommentCardState extends State<CommentCard> {
           right:3*wp,
           child:IconButton(icon: Icon(Icons.more_horiz),
             iconSize: 20*hp,
+            color: colorScheme.primary,
             onPressed: (){
               showModalBottomSheet(
                   context: context,

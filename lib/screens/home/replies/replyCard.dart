@@ -32,8 +32,8 @@ class _ReplyCardState extends State<ReplyCard> {
 
   bool liked = false;
   bool disliked = false;
-  String username="";
-  String groupName="";
+  String? creatorName;
+  String? creatorGroupName;
   Color? groupColor;
 
 
@@ -65,15 +65,15 @@ class _ReplyCardState extends State<ReplyCard> {
       final UserData? fetchUserData = await _userInfoDatabaseService.getUserData(userRef: widget.reply.creatorRef!);
       if (mounted) {
         setState(() {
-          username = fetchUserData != null ? fetchUserData.fundamentalName : '<Failed to retrieve user name>';
+          creatorName = fetchUserData != null ? fetchUserData.fundamentalName : null;
+          creatorGroupName = fetchUserData != null ? (fetchUserData.fullDomainName!=null ? fetchUserData.fullDomainName : fetchUserData.domain) : null;
           groupColor = fetchUserData != null ? fetchUserData.domainColor : null;
-          groupName = fetchUserData != null ? fetchUserData.domain : '<Failed to retrieve user name>';
         });
       }
     } else {
       if (mounted) {
         setState(() {
-          username = '[Removed]';
+          creatorName = '[Removed]';
         });
       }
     }
@@ -85,6 +85,9 @@ class _ReplyCardState extends State<ReplyCard> {
     final wp = Provider.of<WidthPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
 
+    final localCreatorName = creatorName!=null ? creatorName! : '';
+    final localCreatorGroupName = creatorGroupName!=null ? creatorGroupName! : '';
+
     return Stack(
       children: [
         Positioned(
@@ -92,6 +95,7 @@ class _ReplyCardState extends State<ReplyCard> {
           right:-10*wp,
           child:IconButton(icon: Icon(Icons.more_horiz),
             iconSize: 20*hp,
+            color: colorScheme.primary,
             onPressed: (){
               showModalBottomSheet(
                   context: context,
@@ -113,7 +117,7 @@ class _ReplyCardState extends State<ReplyCard> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(username + " • " + groupName,
+                  Text(localCreatorName + " • " + localCreatorGroupName,
                       style: Theme.of(context).textTheme.subtitle2?.copyWith(color: groupColor != null ? groupColor: colorScheme.primary, fontSize: 13*hp)),
                   SizedBox(height:10*hp),
                   Row(

@@ -83,7 +83,7 @@ class RepliesDatabaseService {
           C.postRef: post.postRef,
           C.groupRef: groupRef,
           C.accessRestriction: accessRestriction,
-          C.text: text,
+          C.text: text.trim(),
           C.mediaURL: media,
           C.createdAt: DateTime.now(),
           C.likes: [],

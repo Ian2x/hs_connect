@@ -50,7 +50,7 @@ class MessagesDatabaseService {
     final messageRef = await messagesCollection.add({
       C.senderRef: senderRef,
       C.receiverRef: receiverRef,
-      C.text: text,
+      C.text: text.trim(),
       C.isMedia: isMedia,
       C.createdAt: createdAt,
       C.numReports: 0

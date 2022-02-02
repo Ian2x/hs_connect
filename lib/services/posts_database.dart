@@ -48,9 +48,9 @@ class PostsDatabaseService {
         .set({
           C.groupRef: groupRef,
           C.creatorRef: currUserRef,
-          C.title: title,
-          C.titleLC: title.toLowerCase(),
-          C.text: text,
+          C.title: title.trim(),
+          C.titleLC: title.trim().toLowerCase(),
+          C.text: text?.trim(),
           C.mediaURL: media,
           C.createdAt: DateTime.now(),
           C.trendingCreatedAt: DateTime.now(),

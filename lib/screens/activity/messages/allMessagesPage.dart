@@ -133,7 +133,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                               image: new DecorationImage(fit: BoxFit.fill, image: _images.profileImageProvider(otherUser.profileImageURL)))),
                       SizedBox(width: 14*wp),
                       Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-                        Text(otherUser.displayedName,
+                        Text(otherUser.fundamentalName,
                             style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold)),
                         SizedBox(height: 4*hp),
                         Text(otherUser.fullDomainName != null ? otherUser.fullDomainName! : otherUser.domain,
