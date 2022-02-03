@@ -167,7 +167,6 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(width: 10 * wp),
                   Flexible(
                     //Otherwise horizontal renderflew of row
                     child: Column(
@@ -175,6 +174,7 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                       children: [
                         Row(
                           children: [
+                            SizedBox(width:10*wp),
                             Chip(
                               padding: EdgeInsets.all(0),
                               backgroundColor: colorScheme.surface,
@@ -196,7 +196,7 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                               label: Text(
                                 group!.name,
                                   style: Theme.of(context).textTheme.subtitle2?.copyWith
-                                    (fontSize: 15 * hp, fontWeight: FontWeight.w500),
+                                    (fontSize: 14 * hp, fontWeight: FontWeight.w500),
                                 )
                             ),
                             Text(
@@ -208,20 +208,31 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                             Spacer(),
                           ],
                         ),
-                        Text(
-                            widget.post.title,
+                        Row(
+                          children: [
+                            SizedBox(width:10*wp),
+                            Text(
+                        widget.post.title,
                             style: Theme.of(context).textTheme.headline6?.copyWith(
-                              fontSize:18 * hp, fontWeight: FontWeight.w500,
+                              fontSize:16 * hp, fontWeight: FontWeight.w500,
                             ),
                             overflow: TextOverflow.ellipsis, // default is .clip
                             maxLines: 3),
+                          ],
+                        ),
                         widget.post.mediaURL != null ? ImageContainer(imageString: widget.post.mediaURL!, containerWidth: MediaQuery.of(context).size.width-2*leftRightMargin, hp: hp,)
                             : Container(),
-                        poll != null ? PollView(poll: poll!, currUserRef: widget.currUserRef, post: widget.post): Container(),
+                        poll != null ?
+                          Row(
+                            children: [
+                              SizedBox(width:10*wp),
+                              PollView(poll: poll!, currUserRef: widget.currUserRef, post: widget.post)
+                            ],
+                          ): Container(),
                         Row(
                           //Icon Row
                           children: [
-                            SizedBox(width: 1 * wp),
+                            SizedBox(width: 10 * wp),
                             Text(
                               (widget.post.numComments + widget.post.numReplies).toString() + " Comments",
                               style: Theme.of(context).textTheme.subtitle2?.copyWith(
@@ -251,7 +262,7 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                                 post: widget.post,
                                 postLikesManager: postLikesManager
                             ),
-                            SizedBox(width: 5*hp),
+                            SizedBox(width: 10*hp),
                           ],
                         )
                       ], //Column Children ARRAY
