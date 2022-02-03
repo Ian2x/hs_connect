@@ -6,7 +6,7 @@ import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/arrows_icons.dart';
 import 'package:provider/provider.dart';
 
-const double iconSize = 15;
+const double iconSize = 14;
 
 class LikeDislikeReply extends StatefulWidget {
   final DocumentReference currUserRef;
@@ -93,12 +93,12 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
             );
           }
         }(),
-        SizedBox(width: 3*wp),
+        SizedBox(width: 5*wp),
         Text(
           (likeCount - dislikeCount).toString(),
           style: Theme.of(context).textTheme.subtitle2
         ),
-        SizedBox(width: 3*wp),
+        SizedBox(width: 5*wp),
         () {
           if (likeStatus == true) {
             return IconButton(

@@ -23,7 +23,7 @@ class NewPost extends StatelessWidget {
       body: Stack(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.fromLTRB(15*wp, 30*hp,15*wp,0*hp),
+            padding: EdgeInsets.fromLTRB(0*wp, 30*hp,0*wp,0*hp),
             constraints: BoxConstraints.expand(),
             child: PostForm(userData: userData),
           ),

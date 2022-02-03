@@ -155,7 +155,7 @@ class _PostCardState extends State<PostCard> {
           //if border then ShapeDecoration
           color: colorScheme.surface,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12 * hp)),
-          margin: EdgeInsets.fromLTRB(5 * wp, 3 * hp, 5 * wp, 3*hp),
+          margin: EdgeInsets.fromLTRB(8 * wp, 4 * hp, 8 * wp, 4*hp),
           elevation: 0,
           child: Container(
               padding: EdgeInsets.fromLTRB(2 * wp, 2 * hp, 5 * wp, 5 * hp),

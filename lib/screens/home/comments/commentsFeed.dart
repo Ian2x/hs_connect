@@ -9,6 +9,7 @@ import 'package:hs_connect/screens/home/comments/commentReplyForm.dart';
 import 'package:hs_connect/screens/home/postView/postTitleCard.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
@@ -29,12 +30,32 @@ class _CommentsFeedState extends State<CommentsFeed> {
   bool isReply=false;
   DocumentReference? commentRef;
 
+  late FocusNode myFocusNode;
+
+
+
+  @override
+  void initState() {
+    super.initState();
+    myFocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    // Clean up the focus node when the Form is disposed.
+    myFocusNode.dispose();
+    super.dispose();
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
+
 
 
     switchFormBool(DocumentReference? passedRef){
@@ -64,7 +85,10 @@ class _CommentsFeedState extends State<CommentsFeed> {
               });
 
               return GestureDetector(
-                onTap: ()=>dismissKeyboard(context),
+                onTap: (){
+                  dismissKeyboard(context);
+                  isReply=false;
+                },
                 child: ListView.builder(
                   itemCount: comments.length + 3,
                   scrollDirection: Axis.vertical,
@@ -83,6 +107,11 @@ class _CommentsFeedState extends State<CommentsFeed> {
                       return SizedBox(height: 70*hp);
                     } else {
                       return CommentCard(
+                        focusKeyboard: (){
+                          print ("second focused?");
+                          myFocusNode.requestFocus();
+
+                        },
                         switchFormBool: switchFormBool,
                         comment: comments[index - 2],
                         currUserData: userData,
@@ -108,6 +137,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
                 padding: EdgeInsets.fromLTRB(10 * wp, 10 * hp, 10 * wp, 10 * hp),
                 color: colorScheme.background,
               child: CommentReplyForm(
+                focusNode: myFocusNode,
                 currUserRef: userData.userRef,
                 switchFormBool: switchFormBool,
                 commentReference: commentRef,

@@ -31,18 +31,15 @@ class PostPage extends StatelessWidget {
         bottom: MyDivider()
       ),
       body:
-          Stack(
-            children: [
-              Container(
-                constraints: BoxConstraints(
-                  minHeight: MediaQuery.of(context).size.height,
-                ),
-                child: Provider<PostLikesManager>.value(
-                  value: postLikesManager,
-                  child: CommentsFeed(post: post, group: group),
-                )
-              ),
-            ],
+          Container(
+            padding: EdgeInsets.all(0),
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height,
+            ),
+            child: Provider<PostLikesManager>.value(
+              value: postLikesManager,
+              child: CommentsFeed(post: post, group: group),
+            )
           )
     );
   }

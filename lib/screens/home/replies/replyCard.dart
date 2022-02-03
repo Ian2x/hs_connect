@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/reply.dart';
 import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/models/userData.dart';
+import 'package:hs_connect/screens/profile/profilePage.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
@@ -14,14 +15,14 @@ import 'likeDislikeReply.dart';
 
 class ReplyCard extends StatefulWidget {
   final Reply reply;
-  final DocumentReference currUserRef;
+  final UserData currUserData;
   final bool isLast;
 
   ReplyCard(
       {Key? key,
       required this.isLast,
       required this.reply,
-      required this.currUserRef})
+      required this.currUserData})
       : super(key: key);
 
   @override
@@ -41,13 +42,13 @@ class _ReplyCardState extends State<ReplyCard> {
   void initState() {
     super.initState();
     // initialize liked/disliked
-    if (widget.reply.likes.contains(widget.currUserRef)) {
+    if (widget.reply.likes.contains(widget.currUserData.userRef)) {
       if (mounted) {
         setState(() {
           liked = true;
         });
       }
-    } else if (widget.reply.likes.contains(widget.currUserRef)) {
+    } else if (widget.reply.likes.contains(widget.currUserData.userRef)) {
       if (mounted) {
         setState(() {
           disliked = true;
@@ -61,7 +62,7 @@ class _ReplyCardState extends State<ReplyCard> {
 
   void getUserData() async {
     if (widget.reply.creatorRef != null) {
-      UserDataDatabaseService _userInfoDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserRef);
+      UserDataDatabaseService _userInfoDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserData.userRef);
       final UserData? fetchUserData = await _userInfoDatabaseService.getUserData(userRef: widget.reply.creatorRef!);
       if (mounted) {
         setState(() {
@@ -90,36 +91,32 @@ class _ReplyCardState extends State<ReplyCard> {
 
     return Stack(
       children: [
-        Positioned(
-          top:-10*hp,
-          right:-10*wp,
-          child:IconButton(icon: Icon(Icons.more_horiz),
-            iconSize: 20*hp,
-            color: colorScheme.primary,
-            onPressed: (){
-              showModalBottomSheet(
-                  context: context,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(20*hp),
-                      )),
-                  builder: (context) => pixelProvider(context, child: ReportSheet(
-                    reportType: ReportType.reply,
-                    entityRef: widget.reply.replyRef,
-                  )));
-
-            },
-          ),
-        ),
         Container(
             padding: EdgeInsets.fromLTRB(25*wp, 10*hp, 0*wp, 0*hp),
             child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(localCreatorName + " • " + localCreatorGroupName,
-                      style: Theme.of(context).textTheme.subtitle2?.copyWith(color: groupColor != null ? groupColor: colorScheme.primary, fontSize: 13*hp)),
-                  SizedBox(height:10*hp),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                        splashFactory: NoSplash.splashFactory,
+                        padding: EdgeInsets.zero,
+                        alignment: Alignment.centerLeft),
+                    onPressed: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                pixelProvider(context,
+                                    child: ProfilePage(profileRef:widget.reply.creatorRef!,currUserData: widget.currUserData)
+                                )),
+                      );
+                    },
+                    child:
+                    Text(localCreatorName + " • " + localCreatorGroupName,
+                        style: Theme.of(context).textTheme.subtitle2?.copyWith
+                          (color: groupColor != null ? groupColor: colorScheme.primaryVariant, fontSize: 13*hp)),
+                  ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -143,11 +140,33 @@ class _ReplyCardState extends State<ReplyCard> {
                             Row(
                               children: [
                                 Text(
-                                  convertTime(widget.reply.createdAt.toDate()), style: Theme.of(context).textTheme.bodyText2),
+                                    convertTime(widget.reply.createdAt.toDate()),
+                                    style: Theme.of(context).textTheme.subtitle2?.
+                                    copyWith(color: colorScheme.primary)),
+                                SizedBox(width:8*wp),
+                                TextButton(
+                                  child: Icon(Icons.more_horiz, size:20*hp, color: colorScheme.primary),
+                                  style: TextButton.styleFrom(
+                                      splashFactory: NoSplash.splashFactory,
+                                      padding: EdgeInsets.zero,
+                                      alignment: Alignment.centerLeft),
+                                  onPressed: (){
+                                    showModalBottomSheet(
+                                        context: context,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.vertical(
+                                              top: Radius.circular(20*hp),
+                                            )),
+                                        builder: (context) => pixelProvider(context, child: ReportSheet(
+                                          reportType: ReportType.reply,
+                                          entityRef: widget.reply.commentRef,
+                                        )));
+                                  },
+                                ),
                                 Spacer(),
                                 widget.reply.creatorRef != null ? LikeDislikeReply(
                                     reply: widget.reply,
-                                    currUserRef: widget.currUserRef,
+                                    currUserRef: widget.currUserData.userRef,
                                 ) : Container()
                               ],
                             ),
