@@ -144,6 +144,8 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
 
     PostsDatabaseService _posts = PostsDatabaseService(currUserRef: widget.currUserRef, postRef: widget.post.postRef);
 
+    double iconSize= 18*hp;
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -155,7 +157,8 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
               padding: iconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
-              icon: Icon(Arrows.down_open_big, color: colorScheme.secondary),
+              icon: Icon(Arrows.down_open_big, color: colorScheme.secondary,
+                  size: iconSize * hp),
               onPressed: () {
                 _posts.unDislikePost();
                 widget.postLikesManager.onUnDislike();
@@ -174,7 +177,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
               padding: iconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.primaryVariant,
-              icon: Icon(Arrows.down_open_big),
+              icon: Icon(Arrows.down_open_big, size: iconSize),
               onPressed: () {
                 _posts.dislikePost();
                 widget.postLikesManager.onDislike();
@@ -204,7 +207,8 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
               padding: iconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
-              icon: Icon(Arrows.up_open_big, color: colorScheme.secondary),
+              icon: Icon(Arrows.up_open_big, color: colorScheme.secondary,
+              size: iconSize),
               onPressed: () {
                 _posts.unLikePost(widget.post);
                 widget.postLikesManager.onUnLike();
@@ -223,7 +227,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
               padding: iconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.primaryVariant,
-              icon: Icon(Arrows.up_open_big),
+              icon: Icon(Arrows.up_open_big, size: iconSize),
               onPressed: () {
                 _posts.likePost(widget.post, likeCount);
                 widget.postLikesManager.onLike();

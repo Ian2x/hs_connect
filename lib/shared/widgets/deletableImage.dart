@@ -15,14 +15,14 @@ class DeletableImage extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Container(
-        width: width,
+        width: MediaQuery.of(context).size.width,
         height: height,
         child: Overlay(
           initialEntries: <OverlayEntry>[
             OverlayEntry(builder: (BuildContext context) {
               return FittedBox(
                 child: image,
-                fit: BoxFit.fill,
+                fit: BoxFit.fitWidth,
               );
             }),
             OverlayEntry(builder: (BuildContext context) {

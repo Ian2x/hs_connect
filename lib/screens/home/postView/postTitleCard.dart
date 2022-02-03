@@ -99,7 +99,8 @@ class _PostTitleCardState extends State<PostTitleCard> {
                     }
                   },
                   child: Text("from " + localCreatorName + " • " + convertTime(widget.post.createdAt.toDate()),
-                    style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary)
+                    style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary,
+                    fontSize: 14*hp)
                   ),
                 ),
                 Spacer(flex:1),
@@ -124,14 +125,16 @@ class _PostTitleCardState extends State<PostTitleCard> {
               ]
             ), //introRow
             Text( widget.post.title,
-              style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 22)
+              style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18*hp)
             ),
             SizedBox(height:8*hp),
             widget.post.text!= null && widget.post.text!=""?
               Text(widget.post.text!,
-                style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16)) : Container(),
+                style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16*hp)) : Container(),
             widget.post.mediaURL != null ?
-              ImageContainer(imageString: widget.post.mediaURL!)
+              ImageContainer(imageString: widget.post.mediaURL!,
+                hp:hp,
+                containerWidth: MediaQuery.of(context).size.width,)
                 : Container(),
             poll != null ? PollView(poll: poll!, currUserRef: widget.currUserRef, post: widget.post): Container(),
             SizedBox(height:20*hp),
@@ -152,7 +155,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
             SizedBox(height:30*hp),
             Text(
                 widget.post.numComments + widget.post.numReplies < 2 ? 'Comments' : (widget.post.numComments + widget.post.numReplies).toString() + ' Comments',
-                style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
+                style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18*hp),
             ),
 
           ],

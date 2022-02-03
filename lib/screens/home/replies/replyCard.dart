@@ -92,11 +92,13 @@ class _ReplyCardState extends State<ReplyCard> {
     return Stack(
       children: [
         Container(
-            padding: EdgeInsets.fromLTRB(25*wp, 10*hp, 0*wp, 0*hp),
+            margin:EdgeInsets.zero,
+            padding: EdgeInsets.fromLTRB(20*wp, 0*hp, 0*wp, 0*hp),
             child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  Divider(thickness: 3*hp, color: colorScheme.background, height: 3*hp),
                   TextButton(
                     style: TextButton.styleFrom(
                         splashFactory: NoSplash.splashFactory,
@@ -121,7 +123,7 @@ class _ReplyCardState extends State<ReplyCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Flexible(
-                        fit:FlexFit.loose,
+                        fit:FlexFit.tight,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -136,7 +138,6 @@ class _ReplyCardState extends State<ReplyCard> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: 10*hp),
                             Row(
                               children: [
                                 Text(
@@ -176,7 +177,7 @@ class _ReplyCardState extends State<ReplyCard> {
                     ],
                   ),
                   widget.isLast !=false ?
-                    SizedBox(height: 15*hp) :
+                    Container():
                     Divider(thickness: 3*hp, color: colorScheme.background, height: 30*hp),
                 ]
             )

@@ -43,10 +43,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
-
-
-  final PageStorageBucket _bucket = PageStorageBucket();
-
   @override
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
@@ -70,16 +66,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 ),
               ];
             },
-            body: PageStorage(
-              bucket: _bucket,
-              child: TabBarView(
-                children: [
-                  DomainFeed(currUser: userData, pagedListViewKey: PageStorageKey('domainFeed')),
-                  PublicFeed(currUser: userData, pagedListViewKey: PageStorageKey('publicFeed')),
-                ],
-                controller: tabController,
-                physics: BouncingScrollPhysics(),
-              ),
+            body: TabBarView(
+              children: [
+                DomainFeed(currUser: userData),
+                PublicFeed(currUser: userData),
+              ],
+              controller: tabController,
+              physics: BouncingScrollPhysics(),
             ),
           ),
         ],
