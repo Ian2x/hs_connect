@@ -55,7 +55,7 @@ class GroupTag extends StatelessWidget {
               ) : Container(),
               groupImageURL!=null ? SizedBox(width: fontSize*0.4) : Container(),
               Container(
-                padding: EdgeInsets.only(bottom: 2),
+                padding: EdgeInsets.only(bottom: 0),
                 child: Text( groupName,
                     style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: fontSize)
                 ),

@@ -86,9 +86,9 @@ class _ProfileBodyState extends State<ProfileBody> {
           Text(
             profileData!.fundamentalName,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.headline5?.copyWith(fontWeight: FontWeight.w500),
+            style: Theme.of(context).textTheme.headline5?.copyWith(fontWeight: FontWeight.w500, fontSize: 22*hp),
           ),
-          SizedBox(height: 20 * hp),
+          SizedBox(height: 18 * hp),
           Row(
             children: <Widget>[
               Spacer(),
@@ -96,21 +96,21 @@ class _ProfileBodyState extends State<ProfileBody> {
                 groupImageURL: profileData!.domainImage,
                 groupName: profileData!.fullDomainName != null ? profileData!.fullDomainName! : profileData!.domain,
                 borderRadius: 20*hp,
-                padding: EdgeInsets.fromLTRB(9 * wp, 4 * hp, 9 * wp, 4 * hp),
+                padding: EdgeInsets.fromLTRB(8 * wp, 2 * hp, 8 * wp, 2 * hp),
                 thickness: 1.5*hp,
-                fontSize: 19*hp,
+                fontSize: 18*hp,
               ),
               Spacer(),
             ],
           ),
-          SizedBox(height: 10 * hp),
+          SizedBox(height: 14 * hp),
           Center(
             child: RichText(
               text: TextSpan(
                 children: <TextSpan>[
-                  TextSpan(text: profileData!.score.toString(), style: Theme.of(context).textTheme.headline6),
+                  TextSpan(text: profileData!.score.toString(), style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18*hp)),
                   TextSpan(text: " Likes", style: Theme.of(context).textTheme.headline6?.copyWith
-                      (color: Theme.of(context).colorScheme.error, fontWeight: FontWeight.w500)),
+                      (color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.w500, fontSize: 18*hp)),
                 ],
               ),
             ),
