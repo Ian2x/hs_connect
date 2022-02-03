@@ -42,7 +42,7 @@ class LikeDislikePost extends StatelessWidget {
               padding: iconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
-              icon: Icon(Arrows.down_open_big, color: colorScheme.secondary),
+              icon: Icon(Arrows.down_open_big, color: colorScheme.onBackground),
               onPressed: () {
                 _posts.unDislikePost();
                 postLikesManager.onUnDislike();

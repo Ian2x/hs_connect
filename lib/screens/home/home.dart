@@ -1,3 +1,4 @@
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/postFeed/domainFeed.dart';
@@ -60,7 +61,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 SliverPersistentHeader(
                   delegate: HomeAppBar(tabController: tabController, userData: userData, isDomain: isDomain),
                   pinned: false,
-                  floating: true,
+                  floating: false,
                 )
               ];
             },
@@ -79,3 +80,4 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     );
   }
 }
+

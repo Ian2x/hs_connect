@@ -51,7 +51,7 @@ class _RepliesFeedState extends State<RepliesFeed> {
                       child: ReplyCard(
                     isLast: isLast,
                     reply: replies[index],
-                    currUserRef: userData.userRef,
+                    currUserData: userData,
                   ));
               },
             );

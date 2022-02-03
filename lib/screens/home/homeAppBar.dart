@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
@@ -62,14 +63,15 @@ class HomeAppBar extends SliverPersistentHeaderDelegate {
                               softWrap: false,
                               overflow: TextOverflow.ellipsis),
                         ),
-                      )),
+                      )
+                  ),
                   Tab(
                       iconMargin: EdgeInsets.only(),
                       height: tabBarHeight,
                       icon: Container(
                         decoration: BoxDecoration(
-                          gradient: !isDomain ? Gradients.blueRed() : Gradients.solid(color: colorScheme.primary),
-                          borderRadius: BorderRadius.circular(25)),
+                            gradient: !isDomain ? Gradients.blueRed() : Gradients.solid(color: colorScheme.primary),
+                            borderRadius: BorderRadius.circular(25)),
                         margin: EdgeInsets.fromLTRB(0,0,0,0),
                         padding: EdgeInsets.all(0),
                         child: Container(
@@ -126,3 +128,4 @@ class HomeAppBar extends SliverPersistentHeaderDelegate {
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;
 }
+

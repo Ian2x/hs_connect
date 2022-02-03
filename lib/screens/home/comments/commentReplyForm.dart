@@ -16,6 +16,7 @@ class CommentReplyForm extends StatefulWidget {
   final bool isReply;
   final DocumentReference? commentReference;
   final VoidDocParamFunction switchFormBool;
+  final FocusNode focusNode;
 
   CommentReplyForm({Key? key,
     required this.currUserRef,
@@ -23,6 +24,7 @@ class CommentReplyForm extends StatefulWidget {
     required this.isReply,
     required this.switchFormBool,
     required this.commentReference,
+    required this.focusNode,
   }) : super(key: key);
 
   @override
@@ -30,7 +32,6 @@ class CommentReplyForm extends StatefulWidget {
 }
 
 class _CommentReplyFormState extends State<CommentReplyForm> {
-  late FocusNode myFocusNode;
   final _formKey = GlobalKey<FormState>();
 
   void handleError(err) {
@@ -59,17 +60,9 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
   @override
   void initState() {
     super.initState();
-    myFocusNode = FocusNode();
     if (mounted) setState(() {
       _comments = CommentsDatabaseService(currUserRef: widget.currUserRef, postRef: widget.post.postRef);
     });
-  }
-
-  @override
-  void dispose() {
-    // Clean up the focus node when the Form is disposed.
-    myFocusNode.dispose();
-    super.dispose();
   }
 
   void onSubmit() async {
@@ -132,7 +125,7 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
         child: TextFormField(
           maxLines: null,
           initialValue: '',
-          focusNode: myFocusNode,
+          focusNode: widget.focusNode,
           /*onFieldSubmitted: (value) {
             // was working on submitting upon "enter" key press, but probably not necessary/wanted
             onSubmit();
@@ -144,7 +137,7 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
               isReply: widget.isReply,
               onPressed: () async {
                 onSubmit();
-              }, isFocused: myFocusNode.hasFocus),
+              }, isFocused: widget.focusNode.hasFocus),
           validator:
             widget.isReply!= false ? (val) {
                 if (val == null) return 'Write a reply...';
