@@ -6,14 +6,15 @@ import 'package:hs_connect/screens/home/postView/postCard.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pixels.dart';
+import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 
 class DomainFeed extends StatefulWidget {
   final UserData currUser;
-  final Key pagedListViewKey;
+  final bool isDomain;
 
-  const DomainFeed({Key? key, required this.currUser, required this.pagedListViewKey}) : super(key: key);
+  const DomainFeed({Key? key, required this.currUser, required this.isDomain}) : super(key: key);
 
   @override
   _DomainFeedState createState() => _DomainFeedState();
@@ -21,7 +22,7 @@ class DomainFeed extends StatefulWidget {
 
 class _DomainFeedState extends State<DomainFeed> with AutomaticKeepAliveClientMixin<DomainFeed>{
   @override
-  bool get wantKeepAlive => false;
+  bool get wantKeepAlive => true;
 
   static const _pageSize = nextPostsFetchSize;
 
@@ -32,7 +33,6 @@ class _DomainFeedState extends State<DomainFeed> with AutomaticKeepAliveClientMi
 
   @override
   void initState() {
-    print('re-initing');
     _posts = PostsDatabaseService(currUserRef: widget.currUser.userRef);
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
@@ -63,6 +63,9 @@ class _DomainFeedState extends State<DomainFeed> with AutomaticKeepAliveClientMi
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+    if (!widget.isDomain) return Loading();
+
     final hp = Provider.of<HeightPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
 
@@ -75,7 +78,6 @@ class _DomainFeedState extends State<DomainFeed> with AutomaticKeepAliveClientMi
             ),
         child: PagedListView<DocumentSnapshot?, Post>(
           pagingController: _pagingController,
-          key: widget.pagedListViewKey,
           physics: AlwaysScrollableScrollPhysics(),
           padding: EdgeInsets.zero,
           builderDelegate: PagedChildBuilderDelegate<Post>(

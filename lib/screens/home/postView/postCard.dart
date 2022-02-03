@@ -121,8 +121,10 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
+    final leftRightMargin = 8*wp;
     final colorScheme = Theme.of(context).colorScheme;
 
     if (group==null || username==null) {
@@ -158,10 +160,10 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
           //if border then ShapeDecoration
           color: colorScheme.surface,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12 * hp)),
-          margin: EdgeInsets.fromLTRB(8 * wp, 4 * hp, 8 * wp, 4*hp),
+          margin: EdgeInsets.fromLTRB(leftRightMargin, 4 * hp, leftRightMargin, 4*hp),
           elevation: 0,
           child: Container(
-              padding: EdgeInsets.fromLTRB(2 * wp, 2 * hp, 5 * wp, 5 * hp),
+              padding: EdgeInsets.fromLTRB(0*wp, 2 * hp, 0 * wp, 5 * hp),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -213,7 +215,7 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                             ),
                             overflow: TextOverflow.ellipsis, // default is .clip
                             maxLines: 3),
-                        widget.post.mediaURL != null ? ImageContainer(imageString: widget.post.mediaURL!)
+                        widget.post.mediaURL != null ? ImageContainer(imageString: widget.post.mediaURL!, containerWidth: MediaQuery.of(context).size.width-2*leftRightMargin, hp: hp,)
                             : Container(),
                         poll != null ? PollView(poll: poll!, currUserRef: widget.currUserRef, post: widget.post): Container(),
                         Row(

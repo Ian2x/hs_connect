@@ -22,6 +22,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   bool isDomain = true;
   late TabController tabController;
+  ScrollController scrollController = ScrollController();
   var top = 0.0;
 
   @override
@@ -33,6 +34,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           isDomain = tabController.index == 0;
         });
       }
+      scrollController.jumpTo(0);
     });
     super.initState();
   }
@@ -40,6 +42,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   void dispose() {
     tabController.dispose();
+    scrollController.dispose();
     super.dispose();
   }
 
@@ -57,6 +60,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         children: <Widget>[
           NestedScrollView(
             floatHeaderSlivers: true,
+            controller: scrollController,
             headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
               return [
                 SliverPersistentHeader(
@@ -68,11 +72,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             },
             body: TabBarView(
               children: [
-                DomainFeed(currUser: userData),
-                PublicFeed(currUser: userData),
+                DomainFeed(currUser: userData, isDomain: isDomain),
+                PublicFeed(currUser: userData, isDomain: isDomain),
               ],
               controller: tabController,
-              physics: BouncingScrollPhysics(),
+              physics: AlwaysScrollableScrollPhysics(),
             ),
           ),
         ],

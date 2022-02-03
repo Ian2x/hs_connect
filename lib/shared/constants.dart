@@ -35,7 +35,7 @@ const initialPostsFetchSize = 5;
 const nextPostsFetchSize = 5;
 
 const defaultProfilePic = AssetImage('assets/blankProfile.png');
-const defaultGroupPic = AssetImage('assets/logo1background.png');
+const defaultGroupPic = AssetImage('assets/defaultgroupimage1.png');
 
 const bottomGradientThickness = 1.5;
 const topGradientThickness = 1.5;

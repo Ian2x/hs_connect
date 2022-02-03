@@ -84,14 +84,14 @@ class ThemeNotifier with ChangeNotifier {
 
   ThemeNotifier(BuildContext context) {
     var brightness = SchedulerBinding.instance?.window.platformBrightness;
-    _themeData = brightness == Brightness.dark ? darkTheme : lightTheme;
+    this._themeData = brightness == Brightness.dark ? darkTheme : lightTheme;
+    notifyListeners();
 
     MyStorageManager.readData('themeMode').then((value) {
-      var themeMode = value;
-      if (themeMode == 'light') {
+      if (value == 'light') {
         this._themeData = lightTheme;
         notifyListeners();
-      } else if (themeMode == 'dark'){
+      } else if (value == 'dark'){
         this._themeData = darkTheme;
         notifyListeners();
       }
