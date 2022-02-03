@@ -11,11 +11,10 @@ PreferredSizeWidget activityAppBar({required BuildContext context, required bool
   final colorScheme = Theme.of(context).colorScheme;
 
   final safeAreaHeight = MediaQuery.of(context).padding.top;
-  final temp = HomeAppBar.expandedHeight - safeAreaHeight;
 
 
   return PreferredSize(
-    preferredSize: Size.fromHeight(temp),
+    preferredSize: Size.fromHeight(90*hp),
     child: Container(
       padding: EdgeInsets.only(top: safeAreaHeight),
       color: colorScheme.surface,
@@ -32,7 +31,7 @@ PreferredSizeWidget activityAppBar({required BuildContext context, required bool
                       style: Theme.of(context)
                           .textTheme
                           .headline4
-                          ?.copyWith(fontSize: 24, fontWeight: FontWeight.w600, letterSpacing: 1))
+                          ?.copyWith(fontSize: 22, fontWeight: FontWeight.w600, letterSpacing: 1))
                 ],
               )
             ],

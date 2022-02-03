@@ -30,7 +30,10 @@ class PostCard extends StatefulWidget {
   _PostCardState createState() => _PostCardState();
 }
 
-class _PostCardState extends State<PostCard> {
+class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<PostCard>{
+  @override
+  bool get wantKeepAlive => true;
+
   String? username;
   Group? group;
   late bool likeStatus;
@@ -39,7 +42,6 @@ class _PostCardState extends State<PostCard> {
   late int dislikeCount;
   UserData? fetchUserData;
   Poll? poll;
-
 
   @override
   void initState() {
@@ -119,12 +121,11 @@ class _PostCardState extends State<PostCard> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
+    final leftRightMargin = 8*wp;
     final colorScheme = Theme.of(context).colorScheme;
-
-    final leftRightMargin=8*wp;
-
 
     if (group==null || username==null) {
       return Container();
@@ -162,109 +163,112 @@ class _PostCardState extends State<PostCard> {
           margin: EdgeInsets.fromLTRB(leftRightMargin, 4 * hp, leftRightMargin, 4*hp),
           elevation: 0,
           child: Container(
-              padding: EdgeInsets.fromLTRB(0 * wp, 2 * hp, 0 * wp, 5 * hp),
-              child: Column(
+              padding: EdgeInsets.fromLTRB(0*wp, 2 * hp, 0 * wp, 5 * hp),
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Center(
-                    child: Row(
+                  Flexible(
+                    //Otherwise horizontal renderflew of row
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(width: 10 * wp),
-                        Chip(
-                          padding: EdgeInsets.all(0),
-                          backgroundColor: colorScheme.surface,
-                          avatar: Container(
-                            height: 35,
-                            width: 35,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(100),
-                                color: colorScheme.primary,
-                                border: Border.all(
-                                    width: 0.15*hp
+                        Row(
+                          children: [
+                            SizedBox(width:10*wp),
+                            Chip(
+                              padding: EdgeInsets.all(0),
+                              backgroundColor: colorScheme.surface,
+                              avatar: Container(
+                                height: 35,
+                                width: 35,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    color: colorScheme.primary,
+                                    border: Border.all(
+                                        width: 0.15*hp
+                                    )
+                                ),
+                                child: CircleAvatar(
+                                  backgroundColor: colorScheme.surface,
+                                  backgroundImage: ImageStorage().groupImageProvider(group!=null ? group!.image : null),
+                                ),
+                              ),
+                              label: Text(
+                                group!.name,
+                                  style: Theme.of(context).textTheme.subtitle2?.copyWith
+                                    (fontSize: 14 * hp, fontWeight: FontWeight.w500),
                                 )
                             ),
-                            child: CircleAvatar(
-                              backgroundColor: colorScheme.surface,
-                              backgroundImage: ImageStorage().groupImageProvider(group!=null ? group!.image : null),
+                            Text(
+                              " • " + convertTime(widget.post.createdAt.toDate()),
+                              style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                                color: colorScheme.primary,
+                              ),
                             ),
-                          ),
-                          label: Text(
-                            group!.name,
-                              style: Theme.of(context).textTheme.subtitle2?.copyWith
-                                (fontSize: 14 * hp, fontWeight: FontWeight.w500),
-                            )
+                            Spacer(),
+                          ],
                         ),
-                        Text(
-                          " • " + convertTime(widget.post.createdAt.toDate()),
-                          style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                            color: colorScheme.primary,
-                          ),
+                        Row(
+                          children: [
+                            SizedBox(width:10*wp),
+                            Text(
+                        widget.post.title,
+                            style: Theme.of(context).textTheme.headline6?.copyWith(
+                              fontSize:16 * hp, fontWeight: FontWeight.w500,
+                            ),
+                            overflow: TextOverflow.ellipsis, // default is .clip
+                            maxLines: 3),
+                          ],
                         ),
-                        Spacer(),
-                      ],
+                        widget.post.mediaURL != null ? ImageContainer(imageString: widget.post.mediaURL!, containerWidth: MediaQuery.of(context).size.width-2*leftRightMargin, hp: hp,)
+                            : Container(),
+                        poll != null ?
+                          Row(
+                            children: [
+                              SizedBox(width:10*wp),
+                              PollView(poll: poll!, currUserRef: widget.currUserRef, post: widget.post)
+                            ],
+                          ): Container(),
+                        Row(
+                          //Icon Row
+                          children: [
+                            SizedBox(width: 10 * wp),
+                            Text(
+                              (widget.post.numComments + widget.post.numReplies).toString() + " Comments",
+                              style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                                  fontSize: 14 * hp, fontWeight: FontWeight.normal, color: colorScheme.primary),
+                            ),
+                            IconButton(
+                              constraints: BoxConstraints(),
+                              splashRadius: .1,
+                              icon: Icon(Icons.more_horiz, size: 20 * hp, color: colorScheme.primary),
+                              onPressed: () {
+                                showModalBottomSheet(
+                                    context: context,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.vertical(
+                                          top: Radius.circular(20 * hp),
+                                        )),
+                                    builder: (context) => pixelProvider(context,
+                                        child: ReportSheet(
+                                          reportType: ReportType.post,
+                                          entityRef: widget.post.postRef,
+                                        )));
+                              },
+                            ),
+                            Spacer(),
+                            LikeDislikePost(
+                                currUserRef: widget.currUserRef,
+                                post: widget.post,
+                                postLikesManager: postLikesManager
+                            ),
+                            SizedBox(width: 10*hp),
+                          ],
+                        )
+                      ], //Column Children ARRAY
                     ),
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(width: 10 * wp),
-                      Text(
-                          widget.post.title,
-                          style: Theme.of(context).textTheme.headline6?.copyWith(
-                            fontSize:16 * hp, fontWeight: FontWeight.w500,
-                          ),
-                          overflow: TextOverflow.ellipsis, // default is .clip
-                          maxLines: 3),
-                    ],
-                  ),
-                  widget.post.mediaURL != null ? ImageContainer(
-                      hp:hp,
-                      imageString: widget.post.mediaURL!,
-                      containerWidth: MediaQuery.of(context).size.width-2*leftRightMargin,
                   )
-                      : Container(),
-                  poll != null ? Row(
-                    children: [
-                      SizedBox(width:10*wp),
-                      PollView(poll: poll!, currUserRef: widget.currUserRef, post: widget.post),
-                    ],
-                  ): Container(),
-                  Row(
-                    //Icon Row
-                    children: [
-                      SizedBox(width: 10 * wp),
-                      Text(
-                        (widget.post.numComments + widget.post.numReplies).toString() + " Comments",
-                        style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                            fontSize: 14 * hp, fontWeight: FontWeight.normal, color: colorScheme.primary),
-                      ),
-                      IconButton(
-                        constraints: BoxConstraints(),
-                        splashRadius: .1,
-                        icon: Icon(Icons.more_horiz, size: 20 * hp, color: colorScheme.primary),
-                        onPressed: () {
-                          showModalBottomSheet(
-                              context: context,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(20 * hp),
-                                  )),
-                              builder: (context) => pixelProvider(context,
-                                  child: ReportSheet(
-                                    reportType: ReportType.post,
-                                    entityRef: widget.post.postRef,
-                                  )));
-                        },
-                      ),
-                      Spacer(),
-                      LikeDislikePost(
-                          currUserRef: widget.currUserRef,
-                          post: widget.post,
-                          postLikesManager: postLikesManager
-                      ),
-                      SizedBox(width: 10*hp),
-                    ],
-                  )
-                ], //Column Children ARRAY
+                ],
               ))),
     );
   }
