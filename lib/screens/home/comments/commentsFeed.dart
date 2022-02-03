@@ -102,7 +102,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
                         currUserRef: userData.userRef,
                       );
                     } else if (index == 1) {
-                      return Divider(thickness: 3 * hp, color: colorScheme.background, height: 10 * hp);
+                      return Divider(thickness: 5 * hp, color: colorScheme.background, height: 10 * hp);
                     } else if (index == comments.length+2){
                       return SizedBox(height: 70*hp);
                     } else {

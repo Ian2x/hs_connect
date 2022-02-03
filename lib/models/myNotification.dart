@@ -177,7 +177,7 @@ class MyNotification {
       case MyNotificationType.fromMe:
         return extraData!=null ? extraData! : 'ummm something went wrong :/';
       case MyNotificationType.featuredPost:
-        return extraData!=null ? extraData! : 'ummm something went wrong :/';;
+        return extraData!=null ? extraData! : 'ummm something went wrong :/';
     }
   }
 }

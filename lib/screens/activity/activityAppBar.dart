@@ -24,7 +24,7 @@ PreferredSizeWidget activityAppBar({required BuildContext context, required bool
           Spacer(),
           Row(
             children: <Widget>[
-              SizedBox(width: 18*wp),
+              SizedBox(width: 30*wp),
               Column(
                 children: <Widget>[
                   SizedBox(height: 15*hp),

@@ -272,7 +272,10 @@ class _PostFormState extends State<PostForm> {
                 padding: EdgeInsets.fromLTRB(20*wp, 10*hp, 15*wp, 10*hp),
                 child: Column(children: <Widget>[
                   error != null
-                      ? Text(error!, style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.error))
+                      ? Text(error!, style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.onSurface))
+                      : Container(),
+                  error != null
+                      ? SizedBox(height:10*wp)
                       : Container(),
                   newFile != null
                       ? Semantics(
@@ -283,7 +286,7 @@ class _PostFormState extends State<PostForm> {
                                 if (mounted) {
                                   setState(() => newFile = null);
                                 }
-                              }, height: postPicHeight, width: postPicWidth, buttonSize: 30.0,),
+                              }, height: postPicHeight*hp, width: postPicWidth*wp, buttonSize: 30.0,),
                         )
                       : Container(),
                   TextFormField(
