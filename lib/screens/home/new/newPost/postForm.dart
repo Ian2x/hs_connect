@@ -134,11 +134,12 @@ class _PostFormState extends State<PostForm> {
           key: _formKey,
           child: Column(
             children: <Widget>[
-              SizedBox(height: 55*hp),
+              SizedBox(height: 40*hp),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 //Top ROW
                 children: [
+                  SizedBox(width: 10*wp),
                   TextButton(
                     child: Text("Cancel", style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.primary, fontSize: 18.5)),
                     onPressed: () {
@@ -169,7 +170,7 @@ class _PostFormState extends State<PostForm> {
                         padding: EdgeInsets.fromLTRB(15*wp, 6*hp, 8*wp, 6*hp),
                         decoration: BoxDecoration(
                             border: Border.all(
-                              color: colorScheme.onError,
+                              color: colorScheme.surface,
                               width: 3*hp,
                             ),
                             borderRadius: BorderRadius.circular(10)
@@ -259,16 +260,17 @@ class _PostFormState extends State<PostForm> {
                       }
                     },
                   ),
+                  SizedBox(width: 10*wp),
                 ],
               ),
+              Divider(height: 4*hp, indent: 0, thickness: .5*hp, color: Theme.of(context).colorScheme.onError),
               Container(
                 //TextInput Container
                 constraints: BoxConstraints(
                   minHeight: phoneHeight * 0.75,
                 ),
-                padding: EdgeInsets.fromLTRB(15*wp, 10*hp, 15*wp, 10*hp),
+                padding: EdgeInsets.fromLTRB(20*wp, 10*hp, 15*wp, 10*hp),
                 child: Column(children: <Widget>[
-                  SizedBox(height: 14*hp),
                   error != null
                       ? Text(error!, style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.error))
                       : Container(),
@@ -289,7 +291,7 @@ class _PostFormState extends State<PostForm> {
                     maxLines: null,
                     autocorrect: false,
                     decoration: InputDecoration(
-                        hintStyle: Theme.of(context).textTheme.headline5,
+                        hintStyle: Theme.of(context).textTheme.headline5?.copyWith(color: colorScheme.primaryVariant),
                         border: InputBorder.none,
                         hintText: "What's up?", ),
                     onChanged: (val) {
@@ -347,70 +349,74 @@ class _PostFormState extends State<PostForm> {
           child: GestureDetector(
             onTap: ()=>dismissKeyboard(context),
             child: Container(
-              width:MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
-                color: colorScheme.surface,
-                border: Border(
-                  top: BorderSide(width: 1*hp, color: colorScheme.onError),
+                gradient: Gradients.blueRed(
+                  begin: Alignment.bottomLeft, end: Alignment.topRight,
                 ),
               ),
-              child: Row(children: <Widget>[
-                picPickerButton(
-                    iconSize: 30*hp,
-                    color: newFile == null ? colorScheme.primary : colorScheme.primaryVariant,
-                    setPic: ((File? f) {
-                      if (mounted) {
-                        setState(() {
-                          newFile = f;
-                          poll = null;
-                        });
-                      }
-                    }), context: context, maxHeight: postPicHeight, maxWidth: postPicWidth),
-                SizedBox(width: 2 * wp),
-                IconButton(
-                    onPressed: () {
-                      if (mounted) {
-                        setState(() {
-                          pollChoices = [];
-                          pollChoices!.add('');
-                          pollChoices!.add('');
-                          poll = NewPoll(onDeletePoll: () {
-                            if (mounted) {
-                              setState(() {
-                                poll = null;
-                                pollChoices = null;
-                                if (error == emptyPollChoiceError) {
-                                  error = null;
-                                }
-                              });
-                            }
-                          }, onUpdatePoll: (int index, String newChoice) {
-                            if (mounted) {
-                              setState(() {
-                                pollChoices![index] = newChoice;
-                                if (error == emptyPollChoiceError) {
-                                  for (String choice in pollChoices!) {
-                                    if (choice == '') return;
-                                  }
-                                }
-                                error = null;
-                              });
-                            }
-                          }, onAddPollChoice: () {
-                            if (mounted) {
-                              setState(() {
-                                pollChoices!.add('');
-                              });
-                            }
+              padding: EdgeInsets.only(top: bottomGradientThickness*hp),
+              width:MediaQuery.of(context).size.width,
+              child: Container(
+                color: colorScheme.surface,
+                child: Row(children: <Widget>[
+                  SizedBox(width: 10*wp),
+                  picPickerButton(
+                      iconSize: 30*hp,
+                      color: newFile == null ? colorScheme.primary : colorScheme.primaryVariant,
+                      setPic: ((File? f) {
+                        if (mounted) {
+                          setState(() {
+                            newFile = f;
+                            poll = null;
                           });
-                          newFile = null;
-                        });
-                      }
-                    },
-                    icon: Icon(Icons.assessment,
-                        size: 30*hp, color: poll == null ? colorScheme.primary : colorScheme.primaryVariant),
-                )
-              ]),
+                        }
+                      }), context: context, maxHeight: postPicHeight, maxWidth: postPicWidth),
+                  SizedBox(width: 2 * wp),
+                  IconButton(
+                      onPressed: () {
+                        if (mounted) {
+                          setState(() {
+                            pollChoices = [];
+                            pollChoices!.add('');
+                            pollChoices!.add('');
+                            poll = NewPoll(onDeletePoll: () {
+                              if (mounted) {
+                                setState(() {
+                                  poll = null;
+                                  pollChoices = null;
+                                  if (error == emptyPollChoiceError) {
+                                    error = null;
+                                  }
+                                });
+                              }
+                            }, onUpdatePoll: (int index, String newChoice) {
+                              if (mounted) {
+                                setState(() {
+                                  pollChoices![index] = newChoice;
+                                  if (error == emptyPollChoiceError) {
+                                    for (String choice in pollChoices!) {
+                                      if (choice == '') return;
+                                    }
+                                  }
+                                  error = null;
+                                });
+                              }
+                            }, onAddPollChoice: () {
+                              if (mounted) {
+                                setState(() {
+                                  pollChoices!.add('');
+                                });
+                              }
+                            });
+                            newFile = null;
+                          });
+                        }
+                      },
+                      icon: Icon(Icons.assessment,
+                          size: 30*hp, color: poll == null ? colorScheme.primary : colorScheme.primaryVariant),
+                  )
+                ]),
+              ),
             ),
           )),
     ]);

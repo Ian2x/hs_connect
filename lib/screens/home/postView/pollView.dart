@@ -120,10 +120,14 @@ class PollChoiceView extends StatefulWidget {
 class _PollChoiceViewState extends State<PollChoiceView> {
   Offset offset = Offset.zero;
 
+  late String displayPercent;
+
   @override
   void initState() {
     setState(() => offset += const Offset(100, 0));
+     displayPercent= (widget.votePercentage*100).toInt().toString() + "%";
     super.initState();
+
   }
 
   @override
@@ -174,7 +178,7 @@ class _PollChoiceViewState extends State<PollChoiceView> {
                   padding: EdgeInsets.only(top: 7*hp),
                   width: 75*wp,
                   child: Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
-                    Text(widget.numChoiceVotes.toString() + '   |', style: Theme.of(context).textTheme.bodyText2)
+                    Text(displayPercent + '   |', style: Theme.of(context).textTheme.bodyText2)
                   ])),
             ),
             AnimatedOpacity(
