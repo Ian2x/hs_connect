@@ -43,6 +43,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
+
+
+  final PageStorageBucket _bucket = PageStorageBucket();
+
   @override
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
@@ -56,22 +60,26 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       body: Stack(
         children: <Widget>[
           NestedScrollView(
+            floatHeaderSlivers: true,
             headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
               return [
                 SliverPersistentHeader(
                   delegate: HomeAppBar(tabController: tabController, userData: userData, isDomain: isDomain),
-                  pinned: false,
-                  floating: false,
-                )
+                  pinned: true,
+                  floating: true,
+                ),
               ];
             },
-            body: TabBarView(
-              children: [
-                DomainFeed(currUser: userData),
-                PublicFeed(currUser: userData),
-              ],
-              controller: tabController,
-              physics: BouncingScrollPhysics(),
+            body: PageStorage(
+              bucket: _bucket,
+              child: TabBarView(
+                children: [
+                  DomainFeed(currUser: userData, pagedListViewKey: PageStorageKey('domainFeed')),
+                  PublicFeed(currUser: userData, pagedListViewKey: PageStorageKey('publicFeed')),
+                ],
+                controller: tabController,
+                physics: BouncingScrollPhysics(),
+              ),
             ),
           ),
         ],

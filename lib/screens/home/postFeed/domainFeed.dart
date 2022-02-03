@@ -11,14 +11,17 @@ import 'package:provider/provider.dart';
 
 class DomainFeed extends StatefulWidget {
   final UserData currUser;
+  final Key pagedListViewKey;
 
-  const DomainFeed({Key? key, required this.currUser}) : super(key: key);
+  const DomainFeed({Key? key, required this.currUser, required this.pagedListViewKey}) : super(key: key);
 
   @override
   _DomainFeedState createState() => _DomainFeedState();
 }
 
-class _DomainFeedState extends State<DomainFeed> {
+class _DomainFeedState extends State<DomainFeed> with AutomaticKeepAliveClientMixin<DomainFeed>{
+  @override
+  bool get wantKeepAlive => false;
 
   static const _pageSize = nextPostsFetchSize;
 
@@ -29,6 +32,7 @@ class _DomainFeedState extends State<DomainFeed> {
 
   @override
   void initState() {
+    print('re-initing');
     _posts = PostsDatabaseService(currUserRef: widget.currUser.userRef);
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
@@ -71,6 +75,7 @@ class _DomainFeedState extends State<DomainFeed> {
             ),
         child: PagedListView<DocumentSnapshot?, Post>(
           pagingController: _pagingController,
+          key: widget.pagedListViewKey,
           physics: AlwaysScrollableScrollPhysics(),
           padding: EdgeInsets.zero,
           builderDelegate: PagedChildBuilderDelegate<Post>(

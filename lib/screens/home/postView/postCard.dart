@@ -30,7 +30,10 @@ class PostCard extends StatefulWidget {
   _PostCardState createState() => _PostCardState();
 }
 
-class _PostCardState extends State<PostCard> {
+class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<PostCard>{
+  @override
+  bool get wantKeepAlive => true;
+
   String? username;
   Group? group;
   late bool likeStatus;

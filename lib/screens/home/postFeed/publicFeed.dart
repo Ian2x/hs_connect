@@ -11,15 +11,18 @@ import 'package:provider/provider.dart';
 
 class PublicFeed extends StatefulWidget {
   final UserData currUser;
+  final Key pagedListViewKey;
 
-  const PublicFeed({Key? key, required this.currUser})
+  const PublicFeed({Key? key, required this.currUser, required this.pagedListViewKey})
       : super(key: key);
 
   @override
   _PublicFeedState createState() => _PublicFeedState();
 }
 
-class _PublicFeedState extends State<PublicFeed> {
+class _PublicFeedState extends State<PublicFeed> with AutomaticKeepAliveClientMixin<PublicFeed>{
+  @override
+  bool get wantKeepAlive => false;
 
   static const _pageSize = nextPostsFetchSize;
 
@@ -71,6 +74,7 @@ class _PublicFeedState extends State<PublicFeed> {
             ),
         child: PagedListView<DocumentSnapshot?, Post>(
           pagingController: _pagingController,
+          key: widget.pagedListViewKey,
           physics: AlwaysScrollableScrollPhysics(),
           padding: EdgeInsets.zero,
           builderDelegate: PagedChildBuilderDelegate<Post>(

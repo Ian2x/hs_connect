@@ -19,16 +19,14 @@ void main() async {
     storageBucket: '<your-storage-bucket-url>'
   };
    */
-  FlutterNativeSplash.removeAfter(initialization);
+  FlutterNativeSplash.removeAfter(launchDelay);
 
   await Firebase.initializeApp();
   runApp(MyApp());
 }
 
-void initialization(BuildContext context) async {
-  await Future.delayed(const Duration(milliseconds: 3000), () {
-    print('after 3 seconds');
-  });
+void launchDelay(BuildContext context) async {
+  await Future.delayed(const Duration(milliseconds: 500), () {});
 }
 
 class MyApp extends StatelessWidget {
