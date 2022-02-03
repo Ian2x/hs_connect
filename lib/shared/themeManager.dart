@@ -6,7 +6,7 @@ import 'package:hs_connect/shared/tools/createMaterialColor.dart';
 class ThemeNotifier with ChangeNotifier {
 
   static const darkThemeOnSurface = Color(0xffdbdbdb);
-  final darkTheme = ThemeData(
+  static final darkTheme = ThemeData(
     brightness: Brightness.dark,
     backgroundColor: Color(0xff2d2d2d),
     // background
@@ -32,7 +32,7 @@ class ThemeNotifier with ChangeNotifier {
   );
 
   static const lightThemeOnSurface = Color(0xFF000000);
-  final lightTheme = ThemeData(
+  static final lightTheme = ThemeData(
     brightness: Brightness.light,
     backgroundColor: Color(0xFFf2f2f2),
     // background
@@ -83,16 +83,18 @@ class ThemeNotifier with ChangeNotifier {
   ThemeData getTheme() => _themeData;
 
   ThemeNotifier(BuildContext context) {
-    var brightness = SchedulerBinding.instance!.window.platformBrightness;
-    _themeData = brightness == Brightness.light ? lightTheme : darkTheme;
+    var brightness = SchedulerBinding.instance?.window.platformBrightness;
+    _themeData = brightness == Brightness.dark ? darkTheme : lightTheme;
+
     MyStorageManager.readData('themeMode').then((value) {
-      var themeMode = value ?? 'light';
+      var themeMode = value;
       if (themeMode == 'light') {
         this._themeData = lightTheme;
-      } else {
+        notifyListeners();
+      } else if (themeMode == 'dark'){
         this._themeData = darkTheme;
+        notifyListeners();
       }
-      notifyListeners();
     });
   }
 

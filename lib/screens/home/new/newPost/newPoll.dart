@@ -102,6 +102,7 @@ class _NewPollState extends State<NewPoll> {
                       ),
                     )),
                     child: TextFormField(
+                        autocorrect: false,
                         inputFormatters: [
                           LengthLimitingTextInputFormatter(25),
                         ],

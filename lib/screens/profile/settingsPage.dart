@@ -172,20 +172,23 @@ class _SettingsPageState extends State<SettingsPage> {
                             if (mounted) {
                               setState(() {
                                 feedbackLoading = true;
-                                _feedbackText = '';
                               });
                               }
                             }
                             await FirebaseFirestore.instance.collection(C.feedback).add({
                               C.feedbackText: _feedbackText,
-                              C.creatorRef: widget.currUserData.userRef
+                              C.fundamentalName: widget.currUserData.fundamentalName,
+                              C.creatorRef: widget.currUserData.userRef,
+                              C.createdAt: Timestamp.now()
                             });
                             if (mounted) {
                               setState(() {
                                 feedbackLoading = false;
+                                //_feedbackText = '';
                               });
                             }
-                          }
+                          _feedbackFormKey.currentState?.reset();
+                        }
                       )
                     ],
                   ),

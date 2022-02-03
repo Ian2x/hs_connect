@@ -116,7 +116,7 @@ class _ReportFormState extends State<ReportForm> {
               padding: EdgeInsets.fromLTRB(35*wp, 0, 35*wp, 30*hp),
               child: Text(
                   'Thank you for reporting harmful content. You are making this platform a better place. We will review your report very soon.',
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 19),
                   textAlign: TextAlign.center),
             ),
             Spacer()

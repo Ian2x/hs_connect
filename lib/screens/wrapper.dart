@@ -18,28 +18,10 @@ class Wrapper extends StatefulWidget {
 
 class _WrapperState extends State<Wrapper> {
 
-  bool loadTimed = false;
-
-  @override
-  void initState() {
-    Timer(Duration(milliseconds: 1000), () {if (mounted) {setState(()=>loadTimed = true);}});
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User?>(context);
     final userData = Provider.of<UserData?>(context);
-    if (!loadTimed) return Scaffold(
-      backgroundColor: Colors.green,
-        body: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            gradient: Gradients.blueRed(),
-          ),
-        ),
-    );
     if (user == null || userData == null || user.email==null || !user.email!.endsWith('@ianeric.com')) {
       return pixelProvider(context, child: PreviewPage());
     } else {

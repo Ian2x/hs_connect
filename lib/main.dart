@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:hs_connect/main2.dart';
 import 'package:hs_connect/services/auth.dart';
 import 'package:hs_connect/shared/themeManager.dart';
@@ -16,10 +19,17 @@ void main() async {
     storageBucket: '<your-storage-bucket-url>'
   };
    */
+  FlutterNativeSplash.removeAfter(initialization);
+
   await Firebase.initializeApp();
   runApp(MyApp());
 }
 
+void initialization(BuildContext context) async {
+  await Future.delayed(const Duration(milliseconds: 3000), () {
+    print('after 3 seconds');
+  });
+}
 
 class MyApp extends StatelessWidget {
   @override
