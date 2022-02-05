@@ -81,16 +81,16 @@ class _WaitVerificationState extends State<WaitVerification> {
                 SizedBox(height: 15*hp),
                 Text(
                   'We sent you a link',
-                  style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 24*hp, color: Colors.black //TODO: Convertto HP
+                  style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 24*hp, color: Colors.black
                   ),
                 ),
-                SizedBox(height:25*hp),
+                SizedBox(height:15*hp),
                 Center(
-                  child:Text("Check the link in your school email.",
-                      style: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 16)),
+                  child:Text("Check the link in your school email.\nAfter, you'll be automatically redirected.", textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 15*hp, height: 1.5)),
                 ),
                 SizedBox(height:65 *hp),
-                MyOutlinedButton(  //TODO: Add Gmail LInk
+                MyOutlinedButton(
                   onPressed: () {},
                   gradient: Gradients.blueRed(begin: Alignment.topCenter, end: Alignment.bottomCenter),
                   borderRadius: 20.0,
@@ -106,14 +106,14 @@ class _WaitVerificationState extends State<WaitVerification> {
                       children: [
                         GradientText(
                           "Your email is for verification only.",
-                          style: ThemeText.inter(fontWeight: FontWeight.w600, fontSize: 16*hp, //TODO: Convertto HP
+                          style: ThemeText.inter(fontWeight: FontWeight.w600, fontSize: 16*hp,
                           ),
                           gradient: Gradients.blueRed(),
                         ),
                         SizedBox(height:15 *hp),
                         GradientText(
                           " It'll never be linked to your account.",
-                          style: ThemeText.inter(fontWeight: FontWeight.w600, fontSize: 14.8*hp, //TODO: Convertto HP
+                          style: ThemeText.inter(fontWeight: FontWeight.w600, fontSize: 14.8*hp,
                           ),
                           gradient: Gradients.blueRed(),
                         ),
@@ -121,7 +121,7 @@ class _WaitVerificationState extends State<WaitVerification> {
                     ),
                   ),
                 ),
-                SizedBox(height:210*hp),
+                SizedBox(height:180*hp),
                 TextButton(
                   onPressed:(){
                     showModalBottomSheet(

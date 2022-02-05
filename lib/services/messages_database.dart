@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/message.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
-import 'package:async/async.dart' show StreamGroup;
 import 'package:hs_connect/shared/constants.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -13,9 +12,9 @@ class MessagesDatabaseService {
   MessagesDatabaseService({required this.currUserRef, this.otherUserRef});
 
   // collection reference
-  final CollectionReference messagesCollection = FirebaseFirestore.instance.collection(C.messages);
+  static final CollectionReference messagesCollection = FirebaseFirestore.instance.collection(C.messages);
 
-  ImageStorage _images = ImageStorage();
+  static final ImageStorage _images = ImageStorage();
 
 
   Future _updateUserMessages({required DocumentReference userRef, required DocumentReference otherUserRef, Timestamp? lastMessage, Timestamp? lastViewed}) async {

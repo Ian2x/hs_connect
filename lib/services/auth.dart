@@ -2,9 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:tuple/tuple.dart';
 
 class AuthService {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // auth change home stream
   Stream<User?> get user {
@@ -34,8 +35,8 @@ class AuthService {
       // create a document for the home with the uid
       final _userDataDatabaseService =
           UserDataDatabaseService(currUserRef: FirebaseFirestore.instance.collection(C.userData).doc(user.uid));
-      await _userDataDatabaseService.initUserData(domain, username, domainEmail);
-      return user;
+      String fundamentalName = await _userDataDatabaseService.initUserData(domain, username, domainEmail);
+      return Tuple2<User?, String>(user, fundamentalName);
     } catch (e) {
       return e;
     }

@@ -19,5 +19,5 @@ class MyDivider extends Divider implements PreferredSizeWidget {
   }
 
   @override
-  late Size preferredSize;
+  late final Size preferredSize;
 }

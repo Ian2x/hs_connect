@@ -46,7 +46,6 @@ class _RepliesFeedState extends State<RepliesFeed> {
                   if (index==replies.length-1){
                     isLast=true;
                   }
-                // when scroll up/down, fires once
                   return Center(
                       child: ReplyCard(
                     isLast: isLast,

@@ -4,7 +4,7 @@ import 'package:hs_connect/shared/constants.dart';
 
 class DomainsDataDatabaseService {
   // collection reference
-  final CollectionReference domainsDataDatabaseCollection = FirebaseFirestore.instance.collection(C.domainsData);
+  static final CollectionReference domainsDataDatabaseCollection = FirebaseFirestore.instance.collection(C.domainsData);
 
   // get group data from groupRef
   Future<DomainData?> getDomainData({required String domain}) async {

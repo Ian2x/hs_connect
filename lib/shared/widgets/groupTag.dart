@@ -38,7 +38,7 @@ class GroupTag extends StatelessWidget {
             padding: padding,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(borderRadius),
-              color: Theme.of(context).colorScheme.surface,
+              color: colorScheme.surface,
             ),
             margin: EdgeInsets.all(thickness),
             child: Row(children: <Widget>[

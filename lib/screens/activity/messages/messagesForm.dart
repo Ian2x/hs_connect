@@ -74,7 +74,7 @@ class _MessagesFormState extends State<MessagesForm> {
                               child: DeletableImage(
                                 image: Image.file(File(newFile!.path), fit: BoxFit.scaleDown),
                                 onDelete: () => setPic(null),
-                                buttonSize: 30*hp, height: messagePicHeight, width: messagePicWidth,
+                                buttonSize: 30*hp, height: 400*hp, width: 400*wp,
                               )),
                         ))
                     : Container(),

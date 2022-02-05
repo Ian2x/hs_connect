@@ -8,7 +8,6 @@ import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/animatedSwitch.dart';
 import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
 import 'package:provider/provider.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -102,8 +101,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () async{
-                      if (await canLaunch('https://www.youtube.com/')) {
-                        await launch('https://www.youtube.com/');
+                      if (await canLaunch('https://www.getcircles.com/content')) {
+                        await launch('https://www.getcircles.com/content');
                       }
                     },
                     child: Container(
@@ -122,8 +121,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () async{
-                      if (await canLaunch('https://www.youtube.com/')) {
-                        await launch('https://www.youtube.com/');
+                      if (await canLaunch('https://www.getcircles.com/privacy')) {
+                        await launch('https://www.getcircles.com/privacy');
                       }
                     },
                     child: Container(

@@ -6,20 +6,6 @@ import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/picPickerButton.dart';
 import 'package:provider/provider.dart';
 
-import 'constants.dart';
-
-// used for authentication and profile form
-InputDecoration textInputDecoration({required BuildContext context}) {
-  final wp = MediaQuery.of(context).size.width / numWidthPixels;
-  final colorScheme = Theme.of(context).colorScheme;
-  return InputDecoration(
-    fillColor: colorScheme.surface,
-    filled: true,
-    enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent, width: 2*wp)),
-    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: colorScheme.primary, width: 2*wp)),
-  );
-}
-
 typedef VoidFunction = void Function();
 
 typedef VoidGroupParamFunction = void Function (Group?);
@@ -90,7 +76,7 @@ InputDecoration messageInputDecoration({required VoidFunction onPressed, require
         borderRadius: new BorderRadius.circular(25.7*hp),
         borderSide: new BorderSide(width: 3*wp, color: colorScheme.background)),
     suffixIcon: Row(mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.min, children: <Widget>[
-      picPickerButton(setPic: setPic, iconSize: 16*hp, context: context, maxWidth: messagePicWidth*hp, maxHeight: messagePicHeight*hp),
+      picPickerButton(setPic: setPic, iconSize: 16*hp, context: context, maxWidth: 400*hp, maxHeight: 400*hp),
       IconButton(
           icon: Icon(Icons.send),
           color: colorScheme.onError,

@@ -85,22 +85,6 @@ class PreviewPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                /*Text(
-                  "Learn more about Circle ",
-                  style: ThemeText.inter(fontWeight: FontWeight.w500,
-                      fontSize: 13, color: Colors.white),
-                ),
-                TextButton(
-                  child:Text(
-                    "here",
-                    style: ThemeText.inter(fontWeight: FontWeight.w500,
-                        decoration1: TextDecoration.underline,
-                        fontSize: 13, color: Colors.white),
-                  ),
-                  onPressed: (){
-
-                  },
-                ),*/
                 TextButton(
                   onPressed: (){
                     Navigator.push(
@@ -114,7 +98,6 @@ class PreviewPage extends StatelessWidget {
                     style: ThemeText.inter(fontWeight: FontWeight.w500,
                         fontSize: 16, color: Colors.white),
                   )
-
                 )
               ],
             )

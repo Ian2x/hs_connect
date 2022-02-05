@@ -11,7 +11,6 @@ import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/deletableImage.dart';
-import 'package:hs_connect/shared/widgets/gradientText.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/widgets/myOutlinedButton.dart';
@@ -286,7 +285,7 @@ class _PostFormState extends State<PostForm> {
                                 if (mounted) {
                                   setState(() => newFile = null);
                                 }
-                              }, height: postPicHeight*hp, width: postPicWidth*wp, buttonSize: 30.0,),
+                              }, height: 400*hp, width: 400*wp, buttonSize: 30.0,),
                         )
                       : Container(),
                   TextFormField(
@@ -373,7 +372,7 @@ class _PostFormState extends State<PostForm> {
                             poll = null;
                           });
                         }
-                      }), context: context, maxHeight: postPicHeight, maxWidth: postPicWidth),
+                      }), context: context, maxHeight: 400*hp, maxWidth: 400*wp),
                   SizedBox(width: 2 * wp),
                   IconButton(
                       onPressed: () {

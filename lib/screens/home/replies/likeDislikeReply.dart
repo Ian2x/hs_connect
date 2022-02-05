@@ -6,8 +6,6 @@ import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/arrows_icons.dart';
 import 'package:provider/provider.dart';
 
-const double iconSize = 14;
-
 class LikeDislikeReply extends StatefulWidget {
   final DocumentReference currUserRef;
   final Reply reply;
@@ -23,6 +21,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
   bool dislikeStatus = false;
   int likeCount = 0;
   int dislikeCount = 0;
+  static const double iconSize = 14;
 
   @override
   void initState() {
