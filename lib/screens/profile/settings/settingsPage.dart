@@ -101,8 +101,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () async{
-                      if (await canLaunch('https://www.getcircles.com/content')) {
-                        await launch('https://www.getcircles.com/content');
+                      if (await canLaunch('https://www.getcircles.co/content')) {
+                        await launch('https://www.getcircles.co/content');
                       }
                     },
                     child: Container(
@@ -121,8 +121,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () async{
-                      if (await canLaunch('https://www.getcircles.com/privacy')) {
-                        await launch('https://www.getcircles.com/privacy');
+                      if (await canLaunch('https://www.getcircles.co/privacy')) {
+                        await launch('https://www.getcircles.co/privacy');
                       }
                     },
                     child: Container(
