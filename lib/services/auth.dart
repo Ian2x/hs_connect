@@ -23,7 +23,7 @@ class AuthService {
   }
 
   // register with username & password
-  Future<dynamic> registerWithUsernameAndPassword(String username, String password, String domain) async {
+  Future<dynamic> registerWithUsernameAndPassword(String username, String password, String domain, String domainEmail) async {
     try {
       await _auth.signOut();
       UserCredential userCredential =
@@ -34,7 +34,7 @@ class AuthService {
       // create a document for the home with the uid
       final _userDataDatabaseService =
           UserDataDatabaseService(currUserRef: FirebaseFirestore.instance.collection(C.userData).doc(user.uid));
-      await _userDataDatabaseService.initUserData(domain, username);
+      await _userDataDatabaseService.initUserData(domain, username, domainEmail);
       return user;
     } catch (e) {
       return e;

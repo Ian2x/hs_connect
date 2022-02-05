@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/myNotification.dart';
 import 'package:flutter/material.dart';
+import 'package:tuple/tuple.dart';
 
 List<DocumentReference> docRefList(dynamic input) {
   return (input as List).map((item) => item as DocumentReference).toList();
@@ -39,4 +40,18 @@ DateTime newTrendingCreatedAt(DateTime currTrendingCreatedAt, double trendingBoo
 DateTime undoNewTrendingCreatedAt(DateTime currTrendingCreatedAt, double trendingBoost) {
   final double trendingBoostFactor = trendingBoost / (1 - trendingBoost);
   return currTrendingCreatedAt.subtract(((DateTime.now().add(Duration(days: 1))).difference(currTrendingCreatedAt))*trendingBoostFactor);
+}
+
+
+Future<Tuple2<T1, T2>> waitConcurrently<T1, T2>(
+    Future<T1> future1, Future<T2> future2) async {
+  late T1 result1;
+  late T2 result2;
+
+  await Future.wait([
+    future1.then((value) => result1 = value),
+    future2.then((value) => result2 = value)
+  ]);
+
+  return Future.value(Tuple2(result1, result2));
 }

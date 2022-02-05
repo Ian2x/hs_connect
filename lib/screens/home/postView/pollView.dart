@@ -71,7 +71,7 @@ class _PollViewState extends State<PollView> {
             return PollChoiceView(
                 voted: voted,
                 text: widget.poll.choices[index],
-                votePercentage: choicesVotes[index] / totalVotes,
+                totalVotes: totalVotes,
                 index: index,
                 numChoiceVotes: choicesVotes[index],
                 onVote: () async {
@@ -95,10 +95,10 @@ class _PollViewState extends State<PollView> {
   }
 }
 
-class PollChoiceView extends StatefulWidget {
+class PollChoiceView extends StatelessWidget {
   final int? voted;
   final String text;
-  final double votePercentage;
+  final int totalVotes;
   final VoidFunction onVote;
   final int index;
   final int numChoiceVotes;
@@ -108,37 +108,22 @@ class PollChoiceView extends StatefulWidget {
       required this.voted,
       required this.text,
       required this.onVote,
-      required this.votePercentage,
+      required this.totalVotes,
       required this.index,
       required this.numChoiceVotes})
       : super(key: key);
-
-  @override
-  _PollChoiceViewState createState() => _PollChoiceViewState();
-}
-
-class _PollChoiceViewState extends State<PollChoiceView> {
-  Offset offset = Offset.zero;
-
-  late String displayPercent;
-
-  @override
-  void initState() {
-    setState(() => offset += const Offset(100, 0));
-     displayPercent= (widget.votePercentage*100).toInt().toString() + "%";
-    super.initState();
-
-  }
 
   @override
   Widget build(BuildContext context) {
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
+
+    String votePercentage = totalVotes != 0 ? (100*numChoiceVotes/totalVotes).round().toString()+'%' : '0%';
     return GestureDetector(
       onTap: () {
-        if (widget.voted == null) {
-          widget.onVote();
+        if (voted == null) {
+          onVote();
         }
       },
       child: Container(
@@ -152,37 +137,37 @@ class _PollChoiceViewState extends State<PollChoiceView> {
             ),
           )),
           child: Stack(children: <Widget>[
-            (widget.voted != null)
+            (voted != null)
                 ? LinearPercentIndicator(
                     padding: EdgeInsets.all(0),
                     backgroundColor: colorScheme.surface,
                     animation: true,
                     lineHeight: 32*hp,
                     animationDuration: 700,
-                    percent: widget.votePercentage,
+                    percent: totalVotes!=0 ? numChoiceVotes / totalVotes : 0,
                     barRadius: Radius.circular(10*hp),
                     progressColor: colorScheme.primary.withOpacity(0.4),
                   )
                 : Container(height: 32*hp),
             AnimatedPositioned(
-                child: Text(widget.text, style: Theme.of(context).textTheme.bodyText2),
+                child: Text(text, style: Theme.of(context).textTheme.bodyText2),
                 top: 7*hp,
-                left: widget.voted != null ? 86*wp : 10*wp,
+                left: voted != null ? 86*wp : 10*wp,
                 duration: Duration(milliseconds: 400),
                 curve: Curves.linear),
             AnimatedOpacity(
-              opacity: widget.voted != null ? 1 : 0,
+              opacity: voted != null ? 1 : 0,
               duration: const Duration(milliseconds: 600),
               curve: Curves.easeIn,
               child: Container(
                   padding: EdgeInsets.only(top: 7*hp),
                   width: 75*wp,
                   child: Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
-                    Text(displayPercent + '   |', style: Theme.of(context).textTheme.bodyText2)
+                    Text(votePercentage + '   |', style: Theme.of(context).textTheme.bodyText2)
                   ])),
             ),
             AnimatedOpacity(
-              opacity: widget.voted == widget.index ? 1 : 0,
+              opacity: voted == index ? 1 : 0,
               duration: const Duration(milliseconds: 600),
               curve: Curves.easeIn,
               child: Container(

@@ -14,8 +14,9 @@ import 'loading.dart';
 
 class MyNavigationBar extends StatefulWidget {
   final int currentIndex;
+  final UserData currUserData;
 
-  const MyNavigationBar({Key? key, required this.currentIndex}) : super(key: key);
+  const MyNavigationBar({Key? key, required this.currentIndex, required this.currUserData}) : super(key: key);
 
   @override
   _MyNavigationBarState createState() => _MyNavigationBarState();
@@ -23,104 +24,147 @@ class MyNavigationBar extends StatefulWidget {
 
 class _MyNavigationBarState extends State<MyNavigationBar> {
   bool loading = false;
+  late int numNotifications;
+
+  @override
+  void initState() {
+    numNotifications = widget.currUserData.myNotifications
+            .where((element) => element.createdAt.compareTo(widget.currUserData.notificationsLastViewed) > 0)
+            .length +
+        widget.currUserData.userMessages
+            .where((element) =>
+                element.lastViewed == null ||
+                (element.lastViewed != null && element.lastMessage.compareTo(element.lastViewed!) > 0))
+            .length;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
     final colorScheme = Theme.of(context).colorScheme;
     final hp = Provider.of<HeightPixel>(context).value;
+    final wp = Provider.of<WidthPixel>(context).value;
 
     if (loading || userData == null) return Loading();
 
-    return Container(
-      decoration: BoxDecoration(
-        gradient: Gradients.blueRed(
-          begin: Alignment.bottomLeft, end: Alignment.topRight,
-        ),
-      ),
-      padding: EdgeInsets.only(top: bottomGradientThickness*hp),
-      child: BottomNavigationBar(
-        backgroundColor: colorScheme.surface,
-        type: BottomNavigationBarType.fixed,
-        showSelectedLabels: true,
-        showUnselectedLabels: true,
-        currentIndex: widget.currentIndex,
-        selectedItemColor: colorScheme.onSurface,
-        selectedFontSize: 6,
-        unselectedFontSize: 6,
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            backgroundColor: Colors.green,
-            icon: IconButton(
-              padding: EdgeInsets.zero,
-              // color: colorScheme.onSurface,
-              constraints: BoxConstraints(),
-              icon: Icon(Icons.home, size: 25*hp),
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  NoAnimationMaterialPageRoute(
-                      builder: (context) => pixelProvider(context, child: Home(userData: userData))),
-                );
-              },
+    return Stack(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            gradient: Gradients.blueRed(
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
             ),
-            label: '',
           ),
-          BottomNavigationBarItem(
-            icon: IconButton(
-              padding: EdgeInsets.zero,
-              // color: colorScheme.onSurface,
-              constraints: BoxConstraints(),
-              icon: Icon(Icons.notifications, size: 25*hp),
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  NoAnimationMaterialPageRoute(
-                      builder: (context) => pixelProvider(context, child: ActivityPage())),
-                );
-              },
-            ),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: IconButton(
-              padding: EdgeInsets.zero,
-              // color: colorScheme.onSurface,
-              constraints: BoxConstraints(),
-              icon: Icon(Icons.person, size: 25*hp),
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  NoAnimationMaterialPageRoute(
-                      builder: (context) => pixelProvider(context,
-                          child: ProfilePage(profileRef: userData.userRef, currUserData: userData))),
-                );
-              },
-            ),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: IconButton(
-              padding: EdgeInsets.zero,
-              // color: colorScheme.onSurface,
-              constraints: BoxConstraints(),
-              icon: ShaderMask(
-                shaderCallback: (Rect bounds) {
-                  return Gradients.blueRed().createShader(bounds);
-                },
-                child: Icon(Icons.add, size: 30*hp, color: Colors.white),
+          padding: EdgeInsets.only(top: bottomGradientThickness * hp),
+          child: BottomNavigationBar(
+            backgroundColor: colorScheme.surface,
+            type: BottomNavigationBarType.fixed,
+            showSelectedLabels: true,
+            showUnselectedLabels: true,
+            currentIndex: widget.currentIndex,
+            selectedItemColor: colorScheme.onSurface,
+            selectedFontSize: 6,
+            unselectedFontSize: 6,
+            items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                backgroundColor: Colors.green,
+                icon: IconButton(
+                  padding: EdgeInsets.zero,
+                  // color: colorScheme.onSurface,
+                  constraints: BoxConstraints(),
+                  icon: Icon(Icons.home, size: 25 * hp),
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      NoAnimationMaterialPageRoute(
+                          builder: (context) => pixelProvider(context, child: Home(userData: userData))),
+                    );
+                  },
+                ),
+                label: '',
               ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => pixelProvider(context, child: NewPost())),
-                );
-              },
-            ),
-            label: '',
+              BottomNavigationBarItem(
+                icon: IconButton(
+                  padding: EdgeInsets.zero,
+                  // color: colorScheme.onSurface,
+                  constraints: BoxConstraints(),
+                  icon: Icon(Icons.notifications, size: 25 * hp),
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      NoAnimationMaterialPageRoute(builder: (context) => pixelProvider(context, child: ActivityPage(currUserData: userData,))),
+                    );
+                  },
+                ),
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: IconButton(
+                  padding: EdgeInsets.zero,
+                  // color: colorScheme.onSurface,
+                  constraints: BoxConstraints(),
+                  icon: Icon(Icons.person, size: 25 * hp),
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      NoAnimationMaterialPageRoute(
+                          builder: (context) => pixelProvider(context,
+                              child: ProfilePage(profileRef: userData.userRef, currUserData: userData)
+                          )),
+                    );
+                  },
+                ),
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: IconButton(
+                  padding: EdgeInsets.zero,
+                  // color: colorScheme.onSurface,
+                  constraints: BoxConstraints(),
+                  icon: ShaderMask(
+                    shaderCallback: (Rect bounds) {
+                      return Gradients.blueRed(stops: [0.38, 0.95]).createShader(bounds);
+                    },
+                    child: Icon(Icons.add, size: 30 * hp, color: Colors.white),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => pixelProvider(context, child: NewPost())),
+                    );
+                  },
+                ),
+                label: '',
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+        Positioned(
+            left: 148.5 * wp,
+            top: 8 * hp,
+            child: numNotifications!=0 ? Container(
+              height: 20*hp,
+              width: 20*hp,
+              decoration: BoxDecoration(
+                color: colorScheme.surface,
+                shape: BoxShape.circle,
+              ),
+              padding: EdgeInsets.all(1.5 * hp),
+              child: Container(
+                  padding: EdgeInsets.fromLTRB(2.5*wp, 2*hp, 2*wp, 2.5*hp),
+                  decoration: BoxDecoration(
+                    color: colorScheme.secondary.withOpacity(0.8),
+                    shape: BoxShape.circle,
+                  ),
+                  alignment: Alignment.center,
+                  child: FittedBox(
+                    child: Text(numNotifications.toString(),
+                        style: Theme.of(context).textTheme.subtitle2?.copyWith(color: Colors.white)),
+                  )),
+            ) : Container())
+      ],
     );
   }
 }

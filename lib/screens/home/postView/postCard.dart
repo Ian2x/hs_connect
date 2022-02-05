@@ -13,10 +13,12 @@ import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/polls_database.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/services/user_data_database.dart';
+import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/reports/reportSheet.dart';
+import 'package:hs_connect/shared/widgets/expandableImage.dart';
 import 'package:hs_connect/shared/widgets/widgetDisplay.dart';
 import 'package:provider/provider.dart';
 
@@ -206,6 +208,24 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                               ),
                             ),
                             Spacer(),
+                            widget.post.isFeatured ? Container(
+                              padding: EdgeInsets.only(right: 15*wp, top: 10*hp),
+                              child: Container(
+                                  decoration: BoxDecoration(
+                                      gradient: Gradients.blueRed(),
+                                      borderRadius: BorderRadius.circular(17*hp)
+                                  ),
+                                  child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(17*hp),
+                                        color: Theme.of(context).colorScheme.surface,
+                                      ),
+                                      padding: EdgeInsets.fromLTRB(17*wp, 5*hp, 17*wp, 6*hp),
+                                      margin: EdgeInsets.all(1),
+                                      child: Text('Featured Post')
+                                  )
+                              ),
+                            ) : Container(),
                           ],
                         ),
                         Row(
@@ -220,14 +240,11 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                             maxLines: 3),
                           ],
                         ),
-                        widget.post.mediaURL != null ? ImageContainer(imageString: widget.post.mediaURL!, containerWidth: MediaQuery.of(context).size.width-2*leftRightMargin, hp: hp,)
+                        widget.post.mediaURL != null ? ExpandableImage(imageURL: widget.post.mediaURL!, containerWidth: MediaQuery.of(context).size.width-2*leftRightMargin, maxHeight: 450*hp, margin: EdgeInsets.only(top: 10*hp))
                             : Container(),
                         poll != null ?
-                          Row(
-                            children: [
-                              SizedBox(width:10*wp),
-                              PollView(poll: poll!, currUserRef: widget.currUserRef, post: widget.post)
-                            ],
+                          Container(
+                            child: PollView(poll: poll!, currUserRef: widget.currUserRef, post: widget.post)
                           ): Container(),
                         Row(
                           //Icon Row
@@ -262,7 +279,7 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                                 post: widget.post,
                                 postLikesManager: postLikesManager
                             ),
-                            SizedBox(width: 10*hp),
+                            SizedBox(width: 10*wp),
                           ],
                         )
                       ], //Column Children ARRAY

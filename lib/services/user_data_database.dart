@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crypto/crypto.dart';
 import 'package:hs_connect/models/accessRestriction.dart';
 import 'package:hs_connect/models/searchResult.dart';
 import 'package:hs_connect/models/userData.dart';
@@ -13,7 +16,7 @@ class UserDataDatabaseService {
   // collection reference
   final CollectionReference userDataCollection = FirebaseFirestore.instance.collection(C.userData);
 
-  Future<void> initUserData(String domain, String username, {String? overrideCounty, String? overrideState, String? overrideCountry}) async {
+  Future<void> initUserData(String domain, String username, String domainEmail, {String? overrideCounty, String? overrideState, String? overrideCountry}) async {
     String domainLC = domain.toLowerCase();
     final GroupsDatabaseService _groupDatabaseService = GroupsDatabaseService(currUserRef: currUserRef);
 
@@ -56,6 +59,8 @@ class UserDataDatabaseService {
       C.score: 0,
       C.numReports: 0,
       C.private: false,
+      C.notificationsLastViewed: Timestamp.now(),
+      C.recoveryCode: sha1.convert(utf8.encode(domainEmail)).toString()
     });
     // join domain group
     await joinGroup(groupRef: domainGroupRef);
@@ -74,6 +79,10 @@ class UserDataDatabaseService {
         })
         .then(onValue)
         .catchError(onError);
+  }
+
+  Future updateNotificationsLastViewed() async {
+    return await currUserRef.update({C.notificationsLastViewed: Timestamp.now()});
   }
 
   Future<void> joinGroup(

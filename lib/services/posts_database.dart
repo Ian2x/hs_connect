@@ -62,6 +62,7 @@ class PostsDatabaseService {
           C.numReports: 0,
           C.pollRef: pollRef,
           C.tag: tagString == '' ? null : tagString,
+          C.isFeatured: false
         })
         .then(onValue)
         .catchError(onError);

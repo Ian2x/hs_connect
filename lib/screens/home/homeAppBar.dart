@@ -1,12 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/services/storage/image_storage.dart';
+import 'package:hs_connect/services/auth.dart';
 import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/myStorageManager.dart';
 import 'package:hs_connect/shared/pixels.dart';
-import 'package:hs_connect/shared/tools/buildCircle.dart';
-import 'package:hs_connect/shared/widgets/gradientText.dart';
 import 'package:provider/provider.dart';
 
 
@@ -44,11 +41,14 @@ class HomeAppBar extends SliverPersistentHeaderDelegate{
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 SizedBox(height: 3*hp),
-                Text("Circles.",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline4
-                        ?.copyWith(fontSize: 24*hp, fontWeight: FontWeight.w700)),
+                GestureDetector(
+                  onTap: () async => await AuthService().signOut(),
+                  child: Text("Circles.co",
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline4
+                          ?.copyWith(fontSize: 24*hp, fontWeight: FontWeight.w700)),
+                ),
                 SizedBox(height: 12*hp),
                 TabBar(
                   controller: tabController,

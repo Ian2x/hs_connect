@@ -10,8 +10,8 @@ import 'authenticate.dart';
 
 
 
-class aboutUs extends StatelessWidget {
-  const aboutUs({Key? key}) : super(key: key);
+class AboutUs extends StatelessWidget {
+  const AboutUs({Key? key}) : super(key: key);
 
 
 
@@ -35,7 +35,7 @@ class aboutUs extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 60*hp),
+              SizedBox(height: 68*hp),
               Row(
                 children: [
                   SizedBox(width: 10*wp),
@@ -51,17 +51,19 @@ class aboutUs extends StatelessWidget {
                   ),
                 ],
               ),
+              SizedBox(height: 60*hp),
               SizedBox(
                 height: 90*hp,
                 child:
-                Image.asset('assets/logo1background.png'),
+                Image.asset('assets/sublogo1cropped.png'),
               ),
-              SizedBox(height: 16*hp),
+              SizedBox(height: 20*hp),
               Text(
                 "About Circles",
                 style: ThemeText.inter(fontWeight: FontWeight.w800,
                     fontSize: 30*hp, color: Colors.white),
               ),
+              SizedBox(height: 15*hp),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 60*wp),
                 child: Column(
@@ -88,7 +90,7 @@ class aboutUs extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height:60*hp),
-                    ActionChip(
+                   /* ActionChip(
                       padding: EdgeInsets.fromLTRB(60*wp, 15*hp, 60*wp, 15*hp),
                       backgroundColor: Colors.white,
                       label: GradientText(
@@ -101,7 +103,7 @@ class aboutUs extends StatelessWidget {
                         Navigator.of(context)
                             .push(MaterialPageRoute(builder: (context) => pixelProvider(context, child: Authenticate(signIn: false))));
                       },
-                    ),
+                    ),*/
 
                   ],
                 )
