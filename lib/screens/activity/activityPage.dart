@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/activity/messages/allMessagesPage.dart';
 import 'package:hs_connect/screens/activity/notifications/notificationsFeed.dart';
-import 'package:hs_connect/screens/home/homeAppBar.dart';
+import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
@@ -11,7 +11,8 @@ import 'package:provider/provider.dart';
 import 'activityAppBar.dart';
 
 class ActivityPage extends StatefulWidget {
-  const ActivityPage({Key? key}) : super(key: key);
+  final UserData currUserData;
+  const ActivityPage({Key? key, required this.currUserData}) : super(key: key);
 
   @override
   _ActivityPageState createState() => _ActivityPageState();
@@ -23,6 +24,7 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
 
   @override
   void initState() {
+    UserDataDatabaseService(currUserRef: widget.currUserData.userRef).updateNotificationsLastViewed();
     tabController = TabController(length: 2, vsync: this);
     tabController.addListener(() {
       if (mounted) {
@@ -36,6 +38,7 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
 
   @override
   void dispose() {
+    UserDataDatabaseService(currUserRef: widget.currUserData.userRef).updateNotificationsLastViewed();
     tabController.dispose();
     super.dispose();
   }
@@ -43,8 +46,6 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
-    final wp = Provider.of<WidthPixel>(context).value;
-    final hp = Provider.of<HeightPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
 
     if (userData == null) {
@@ -66,6 +67,7 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
       ),
       bottomNavigationBar: MyNavigationBar(
         currentIndex: 1,
+        currUserData: userData,
       ),
     );
   }

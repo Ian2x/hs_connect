@@ -55,14 +55,14 @@ class _WaitVerificationState extends State<WaitVerification> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
           Container(
-          height: 110*hp,
+          height: 100*hp,
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
             gradient: Gradients.blueRed(begin: Alignment.topLeft , end: Alignment.bottomRight),
           ),
           child: SizedBox(),
         ),
-        SizedBox(height: 10*hp),
+        SizedBox(height: 30*hp),
         Row(
           children: [
             SizedBox(width: 10*hp),
@@ -76,7 +76,7 @@ class _WaitVerificationState extends State<WaitVerification> {
                 SizedBox(
                   height: 80 *hp,
                   child:
-                  Image.asset('assets/logo1background.png'),
+                  Image.asset('assets/sublogo1cropped.png'),
                 ),
                 SizedBox(height: 15*hp),
                 Text(
@@ -84,7 +84,7 @@ class _WaitVerificationState extends State<WaitVerification> {
                   style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 24*hp, color: Colors.black //TODO: Convertto HP
                   ),
                 ),
-                SizedBox(height:15*hp),
+                SizedBox(height:25*hp),
                 Center(
                   child:Text("Check the link in your school email.",
                       style: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 16)),
@@ -163,7 +163,7 @@ class _WaitVerificationState extends State<WaitVerification> {
     if (user!.emailVerified) {
       timer!.cancel();
       Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => pixelProvider(context, child: RegisterUser(domain: widget.domain))));
+          .push(MaterialPageRoute(builder: (context) => pixelProvider(context, child: RegisterUser(domain: widget.domain, domainEmail: widget.domainEmail))));
     }
   }
 }

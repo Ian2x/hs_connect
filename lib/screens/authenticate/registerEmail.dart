@@ -40,73 +40,75 @@ class _RegisterEmailState extends State<RegisterEmail> {
         ? Scaffold(backgroundColor: Colors.white, body: Loading(backgroundColor: Colors.white, spinColor: Color(0xff60676c)))
         : Scaffold(
       backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          GestureDetector(
-            onTap: ()=>dismissKeyboard(context),
-            child: SingleChildScrollView(
+      body: GestureDetector(
+        onTap: ()=>dismissKeyboard(context),
+        child: Stack(
+          children: [
+            SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    height: 110*hp,
+                    height: 100*hp,
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                       gradient: Gradients.blueRed(begin: Alignment.topLeft , end: Alignment.bottomRight),
                     ),
                     child: SizedBox(),
                   ),
-                  SizedBox(height: 10*hp),
-                  Row(
-                    children: [
-                      SizedBox(width: 10*hp),
-                      TextButton(
-                          onPressed: (){
-                            // remove keyboard
-                            dismissKeyboard(context);
-                            Navigator.pushReplacement(
-                              context,
-                              NoAnimationMaterialPageRoute(
-                                  builder: (context) => pixelProvider(context, child: PreviewPage())),
-                            );
-                          },
-                          child:Text(
-                            "Cancel",
-                            style: ThemeText.inter(fontWeight: FontWeight.normal,
-                                fontSize: 16*hp, color: Colors.black),
-                          )
-                      ),
-                    ],
+                  Container(
+                    padding: EdgeInsets.all(10*hp),
+                    child: TextButton(
+                        onPressed: (){
+                          // remove keyboard
+                          dismissKeyboard(context);
+                          Navigator.pushReplacement(
+                            context,
+                            NoAnimationMaterialPageRoute(
+                                builder: (context) => pixelProvider(context, child: PreviewPage())),
+                          );
+                        },
+                        child:Text(
+                          "Cancel",
+                          style: ThemeText.inter(fontWeight: FontWeight.normal,
+                              fontSize: 16*hp, color: Colors.black),
+                        )
+                    ),
                   ),
-                  SizedBox(height: 20*hp),
-                  Center(
-                      child:
-                      Column(
-                        children: [
-                          SizedBox(
-                            height: 80 *hp,
-                            child:
-                            Image.asset('assets/logo1background.png'),
-                          ),
-                          SizedBox(height: 20*hp),
-                          Text(
-                            'Sign Up',
-                            style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 28*hp, color: Colors.black
+                  Container(
+                    alignment: Alignment.topCenter,
+                    child: Center(
+                        child:
+                        Column(
+                          children: [
+                            SizedBox(
+                              height: 80 *hp,
+                              child:
+                              Image.asset('assets/sublogo1cropped.png'),
                             ),
-                          ),
-                          SizedBox(height: 20*hp),
-                          Center(
-                            child:
-                            error != null ? Center(
-                              child: Text(
-                                  error!, style: ThemeText.inter(fontWeight: FontWeight.w500, fontSize: 13*hp, color: Colors.black)),
-                            ) :
-                            Text("Verify your school with your email. We ",
-                                style: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 14)),
-                          ),
-                          SizedBox(height: 50*hp),
-                        ],
-                      )
+                            SizedBox(height: 20*hp),
+                            Text(
+                              'Sign Up',
+                              style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 28*hp, color: Colors.black
+                              ),
+                            ),
+                            SizedBox(height: 15*hp),
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 40*wp),
+                              child: Text("Verify your school with your email.\nAfter verification, your email will not be linked to your account.",
+                                  style: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 14,), textAlign: TextAlign.center,),
+                            ),
+                            Container(
+                              height: 40*hp,
+                              padding: EdgeInsets.symmetric(horizontal: 20*wp),
+                              alignment: Alignment.bottomCenter,
+                              child: error != null ? Text(
+                                  error!, style: ThemeText.inter(fontWeight: FontWeight.w500, fontSize: 13*hp, color: Colors.black), textAlign: TextAlign.center,) :
+                              Container()
+                            )
+                          ],
+                        )
+                    ),
                   ),
                   Form(
                     key: _formKey,
@@ -133,55 +135,50 @@ class _RegisterEmailState extends State<RegisterEmail> {
                                   }
                                 },
                               ),
-                              Divider(height:4*hp, thickness: 2*hp, color: Color(0xffdbdada)),
-                              SizedBox(height:10*hp)
+                              Divider(height:0, thickness: 2*hp, color: Color(0xffdbdada)),
                             ],
                           )
                     ),
                   ),
-                  SizedBox(height:90*hp) ],
+                  SizedBox(height:110*hp) ],
               ),
             ),
-          ),
-          Positioned(
-            bottom:0,
-            left:0,
-            child: AuthBar(buttonText: "Register",
-                onPressed: () async {
-              print(error);
-                  if (mounted) {
-                    setState(() => loading = true);
-                  }
-                  dynamic result = await _auth.createEmailUser(email);
-                  if (result is User?) {
-                    final int tempIndex = email.lastIndexOf('@');
-                    final String domain = email.substring(tempIndex);
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (context) => pixelProvider(context, child: WaitVerification(domain: domain, domainEmail: email))));
-                  } else if (result is FirebaseAuthException) {
+            Positioned(
+              bottom:0,
+              left:0,
+              child: AuthBar(buttonText: "Register",
+                  onPressed: () async {
                     if (mounted) {
-                      setState(() {
-                        String errorMsg = '';
-                        if (result.message != null) errorMsg += result.message!;
-                        /*errorMsg +=
-                            'If you think this is a mistake, please contact us at ___ for support. [Error Code: ' +
-                                result.code +
-                                ']';*/
-                        error = errorMsg;
-                        loading = false;
-                      });
+                      setState(() => loading = true);
                     }
-                  } else {
-                    if (mounted) {
-                      setState(() {
-                        error =  result.toString();
-                        loading = false;
-                      });
+                    String localEmail = email.toLowerCase();
+                    dynamic result = await _auth.createEmailUser(localEmail);
+                    if (result is User?) {
+                      final int tempIndex = localEmail.lastIndexOf('@');
+                      final String domain = localEmail.substring(tempIndex);
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (context) => pixelProvider(context, child: WaitVerification(domain: domain, domainEmail: localEmail))));
+                    } else if (result is FirebaseAuthException) {
+                      if (mounted) {
+                        setState(() {
+                          String errorMsg = 'Error: ';
+                          if (result.message != null) errorMsg += result.message!;
+                          error = errorMsg;
+                          loading = false;
+                        });
+                      }
+                    } else {
+                      if (mounted) {
+                        setState(() {
+                          error = "Error: " + result.toString();
+                          loading = false;
+                        });
+                      }
                     }
-                  }
-                }),
-          ),
-        ],
+                  }),
+            ),
+          ],
+        ),
       ),
     );
   }

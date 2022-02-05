@@ -55,7 +55,7 @@ class _SignInState extends State<SignIn> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          height: 110*hp,
+                          height: 100*hp,
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
                             gradient: Gradients.blueRed(begin: Alignment.topLeft , end: Alignment.bottomRight),
@@ -87,7 +87,7 @@ class _SignInState extends State<SignIn> {
                                 SizedBox(
                                   height: 80 *hp,
                                   child:
-                                  Image.asset('assets/logo1background.png'),
+                                  Image.asset('assets/sublogo1cropped.png'),
                                 ),
                                 SizedBox(height: 20*hp),
                                 Text(
@@ -121,7 +121,7 @@ class _SignInState extends State<SignIn> {
                                               }
                                             }
                                         ),
-                                        Divider(height:4*hp, thickness: 2*hp, color: Color(0xffdbdada)),
+                                        Divider(height:0, thickness: 2*hp, color: Color(0xffdbdada)),
                                         SizedBox(height:10*hp),
                                         TextFormField(
                                             autocorrect:false,
@@ -136,7 +136,7 @@ class _SignInState extends State<SignIn> {
                                                 setState(() => password = val);
                                               }
                                             }),
-                                        Divider(height:4*hp, thickness: 2*hp, color: Color(0xffdbdada)),
+                                        Divider(height:0, thickness: 2*hp, color: Color(0xffdbdada)),
                                         SizedBox(height:10*hp),
                                       ],
                                     ),

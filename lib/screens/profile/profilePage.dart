@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/profile/profileBody.dart';
-import 'package:hs_connect/screens/profile/settingsPage.dart';
+import 'package:hs_connect/screens/profile/settings/settingsPage.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
 import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
@@ -42,6 +42,7 @@ class ProfilePage extends StatelessWidget {
         ),
         bottomNavigationBar: MyNavigationBar(
           currentIndex: 2,
+          currUserData: currUserData,
         ),
       );
     } else {

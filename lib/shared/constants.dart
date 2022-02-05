@@ -54,10 +54,12 @@ class Gradients {
   static LinearGradient blueRed ({
     AlignmentGeometry begin = Alignment.topLeft,
     AlignmentGeometry end = Alignment. bottomRight,
+    List<double>? stops,
   }){
     return LinearGradient(
       begin: begin,
       end: end,
+      stops: stops,
       colors: [ _Gradient.gBlue, _Gradient.gRed],
     );
   }
@@ -215,4 +217,9 @@ class C {
   static const featuredPost = 'featuredPost';
   static const feedback = 'feedback';
   static const feedbackText = 'feedbackText';
+  static const isFeatured = 'isFeatured';
+  static const notificationsLastViewed = 'notificationsLastViewed';
+  static const recoveryCode = 'recoveryCode';
+  static const type = 'type';
+  static const postId = 'postId';
 }

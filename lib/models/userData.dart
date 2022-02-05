@@ -44,6 +44,7 @@ class UserData {
   final int score;
   final int numReports;
   final bool private;
+  Timestamp notificationsLastViewed;
   // extracted data
   final String? fullDomainName;
   final Color? domainColor;
@@ -75,6 +76,7 @@ class UserData {
     required this.score,
     required this.numReports,
     required this.private,
+    required this.notificationsLastViewed,
   });
 }
 
@@ -104,6 +106,7 @@ Future<UserData> userDataFromSnapshot(DocumentSnapshot snapshot, DocumentReferen
     score: snapshot.get(C.score),
     numReports: snapshot.get(C.numReports),
     private: snapshot.get(C.private),
+    notificationsLastViewed: snapshot.get(C.notificationsLastViewed),
     // extracted data
     fullDomainName: domainData.fullName,
     domainColor: domainData.color != null ? HexColor(domainData.color!) : null,

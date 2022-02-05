@@ -34,7 +34,7 @@ class PreviewPage extends StatelessWidget {
             SizedBox(
               height: 130*hp,
               child:
-              Image.asset('assets/logo1background.png'),
+              Image.asset('assets/sublogo1cropped.png'),
             ),
             SizedBox(height: 16*hp),
             Text(
@@ -81,7 +81,7 @@ class PreviewPage extends StatelessWidget {
                     .push(MaterialPageRoute(builder: (context) => pixelProvider(context, child: Authenticate(signIn: true))));
               },
             ),
-            SizedBox(height: 78*hp),
+            SizedBox(height: 65*hp),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -106,7 +106,7 @@ class PreviewPage extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => pixelProvider(context, child: aboutUs(
+                            builder: (context) => pixelProvider(context, child: AboutUs(
                             )))  );
                   },
                   child: Text(

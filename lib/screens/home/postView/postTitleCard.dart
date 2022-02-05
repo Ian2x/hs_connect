@@ -14,9 +14,9 @@ import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
+import 'package:hs_connect/shared/widgets/expandableImage.dart';
 import 'package:hs_connect/shared/widgets/groupTag.dart';
 import 'package:hs_connect/shared/reports/reportSheet.dart';
-import 'package:hs_connect/shared/widgets/widgetDisplay.dart';
 import 'package:provider/provider.dart';
 
 class PostTitleCard extends StatefulWidget {
@@ -36,7 +36,6 @@ class PostTitleCard extends StatefulWidget {
 }
 
 class _PostTitleCardState extends State<PostTitleCard> {
-
   String? creatorName;
   Poll? poll;
 
@@ -73,13 +72,14 @@ class _PostTitleCardState extends State<PostTitleCard> {
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
-    final postLikesManager = Provider.of<PostLikesManager>(context);
     UserData? userData = Provider.of<UserData?>(context);
+    PostLikesManager postLikesManager = Provider.of<PostLikesManager>(context);
+    final leftRightPadding = 10*wp;
 
     final localCreatorName = creatorName != null ? creatorName! : '';
 
     return Container(
-        padding: EdgeInsets.fromLTRB(20*wp, 10*hp, 10*wp, 10*hp),
+        padding: EdgeInsets.fromLTRB(leftRightPadding*wp, 10*hp, leftRightPadding*wp, 10*hp),
         child:
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,9 +132,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
               Text(widget.post.text!,
                 style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16*hp)) : Container(),
             widget.post.mediaURL != null ?
-              ImageContainer(imageString: widget.post.mediaURL!,
-                hp:hp,
-                containerWidth: MediaQuery.of(context).size.width,)
+              ExpandableImage(imageURL: widget.post.mediaURL!, maxHeight: 450*hp, containerWidth: MediaQuery.of(context).size.width-2*leftRightPadding)
                 : Container(),
             poll != null ? PollView(poll: poll!, currUserRef: widget.currUserRef, post: widget.post): Container(),
             SizedBox(height:20*hp),

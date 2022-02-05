@@ -3,7 +3,7 @@ import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'accessRestriction.dart';
 
-enum Tag { Relationships, Parties, Memes, Classes, Advice, College, Confession }
+enum Tag { Relationships, Parties, Memes, Classes, Advice, College, Confession}
 
 extension TagExtension on Tag {
   String get string {
@@ -66,6 +66,7 @@ class Post {
   final int numReports;
   final DocumentReference? pollRef;
   final Tag? tag;
+  final bool isFeatured;
 
   Post({
     required this.postRef,
@@ -85,6 +86,7 @@ class Post {
     required this.numReports,
     required this.pollRef,
     required this.tag,
+    required this.isFeatured
   });
 }
 
@@ -108,6 +110,7 @@ postFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
     numReports: querySnapshot[C.numReports],
     pollRef: querySnapshot[C.pollRef],
     tag: tagFrom(querySnapshot[C.tag]),
+    isFeatured: querySnapshot[C.isFeatured]
   );
 }
 
@@ -131,5 +134,6 @@ Post postFromSnapshot(DocumentSnapshot snapshot) {
     numReports: snapshot[C.numReports],
     pollRef: snapshot[C.pollRef],
     tag: tagFrom(snapshot[C.tag]),
+    isFeatured: snapshot[C.isFeatured]
   );
 }
