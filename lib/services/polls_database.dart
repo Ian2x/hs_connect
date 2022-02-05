@@ -10,7 +10,7 @@ class PollsDatabaseService {
   PollsDatabaseService({this.pollRef});
 
   // collection reference
-  final CollectionReference pollsCollection = FirebaseFirestore.instance.collection(C.polls);
+  static final CollectionReference pollsCollection = FirebaseFirestore.instance.collection(C.polls);
 
   Future<DocumentReference> newPoll({
     required List<String> choices,

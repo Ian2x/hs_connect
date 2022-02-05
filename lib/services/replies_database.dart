@@ -18,10 +18,10 @@ class RepliesDatabaseService {
 
   RepliesDatabaseService({required this.currUserRef, this.commentRef, this.postRef, this.replyRef});
 
-  ImageStorage _images = ImageStorage();
+  static final ImageStorage _images = ImageStorage();
 
   // collection reference
-  final CollectionReference repliesCollection = FirebaseFirestore.instance.collection(C.replies);
+  static final CollectionReference repliesCollection = FirebaseFirestore.instance.collection(C.replies);
 
   Future newReply(
       {required String text,

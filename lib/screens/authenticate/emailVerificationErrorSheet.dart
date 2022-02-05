@@ -27,7 +27,6 @@ class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorShee
   late String deleteEmail;
   @override
   void initState() {
-    print(shortHash('yianwang29@gmail.com'));
     if (widget.emailDeleted) {
       deleteEmail = 'Email deleted';
     } else {
@@ -50,12 +49,12 @@ class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorShee
         child: Column(
           children: <Widget>[
             Text(
-                "If you haven't received an email after 5 minutes, it is recommended that you delete your email from our systems and start over. Otherwise, you'll never be able to make an account from this address. Please contact us at ___ if you still have questions.",
+                "If you haven't received an email after 5 minutes, it is recommended that you delete your email from our systems and start over. Otherwise, you'll never be able to make an account from this address. Please contact us at app@getcircles.co if you still have questions.",
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.black)),
             SizedBox(
                 height: 60*hp,
-                child: Center(child: Text(error, style: Theme.of(context).textTheme.bodyText2?.copyWith(color: Color(0xFFb2b2b2))))),
+                child: Center(child: Text(error, textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyText2?.copyWith(color: Color(0xFFb2b2b2))))),
             Row(children: <Widget>[
               Spacer(),
               MyOutlinedButton(
@@ -70,7 +69,7 @@ class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorShee
                       }
                     } on FirebaseAuthException catch (e) {
                       if (mounted) {
-                        setState(() =>error = "Error: " + e.code + "\nPlease remember this code: " + shortHash(widget.domainEmail.toLowerCase()));
+                        setState(() =>error = "Error: " + e.code + "\nPlease contact us at app@getcircles.co for support. Use this code: " + shortHash(widget.domainEmail.toLowerCase()));
                       }
                     }
                   }

@@ -1,4 +1,3 @@
-import 'package:hs_connect/screens/authenticate/preview.dart';
 import 'package:hs_connect/screens/authenticate/registerEmail.dart';
 import 'package:hs_connect/screens/authenticate/signIn.dart';
 import 'package:flutter/material.dart';

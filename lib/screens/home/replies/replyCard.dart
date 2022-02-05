@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/reply.dart';
 import 'package:hs_connect/models/report.dart';
@@ -55,8 +54,6 @@ class _ReplyCardState extends State<ReplyCard> {
         });
       }
     }
-    // find username for userId
-    // _userInfoDatabaseService.userId = widget.userId;
     getUserData();
   }
 

@@ -16,10 +16,10 @@ class CommentsDatabaseService {
 
   CommentsDatabaseService({required this.currUserRef, this.postRef, this.commentRef});
 
-  ImageStorage _images = ImageStorage();
+  static final ImageStorage _images = ImageStorage();
 
   // collection reference
-  final CollectionReference commentsCollection = FirebaseFirestore.instance.collection(C.comments);
+  static final CollectionReference commentsCollection = FirebaseFirestore.instance.collection(C.comments);
 
   Future<dynamic> newComment(
       {required String text,

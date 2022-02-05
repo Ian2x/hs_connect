@@ -8,7 +8,7 @@ class ReportsDatabaseService {
   ReportsDatabaseService({required this.currUserRef});
 
   // collection reference
-  final CollectionReference reportsCollection = FirebaseFirestore.instance.collection(C.reports);
+  static final CollectionReference reportsCollection = FirebaseFirestore.instance.collection(C.reports);
 
   Future<DocumentReference> newReport({
     required ReportType reportType,

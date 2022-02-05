@@ -9,7 +9,6 @@ import 'package:hs_connect/screens/home/comments/commentReplyForm.dart';
 import 'package:hs_connect/screens/home/postView/postTitleCard.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
@@ -108,9 +107,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
                     } else {
                       return CommentCard(
                         focusKeyboard: (){
-                          print ("second focused?");
                           myFocusNode.requestFocus();
-
                         },
                         switchFormBool: switchFormBool,
                         comment: comments[index - 2],
@@ -123,7 +120,6 @@ class _CommentsFeedState extends State<CommentsFeed> {
             }
           },
         ),
-
           Positioned(
             bottom:0,
             right:0,

@@ -3,7 +3,6 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/activity/messages/allMessagesPage.dart';
 import 'package:hs_connect/screens/activity/notifications/notificationsFeed.dart';
 import 'package:hs_connect/services/user_data_database.dart';
-import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
 import 'package:provider/provider.dart';

@@ -6,39 +6,14 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:uuid/uuid.dart';
 
-
-/*
-Future<String> cacheImage(String imagePath) async {
-    final Reference ref = _storage.ref().child(imagePath);
-
-    // Get your image url
-    final imageUrl = await ref.getDownloadURL();
-
-    // Check if the image file is not in the cache
-    if ((await defaultCacheManager.getFileFromCache(imageUrl))?.file == null) {
-      // Download your image data
-      final imageBytes = await ref.getData(10000000);
-
-      // Put the image file in the cache
-      await defaultCacheManager.putFile(
-        imageUrl,
-        imageBytes,
-        fileExtension: "jpg",
-      );
-    }
-
-    // Return image download url
-    return imageUrl;
-  }
- */
 class ImageStorage {
   // initializer
   ImageStorage();
 
-  final Reference imagesRef = FirebaseStorage.instance.ref().child(C.images);
-  final Reference profilePicsRef = FirebaseStorage.instance.ref().child(C.profilePics);
+  static final Reference imagesRef = FirebaseStorage.instance.ref().child(C.images);
+  static final Reference profilePicsRef = FirebaseStorage.instance.ref().child(C.profilePics);
 
-  final defaultCacheManager = DefaultCacheManager();
+  static final defaultCacheManager = DefaultCacheManager();
 
   Future<void> listExample() async {
     ListResult result = await imagesRef.listAll();

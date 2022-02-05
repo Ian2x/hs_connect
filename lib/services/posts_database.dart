@@ -9,7 +9,6 @@ import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/replies_database.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
-import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
@@ -22,11 +21,10 @@ class PostsDatabaseService {
 
   PostsDatabaseService({required this.currUserRef, this.postRef});
 
-  ImageStorage _images = ImageStorage();
+  static final ImageStorage _images = ImageStorage();
 
   // collection reference
-  final CollectionReference postsCollection = FirebaseFirestore.instance.collection(C.posts);
-  late UserDataDatabaseService _userData = new UserDataDatabaseService(currUserRef: currUserRef);
+  static final CollectionReference postsCollection = FirebaseFirestore.instance.collection(C.posts);
 
   Future<dynamic> newPost(
       {required String title,

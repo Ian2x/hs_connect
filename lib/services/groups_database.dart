@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/accessRestriction.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/searchResult.dart';
-import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 
@@ -29,7 +28,7 @@ class GroupsDatabaseService {
   GroupsDatabaseService({required this.currUserRef});
 
   // collection reference
-  final CollectionReference groupsCollection = FirebaseFirestore.instance.collection(C.groups);
+  static final CollectionReference groupsCollection = FirebaseFirestore.instance.collection(C.groups);
 
   Future<DocumentReference> newGroup(
       {required AccessRestriction accessRestriction,
@@ -118,67 +117,6 @@ class GroupsDatabaseService {
     groupRef.update({C.lastOverTimeUpdate: Timestamp.now()});
   }
 
-  Future<List<Group>> getAllowableGroups(
-      {required String domain, required String? county, required String? state, required String? country}) async {
-    // get all group refs
-
-    final Future domainGroupsFetch = groupsCollection
-        .where(C.accessRestriction,
-        isEqualTo: AccessRestriction(restrictionType: AccessRestrictionType.domain, restriction: domain).asMap())
-        .get();
-    final Future? countyGroupsFetch = county != null
-        ? groupsCollection
-        .where(C.accessRestriction,
-        isEqualTo:
-        AccessRestriction(restrictionType: AccessRestrictionType.county, restriction: county).asMap())
-        .get()
-        : null;
-    final Future? stateGroupsFetch = state != null
-        ? groupsCollection
-        .where(C.accessRestriction,
-        isEqualTo: AccessRestriction(restrictionType: AccessRestrictionType.state, restriction: state).asMap())
-        .get()
-        : null;
-    final Future? countryGroupsFetch = country != null
-        ? groupsCollection
-        .where(C.accessRestriction,
-        isEqualTo:
-        AccessRestriction(restrictionType: AccessRestrictionType.country, restriction: country).asMap())
-        .get()
-        : null;
-    final publicGroup = groupFromSnapshot(await groupsCollection.doc(C.Public).get());
-    final QuerySnapshot domainGroupsSnapshots= await domainGroupsFetch;
-    final QuerySnapshot? countyGroupsSnapshots = await countyGroupsFetch;
-    final QuerySnapshot? stateGroupsSnapshots = await stateGroupsFetch;
-    final QuerySnapshot? countryGroupsSnapshots = await countryGroupsFetch;
-    var allowableGroups = domainGroupsSnapshots.docs.map((snapshot) => groupFromSnapshot(snapshot)).toList();
-    allowableGroups.removeWhere((value) => value==null);
-    if (countyGroupsSnapshots != null) {
-      var countyGroups = countyGroupsSnapshots.docs.map((snapshot) => groupFromSnapshot(snapshot)).toList();
-      countyGroups.removeWhere((value) => value==null);
-      allowableGroups.addAll(countyGroups);
-    }
-    if (stateGroupsSnapshots != null) {
-      var stateGroups = stateGroupsSnapshots.docs.map((snapshot) => groupFromSnapshot(snapshot)).toList();
-      stateGroups.removeWhere((value) => value==null);
-      allowableGroups.addAll(stateGroups);
-    }
-    if (countryGroupsSnapshots != null) {
-      var countryGroups = countryGroupsSnapshots.docs.map((snapshot) => groupFromSnapshot(snapshot)).toList();
-      countryGroups.removeWhere((value) => value==null);
-      allowableGroups.addAll(countryGroups);
-    }
-    if (publicGroup != null) allowableGroups.add(publicGroup);
-    return allowableGroups.cast<Group>();
-  }
-
-  Future<List<DocumentReference>> getAllowableGroupRefs(
-      {required String domain, required String? county, required String? state, required String? country}) async {
-    return (await getAllowableGroups(domain: domain, county: county, state: state, country: country))
-        .map((group) => group.groupRef)
-        .toList();
-  }
-
   Future<Group?> getGroup(DocumentReference groupRef) async {
     return groupFromSnapshot(await groupRef.get());
   }
@@ -201,29 +139,6 @@ class GroupsDatabaseService {
       results[groupsRefs.length] = publicGroup;
     }
     return results;
-  }
-
-  Future<List<Group>> getTrendingGroups(
-      {required String domain, required String? county, required String? state, required String? country}) async {
-    // get all group refs
-    final allowableGroups = await getAllowableGroups(domain: domain, county: county, state: state, country: country);
-    List<GroupRanking> groupRankings = <GroupRanking>[];
-    allowableGroups.forEach((group) {
-      int score = 0;
-      List<CountAtTime> pot = group.postsOverTime;
-      if (pot.isNotEmpty) {
-        pot.sort((a,b) => a.time.compareTo(b.time));
-        score+=pot[0].count;
-      }
-      List<CountAtTime> mot = group.membersOverTime;
-      if (mot.isNotEmpty) {
-        mot.sort((a,b) => a.time.compareTo(b.time));
-        score+=mot[0].count;
-      }
-      groupRankings.add(GroupRanking(group: group, score: score));
-    });
-    groupRankings.sort((a,b) => b.score-a.score);
-    return groupRankings.map((groupRanking) => groupRanking.group).toList();
   }
 
   SearchResult _searchResultFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {

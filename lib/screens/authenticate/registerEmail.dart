@@ -94,9 +94,9 @@ class _RegisterEmailState extends State<RegisterEmail> {
                             ),
                             SizedBox(height: 15*hp),
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: 40*wp),
-                              child: Text("Verify your school with your email.\nAfter verification, your email will not be linked to your account.",
-                                  style: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 14,), textAlign: TextAlign.center,),
+                              padding: EdgeInsets.symmetric(horizontal: 25*wp),
+                              child: Text("Verify your school with your email.\nFor anonymity, your email will be disconnected from your account afterwards.",
+                                  style: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 14*hp, height: 1.3), textAlign: TextAlign.center,),
                             ),
                             Container(
                               height: 40*hp,

@@ -7,11 +7,9 @@ import 'package:hs_connect/shared/pixels.dart';
 import 'package:provider/provider.dart';
 import 'package:hs_connect/shared/widgets/arrows_icons.dart';
 
-const double iconSizeStateless = 16;
-const double iconSizeStateful = 24;
-
-
-const EdgeInsets iconPadding = EdgeInsets.all(0);
+const double postIconSizeStateless = 16;
+const double postIconSizeStateful = 24;
+const EdgeInsets postIconPadding = EdgeInsets.all(0);
 
 class LikeDislikePost extends StatelessWidget {
   final DocumentReference currUserRef;
@@ -37,9 +35,9 @@ class LikeDislikePost extends StatelessWidget {
         () {
           if (postLikesManager.dislikeStatus == true) {
             return IconButton(
-              iconSize: iconSizeStateless*hp,
+              iconSize: postIconSizeStateless*hp,
               splashColor: Colors.transparent,
-              padding: iconPadding,
+              padding: postIconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
               icon: Icon(Arrows.down_open_big, color: colorScheme.onBackground),
@@ -50,9 +48,9 @@ class LikeDislikePost extends StatelessWidget {
             );
           } else {
             return IconButton(
-              iconSize: iconSizeStateless*hp,
+              iconSize: postIconSizeStateless*hp,
               splashColor: Colors.transparent,
-              padding: iconPadding,
+              padding: postIconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.primaryVariant,
               icon: Icon(Arrows.down_open_big),
@@ -72,9 +70,9 @@ class LikeDislikePost extends StatelessWidget {
         () {
           if (postLikesManager.likeStatus == true) {
             return IconButton(
-              iconSize: iconSizeStateless*hp,
+              iconSize: postIconSizeStateless*hp,
               splashColor: Colors.transparent,
-              padding: iconPadding,
+              padding: postIconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
               icon: Icon(Arrows.up_open_big, color: colorScheme.secondary),
@@ -85,9 +83,9 @@ class LikeDislikePost extends StatelessWidget {
             );
           } else {
             return IconButton(
-              iconSize: iconSizeStateless*hp,
+              iconSize: postIconSizeStateless*hp,
               splashColor: Colors.transparent,
-              padding: iconPadding,
+              padding: postIconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.primaryVariant,
               icon: Icon(Arrows.up_open_big),
@@ -152,9 +150,9 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
             () {
           if (dislikeStatus == true) {
             return IconButton(
-              iconSize: iconSizeStateful*hp,
+              iconSize: postIconSizeStateful*hp,
               splashColor: Colors.transparent,
-              padding: iconPadding,
+              padding: postIconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
               icon: Icon(Arrows.down_open_big, color: colorScheme.secondary,
@@ -172,9 +170,9 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
             );
           } else {
             return IconButton(
-              iconSize: iconSizeStateful*hp,
+              iconSize: postIconSizeStateful*hp,
               splashColor: Colors.transparent,
-              padding: iconPadding,
+              padding: postIconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.primaryVariant,
               icon: Icon(Arrows.down_open_big, size: iconSize),
@@ -202,9 +200,9 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
             () {
           if (likeStatus == true) {
             return IconButton(
-              iconSize: iconSizeStateful*hp,
+              iconSize: postIconSizeStateful*hp,
               splashColor: Colors.transparent,
-              padding: iconPadding,
+              padding: postIconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
               icon: Icon(Arrows.up_open_big, color: colorScheme.secondary,
@@ -222,9 +220,9 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
             );
           } else {
             return IconButton(
-              iconSize: iconSizeStateful*hp,
+              iconSize: postIconSizeStateful*hp,
               splashColor: Colors.transparent,
-              padding: iconPadding,
+              padding: postIconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.primaryVariant,
               icon: Icon(Arrows.up_open_big, size: iconSize),

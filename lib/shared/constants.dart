@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hs_connect/shared/tools/hexColor.dart';
-// Calculate trending by activity within past 1.5 days
-const hoursTrending = 36;
 
 const maxDataCollectionRate = 3; // in hours (for trending groups)
 const maxDataCollectionDays = 2; // in days (for trending groups)
@@ -12,21 +9,6 @@ const trendingCommentBoost = 0.04;
 const trendingReplyBoost = 0.05;
 const trendingPostLikeBoost = 0.02;
 const trendingPollVoteBoost = 0.03;
-
-const double profilePicWidth = 400;
-const double profilePicHeight = 400;
-
-const double groupPicWidth = 400;
-const double groupPicHeight = 400;
-
-const double commentPicWidth = 400;
-const double commentPicHeight = 400;
-
-const double messagePicWidth = 400;
-const double messagePicHeight = 400;
-
-const double postPicWidth = 400;
-const double postPicHeight = 400;
 
 const numHeightPixels = 781.1;
 const numWidthPixels = 392.7;
@@ -43,11 +25,9 @@ const topGradientThickness = 1.5;
 class _Gradient extends Color {
   _Gradient(int value) : super(value);
 
-  static Color gRed = HexColor ("FF004D");
+  static Color gRed = Color(0xFFff004d);
 
-  static Color gBlue = HexColor("13A1F0");
-
-  static Color gBlack = Colors.black;
+  static Color gBlue = Color(0xFF13a1f0);
 }
 
 class Gradients {

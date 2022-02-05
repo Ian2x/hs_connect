@@ -65,7 +65,6 @@ class _ProfileBodyState extends State<ProfileBody> {
     final userData = Provider.of<UserData?>(context);
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
-    final colorScheme = Theme.of(context).colorScheme;
 
     if (profileData == null) return Loading();
     bool isOwnProfile = widget.profileUserRef == widget.currUserData.userRef &&

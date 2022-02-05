@@ -18,26 +18,20 @@ class ProfileImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final hp = Provider.of<HeightPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
 
     return Center(
-      child: buildImage(context: context),
-    );
-  }
-
-  Widget buildImage({required BuildContext context}) {
-    final hp = Provider.of<HeightPixel>(context).value;
-
-    final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-        width: 100*hp,
-        height: 100*hp,
-        decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: colorScheme.background,
-            border: Border.all(color: colorScheme.background, width: 1.5*hp),
-            image: DecorationImage(fit: BoxFit.fill, image: _images.profileImageProvider(profileImageURL))
-        )
+      child: Container(
+          width: 100*hp,
+          height: 100*hp,
+          decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: colorScheme.background,
+              border: Border.all(color: colorScheme.background, width: 1.5*hp),
+              image: DecorationImage(fit: BoxFit.fill, image: _images.profileImageProvider(profileImageURL))
+          )
+      ),
     );
   }
 

@@ -1,19 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
-import 'package:hs_connect/shared/widgets/gradientText.dart';
 import 'package:provider/provider.dart';
-
-import 'authenticate.dart';
-
-
 
 class AboutUs extends StatelessWidget {
   const AboutUs({Key? key}) : super(key: key);
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -90,33 +81,12 @@ class AboutUs extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height:60*hp),
-                   /* ActionChip(
-                      padding: EdgeInsets.fromLTRB(60*wp, 15*hp, 60*wp, 15*hp),
-                      backgroundColor: Colors.white,
-                      label: GradientText(
-                        'Sign up',
-                        style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 23*hp,
-                        ),
-                        gradient: Gradients.blueRed(),
-                      ),
-                      onPressed: (){
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (context) => pixelProvider(context, child: Authenticate(signIn: false))));
-                      },
-                    ),*/
-
                   ],
                 )
               )
-
-
             ],
           )
       ),
-
-
-
-
     );
   }
 }

@@ -6,8 +6,11 @@ import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
+import 'package:hs_connect/shared/widgets/gradientText.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
+import 'package:hs_connect/shared/widgets/myOutlinedButton.dart';
 import 'package:provider/provider.dart';
+import 'package:tuple/tuple.dart';
 
 import 'authBar.dart';
 
@@ -31,9 +34,10 @@ class _RegisterUserState extends State<RegisterUser> {
   String password = '';
 
   String? error;
+  bool passwordHidden = true;
 
-  String authError = 'That username has already been taken.';
-  String lengthError = 'Username and Password should be 6+ characters long.';
+  static const String authError = 'That username has already been taken.';
+  static const String lengthError = 'Username and Password should be 6+ characters long.';
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +65,6 @@ class _RegisterUserState extends State<RegisterUser> {
                           decoration: BoxDecoration(
                             gradient: Gradients.blueRed(begin: Alignment.topLeft , end: Alignment.bottomRight),
                           ),
-                          child: SizedBox(),
                         ),
                         SizedBox(height: 30*hp),
                         Center(
@@ -80,10 +83,10 @@ class _RegisterUserState extends State<RegisterUser> {
                                   ),
                                 ),
                                 SizedBox(height: 10*hp),
-                                Text("Your username is only used for logging in.\n(No one else will see it)",
-                                    style: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 14), textAlign: TextAlign.center,),
+                                Text("Your username is only used for logging in.\n(No one else will see it)", textAlign: TextAlign.center,
+                                    style: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 15*hp, height: 1.5)),
                                 Container(
-                                  height: 40*hp,
+                                  height: 30*hp,
                                   padding: EdgeInsets.symmetric(horizontal: 20*wp),
                                   alignment: Alignment.bottomCenter,
                                   child: error != null ? Text(
@@ -117,11 +120,21 @@ class _RegisterUserState extends State<RegisterUser> {
                                       TextFormField(
                                           style: Theme.of(context).textTheme.headline6?.copyWith(color: Color(0xFFa1a1a1)),
                                           autocorrect:false,
-                                          obscureText: true,
+                                          obscureText: passwordHidden,
                                           decoration: InputDecoration(
                                               hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: Color(0xffdbdada)),
                                               border: InputBorder.none,
-                                              hintText: "Password..."),
+                                              hintText: "Password...",
+                                              suffixIcon: IconButton(
+                                                icon: passwordHidden ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
+                                                iconSize: 17,
+                                                onPressed: () {
+                                                  if (mounted) {
+                                                    setState(() => passwordHidden = !passwordHidden);
+                                                  }
+                                                },
+                                              )
+                                          ),
                                           onChanged: (val) {
                                             if (mounted) {
                                               setState(() => password = val);
@@ -167,8 +180,53 @@ class _RegisterUserState extends State<RegisterUser> {
                           }
                           dynamic result =
                               await _auth.registerWithUsernameAndPassword(username, password, widget.domain, widget.domainEmail);
-                          if (result is User?) {
-                            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => pixelProvider(context, child: Wrapper())), (Route<dynamic> route) => false);
+                          if (result is Tuple2<User?, String>) {
+                            if (mounted) {
+                              setState(() => loading = false);
+                            }
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (BuildContext context) {
+                                return new AlertDialog(
+                                  title: Text(
+                                    "You've been assigned the username:", textAlign: TextAlign.center,
+                                    style: ThemeText.inter(fontSize: 18 * hp, color: Colors.black),
+                                  ),
+                                  content: Container(
+                                    padding: EdgeInsets.fromLTRB(10*wp, 0, 10*wp, 10*hp),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text(
+                                          result.item2,
+                                          style: ThemeText.inter(fontSize: 20 * hp, color: Colors.black),
+                                        ),
+                                        SizedBox(height: 25*hp),
+                                        MyOutlinedButton(
+                                          padding: EdgeInsets.symmetric(vertical: 6*hp, horizontal: 20*wp),
+                                          onPressed: () {
+                                            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => pixelProvider(context, child: Wrapper())), (Route<dynamic> route) => false);
+                                          },
+                                          gradient: Gradients.blueRed(begin: Alignment.topCenter, end: Alignment.bottomCenter),
+                                          borderRadius: 30*hp,
+                                          backgroundColor: Colors.white,
+                                          child: GradientText(
+                                            "Continue",
+                                            softWrap: false,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: ThemeText.inter(fontWeight: FontWeight.w500, fontSize: 14*hp,
+                                            ),
+                                            gradient: Gradients.blueRed(),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
                           } else if (result is FirebaseAuthException && result.code == 'email-already-in-use') {
                             if (mounted) {
                               setState(() {

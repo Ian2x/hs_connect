@@ -14,9 +14,9 @@ class UserDataDatabaseService {
   UserDataDatabaseService({required this.currUserRef});
 
   // collection reference
-  final CollectionReference userDataCollection = FirebaseFirestore.instance.collection(C.userData);
+  static final CollectionReference userDataCollection = FirebaseFirestore.instance.collection(C.userData);
 
-  Future<void> initUserData(String domain, String username, String domainEmail, {String? overrideCounty, String? overrideState, String? overrideCountry}) async {
+  Future<String> initUserData(String domain, String username, String domainEmail, {String? overrideCounty, String? overrideState, String? overrideCountry}) async {
     String domainLC = domain.toLowerCase();
     final GroupsDatabaseService _groupDatabaseService = GroupsDatabaseService(currUserRef: currUserRef);
 
@@ -64,6 +64,7 @@ class UserDataDatabaseService {
     });
     // join domain group
     await joinGroup(groupRef: domainGroupRef);
+    return fundamentalName;
   }
 
   Future<void> updateProfile(

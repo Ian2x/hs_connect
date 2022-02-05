@@ -30,7 +30,6 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
   Widget build(BuildContext context) {
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
-    final colorScheme = Theme.of(context).colorScheme;
 
     if (selectedGroup==null) return Loading();
     return Container(
@@ -117,43 +116,7 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
                             )
                           ]),
                         ],
-                      )/*Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Divider(color: colorScheme.background, thickness: 2*hp),
-                          Row(
-                            children: <Widget>[
-                              Text(group.name,
-                                  style: Theme.of(context).textTheme.subtitle1),
-                              Spacer(),
-                              ConstrainedBox(
-                                  constraints: BoxConstraints(maxHeight: 40*hp),
-                                child:
-                                Checkbox(
-                                  value: selectedGroup == widget.groups[index - 1],
-                                  shape: CircleBorder(),
-                                  onChanged: (bool? value) {
-                                    if (value==true) {
-                                      if (mounted) {
-                                        setState(() {
-                                          selectedGroup = widget.groups[index - 1];
-                                        });
-                                      }
-                                      widget.onSelectGroup(widget.groups[index - 1]);
-                                    }
-                                  },
-                                )
-                              )
-                            ]
-                          ),
-                          group.name == "Public"
-                              ? Text("Anyone can see", style: Theme.of(context).textTheme.subtitle2)
-                              : Container(),
-                          group.accessRestriction.restrictionType == AccessRestrictionType.domain
-                              ? Text("Only for your school", style: Theme.of(context).textTheme.subtitle2)
-                              : Container()
-                        ]
-                      ),*/
+                      )
                     ),
                   );
                 }
