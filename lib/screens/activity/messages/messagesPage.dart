@@ -43,35 +43,25 @@ class MessagesPage extends StatelessWidget {
           elevation: 0,
           bottom: MyDivider(),
         ),
-        body: Container(
-          padding: EdgeInsets.only(bottom: 10 * hp),
-          child: Column(children: <Widget>[
-            Expanded(
-                child: Container(
-              padding: EdgeInsets.only(left: 10 * wp, right: 10 * wp),
-              child: MessagesFeed(
-                currUserRef: currUserRef,
-                otherUserRef: otherUserData.userRef,
-                onUpdateLastViewed: onUpdateLastViewed,
-              ),
-            )),
-            Container(
-                height: bottomGradientThickness * hp,
-                decoration: BoxDecoration(
-                  gradient: Gradients.blueRed(),
-                )),
-            Container(
-              child: SizedBox(height: 10 * hp),
+        body: Column(children: <Widget>[
+          Expanded(
+              child: Container(
+            padding: EdgeInsets.only(left: 10 * wp, right: 10 * wp),
+            child: MessagesFeed(
+              currUserRef: currUserRef,
+              otherUserRef: otherUserData.userRef,
+              onUpdateLastViewed: onUpdateLastViewed,
             ),
-            Container(
-                padding: EdgeInsets.only(left: 10 * wp, right: 10 * wp),
-                child: MessagesForm(
-                    currUserRef: currUserRef,
-                    otherUserRef: otherUserData.userRef,
-                    onUpdateLastMessage: onUpdateLastMessage,
-                    onUpdateLastViewed: onUpdateLastViewed))
-          ]),
-        ),
+          )),
+          Container(
+              height: bottomGradientThickness * hp,
+              color: colorScheme.onSurface),
+          MessagesForm(
+              currUserRef: currUserRef,
+              otherUserRef: otherUserData.userRef,
+              onUpdateLastMessage: onUpdateLastMessage,
+              onUpdateLastViewed: onUpdateLastViewed)
+        ]),
       ),
     );
   }

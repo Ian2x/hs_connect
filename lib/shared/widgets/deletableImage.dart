@@ -13,30 +13,20 @@ class DeletableImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
-        width: MediaQuery.of(context).size.width,
+        width: width,
         height: height,
-        child: Overlay(
-          initialEntries: <OverlayEntry>[
-            OverlayEntry(builder: (BuildContext context) {
-              return FittedBox(
-                child: image,
-                fit: BoxFit.fitWidth,
-              );
-            }),
-            OverlayEntry(builder: (BuildContext context) {
-              return Row(children: <Widget>[
-                Spacer(),
-                Column(children: <Widget>[
-                  SizedBox(height: buttonSize/3),
-                  DeleteImageButton(onDelete: onDelete, buttonSize: buttonSize),
-                  Spacer()
-                ]),
-                SizedBox(width: buttonSize/3),
-              ]);
-            }),
-          ],
+        child: FittedBox(
+          fit: BoxFit.contain,
+          child: Stack(
+            children: [
+              image,
+              Positioned(
+                right: 10,
+                top: 10,
+                child:DeleteImageButton(onDelete: onDelete, buttonSize: buttonSize))
+            ]
+          ),
         ));
   }
 }
@@ -64,8 +54,7 @@ class DeleteImageButton extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
             ),
-            Icon(Icons.close,
-            color: Colors.white),
+            Icon(Icons.close, color: Colors.white),
           ],
         ),
       ),

@@ -125,12 +125,10 @@ class _CommentsFeedState extends State<CommentsFeed> {
             right:0,
             child: Container(
             padding: EdgeInsets.only(top: bottomGradientThickness * hp),
-            decoration: BoxDecoration(
-              gradient: Gradients.blueRed(),
-            ),
+            color: colorScheme.onSurface,
             child: Container(
                 width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.fromLTRB(10 * wp, 10 * hp, 10 * wp, 10 * hp),
+                padding: EdgeInsets.fromLTRB(5 * wp, 5 * hp, 5 * wp, 5 * hp),
                 color: colorScheme.background,
               child: CommentReplyForm(
                 focusNode: myFocusNode,

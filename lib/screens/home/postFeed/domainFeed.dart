@@ -13,8 +13,9 @@ import 'package:provider/provider.dart';
 class DomainFeed extends StatefulWidget {
   final UserData currUser;
   final bool isDomain;
+  final bool searchByTrending;
 
-  const DomainFeed({Key? key, required this.currUser, required this.isDomain}) : super(key: key);
+  const DomainFeed({Key? key, required this.currUser, required this.isDomain, required this.searchByTrending}) : super(key: key);
 
   @override
   _DomainFeedState createState() => _DomainFeedState();
@@ -45,7 +46,7 @@ class _DomainFeedState extends State<DomainFeed> with AutomaticKeepAliveClientMi
       DocumentSnapshot? tempKey;
       List<Post?> tempPosts = await _posts.getGroupPosts(
           [FirebaseFirestore.instance.collection(C.groups).doc(widget.currUser.domain)],
-          startingFrom: pageKey, setStartFrom: (DocumentSnapshot ds) {tempKey = ds;}, withPublic: false, byNew: false);
+          startingFrom: pageKey, setStartFrom: (DocumentSnapshot ds) {tempKey = ds;}, withPublic: false, byNew: !widget.searchByTrending);
       tempPosts.removeWhere((value) => value == null);
       final newPosts = tempPosts.map((item) => item!).toList();
       final isLastPage = newPosts.length < _pageSize;

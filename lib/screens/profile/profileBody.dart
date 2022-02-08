@@ -85,9 +85,9 @@ class _ProfileBodyState extends State<ProfileBody> {
           Text(
             profileData!.fundamentalName,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.headline5?.copyWith(fontWeight: FontWeight.w500, fontSize: 22*hp),
+            style: Theme.of(context).textTheme.headline5,
           ),
-          SizedBox(height: 18 * hp),
+          SizedBox(height: 14 * hp),
           Row(
             children: <Widget>[
               Spacer(),
@@ -104,15 +104,7 @@ class _ProfileBodyState extends State<ProfileBody> {
           ),
           SizedBox(height: 14 * hp),
           Center(
-            child: RichText(
-              text: TextSpan(
-                children: <TextSpan>[
-                  TextSpan(text: profileData!.score.toString(), style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18*hp)),
-                  TextSpan(text: " Likes", style: Theme.of(context).textTheme.headline6?.copyWith
-                      (color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.w500, fontSize: 18*hp)),
-                ],
-              ),
-            ),
+            child: Text(profileData!.score.toString() + " Likes", style: Theme.of(context).textTheme.headline6)
           ),
           widget.profileUserRef != widget.currUserData.userRef
               ? Column(

@@ -140,7 +140,7 @@ class _PostFormState extends State<PostForm> {
                 children: [
                   SizedBox(width: 10*wp),
                   TextButton(
-                    child: Text("Cancel", style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.primary, fontSize: 18.5)),
+                    child: Text("Cancel", style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontSize: 18.5)),
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -178,7 +178,7 @@ class _PostFormState extends State<PostForm> {
                           children: [
                             Text(
                               selectedGroup!.name,
-                              style: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.primaryVariant)
+                              style: Theme.of(context).textTheme.headline6
                             ),
                             Icon(Icons.keyboard_arrow_down_rounded),
                           ],
@@ -268,25 +268,13 @@ class _PostFormState extends State<PostForm> {
                 constraints: BoxConstraints(
                   minHeight: phoneHeight * 0.75,
                 ),
-                padding: EdgeInsets.fromLTRB(20*wp, 10*hp, 15*wp, 10*hp),
+                padding: EdgeInsets.fromLTRB(20*wp, 10*hp, 20*wp, 10*hp),
                 child: Column(children: <Widget>[
                   error != null
                       ? Text(error!, style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.onSurface))
                       : Container(),
                   error != null
                       ? SizedBox(height:10*wp)
-                      : Container(),
-                  newFile != null
-                      ? Semantics(
-                          label: 'new_post_pic_image',
-                          child: DeletableImage(
-                              image: Image.file(File(newFile!.path)),
-                              onDelete: () {
-                                if (mounted) {
-                                  setState(() => newFile = null);
-                                }
-                              }, height: 400*hp, width: 400*wp, buttonSize: 30.0,),
-                        )
                       : Container(),
                   TextFormField(
                     style: Theme.of(context).textTheme.headline5,
@@ -295,7 +283,7 @@ class _PostFormState extends State<PostForm> {
                     decoration: InputDecoration(
                         hintStyle: Theme.of(context).textTheme.headline5?.copyWith(color: colorScheme.primaryVariant),
                         border: InputBorder.none,
-                        hintText: "What's up?", ),
+                        hintText: "Title", ),
                     onChanged: (val) {
                       setState(() => _title = val);
                       if (error == emptyTitleError) {
@@ -307,6 +295,18 @@ class _PostFormState extends State<PostForm> {
                       }
                     },
                   ),
+                  newFile != null
+                      ? Semantics(
+                    label: 'new_post_pic_image',
+                    child: DeletableImage(
+                      image: Image.file(File(newFile!.path)),
+                      onDelete: () {
+                        if (mounted) {
+                          setState(() => newFile = null);
+                        }
+                      }, height: 400*hp, width: 400*wp, buttonSize: 30.0,),
+                  )
+                      : Container(),
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
@@ -323,13 +323,13 @@ class _PostFormState extends State<PostForm> {
                       child: Column(
                         children: [
                           TextFormField(
-                            style: Theme.of(context).textTheme.bodyText1?.copyWith(color: colorScheme.primary, fontSize: 20),
+                            style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 20),
                             maxLines: null,
                             autocorrect: false,
                             decoration: InputDecoration(
                                 hintStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: colorScheme.primary, fontSize: 20),
                                 border: InputBorder.none,
-                                hintText: "optional text"),
+                                hintText: "Optional text"),
                             onChanged: (val) => setState(() => _text = val),
                             focusNode: optionalTextFocusNode,
                           ),
@@ -351,11 +351,7 @@ class _PostFormState extends State<PostForm> {
           child: GestureDetector(
             onTap: ()=>dismissKeyboard(context),
             child: Container(
-              decoration: BoxDecoration(
-                gradient: Gradients.blueRed(
-                  begin: Alignment.bottomLeft, end: Alignment.topRight,
-                ),
-              ),
+              color: colorScheme.onSurface,
               padding: EdgeInsets.only(top: bottomGradientThickness*hp),
               width:MediaQuery.of(context).size.width,
               child: Container(

@@ -7,6 +7,7 @@ import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
+import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
 import 'package:provider/provider.dart';
 
 import 'authBar.dart';
@@ -25,6 +26,7 @@ class _SignInState extends State<SignIn> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
+  bool passwordHidden = true;
 
   // text field state
   String username = '';
@@ -46,6 +48,7 @@ class _SignInState extends State<SignIn> {
     )
         : Scaffold(
         backgroundColor: Colors.white,
+        appBar: AppBar(leading: myBackButtonIcon(context), elevation: 0, backgroundColor: Colors.white,),
         body: Stack(
             children: [
               GestureDetector(
@@ -54,32 +57,7 @@ class _SignInState extends State<SignIn> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          height: 100*hp,
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            gradient: Gradients.blueRed(begin: Alignment.topLeft , end: Alignment.bottomRight),
-                          ),
-                          child: SizedBox(),
-                        ),
-                        SizedBox(height: 10*hp),
-                        Row(
-                          children: [
-                            SizedBox(width: 10*hp),
-                            TextButton(
-                                onPressed: (){
-                                  dismissKeyboard(context);
-                                  Navigator.pop(context);
-                                },
-                                child:Text(
-                                  "Cancel",
-                                  style: ThemeText.inter(fontWeight: FontWeight.normal,
-                                      fontSize: 16*hp, color: Colors.grey),
-                                )
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 15*hp),
+                        SizedBox(height: 35*hp),
                         Center(
                             child:
                             Column(
@@ -87,20 +65,28 @@ class _SignInState extends State<SignIn> {
                                 SizedBox(
                                   height: 80 *hp,
                                   child:
-                                  Image.asset('assets/sublogo1cropped.png'),
+                                  Image.asset('assets/splash1cropped.png'),
                                 ),
-                                SizedBox(height: 20*hp),
+                                SizedBox(height: 25*hp),
                                 Text(
                                   'Login',
                                   style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 28*hp, color: Colors.black
                                   ),
                                 ),
-                                error != '' ? SizedBox(height:10*hp) : Container(),
+                                SizedBox(height: 10*hp),
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 25*wp),
+                                  child: Text("Enter your login credentials.",
+                                    style: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 14*hp, height: 1.3), textAlign: TextAlign.center,),
+                                ),
                                 error != '' ?
-                                Text(error,
-                                  style: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 12))
-                                : Container(),
-                                error != '' ? SizedBox(height:15*hp): SizedBox(height: 25*hp),
+                                Container(
+                                  height: 20*hp,
+                                  alignment: Alignment.bottomCenter,
+                                  child: Text(error,
+                                    style: ThemeText.inter(fontWeight: FontWeight.w500, fontSize: 13*hp, color: Colors.black), textAlign: TextAlign.center),
+                                )
+                                : Container(height: 20*hp),
                                 Container(
                                   padding:EdgeInsets.fromLTRB(20*wp,0,20*wp,0),
                                   child: Form(
@@ -109,10 +95,10 @@ class _SignInState extends State<SignIn> {
                                       children: [
                                         TextFormField(
                                             autocorrect:false,
-                                            style: Theme.of(context).textTheme.headline6,
+                                            style: Theme.of(context).textTheme.headline6?.copyWith(color: authPrimaryTextColor),
                                             maxLines: null,
                                             decoration: InputDecoration(
-                                                hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: Color(0xffdbdada)),
+                                                hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: authHintTextColor),
                                                 border: InputBorder.none,
                                                 hintText: "Username"),
                                             onChanged: (val) {
@@ -121,30 +107,37 @@ class _SignInState extends State<SignIn> {
                                               }
                                             }
                                         ),
-                                        Divider(height:0, thickness: 2*hp, color: Color(0xffdbdada)),
+                                        Divider(height:0, thickness: 2*hp, color: authHintTextColor),
                                         SizedBox(height:10*hp),
                                         TextFormField(
                                             autocorrect:false,
-                                            style: Theme.of(context).textTheme.headline6,
+                                            style: Theme.of(context).textTheme.headline6?.copyWith(color: authPrimaryTextColor),
                                             decoration: InputDecoration(
-                                                hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: Color(0xffdbdada)),
+                                                hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: authHintTextColor),
                                                 border: InputBorder.none,
+                                                suffixIcon: IconButton(
+                                                  icon: passwordHidden ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
+                                                  iconSize: 17,
+                                                  onPressed: () {
+                                                    if (mounted) {
+                                                      setState(() => passwordHidden = !passwordHidden);
+                                                    }
+                                                  },
+                                                ),
                                                 hintText: "Password"),
-                                            obscureText: true,
+                                            obscureText: passwordHidden,
+
                                             onChanged: (val) {
                                               if (mounted) {
                                                 setState(() => password = val);
                                               }
                                             }),
-                                        Divider(height:0, thickness: 2*hp, color: Color(0xffdbdada)),
-                                        SizedBox(height:10*hp),
+                                        Divider(height:0, thickness: 2*hp, color: authHintTextColor),
                                       ],
                                     ),
                                   ),
                                 ),
-                                  SizedBox(height: 20*hp),
-                                  SizedBox(height:15*hp),
-                                  SizedBox(height: 50*hp),
+                                  SizedBox(height: 105*hp),
                                 ],
                               )
                           ),

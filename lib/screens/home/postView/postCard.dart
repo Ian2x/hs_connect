@@ -11,11 +11,11 @@ import 'package:hs_connect/screens/home/postView/pollView.dart';
 import 'package:hs_connect/screens/home/postView/postPage.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/polls_database.dart';
-import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
+import 'package:hs_connect/shared/tools/buildCircle.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/reports/reportSheet.dart';
 import 'package:hs_connect/shared/widgets/expandableImage.dart';
@@ -161,130 +161,108 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
           //if border then ShapeDecoration
           color: colorScheme.surface,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12 * hp)),
-          margin: EdgeInsets.fromLTRB(leftRightMargin, 4 * hp, leftRightMargin, 4*hp),
+          margin: EdgeInsets.fromLTRB(leftRightMargin, 4 * hp, leftRightMargin, 4 * hp),
           elevation: 0,
           child: Container(
-              padding: EdgeInsets.fromLTRB(0*wp, 2 * hp, 0 * wp, 5 * hp),
-              child: Row(
+              padding: EdgeInsets.fromLTRB(0, 10*hp, 0, 0),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Flexible(
-                    //Otherwise horizontal renderflew of row
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            SizedBox(width:10*wp),
-                            Chip(
-                              padding: EdgeInsets.all(0),
-                              backgroundColor: colorScheme.surface,
-                              avatar: Container(
-                                height: 35,
-                                width: 35,
+                  Row(
+                    children: [
+                      SizedBox(width:10*wp),
+                      buildGroupCircle(
+                          groupImage: group!=null ? group!.image : null,
+                          height: 27*hp,
+                          width: 27*hp,
+                          context: context,
+                          backgroundColor: colorScheme.surface),
+                      SizedBox(width: 5*wp),
+                      Text(
+                        group!.name + " • " + convertTime(widget.post.createdAt.toDate()),
+                        style: Theme.of(context).textTheme.subtitle2?.copyWith
+                          (color: colorScheme.primary),
+                      ),
+                      Spacer(),
+                      widget.post.isFeatured ? Container(
+                        padding: EdgeInsets.only(right: 15*wp, top: 0*hp),
+                        child: Container(
+                            decoration: BoxDecoration(
+                                gradient: Gradients.blueRed(),
+                                borderRadius: BorderRadius.circular(17*hp)
+                            ),
+                            child: Container(
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100),
-                                    color: colorScheme.primary,
-                                    border: Border.all(
-                                        width: 0.15*hp
-                                    )
+                                  borderRadius: BorderRadius.circular(17*hp),
+                                  color: Theme.of(context).colorScheme.surface,
                                 ),
-                                child: CircleAvatar(
-                                  backgroundColor: colorScheme.surface,
-                                  backgroundImage: ImageStorage().groupImageProvider(group!=null ? group!.image : null),
-                                ),
-                              ),
-                              label: Text(
-                                group!.name,
-                                  style: Theme.of(context).textTheme.subtitle2?.copyWith
-                                    (fontSize: 14 * hp, fontWeight: FontWeight.w500),
-                                )
-                            ),
-                            Text(
-                              " • " + convertTime(widget.post.createdAt.toDate()),
-                              style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                                color: colorScheme.primary,
-                              ),
-                            ),
-                            Spacer(),
-                            widget.post.isFeatured ? Container(
-                              padding: EdgeInsets.only(right: 15*wp, top: 10*hp),
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      gradient: Gradients.blueRed(),
-                                      borderRadius: BorderRadius.circular(17*hp)
-                                  ),
-                                  child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(17*hp),
-                                        color: Theme.of(context).colorScheme.surface,
-                                      ),
-                                      padding: EdgeInsets.fromLTRB(17*wp, 5*hp, 17*wp, 6*hp),
-                                      margin: EdgeInsets.all(1),
-                                      child: Text('Featured Post')
-                                  )
-                              ),
-                            ) : Container(),
-                          ],
+                                padding: EdgeInsets.fromLTRB(17*wp, 5*hp, 17*wp, 6*hp),
+                                margin: EdgeInsets.all(1.5*hp),
+                                child: Text('Featured', style: Theme.of(context).textTheme.subtitle2)
+                            )
                         ),
-                        Row(
-                          children: [
-                            SizedBox(width:10*wp),
-                            Text(
-                        widget.post.title,
-                            style: Theme.of(context).textTheme.headline6?.copyWith(
-                              fontSize:16 * hp, fontWeight: FontWeight.w500,
-                            ),
-                            overflow: TextOverflow.ellipsis, // default is .clip
-                            maxLines: 3),
-                          ],
+                      ) : Container(),
+                    ],
+                  ),
+                  SizedBox(height: 10*hp),
+                  Row(
+                    children: [
+                      SizedBox(width:10*wp),
+                      Text(
+                  widget.post.title,
+                      style: Theme.of(context).textTheme.headline6?.copyWith(
+                        fontSize:16 * hp, fontWeight: FontWeight.w500,
+                      ),
+                      overflow: TextOverflow.ellipsis, // default is .clip
+                      maxLines: 3),
+                    ],
+                  ),
+                  widget.post.mediaURL != null ? ExpandableImage(imageURL: widget.post.mediaURL!, containerWidth: MediaQuery.of(context).size.width-2*leftRightMargin, maxHeight: 300*hp, loadingHeight: 300*hp, margin: EdgeInsets.only(top: 10*hp))
+                      : Container(),
+                  poll != null ?
+                    Container(
+                      alignment: Alignment.center,
+                      child: PollView(poll: poll!, currUserRef: widget.currUserRef, post: widget.post)
+                    ): Container(),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(0, 0, 0, 2*hp),
+                    child: Row(
+                      //Icon Row
+                      children: [
+                        SizedBox(width: 10 * wp),
+                        Text(
+                          (widget.post.numComments + widget.post.numReplies).toString() + " Comments",
+                          style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary),
                         ),
-                        widget.post.mediaURL != null ? ExpandableImage(imageURL: widget.post.mediaURL!, containerWidth: MediaQuery.of(context).size.width-2*leftRightMargin, maxHeight: 450*hp, margin: EdgeInsets.only(top: 10*hp))
-                            : Container(),
-                        poll != null ?
-                          Container(
-                            child: PollView(poll: poll!, currUserRef: widget.currUserRef, post: widget.post)
-                          ): Container(),
-                        Row(
-                          //Icon Row
-                          children: [
-                            SizedBox(width: 10 * wp),
-                            Text(
-                              (widget.post.numComments + widget.post.numReplies).toString() + " Comments",
-                              style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                                  fontSize: 14 * hp, fontWeight: FontWeight.normal, color: colorScheme.primary),
-                            ),
-                            IconButton(
-                              constraints: BoxConstraints(),
-                              splashRadius: .1,
-                              icon: Icon(Icons.more_horiz, size: 20 * hp, color: colorScheme.primary),
-                              onPressed: () {
-                                showModalBottomSheet(
-                                    context: context,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.vertical(
-                                          top: Radius.circular(20 * hp),
-                                        )),
-                                    builder: (context) => pixelProvider(context,
-                                        child: ReportSheet(
-                                          reportType: ReportType.post,
-                                          entityRef: widget.post.postRef,
-                                        )));
-                              },
-                            ),
-                            Spacer(),
-                            LikeDislikePost(
-                                currUserRef: widget.currUserRef,
-                                post: widget.post,
-                                postLikesManager: postLikesManager
-                            ),
-                            SizedBox(width: 10*wp),
-                          ],
-                        )
-                      ], //Column Children ARRAY
+                        IconButton(
+                          constraints: BoxConstraints(),
+                          splashRadius: .1,
+                          icon: Icon(Icons.more_horiz, size: 20 * hp, color: colorScheme.primary),
+                          onPressed: () {
+                            showModalBottomSheet(
+                                context: context,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(20 * hp),
+                                    )),
+                                builder: (context) => pixelProvider(context,
+                                    child: ReportSheet(
+                                      reportType: ReportType.post,
+                                      entityRef: widget.post.postRef,
+                                    )));
+                          },
+                        ),
+                        Spacer(),
+                        LikeDislikePost(
+                            currUserRef: widget.currUserRef,
+                            post: widget.post,
+                            postLikesManager: postLikesManager
+                        ),
+                        SizedBox(width: 10*wp),
+                      ],
                     ),
                   )
-                ],
+                ], //Column Children ARRAY
               ))),
     );
   }

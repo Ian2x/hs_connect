@@ -13,8 +13,9 @@ import 'package:provider/provider.dart';
 class PublicFeed extends StatefulWidget {
   final UserData currUser;
   final bool isDomain;
+  final bool searchByTrending;
 
-  const PublicFeed({Key? key, required this.currUser, required this.isDomain})
+  const PublicFeed({Key? key, required this.currUser, required this.isDomain, required this.searchByTrending})
       : super(key: key);
 
   @override
@@ -45,7 +46,7 @@ class _PublicFeedState extends State<PublicFeed> with AutomaticKeepAliveClientMi
     try {
       DocumentSnapshot? tempKey;
       List<Post?> tempPosts = await _posts.getGroupPosts([],
-          startingFrom: pageKey, setStartFrom: (DocumentSnapshot ds) {tempKey = ds;}, withPublic: true, byNew: false);
+          startingFrom: pageKey, setStartFrom: (DocumentSnapshot ds) {tempKey = ds;}, withPublic: true, byNew: !widget.searchByTrending);
       tempPosts.removeWhere((value) => value == null);
       final newPosts = tempPosts.map((item) => item!).toList();
       final isLastPage = newPosts.length < _pageSize;

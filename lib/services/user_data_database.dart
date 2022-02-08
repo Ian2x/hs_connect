@@ -7,6 +7,7 @@ import 'package:hs_connect/models/searchResult.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:tuple/tuple.dart';
 
 class UserDataDatabaseService {
   DocumentReference currUserRef;
@@ -16,7 +17,7 @@ class UserDataDatabaseService {
   // collection reference
   static final CollectionReference userDataCollection = FirebaseFirestore.instance.collection(C.userData);
 
-  Future<String> initUserData(String domain, String username, String domainEmail, {String? overrideCounty, String? overrideState, String? overrideCountry}) async {
+  Future<Tuple3<String, int, String>> initUserData(String domain, String username, String domainEmail, {String? overrideCounty, String? overrideState, String? overrideCountry}) async {
     String domainLC = domain.toLowerCase();
     final GroupsDatabaseService _groupDatabaseService = GroupsDatabaseService(currUserRef: currUserRef);
 
@@ -64,7 +65,7 @@ class UserDataDatabaseService {
     });
     // join domain group
     await joinGroup(groupRef: domainGroupRef);
-    return fundamentalName;
+    return Tuple3(fundamentalName, fundamentalNumber, domainLC);
   }
 
   Future<void> updateProfile(

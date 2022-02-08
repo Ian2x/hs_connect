@@ -74,12 +74,12 @@ class _PostTitleCardState extends State<PostTitleCard> {
     final colorScheme = Theme.of(context).colorScheme;
     UserData? userData = Provider.of<UserData?>(context);
     PostLikesManager postLikesManager = Provider.of<PostLikesManager>(context);
-    final leftRightPadding = 10*wp;
+    final leftRightPadding = 15*wp;
 
     final localCreatorName = creatorName != null ? creatorName! : '';
 
     return Container(
-        padding: EdgeInsets.fromLTRB(leftRightPadding*wp, 10*hp, leftRightPadding*wp, 10*hp),
+        padding: EdgeInsets.fromLTRB(leftRightPadding*wp, 0, leftRightPadding*wp, 10*hp),
         child:
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,8 +99,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
                     }
                   },
                   child: Text("from " + localCreatorName + " • " + convertTime(widget.post.createdAt.toDate()),
-                    style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary,
-                    fontSize: 14*hp)
+                    style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary)
                   ),
                 ),
                 Spacer(flex:1),
@@ -150,7 +149,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
                 LikeDislikePostStateful(currUserRef: widget.currUserRef, post: widget.post, postLikesManager: postLikesManager),
               ],
             ),
-            SizedBox(height:30*hp),
+            SizedBox(height:25*hp),
             Text(
                 widget.post.numComments + widget.post.numReplies < 2 ? 'Comments' : (widget.post.numComments + widget.post.numReplies).toString() + ' Comments',
                 style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18*hp),

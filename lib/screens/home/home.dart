@@ -9,7 +9,9 @@ import 'package:hs_connect/screens/home/postFeed/publicFeed.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/screens/home/postView/postPage.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/myStorageManager.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
+import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
@@ -30,6 +32,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   late TabController tabController;
   ScrollController scrollController = ScrollController();
   var top = 0.0;
+  bool searchByTrending = true;
+
+  void toggleSearch() {
+    if (mounted) {
+      setState(() => searchByTrending = !searchByTrending);
+    }
+  }
 
   @override
   void initState() {
@@ -50,8 +59,22 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void subscribeToDomain() async {
     NotificationSettings settings = await FirebaseMessaging.instance.getNotificationSettings();
     if (settings.authorizationStatus==AuthorizationStatus.authorized) {
-      print('subscribing to topic: ' + widget.userData.domain.substring(1));
-      await FirebaseMessaging.instance.subscribeToTopic(widget.userData.domain.substring(1));
+      MyStorageManager.readData('subscribed').then((value) async {
+        if (value==true) {
+          print('Already subscribed to topic');
+        } else {
+          print('Subscribing to topic: ' + widget.userData.domain.substring(1));
+          FirebaseMessaging.instance.subscribeToTopic(widget.userData.domain.substring(1)).then(
+            (aVoid) {
+              MyStorageManager.saveData('subscribed', true);
+              print("Successfully subscribed");
+            },
+            onError: (aVoid) {
+              MyStorageManager.saveData('subscribed', false);
+            }
+          );
+        }
+      });
     }
   }
 
@@ -108,6 +131,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     if (userData == null) {
       return Scaffold(backgroundColor: colorScheme.background, body: Loading());
     }
+
+    final hp = Provider.of<HeightPixel>(context).value;
+
     return Scaffold(
       backgroundColor: colorScheme.background,
       body: Stack(
@@ -118,7 +144,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
               return [
                 SliverPersistentHeader(
-                  delegate: HomeAppBar(tabController: tabController, userData: userData, isDomain: isDomain),
+                  delegate: HomeAppBar(tabController: tabController, userData: userData, isDomain: isDomain, searchByTrending: searchByTrending, hp: hp, toggleSearch: toggleSearch),
                   pinned: true,
                   floating: true,
                 ),
@@ -126,8 +152,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             },
             body: TabBarView(
               children: [
-                DomainFeed(currUser: userData, isDomain: isDomain),
-                PublicFeed(currUser: userData, isDomain: isDomain),
+                DomainFeed(currUser: userData, isDomain: isDomain, searchByTrending: searchByTrending, key: ValueKey<bool>(searchByTrending)),
+                PublicFeed(currUser: userData, isDomain: isDomain, searchByTrending: searchByTrending, key: ValueKey<bool>(!searchByTrending)),
               ],
               controller: tabController,
               physics: AlwaysScrollableScrollPhysics(),

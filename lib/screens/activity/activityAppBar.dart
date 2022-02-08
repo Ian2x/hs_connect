@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/screens/home/homeAppBar.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:provider/provider.dart';
-import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/widgets/gradientText.dart';
 
 PreferredSizeWidget activityAppBar({required BuildContext context, required bool isNotifications, required TabController tabController}) {
   final wp = Provider.of<WidthPixel>(context).value;
@@ -14,75 +12,55 @@ PreferredSizeWidget activityAppBar({required BuildContext context, required bool
 
 
   return PreferredSize(
-    preferredSize: Size.fromHeight(90*hp),
+    preferredSize: Size.fromHeight(HomeAppBar.expandedHeight*hp-safeAreaHeight),
     child: Container(
       padding: EdgeInsets.only(top: safeAreaHeight),
       color: colorScheme.surface,
       child: Column(
         children: [
-          Spacer(),
-          Row(
-            children: <Widget>[
-              SizedBox(width: 30*wp),
-              Column(
-                children: <Widget>[
-                  SizedBox(height: 15*hp),
-                  Text('Activity',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline4
-                          ?.copyWith(fontSize: 22, fontWeight: FontWeight.w600, letterSpacing: 1))
-                ],
-              )
-            ],
-          ),
-          SizedBox(height: 15),
           Container(
-            padding: EdgeInsets.only(right: 15, left: 15),
-            child: TabBar(
-              controller: tabController,
-              padding: EdgeInsets.zero,
-              indicatorWeight: HomeAppBar.epsilon,
-              tabs: <Widget>[
-                Tab(
-                    iconMargin: EdgeInsets.only(),
-                    height: HomeAppBar.tabBarHeight,
-                    icon: Column(children: <Widget>[
-                      GradientText('Notifications',
-                          style: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.w500),
-                          maxLines: 1,
-                          softWrap: false,
-                          overflow: TextOverflow.fade,
-                          gradient: isNotifications ? Gradients.blueRed() : Gradients.solid(color: colorScheme.primary)),
-                      Spacer(),
-                      isNotifications
-                          ? Container(
-                        height: topGradientThickness,
-                        decoration: BoxDecoration(gradient: Gradients.blueRed()),
-                      )
-                          : Container()
-                    ])),
-                Tab(
-                    iconMargin: EdgeInsets.only(),
-                    height: HomeAppBar.tabBarHeight,
-                    icon: Column(children: <Widget>[
-                      GradientText("Messages",
-                          style: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.w500),
-                          maxLines: 1,
-                          softWrap: false,
-                          overflow: TextOverflow.fade,
-                          gradient: !isNotifications ? Gradients.blueRed() : Gradients.solid(color: colorScheme.primary)),
-                      //Text("Trending", style: Theme.of(context).textTheme.subtitle1),
-                      Spacer(),
-                      !isNotifications
-                          ? Container(
-                        height: topGradientThickness,
-                        decoration: BoxDecoration(gradient: Gradients.blueRed()),
-                      )
-                          : Container()
-                    ]))
-              ],
+            padding: EdgeInsets.fromLTRB(30*wp, 4*hp, 30*wp, 0),
+            child: Text('Activity',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline4
+                    ?.copyWith(fontSize: 19*hp, fontWeight: FontWeight.bold))
+          ),
+          Spacer(),
+          TabBar(
+            controller: tabController,
+            padding: EdgeInsets.zero,
+            indicatorColor: colorScheme.onSurface,
+            indicator: BoxDecoration(
+                border: Border(bottom: BorderSide(width: 1.5*hp, color: colorScheme.onSurface)
+                )
             ),
+            indicatorPadding: HomeAppBar.tabBarPadding,
+            indicatorWeight: 0.001*hp,
+            labelStyle: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.w500, fontSize: 15, color: colorScheme.onSurface),
+            unselectedLabelStyle: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.w500, fontSize: 15, color: colorScheme.primary),
+            tabs: <Widget>[
+              Tab(
+                  iconMargin: EdgeInsets.all(0),
+                  height: HomeAppBar.tabBarHeight,
+                  child: Container(
+                    padding: HomeAppBar.tabBarPadding,
+                    child: Text('Notifications',
+                        maxLines: 1,
+                        softWrap: false,
+                        overflow: TextOverflow.fade),
+                  )),
+              Tab(
+                  iconMargin: EdgeInsets.only(),
+                  height: HomeAppBar.tabBarHeight,
+                  icon: Container(
+                    padding: HomeAppBar.tabBarPadding,
+                    child: Text("Messages",
+                        maxLines: 1,
+                        softWrap: false,
+                        overflow: TextOverflow.fade),
+                  ))
+            ],
           ),
         ]
       ),

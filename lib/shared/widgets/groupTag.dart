@@ -37,7 +37,7 @@ class GroupTag extends StatelessWidget {
           child: Container(
             padding: padding,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(borderRadius),
+              borderRadius: BorderRadius.circular(borderRadius-thickness),
               color: colorScheme.surface,
             ),
             margin: EdgeInsets.all(thickness),
@@ -57,7 +57,7 @@ class GroupTag extends StatelessWidget {
               Container(
                 padding: EdgeInsets.only(bottom: 0),
                 child: Text( groupName,
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: fontSize)
+                    style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: fontSize)
                 ),
               )
             ]),

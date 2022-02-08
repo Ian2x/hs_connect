@@ -8,7 +8,7 @@ class ThemeNotifier with ChangeNotifier {
   static const darkThemeOnSurface = Color(0xffdbdbdb);
   static final darkTheme = ThemeData(
     brightness: Brightness.dark,
-    backgroundColor: Color(0xff2d2d2d),
+    backgroundColor: Color(0xff262626),
     // background
     colorScheme: ColorScheme(
       brightness: Brightness.dark,
@@ -18,7 +18,7 @@ class ThemeNotifier with ChangeNotifier {
       primaryVariant: Color(0xffbab9b9),
       secondaryVariant: Color(0xFF137ef0),
       secondary: Color(0xFF13a1f0),
-      surface: Color(0xff181818),
+      surface: Color(0xff131313),
       primary: Color(0xffa1a1a1),
       onError: Color(0xff353636),
       onSecondary: Color(0xFFff004d),
@@ -34,7 +34,7 @@ class ThemeNotifier with ChangeNotifier {
   static const lightThemeOnSurface = Color(0xFF000000);
   static final lightTheme = ThemeData(
     brightness: Brightness.light,
-    backgroundColor: Color(0xFFf2f2f2),
+    backgroundColor: Color(0xFFf4f4f4),
     // background
     colorScheme: ColorScheme(
       brightness: Brightness.light,

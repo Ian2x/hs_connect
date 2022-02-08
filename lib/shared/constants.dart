@@ -5,29 +5,33 @@ const maxDataCollectionDays = 2; // in days (for trending groups)
 const notificationStorageDays = 7; // in days
 
 // trendingCreatedAt factors
-const trendingCommentBoost = 0.04;
-const trendingReplyBoost = 0.05;
-const trendingPostLikeBoost = 0.02;
-const trendingPollVoteBoost = 0.03;
+const trendingCommentBoost = 0.08;
+const trendingReplyBoost = 0.1;
+const trendingPostLikeBoost = 0.04;
+const trendingPollVoteBoost = 0.06;
 
 const numHeightPixels = 781.1;
 const numWidthPixels = 392.7;
 
-const initialPostsFetchSize = 5;
-const nextPostsFetchSize = 5;
+const initialPostsFetchSize = 20;
+const nextPostsFetchSize = 20;
 
 const defaultProfilePic = AssetImage('assets/blankProfile.png');
 const defaultGroupPic = AssetImage('assets/defaultgroupimage1.png');
 
-const bottomGradientThickness = 1.5;
+const bottomGradientThickness = 2.5;
 const topGradientThickness = 1.5;
+
+const authHintTextColor = Color(0xffdbdada);
+const authPrimaryTextColor = Color(0xFFa1a1a1);
 
 class _Gradient extends Color {
   _Gradient(int value) : super(value);
 
-  static Color gRed = Color(0xFFff004d);
-
-  static Color gBlue = Color(0xFF13a1f0);
+  static Color gRed = Color(0xFFff004d).withOpacity(0.5);
+  static Color gRedFull = Color(0xFFff004d);
+  static Color gBlue = Color(0xFF13a1f0).withOpacity(0.5);
+  static Color gBlueFull = Color(0xFF13a1f0);
 }
 
 class Gradients {
@@ -41,6 +45,18 @@ class Gradients {
       end: end,
       stops: stops,
       colors: [ _Gradient.gBlue, _Gradient.gRed],
+    );
+  }
+  static LinearGradient blueRedFull ({
+    AlignmentGeometry begin = Alignment.topLeft,
+    AlignmentGeometry end = Alignment. bottomRight,
+    List<double>? stops,
+  }){
+    return LinearGradient(
+      begin: begin,
+      end: end,
+      stops: stops,
+      colors: [ _Gradient.gBlueFull, _Gradient.gRedFull],
     );
   }
   static LinearGradient blueRedHorizontal ({

@@ -52,7 +52,6 @@ class LikeDislikePost extends StatelessWidget {
               splashColor: Colors.transparent,
               padding: postIconPadding,
               constraints: BoxConstraints(),
-              color: colorScheme.primaryVariant,
               icon: Icon(Arrows.down_open_big),
               onPressed: () {
                 _posts.dislikePost();
@@ -87,7 +86,6 @@ class LikeDislikePost extends StatelessWidget {
               splashColor: Colors.transparent,
               padding: postIconPadding,
               constraints: BoxConstraints(),
-              color: colorScheme.primaryVariant,
               icon: Icon(Arrows.up_open_big),
               onPressed: () {
                 _posts.likePost(post, postLikesManager.likeCount);

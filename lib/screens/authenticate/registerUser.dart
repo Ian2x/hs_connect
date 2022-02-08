@@ -6,7 +6,6 @@ import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
-import 'package:hs_connect/shared/widgets/gradientText.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/myOutlinedButton.dart';
 import 'package:provider/provider.dart';
@@ -46,141 +45,142 @@ class _RegisterUserState extends State<RegisterUser> {
 
     return loading
         ? Scaffold(
-      backgroundColor: Colors.white,
-      body: Loading(backgroundColor: Colors.white, spinColor: Color(0xff60676c))
-    )
+            backgroundColor: Colors.white, body: Loading(backgroundColor: Colors.white, spinColor: Color(0xff60676c)))
         : Scaffold(
-      backgroundColor: Colors.white,
-        body: Stack(
-            children: [
-              Form(
-                key: _formKey,
-                child: SingleChildScrollView(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          height: 100*hp,
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            gradient: Gradients.blueRed(begin: Alignment.topLeft , end: Alignment.bottomRight),
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              backgroundColor: Colors.white,
+              elevation: 0,
+              automaticallyImplyLeading: false,
+            ),
+            body: GestureDetector(
+              onTap: () => dismissKeyboard(context),
+              child: Stack(children: [
+                Form(
+                  key: _formKey,
+                  child: SingleChildScrollView(
+                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                      Center(
+                          child: Column(
+                        children: [
+                          SizedBox(height:20*hp),
+                          SizedBox(
+                            height: 80 * hp,
+                            child: Image.asset('assets/splash1cropped.png'),
                           ),
-                        ),
-                        SizedBox(height: 30*hp),
-                        Center(
-                            child:
-                            Column(
+                          SizedBox(height: 35 * hp),
+                          Text(
+                            'Make an Account',
+                            style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 28 * hp, color: Colors.black),
+                          ),
+                          SizedBox(height: 10 * hp),
+                          Text("Your username is only used for logging in.\n(No one else will see it)",
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1
+                                  ?.copyWith(color: Colors.black, fontSize: 15 * hp, height: 1.5)),
+                          Container(
+                              height: 30 * hp,
+                              padding: EdgeInsets.symmetric(horizontal: 20 * wp),
+                              alignment: Alignment.bottomCenter,
+                              child: error != null
+                                  ? Text(error!,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle1
+                                          ?.copyWith(color: Colors.black, fontSize: 12),
+                                      textAlign: TextAlign.center)
+                                  : Container()),
+                          Container(
+                            padding: EdgeInsets.fromLTRB(20 * wp, 0, 20 * wp, 0),
+                            child: Column(
                               children: [
-                                SizedBox(
-                                  height: 80 *hp,
-                                  child:
-                                  Image.asset('assets/sublogo1cropped.png'),
-                                ),
-                                SizedBox(height: 35*hp),
-                                Text(
-                                  'Make an Account',
-                                  style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 28*hp, color: Colors.black
-                                  ),
-                                ),
-                                SizedBox(height: 10*hp),
-                                Text("Your username is only used for logging in.\n(No one else will see it)", textAlign: TextAlign.center,
-                                    style: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 15*hp, height: 1.5)),
-                                Container(
-                                  height: 30*hp,
-                                  padding: EdgeInsets.symmetric(horizontal: 20*wp),
-                                  alignment: Alignment.bottomCenter,
-                                  child: error != null ? Text(
-                                    error!, style: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 12), textAlign: TextAlign.center) : Container()
-                                ),
-                                Container(
-                                  padding:EdgeInsets.fromLTRB(20*wp,0,20*wp,0),
-                                  child: Column(
-                                    children: [
-                                      TextFormField(
-                                          style: Theme.of(context).textTheme.headline6?.copyWith(color: Color(0xFFa1a1a1)),
-                                          autocorrect:false,
-                                          obscureText: false,
-                                          decoration: InputDecoration(
-                                              hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: Color(0xffdbdada)),
-                                              border: InputBorder.none,
-                                              hintText: "Login Username..."),
-                                          onChanged: (val) {
+                                TextFormField(
+                                    style: Theme.of(context).textTheme.headline6?.copyWith(color: authPrimaryTextColor),
+                                    autocorrect: false,
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                        hintStyle:
+                                            Theme.of(context).textTheme.headline6?.copyWith(color: authHintTextColor),
+                                        border: InputBorder.none,
+                                        hintText: "Login Username..."),
+                                    onChanged: (val) {
+                                      if (mounted) {
+                                        setState(() => username = val);
+                                        if (username.length >= 6) {
+                                          if (mounted) {
+                                            setState(() {
+                                              error = null;
+                                            });
+                                          }
+                                        }
+                                      }
+                                    }),
+                                Divider(height: 0, thickness: 2 * hp, color: authHintTextColor),
+                                TextFormField(
+                                    style: Theme.of(context).textTheme.headline6?.copyWith(color: authPrimaryTextColor),
+                                    autocorrect: false,
+                                    obscureText: passwordHidden,
+                                    decoration: InputDecoration(
+                                        hintStyle:
+                                            Theme.of(context).textTheme.headline6?.copyWith(color: authHintTextColor),
+                                        border: InputBorder.none,
+                                        hintText: "Password...",
+                                        suffixIcon: IconButton(
+                                          icon: passwordHidden ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
+                                          iconSize: 17,
+                                          onPressed: () {
                                             if (mounted) {
-                                              setState(() => username = val);
-                                              if (username.length >= 6) {
-                                                if (mounted) {
-                                                  setState(() {
-                                                    error = null;
-                                                  });
-                                                }
-                                              }
+                                              setState(() => passwordHidden = !passwordHidden);
                                             }
-                                          }),
-                                      Divider(height:0, thickness: 2*hp, color: Color(0xffdbdada)),
-                                      TextFormField(
-                                          style: Theme.of(context).textTheme.headline6?.copyWith(color: Color(0xFFa1a1a1)),
-                                          autocorrect:false,
-                                          obscureText: passwordHidden,
-                                          decoration: InputDecoration(
-                                              hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: Color(0xffdbdada)),
-                                              border: InputBorder.none,
-                                              hintText: "Password...",
-                                              suffixIcon: IconButton(
-                                                icon: passwordHidden ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
-                                                iconSize: 17,
-                                                onPressed: () {
-                                                  if (mounted) {
-                                                    setState(() => passwordHidden = !passwordHidden);
-                                                  }
-                                                },
-                                              )
-                                          ),
-                                          onChanged: (val) {
-                                            if (mounted) {
-                                              setState(() => password = val);
-                                              if (val.length >= 6) {
-                                                if (mounted) {
-                                                  setState(() {
-                                                    error = null;
-                                                  });
-                                                }
-                                              }
-                                            }
-                                          }),
-                                      Divider(height:0, thickness: 2*hp, color: Color(0xffdbdada)),
-                                    ],
-                                  ),
-                                ),
-                                  SizedBox(height: 120*hp),
-                                ],
-                              )
+                                          },
+                                        )),
+                                    onChanged: (val) {
+                                      if (mounted) {
+                                        setState(() => password = val);
+                                        if (val.length >= 6) {
+                                          if (mounted) {
+                                            setState(() {
+                                              error = null;
+                                            });
+                                          }
+                                        }
+                                      }
+                                    }),
+                                Divider(height: 0, thickness: 2 * hp, color: Color(0xffdbdada)),
+                              ],
+                            ),
                           ),
-                        ]),
+                          SizedBox(height: 120 * hp),
+                        ],
+                      )),
+                    ]),
                   ),
-              ),
-              Positioned(
-                bottom:0,
-                left:0,
-                child: new AuthBar(buttonText: "Register",
+                ),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  child: new AuthBar(
+                    buttonText: "Register",
                     onPressed: () async {
-                        dismissKeyboard(context);
-                        if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-                        if (username.length < 6 || password.length < 6){
+                      dismissKeyboard(context);
+                      if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+                        if (username.length < 6 || password.length < 6) {
                           if (mounted) {
                             setState(() {
-                                error = lengthError;
+                              error = lengthError;
                             });
                           }
                           return;
                         }
-                        if (_formKey.currentState != null && _formKey.currentState!.validate()
-                        ) {
+                        if (_formKey.currentState != null && _formKey.currentState!.validate()) {
                           if (mounted) {
                             setState(() => loading = true);
                           }
-                          dynamic result =
-                              await _auth.registerWithUsernameAndPassword(username, password, widget.domain, widget.domainEmail);
-                          if (result is Tuple2<User?, String>) {
+                          dynamic result = await _auth.registerWithUsernameAndPassword(
+                              username, password, widget.domain, widget.domainEmail);
+                          if (result is Tuple4<User?, String, int, String>) {
                             if (mounted) {
                               setState(() => loading = false);
                             }
@@ -189,12 +189,18 @@ class _RegisterUserState extends State<RegisterUser> {
                               barrierDismissible: false,
                               builder: (BuildContext context) {
                                 return new AlertDialog(
+                                  backgroundColor: Colors.white,
                                   title: Text(
-                                    "You've been assigned the username:", textAlign: TextAlign.center,
-                                    style: ThemeText.inter(fontSize: 18 * hp, color: Colors.black),
+                                    "You're user number " +
+                                        result.item3.toString() +
+                                        " from " +
+                                        result.item4 +
+                                        ". You've been assigned the name:",
+                                    textAlign: TextAlign.center,
+                                    style: ThemeText.inter(fontSize: 15 * hp, color: Colors.black),
                                   ),
                                   content: Container(
-                                    padding: EdgeInsets.fromLTRB(10*wp, 0, 10*wp, 10*hp),
+                                    padding: EdgeInsets.fromLTRB(10 * wp, 0, 10 * wp, 0),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -203,22 +209,25 @@ class _RegisterUserState extends State<RegisterUser> {
                                           result.item2,
                                           style: ThemeText.inter(fontSize: 20 * hp, color: Colors.black),
                                         ),
-                                        SizedBox(height: 25*hp),
+                                        SizedBox(height: 25 * hp),
                                         MyOutlinedButton(
-                                          padding: EdgeInsets.symmetric(vertical: 6*hp, horizontal: 20*wp),
+                                          padding: EdgeInsets.symmetric(vertical: 6 * hp, horizontal: 20 * wp),
                                           onPressed: () {
-                                            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => pixelProvider(context, child: Wrapper())), (Route<dynamic> route) => false);
+                                            Navigator.of(context).pushAndRemoveUntil(
+                                                MaterialPageRoute(
+                                                    builder: (context) => pixelProvider(context, child: Wrapper())),
+                                                (Route<dynamic> route) => false);
                                           },
-                                          gradient: Gradients.blueRed(begin: Alignment.topCenter, end: Alignment.bottomCenter),
-                                          borderRadius: 30*hp,
+                                          gradient: Gradients.blueRed(
+                                              begin: Alignment.topCenter, end: Alignment.bottomCenter),
+                                          borderRadius: 30 * hp,
                                           backgroundColor: Colors.white,
-                                          child: GradientText(
+                                          child: Text(
                                             "Continue",
                                             softWrap: false,
                                             overflow: TextOverflow.ellipsis,
-                                            style: ThemeText.inter(fontWeight: FontWeight.w500, fontSize: 14*hp,
-                                            ),
-                                            gradient: Gradients.blueRed(),
+                                            style: ThemeText.inter(
+                                                fontWeight: FontWeight.w500, fontSize: 14 * hp, color: Colors.black),
                                           ),
                                         )
                                       ],
@@ -252,9 +261,11 @@ class _RegisterUserState extends State<RegisterUser> {
                             }
                           }
                         }
-                      }},),
-              ),
-            ])
-    );
+                      }
+                    },
+                  ),
+                ),
+              ]),
+            ));
   }
 }

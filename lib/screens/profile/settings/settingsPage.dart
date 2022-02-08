@@ -7,6 +7,7 @@ import 'package:hs_connect/shared/themeManager.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/animatedSwitch.dart';
 import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
+import 'package:hs_connect/shared/widgets/myDivider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -55,15 +56,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           elevation: 0,
           leading: myBackButtonIcon(context),
-          bottom: PreferredSize(
-              child: Container(
-                decoration: BoxDecoration(
-                    gradient: Gradients.blueRed()
-                ),
-                //color: colorScheme.primary,
-                height: topGradientThickness*hp,
-              ),
-              preferredSize: Size.fromHeight(topGradientThickness*hp)),
+          bottom: MyDivider(),
         ),
         body: SingleChildScrollView(
           child: GestureDetector(
@@ -101,26 +94,6 @@ class _SettingsPageState extends State<SettingsPage> {
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () async{
-                      if (await canLaunch('https://www.getcircles.co/content')) {
-                        await launch('https://www.getcircles.co/content');
-                      }
-                    },
-                    child: Container(
-                      height: 55*hp,
-                      alignment: Alignment.center,
-                      child: Row(
-                        children: [
-                          Text('Content policy', style: textTheme.subtitle1),
-                          Spacer(),
-                          Icon(Icons.keyboard_arrow_right)
-                        ]
-                      ),
-                    ),
-                  ),
-                  Divider(thickness: 1*hp, height: 1*hp),
-                  GestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    onTap: () async{
                       if (await canLaunch('https://www.getcircles.co/privacy')) {
                         await launch('https://www.getcircles.co/privacy');
                       }
@@ -138,12 +111,32 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                   Divider(thickness: 1*hp, height: 1*hp),
+                  GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () async{
+                      if (await canLaunch('https://www.getcircles.co/terms')) {
+                        await launch('https://www.getcircles.co/terms');
+                      }
+                    },
+                    child: Container(
+                      height: 55*hp,
+                      alignment: Alignment.center,
+                      child: Row(
+                          children: [
+                            Text('Terms of Service', style: textTheme.subtitle1),
+                            Spacer(),
+                            Icon(Icons.keyboard_arrow_right)
+                          ]
+                      ),
+                    ),
+                  ),
+                  Divider(thickness: 1*hp, height: 1*hp),
                   SizedBox(height: 20*hp),
                   Text("Send feedback", style: textTheme.subtitle1),
                   feedbackError != null
                       ? Container(
                       padding: EdgeInsets.only(top: 12*hp),
-                      child: Text(feedbackError!, style: textTheme.bodyText2?.copyWith(color: colorScheme.error)))
+                      child: Text(feedbackError!, style: textTheme.bodyText2))
                       : SizedBox(height: 6),
                   Form(
                     key: _feedbackFormKey,
@@ -162,7 +155,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             maxLines: null,
                             autocorrect: false,
                             decoration: InputDecoration(
-                                hintStyle: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.primary), border: InputBorder.none, hintText: "What can we improve on?"),
+                                hintStyle: Theme.of(context).textTheme.subtitle1, border: InputBorder.none, hintText: "What can we improve on?"),
                             onChanged: (val) {
                               setState(() => _feedbackText = val);
                               if (feedbackError == emptyFeedbackError) {

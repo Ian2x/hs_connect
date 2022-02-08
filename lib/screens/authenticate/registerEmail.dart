@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:hs_connect/screens/authenticate/preview.dart';
 import 'package:hs_connect/screens/authenticate/waitVerification.dart';
 import 'package:hs_connect/services/auth.dart';
 import 'package:hs_connect/shared/constants.dart';
@@ -8,6 +7,7 @@ import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
+import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
 import 'package:provider/provider.dart';
 
 import 'authBar.dart';
@@ -40,6 +40,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
         ? Scaffold(backgroundColor: Colors.white, body: Loading(backgroundColor: Colors.white, spinColor: Color(0xff60676c)))
         : Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(leading: myBackButtonIcon(context), elevation: 0, backgroundColor: Colors.white,),
       body: GestureDetector(
         onTap: ()=>dismissKeyboard(context),
         child: Stack(
@@ -48,33 +49,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    height: 100*hp,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      gradient: Gradients.blueRed(begin: Alignment.topLeft , end: Alignment.bottomRight),
-                    ),
-                    child: SizedBox(),
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(10*hp),
-                    child: TextButton(
-                        onPressed: (){
-                          // remove keyboard
-                          dismissKeyboard(context);
-                          Navigator.pushReplacement(
-                            context,
-                            NoAnimationMaterialPageRoute(
-                                builder: (context) => pixelProvider(context, child: PreviewPage())),
-                          );
-                        },
-                        child:Text(
-                          "Cancel",
-                          style: ThemeText.inter(fontWeight: FontWeight.normal,
-                              fontSize: 16*hp, color: Colors.black),
-                        )
-                    ),
-                  ),
+                  SizedBox(height: 30*hp),
                   Container(
                     alignment: Alignment.topCenter,
                     child: Center(
@@ -84,7 +59,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                             SizedBox(
                               height: 80 *hp,
                               child:
-                              Image.asset('assets/sublogo1cropped.png'),
+                              Image.asset('assets/splash1cropped.png'),
                             ),
                             SizedBox(height: 20*hp),
                             Text(
@@ -95,15 +70,15 @@ class _RegisterEmailState extends State<RegisterEmail> {
                             SizedBox(height: 15*hp),
                             Container(
                               padding: EdgeInsets.symmetric(horizontal: 25*wp),
-                              child: Text("Verify your school with your email.\nFor anonymity, your email will be disconnected from your account afterwards.",
+                              child: Text("We'll send you an email to verify your school.",
                                   style: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 14*hp, height: 1.3), textAlign: TextAlign.center,),
                             ),
                             Container(
-                              height: 40*hp,
+                              height: 50*hp,
                               padding: EdgeInsets.symmetric(horizontal: 20*wp),
                               alignment: Alignment.bottomCenter,
                               child: error != null ? Text(
-                                  error!, style: ThemeText.inter(fontWeight: FontWeight.w500, fontSize: 13*hp, color: Colors.black), textAlign: TextAlign.center,) :
+                                  error!, style: ThemeText.inter(fontWeight: FontWeight.w500, fontSize: 13*hp, color: Colors.black), textAlign: TextAlign.center) :
                               Container()
                             )
                           ],
@@ -120,11 +95,11 @@ class _RegisterEmailState extends State<RegisterEmail> {
                             children: [
                               TextField(
                                 autocorrect:false,
-                                style: Theme.of(context).textTheme.headline6?.copyWith(color: Color(0xFFa1a1a1)),
+                                style: Theme.of(context).textTheme.headline6?.copyWith(color: authPrimaryTextColor),
                                 maxLines: null,
                                 keyboardType: TextInputType.emailAddress,
                                 decoration: InputDecoration(
-                                    hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: Color(0xffdbdada)),
+                                    hintStyle: Theme.of(context).textTheme.headline6?.copyWith(color: authHintTextColor),
                                     border: InputBorder.none,
                                     hintText: "Your School Email"),
                                 onChanged: (value) {
@@ -135,7 +110,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                                   }
                                 },
                               ),
-                              Divider(height:0, thickness: 2*hp, color: Color(0xffdbdada)),
+                              Divider(height:0, thickness: 2*hp, color: authHintTextColor),
                             ],
                           )
                     ),

@@ -25,6 +25,7 @@ class PostPage extends StatelessWidget {
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
         title: Text(group.name),
+        centerTitle: true,
         backgroundColor: colorScheme.surface,
         elevation: 0,
         leading: myBackButtonIcon(context),

@@ -39,19 +39,19 @@ class MessagesBubble extends StatelessWidget {
               alignment: isSentMessage ? Alignment.centerRight : Alignment.centerLeft,
               child: _images.getCachedImage(message.text, fit: BoxFit.scaleDown)));
     }
-    return Container(
-      child: Bubble(
-          color: isSentMessage ? colorScheme.secondary.withOpacity(0.6) : colorScheme.primary.withOpacity(0.4),
-          margin: BubbleEdges.fromLTRB(isSentMessage ? 50*wp : 0*wp, 5*wp, isSentMessage ? 0 : 50*hp, 5*hp),
-          alignment: isSentMessage ? Alignment.centerRight : Alignment.centerLeft,
-          // nip: isSentMessage ? BubbleNip.rightTop : BubbleNip.leftTop,
-          radius: Radius.circular(12*hp),
-          child: Container(
-            padding: EdgeInsets.only(left:4*wp,right:4*wp,bottom: 1*hp),
-            child: Text(message.text, style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 15.5*hp))
-          ),
-          elevation: 0,
-      ),
+    return Bubble(
+        color: isSentMessage ? colorScheme.secondary.withOpacity(0.6) : colorScheme.primary.withOpacity(0.4),
+        margin: BubbleEdges.fromLTRB(isSentMessage ? 50*wp : 0*wp, 5*wp, isSentMessage ? 0 : 50*hp, 5*hp),
+        alignment: isSentMessage ? Alignment.centerRight : Alignment.centerLeft,
+        radius: Radius.circular(11*hp),
+        child: Container(
+          padding: EdgeInsets.only(left:4*wp,right:4*wp,bottom: 1*hp),
+          child: Text(
+            message.text,
+            style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 15.5 * hp),
+            textWidthBasis: TextWidthBasis.longestLine,
+          )),
+        elevation: 0,
     );
 
   }

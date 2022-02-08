@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
-import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
@@ -21,6 +20,7 @@ class UMUD {
 
 class AllMessagesPage extends StatefulWidget {
   final UserData userData;
+
   const AllMessagesPage({Key? key, required this.userData}) : super(key: key);
 
   @override
@@ -83,7 +83,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
 
     if (otherUsers!.length == 0) {
       return Container(
-          padding: EdgeInsets.only(top: 50*hp),
+          padding: EdgeInsets.only(top: 50 * hp),
           alignment: Alignment.topCenter,
           child: Text("No messages :/",
               style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.normal)));
@@ -110,32 +110,35 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => pixelProvider(context, child: MessagesPage(
-                        currUserRef: widget.userData.userRef,
-                        otherUserData: otherUser,
-                        onUpdateLastMessage: updateLastMessage,
-                        onUpdateLastViewed: updateLastViewed,
-                      ))));
+                      builder: (context) => pixelProvider(context,
+                          child: MessagesPage(
+                            currUserRef: widget.userData.userRef,
+                            otherUserData: otherUser,
+                            onUpdateLastMessage: updateLastMessage,
+                            onUpdateLastViewed: updateLastViewed,
+                          ))));
             },
             child: Stack(
               alignment: AlignmentDirectional.centerStart,
               children: <Widget>[
                 Container(
-                    margin: EdgeInsets.only(top: index == 0 ? 4.5*hp : 2*hp, bottom: index == UMUDcache.length - 1 ? 2.5*hp : 0*hp),
-                    padding: EdgeInsets.fromLTRB(20*wp, 14*hp, 14*wp, 16*hp),
+                    margin: EdgeInsets.only(
+                        top: index == 0 ? 4.5 * hp : 2 * hp, bottom: index == UMUDcache.length - 1 ? 2.5 * hp : 0 * hp),
+                    padding: EdgeInsets.fromLTRB(20 * wp, 14 * hp, 14 * wp, 16 * hp),
                     color: colorScheme.surface,
                     child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
                       Container(
-                          width: 40*hp,
-                          height: 40*hp,
+                          width: 40 * hp,
+                          height: 40 * hp,
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              image: new DecorationImage(fit: BoxFit.fill, image: _images.profileImageProvider(otherUser.profileImageURL)))),
-                      SizedBox(width: 14*wp),
+                              image: new DecorationImage(
+                                  fit: BoxFit.fill, image: _images.profileImageProvider(otherUser.profileImageURL)))),
+                      SizedBox(width: 14 * wp),
                       Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                         Text(otherUser.fundamentalName,
                             style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold)),
-                        SizedBox(height: 4*hp),
+                        SizedBox(height: 4 * hp),
                         Text(otherUser.fullDomainName != null ? otherUser.fullDomainName! : otherUser.domain,
                             style: Theme.of(context).textTheme.bodyText2?.copyWith(color: colorScheme.primary))
                       ]),
@@ -154,11 +157,14 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                 (UMUDcache[index].UM!.lastViewed == null ||
                         UMUDcache[index].UM!.lastViewed!.compareTo(UMUDcache[index].UM!.lastMessage) < 0)
                     ? Container(
-                        width: 10*wp,
-                        height: 10*wp,
-                        margin: EdgeInsets.only(top: index == 0 ? 4.5*hp : 2*hp, left: 6*wp, bottom: index == UMUDcache.length - 1 ? 2.5*hp : 0*hp),
-                        decoration: new BoxDecoration(
-                          gradient: Gradients.blueRed(),
+                        width: 10 * wp,
+                        height: 10 * wp,
+                        margin: EdgeInsets.only(
+                            top: index == 0 ? 4.5 * hp : 2 * hp,
+                            left: 6 * wp,
+                            bottom: index == UMUDcache.length - 1 ? 2.5 * hp : 0 * hp),
+                        decoration: BoxDecoration(
+                          color: colorScheme.secondary,
                           shape: BoxShape.circle,
                         ),
                       )
