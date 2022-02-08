@@ -53,7 +53,7 @@ class HomeAppBar extends SliverPersistentHeaderDelegate{
                           style: Theme.of(context)
                               .textTheme
                               .headline4
-                              ?.copyWith(fontSize: 19*hp, fontWeight: FontWeight.bold)),
+                              ?.copyWith(fontSize: 18*hp, fontWeight: FontWeight.bold)),
                     ),
                     TabBar(
                       controller: tabController,
@@ -69,7 +69,7 @@ class HomeAppBar extends SliverPersistentHeaderDelegate{
                       unselectedLabelStyle: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.w500, fontSize: 15, color: colorScheme.primary),
                       tabs: <Widget>[
                         Tab(
-                            iconMargin: EdgeInsets.all(0),
+                            iconMargin: EdgeInsets.zero,
                             height: tabBarHeight,
                             child: Container(
                               padding: tabBarPadding,
@@ -101,6 +101,7 @@ class HomeAppBar extends SliverPersistentHeaderDelegate{
                         onTap: () {
                           showModalBottomSheet(
                               context: context,
+                              isScrollControlled: true,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.vertical(
                                     top: Radius.circular(20*hp),

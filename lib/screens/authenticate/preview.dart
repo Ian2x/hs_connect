@@ -27,25 +27,25 @@ class PreviewPage extends StatelessWidget {
           ),
           child: Column(
             children: [
-              SizedBox(height: 160 * hp),
+              SizedBox(height: 180 * hp),
               SizedBox(
-                height: 115 * hp,
-                child: Image.asset('assets/sublogo1cropped.png'),
+                height: 95 * hp,
+                child: Image.asset('assets/sublogo2.png'),
               ),
-              SizedBox(height: 15 * hp),
+              SizedBox(height: 60 * hp),
               Text("circles.co",
-                  style: textTheme.headline4?.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
-              SizedBox(height: 20 * hp),
+                  style: textTheme.headline4?.copyWith(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 28*hp)),
+              SizedBox(height: 15 * hp),
               Text(
                 "Talk with your classmates,",
-                style: textTheme.subtitle1?.copyWith(color: Colors.white),
+                style: textTheme.subtitle1?.copyWith(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 19*hp),
               ),
               SizedBox(height: 4 * hp),
               Text(
                 "anonymously.",
-                style: textTheme.subtitle1?.copyWith(color: Colors.white),
+                style: textTheme.subtitle1?.copyWith(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 19*hp),
               ),
-              SizedBox(height: 70 * hp),
+              SizedBox(height: 100 * hp),
               ActionChip(
                 padding: EdgeInsets.fromLTRB(35 * wp, 15 * hp, 35 * wp, 15 * hp),
                 backgroundColor: Colors.white,
@@ -69,7 +69,7 @@ class PreviewPage extends StatelessWidget {
                       builder: (context) => pixelProvider(context, child: Authenticate(signIn: true))));
                 },
               ),
-              SizedBox(height: 105 * hp),
+              SizedBox(height: 65 * hp),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -80,7 +80,7 @@ class PreviewPage extends StatelessWidget {
                       },
                       child: Text(
                         "About",
-                        style: textTheme.subtitle1?.copyWith(color: Colors.white)
+                        style: textTheme.subtitle1?.copyWith(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 19*hp)
                       ))
                 ],
               )

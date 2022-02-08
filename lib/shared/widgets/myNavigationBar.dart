@@ -53,6 +53,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
         Container(
           color: colorScheme.onSurface,
           padding: EdgeInsets.only(top: bottomGradientThickness * hp),
+          height: 43*hp,
           child: BottomNavigationBar(
             backgroundColor: colorScheme.surface,
             type: BottomNavigationBarType.fixed,
@@ -60,15 +61,15 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
             showUnselectedLabels: true,
             currentIndex: widget.currentIndex,
             selectedItemColor: colorScheme.onSurface,
-            selectedFontSize: 6,
-            unselectedFontSize: 6,
+            selectedFontSize: 6*hp,
+            unselectedFontSize: 6*hp,
             items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                backgroundColor: Colors.green,
                 icon: IconButton(
-                  padding: EdgeInsets.zero,
+                  padding: EdgeInsets.only(top: 5*hp),
                   // color: colorScheme.onSurface,
                   constraints: BoxConstraints(),
+                  alignment: Alignment.bottomCenter,
                   icon: Icon(Icons.home, size: 25 * hp),
                   onPressed: () {
                     Navigator.pushReplacement(
@@ -82,7 +83,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
               ),
               BottomNavigationBarItem(
                 icon: IconButton(
-                  padding: EdgeInsets.zero,
+                  padding: EdgeInsets.only(top: 5*hp),
                   // color: colorScheme.onSurface,
                   constraints: BoxConstraints(),
                   icon: Icon(Icons.notifications, size: 25 * hp),
@@ -97,7 +98,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
               ),
               BottomNavigationBarItem(
                 icon: IconButton(
-                  padding: EdgeInsets.zero,
+                  padding: EdgeInsets.only(top: 5*hp),
                   // color: colorScheme.onSurface,
                   constraints: BoxConstraints(),
                   icon: Icon(Icons.person, size: 25 * hp),
@@ -115,7 +116,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
               ),
               BottomNavigationBarItem(
                 icon: IconButton(
-                  padding: EdgeInsets.zero,
+                  padding: EdgeInsets.only(top: 0*hp),
                   // color: colorScheme.onSurface,
                   constraints: BoxConstraints(),
                   icon: Icon(Icons.add, size: 30 * hp),

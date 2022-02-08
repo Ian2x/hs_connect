@@ -8,6 +8,7 @@ import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/postView/likeDislikePost.dart';
 import 'package:hs_connect/screens/home/postView/pollView.dart';
+import 'package:hs_connect/screens/home/postView/postCard.dart';
 import 'package:hs_connect/screens/profile/profilePage.dart';
 import 'package:hs_connect/services/polls_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
@@ -99,7 +100,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
                     }
                   },
                   child: Text("from " + localCreatorName + " • " + convertTime(widget.post.createdAt.toDate()),
-                    style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary)
+                    style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary, fontSize: postCardDetailSize)
                   ),
                 ),
                 Spacer(flex:1),
@@ -152,7 +153,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
             SizedBox(height:25*hp),
             Text(
                 widget.post.numComments + widget.post.numReplies < 2 ? 'Comments' : (widget.post.numComments + widget.post.numReplies).toString() + ' Comments',
-                style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18*hp),
+                style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 16*hp),
             ),
 
           ],

@@ -195,7 +195,7 @@ class _RegisterUserState extends State<RegisterUser> {
                                         result.item3.toString() +
                                         " from " +
                                         result.item4 +
-                                        ". You've been assigned the name:",
+                                        ". We gave you the name:",
                                     textAlign: TextAlign.center,
                                     style: ThemeText.inter(fontSize: 15 * hp, color: Colors.black),
                                   ),

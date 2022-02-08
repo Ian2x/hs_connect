@@ -17,13 +17,15 @@ const initialPostsFetchSize = 20;
 const nextPostsFetchSize = 20;
 
 const defaultProfilePic = AssetImage('assets/blankProfile.png');
-const defaultGroupPic = AssetImage('assets/defaultgroupimage1.png');
+const defaultGroupPic = AssetImage('assets/defaultgroupimage2.png');
 
-const bottomGradientThickness = 2.5;
+const bottomGradientThickness = 0.3;
 const topGradientThickness = 1.5;
 
 const authHintTextColor = Color(0xffdbdada);
 const authPrimaryTextColor = Color(0xFFa1a1a1);
+
+const commentReplyDetailSize = 11.0;
 
 class _Gradient extends Color {
   _Gradient(int value) : super(value);

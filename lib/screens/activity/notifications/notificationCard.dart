@@ -80,7 +80,7 @@ class _NotificationCardState extends State<NotificationCard> {
         postGroupName == null) {
       return Container(
           margin: EdgeInsets.only(top: 2*hp),
-          padding: EdgeInsets.fromLTRB(14*wp, 14*hp, 14*wp, 16*hp),
+          padding: EdgeInsets.fromLTRB(14*wp, 13*hp, 14*wp, 15*hp),
           height: 70*hp,
           color: colorScheme.surface,
         child: loading ? Loading(backgroundColor: Colors.transparent) : null
@@ -125,7 +125,7 @@ class _NotificationCardState extends State<NotificationCard> {
         },
         child: Container(
             margin: EdgeInsets.only(top: 2.5*hp),
-            padding: EdgeInsets.fromLTRB(14*wp, 14*hp, 14*wp, 16*hp),
+            padding: EdgeInsets.fromLTRB(14*wp, 13*hp, 14*wp, 15*hp),
             color: colorScheme.surface,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -134,8 +134,8 @@ class _NotificationCardState extends State<NotificationCard> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                        height: 40*hp,
-                        width: 40*hp,
+                        height: 33*hp,
+                        width: 33*hp,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle, image: DecorationImage(fit: BoxFit.fill, image: _images.profileImageProvider(profileImageURL)))),
                     SizedBox(width: 14*wp),
@@ -149,7 +149,7 @@ class _NotificationCardState extends State<NotificationCard> {
                             TextSpan(
                                 text: widget.myNotification
                                     .printA(sourceUserName!, sourceUserFullDomainName!, postGroupName!),
-                                style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold)),
+                                style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w600)),
                             TextSpan(
                                 text: widget.myNotification
                                     .printB(sourceUserName!, sourceUserFullDomainName!, postGroupName!),
@@ -157,7 +157,7 @@ class _NotificationCardState extends State<NotificationCard> {
                             TextSpan(
                                 text: widget.myNotification
                                     .printC(sourceUserName!, sourceUserFullDomainName!, postGroupName!),
-                                style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold)),
+                                style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w600)),
                             TextSpan(
                                 text: widget.myNotification
                                     .printD(sourceUserName!, sourceUserFullDomainName!, postGroupName!),

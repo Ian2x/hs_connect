@@ -41,14 +41,9 @@ class _RepliesFeedState extends State<RepliesFeed> {
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               itemBuilder: (BuildContext context, int index) {
-                  bool isLast=false;
-
-                  if (index==replies.length-1){
-                    isLast=true;
-                  }
                   return Center(
-                      child: ReplyCard(
-                    isLast: isLast,
+                    child: ReplyCard(
+                    isLast: index==replies.length-1,
                     reply: replies[index],
                     currUserData: userData,
                   ));

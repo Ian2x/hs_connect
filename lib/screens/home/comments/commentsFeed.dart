@@ -25,13 +25,10 @@ class CommentsFeed extends StatefulWidget {
 }
 
 class _CommentsFeedState extends State<CommentsFeed> {
-
-  bool isReply=false;
+  bool isReply = false;
   DocumentReference? commentRef;
 
   late FocusNode myFocusNode;
-
-
 
   @override
   void initState() {
@@ -46,26 +43,22 @@ class _CommentsFeedState extends State<CommentsFeed> {
     super.dispose();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
     final hp = Provider.of<HeightPixel>(context).value;
-    final wp = Provider.of<WidthPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
 
-
-
-    switchFormBool(DocumentReference? passedRef){
+    switchFormBool(DocumentReference? passedRef) {
       setState(() {
-        isReply=!isReply;
-        commentRef= passedRef;
+        isReply = !isReply;
+        commentRef = passedRef;
       });
     }
 
     if (userData == null) return Loading();
-    CommentsDatabaseService _comments = CommentsDatabaseService(currUserRef: userData.userRef, postRef: widget.post.postRef);
+    CommentsDatabaseService _comments =
+        CommentsDatabaseService(currUserRef: userData.userRef, postRef: widget.post.postRef);
 
     return Stack(
       children: [
@@ -79,14 +72,14 @@ class _CommentsFeedState extends State<CommentsFeed> {
               commentss.removeWhere((value) => value == null);
               List<Comment> comments = commentss.map((item) => item!).toList();
               // sort by most recent
-              comments.sort((a,b) {
+              comments.sort((a, b) {
                 return a.createdAt.compareTo(b.createdAt);
               });
 
               return GestureDetector(
-                onTap: (){
+                onTap: () {
                   dismissKeyboard(context);
-                  isReply=false;
+                  isReply = false;
                 },
                 child: ListView.builder(
                   itemCount: comments.length + 3,
@@ -102,11 +95,11 @@ class _CommentsFeedState extends State<CommentsFeed> {
                       );
                     } else if (index == 1) {
                       return Divider(thickness: 5 * hp, color: colorScheme.background, height: 10 * hp);
-                    } else if (index == comments.length+2){
-                      return SizedBox(height: 70*hp);
+                    } else if (index == comments.length + 2) {
+                      return SizedBox(height: 70 * hp);
                     } else {
                       return CommentCard(
-                        focusKeyboard: (){
+                        focusKeyboard: () {
                           myFocusNode.requestFocus();
                         },
                         switchFormBool: switchFormBool,
@@ -120,27 +113,25 @@ class _CommentsFeedState extends State<CommentsFeed> {
             }
           },
         ),
-          Positioned(
-            bottom:0,
-            right:0,
-            child: Container(
+        Positioned(
+          bottom: 0,
+          right: 0,
+          child: Container(
             padding: EdgeInsets.only(top: bottomGradientThickness * hp),
             color: colorScheme.onSurface,
             child: Container(
                 width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.fromLTRB(5 * wp, 5 * hp, 5 * wp, 5 * hp),
                 color: colorScheme.background,
-              child: CommentReplyForm(
-                focusNode: myFocusNode,
-                currUserRef: userData.userRef,
-                switchFormBool: switchFormBool,
-                commentReference: commentRef,
-                isReply: isReply,
-                post: widget.post)
-              ),
-            )
-              ,
+                padding: EdgeInsets.all(10*hp),
+                child: CommentReplyForm(
+                    focusNode: myFocusNode,
+                    currUserRef: userData.userRef,
+                    switchFormBool: switchFormBool,
+                    commentReference: commentRef,
+                    isReply: isReply,
+                    post: widget.post)),
           ),
+        ),
       ],
     );
   }

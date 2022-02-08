@@ -9,7 +9,7 @@ import 'package:hs_connect/shared/widgets/arrows_icons.dart';
 
 const double postIconSizeStateless = 16;
 const double postIconSizeStateful = 24;
-const EdgeInsets postIconPadding = EdgeInsets.all(0);
+const EdgeInsets postIconPadding = EdgeInsets.zero;
 
 class LikeDislikePost extends StatelessWidget {
   final DocumentReference currUserRef;

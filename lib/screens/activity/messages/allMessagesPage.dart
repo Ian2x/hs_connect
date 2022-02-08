@@ -124,12 +124,12 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                 Container(
                     margin: EdgeInsets.only(
                         top: index == 0 ? 4.5 * hp : 2 * hp, bottom: index == UMUDcache.length - 1 ? 2.5 * hp : 0 * hp),
-                    padding: EdgeInsets.fromLTRB(20 * wp, 14 * hp, 14 * wp, 16 * hp),
+                    padding: EdgeInsets.fromLTRB(20 * wp, 13 * hp, 14 * wp, 15 * hp),
                     color: colorScheme.surface,
                     child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
                       Container(
-                          width: 40 * hp,
-                          height: 40 * hp,
+                          width: 33 * hp,
+                          height: 33 * hp,
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               image: new DecorationImage(

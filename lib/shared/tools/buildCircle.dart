@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 
-import '../constants.dart';
-
 Widget buildGroupCircle({
   required String? groupImage,
   required double height,

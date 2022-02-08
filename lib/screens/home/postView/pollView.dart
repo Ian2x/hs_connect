@@ -139,7 +139,7 @@ class PollChoiceView extends StatelessWidget {
           child: Stack(children: <Widget>[
             (voted != null)
                 ? LinearPercentIndicator(
-                    padding: EdgeInsets.all(0),
+                    padding: EdgeInsets.zero,
                     backgroundColor: colorScheme.surface,
                     animation: true,
                     lineHeight: 32*hp,

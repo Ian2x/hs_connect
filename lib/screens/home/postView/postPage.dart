@@ -33,7 +33,7 @@ class PostPage extends StatelessWidget {
       ),
       body:
           Container(
-            padding: EdgeInsets.all(0),
+            padding: EdgeInsets.zero,
             constraints: BoxConstraints(
               minHeight: MediaQuery.of(context).size.height,
             ),

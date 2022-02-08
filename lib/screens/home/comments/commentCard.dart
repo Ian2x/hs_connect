@@ -6,6 +6,7 @@ import 'package:hs_connect/screens/home/comments/likeDislikeComment.dart';
 import 'package:hs_connect/screens/home/replies/replyFeed.dart';
 import 'package:hs_connect/screens/profile/profilePage.dart';
 import 'package:hs_connect/services/user_data_database.dart';
+import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
@@ -18,7 +19,6 @@ class CommentCard extends StatefulWidget {
   final UserData currUserData;
   final VoidDocParamFunction switchFormBool;
   final VoidFunction focusKeyboard;
-
 
   CommentCard({
     Key? key,
@@ -33,7 +33,6 @@ class CommentCard extends StatefulWidget {
 }
 
 class _CommentCardState extends State<CommentCard> {
-
   bool liked = false;
   bool disliked = false;
   String? creatorName;
@@ -62,12 +61,15 @@ class _CommentCardState extends State<CommentCard> {
 
   void getUserData() async {
     if (widget.comment.creatorRef != null) {
-      UserDataDatabaseService _userDataDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserData.userRef);
+      UserDataDatabaseService _userDataDatabaseService =
+          UserDataDatabaseService(currUserRef: widget.currUserData.userRef);
       final UserData? fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.comment.creatorRef!);
       if (mounted) {
         setState(() {
           creatorName = fetchUserData != null ? fetchUserData.fundamentalName : null;
-          creatorGroupName = fetchUserData != null ? (fetchUserData.fullDomainName!=null ? fetchUserData.fullDomainName : fetchUserData.domain) : null;
+          creatorGroupName = fetchUserData != null
+              ? (fetchUserData.fullDomainName != null ? fetchUserData.fullDomainName : fetchUserData.domain)
+              : null;
           creatorGroupColor = fetchUserData != null ? fetchUserData.domainColor : null;
         });
       }
@@ -80,131 +82,103 @@ class _CommentCardState extends State<CommentCard> {
     }
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
     final wp = Provider.of<WidthPixel>(context).value;
     final hp = Provider.of<HeightPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
 
-
-    final localCreatorName = creatorName!=null ? creatorName! : '';
-    final localCreatorGroupName = creatorGroupName!=null ? creatorGroupName! : '';
+    final localCreatorName = creatorName != null ? creatorName! : '';
+    final localCreatorGroupName = creatorGroupName != null ? creatorGroupName! : '';
     return Container(
-      padding: EdgeInsets.fromLTRB(18*wp, 0*hp, 10*wp, 0*hp),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Wrap(
-            alignment: WrapAlignment.spaceEvenly,
-            children: [
-              TextButton(
-                style: TextButton.styleFrom(
-                    splashFactory: NoSplash.splashFactory,
-                    padding: EdgeInsets.zero,
-                    alignment: Alignment.centerLeft),
-                onPressed: (){
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            pixelProvider(context,
-                                child: ProfilePage(profileRef:widget.comment.creatorRef!,currUserData: widget.currUserData)
-                            )),
-                  );
-                },
-                child:
-                Text(localCreatorName + " • " + localCreatorGroupName,
-                    style: Theme.of(context).textTheme.subtitle2?.copyWith
-                      (color: creatorGroupColor !=null ? creatorGroupColor :colorScheme.primaryVariant,
-                        fontSize: 14*hp,
-                        fontWeight: FontWeight.w300)),
-              ),
-            ],
+        padding: EdgeInsets.fromLTRB(17 * wp, 0 * hp, 17 * wp, 0 * hp),
+        child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+          Container(
+            alignment: Alignment.centerLeft,
+            height: 33 * hp,
+            child: TextButton(
+              style: TextButton.styleFrom(
+                  splashFactory: NoSplash.splashFactory, padding: EdgeInsets.zero, alignment: Alignment.centerLeft),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => pixelProvider(context,
+                          child:
+                              ProfilePage(profileRef: widget.comment.creatorRef!, currUserData: widget.currUserData))),
+                );
+              },
+              child: Text(localCreatorName + " • " + localCreatorGroupName,
+                  style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                      color: creatorGroupColor != null ? creatorGroupColor : colorScheme.primaryVariant,
+                      fontSize: commentReplyDetailSize,
+                      fontWeight: FontWeight.w300)),
+            ),
+          ),
+          SizedBox(
+            width: (MediaQuery.of(context).size.width) * .85,
+            child: Text(widget.comment.text,
+                style: Theme.of(context).textTheme.bodyText1),
           ),
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Flexible(
-                fit:FlexFit.loose,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: (MediaQuery.of(context).size.width)*.85,
-                      child: RichText(
-                        text: TextSpan(
-                          children: <TextSpan>[
-                            TextSpan(text: widget.comment.text,
-                                style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                                  fontWeight:FontWeight.w500, fontSize: 16*hp,
-                                )),
-                          ],
-                        ),
-                      ),
-                    ),
-                    //SizedBox(height:3*hp),
-                    Row(
-                      children: [
-                        Text(
-                          convertTime(widget.comment.createdAt.toDate()),
-                            style: Theme.of(context).textTheme.subtitle2?.
-                            copyWith(color: colorScheme.primary, fontSize: 14*hp)),
-                        SizedBox(width:8*wp),
-                        TextButton(
-                          child: Icon(Icons.more_horiz, size:20*hp, color: colorScheme.primary),
-                          style: TextButton.styleFrom(
-                              splashFactory: NoSplash.splashFactory,
-                              padding: EdgeInsets.zero,
-                              alignment: Alignment.centerLeft),
-                          onPressed: (){
-                            showModalBottomSheet(
-                                context: context,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(20*hp),
-                                    )),
-                                builder: (context) => pixelProvider(context, child: ReportSheet(
-                                  reportType: ReportType.comment,
-                                  entityRef: widget.comment.commentRef,
-                                )));
-                          },
-                        ),
-                        Spacer(),
-                        TextButton(
-                            style: TextButton.styleFrom(
-                                splashFactory: NoSplash.splashFactory,
-                                padding: EdgeInsets.zero,
-                                minimumSize: Size(50, 30),
-                                alignment: Alignment.centerLeft),
-                            child: Text("Reply", style: Theme.of(context).textTheme.bodyText2?.copyWith(color: colorScheme.onSurface,
-                              fontWeight:FontWeight.w500, height:1.0,
-                            )),
-                            onPressed: (){
-                              print("focused");
-                              widget.focusKeyboard();
-                              widget.switchFormBool(widget.comment.commentRef);
-                            }
-                        ),
-                        SizedBox(width:8*wp),
-                        widget.comment.creatorRef != null ? LikeDislikeComment(
-                            comment: widget.comment,
-                            currUserRef: widget.currUserData.userRef,
-                        ) : Container()
-                      ],
-                    ),
-                  ],
+              Text(convertTime(widget.comment.createdAt.toDate()),
+                  style: Theme.of(context)
+                      .textTheme
+                      .subtitle2
+                      ?.copyWith(color: colorScheme.primary, fontSize: commentReplyDetailSize)),
+              SizedBox(width: 8 * wp),
+              Container(
+                height: 20*hp,
+                child: IconButton(
+                  icon: Icon(Icons.more_horiz, size: 20 * hp, color: colorScheme.primary),
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.zero,
+                  onPressed: () {
+                    showModalBottomSheet(
+                        context: context,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(20 * hp),
+                        )),
+                        builder: (context) => pixelProvider(context,
+                            child: ReportSheet(
+                              reportType: ReportType.comment,
+                              entityRef: widget.comment.commentRef,
+                            )));
+                  },
                 ),
               ),
+              Spacer(),
+              Container(
+                height: 30*hp,
+                child: TextButton(
+                    style: TextButton.styleFrom(
+                        splashFactory: NoSplash.splashFactory,
+                        padding: EdgeInsets.zero,
+                        alignment: Alignment.center),
+                    child: Text("Reply",
+                        style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                            color: colorScheme.onSurface, fontWeight: FontWeight.w500, fontSize: commentReplyDetailSize)),
+                    onPressed: () {
+                      widget.focusKeyboard();
+                      widget.switchFormBool(widget.comment.commentRef);
+                    }),
+              ),
+              widget.comment.creatorRef != null
+                  ? LikeDislikeComment(
+                      comment: widget.comment,
+                      currUserRef: widget.currUserData.userRef,
+                    )
+                  : Container()
             ],
           ),
-      RepliesFeed(commentRef: widget.comment.commentRef, postRef: widget.comment.postRef, groupRef: widget.comment.groupRef),
-      Divider(thickness: 3*hp, color: colorScheme.background, height: 3*hp),
-        ]
-      )
-    );
+          SizedBox(height: 4*hp),
+          RepliesFeed(
+              commentRef: widget.comment.commentRef,
+              postRef: widget.comment.postRef,
+              groupRef: widget.comment.groupRef),
+          Divider(thickness: 3 * hp, color: colorScheme.background, height: 0),
+        ]));
   }
 }

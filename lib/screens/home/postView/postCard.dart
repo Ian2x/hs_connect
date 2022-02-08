@@ -21,6 +21,8 @@ import 'package:hs_connect/shared/reports/reportSheet.dart';
 import 'package:hs_connect/shared/widgets/expandableImage.dart';
 import 'package:provider/provider.dart';
 
+const postCardDetailSize = 12.0;
+
 class PostCard extends StatefulWidget {
   final Post post;
   final DocumentReference currUserRef;
@@ -32,6 +34,10 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<PostCard>{
+
+  static const leftRightMargin = 10.0;
+
+
   @override
   bool get wantKeepAlive => true;
 
@@ -125,7 +131,6 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
     super.build(context);
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
-    final leftRightMargin = 8*wp;
     final colorScheme = Theme.of(context).colorScheme;
 
     if (group==null || username==null) {
@@ -173,19 +178,19 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                       SizedBox(width:10*wp),
                       buildGroupCircle(
                           groupImage: group!=null ? group!.image : null,
-                          height: 27*hp,
-                          width: 27*hp,
+                          height: 20*hp,
+                          width: 20*hp,
                           context: context,
                           backgroundColor: colorScheme.surface),
                       SizedBox(width: 5*wp),
                       Text(
                         group!.name + " • " + convertTime(widget.post.createdAt.toDate()),
                         style: Theme.of(context).textTheme.subtitle2?.copyWith
-                          (color: colorScheme.primary),
+                          (color: colorScheme.primary, fontSize: postCardDetailSize),
                       ),
                       Spacer(),
                       widget.post.isFeatured ? Container(
-                        padding: EdgeInsets.only(right: 15*wp, top: 0*hp),
+                        padding: EdgeInsets.only(right: 10*wp, top: 0*hp),
                         child: Container(
                             decoration: BoxDecoration(
                                 gradient: Gradients.blueRed(),
@@ -232,7 +237,7 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                         SizedBox(width: 10 * wp),
                         Text(
                           (widget.post.numComments + widget.post.numReplies).toString() + " Comments",
-                          style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary),
+                          style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary, fontSize: postCardDetailSize),
                         ),
                         IconButton(
                           constraints: BoxConstraints(),
