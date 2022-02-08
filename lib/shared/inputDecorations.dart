@@ -26,9 +26,10 @@ InputDecoration commentReplyInputDecoration({required VoidFunction onPressed, re
   final hp = Provider.of<HeightPixel>(context).value;
   final wp = Provider.of<WidthPixel>(context).value;
   return InputDecoration(
-    fillColor: colorScheme.surface, filled: true,
+    fillColor: colorScheme.surface,
+    filled: true,
     hintText: isReply != false ? "Reply..." : "Comment...",
-    hintStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: colorScheme.primary),
+    hintStyle: Theme.of(context).textTheme.bodyText1,
     labelStyle: Theme.of(context).textTheme.bodyText1,
     contentPadding: EdgeInsets.fromLTRB(20*wp, 14*hp, 0*wp, 14*hp),
     border: new OutlineInputBorder(
@@ -62,7 +63,7 @@ InputDecoration messageInputDecoration({required VoidFunction onPressed, require
     hintText: 'Message...',
     fillColor: colorScheme.surface,
     filled: true,
-    hintStyle: Theme.of(context).textTheme.bodyText1,
+    hintStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: colorScheme.primary),
     labelStyle: Theme.of(context).textTheme.bodyText1,
     contentPadding: EdgeInsets.fromLTRB(20*wp, 14*hp, 0*wp, 14*hp),
     border: new OutlineInputBorder(

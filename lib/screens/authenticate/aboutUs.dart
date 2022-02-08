@@ -39,17 +39,17 @@ class AboutUs extends StatelessWidget {
                       )),
                 ],
               ),
-              SizedBox(height: 70 * hp),
+              SizedBox(height: 40 * hp),
               SizedBox(
                 height: 90 * hp,
-                child: Image.asset('assets/sublogo1cropped.png'),
+                child: Image.asset('assets/sublogo2.png'),
               ),
-              SizedBox(height: 20 * hp),
+              SizedBox(height: 35 * hp),
               Text(
                 "About Circles",
                 style: textTheme.headline4?.copyWith(fontWeight: FontWeight.bold, color: Colors.white),
               ),
-              SizedBox(height: 15 * hp),
+              SizedBox(height: 0 * hp),
               Container(
                   margin: EdgeInsets.symmetric(horizontal: 30 * wp),
                   child: Column(
@@ -57,19 +57,19 @@ class AboutUs extends StatelessWidget {
                       SizedBox(height: 40 * hp),
                       Text(
                         "Circles.co is an app that lets highschoolers chat anonymously. ",
-                        style: textTheme.bodyText2?.copyWith(color: Colors.white, fontSize: fontSize),
+                        style: textTheme.bodyText2?.copyWith(color: Colors.white, fontSize: fontSize, height: 1.5),
                         textAlign: TextAlign.center,
                       ),
                       SizedBox(height: 30 * hp),
                       Text(
                         "Talk with people from just your high school, or other high schools on the app.",
-                        style: textTheme.bodyText2?.copyWith(color: Colors.white, fontSize: fontSize),
+                        style: textTheme.bodyText2?.copyWith(color: Colors.white, fontSize: fontSize, height: 1.5),
                         textAlign: TextAlign.center,
                       ),
                       SizedBox(height: 30 * hp),
                       Text(
-                        "Post about classes, sports, events, etc.",
-                        style: textTheme.bodyText2?.copyWith(color: Colors.white, fontSize: fontSize),
+                        "Post about classes, sports, memes, upcoming events, etc.",
+                        style: textTheme.bodyText2?.copyWith(color: Colors.white, fontSize: fontSize, height: 1.5),
                         textAlign: TextAlign.center,
                       ),
                     ],

@@ -52,11 +52,11 @@ class _NewPollState extends State<NewPoll> {
           ),
         ),
         padding: EdgeInsets.all(10*hp),
-        margin: EdgeInsets.all(0),
+        margin: EdgeInsets.zero,
         child: Form(
           key: _formKey,
           child: ListView.builder(
-            padding: EdgeInsets.all(0),
+            padding: EdgeInsets.zero,
             itemCount: min(numOptions + 2, 7),
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
@@ -64,7 +64,7 @@ class _NewPollState extends State<NewPoll> {
               if (index == 0) {
                 return Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
                   IconButton(
-                    padding: EdgeInsets.all(0),
+                    padding: EdgeInsets.zero,
                     constraints: BoxConstraints(),
                     onPressed: () {
                       widget.onDeletePoll();
@@ -75,7 +75,7 @@ class _NewPollState extends State<NewPoll> {
               } else if (index == numOptions + 1) {
                 return Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
                   IconButton(
-                    padding: EdgeInsets.all(0),
+                    padding: EdgeInsets.zero,
                     constraints: BoxConstraints(),
                     onPressed: () {
                       setState(() {

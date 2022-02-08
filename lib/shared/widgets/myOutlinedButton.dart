@@ -30,8 +30,8 @@ class MyOutlinedButton extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return ActionChip(
-      labelPadding: EdgeInsets.all(0),
-      padding: EdgeInsets.all(0),
+      labelPadding: EdgeInsets.zero,
+      padding: EdgeInsets.zero,
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       pressElevation: pressElevation,
       label: Container(

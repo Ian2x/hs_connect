@@ -24,7 +24,7 @@ PreferredSizeWidget activityAppBar({required BuildContext context, required bool
                 style: Theme.of(context)
                     .textTheme
                     .headline4
-                    ?.copyWith(fontSize: 19*hp, fontWeight: FontWeight.bold))
+                    ?.copyWith(fontSize: 18*hp, fontWeight: FontWeight.w600))
           ),
           Spacer(),
           TabBar(
@@ -41,7 +41,7 @@ PreferredSizeWidget activityAppBar({required BuildContext context, required bool
             unselectedLabelStyle: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.w500, fontSize: 15, color: colorScheme.primary),
             tabs: <Widget>[
               Tab(
-                  iconMargin: EdgeInsets.all(0),
+                  iconMargin: EdgeInsets.zero,
                   height: HomeAppBar.tabBarHeight,
                   child: Container(
                     padding: HomeAppBar.tabBarPadding,

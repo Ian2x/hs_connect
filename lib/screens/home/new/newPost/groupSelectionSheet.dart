@@ -33,7 +33,8 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
 
     if (selectedGroup==null) return Loading();
     return Container(
-        padding: EdgeInsets.fromLTRB(25*wp, 0*hp, 25*wp, 40*hp),
+        height: 208*hp,
+        padding: EdgeInsets.fromLTRB(25*wp, 25*hp, 25*wp, 25*hp),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,7 +49,6 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 40*hp),
                       Text("Pick a circle",
                           style: Theme.of(context).textTheme.headline6),
                     ],

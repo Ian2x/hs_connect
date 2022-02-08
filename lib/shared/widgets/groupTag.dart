@@ -26,8 +26,8 @@ class GroupTag extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Chip(
-      labelPadding: EdgeInsets.all(0),
-      padding: EdgeInsets.all(0),
+      labelPadding: EdgeInsets.zero,
+      padding: EdgeInsets.zero,
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       label: Container(
           decoration: BoxDecoration(

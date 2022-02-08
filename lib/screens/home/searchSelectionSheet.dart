@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hs_connect/models/accessRestriction.dart';
-import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pixels.dart';
-import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
 class SearchSelectionSheet extends StatefulWidget {
@@ -31,7 +28,8 @@ class _SearchSelectionSheetState extends State<SearchSelectionSheet> {
     final wp = Provider.of<WidthPixel>(context).value;
 
     return Container(
-        padding: EdgeInsets.fromLTRB(25*wp, 0*hp, 25*wp, 40*hp),
+      height: 208*hp,
+        padding: EdgeInsets.fromLTRB(25*wp, 25*hp, 25*wp, 25*hp),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,7 +37,6 @@ class _SearchSelectionSheetState extends State<SearchSelectionSheet> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 40*hp),
                 Text("Filter your feed by:",
                     style: Theme.of(context).textTheme.headline6),
               ],
@@ -59,7 +56,15 @@ class _SearchSelectionSheetState extends State<SearchSelectionSheet> {
                   Divider(),
                   Row(
                     children: [
-                      Text('Hot', style: Theme.of(context).textTheme.subtitle1),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Hot', style: Theme.of(context).textTheme.subtitle1),
+                          SizedBox(height: 5*hp),
+                          Text("Sort posts by newest", style: Theme.of(context).textTheme.subtitle2),
+                          SizedBox(height: 2*hp)
+                        ],
+                      ),
                       Spacer(),
                       ConstrainedBox(
                           constraints: BoxConstraints(maxHeight: 40*hp),
@@ -99,7 +104,15 @@ class _SearchSelectionSheetState extends State<SearchSelectionSheet> {
                     Divider(),
                     Row(
                       children: [
-                        Text('New', style: Theme.of(context).textTheme.subtitle1),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('New', style: Theme.of(context).textTheme.subtitle1),
+                            SizedBox(height: 5*hp),
+                            Text("Sort posts by newest", style: Theme.of(context).textTheme.subtitle2),
+                            SizedBox(height: 2*hp)
+                          ],
+                        ),
                         Spacer(),
                         ConstrainedBox(
                             constraints: BoxConstraints(maxHeight: 40*hp),

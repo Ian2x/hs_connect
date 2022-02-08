@@ -38,7 +38,7 @@ class _NewMessageButtonState extends State<NewMessageButton> {
     final wp = Provider.of<WidthPixel>(context).value;
 
     return Container(
-        margin: EdgeInsets.all(0),
+        margin: EdgeInsets.zero,
         width: MediaQuery.of(context).size.width*.8,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
