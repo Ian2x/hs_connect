@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 
 class WaitVerification extends StatefulWidget {
   final domainEmail;
+
   const WaitVerification({Key? key, required this.domain, required this.domainEmail}) : super(key: key);
 
   final String domain;
@@ -46,124 +47,113 @@ class _WaitVerificationState extends State<WaitVerification> {
   @override
   Widget build(BuildContext context) {
     final hp = Provider.of<HeightPixel>(context).value;
+    final wp = Provider.of<WidthPixel>(context).value;
 
     return Scaffold(
-      backgroundColor: Colors.white,
-        body: Stack(
-          children: [
-          Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-          Container(
-          height: 100*hp,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            gradient: Gradients.blueRed(begin: Alignment.topLeft , end: Alignment.bottomRight),
-          ),
-          child: SizedBox(),
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          automaticallyImplyLeading: false,
         ),
-        SizedBox(height: 30*hp),
-        Row(
-          children: [
-            SizedBox(width: 10*hp),
-          ],
-        ),
-        SizedBox(height: 30*hp),
-        Center(
-            child:
-            Column(
+        body: Stack(children: [
+          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            SizedBox(height: 60 * hp),
+            Center(
+                child: Column(
               children: [
                 SizedBox(
-                  height: 80 *hp,
-                  child:
-                  Image.asset('assets/sublogo1cropped.png'),
+                  height: 80 * hp,
+                  child: Image.asset('assets/splash1cropped.png'),
                 ),
-                SizedBox(height: 15*hp),
+                SizedBox(height: 20 * hp),
                 Text(
                   'We sent you a link',
-                  style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 24*hp, color: Colors.black
-                  ),
+                  style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 24 * hp, color: Colors.black),
                 ),
-                SizedBox(height:15*hp),
+                SizedBox(height: 15 * hp),
                 Center(
-                  child:Text("Check the link in your school email.\nAfter, you'll be automatically redirected.", textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 15*hp, height: 1.5)),
+                  child: Text("Check the link in your school email.\nAfter, you'll be automatically redirected.",
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context)
+                          .textTheme
+                          .subtitle1
+                          ?.copyWith(color: Colors.black, height: 1.5)),
                 ),
-                SizedBox(height:65 *hp),
-                MyOutlinedButton(
-                  onPressed: () {},
-                  gradient: Gradients.blueRed(begin: Alignment.topCenter, end: Alignment.bottomCenter),
-                  borderRadius: 20.0,
-                  thickness:1.5,
-                  pressElevation: 0.0,
-                  padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                  backgroundColor: Colors.white,
+                SizedBox(height: 85 * hp),
+                Container(
+                  height: 100*hp,
+                  width: 300*wp,
+                  decoration: BoxDecoration(
+                    gradient: Gradients.blueRed(begin: Alignment.topCenter, end: Alignment.bottomCenter),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
                   child: Container(
-                    height: MediaQuery.of(context).size.height*.13,
-                    width: MediaQuery.of(context).size.width*.7,
+                    padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(18.5),
+                      color: Colors.white,
+                    ),
+                    margin: EdgeInsets.all(1.5),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        GradientText(
-                          "Your email is for verification only.",
-                          style: ThemeText.inter(fontWeight: FontWeight.w600, fontSize: 16*hp,
+                        Text(
+                          "Your email is for verification only.\nIt'll never be linked to your account.",
+                          style: ThemeText.inter(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14.5 * hp,
+                            color: Colors.black,
+                            height: 1.5,
                           ),
-                          gradient: Gradients.blueRed(),
-                        ),
-                        SizedBox(height:15 *hp),
-                        GradientText(
-                          " It'll never be linked to your account.",
-                          style: ThemeText.inter(fontWeight: FontWeight.w600, fontSize: 14.8*hp,
-                          ),
-                          gradient: Gradients.blueRed(),
+                          textAlign: TextAlign.center,
                         ),
                       ],
                     ),
                   ),
                 ),
-                SizedBox(height:180*hp),
+                SizedBox(height: 100 * hp),
                 TextButton(
-                  onPressed:(){
+                  onPressed: () {
                     showModalBottomSheet(
                         context: context,
                         constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.40),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(20*hp),
-                            )),
-                        builder: (context) => pixelProvider(context, child: EmailVerificationErrorSheet(
-                          cancelTimer: ()=>timer!.cancel(),
-                          onDeleteEmail: () {
-                            if (mounted) {
-                              setState(()=>emailDeleted = true);
-                            }
-                          },
-                          emailDeleted: emailDeleted,
-                          domainEmail: widget.domainEmail
-                        )));
+                          top: Radius.circular(20 * hp),
+                        )),
+                        builder: (context) => pixelProvider(context,
+                            child: EmailVerificationErrorSheet(
+                                cancelTimer: () => timer!.cancel(),
+                                onDeleteEmail: () {
+                                  if (mounted) {
+                                    setState(() => emailDeleted = true);
+                                  }
+                                },
+                                emailDeleted: emailDeleted,
+                                domainEmail: widget.domainEmail)));
                   },
-                  child: Text(
-                      " Didn't get it? Click here.",
-                      style: ThemeText.inter(fontWeight: FontWeight.normal,
-                        fontSize: 15*hp, color: Colors.black,
-                      )
-                  ),
+                  child: Text(" Didn't get it? Click here.",
+                      style: ThemeText.inter(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 15 * hp,
+                        color: Colors.black,
+                      )),
                 ),
               ],
-            )
-          ),
-      ]),
-    ])
-  );
-}
+            )),
+          ]),
+        ]));
+  }
 
   Future<void> checkEmailVerified() async {
     user = auth.currentUser;
     await user!.reload();
     if (user!.emailVerified) {
       timer!.cancel();
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => pixelProvider(context, child: RegisterUser(domain: widget.domain, domainEmail: widget.domainEmail))));
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) =>
+              pixelProvider(context, child: RegisterUser(domain: widget.domain, domainEmail: widget.domainEmail))));
     }
   }
 }

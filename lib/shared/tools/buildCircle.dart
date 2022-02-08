@@ -1,37 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:hs_connect/services/storage/image_storage.dart';
 
 import '../constants.dart';
 
-Widget buildProfileCircle({
-  required Widget child,
-  required double all,
-  required Color color,
-}) {
-  return ClipOval(
-    child: Container(
-      padding: EdgeInsets.all(all),
-      color: color,
-      child: child,
-    ),
-  );
-}
-
 Widget buildGroupCircle({
-  required Widget child,
-  required double all,
+  required String? groupImage,
+  required double height,
+  required double width,
+  required BuildContext context,
   required Color backgroundColor
 }) {
-  return ClipOval(
-    child: Container(
-      padding: EdgeInsets.all(all),
-      decoration: BoxDecoration(
-        gradient: Gradients.blueRed(),
-      ),
-      child: buildProfileCircle(
-        all: all,
-        color: backgroundColor,
-        child: child
-      )
-    )
+  return Container(
+    height: height,
+    width: width,
+    decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(100),
+        color: Theme.of(context).colorScheme.primary,
+        border: Border.all(
+            width: 0.15
+        )
+    ),
+    child: CircleAvatar(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundImage: ImageStorage().groupImageProvider(groupImage),
+    ),
   );
 }

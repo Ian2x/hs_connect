@@ -51,12 +51,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
     return Stack(
       children: [
         Container(
-          decoration: BoxDecoration(
-            gradient: Gradients.blueRed(
-              begin: Alignment.bottomLeft,
-              end: Alignment.topRight,
-            ),
-          ),
+          color: colorScheme.onSurface,
           padding: EdgeInsets.only(top: bottomGradientThickness * hp),
           child: BottomNavigationBar(
             backgroundColor: colorScheme.surface,
@@ -123,12 +118,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
                   padding: EdgeInsets.zero,
                   // color: colorScheme.onSurface,
                   constraints: BoxConstraints(),
-                  icon: ShaderMask(
-                    shaderCallback: (Rect bounds) {
-                      return Gradients.blueRed(stops: [0.38, 0.95]).createShader(bounds);
-                    },
-                    child: Icon(Icons.add, size: 30 * hp, color: Colors.white),
-                  ),
+                  icon: Icon(Icons.add, size: 30 * hp),
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -155,7 +145,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
               child: Container(
                   padding: EdgeInsets.fromLTRB(2.5*wp, 2*hp, 2*wp, 2.5*hp),
                   decoration: BoxDecoration(
-                    color: colorScheme.secondary.withOpacity(0.8),
+                    color: colorScheme.secondary,
                     shape: BoxShape.circle,
                   ),
                   alignment: Alignment.center,

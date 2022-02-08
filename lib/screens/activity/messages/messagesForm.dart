@@ -57,80 +57,80 @@ class _MessagesFormState extends State<MessagesForm> {
     MessagesDatabaseService _messages = MessagesDatabaseService(currUserRef: userData.userRef);
 
     return Container(
-       child: Form(
-              key: _formKey,
-              child: Column(crossAxisAlignment: CrossAxisAlignment.end,
-              children: <Widget>[
-                newFile != null && !loading
-                    ? Semantics(
-                        label: 'new_message_image',
-                        child: Container(
-                          width: 150*wp,
-                          height: 150*hp,
-                          padding: EdgeInsets.all(3*hp),
-                          decoration: BoxDecoration(color: colorScheme.background, borderRadius: imageBorderRadius),
-                          child: ClipRRect(
-                              borderRadius: imageBorderRadius,
-                              child: DeletableImage(
-                                image: Image.file(File(newFile!.path), fit: BoxFit.scaleDown),
-                                onDelete: () => setPic(null),
-                                buttonSize: 30*hp, height: 400*hp, width: 400*wp,
-                              )),
-                        ))
-                    : Container(),
-                TextFormField(
-                    autocorrect: false,
-                    initialValue: null,
-                    keyboardType: TextInputType.multiline,
-                    maxLines: null,
-                    style: Theme.of(context).textTheme.subtitle1,
-                    decoration: messageInputDecoration(
-                        context: context,
-                        setPic: setPic,
-                        onPressed: () async {
-                          if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-                            if (mounted) {
-                              setState(() => loading = true);
-                            }
+       child: Container(
+         padding: EdgeInsets.fromLTRB(6.5*wp, 6.5*hp, 6.5*wp, 6.5*hp),
+         child: Form(
+                key: _formKey,
+                child: Column(crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  newFile != null && !loading
+                      ? Semantics(
+                          label: 'new_message_image',
+                          child: Container(
+                            width: 150*wp,
+                            height: 150*hp,
+                            decoration: BoxDecoration(borderRadius: imageBorderRadius),
+                            child: DeletableImage(
+                              image: Image.file(File(newFile!.path), fit: BoxFit.scaleDown),
+                              onDelete: () => setPic(null),
+                              buttonSize: 50*hp, height: 144*hp, width: 144*wp,
+                            ),
+                          ))
+                      : Container(),
+                  TextFormField(
+                      autocorrect: false,
+                      initialValue: null,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      style: Theme.of(context).textTheme.subtitle1,
+                      decoration: messageInputDecoration(
+                          context: context,
+                          setPic: setPic,
+                          onPressed: () async {
+                            if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+                              if (mounted) {
+                                setState(() => loading = true);
+                              }
 
-                            if (newFile != null) {
-                              // upload newFile
-                              final downloadURL = await _images.uploadImage(file: newFile!);
+                              if (newFile != null) {
+                                // upload newFile
+                                final downloadURL = await _images.uploadImage(file: newFile!);
 
-                              await _messages.newMessage(
-                                  receiverRef: widget.otherUserRef,
-                                  text: downloadURL,
-                                  isMedia: true,
-                                  createdAt: Timestamp.now(),
-                                  senderRef: userData.userRef);
+                                await _messages.newMessage(
+                                    receiverRef: widget.otherUserRef,
+                                    text: downloadURL,
+                                    isMedia: true,
+                                    createdAt: Timestamp.now(),
+                                    senderRef: userData.userRef);
+                              }
+                              if (_message != null && _message != '') {
+                                await _messages.newMessage(
+                                    receiverRef: widget.otherUserRef,
+                                    text: _message!,
+                                    isMedia: false,
+                                    createdAt: Timestamp.now(),
+                                    senderRef: userData.userRef);
+                              }
+                              if (mounted) {
+                                setState(() {
+                                  loading = false;
+                                  newFile = null;
+                                  _message = null;
+                                });
+                              }
+                              _formKey.currentState?.reset();
+                              widget.onUpdateLastMessage();
+                              widget.onUpdateLastViewed();
                             }
-                            if (_message != null && _message != '') {
-                              await _messages.newMessage(
-                                  receiverRef: widget.otherUserRef,
-                                  text: _message!,
-                                  isMedia: false,
-                                  createdAt: Timestamp.now(),
-                                  senderRef: userData.userRef);
-                            }
-                            if (mounted) {
-                              setState(() {
-                                loading = false;
-                                newFile = null;
-                                _message = null;
-                              });
-                            }
-                            _formKey.currentState?.reset();
-                            widget.onUpdateLastMessage();
-                            widget.onUpdateLastViewed();
-                          }
-                        }),
-                    onChanged: (val) {
-                      if (mounted) {
-                        setState(() => _message = val);
-                      }
-                    })
-              ]),
-            ),
+                          }),
+                      onChanged: (val) {
+                        if (mounted) {
+                          setState(() => _message = val);
+                        }
+                      })
+                ]),
+              ),
+       ),
           );
   }
 }

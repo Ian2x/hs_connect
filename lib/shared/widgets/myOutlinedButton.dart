@@ -10,6 +10,7 @@ class MyOutlinedButton extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final double? pressElevation;
   final Color? backgroundColor;
+  final Color? outlineColor;
 
   const MyOutlinedButton({
     Key? key,
@@ -22,6 +23,7 @@ class MyOutlinedButton extends StatelessWidget {
     this.pressElevation,
     this.thickness = 2,
     this.backgroundColor,
+    this.outlineColor
   }) : super(key: key);
 
   @override
@@ -35,12 +37,13 @@ class MyOutlinedButton extends StatelessWidget {
       label: Container(
         decoration: BoxDecoration(
             gradient: gradient,
+            color: outlineColor,
             borderRadius: BorderRadius.circular(borderRadius),
         ),
         child: Container(
           padding: padding,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(borderRadius),
+            borderRadius: BorderRadius.circular(borderRadius-thickness),
             color: backgroundColor,
           ),
           margin: EdgeInsets.all(thickness),

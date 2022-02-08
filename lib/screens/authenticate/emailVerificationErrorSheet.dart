@@ -43,17 +43,18 @@ class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorShee
     final wp = Provider.of<HeightPixel>(context).value;
 
     return Container(
-        padding: EdgeInsets.symmetric(vertical: 38*hp, horizontal: 30*wp),
+        padding: EdgeInsets.fromLTRB(30*wp, 25*hp, 30*wp, 35*hp),
         color: Colors.white,
         alignment: Alignment.center,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-                "If you haven't received an email after 5 minutes, it is recommended that you delete your email from our systems and start over. Otherwise, you'll never be able to make an account from this address. Please contact us at app@getcircles.co if you still have questions.",
+                "If you haven't received an email after 2 minutes, it is recommended that you delete your email from our systems and start over. Otherwise, you'll never be able to make an account from this address. Please contact us at app@getcircles.co if you still have questions.",
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.black)),
             SizedBox(
-                height: 60*hp,
+                height: error=='' ? 40*hp : 80*hp,
                 child: Center(child: Text(error, textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyText2?.copyWith(color: Color(0xFFb2b2b2))))),
             Row(children: <Widget>[
               Spacer(),
@@ -84,11 +85,10 @@ class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorShee
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      GradientText(
+                      Text(
                         deleteEmail,
-                        style: ThemeText.inter(fontWeight: FontWeight.w600, fontSize: 16*hp,
+                        style: ThemeText.inter(fontWeight: FontWeight.w600, fontSize: 16*hp, color: Colors.black
                         ),
-                        gradient: Gradients.blueRed(),
                       ),
                     ],
                   ),
@@ -109,11 +109,10 @@ class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorShee
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      GradientText(
+                      Text(
                         "Start Over",
-                        style: ThemeText.inter(fontWeight: FontWeight.w600, fontSize: 16*hp,
+                        style: ThemeText.inter(fontWeight: FontWeight.w600, fontSize: 16*hp, color: Colors.black
                         ),
-                        gradient: Gradients.blueRed(),
                       ),
                     ],
                   ),

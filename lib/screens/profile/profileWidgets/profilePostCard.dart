@@ -127,7 +127,7 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
           );
         },
         child: Container(
-          padding: EdgeInsets.fromLTRB(10 * wp, 0, 5 * wp, 10 * hp),
+          padding: EdgeInsets.fromLTRB(10 * wp, 0, 10 * wp, 10 * hp),
           decoration: ShapeDecoration(
             color: colorScheme.surface,
             shape: RoundedRectangleBorder(
@@ -141,23 +141,18 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: EdgeInsets.fromLTRB(2*hp, 10*hp, 0, 0),
+                padding: EdgeInsets.fromLTRB(2*wp, 10*hp, 0, 0),
                 child: Row(
                   children: [
-                    SizedBox(
-                      height: 30*hp,
-                      width: 30*hp,
-                      child: buildGroupCircle(
-                          child: Container(
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(image: ImageStorage().groupImageProvider(group!.image))),
-                          ),
-                          all: 1.5,
-                          backgroundColor: colorScheme.background),
-                    ),
+                    buildGroupCircle(
+                        groupImage: group!.image,
+                        context: context,
+                        height: 25*hp,
+                        width: 25*hp,
+                        backgroundColor: colorScheme.background),
                     SizedBox(width: 5*wp),
-                    Text(group!.name, style: Theme.of(context).textTheme.subtitle2)
+                    Text(group!.name, style: Theme.of(context).textTheme.subtitle2?.copyWith
+                      (fontWeight: FontWeight.w500, color: colorScheme.primary))
                   ],
                 ),
               ),
@@ -167,18 +162,9 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
               Row(
                 children: [
                   Text((widget.post.numComments + widget.post.numReplies).toString() + " Comments",
-                      style: Theme.of(context).textTheme.bodyText2?.copyWith(color: colorScheme.error)),
+                      style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w500, color: colorScheme.primary)),
                   Spacer(),
-                  RichText(
-                    text: TextSpan(
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: (likeCount-dislikeCount).toString(),
-                            style: Theme.of(context).textTheme.subtitle2),
-                        TextSpan(text: " Likes ", style: Theme.of(context).textTheme.bodyText2?.copyWith(color: colorScheme.error)),
-                      ],
-                    ),
-                  ),
+                  Text((likeCount-dislikeCount).toString() + " Likes", style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w500)),
                 ],
               ),
             ],

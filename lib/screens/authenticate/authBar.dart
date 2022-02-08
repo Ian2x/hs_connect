@@ -19,7 +19,7 @@ class AuthBar extends StatelessWidget {
     final hp = Provider.of<HeightPixel>(context).value;
 
     return Container(
-        color:Colors.white,
+        color:Colors.transparent,
         padding: EdgeInsets.fromLTRB(10*wp, 3*hp, 10*wp, 5*hp),
         width: MediaQuery.of(context).size.width,
         child:
@@ -28,18 +28,18 @@ class AuthBar extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             MyOutlinedButton(
-              padding: EdgeInsets.symmetric(vertical: 12*hp, horizontal: 40*wp),
+              padding: EdgeInsets.symmetric(vertical: 11*hp, horizontal: 35*wp),
               onPressed: onPressed,
-              gradient: Gradients.blueRed(begin: Alignment.topCenter, end: Alignment.bottomCenter),
-              borderRadius: 40,
+              outlineColor: Colors.black,
+              borderRadius: 40*hp,
               backgroundColor: Colors.white,
-              child: GradientText(
+              thickness: 1.2*hp,
+              child: Text(
                 buttonText,
                 softWrap: false,
                 overflow: TextOverflow.ellipsis,
-                style: ThemeText.inter(fontWeight: FontWeight.w500, fontSize: 17*hp,
+                style: ThemeText.inter(fontWeight: FontWeight.w500, fontSize: 17*hp, color: Colors.black,
                 ),
-                gradient: Gradients.blueRed(),
               ),
             )
           ]
