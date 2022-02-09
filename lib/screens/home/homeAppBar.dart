@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 
 class HomeAppBar extends SliverPersistentHeaderDelegate{
   static const tabBarHeight = 40.0;
-  static const expandedHeight = 130.0;
+  static const expandedHeight = 66.0;
   static const tabBarPadding = EdgeInsets.symmetric(horizontal: 25);
 
   final TabController tabController;
@@ -20,8 +20,10 @@ class HomeAppBar extends SliverPersistentHeaderDelegate{
   final bool searchByTrending;
   final VoidFunction toggleSearch;
   final double hp;
+  final double safeAreaHeight;
 
-  HomeAppBar({required this.tabController, required this.userData, required this.isDomain, required this.searchByTrending, required this.hp, required this.toggleSearch});
+  HomeAppBar({required this.tabController, required this.userData, required this.isDomain,
+    required this.searchByTrending, required this.hp, required this.toggleSearch, required this.safeAreaHeight});
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
@@ -29,7 +31,7 @@ class HomeAppBar extends SliverPersistentHeaderDelegate{
     final colorScheme = Theme.of(context).colorScheme;
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
-    final safeAreaHeight = MediaQuery.of(context).padding.top;
+    //final safeAreaHeight = MediaQuery.of(context).padding.top;
     final fullDomainName = userData.fullDomainName != null ? userData.fullDomainName! : userData.domain;
     return Stack(
       children: [
@@ -118,7 +120,7 @@ class HomeAppBar extends SliverPersistentHeaderDelegate{
   }
 
   @override
-  double get maxExtent => expandedHeight*hp;
+  double get maxExtent => expandedHeight*hp + safeAreaHeight*hp;
 
   @override
   double get minExtent => 0;

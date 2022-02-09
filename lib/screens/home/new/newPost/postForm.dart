@@ -133,7 +133,7 @@ class _PostFormState extends State<PostForm> {
           key: _formKey,
           child: Column(
             children: <Widget>[
-              SizedBox(height: 40*hp),
+              SizedBox(height: MediaQuery.of(context).padding.top),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 //Top ROW

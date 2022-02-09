@@ -48,93 +48,97 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
 
     if (loading || userData == null) return Loading();
 
+    numNotifications = 5;
+
     return Stack(
       children: [
         Container(
           color: colorScheme.onSurface,
           padding: EdgeInsets.only(top: bottomGradientThickness * hp),
-          height: 43*hp,
-          child: BottomNavigationBar(
-            backgroundColor: colorScheme.surface,
-            type: BottomNavigationBarType.fixed,
-            showSelectedLabels: true,
-            showUnselectedLabels: true,
-            currentIndex: widget.currentIndex,
-            selectedItemColor: colorScheme.onSurface,
-            selectedFontSize: 6*hp,
-            unselectedFontSize: 6*hp,
-            items: <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: IconButton(
-                  padding: EdgeInsets.only(top: 5*hp),
-                  // color: colorScheme.onSurface,
-                  constraints: BoxConstraints(),
-                  alignment: Alignment.bottomCenter,
-                  icon: Icon(Icons.home, size: 25 * hp),
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      NoAnimationMaterialPageRoute(
-                          builder: (context) => pixelProvider(context, child: Home(userData: userData))),
-                    );
-                  },
+          child: Container(
+            color: colorScheme.surface,
+            height: 43*hp + MediaQuery.of(context).padding.bottom,
+            child: BottomNavigationBar(
+              backgroundColor: colorScheme.surface,
+              type: BottomNavigationBarType.fixed,
+              showSelectedLabels: true,
+              showUnselectedLabels: true,
+              currentIndex: widget.currentIndex,
+              selectedItemColor: colorScheme.onSurface,
+              selectedFontSize: 6*hp,
+              unselectedFontSize: 6*hp,
+              items: <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: IconButton(
+                    padding: EdgeInsets.only(top: 5*hp),
+                    // color: colorScheme.onSurface,
+                    constraints: BoxConstraints(),
+                    icon: Icon(Icons.home, size: 25 * hp),
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        NoAnimationMaterialPageRoute(
+                            builder: (context) => pixelProvider(context, child: Home(userData: userData))),
+                      );
+                    },
+                  ),
+                  label: '',
                 ),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: IconButton(
-                  padding: EdgeInsets.only(top: 5*hp),
-                  // color: colorScheme.onSurface,
-                  constraints: BoxConstraints(),
-                  icon: Icon(Icons.notifications, size: 25 * hp),
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      NoAnimationMaterialPageRoute(builder: (context) => pixelProvider(context, child: ActivityPage(currUserData: userData,))),
-                    );
-                  },
+                BottomNavigationBarItem(
+                  icon: IconButton(
+                    padding: EdgeInsets.only(top: 5*hp),
+                    // color: colorScheme.onSurface,
+                    constraints: BoxConstraints(),
+                    icon: Icon(Icons.notifications, size: 25 * hp),
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        NoAnimationMaterialPageRoute(builder: (context) => pixelProvider(context, child: ActivityPage(currUserData: userData,))),
+                      );
+                    },
+                  ),
+                  label: '',
                 ),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: IconButton(
-                  padding: EdgeInsets.only(top: 5*hp),
-                  // color: colorScheme.onSurface,
-                  constraints: BoxConstraints(),
-                  icon: Icon(Icons.person, size: 25 * hp),
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      NoAnimationMaterialPageRoute(
-                          builder: (context) => pixelProvider(context,
-                              child: ProfilePage(profileRef: userData.userRef, currUserData: userData)
-                          )),
-                    );
-                  },
+                BottomNavigationBarItem(
+                  icon: IconButton(
+                    padding: EdgeInsets.only(top: 5*hp),
+                    // color: colorScheme.onSurface,
+                    constraints: BoxConstraints(),
+                    icon: Icon(Icons.person, size: 25 * hp),
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        NoAnimationMaterialPageRoute(
+                            builder: (context) => pixelProvider(context,
+                                child: ProfilePage(profileRef: userData.userRef, currUserData: userData)
+                            )),
+                      );
+                    },
+                  ),
+                  label: '',
                 ),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: IconButton(
-                  padding: EdgeInsets.only(top: 0*hp),
-                  // color: colorScheme.onSurface,
-                  constraints: BoxConstraints(),
-                  icon: Icon(Icons.add, size: 30 * hp),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => pixelProvider(context, child: NewPost())),
-                    );
-                  },
+                BottomNavigationBarItem(
+                  icon: IconButton(
+                    padding: EdgeInsets.only(top: 0*hp),
+                    // color: colorScheme.onSurface,
+                    constraints: BoxConstraints(),
+                    icon: Icon(Icons.add, size: 30 * hp),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => pixelProvider(context, child: NewPost())),
+                      );
+                    },
+                  ),
+                  label: '',
                 ),
-                label: '',
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         Positioned(
             left: 148.5 * wp,
-            top: 8 * hp,
+            top: 5 * hp,
             child: numNotifications!=0 ? Container(
               height: 20*hp,
               width: 20*hp,
