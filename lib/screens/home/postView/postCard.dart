@@ -178,8 +178,8 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                       SizedBox(width:10*wp),
                       buildGroupCircle(
                           groupImage: group!=null ? group!.image : null,
-                          height: 20*hp,
-                          width: 20*hp,
+                          height: 24*hp,
+                          width: 24*hp,
                           context: context,
                           backgroundColor: colorScheme.surface),
                       SizedBox(width: 5*wp),

@@ -25,7 +25,7 @@ class AboutUs extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 68 * hp),
+              SizedBox(height: MediaQuery.of(context).padding.top+5*hp),
               Row(
                 children: [
                   SizedBox(width: 10 * wp),
