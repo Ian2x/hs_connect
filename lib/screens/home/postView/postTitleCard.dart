@@ -15,6 +15,7 @@ import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
+import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/expandableImage.dart';
 import 'package:hs_connect/shared/widgets/groupTag.dart';
 import 'package:hs_connect/shared/reports/reportSheet.dart';
@@ -100,7 +101,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
                     }
                   },
                   child: Text("from " + localCreatorName + " • " + convertTime(widget.post.createdAt.toDate()),
-                    style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary, fontSize: postCardDetailSize)
+                    style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary, fontSize: postCardDetailSize+1)
                   ),
                 ),
                 Spacer(flex:1),
@@ -145,6 +146,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
                     padding: EdgeInsets.fromLTRB(9*wp, 4*hp, 9*wp, 4*hp),
                     thickness: 1.5*hp,
                     fontSize: 15*hp,
+                    groupColor: widget.group.hexColor!=null ? HexColor(widget.group.hexColor!) : null,
                 ),
                 Spacer(),
                 LikeDislikePostStateful(currUserRef: widget.currUserRef, post: widget.post, postLikesManager: postLikesManager),

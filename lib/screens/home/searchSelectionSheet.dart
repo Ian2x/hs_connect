@@ -26,6 +26,7 @@ class _SearchSelectionSheetState extends State<SearchSelectionSheet> {
   Widget build(BuildContext context) {
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
       height: 208*hp,
@@ -59,9 +60,9 @@ class _SearchSelectionSheetState extends State<SearchSelectionSheet> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Hot', style: Theme.of(context).textTheme.subtitle1),
+                          Text('Hot', style: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w500)),
                           SizedBox(height: 5*hp),
-                          Text("Sort posts by newest", style: Theme.of(context).textTheme.subtitle2),
+                          Text("Show trending posts", style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary)),
                           SizedBox(height: 2*hp)
                         ],
                       ),
@@ -107,9 +108,9 @@ class _SearchSelectionSheetState extends State<SearchSelectionSheet> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('New', style: Theme.of(context).textTheme.subtitle1),
+                            Text('New', style: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w500)),
                             SizedBox(height: 5*hp),
-                            Text("Sort posts by newest", style: Theme.of(context).textTheme.subtitle2),
+                            Text("Show the newest posts", style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary)),
                             SizedBox(height: 2*hp)
                           ],
                         ),

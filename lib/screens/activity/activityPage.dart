@@ -56,7 +56,7 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
 
     return Scaffold(
       backgroundColor: colorScheme.background,
-      appBar: activityAppBar(context: context, isNotifications: isNotifications, tabController: tabController),
+      appBar: activityAppBar(context: context, isNotifications: isNotifications, tabController: tabController, userData: userData),
       body: Container(
         color: colorScheme.background,
         child: TabBarView(children: <Widget>[

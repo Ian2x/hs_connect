@@ -18,6 +18,7 @@ import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/buildCircle.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/reports/reportSheet.dart';
+import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/expandableImage.dart';
 import 'package:provider/provider.dart';
 
@@ -178,15 +179,19 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                       SizedBox(width:10*wp),
                       buildGroupCircle(
                           groupImage: group!=null ? group!.image : null,
-                          height: 24*hp,
-                          width: 24*hp,
+                          height: 20*hp,
+                          width: 20*hp,
                           context: context,
                           backgroundColor: colorScheme.surface),
                       SizedBox(width: 5*wp),
                       Text(
-                        group!.name + " • " + convertTime(widget.post.createdAt.toDate()),
+                        group!.name,
                         style: Theme.of(context).textTheme.subtitle2?.copyWith
-                          (color: colorScheme.primary, fontSize: postCardDetailSize),
+                          (color: group!.hexColor!=null ? HexColor(group!.hexColor!) : colorScheme.primary, fontSize: postCardDetailSize),
+                      ),
+                      Text(" • " + convertTime(widget.post.createdAt.toDate()),
+                          style: Theme.of(context).textTheme.subtitle2?.copyWith
+                        (color: colorScheme.primary, fontSize: postCardDetailSize),
                       ),
                       Spacer(),
                       widget.post.isFeatured ? Container(
@@ -202,7 +207,7 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                                   color: Theme.of(context).colorScheme.surface,
                                 ),
                                 padding: EdgeInsets.fromLTRB(17*wp, 5*hp, 17*wp, 6*hp),
-                                margin: EdgeInsets.all(1.5*hp),
+                                margin: EdgeInsets.all(2*hp),
                                 child: Text('Featured', style: Theme.of(context).textTheme.subtitle2)
                             )
                         ),

@@ -13,14 +13,14 @@ import 'messagesFeed.dart';
 
 class MessagesPage extends StatelessWidget {
   final UserData otherUserData;
-  final DocumentReference currUserRef;
+  final UserData currUserData;
   final VoidFunction onUpdateLastMessage;
   final VoidFunction onUpdateLastViewed;
 
   const MessagesPage(
       {Key? key,
       required this.otherUserData,
-      required this.currUserRef,
+      required this.currUserData,
       required this.onUpdateLastMessage,
       required this.onUpdateLastViewed})
       : super(key: key);
@@ -48,16 +48,16 @@ class MessagesPage extends StatelessWidget {
               child: Container(
             padding: EdgeInsets.only(left: 10 * wp, right: 10 * wp),
             child: MessagesFeed(
-              currUserRef: currUserRef,
+              currUserRef: currUserData.userRef,
               otherUserRef: otherUserData.userRef,
               onUpdateLastViewed: onUpdateLastViewed,
             ),
           )),
           Container(
               height: bottomGradientThickness * hp,
-              color: colorScheme.onSurface),
+              color: currUserData.domainColor!=null ? currUserData.domainColor! : colorScheme.onSurface),
           MessagesForm(
-              currUserRef: currUserRef,
+              currUserRef: currUserData.userRef,
               otherUserRef: otherUserData.userRef,
               onUpdateLastMessage: onUpdateLastMessage,
               onUpdateLastViewed: onUpdateLastViewed)

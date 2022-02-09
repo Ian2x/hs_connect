@@ -112,7 +112,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                   MaterialPageRoute(
                       builder: (context) => pixelProvider(context,
                           child: MessagesPage(
-                            currUserRef: widget.userData.userRef,
+                            currUserData: widget.userData,
                             otherUserData: otherUser,
                             onUpdateLastMessage: updateLastMessage,
                             onUpdateLastViewed: updateLastViewed,
@@ -140,7 +140,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                             style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold)),
                         SizedBox(height: 4 * hp),
                         Text(otherUser.fullDomainName != null ? otherUser.fullDomainName! : otherUser.domain,
-                            style: Theme.of(context).textTheme.bodyText2?.copyWith(color: colorScheme.primary))
+                            style: Theme.of(context).textTheme.bodyText2?.copyWith(color: otherUser.domainColor!=null ? otherUser.domainColor! : colorScheme.primary))
                       ]),
                       Flexible(
                           child: Column(children: <Widget>[

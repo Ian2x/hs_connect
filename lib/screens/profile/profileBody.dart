@@ -65,6 +65,7 @@ class _ProfileBodyState extends State<ProfileBody> {
     final userData = Provider.of<UserData?>(context);
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
+    final colorScheme = Theme.of(context).colorScheme;
 
     if (profileData == null) return Loading();
     bool isOwnProfile = widget.profileUserRef == widget.currUserData.userRef &&
@@ -95,9 +96,10 @@ class _ProfileBodyState extends State<ProfileBody> {
                 groupImageURL: profileData!.domainImage,
                 groupName: profileData!.fullDomainName != null ? profileData!.fullDomainName! : profileData!.domain,
                 borderRadius: 20*hp,
-                padding: EdgeInsets.fromLTRB(8 * wp, 2 * hp, 8 * wp, 2 * hp),
+                padding: EdgeInsets.fromLTRB(8 * wp, 4 * hp, 8 * wp, 4 * hp),
                 thickness: 1.5*hp,
                 fontSize: 18*hp,
+                groupColor: profileData!.domainColor!=null ? profileData!.domainColor! : null,
               ),
               Spacer(),
             ],
@@ -114,7 +116,7 @@ class _ProfileBodyState extends State<ProfileBody> {
                       SizedBox(width: 45 * wp),
                       NewMessageButton(
                         otherUserData: profileData!,
-                        currUserRef: widget.currUserData.userRef,
+                        currUserData: widget.currUserData,
                       )
                     ])
                   ],

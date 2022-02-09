@@ -10,6 +10,7 @@ import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
+import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/deletableImage.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
@@ -351,7 +352,7 @@ class _PostFormState extends State<PostForm> {
           child: GestureDetector(
             onTap: ()=>dismissKeyboard(context),
             child: Container(
-              color: colorScheme.onSurface,
+              color: userData.domainColor!=null ? userData.domainColor! : colorScheme.onSurface,
               padding: EdgeInsets.only(top: bottomGradientThickness*hp),
               width:MediaQuery.of(context).size.width,
               child: Container(
