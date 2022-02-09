@@ -53,6 +53,7 @@ dependencies:
   dismissible_page: ^0.6.4
   firebase_messaging: ^11.2.6
   tuple: ^2.0.0
+  share_plus: ^3.0.4
 
 flutter_native_splash:
   color: "#ffffff"

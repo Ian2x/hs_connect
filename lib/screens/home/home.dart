@@ -18,6 +18,7 @@ import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
 import 'package:provider/provider.dart';
 
 import 'homeAppBar.dart';
+import 'launchCountdown.dart';
 
 class Home extends StatefulWidget {
   final UserData userData;
@@ -130,6 +131,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
     if (userData == null) {
       return Scaffold(backgroundColor: colorScheme.background, body: Loading());
+    }
+
+    if (userData.launchDate!=null && userData.launchDate!.compareTo(Timestamp.now())>0) {
+      return LaunchCountdown(userData: userData);
     }
 
     final hp = Provider.of<HeightPixel>(context).value;
