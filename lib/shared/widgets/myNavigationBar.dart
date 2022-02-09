@@ -48,8 +48,6 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
 
     if (loading || userData == null) return Loading();
 
-    numNotifications = 5;
-
     return Stack(
       children: [
         Container(

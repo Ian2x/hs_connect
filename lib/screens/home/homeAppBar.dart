@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 class HomeAppBar extends SliverPersistentHeaderDelegate{
   static const tabBarHeight = 40.0;
   static const expandedHeight = 66.0;
+
   static const tabBarPadding = EdgeInsets.symmetric(horizontal: 25);
 
   final TabController tabController;
