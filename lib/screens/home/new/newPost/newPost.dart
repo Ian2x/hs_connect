@@ -20,14 +20,9 @@ class NewPost extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      body: Stack(
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.fromLTRB(0*wp, 30*hp,0*wp,0*hp),
-            constraints: BoxConstraints.expand(),
-            child: PostForm(userData: userData),
-          ),
-        ],
+      body: Container(
+        constraints: BoxConstraints.expand(),
+        child: PostForm(userData: userData),
       ),
     );
   }

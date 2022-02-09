@@ -149,7 +149,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
               return [
                 SliverPersistentHeader(
-                  delegate: HomeAppBar(tabController: tabController, userData: userData, isDomain: isDomain, searchByTrending: searchByTrending, hp: hp, toggleSearch: toggleSearch),
+                  delegate: HomeAppBar(tabController: tabController, userData: userData, isDomain: isDomain, searchByTrending: searchByTrending, hp: hp, toggleSearch: toggleSearch, safeAreaHeight: MediaQuery.of(context).padding.top),
                   pinned: true,
                   floating: true,
                 ),
@@ -167,6 +167,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         ],
       ),
       bottomNavigationBar: MyNavigationBar(currentIndex: 0, currUserData: widget.userData,),
+      resizeToAvoidBottomInset: false,
     );
   }
 }
