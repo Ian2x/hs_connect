@@ -52,6 +52,7 @@ class UserData {
   final String? currState;
   final String? currCountry;
   final String? domainImage;
+  final Timestamp? launchDate;
 
   UserData({
     required this.userRef,
@@ -77,6 +78,7 @@ class UserData {
     required this.numReports,
     required this.private,
     required this.notificationsLastViewed,
+    required this.launchDate
   });
 }
 
@@ -88,7 +90,7 @@ Future<UserData> userDataFromSnapshot(DocumentSnapshot snapshot, DocumentReferen
   if (noDomainData==null || noDomainData==false) {
     domainData = await _domainsData.getDomainData(domain: domain);
   }
-  if (domainData==null) domainData = DomainData(county: null, state: null, country: null, fullName: null, color: null, image: null);
+  if (domainData==null) domainData = DomainData(county: null, state: null, country: null, fullName: null, color: null, image: null, launchDate: null);
   return UserData(
     userRef: userRef,
     fundamentalName: snapshot.get(C.fundamentalName),
@@ -113,6 +115,7 @@ Future<UserData> userDataFromSnapshot(DocumentSnapshot snapshot, DocumentReferen
     currCounty: snapshot.get(C.overrideCounty) != null ? snapshot.get(C.overrideCounty) : domainData.county,
     currState: snapshot.get(C.overrideState) != null ? snapshot.get(C.overrideState) : domainData.state,
     currCountry: snapshot.get(C.overrideCountry) != null ? snapshot.get(C.overrideCountry) : domainData.country,
-    domainImage: domainData.image
+    domainImage: domainData.image,
+    launchDate: domainData.launchDate,
   );
 }

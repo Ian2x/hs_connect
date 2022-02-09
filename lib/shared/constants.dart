@@ -220,4 +220,5 @@ class C {
   static const recoveryCode = 'recoveryCode';
   static const type = 'type';
   static const postId = 'postId';
+  static const launchDate = 'launchDate';
 }

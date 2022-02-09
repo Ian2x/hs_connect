@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class DomainData {
   final String? county;
   final String? state;
@@ -5,6 +7,7 @@ class DomainData {
   final String? fullName;
   final String? color;
   final String? image;
+  final Timestamp? launchDate;
 
   DomainData(
       {required this.county,
@@ -12,5 +15,6 @@ class DomainData {
       required this.country,
       required this.fullName,
       required this.color,
-      required this.image});
+      required this.image,
+      required this.launchDate});
 }

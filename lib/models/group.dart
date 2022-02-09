@@ -94,7 +94,7 @@ Future<Group?> groupFromSnapshot(DocumentSnapshot snapshot) async {
       final _domainsData = DomainsDataDatabaseService();
       domainData = await _domainsData.getDomainData(domain: snapshot.get(C.name));
     }
-    if (domainData==null) domainData = DomainData(county: null, state: null, country: null, fullName: null, color: null, image: null);
+    if (domainData==null) domainData = DomainData(county: null, state: null, country: null, fullName: null, color: null, image: null, launchDate: null);
     final temp = Group(
       groupRef: snapshot.reference,
       creatorRef: snapshot.get(C.creatorRef),
