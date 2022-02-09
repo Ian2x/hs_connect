@@ -27,9 +27,9 @@ class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorShee
   @override
   void initState() {
     if (widget.emailDeleted) {
-      deleteEmail = 'Email deleted';
+      deleteEmail = 'Email invalidated';
     } else {
-      deleteEmail = 'Delete email';
+      deleteEmail = 'Invalidate email';
     }
     super.initState();
   }
@@ -42,14 +42,14 @@ class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorShee
     final wp = Provider.of<HeightPixel>(context).value;
 
     return Container(
-        padding: EdgeInsets.fromLTRB(30*wp, 25*hp, 30*wp, 35*hp),
+        padding: EdgeInsets.fromLTRB(20*wp, 25*hp, 20*wp, 35*hp),
         color: Colors.white,
         alignment: Alignment.center,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-                "If you haven't received an email after 2 minutes, it is recommended that you delete your email from our systems and start over. Otherwise, you'll never be able to make an account from this address. Please contact us at app@getcircles.co if you still have questions.",
+                "If you haven't received an email after 2 minutes, it is recommended that you invalidate the email from our systems and start over. Otherwise, you'll never be able to make an account from this address. Please contact us at app@getcircles.co if you still have questions.",
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.black)),
             SizedBox(
@@ -59,13 +59,13 @@ class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorShee
               Spacer(),
               MyOutlinedButton(
                 onPressed: () async {
-                  if (deleteEmail=='Delete email') {
+                  if (deleteEmail=='Invalidate email') {
                     try {
                       widget.cancelTimer();
                       await FirebaseAuth.instance.currentUser!.delete();
                       widget.onDeleteEmail();
                       if (mounted) {
-                        setState(() => deleteEmail = 'Email deleted');
+                        setState(() => deleteEmail = 'Email invalidated');
                       }
                     } on FirebaseAuthException catch (e) {
                       if (mounted) {
@@ -77,10 +77,11 @@ class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorShee
                 gradient: Gradients.blueRed(begin: Alignment.topCenter, end: Alignment.bottomCenter),
                 borderRadius: 20*hp,
                 thickness: 1.5*hp,
+                padding: EdgeInsets.symmetric(horizontal: 15*wp),
                 backgroundColor: Colors.white,
                 child: Container(
                   height: 40*hp,
-                  width: 140*hp,
+                  width: 140*wp,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -104,7 +105,7 @@ class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorShee
                 backgroundColor: Colors.white,
                 child: Container(
                   height: 40*hp,
-                  width: 140*hp,
+                  width: 120*wp,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
