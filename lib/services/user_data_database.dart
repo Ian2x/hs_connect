@@ -31,7 +31,7 @@ class UserDataDatabaseService {
 
     // assign fundamental name
     final int fundamentalNumber = (await domainGroupRef.get()).get(C.numMembers) + 1;
-    final String fundamentalName = domainLC.replaceAll(RegExp(r'(.com|.org|.info|.edu|.net|.co|.us)'), '') + fundamentalNumber.toString();
+    final String fundamentalName = domainLC.replaceAll(RegExp(r'(\.com|\.org|\.info|\.edu|\.net)'), '') + fundamentalNumber.toString();
 
     // Create domainsData if not already created
     final domainsDataRef = FirebaseFirestore.instance.collection(C.domainsData).doc(domainLC);

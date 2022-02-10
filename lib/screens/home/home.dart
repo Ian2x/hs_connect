@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/postLikesManager.dart';
@@ -103,7 +104,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       if (group!=null) {
         Navigator.push(
             context,
-            MaterialPageRoute(
+            CupertinoPageRoute(
                 builder: (context) =>
                     pixelProvider(context,
                         child: PostPage(post: post, group: group, creatorData: creatorData, postLikesManager: PostLikesManager(

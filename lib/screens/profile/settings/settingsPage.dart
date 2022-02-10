@@ -114,6 +114,26 @@ class _SettingsPageState extends State<SettingsPage> {
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () async{
+                      if (await canLaunch('https://www.getcircles.co/content')) {
+                        await launch('https://www.getcircles.co/content');
+                      }
+                    },
+                    child: Container(
+                      height: 55*hp,
+                      alignment: Alignment.center,
+                      child: Row(
+                          children: [
+                            Text('Content policy', style: textTheme.subtitle1),
+                            Spacer(),
+                            Icon(Icons.keyboard_arrow_right)
+                          ]
+                      ),
+                    ),
+                  ),
+                  Divider(thickness: 1*hp, height: 1*hp),
+                  GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () async{
                       if (await canLaunch('https://www.getcircles.co/terms')) {
                         await launch('https://www.getcircles.co/terms');
                       }

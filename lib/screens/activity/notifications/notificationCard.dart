@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/myNotification.dart';
@@ -99,7 +100,7 @@ class _NotificationCardState extends State<NotificationCard> {
           if (group!=null) {
             Navigator.push(
                 context,
-                MaterialPageRoute(
+                CupertinoPageRoute(
                     builder: (context) => pixelProvider(context, child: PostPage(
                       creatorData: userData,
                       post: post,

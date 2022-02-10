@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/poll.dart';
@@ -153,7 +154,7 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(
+          CupertinoPageRoute(
               builder: (context) => pixelProvider(context,
                   child: PostPage(
                     post: widget.post,

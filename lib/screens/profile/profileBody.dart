@@ -95,8 +95,8 @@ class _ProfileBodyState extends State<ProfileBody> {
               GroupTag(
                 groupImageURL: profileData!.domainImage,
                 groupName: profileData!.fullDomainName != null ? profileData!.fullDomainName! : profileData!.domain,
-                borderRadius: 20*hp,
-                padding: EdgeInsets.fromLTRB(8 * wp, 4 * hp, 8 * wp, 4 * hp),
+                borderRadius: 30*hp,
+                padding: EdgeInsets.fromLTRB(30 * wp, 5 * hp, 30 * wp, 5 * hp),
                 thickness: 1.5*hp,
                 fontSize: 18*hp,
                 groupColor: profileData!.domainColor!=null ? profileData!.domainColor! : null,

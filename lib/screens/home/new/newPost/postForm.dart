@@ -10,7 +10,6 @@ import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
-import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/deletableImage.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
@@ -300,12 +299,12 @@ class _PostFormState extends State<PostForm> {
                       ? Semantics(
                     label: 'new_post_pic_image',
                     child: DeletableImage(
-                      image: Image.file(File(newFile!.path)),
+                      image: Image.file(File(newFile!.path), fit: BoxFit.contain),
                       onDelete: () {
                         if (mounted) {
                           setState(() => newFile = null);
                         }
-                      }, height: 400*hp, width: 400*wp, buttonSize: 30.0,),
+                      }, height: 400*hp, width: 400*wp),
                   )
                       : Container(),
                   GestureDetector(
@@ -361,7 +360,7 @@ class _PostFormState extends State<PostForm> {
                   SizedBox(width: 10*wp),
                   picPickerButton(
                       iconSize: 30*hp,
-                      color: newFile == null ? colorScheme.primary : colorScheme.primaryVariant,
+                      color: newFile == null ? colorScheme.primary : colorScheme.secondary,
                       setPic: ((File? f) {
                         if (mounted) {
                           setState(() {
@@ -412,7 +411,7 @@ class _PostFormState extends State<PostForm> {
                         }
                       },
                       icon: Icon(Icons.assessment,
-                          size: 30*hp, color: poll == null ? colorScheme.primary : colorScheme.primaryVariant),
+                          size: 30*hp, color: poll == null ? colorScheme.primary : colorScheme.secondary),
                   )
                 ]),
               ),

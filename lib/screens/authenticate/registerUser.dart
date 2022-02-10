@@ -80,7 +80,7 @@ class _RegisterUserState extends State<RegisterUser> {
                                   .subtitle1
                                   ?.copyWith(color: Colors.black, fontSize: 15 * hp, height: 1.5)),
                           Container(
-                              height: 30 * hp,
+                              height: 40 * hp,
                               padding: EdgeInsets.symmetric(horizontal: 20 * wp),
                               alignment: Alignment.bottomCenter,
                               child: error != null

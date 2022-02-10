@@ -17,59 +17,30 @@ class LikeDislikePost extends StatelessWidget {
   final PostLikesManager postLikesManager;
 
 
-  const LikeDislikePost(
-      {Key? key, required this.currUserRef, required this.post, required this.postLikesManager})
+  const LikeDislikePost({Key? key, required this.currUserRef, required this.post, required this.postLikesManager})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final hp = Provider.of<HeightPixel>(context).value;
-    final wp = Provider.of<WidthPixel>(context).value;
-    final colorScheme = Theme.of(context).colorScheme;
+    final hp = Provider
+        .of<HeightPixel>(context)
+        .value;
+    final wp = Provider
+        .of<WidthPixel>(context)
+        .value;
+    final colorScheme = Theme
+        .of(context)
+        .colorScheme;
 
     PostsDatabaseService _posts = PostsDatabaseService(currUserRef: currUserRef, postRef: post.postRef);
 
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        () {
-          if (postLikesManager.dislikeStatus == true) {
-            return IconButton(
-              iconSize: postIconSizeStateless*hp,
-              splashColor: Colors.transparent,
-              padding: postIconPadding,
-              constraints: BoxConstraints(),
-              color: colorScheme.secondary,
-              icon: Icon(Arrows.down_open_big, color: colorScheme.onBackground),
-              onPressed: () {
-                _posts.unDislikePost();
-                postLikesManager.onUnDislike();
-              },
-            );
-          } else {
-            return IconButton(
-              iconSize: postIconSizeStateless*hp,
-              splashColor: Colors.transparent,
-              padding: postIconPadding,
-              constraints: BoxConstraints(),
-              icon: Icon(Arrows.down_open_big),
-              onPressed: () {
-                _posts.dislikePost();
-                postLikesManager.onDislike();
-              },
-            );
-          }
-        }(),
-        SizedBox(width: 5*wp),
-        Text(
-          (postLikesManager.likeCount - postLikesManager.dislikeCount).toString(),
-          style: Theme.of(context).textTheme.subtitle1,
-        ),
-        SizedBox(width: 5*wp),
-        () {
+            () {
           if (postLikesManager.likeStatus == true) {
             return IconButton(
-              iconSize: postIconSizeStateless*hp,
+              iconSize: postIconSizeStateless * hp,
               splashColor: Colors.transparent,
               padding: postIconPadding,
               constraints: BoxConstraints(),
@@ -82,7 +53,7 @@ class LikeDislikePost extends StatelessWidget {
             );
           } else {
             return IconButton(
-              iconSize: postIconSizeStateless*hp,
+              iconSize: postIconSizeStateless * hp,
               splashColor: Colors.transparent,
               padding: postIconPadding,
               constraints: BoxConstraints(),
@@ -93,7 +64,44 @@ class LikeDislikePost extends StatelessWidget {
               },
             );
           }
-        }()
+        }(),
+        SizedBox(width: 5 * wp),
+        Text(
+          (postLikesManager.likeCount - postLikesManager.dislikeCount).toString(),
+          style: Theme
+              .of(context)
+              .textTheme
+              .subtitle1,
+        ),
+        SizedBox(width: 5 * wp),
+            () {
+          if (postLikesManager.dislikeStatus == true) {
+            return IconButton(
+              iconSize: postIconSizeStateless * hp,
+              splashColor: Colors.transparent,
+              padding: postIconPadding,
+              constraints: BoxConstraints(),
+              color: colorScheme.secondary,
+              icon: Icon(Arrows.down_open_big, color: colorScheme.onBackground),
+              onPressed: () {
+                _posts.unDislikePost();
+                postLikesManager.onUnDislike();
+              },
+            );
+          } else {
+            return IconButton(
+              iconSize: postIconSizeStateless * hp,
+              splashColor: Colors.transparent,
+              padding: postIconPadding,
+              constraints: BoxConstraints(),
+              icon: Icon(Arrows.down_open_big),
+              onPressed: () {
+                _posts.dislikePost();
+                postLikesManager.onDislike();
+              },
+            );
+          }
+        }(),
       ],
     );
   }
@@ -134,21 +142,81 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
 
   @override
   Widget build(BuildContext context) {
-    final hp = Provider.of<HeightPixel>(context).value;
-    final wp = Provider.of<WidthPixel>(context).value;
-    final colorScheme = Theme.of(context).colorScheme;
+    final hp = Provider
+        .of<HeightPixel>(context)
+        .value;
+    final wp = Provider
+        .of<WidthPixel>(context)
+        .value;
+    final colorScheme = Theme
+        .of(context)
+        .colorScheme;
 
     PostsDatabaseService _posts = PostsDatabaseService(currUserRef: widget.currUserRef, postRef: widget.post.postRef);
 
-    double iconSize= 18*hp;
+    double iconSize = 18 * hp;
 
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
             () {
+          if (likeStatus == true) {
+            return IconButton(
+              iconSize: postIconSizeStateful * hp,
+              splashColor: Colors.transparent,
+              padding: postIconPadding,
+              constraints: BoxConstraints(),
+              color: colorScheme.secondary,
+              icon: Icon(Arrows.up_open_big, color: colorScheme.secondary,
+                  size: iconSize),
+              onPressed: () {
+                _posts.unLikePost(widget.post);
+                widget.postLikesManager.onUnLike();
+                if (mounted) {
+                  setState(() {
+                    likeCount -= 1;
+                    likeStatus = false;
+                  });
+                }
+              },
+            );
+          } else {
+            return IconButton(
+              iconSize: postIconSizeStateful * hp,
+              splashColor: Colors.transparent,
+              padding: postIconPadding,
+              constraints: BoxConstraints(),
+              color: colorScheme.primaryVariant,
+              icon: Icon(Arrows.up_open_big, size: iconSize),
+              onPressed: () {
+                _posts.likePost(widget.post, likeCount);
+                widget.postLikesManager.onLike();
+                if (mounted) {
+                  setState(() {
+                    likeCount += 1;
+                    if (dislikeStatus == true) dislikeCount -= 1;
+                    likeStatus = true;
+                    dislikeStatus = false;
+                  });
+                }
+              },
+            );
+          }
+        }(),
+        SizedBox(width: 8 * wp),
+        Text(
+          (likeCount - dislikeCount).toString(),
+          style: Theme
+              .of(context)
+              .textTheme
+              .subtitle1,
+        ),
+        SizedBox(width: 8 * wp),
+
+            () {
           if (dislikeStatus == true) {
             return IconButton(
-              iconSize: postIconSizeStateful*hp,
+              iconSize: postIconSizeStateful * hp,
               splashColor: Colors.transparent,
               padding: postIconPadding,
               constraints: BoxConstraints(),
@@ -168,7 +236,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
             );
           } else {
             return IconButton(
-              iconSize: postIconSizeStateful*hp,
+              iconSize: postIconSizeStateful * hp,
               splashColor: Colors.transparent,
               padding: postIconPadding,
               constraints: BoxConstraints(),
@@ -189,56 +257,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
             );
           }
         }(),
-        SizedBox(width: 8*wp),
-        Text(
-          (likeCount - dislikeCount).toString(),
-          style: Theme.of(context).textTheme.subtitle1,
-        ),
-        SizedBox(width: 8*wp),
-            () {
-          if (likeStatus == true) {
-            return IconButton(
-              iconSize: postIconSizeStateful*hp,
-              splashColor: Colors.transparent,
-              padding: postIconPadding,
-              constraints: BoxConstraints(),
-              color: colorScheme.secondary,
-              icon: Icon(Arrows.up_open_big, color: colorScheme.secondary,
-              size: iconSize),
-              onPressed: () {
-                _posts.unLikePost(widget.post);
-                widget.postLikesManager.onUnLike();
-                if (mounted) {
-                  setState(() {
-                    likeCount -= 1;
-                    likeStatus = false;
-                  });
-                }
-              },
-            );
-          } else {
-            return IconButton(
-              iconSize: postIconSizeStateful*hp,
-              splashColor: Colors.transparent,
-              padding: postIconPadding,
-              constraints: BoxConstraints(),
-              color: colorScheme.primaryVariant,
-              icon: Icon(Arrows.up_open_big, size: iconSize),
-              onPressed: () {
-                _posts.likePost(widget.post, likeCount);
-                widget.postLikesManager.onLike();
-                if (mounted) {
-                  setState(() {
-                    likeCount += 1;
-                    if (dislikeStatus == true) dislikeCount -= 1;
-                    likeStatus = true;
-                    dislikeStatus = false;
-                  });
-                }
-              },
-            );
-          }
-        }()
+
       ],
     );
   }

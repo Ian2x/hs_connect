@@ -70,9 +70,9 @@ class _MessagesFormState extends State<MessagesForm> {
                          height: 150*hp,
                          decoration: BoxDecoration(borderRadius: imageBorderRadius),
                          child: DeletableImage(
-                           image: Image.file(File(newFile!.path), fit: BoxFit.scaleDown),
+                           image: Image.file(File(newFile!.path), fit: BoxFit.contain),
                            onDelete: () => setPic(null),
-                           buttonSize: 50*hp, height: 144*hp, width: 144*wp,
+                           height: 144*hp, width: 144*wp,
                          ),
                        ))
                    : Container(),
@@ -119,7 +119,7 @@ class _MessagesFormState extends State<MessagesForm> {
                            widget.onUpdateLastMessage();
                            widget.onUpdateLastViewed();
                          }
-                       }),
+                       }, hasText: (_message!=null && _message!='') || newFile!=null, hasImage: newFile!=null),
                    onChanged: (val) {
                      if (mounted) {
                        setState(() => _message = val);

@@ -21,7 +21,7 @@ typedef VoidDocSnapParamFunction = void Function (DocumentSnapshot);
 typedef VoidBoolParamFunction = void Function(bool);
 
 
-InputDecoration commentReplyInputDecoration({required VoidFunction onPressed, required bool isReply, required bool isFocused, required BuildContext context}) {
+InputDecoration commentReplyInputDecoration({required VoidFunction onPressed, required bool isReply, required bool isFocused, required BuildContext context, required bool hasText}) {
   final colorScheme = Theme.of(context).colorScheme;
   final hp = Provider.of<HeightPixel>(context).value;
   final wp = Provider.of<WidthPixel>(context).value;
@@ -29,7 +29,7 @@ InputDecoration commentReplyInputDecoration({required VoidFunction onPressed, re
     fillColor: colorScheme.surface,
     filled: true,
     hintText: isReply != false ? "Reply..." : "Comment...",
-    hintStyle: Theme.of(context).textTheme.bodyText1,
+    hintStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: colorScheme.primary),
     labelStyle: Theme.of(context).textTheme.bodyText1,
     contentPadding: EdgeInsets.fromLTRB(20*wp, 14*hp, 0*wp, 14*hp),
     border: new OutlineInputBorder(
@@ -45,7 +45,7 @@ InputDecoration commentReplyInputDecoration({required VoidFunction onPressed, re
     suffixIcon: isFocused ? Row(mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.min, children: <Widget>[
       IconButton(
           icon: Icon(Icons.send),
-          color: colorScheme.onError,
+          color: hasText? colorScheme.secondary : colorScheme.primary,
           iconSize: 16*hp,
           padding: EdgeInsets.only(left: 5*wp, right: 15*wp),
           splashColor: Colors.transparent,
@@ -55,7 +55,7 @@ InputDecoration commentReplyInputDecoration({required VoidFunction onPressed, re
   );
 }
 
-InputDecoration messageInputDecoration({required VoidFunction onPressed, required Function setPic, required BuildContext context}) {
+InputDecoration messageInputDecoration({required VoidFunction onPressed, required Function setPic, required BuildContext context, required bool hasText, required bool hasImage}) {
   final hp = Provider.of<HeightPixel>(context).value;
   final wp = Provider.of<WidthPixel>(context).value;
   final colorScheme = Theme.of(context).colorScheme;
@@ -77,10 +77,10 @@ InputDecoration messageInputDecoration({required VoidFunction onPressed, require
         borderRadius: new BorderRadius.circular(25.7*hp),
         borderSide: new BorderSide(width: 3*wp, color: colorScheme.background)),
     suffixIcon: Row(mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.min, children: <Widget>[
-      picPickerButton(setPic: setPic, iconSize: 16*hp, context: context, maxWidth: 400*hp, maxHeight: 400*hp),
+      picPickerButton(setPic: setPic, iconSize: 16*hp, context: context, maxWidth: 400*hp, maxHeight: 400*hp, color: hasImage ? colorScheme.secondary : colorScheme.primary),
       IconButton(
           icon: Icon(Icons.send),
-          color: colorScheme.onError,
+          color: hasText ? colorScheme.secondary : colorScheme.primary,
           iconSize: 16*hp,
           padding: EdgeInsets.only(left: 5*wp, right: 15*wp),
           splashColor: Colors.transparent,

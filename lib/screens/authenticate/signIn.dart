@@ -6,6 +6,7 @@ import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
+import 'package:hs_connect/shared/widgets/checkboxFormField.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
 import 'package:provider/provider.dart';
@@ -40,6 +41,7 @@ class _SignInState extends State<SignIn> {
   Widget build(BuildContext context) {
     final wp = Provider.of<WidthPixel>(context).value;
     final hp = Provider.of<HeightPixel>(context).value;
+    final textTheme = Theme.of(context).textTheme;
 
     return loading
         ? Scaffold(
@@ -132,6 +134,7 @@ class _SignInState extends State<SignIn> {
                                               }
                                             }),
                                         Divider(height:0, thickness: 2*hp, color: authHintTextColor),
+                                        myCheckBoxFormField(textTheme)
                                       ],
                                     ),
                                   ),

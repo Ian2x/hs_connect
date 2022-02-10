@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
@@ -121,7 +122,7 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
           );
           Navigator.push(
               context,
-              MaterialPageRoute(
+              CupertinoPageRoute(
                   builder: (context) =>
                       pixelProvider(context,
                           child: PostPage(post: widget.post, group: group!, creatorData: widget.currUserData, postLikesManager: postLikesManager, )))
