@@ -128,7 +128,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
             Text( widget.post.title,
               style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18*hp)
             ),
-            SizedBox(height:8*hp),
+            SizedBox(height:12*hp),
             widget.post.text!= null && widget.post.text!=""?
               Text(widget.post.text!,
                 style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16*hp)) : Container(),
@@ -136,7 +136,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
               ExpandableImage(imageURL: widget.post.mediaURL!, maxHeight: 450*hp, containerWidth: MediaQuery.of(context).size.width-2*leftRightPadding)
                 : Container(),
             poll != null ? PollView(poll: poll!, currUserRef: widget.currUserRef, post: widget.post): Container(),
-            SizedBox(height:20*hp),
+            SizedBox(height:25*hp),
             Row(
               children: [
                 Text(
@@ -147,7 +147,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
                 LikeDislikePostStateful(currUserRef: widget.currUserRef, post: widget.post, postLikesManager: postLikesManager),
               ],
             ),
-            SizedBox(height:25*hp),
+            SizedBox(height:8*hp),
           ],
         ),
       );
