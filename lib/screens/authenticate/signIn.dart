@@ -57,17 +57,16 @@ class _SignInState extends State<SignIn> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 35*hp),
                         Center(
                             child:
                             Column(
                               children: [
                                 SizedBox(
-                                  height: 80 *hp,
+                                  height: 70 *hp,
                                   child:
                                   Image.asset('assets/splash1cropped.png'),
                                 ),
-                                SizedBox(height: 25*hp),
+                                SizedBox(height: 15*hp),
                                 Text(
                                   'Login',
                                   style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 28*hp, color: Colors.black

@@ -347,7 +347,7 @@ class _PostFormState extends State<PostForm> {
         ),
       ),
       Positioned(
-          bottom: 0,
+          bottom: MediaQuery.of(context).padding.bottom,
           left: 0,
           child: GestureDetector(
             onTap: ()=>dismissKeyboard(context),

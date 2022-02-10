@@ -83,11 +83,11 @@ class _ProfilePostFeedState extends State<ProfilePostFeed> {
                 ),
               )
             : Container(
-                height: 70 * hp,
+                height: 90 * hp,
                 child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Text(
                     "You have no posts",
-                    style: Theme.of(context).textTheme.subtitle1,
+                    style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.normal),
                     textAlign: TextAlign.center,
                   ),
                 ]))
