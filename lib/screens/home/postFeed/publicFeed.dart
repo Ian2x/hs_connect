@@ -88,7 +88,7 @@ class _PublicFeedState extends State<PublicFeed> with AutomaticKeepAliveClientMi
                 return Center(
                     child: PostCard(
                       post: item,
-                      currUserRef: widget.currUser.userRef,
+                      currUser: widget.currUser,
                     ));
               },
               noItemsFoundIndicatorBuilder: (BuildContext context) => Container(

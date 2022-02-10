@@ -7,6 +7,7 @@ import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/postLikesManager.dart';
 import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/models/userData.dart';
+import 'package:hs_connect/screens/home/postView/dmButton.dart';
 import 'package:hs_connect/screens/home/postView/likeDislikePost.dart';
 import 'package:hs_connect/screens/home/postView/pollView.dart';
 import 'package:hs_connect/screens/home/postView/postPage.dart';
@@ -27,9 +28,9 @@ const postCardDetailSize = 12.0;
 
 class PostCard extends StatefulWidget {
   final Post post;
-  final DocumentReference currUserRef;
+  final UserData currUser;
 
-  PostCard({Key? key, required this.post, required this.currUserRef}) : super(key: key);
+  PostCard({Key? key, required this.post, required this.currUser}) : super(key: key);
 
   @override
   _PostCardState createState() => _PostCardState();
@@ -54,8 +55,8 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
 
   @override
   void initState() {
-    likeStatus = widget.post.likes.contains(widget.currUserRef);
-    dislikeStatus = widget.post.dislikes.contains(widget.currUserRef);
+    likeStatus = widget.post.likes.contains(widget.currUser.userRef);
+    dislikeStatus = widget.post.dislikes.contains(widget.currUser.userRef);
     likeCount = widget.post.likes.length;
     dislikeCount = widget.post.dislikes.length;
     getUserData();
@@ -65,7 +66,7 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
   }
 
   void getUserData() async {
-    UserDataDatabaseService _userDataDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserRef);
+    UserDataDatabaseService _userDataDatabaseService = UserDataDatabaseService(currUserRef: widget.currUser.userRef);
     fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.post.creatorRef, noDomainData: true);
     if (mounted) {
       setState(() {
@@ -75,7 +76,7 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
   }
 
   void getGroupData() async {
-    GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserRef);
+    GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUser.userRef);
     final Group? fetchGroup = await _groups.groupFromRef(widget.post.groupRef);
     if (fetchGroup != null) {
       if (mounted) {
@@ -231,7 +232,7 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                   poll != null ?
                     Container(
                       alignment: Alignment.center,
-                      child: PollView(poll: poll!, currUserRef: widget.currUserRef, post: widget.post)
+                      child: PollView(poll: poll!, currUserRef: widget.currUser.userRef, post: widget.post)
                     ): Container(),
                   Container(
                     padding: EdgeInsets.fromLTRB(0, 0, 0, 2*hp),
@@ -262,8 +263,9 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                           },
                         ),
                         Spacer(),
+                        dmButton(currUserData:widget.currUser,otherUserData: fetchUserData),
                         LikeDislikePost(
-                            currUserRef: widget.currUserRef,
+                            currUserRef: widget.currUser.userRef,
                             post: widget.post,
                             postLikesManager: postLikesManager
                         ),

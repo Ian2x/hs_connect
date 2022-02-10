@@ -86,7 +86,8 @@ class _DomainFeedState extends State<DomainFeed> with AutomaticKeepAliveClientMi
                 return Center(
                     child: PostCard(
                       post: item,
-                currUserRef: widget.currUser.userRef,
+
+                currUser: widget.currUser,
               ));
             },
             noItemsFoundIndicatorBuilder: (BuildContext context) => Container(

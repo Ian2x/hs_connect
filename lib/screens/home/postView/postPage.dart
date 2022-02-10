@@ -55,7 +55,6 @@ class PostPage extends StatelessWidget {
             onVerticalDragDown: (DragDownDetails ddd) {
               dismissKeyboard(context);
             },
-            onHor
             child: Container(
               padding: EdgeInsets.zero,
               constraints: BoxConstraints(
