@@ -19,20 +19,20 @@ const nextPostsFetchSize = 20;
 const defaultProfilePic = AssetImage('assets/blankProfile.png');
 const defaultGroupPic = AssetImage('assets/defaultgroupimage2.png');
 
-const bottomGradientThickness = 0.3;
-const topGradientThickness = 1.5;
+const bottomGradientThickness = 2.0;
+const topGradientThickness = 2.0;
 
 const authHintTextColor = Color(0xffdbdada);
 const authPrimaryTextColor = Color(0xFFa1a1a1);
 
-const commentReplyDetailSize = 11.0;
+const commentReplyDetailSize = 13.0;
 
 class _Gradient extends Color {
   _Gradient(int value) : super(value);
 
-  static Color gRed = Color(0xFFff004d).withOpacity(0.5);
+  static Color gRed = Color(0xFFff004d).withOpacity(0.85);
   static Color gRedFull = Color(0xFFff004d);
-  static Color gBlue = Color(0xFF13a1f0).withOpacity(0.5);
+  static Color gBlue = Color(0xFF13a1f0).withOpacity(0.85);
   static Color gBlueFull = Color(0xFF13a1f0);
 }
 

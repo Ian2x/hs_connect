@@ -6,6 +6,7 @@ import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
+import 'package:hs_connect/shared/widgets/checkboxFormField.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
 import 'package:provider/provider.dart';
@@ -40,6 +41,7 @@ class _SignInState extends State<SignIn> {
   Widget build(BuildContext context) {
     final wp = Provider.of<WidthPixel>(context).value;
     final hp = Provider.of<HeightPixel>(context).value;
+    final textTheme = Theme.of(context).textTheme;
 
     return loading
         ? Scaffold(
@@ -57,17 +59,16 @@ class _SignInState extends State<SignIn> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 35*hp),
                         Center(
                             child:
                             Column(
                               children: [
                                 SizedBox(
-                                  height: 80 *hp,
+                                  height: 70 *hp,
                                   child:
                                   Image.asset('assets/splash1cropped.png'),
                                 ),
-                                SizedBox(height: 25*hp),
+                                SizedBox(height: 15*hp),
                                 Text(
                                   'Login',
                                   style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 28*hp, color: Colors.black
@@ -133,6 +134,7 @@ class _SignInState extends State<SignIn> {
                                               }
                                             }),
                                         Divider(height:0, thickness: 2*hp, color: authHintTextColor),
+                                        myCheckBoxFormField(textTheme)
                                       ],
                                     ),
                                   ),

@@ -56,7 +56,7 @@ class AboutUs extends StatelessWidget {
                     children: [
                       SizedBox(height: 40 * hp),
                       Text(
-                        "Circles.co is an app that lets highschoolers chat anonymously. ",
+                        "Circles.co is an app made by other students that lets highschoolers chat anonymously. ",
                         style: textTheme.bodyText2?.copyWith(color: Colors.white, fontSize: fontSize, height: 1.5),
                         textAlign: TextAlign.center,
                       ),

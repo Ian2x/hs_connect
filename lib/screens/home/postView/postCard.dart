@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/poll.dart';
@@ -18,6 +19,7 @@ import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/buildCircle.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/reports/reportSheet.dart';
+import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/expandableImage.dart';
 import 'package:provider/provider.dart';
 
@@ -152,7 +154,7 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(
+          CupertinoPageRoute(
               builder: (context) => pixelProvider(context,
                   child: PostPage(
                     post: widget.post,
@@ -184,9 +186,13 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                           backgroundColor: colorScheme.surface),
                       SizedBox(width: 5*wp),
                       Text(
-                        group!.name + " • " + convertTime(widget.post.createdAt.toDate()),
+                        group!.name,
                         style: Theme.of(context).textTheme.subtitle2?.copyWith
-                          (color: colorScheme.primary, fontSize: postCardDetailSize),
+                          (color: group!.hexColor!=null ? HexColor(group!.hexColor!) : colorScheme.primary, fontSize: postCardDetailSize),
+                      ),
+                      Text(" • " + convertTime(widget.post.createdAt.toDate()),
+                          style: Theme.of(context).textTheme.subtitle2?.copyWith
+                        (color: colorScheme.primary, fontSize: postCardDetailSize),
                       ),
                       Spacer(),
                       widget.post.isFeatured ? Container(
@@ -202,7 +208,7 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                                   color: Theme.of(context).colorScheme.surface,
                                 ),
                                 padding: EdgeInsets.fromLTRB(17*wp, 5*hp, 17*wp, 6*hp),
-                                margin: EdgeInsets.all(1.5*hp),
+                                margin: EdgeInsets.all(2*hp),
                                 child: Text('Featured', style: Theme.of(context).textTheme.subtitle2)
                             )
                         ),
@@ -210,17 +216,15 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                     ],
                   ),
                   SizedBox(height: 10*hp),
-                  Row(
-                    children: [
-                      SizedBox(width:10*wp),
-                      Text(
-                  widget.post.title,
-                      style: Theme.of(context).textTheme.headline6?.copyWith(
-                        fontSize:16 * hp, fontWeight: FontWeight.w500,
-                      ),
-                      overflow: TextOverflow.ellipsis, // default is .clip
-                      maxLines: 3),
-                    ],
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10*wp),
+                    child: Text(
+                    widget.post.title,
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                      fontSize:16 * hp, fontWeight: FontWeight.w500,
+                    ),
+                    overflow: TextOverflow.ellipsis, // default is .clip
+                    maxLines: 3),
                   ),
                   widget.post.mediaURL != null ? ExpandableImage(imageURL: widget.post.mediaURL!, containerWidth: MediaQuery.of(context).size.width-2*leftRightMargin, maxHeight: 300*hp, loadingHeight: 300*hp, margin: EdgeInsets.only(top: 10*hp))
                       : Container(),

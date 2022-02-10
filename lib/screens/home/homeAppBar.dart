@@ -51,7 +51,7 @@ class HomeAppBar extends SliverPersistentHeaderDelegate{
                   children: [
                     SizedBox(height: 3*hp),
                     GestureDetector(
-                      onTap: () async => await AuthService().signOut(),
+                      //onTap: () async => await AuthService().signOut(),
                       child: Text("circles.co",
                           style: Theme.of(context)
                               .textTheme
@@ -61,9 +61,8 @@ class HomeAppBar extends SliverPersistentHeaderDelegate{
                     TabBar(
                       controller: tabController,
                       padding: EdgeInsets.zero,
-                      indicatorColor: colorScheme.onSurface,
                       indicator: BoxDecoration(
-                        border: Border(bottom: BorderSide(width: 1.5*hp, color: colorScheme.onSurface)
+                        border: Border(bottom: BorderSide(width: 2.0*hp, color: userData.domainColor!=null ? userData.domainColor! : colorScheme.surface), //colorScheme.surface,)
                         )
                       ),
                       indicatorPadding: tabBarPadding,

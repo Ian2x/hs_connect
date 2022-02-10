@@ -101,18 +101,34 @@ class _ReplyCardState extends State<ReplyCard> {
                           child: ProfilePage(profileRef: widget.reply.creatorRef!, currUserData: widget.currUserData))),
                 );
               },
-              child: Text(localCreatorName + " • " + localCreatorGroupName,
-                  style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                      color: groupColor != null ? groupColor : colorScheme.primaryVariant,
-                      fontSize: commentReplyDetailSize,
-                      fontWeight: FontWeight.w300)),
+              child: RichText(text: TextSpan(
+                  children: [
+                    TextSpan(
+                        text: localCreatorName + " • ",
+                        style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                            color: colorScheme.primaryVariant,
+                            fontSize: commentReplyDetailSize,
+                            fontWeight: FontWeight.w300)
+                    ),
+                    TextSpan(
+                        text: localCreatorGroupName,
+                        style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                            color: groupColor != null ? groupColor : colorScheme.primaryVariant,
+                            fontSize: commentReplyDetailSize,
+                            fontWeight: FontWeight.w300)
+                    )
+                  ]
+              ),
+              )
             ),
           ),
+          SizedBox(height: 4*hp),
           SizedBox(
             width: (MediaQuery.of(context).size.width) * .85,
             child: Text(widget.reply.text,
-                style: Theme.of(context).textTheme.bodyText1),
+                style: Theme.of(context).textTheme.bodyText1?.copyWith(fontWeight: FontWeight.w600)),
           ),
+          SizedBox(height: 7*hp),
           Row(
             children: [
               Text(convertTime(widget.reply.createdAt.toDate()),

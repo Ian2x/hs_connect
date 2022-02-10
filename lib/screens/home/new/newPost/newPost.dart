@@ -11,8 +11,6 @@ class NewPost extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
-    final hp = Provider.of<HeightPixel>(context).value;
-    final wp = Provider.of<WidthPixel>(context).value;
 
     if (userData == null) {
       return Loading();

@@ -63,12 +63,11 @@ class _RegisterUserState extends State<RegisterUser> {
                       Center(
                           child: Column(
                         children: [
-                          SizedBox(height:20*hp),
                           SizedBox(
-                            height: 80 * hp,
+                            height: 70 * hp,
                             child: Image.asset('assets/splash1cropped.png'),
                           ),
-                          SizedBox(height: 35 * hp),
+                          SizedBox(height: 15 * hp),
                           Text(
                             'Make an Account',
                             style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 28 * hp, color: Colors.black),
@@ -81,15 +80,12 @@ class _RegisterUserState extends State<RegisterUser> {
                                   .subtitle1
                                   ?.copyWith(color: Colors.black, fontSize: 15 * hp, height: 1.5)),
                           Container(
-                              height: 30 * hp,
+                              height: 40 * hp,
                               padding: EdgeInsets.symmetric(horizontal: 20 * wp),
                               alignment: Alignment.bottomCenter,
                               child: error != null
                                   ? Text(error!,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle1
-                                          ?.copyWith(color: Colors.black, fontSize: 12),
+                                  style: ThemeText.inter(fontWeight: FontWeight.w500, fontSize: 13*hp, color: Colors.black),
                                       textAlign: TextAlign.center)
                                   : Container()),
                           Container(

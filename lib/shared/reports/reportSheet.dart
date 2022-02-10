@@ -85,7 +85,7 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
                       ],
                     ),
                   ),
-                  Divider(color: colorScheme.background, thickness: 2 * hp, height: 0),
+                  Divider(color: colorScheme.background, thickness: 1 * hp, height: 0),
                   Container(
                     //color: Colors.orange,
                     child: TextButton(

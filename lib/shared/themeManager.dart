@@ -29,6 +29,12 @@ class ThemeNotifier with ChangeNotifier {
     // from primary color
     textTheme: myTextTheme.apply(bodyColor: darkThemeOnSurface, displayColor: darkThemeOnSurface),
     splashColor: Colors.transparent,
+    pageTransitionsTheme: PageTransitionsTheme(
+      builders: {
+        TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+      },
+    ),
   );
 
   static const lightThemeOnSurface = Color(0xFF000000);
@@ -55,6 +61,12 @@ class ThemeNotifier with ChangeNotifier {
     // from primary color
     textTheme: myTextTheme.apply(bodyColor: lightThemeOnSurface, displayColor: lightThemeOnSurface),
     splashColor: Colors.transparent,
+    pageTransitionsTheme: PageTransitionsTheme(
+      builders: {
+        TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+      },
+    ),
   );
 
   static const myTextTheme = TextTheme(

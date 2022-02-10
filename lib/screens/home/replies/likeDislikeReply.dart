@@ -51,54 +51,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        () {
-          if (dislikeStatus == true) {
-            return IconButton(
-              iconSize: iconSize*hp,
-              splashColor: Colors.transparent,
-              padding: EdgeInsets.all(3*hp),
-              constraints: BoxConstraints(),
-              color: colorScheme.secondary,
-              icon: Icon(Arrows.down_open_big, color: colorScheme.secondary),
-              onPressed: () {
-                _replies.unDislikeReply();
-                if (mounted) {
-                  setState(() {
-                    dislikeCount -= 1;
-                    dislikeStatus = false;
-                  });
-                }
-              },
-            );
-          } else {
-            return IconButton(
-              iconSize: iconSize*hp,
-              splashColor: Colors.transparent,
-              padding: EdgeInsets.all(3*hp),
-              constraints: BoxConstraints(),
-              color: colorScheme.primaryVariant,
-              icon: Icon(Arrows.down_open_big),
-              onPressed: () {
-                _replies.dislikeReply();
-                if (mounted) {
-                  setState(() {
-                    dislikeCount += 1;
-                    if (likeStatus == true) likeCount -= 1;
-                    dislikeStatus = true;
-                    likeStatus = false;
-                  });
-                }
-              },
-            );
-          }
-        }(),
-        SizedBox(width: 5*wp),
-        Text(
-          (likeCount - dislikeCount).toString(),
-          style: Theme.of(context).textTheme.subtitle2
-        ),
-        SizedBox(width: 5*wp),
-        () {
+            () {
           if (likeStatus == true) {
             return IconButton(
               iconSize: iconSize*hp,
@@ -135,6 +88,53 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
                   });
                 }
                 _replies.likeReply(widget.reply.creatorRef!, likeCount);
+              },
+            );
+          }
+        }(),
+        SizedBox(width: 5*wp),
+        Text(
+          (likeCount - dislikeCount).toString(),
+          style: Theme.of(context).textTheme.subtitle2
+        ),
+        SizedBox(width: 5*wp),
+            () {
+          if (dislikeStatus == true) {
+            return IconButton(
+              iconSize: iconSize*hp,
+              splashColor: Colors.transparent,
+              padding: EdgeInsets.all(3*hp),
+              constraints: BoxConstraints(),
+              color: colorScheme.secondary,
+              icon: Icon(Arrows.down_open_big, color: colorScheme.secondary),
+              onPressed: () {
+                _replies.unDislikeReply();
+                if (mounted) {
+                  setState(() {
+                    dislikeCount -= 1;
+                    dislikeStatus = false;
+                  });
+                }
+              },
+            );
+          } else {
+            return IconButton(
+              iconSize: iconSize*hp,
+              splashColor: Colors.transparent,
+              padding: EdgeInsets.all(3*hp),
+              constraints: BoxConstraints(),
+              color: colorScheme.primaryVariant,
+              icon: Icon(Arrows.down_open_big),
+              onPressed: () {
+                _replies.dislikeReply();
+                if (mounted) {
+                  setState(() {
+                    dislikeCount += 1;
+                    if (likeStatus == true) likeCount -= 1;
+                    dislikeStatus = true;
+                    likeStatus = false;
+                  });
+                }
               },
             );
           }

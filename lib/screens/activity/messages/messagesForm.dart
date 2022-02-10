@@ -70,14 +70,14 @@ class _MessagesFormState extends State<MessagesForm> {
                          height: 150*hp,
                          decoration: BoxDecoration(borderRadius: imageBorderRadius),
                          child: DeletableImage(
-                           image: Image.file(File(newFile!.path), fit: BoxFit.scaleDown),
+                           image: Image.file(File(newFile!.path), fit: BoxFit.contain),
                            onDelete: () => setPic(null),
-                           buttonSize: 50*hp, height: 144*hp, width: 144*wp,
+                           height: 144*hp, width: 144*wp,
                          ),
                        ))
                    : Container(),
                TextFormField(
-                   autocorrect: false,
+                   autocorrect: true,
                    initialValue: null,
                    keyboardType: TextInputType.multiline,
                    maxLines: null,
@@ -99,7 +99,6 @@ class _MessagesFormState extends State<MessagesForm> {
                                  receiverRef: widget.otherUserRef,
                                  text: downloadURL,
                                  isMedia: true,
-                                 createdAt: Timestamp.now(),
                                  senderRef: userData.userRef);
                            }
                            if (_message != null && _message != '') {
@@ -107,7 +106,6 @@ class _MessagesFormState extends State<MessagesForm> {
                                  receiverRef: widget.otherUserRef,
                                  text: _message!,
                                  isMedia: false,
-                                 createdAt: Timestamp.now(),
                                  senderRef: userData.userRef);
                            }
                            if (mounted) {
@@ -121,7 +119,7 @@ class _MessagesFormState extends State<MessagesForm> {
                            widget.onUpdateLastMessage();
                            widget.onUpdateLastViewed();
                          }
-                       }),
+                       }, hasText: (_message!=null && _message!='') || newFile!=null, hasImage: newFile!=null),
                    onChanged: (val) {
                      if (mounted) {
                        setState(() => _message = val);

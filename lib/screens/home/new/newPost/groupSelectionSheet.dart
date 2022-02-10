@@ -3,6 +3,7 @@ import 'package:hs_connect/models/accessRestriction.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pixels.dart';
+import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
@@ -30,6 +31,7 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
   Widget build(BuildContext context) {
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
+    final colorScheme = Theme.of(context).colorScheme;
 
     if (selectedGroup==null) return Loading();
     return Container(
@@ -73,12 +75,12 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(group.name,
-                                  style: Theme.of(context).textTheme.subtitle1),
+                                  style: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w500)),
                               group.name == "Public"
                                   ? Column(
                                     children: [
                                       SizedBox(height:5*hp),
-                                      Text("Anyone can see", style: Theme.of(context).textTheme.subtitle2),
+                                      Text("Anyone can see", style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary)),
                                       SizedBox(height:2*hp),
                                     ],
                                   )
@@ -87,7 +89,7 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
                                   ? Column(
                                     children: [
                                       SizedBox(height:5*hp),
-                                      Text("Only for your school", style: Theme.of(context).textTheme.subtitle2),
+                                      Text("Only for your school", style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary)),
                                       SizedBox(height:2*hp),
                                     ],
                                   )

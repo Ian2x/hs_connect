@@ -51,11 +51,11 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
     return Stack(
       children: [
         Container(
-          color: colorScheme.onSurface,
+          color: userData.domainColor!=null ? userData.domainColor! : colorScheme.surface, //colorScheme.surface,
           padding: EdgeInsets.only(top: bottomGradientThickness * hp),
           child: Container(
             color: colorScheme.surface,
-            height: 43*hp + MediaQuery.of(context).padding.bottom,
+            height: 45*hp + MediaQuery.of(context).padding.bottom,
             child: BottomNavigationBar(
               backgroundColor: colorScheme.surface,
               type: BottomNavigationBarType.fixed,
@@ -65,71 +65,38 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
               selectedItemColor: colorScheme.onSurface,
               selectedFontSize: 6*hp,
               unselectedFontSize: 6*hp,
+              onTap: (int index) {
+                if (index==0) {
+                  Navigator.pushReplacement(
+                    context,
+                    NoAnimationMaterialPageRoute(
+                        builder: (context) => pixelProvider(context, child: Home(userData: userData))),
+                  );
+                } else if (index == 1) {
+                  Navigator.pushReplacement(
+                    context,
+                    NoAnimationMaterialPageRoute(builder: (context) => pixelProvider(context, child: ActivityPage(currUserData: userData,))),
+                  );
+                } else if (index == 2) {
+                  Navigator.pushReplacement(
+                    context,
+                    NoAnimationMaterialPageRoute(
+                        builder: (context) => pixelProvider(context,
+                            child: ProfilePage(profileRef: userData.userRef, currUserData: userData)
+                        )),
+                  );
+                } else if (index == 3) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => pixelProvider(context, child: NewPost())),
+                  );
+                }
+              },
               items: <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                  icon: IconButton(
-                    padding: EdgeInsets.only(top: 5*hp),
-                    // color: colorScheme.onSurface,
-                    constraints: BoxConstraints(),
-                    icon: Icon(Icons.home, size: 25 * hp),
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        NoAnimationMaterialPageRoute(
-                            builder: (context) => pixelProvider(context, child: Home(userData: userData))),
-                      );
-                    },
-                  ),
-                  label: '',
-                ),
-                BottomNavigationBarItem(
-                  icon: IconButton(
-                    padding: EdgeInsets.only(top: 5*hp),
-                    // color: colorScheme.onSurface,
-                    constraints: BoxConstraints(),
-                    icon: Icon(Icons.notifications, size: 25 * hp),
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        NoAnimationMaterialPageRoute(builder: (context) => pixelProvider(context, child: ActivityPage(currUserData: userData,))),
-                      );
-                    },
-                  ),
-                  label: '',
-                ),
-                BottomNavigationBarItem(
-                  icon: IconButton(
-                    padding: EdgeInsets.only(top: 5*hp),
-                    // color: colorScheme.onSurface,
-                    constraints: BoxConstraints(),
-                    icon: Icon(Icons.person, size: 25 * hp),
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        NoAnimationMaterialPageRoute(
-                            builder: (context) => pixelProvider(context,
-                                child: ProfilePage(profileRef: userData.userRef, currUserData: userData)
-                            )),
-                      );
-                    },
-                  ),
-                  label: '',
-                ),
-                BottomNavigationBarItem(
-                  icon: IconButton(
-                    padding: EdgeInsets.only(top: 0*hp),
-                    // color: colorScheme.onSurface,
-                    constraints: BoxConstraints(),
-                    icon: Icon(Icons.add, size: 30 * hp),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => pixelProvider(context, child: NewPost())),
-                      );
-                    },
-                  ),
-                  label: '',
-                ),
+                BottomNavigationBarItem(label: '', icon: Icon(Icons.home, size: 30*hp)),
+                BottomNavigationBarItem(label: '', icon: Icon(Icons.notifications, size: 30*hp)),
+                BottomNavigationBarItem(label: '', icon: Icon(Icons.person, size: 30*hp)),
+                BottomNavigationBarItem(label: '', icon: Icon(Icons.add, size: 30*hp)),
               ],
             ),
           ),

@@ -1,8 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/postLikesManager.dart';
 import 'package:hs_connect/models/userData.dart';
+import 'package:hs_connect/screens/home/postView/postCard.dart';
+import 'package:hs_connect/screens/home/postView/postCard.dart';
 import 'package:hs_connect/screens/home/postView/postPage.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
@@ -119,7 +122,7 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
           );
           Navigator.push(
               context,
-              MaterialPageRoute(
+              CupertinoPageRoute(
                   builder: (context) =>
                       pixelProvider(context,
                           child: PostPage(post: widget.post, group: group!, creatorData: widget.currUserData, postLikesManager: postLikesManager, )))
@@ -146,24 +149,24 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
                     buildGroupCircle(
                         groupImage: group!.image,
                         context: context,
-                        height: 25*hp,
-                        width: 25*hp,
+                        height: 20*hp,
+                        width: 20*hp,
                         backgroundColor: colorScheme.background),
                     SizedBox(width: 5*wp),
                     Text(group!.name, style: Theme.of(context).textTheme.subtitle2?.copyWith
-                      (fontWeight: FontWeight.w500, color: colorScheme.primary))
+                      (fontWeight: FontWeight.w500, color: colorScheme.primary, fontSize: postCardDetailSize))
                   ],
                 ),
               ),
               SizedBox(height: 10 * hp),
-              Text(widget.post.title, style: Theme.of(context).textTheme.headline6),
+              Text(widget.post.title, style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 16*hp), overflow: TextOverflow.ellipsis, maxLines: 3),
               SizedBox(height: 10 * hp),
               Row(
                 children: [
                   Text((widget.post.numComments + widget.post.numReplies).toString() + " Comments",
-                      style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w500, color: colorScheme.primary)),
+                      style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w500, color: colorScheme.primary, fontSize: postCardDetailSize)),
                   Spacer(),
-                  Text((likeCount-dislikeCount).toString() + " Likes", style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w500)),
+                  Text((likeCount-dislikeCount).toString() + " Likes", style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w500, fontSize: postCardDetailSize)),
                 ],
               ),
             ],

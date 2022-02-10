@@ -8,9 +8,9 @@ import 'package:provider/provider.dart';
 
 class NewMessageButton extends StatefulWidget {
   final UserData otherUserData;
-  final DocumentReference currUserRef;
+  final UserData currUserData;
 
-  const NewMessageButton({Key? key, required this.otherUserData, required this.currUserRef}) : super(key: key);
+  const NewMessageButton({Key? key, required this.otherUserData, required this.currUserData}) : super(key: key);
 
   @override
   _NewMessageButtonState createState() => _NewMessageButtonState();
@@ -75,7 +75,7 @@ class _NewMessageButtonState extends State<NewMessageButton> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => pixelProvider(context, child: MessagesPage(
-                                  currUserRef: widget.currUserRef,
+                                  currUserData: widget.currUserData,
                                   otherUserData: widget.otherUserData,
                                   onUpdateLastMessage: () {},
                                   onUpdateLastViewed: () {},

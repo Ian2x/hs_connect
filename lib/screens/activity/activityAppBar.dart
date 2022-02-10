@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/homeAppBar.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:provider/provider.dart';
 
-PreferredSizeWidget activityAppBar({required BuildContext context, required bool isNotifications, required TabController tabController}) {
+PreferredSizeWidget activityAppBar({required BuildContext context, required bool isNotifications, required TabController tabController, required UserData userData}) {
   final wp = Provider.of<WidthPixel>(context).value;
   final hp = Provider.of<HeightPixel>(context).value;
   final colorScheme = Theme.of(context).colorScheme;
@@ -12,7 +13,7 @@ PreferredSizeWidget activityAppBar({required BuildContext context, required bool
 
 
   return PreferredSize(
-    preferredSize: Size.fromHeight(HomeAppBar.expandedHeight*hp-safeAreaHeight + 63),
+    preferredSize: Size.fromHeight(HomeAppBar.expandedHeight*hp + 0.5),
     child: Container(
       padding: EdgeInsets.only(top: safeAreaHeight),
       color: colorScheme.surface,
@@ -30,9 +31,8 @@ PreferredSizeWidget activityAppBar({required BuildContext context, required bool
           TabBar(
             controller: tabController,
             padding: EdgeInsets.zero,
-            indicatorColor: colorScheme.onSurface,
             indicator: BoxDecoration(
-                border: Border(bottom: BorderSide(width: 1.5*hp, color: colorScheme.onSurface)
+                border: Border(bottom: BorderSide(width: 2.0*hp, color: userData.domainColor!=null ? userData.domainColor! : colorScheme.onSurface)
                 )
             ),
             indicatorPadding: HomeAppBar.tabBarPadding,

@@ -140,7 +140,7 @@ class _PostFormState extends State<PostForm> {
                 children: [
                   SizedBox(width: 10*wp),
                   TextButton(
-                    child: Text("Cancel", style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontSize: 18.5)),
+                    child: Text("Cancel", style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontWeight: FontWeight.w500)),
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -277,11 +277,11 @@ class _PostFormState extends State<PostForm> {
                       ? SizedBox(height:10*wp)
                       : Container(),
                   TextFormField(
-                    style: Theme.of(context).textTheme.headline5,
+                    style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18*hp),
                     maxLines: null,
-                    autocorrect: false,
+                    autocorrect: true,
                     decoration: InputDecoration(
-                        hintStyle: Theme.of(context).textTheme.headline5?.copyWith(color: colorScheme.primaryVariant),
+                        hintStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18*hp, color: colorScheme.primaryVariant),
                         border: InputBorder.none,
                         hintText: "Title", ),
                     onChanged: (val) {
@@ -299,12 +299,12 @@ class _PostFormState extends State<PostForm> {
                       ? Semantics(
                     label: 'new_post_pic_image',
                     child: DeletableImage(
-                      image: Image.file(File(newFile!.path)),
+                      image: Image.file(File(newFile!.path), fit: BoxFit.contain),
                       onDelete: () {
                         if (mounted) {
                           setState(() => newFile = null);
                         }
-                      }, height: 400*hp, width: 400*wp, buttonSize: 30.0,),
+                      }, height: 400*hp, width: 400*wp),
                   )
                       : Container(),
                   GestureDetector(
@@ -323,11 +323,11 @@ class _PostFormState extends State<PostForm> {
                       child: Column(
                         children: [
                           TextFormField(
-                            style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 20),
+                            style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16*hp),
                             maxLines: null,
-                            autocorrect: false,
+                            autocorrect: true,
                             decoration: InputDecoration(
-                                hintStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: colorScheme.primary, fontSize: 20),
+                                hintStyle: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16*hp, color: colorScheme.primary),
                                 border: InputBorder.none,
                                 hintText: "Optional text"),
                             onChanged: (val) => setState(() => _text = val),
@@ -346,12 +346,12 @@ class _PostFormState extends State<PostForm> {
         ),
       ),
       Positioned(
-          bottom: 0,
+          bottom: MediaQuery.of(context).padding.bottom,
           left: 0,
           child: GestureDetector(
             onTap: ()=>dismissKeyboard(context),
             child: Container(
-              color: colorScheme.onSurface,
+              color: userData.domainColor!=null ? userData.domainColor! : colorScheme.onSurface,
               padding: EdgeInsets.only(top: bottomGradientThickness*hp),
               width:MediaQuery.of(context).size.width,
               child: Container(
@@ -360,7 +360,7 @@ class _PostFormState extends State<PostForm> {
                   SizedBox(width: 10*wp),
                   picPickerButton(
                       iconSize: 30*hp,
-                      color: newFile == null ? colorScheme.primary : colorScheme.primaryVariant,
+                      color: newFile == null ? colorScheme.primary : colorScheme.secondary,
                       setPic: ((File? f) {
                         if (mounted) {
                           setState(() {
@@ -411,7 +411,7 @@ class _PostFormState extends State<PostForm> {
                         }
                       },
                       icon: Icon(Icons.assessment,
-                          size: 30*hp, color: poll == null ? colorScheme.primary : colorScheme.primaryVariant),
+                          size: 30*hp, color: poll == null ? colorScheme.primary : colorScheme.secondary),
                   )
                 ]),
               ),

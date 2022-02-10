@@ -10,6 +10,7 @@ class GroupTag extends StatelessWidget {
   final EdgeInsets padding;
   final double thickness;
   final double fontSize;
+  final Color? groupColor;
 
   GroupTag({Key? key,
     required this.groupImageURL,
@@ -17,7 +18,8 @@ class GroupTag extends StatelessWidget {
     required this.borderRadius,
     required this.padding,
     required this.thickness,
-    required this.fontSize
+    required this.fontSize,
+    required this.groupColor
   }) : super(key: key);
 
 
@@ -31,7 +33,8 @@ class GroupTag extends StatelessWidget {
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       label: Container(
           decoration: BoxDecoration(
-              gradient: Gradients.blueRed(),
+              gradient: groupColor==null ? Gradients.blueRed() : null,
+              color: groupColor!=null ? groupColor : null,
               borderRadius: BorderRadius.circular(borderRadius)
           ),
           child: Container(

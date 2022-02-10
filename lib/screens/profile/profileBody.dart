@@ -65,6 +65,7 @@ class _ProfileBodyState extends State<ProfileBody> {
     final userData = Provider.of<UserData?>(context);
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
+    final colorScheme = Theme.of(context).colorScheme;
 
     if (profileData == null) return Loading();
     bool isOwnProfile = widget.profileUserRef == widget.currUserData.userRef &&
@@ -94,17 +95,18 @@ class _ProfileBodyState extends State<ProfileBody> {
               GroupTag(
                 groupImageURL: profileData!.domainImage,
                 groupName: profileData!.fullDomainName != null ? profileData!.fullDomainName! : profileData!.domain,
-                borderRadius: 20*hp,
-                padding: EdgeInsets.fromLTRB(8 * wp, 2 * hp, 8 * wp, 2 * hp),
+                borderRadius: 30*hp,
+                padding: EdgeInsets.fromLTRB(30 * wp, 5 * hp, 30 * wp, 5 * hp),
                 thickness: 1.5*hp,
                 fontSize: 18*hp,
+                groupColor: profileData!.domainColor!=null ? profileData!.domainColor! : null,
               ),
               Spacer(),
             ],
           ),
           SizedBox(height: 14 * hp),
           Center(
-            child: Text(profileData!.score.toString() + " Likes", style: Theme.of(context).textTheme.headline6)
+            child: Text(profileData!.score.toString() + " Likes", style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 17))
           ),
           widget.profileUserRef != widget.currUserData.userRef
               ? Column(
@@ -114,7 +116,7 @@ class _ProfileBodyState extends State<ProfileBody> {
                       SizedBox(width: 45 * wp),
                       NewMessageButton(
                         otherUserData: profileData!,
-                        currUserRef: widget.currUserData.userRef,
+                        currUserData: widget.currUserData,
                       )
                     ])
                   ],

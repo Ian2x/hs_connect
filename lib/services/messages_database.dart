@@ -44,14 +44,13 @@ class MessagesDatabaseService {
     required DocumentReference receiverRef,
     required String text,
     required bool isMedia,
-    required Timestamp createdAt,
   }) async {
     final messageRef = await messagesCollection.add({
       C.senderRef: senderRef,
       C.receiverRef: receiverRef,
       C.text: text.trim(),
       C.isMedia: isMedia,
-      C.createdAt: createdAt,
+      C.createdAt: Timestamp.now(),
       C.numReports: 0
     });
 
