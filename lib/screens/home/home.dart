@@ -104,7 +104,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       if (group!=null) {
         Navigator.push(
             context,
-            CupertinoPageRoute(
+            MaterialPageRoute(
                 builder: (context) =>
                     pixelProvider(context,
                         child: PostPage(post: post, group: group, creatorData: creatorData, postLikesManager: PostLikesManager(

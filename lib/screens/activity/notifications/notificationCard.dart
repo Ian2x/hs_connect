@@ -1,6 +1,4 @@
 import 'dart:developer';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/myNotification.dart';
@@ -82,7 +80,7 @@ class _NotificationCardState extends State<NotificationCard> {
       return Container(
           margin: EdgeInsets.only(top: 2*hp),
           padding: EdgeInsets.fromLTRB(14*wp, 13*hp, 14*wp, 15*hp),
-          height: 70*hp,
+          height: 65*hp,
           color: colorScheme.surface,
         child: loading ? Loading(backgroundColor: Colors.transparent) : null
       );
@@ -100,7 +98,7 @@ class _NotificationCardState extends State<NotificationCard> {
           if (group!=null) {
             Navigator.push(
                 context,
-                CupertinoPageRoute(
+                MaterialPageRoute(
                     builder: (context) => pixelProvider(context, child: PostPage(
                       creatorData: userData,
                       post: post,

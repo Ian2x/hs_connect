@@ -52,6 +52,7 @@ class _SettingsPageState extends State<SettingsPage> {
             children: [
               SizedBox(width: 85*wp),
               Text("Settings"),
+              Icon(Icons.message)
             ],
           ),
           elevation: 0,
@@ -62,6 +63,11 @@ class _SettingsPageState extends State<SettingsPage> {
           child: GestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: ()=>dismissKeyboard(context),
+            onPanUpdate: (details) {
+              if (details.delta.dx > 15) {
+                Navigator.of(context).pop();
+              }
+            },
             child: Container(
               //width: MediaQuery.of(context).size.width,
               padding: EdgeInsets.symmetric(horizontal: 11*wp, vertical: 0),
