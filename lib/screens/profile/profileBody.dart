@@ -106,7 +106,7 @@ class _ProfileBodyState extends State<ProfileBody> {
           ),
           SizedBox(height: 14 * hp),
           Center(
-            child: Text(profileData!.score.toString() + " Likes", style: Theme.of(context).textTheme.headline6)
+            child: Text(profileData!.score.toString() + " Likes", style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 17))
           ),
           widget.profileUserRef != widget.currUserData.userRef
               ? Column(

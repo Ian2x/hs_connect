@@ -13,7 +13,7 @@ PreferredSizeWidget activityAppBar({required BuildContext context, required bool
 
 
   return PreferredSize(
-    preferredSize: Size.fromHeight(HomeAppBar.expandedHeight*hp-safeAreaHeight + 63),
+    preferredSize: Size.fromHeight(HomeAppBar.expandedHeight*hp + 2),
     child: Container(
       padding: EdgeInsets.only(top: safeAreaHeight),
       color: colorScheme.surface,

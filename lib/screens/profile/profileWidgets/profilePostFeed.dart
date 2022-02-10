@@ -51,7 +51,7 @@ class _ProfilePostFeedState extends State<ProfilePostFeed> {
         Row(
           children: [
             SizedBox(width: 10 * wp),
-            Text("Your Posts", style: Theme.of(context).textTheme.headline5, textAlign: TextAlign.left),
+            Text("Your Posts", style: Theme.of(context).textTheme.headline5?.copyWith(fontSize: 22), textAlign: TextAlign.left),
           ],
         ),
         SizedBox(height: 10 * hp),
