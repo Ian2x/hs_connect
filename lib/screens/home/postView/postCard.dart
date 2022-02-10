@@ -215,17 +215,15 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                     ],
                   ),
                   SizedBox(height: 10*hp),
-                  Row(
-                    children: [
-                      SizedBox(width:10*wp),
-                      Text(
-                  widget.post.title,
-                      style: Theme.of(context).textTheme.headline6?.copyWith(
-                        fontSize:16 * hp, fontWeight: FontWeight.w500,
-                      ),
-                      overflow: TextOverflow.ellipsis, // default is .clip
-                      maxLines: 3),
-                    ],
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10*wp),
+                    child: Text(
+                    widget.post.title,
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                      fontSize:16 * hp, fontWeight: FontWeight.w500,
+                    ),
+                    overflow: TextOverflow.ellipsis, // default is .clip
+                    maxLines: 3),
                   ),
                   widget.post.mediaURL != null ? ExpandableImage(imageURL: widget.post.mediaURL!, containerWidth: MediaQuery.of(context).size.width-2*leftRightMargin, maxHeight: 300*hp, loadingHeight: 300*hp, margin: EdgeInsets.only(top: 10*hp))
                       : Container(),
