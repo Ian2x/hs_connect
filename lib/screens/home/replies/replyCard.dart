@@ -126,7 +126,7 @@ class _ReplyCardState extends State<ReplyCard> {
           SizedBox(
             width: (MediaQuery.of(context).size.width) * .85,
             child: Text(widget.reply.text,
-                style: Theme.of(context).textTheme.bodyText1),
+                style: Theme.of(context).textTheme.bodyText1?.copyWith(fontWeight: FontWeight.w600)),
           ),
           SizedBox(height: 7*hp),
           Row(
