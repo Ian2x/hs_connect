@@ -5,6 +5,7 @@ import 'package:hs_connect/screens/profile/profileBody.dart';
 import 'package:hs_connect/screens/profile/settings/settingsPage.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
+import 'package:hs_connect/shared/widgets/myDivider.dart';
 import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -47,7 +48,7 @@ class ProfilePage extends StatelessWidget {
       );
     } else {
       return Scaffold(
-        appBar: AppBar(backgroundColor: colorScheme.surface, leading: myBackButtonIcon(context)),
+        appBar: AppBar(backgroundColor: colorScheme.surface, leading: myBackButtonIcon(context), elevation: 0),
         backgroundColor: colorScheme.surface,
         body: ProfileBody(
           profileUserRef: profileRef,

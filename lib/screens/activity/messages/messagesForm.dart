@@ -99,7 +99,6 @@ class _MessagesFormState extends State<MessagesForm> {
                                  receiverRef: widget.otherUserRef,
                                  text: downloadURL,
                                  isMedia: true,
-                                 createdAt: Timestamp.now(),
                                  senderRef: userData.userRef);
                            }
                            if (_message != null && _message != '') {
@@ -107,7 +106,6 @@ class _MessagesFormState extends State<MessagesForm> {
                                  receiverRef: widget.otherUserRef,
                                  text: _message!,
                                  isMedia: false,
-                                 createdAt: Timestamp.now(),
                                  senderRef: userData.userRef);
                            }
                            if (mounted) {
