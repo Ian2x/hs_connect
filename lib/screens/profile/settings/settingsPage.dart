@@ -153,7 +153,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           child: TextFormField(
                             style: Theme.of(context).textTheme.subtitle1,
                             maxLines: null,
-                            autocorrect: false,
+                            autocorrect: true,
                             decoration: InputDecoration(
                                 hintStyle: Theme.of(context).textTheme.subtitle1, border: InputBorder.none, hintText: "What can we improve on?"),
                             onChanged: (val) {

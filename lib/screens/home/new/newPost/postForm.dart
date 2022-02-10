@@ -141,7 +141,7 @@ class _PostFormState extends State<PostForm> {
                 children: [
                   SizedBox(width: 10*wp),
                   TextButton(
-                    child: Text("Cancel", style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontSize: 18.5)),
+                    child: Text("Cancel", style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontWeight: FontWeight.w500)),
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -278,11 +278,11 @@ class _PostFormState extends State<PostForm> {
                       ? SizedBox(height:10*wp)
                       : Container(),
                   TextFormField(
-                    style: Theme.of(context).textTheme.headline5,
+                    style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18*hp),
                     maxLines: null,
-                    autocorrect: false,
+                    autocorrect: true,
                     decoration: InputDecoration(
-                        hintStyle: Theme.of(context).textTheme.headline5?.copyWith(color: colorScheme.primaryVariant),
+                        hintStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18*hp, color: colorScheme.primaryVariant),
                         border: InputBorder.none,
                         hintText: "Title", ),
                     onChanged: (val) {
@@ -324,11 +324,11 @@ class _PostFormState extends State<PostForm> {
                       child: Column(
                         children: [
                           TextFormField(
-                            style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 20),
+                            style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16*hp),
                             maxLines: null,
-                            autocorrect: false,
+                            autocorrect: true,
                             decoration: InputDecoration(
-                                hintStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: colorScheme.primary, fontSize: 20),
+                                hintStyle: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16*hp, color: colorScheme.primary),
                                 border: InputBorder.none,
                                 hintText: "Optional text"),
                             onChanged: (val) => setState(() => _text = val),

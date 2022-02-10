@@ -77,7 +77,7 @@ class _MessagesFormState extends State<MessagesForm> {
                        ))
                    : Container(),
                TextFormField(
-                   autocorrect: false,
+                   autocorrect: true,
                    initialValue: null,
                    keyboardType: TextInputType.multiline,
                    maxLines: null,

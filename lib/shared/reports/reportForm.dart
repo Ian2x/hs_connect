@@ -197,7 +197,7 @@ class _ReportFormState extends State<ReportForm> {
             child: TextFormField(
               style: Theme.of(context).textTheme.subtitle1,
               maxLines: 15,
-              autocorrect: false,
+              autocorrect: true,
               maxLength: 400,
               decoration: InputDecoration(
                   hintStyle: Theme.of(context).textTheme.subtitle1, border: InputBorder.none, hintText: "Description..."),
