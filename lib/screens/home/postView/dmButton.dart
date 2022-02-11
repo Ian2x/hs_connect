@@ -17,21 +17,22 @@ class dmButton extends StatelessWidget {
     final hp = Provider.of<HeightPixel>(context).value;
 
     return IconButton(
-
-            onPressed: () {
-              if (otherUserData != null && otherUserData!.userRef != currUserData.userRef){
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => pixelProvider(context, child: MessagesPage(
-                          currUserData: currUserData,
-                          otherUserData: otherUserData!,
-                          onUpdateLastMessage: () {},
-                          onUpdateLastViewed: () {},
-                        ))));
-              }
-            },
-            icon: Icon(Icons.chat_bubble_outline_rounded, size: 18*hp, color: Theme.of(context).colorScheme.primary),
-          );
+      constraints: BoxConstraints(),
+      onPressed: () {
+        if (otherUserData != null && otherUserData!.userRef != currUserData.userRef) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => pixelProvider(context,
+                      child: MessagesPage(
+                        currUserData: currUserData,
+                        otherUserData: otherUserData!,
+                        onUpdateLastMessage: () {},
+                        onUpdateLastViewed: () {},
+                      ))));
+        }
+      },
+      icon: Icon(Icons.chat_bubble_outline_rounded, size: 18 * hp, color: Theme.of(context).colorScheme.primary),
+    );
   }
 }

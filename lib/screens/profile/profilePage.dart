@@ -71,6 +71,7 @@ class ProfilePage extends StatelessWidget {
                             child: ReportSheet(
                               reportType: ReportType.user,
                               entityRef: profileRef,
+                              entityCreatorRef: profileRef,
                             )));
                   })
             ],

@@ -137,7 +137,8 @@ class _ReplyCardState extends State<ReplyCard> {
                       .subtitle2
                       ?.copyWith(color: colorScheme.primary, fontSize: commentReplyDetailSize)),
               SizedBox(width: 8 * wp),
-              Container(
+              widget.reply.creatorRef != null && widget.reply.creatorRef != widget.currUserData.userRef
+                  ? Container(
                 height: 30 * hp,
                 child: IconButton(
                   icon: Icon(Icons.more_horiz, size: 20 * hp, color: colorScheme.primary),
@@ -154,10 +155,11 @@ class _ReplyCardState extends State<ReplyCard> {
                             child: ReportSheet(
                               reportType: ReportType.reply,
                               entityRef: widget.reply.commentRef,
+                              entityCreatorRef: widget.reply.creatorRef!,
                             )));
                   },
                 ),
-              ),
+              ) : Container(height: 30 * hp),
               Spacer(),
               widget.reply.creatorRef != null
                   ? LikeDislikeReply(

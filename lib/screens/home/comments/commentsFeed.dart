@@ -100,6 +100,9 @@ class _CommentsFeedState extends State<CommentsFeed> {
                     } else if (index == comments.length + 2) {
                       return SizedBox(height: 70 * hp);
                     } else {
+                      if (userData.blockedUserRefs.contains(comments[index - 2].creatorRef)) {
+                        return Container();
+                      }
                       return CommentCard(
                         focusKeyboard: () {
                           myFocusNode.requestFocus();

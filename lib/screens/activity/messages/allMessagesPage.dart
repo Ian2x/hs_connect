@@ -99,6 +99,9 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
         shrinkWrap: true,
         itemBuilder: (BuildContext context, int index) {
           final otherUser = UMUDcache[index].UD!;
+          if (widget.userData.blockedUserRefs.contains(otherUser.userRef)) {
+            return Container();
+          }
           final updateLastMessage = () {
             UMUDcache[index].UM!.lastMessage = Timestamp.now();
           };

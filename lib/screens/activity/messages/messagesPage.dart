@@ -70,6 +70,7 @@ class MessagesPage extends StatelessWidget {
                         child: ReportSheet(
                           reportType: ReportType.message,
                           entityRef: otherUserData.userRef,
+                          entityCreatorRef: otherUserData.userRef,
                         )));
               },
             ),

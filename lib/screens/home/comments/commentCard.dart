@@ -144,8 +144,9 @@ class _CommentCardState extends State<CommentCard> {
                       .subtitle2
                       ?.copyWith(color: colorScheme.primary, fontSize: commentReplyDetailSize)),
               SizedBox(width: 8 * wp),
-              Container(
-                height: 20*hp,
+              widget.comment.creatorRef != null && widget.comment.creatorRef != widget.currUserData.userRef
+                  ? Container(
+                height: 30*hp,
                 child: IconButton(
                   icon: Icon(Icons.more_horiz, size: 20 * hp, color: colorScheme.primary),
                   alignment: Alignment.centerLeft,
@@ -161,10 +162,11 @@ class _CommentCardState extends State<CommentCard> {
                             child: ReportSheet(
                               reportType: ReportType.comment,
                               entityRef: widget.comment.commentRef,
+                              entityCreatorRef: widget.comment.creatorRef!,
                             )));
                   },
                 ),
-              ),
+              ) : Container(height: 30*hp),
               Spacer(),
               Container(
                 height: 30*hp,

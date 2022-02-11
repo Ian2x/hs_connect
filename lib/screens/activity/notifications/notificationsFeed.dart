@@ -72,6 +72,9 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
         physics: BouncingScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
           int trueIndex = numberNotifications - index - 1;
+          if (userData.blockedUserRefs.contains(userData.myNotifications[trueIndex].sourceUserRef)) {
+            return Container();
+          }
           if (trueIndex == numberNotifications-1) {
             return Container(
                 padding: EdgeInsets.only(top: 2.5*hp),

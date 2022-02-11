@@ -53,6 +53,8 @@ class UserData {
   final String? currCountry;
   final String? domainImage;
   final Timestamp? launchDate;
+  final List<DocumentReference> blockedPostRefs;
+  final List<DocumentReference> blockedUserRefs;
 
   UserData({
     required this.userRef,
@@ -78,7 +80,9 @@ class UserData {
     required this.numReports,
     required this.private,
     required this.notificationsLastViewed,
-    required this.launchDate
+    required this.launchDate,
+    required this.blockedPostRefs,
+    required this.blockedUserRefs
   });
 }
 
@@ -117,5 +121,7 @@ Future<UserData> userDataFromSnapshot(DocumentSnapshot snapshot, DocumentReferen
     currCountry: snapshot.get(C.overrideCountry) != null ? snapshot.get(C.overrideCountry) : domainData.country,
     domainImage: domainData.image,
     launchDate: domainData.launchDate,
+    blockedPostRefs: docRefList(snapshot.get(C.blockedPostRefs)),
+    blockedUserRefs: docRefList(snapshot.get(C.blockedUserRefs))
   );
 }

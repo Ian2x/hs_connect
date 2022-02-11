@@ -26,40 +26,40 @@ class PostPage extends StatelessWidget {
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
 
-    return Scaffold(
-      backgroundColor: colorScheme.surface,
-      appBar: AppBar(
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              height: 20*hp, width: 20*hp,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-              image: DecorationImage(image: ImageStorage().groupImageProvider(group.image))
-            )),
-            SizedBox(width: 8*wp),
-            Flexible(child: Text(group.name, overflow: TextOverflow.ellipsis)),
-          ],
-        ),
-        centerTitle: true,
+    return GestureDetector(
+      onVerticalDragDown: (DragDownDetails ddd) {
+        dismissKeyboard(context);
+      },
+      onPanUpdate: (details) {
+        if (details.delta.dx > 15) {
+          Navigator.of(context).pop();
+        }
+      },
+      child: Scaffold(
         backgroundColor: colorScheme.surface,
-        elevation: 0,
-        leading: myBackButtonIcon(context),
-        bottom: MyDivider()
-      ),
-      body:
-          GestureDetector(
-            onVerticalDragDown: (DragDownDetails ddd) {
-              dismissKeyboard(context);
-            },
-            onPanUpdate: (details) {
-              if (details.delta.dx > 15) {
-                Navigator.of(context).pop();
-              }
-            },
-            child: Container(
+        appBar: AppBar(
+          title: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                height: 20*hp, width: 20*hp,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                image: DecorationImage(image: ImageStorage().groupImageProvider(group.image))
+              )),
+              SizedBox(width: 8*wp),
+              Flexible(child: Text(group.name, overflow: TextOverflow.ellipsis)),
+            ],
+          ),
+          centerTitle: true,
+          backgroundColor: colorScheme.surface,
+          elevation: 0,
+          leading: myBackButtonIcon(context),
+          bottom: MyDivider()
+        ),
+        body:
+            Container(
               padding: EdgeInsets.zero,
               constraints: BoxConstraints(
                 minHeight: MediaQuery.of(context).size.height,
@@ -68,8 +68,8 @@ class PostPage extends StatelessWidget {
                 value: postLikesManager,
                 child: CommentsFeed(post: post, group: group),
               )
-            ),
-          )
+            )
+      ),
     );
   }
 }

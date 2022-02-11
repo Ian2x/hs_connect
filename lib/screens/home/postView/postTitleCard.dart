@@ -110,7 +110,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
                       ?.copyWith(color: colorScheme.primary, fontSize: postCardDetailSize+1),
                 ) : Container(),
                 Spacer(),
-                IconButton(
+                widget.post.creatorRef!=widget.currUserRef ? IconButton(
                   icon: Icon(Icons.more_horiz),
                   iconSize: 20*hp,
                   color: colorScheme.primary,
@@ -124,10 +124,11 @@ class _PostTitleCardState extends State<PostTitleCard> {
                         builder: (context) => pixelProvider(context, child: ReportSheet(
                           reportType: ReportType.post,
                           entityRef: widget.post.postRef,
+                          entityCreatorRef: widget.post.creatorRef,
                         )));
 
                   },
-                )
+                ) : Container(height: 48*hp)
               ]
             ), //introRow
             Text( widget.post.title,

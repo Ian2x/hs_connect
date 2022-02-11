@@ -265,7 +265,7 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                               .subtitle2
                               ?.copyWith(color: colorScheme.primary, fontSize: postCardDetailSize),
                         ),
-                        IconButton(
+                        widget.currUser.userRef!=widget.post.creatorRef ? IconButton(
                           constraints: BoxConstraints(),
                           splashRadius: .1,
                           icon: Icon(Icons.more_horiz, size: 20 * hp, color: colorScheme.primary),
@@ -280,9 +280,10 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                                     child: ReportSheet(
                                       reportType: ReportType.post,
                                       entityRef: widget.post.postRef,
+                                      entityCreatorRef: widget.post.creatorRef,
                                     )));
                           },
-                        ),
+                        ) : Container(height: 38*hp),
                         Spacer(),
                         fetchUserData != null && fetchUserData!.userRef != widget.currUser.userRef
                             ? dmButton(currUserData: widget.currUser, otherUserData: fetchUserData)
