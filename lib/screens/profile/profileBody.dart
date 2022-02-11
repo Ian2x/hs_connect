@@ -86,7 +86,7 @@ class _ProfileBodyState extends State<ProfileBody> {
           Text(
             profileData!.fundamentalName,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.headline5,
+            style: Theme.of(context).textTheme.headline5?.copyWith(fontWeight:FontWeight.w600),
           ),
           SizedBox(height: 14 * hp),
           Row(
