@@ -93,10 +93,10 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
                 }
               },
               items: <BottomNavigationBarItem>[
-                BottomNavigationBarItem(label: '', icon: Icon(Icons.home, size: 30*hp)),
-                BottomNavigationBarItem(label: '', icon: Icon(Icons.notifications, size: 30*hp)),
-                BottomNavigationBarItem(label: '', icon: Icon(Icons.person, size: 30*hp)),
-                BottomNavigationBarItem(label: '', icon: Icon(Icons.add, size: 30*hp)),
+                BottomNavigationBarItem(label: '', icon: Icon(Icons.home_rounded, size: 30*hp)),
+                BottomNavigationBarItem(label: '', icon: Icon(Icons.notifications_rounded, size: 30*hp)),
+                BottomNavigationBarItem(label: '', icon: Icon(Icons.person_rounded, size: 30*hp)),
+                BottomNavigationBarItem(label: '', icon: Icon(Icons.add_rounded, size: 30*hp)),
               ],
             ),
           ),

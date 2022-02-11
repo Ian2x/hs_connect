@@ -96,7 +96,7 @@ class HomeAppBar extends SliverPersistentHeaderDelegate{
                   ],
                 ),
                 Positioned(
-                    left: 333*wp,
+                    left: 330*wp,
                     top: 5*hp,
                     child: GestureDetector(
                         onTap: () {

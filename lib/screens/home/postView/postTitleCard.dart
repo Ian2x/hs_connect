@@ -136,7 +136,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
             SizedBox(height:12*hp),
             widget.post.text!= null && widget.post.text!=""?
               Text(widget.post.text!,
-                style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16*hp)) : Container(),
+                style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16*hp, fontFamily: "Roboto", height: 1.3)) : Container(),
             widget.post.mediaURL != null ?
               ExpandableImage(imageURL: widget.post.mediaURL!, maxHeight: 450*hp, containerWidth: MediaQuery.of(context).size.width-2*leftRightPadding)
                 : Container(),
