@@ -14,8 +14,9 @@ class PublicFeed extends StatefulWidget {
   final UserData currUser;
   final bool isDomain;
   final bool searchByTrending;
+  final bool matureEnabled;
 
-  const PublicFeed({Key? key, required this.currUser, required this.isDomain, required this.searchByTrending})
+  const PublicFeed({Key? key, required this.currUser, required this.isDomain, required this.searchByTrending, required this.matureEnabled})
       : super(key: key);
 
   @override
@@ -84,10 +85,13 @@ class _PublicFeedState extends State<PublicFeed> with AutomaticKeepAliveClientMi
           padding: EdgeInsets.zero,
           builderDelegate: PagedChildBuilderDelegate<Post>(
             //animateTransitions: true,
-              itemBuilder: (context, item, index) {
+              itemBuilder: (context, post, index) {
+                if (!widget.matureEnabled && post.mature) {
+                  return Container();
+                }
                 return Center(
                     child: PostCard(
-                      post: item,
+                      post: post,
                       currUser: widget.currUser,
                     ));
               },

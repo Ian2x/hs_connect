@@ -14,8 +14,9 @@ class DomainFeed extends StatefulWidget {
   final UserData currUser;
   final bool isDomain;
   final bool searchByTrending;
+  final bool matureEnabled;
 
-  const DomainFeed({Key? key, required this.currUser, required this.isDomain, required this.searchByTrending}) : super(key: key);
+  const DomainFeed({Key? key, required this.currUser, required this.isDomain, required this.searchByTrending, required this.matureEnabled}) : super(key: key);
 
   @override
   _DomainFeedState createState() => _DomainFeedState();
@@ -82,11 +83,13 @@ class _DomainFeedState extends State<DomainFeed> with AutomaticKeepAliveClientMi
           physics: AlwaysScrollableScrollPhysics(),
           padding: EdgeInsets.zero,
           builderDelegate: PagedChildBuilderDelegate<Post>(
-              itemBuilder: (context, item, index) {
+              itemBuilder: (context, post, index) {
+                if (!widget.matureEnabled && post.mature) {
+                  return Container();
+                }
                 return Center(
                     child: PostCard(
-                      post: item,
-
+                      post: post,
                 currUser: widget.currUser,
               ));
             },

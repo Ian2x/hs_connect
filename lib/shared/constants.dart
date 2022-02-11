@@ -221,4 +221,5 @@ class C {
   static const type = 'type';
   static const postId = 'postId';
   static const launchDate = 'launchDate';
+  static const mature = 'mature';
 }

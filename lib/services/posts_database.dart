@@ -32,6 +32,7 @@ class PostsDatabaseService {
       required String? media,
       required DocumentReference groupRef,
       required String? tagString,
+      required bool mature,
       required DocumentReference? pollRef,
       Function(void) onValue = defaultFunc,
       Function onError = defaultFunc}) async {
@@ -60,7 +61,8 @@ class PostsDatabaseService {
           C.numReports: 0,
           C.pollRef: pollRef,
           C.tag: tagString == '' ? null : tagString,
-          C.isFeatured: false
+          C.isFeatured: false,
+          C.mature: mature
         })
         .then(onValue)
         .catchError(onError);

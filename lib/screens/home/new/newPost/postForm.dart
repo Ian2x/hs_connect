@@ -10,6 +10,7 @@ import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
+import 'package:hs_connect/shared/widgets/animatedSwitch.dart';
 import 'package:hs_connect/shared/widgets/deletableImage.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
@@ -57,6 +58,7 @@ class _PostFormState extends State<PostForm> {
   String _title = '';
   String _text = '';
   String _tag = '';
+  bool isMature = false;
   String? error;
   bool loading = false;
 
@@ -253,6 +255,7 @@ class _PostFormState extends State<PostForm> {
                           media: downloadURL,
                           pollRef: pollRef,
                           groupRef: selectedGroup!.groupRef,
+                          mature: isMature,
                           onValue: handleValue,
                           onError: handleError,
                         );
@@ -412,7 +415,19 @@ class _PostFormState extends State<PostForm> {
                       },
                       icon: Icon(Icons.assessment,
                           size: 30*hp, color: poll == null ? colorScheme.primary : colorScheme.secondary),
-                  )
+                  ),
+                  Spacer(),
+                  Text("Mature", style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontWeight: FontWeight.w500)),
+                  SizedBox(width: 10*wp),
+                  AnimatedSwitch(
+                    initialState: isMature,
+                    onToggle: () {
+                      if (mounted) {
+                        setState(() => isMature = !isMature);
+                      }
+                    },
+                  ),
+                  SizedBox(width: 10*wp),
                 ]),
               ),
             ),
