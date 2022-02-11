@@ -21,7 +21,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
   bool dislikeStatus = false;
   int likeCount = 0;
   int dislikeCount = 0;
-  static const double iconSize = 14;
+  static const double iconSize = 18;
 
   @override
   void initState() {
@@ -92,12 +92,12 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
             );
           }
         }(),
-        SizedBox(width: 5*wp),
+        SizedBox(width: 8*wp),
         Text(
           (likeCount - dislikeCount).toString(),
-          style: Theme.of(context).textTheme.subtitle2
+          style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 0.75 * iconSize * hp)
         ),
-        SizedBox(width: 5*wp),
+        SizedBox(width: 8*wp),
             () {
           if (dislikeStatus == true) {
             return IconButton(

@@ -39,47 +39,52 @@ class _NewMessageButtonState extends State<NewMessageButton> {
 
     return Container(
         margin: EdgeInsets.zero,
-        width: MediaQuery.of(context).size.width*.8,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
+        width: MediaQuery.of(context).size.width * .8,
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
           Align(
             alignment: Alignment.centerLeft,
             child: Text("Message", style: Theme.of(context).textTheme.headline5, textAlign: TextAlign.left),
           ),
-          SizedBox(height: 20*hp),
+          SizedBox(height: 20 * hp),
           Align(
               alignment: Alignment.centerLeft,
               child: Container(
-                height: 52*hp,
-                width: 300*wp,
+                height: 52 * hp,
+                width: 300 * wp,
                 decoration: ShapeDecoration(
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16*hp),
+                      borderRadius: BorderRadius.circular(16 * hp),
                       side: BorderSide(
                         color: Theme.of(context).colorScheme.onError,
-                        width: 1.5*hp,
+                        width: 1.5 * hp,
                       )),
                 ),
                 child: Overlay(initialEntries: <OverlayEntry>[
                   OverlayEntry(builder: (BuildContext context) {
                     return TextField(
-                      decoration: InputDecoration(hintStyle: Theme.of(context).textTheme.subtitle1!.copyWith(color: Theme.of(context).hintColor), border: InputBorder.none, hintText: "   Send a chat"),
+                      decoration: InputDecoration(
+                          hintStyle:
+                              Theme.of(context).textTheme.subtitle1!.copyWith(color: Theme.of(context).hintColor),
+                          border: InputBorder.none,
+                          hintText: "   Send a chat"),
                     );
                   }),
                   OverlayEntry(builder: (BuildContext context) {
                     return GestureDetector(
                       onTap: () {
                         myFocusNode.requestFocus();
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => pixelProvider(context, child: MessagesPage(
-                                  currUserData: widget.currUserData,
-                                  otherUserData: widget.otherUserData,
-                                  onUpdateLastMessage: () {},
-                                  onUpdateLastViewed: () {},
-                                ))));
+                        if (widget.otherUserData.userRef != widget.currUserData.userRef) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => pixelProvider(context,
+                                      child: MessagesPage(
+                                        currUserData: widget.currUserData,
+                                        otherUserData: widget.otherUserData,
+                                        onUpdateLastMessage: () {},
+                                        onUpdateLastViewed: () {},
+                                      ))));
+                        }
                       },
                       behavior: HitTestBehavior.translucent,
                       child: Container(),

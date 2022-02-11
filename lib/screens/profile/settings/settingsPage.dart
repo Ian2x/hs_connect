@@ -52,7 +52,6 @@ class _SettingsPageState extends State<SettingsPage> {
             children: [
               SizedBox(width: 85*wp),
               Text("Settings"),
-              Icon(Icons.message)
             ],
           ),
           elevation: 0,

@@ -22,6 +22,7 @@ class HomeAppBar extends SliverPersistentHeaderDelegate{
   final VoidFunction toggleSearch;
   final double hp;
   final double safeAreaHeight;
+  //final double matureEnabled;
 
   HomeAppBar({required this.tabController, required this.userData, required this.isDomain,
     required this.searchByTrending, required this.hp, required this.toggleSearch, required this.safeAreaHeight});
@@ -96,6 +97,11 @@ class HomeAppBar extends SliverPersistentHeaderDelegate{
                     ),
                   ],
                 ),
+                /*Positioned(
+                  left: 5*wp,
+                  top: 5*hp,
+                  child: Text('Mature', style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 13*hp, decoration: ))
+                ),*/
                 Positioned(
                     left: 333*wp,
                     top: 5*hp,

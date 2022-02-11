@@ -35,6 +35,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   ScrollController scrollController = ScrollController();
   var top = 0.0;
   bool searchByTrending = true;
+  //bool matureEnabled = false;
 
   void toggleSearch() {
     if (mounted) {

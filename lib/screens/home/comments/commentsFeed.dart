@@ -48,6 +48,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
     final hp = Provider.of<HeightPixel>(context).value;
+    final wp = Provider.of<WidthPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
 
     switchFormBool(DocumentReference? passedRef) {
@@ -123,7 +124,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
             child: Container(
                 width: MediaQuery.of(context).size.width,
                 color: colorScheme.background,
-                padding: EdgeInsets.all(10*hp),
+                padding: EdgeInsets.fromLTRB(10*wp, 10*hp, 10*wp, MediaQuery.of(context).padding.bottom>10 ? MediaQuery.of(context).padding.bottom : 10*hp),
                 child: CommentReplyForm(
                     focusNode: myFocusNode,
                     currUserRef: userData.userRef,
