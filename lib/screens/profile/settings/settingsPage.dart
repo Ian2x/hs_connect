@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/myStorageManager.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/themeManager.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
@@ -25,6 +26,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   final _feedbackFormKey = GlobalKey<FormState>();
   late bool isLightTheme;
+  bool? showMaturePosts;
   String _feedbackText = '';
   String? feedbackError;
   bool feedbackLoading = false;
@@ -32,8 +34,21 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   void initState() {
     isLightTheme = widget.initialIsLightTheme;
+    getShowMaturePosts();
     super.initState();
   }
+
+  void getShowMaturePosts() async {
+    final data = await MyStorageManager.readData('mature');
+    if (mounted) {
+      if (data==false) {
+        setState(() => showMaturePosts = false);
+      } else {
+        setState(() => showMaturePosts = true);
+      }
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +77,11 @@ class _SettingsPageState extends State<SettingsPage> {
           child: GestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: ()=>dismissKeyboard(context),
+            onPanUpdate: (details) {
+              if (details.delta.dx > 15) {
+                Navigator.of(context).pop();
+              }
+            },
             child: Container(
               //width: MediaQuery.of(context).size.width,
               padding: EdgeInsets.symmetric(horizontal: 11*wp, vertical: 0),
@@ -88,6 +108,29 @@ class _SettingsPageState extends State<SettingsPage> {
                           }
                         }),
                       ]
+                    ),
+                  ),
+                  Divider(thickness: 1*hp, height: 1*hp),
+                  Container(
+                    height: 55*hp,
+                    alignment: Alignment.center,
+                    child: Row(
+                        children: [
+                          Text("Show mature posts", style: textTheme.subtitle1),
+                          Spacer(),
+                          showMaturePosts != null ? AnimatedSwitch(initialState: showMaturePosts!, onToggle: () async {
+                            if (showMaturePosts!) {
+                              MyStorageManager.saveData('mature', false);
+                            } else {
+                              MyStorageManager.saveData('mature', true);
+                            }
+                            if (mounted) {
+                              setState(() {
+                                showMaturePosts = !(showMaturePosts!);
+                              });
+                            }
+                          }) : Container(),
+                        ]
                     ),
                   ),
                   Divider(thickness: 1*hp, height: 1*hp),

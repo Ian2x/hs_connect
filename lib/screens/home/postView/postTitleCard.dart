@@ -15,9 +15,7 @@ import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
-import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/expandableImage.dart';
-import 'package:hs_connect/shared/widgets/groupTag.dart';
 import 'package:hs_connect/shared/reports/reportSheet.dart';
 import 'package:provider/provider.dart';
 
@@ -104,7 +102,14 @@ class _PostTitleCardState extends State<PostTitleCard> {
                     style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary, fontSize: postCardDetailSize+1)
                   ),
                 ),
-                Spacer(flex:1),
+                widget.post.mature ? Text(
+                  " • Mature",
+                  style: Theme.of(context)
+                      .textTheme
+                      .subtitle2
+                      ?.copyWith(color: colorScheme.primary, fontSize: postCardDetailSize+1),
+                ) : Container(),
+                Spacer(),
                 IconButton(
                   icon: Icon(Icons.more_horiz),
                   iconSize: 20*hp,
@@ -128,7 +133,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
             Text( widget.post.title,
               style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18*hp)
             ),
-            SizedBox(height:8*hp),
+            SizedBox(height:12*hp),
             widget.post.text!= null && widget.post.text!=""?
               Text(widget.post.text!,
                 style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16*hp)) : Container(),
@@ -136,7 +141,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
               ExpandableImage(imageURL: widget.post.mediaURL!, maxHeight: 450*hp, containerWidth: MediaQuery.of(context).size.width-2*leftRightPadding)
                 : Container(),
             poll != null ? PollView(poll: poll!, currUserRef: widget.currUserRef, post: widget.post): Container(),
-            SizedBox(height:20*hp),
+            SizedBox(height:25*hp),
             Row(
               children: [
                 Text(
@@ -147,7 +152,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
                 LikeDislikePostStateful(currUserRef: widget.currUserRef, post: widget.post, postLikesManager: postLikesManager),
               ],
             ),
-            SizedBox(height:25*hp),
+            SizedBox(height:8*hp),
           ],
         ),
       );

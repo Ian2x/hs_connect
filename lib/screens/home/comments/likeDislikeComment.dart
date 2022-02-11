@@ -17,7 +17,7 @@ class LikeDislikeComment extends StatefulWidget {
 }
 
 class _LikeDislikeCommentState extends State<LikeDislikeComment> {
-  static const double iconSize = 15;
+  static const double iconSize = 18;
   bool likeStatus = false;
   bool dislikeStatus = false;
   int likeCount = 0;
@@ -89,12 +89,12 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
             );
           }
         }(),
-        SizedBox(width: 3*wp),
+        SizedBox(width: 8*wp),
         Text(
           (likeCount - dislikeCount).toString(),
-          style: Theme.of(context).textTheme.subtitle2
+          style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 0.75 * iconSize * hp)
         ),
-        SizedBox(width: 3*wp),
+        SizedBox(width: 8*wp),
             () {
           if (dislikeStatus == true) {
             return IconButton(

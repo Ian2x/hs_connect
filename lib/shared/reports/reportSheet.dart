@@ -66,13 +66,10 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
                 children: [
                   TextButton(
                     onPressed: () {
-                      showModalBottomSheet(
-                          context: context,
-                          backgroundColor: Colors.transparent,
-                          transitionAnimationController: controller,
-                          isScrollControlled: true,
-                          builder: (context) => pixelProvider(context,
-                              child: ReportForm(reportType: widget.reportType, entityRef: widget.entityRef)));
+                      Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => pixelProvider(context, child: ReportForm(entityRef: widget.entityRef, reportType: widget.reportType)))
+                      );
                     },
                     child: Row(
                       children: [

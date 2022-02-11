@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/shared/constants.dart';
 
-enum ReportType { message, post, comment, reply }
+enum ReportType { message, post, comment, reply, user }
 
 extension ReportTypeExtension on ReportType {
   String get string {
@@ -14,6 +14,8 @@ extension ReportTypeExtension on ReportType {
         return C.comment;
       case ReportType.reply:
         return C.reply;
+      case ReportType.user:
+        return C.user;
     }
   }
 }
@@ -28,6 +30,8 @@ ReportType reportTypeFrom(String reportType) {
       return ReportType.comment;
     case C.reply:
       return ReportType.reply;
+    case C.user:
+      return ReportType.user;
     default:
       throw FormatException(reportType + "is not a ReportType type");
   }

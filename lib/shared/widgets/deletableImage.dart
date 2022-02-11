@@ -17,12 +17,11 @@ class DeletableImage extends StatelessWidget {
 
     final sizing = min(width, height) * 0.07 + 15;
     return Container(
-      height: height,
       width: width,
       child: Stack(
         alignment: Alignment.center,
         children: [
-          Container(width: width, height: height, alignment: Alignment.center, child: Stack(
+          Container(width: width, alignment: Alignment.center, child: Stack(
             children: [
               image,
               Positioned(

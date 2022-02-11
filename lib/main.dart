@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:hs_connect/main2.dart';
 import 'package:hs_connect/services/auth.dart';
@@ -23,6 +24,10 @@ void main() async {
     storageBucket: '<your-storage-bucket-url>'
   };
    */
+
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
   await Firebase.initializeApp();
   //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 

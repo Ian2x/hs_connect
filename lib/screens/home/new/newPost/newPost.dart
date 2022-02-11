@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/shared/pixels.dart';
+import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 import 'postForm.dart';
@@ -18,9 +18,14 @@ class NewPost extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      body: Container(
-        constraints: BoxConstraints.expand(),
-        child: PostForm(userData: userData),
+      body: GestureDetector(
+        onVerticalDragDown: (DragDownDetails ddd) {
+          dismissKeyboard(context);
+        },
+        child: Container(
+          constraints: BoxConstraints.expand(),
+          child: PostForm(userData: userData),
+        ),
       ),
     );
   }

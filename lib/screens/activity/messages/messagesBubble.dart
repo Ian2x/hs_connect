@@ -3,6 +3,7 @@ import 'package:hs_connect/models/message.dart';
 import 'package:bubble/bubble.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/pixels.dart';
+import 'package:hs_connect/shared/widgets/expandableImage.dart';
 import 'package:provider/provider.dart';
 
 class MessagesBubble extends StatelessWidget {
@@ -10,8 +11,6 @@ class MessagesBubble extends StatelessWidget {
   final bool isSentMessage;
 
   MessagesBubble({Key? key, required this.message, required this.isSentMessage}) : super(key: key);
-
-  final ImageStorage _images = ImageStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +31,12 @@ class MessagesBubble extends StatelessWidget {
     }
     if (message.isMedia!) {
       return Container(
-          height: 300*hp,
-          width: 300*wp,
+          //height: 300*hp,
+          //width: 300*wp,
           margin: EdgeInsets.only(top: 5*hp, bottom: 5*hp),
           child: Align(
               alignment: isSentMessage ? Alignment.centerRight : Alignment.centerLeft,
-              child: _images.getCachedImage(message.text, fit: BoxFit.scaleDown)));
+              child: ExpandableImage(imageURL: message.text, maxHeight: 900*hp, containerWidth: 300*wp)));
     }
     return Bubble(
         color: isSentMessage ? colorScheme.secondary.withOpacity(0.6) : colorScheme.primary.withOpacity(0.4),

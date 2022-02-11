@@ -23,6 +23,7 @@ import 'launchCountdown.dart';
 
 class Home extends StatefulWidget {
   final UserData userData;
+
   const Home({Key? key, required this.userData}) : super(key: key);
 
   @override
@@ -60,21 +61,18 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   void subscribeToDomain() async {
     NotificationSettings settings = await FirebaseMessaging.instance.getNotificationSettings();
-    if (settings.authorizationStatus==AuthorizationStatus.authorized) {
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       MyStorageManager.readData('subscribed').then((value) async {
-        if (value==true) {
+        if (value == true) {
           print('Already subscribed to topic');
         } else {
           print('Subscribing to topic: ' + widget.userData.domain.substring(1));
-          FirebaseMessaging.instance.subscribeToTopic(widget.userData.domain.substring(1)).then(
-            (aVoid) {
-              MyStorageManager.saveData('subscribed', true);
-              print("Successfully subscribed");
-            },
-            onError: (aVoid) {
-              MyStorageManager.saveData('subscribed', false);
-            }
-          );
+          FirebaseMessaging.instance.subscribeToTopic(widget.userData.domain.substring(1)).then((aVoid) {
+            MyStorageManager.saveData('subscribed', true);
+            print("Successfully subscribed");
+          }, onError: (aVoid) {
+            MyStorageManager.saveData('subscribed', false);
+          });
         }
       });
     }
@@ -83,8 +81,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   // It is assumed that all messages contain a data field with the key 'type'
   Future<void> setupInteractedMessage() async {
     // Get any messages which caused the application to open from a terminated state.
-    RemoteMessage? initialMessage =
-    await FirebaseMessaging.instance.getInitialMessage();
+    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
 
     // If the message also contains a data property with a "type" of "chat", navigate to a chat screen
     if (initialMessage != null) {
@@ -97,23 +94,30 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   void _handleMessage(RemoteMessage message) async {
     if (message.data[C.type] == C.featuredPost) {
-      Post post = postFromSnapshot(await FirebaseFirestore.instance.collection(C.posts).doc(message.data[C.postId]).get());
-      final data = await waitConcurrently(groupFromSnapshot(await post.groupRef.get()), userDataFromSnapshot(await post.creatorRef.get(), post.creatorRef));
+      Post post =
+          postFromSnapshot(await FirebaseFirestore.instance.collection(C.posts).doc(message.data[C.postId]).get());
+      final data = await waitConcurrently(groupFromSnapshot(await post.groupRef.get()),
+          userDataFromSnapshot(await post.creatorRef.get(), post.creatorRef));
       Group? group = data.item1;
       UserData creatorData = data.item2;
-      if (group!=null) {
+      if (group != null) {
         Navigator.push(
             context,
-            CupertinoPageRoute(
-                builder: (context) =>
-                    pixelProvider(context,
-                        child: PostPage(post: post, group: group, creatorData: creatorData, postLikesManager: PostLikesManager(
+            MaterialPageRoute(
+                builder: (context) => pixelProvider(context,
+                    child: PostPage(
+                        post: post,
+                        group: group,
+                        creatorData: creatorData,
+                        postLikesManager: PostLikesManager(
                             likeStatus: post.likes.contains(widget.userData.userRef),
                             dislikeStatus: post.dislikes.contains(widget.userData.userRef),
                             likeCount: post.likes.length,
                             dislikeCount: post.dislikes.length,
-                            onLike: () {}, onUnLike: () {}, onDislike: () {}, onUnDislike: () {}))
-                    )));
+                            onLike: () {},
+                            onUnLike: () {},
+                            onDislike: () {},
+                            onUnDislike: () {})))));
       }
     }
   }
@@ -134,7 +138,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       return Scaffold(backgroundColor: colorScheme.background, body: Loading());
     }
 
-    if (userData.launchDate!=null && userData.launchDate!.compareTo(Timestamp.now())>0) {
+    if (userData.launchDate != null && userData.launchDate!.compareTo(Timestamp.now()) > 0) {
       return LaunchCountdown(userData: userData);
     }
 
@@ -150,7 +154,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
               return [
                 SliverPersistentHeader(
-                  delegate: HomeAppBar(tabController: tabController, userData: userData, isDomain: isDomain, searchByTrending: searchByTrending, hp: hp, toggleSearch: toggleSearch, safeAreaHeight: MediaQuery.of(context).padding.top),
+                  delegate: HomeAppBar(
+                      tabController: tabController,
+                      userData: userData,
+                      isDomain: isDomain,
+                      searchByTrending: searchByTrending,
+                      hp: hp,
+                      toggleSearch: toggleSearch,
+                      safeAreaHeight: MediaQuery.of(context).padding.top),
                   pinned: true,
                   floating: true,
                 ),
@@ -158,8 +169,18 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             },
             body: TabBarView(
               children: [
-                DomainFeed(currUser: userData, isDomain: isDomain, searchByTrending: searchByTrending, key: ValueKey<bool>(searchByTrending)),
-                PublicFeed(currUser: userData, isDomain: isDomain, searchByTrending: searchByTrending, key: ValueKey<bool>(!searchByTrending)),
+                DomainFeed(
+                    currUser: userData,
+                    isDomain: isDomain,
+                    searchByTrending: searchByTrending,
+                    key: ValueKey<bool>(searchByTrending),
+                ),
+                PublicFeed(
+                    currUser: userData,
+                    isDomain: isDomain,
+                    searchByTrending: searchByTrending,
+                    key: ValueKey<bool>(!searchByTrending),
+                ),
               ],
               controller: tabController,
               physics: AlwaysScrollableScrollPhysics(),
@@ -167,9 +188,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           ),
         ],
       ),
-      bottomNavigationBar: MyNavigationBar(currentIndex: 0, currUserData: widget.userData,),
+      bottomNavigationBar: MyNavigationBar(
+        currentIndex: 0,
+        currUserData: widget.userData,
+      ),
       resizeToAvoidBottomInset: false,
     );
   }
 }
-

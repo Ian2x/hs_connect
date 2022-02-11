@@ -67,6 +67,7 @@ class Post {
   final DocumentReference? pollRef;
   final Tag? tag;
   final bool isFeatured;
+  final bool mature;
 
   Post({
     required this.postRef,
@@ -86,7 +87,8 @@ class Post {
     required this.numReports,
     required this.pollRef,
     required this.tag,
-    required this.isFeatured
+    required this.isFeatured,
+    required this.mature
   });
 }
 
@@ -110,7 +112,8 @@ postFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
     numReports: querySnapshot[C.numReports],
     pollRef: querySnapshot[C.pollRef],
     tag: tagFrom(querySnapshot[C.tag]),
-    isFeatured: querySnapshot[C.isFeatured]
+    isFeatured: querySnapshot[C.isFeatured],
+    mature: querySnapshot[C.mature]
   );
 }
 
@@ -134,6 +137,7 @@ Post postFromSnapshot(DocumentSnapshot snapshot) {
     numReports: snapshot[C.numReports],
     pollRef: snapshot[C.pollRef],
     tag: tagFrom(snapshot[C.tag]),
-    isFeatured: snapshot[C.isFeatured]
+    isFeatured: snapshot[C.isFeatured],
+    mature: snapshot[C.mature]
   );
 }

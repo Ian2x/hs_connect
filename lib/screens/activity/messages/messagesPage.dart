@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/models/userData.dart';
@@ -8,6 +7,7 @@ import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/reports/reportSheet.dart';
+import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
 import 'package:hs_connect/shared/widgets/myDivider.dart';
 import 'package:provider/provider.dart';
@@ -36,6 +36,14 @@ class MessagesPage extends StatelessWidget {
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      onVerticalDragDown: (DragDownDetails ddd) {
+        dismissKeyboard(context);
+      },
+      onPanUpdate: (details) {
+        if (details.delta.dx > 15) {
+          Navigator.of(context).pop();
+        }
+      },
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: colorScheme.surface,

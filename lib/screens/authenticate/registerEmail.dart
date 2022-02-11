@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hs_connect/screens/authenticate/waitVerification.dart';
@@ -11,7 +10,6 @@ import 'package:hs_connect/shared/widgets/checkboxFormField.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'authBar.dart';
 

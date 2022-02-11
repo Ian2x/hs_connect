@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/searchSelectionSheet.dart';
-import 'package:hs_connect/services/auth.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';

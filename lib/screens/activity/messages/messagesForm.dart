@@ -56,7 +56,7 @@ class _MessagesFormState extends State<MessagesForm> {
     MessagesDatabaseService _messages = MessagesDatabaseService(currUserRef: userData.userRef);
 
     return Container(
-      padding: EdgeInsets.fromLTRB(10*wp, 10*hp, 10*wp, 10*hp),
+      padding: EdgeInsets.fromLTRB(10*wp, 10*hp, 10*wp, MediaQuery.of(context).padding.bottom>10 ? MediaQuery.of(context).padding.bottom : 10*hp),
       color: colorScheme.background,
       child: Form(
              key: _formKey,

@@ -88,7 +88,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
                 } else if (index == 3) {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => pixelProvider(context, child: NewPost())),
+                    NoAnimationMaterialPageRoute(builder: (context) => pixelProvider(context, child: NewPost())),
                   );
                 }
               },

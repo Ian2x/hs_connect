@@ -1,0 +1,36 @@
+dependencies: \
+  /Users/ianhu/StudioProjects/hs_connect/ios/Runner/GeneratedPluginRegistrant.m \
+  /Users/ianhu/StudioProjects/hs_connect/ios/Runner/GeneratedPluginRegistrant.h \
+  /Users/ianhu/StudioProjects/hs_connect/ios/build/Debug-iphoneos/Flutter.framework/Modules/module.modulemap \
+  /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/usr/include/kcdata.modulemap \
+  /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/usr/include/uuid.modulemap \
+  /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/usr/include/netinet6.modulemap \
+  /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/usr/include/machine.modulemap \
+  /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/usr/include/device.modulemap \
+  /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/usr/include/mach_debug.modulemap \
+  /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/usr/include/mach_machine.modulemap \
+  /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/usr/include/mach.modulemap \
+  /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/usr/include/bank.modulemap \
+  /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/usr/include/darwin_posix_sys_types.modulemap \
+  /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/usr/include/netinet.modulemap \
+  /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/usr/include/net.modulemap \
+  /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/usr/include/darwin_cdefs.modulemap \
+  /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/usr/include/mach-o/compact_unwind_encoding.modulemap \
+  /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/usr/include/mach-o/dyld.modulemap \
+  /Users/ianhu/StudioProjects/hs_connect/ios/Pods/Firebase/CoreOnly/Sources/module.modulemap \
+  /Users/ianhu/StudioProjects/hs_connect/ios/build/Debug-iphoneos/Flutter.framework/Headers/FlutterViewController.h \
+  /Users/ianhu/StudioProjects/hs_connect/ios/build/Debug-iphoneos/Flutter.framework/Headers/FlutterPluginAppLifeCycleDelegate.h \
+  /Users/ianhu/StudioProjects/hs_connect/ios/build/Debug-iphoneos/Flutter.framework/Headers/FlutterHeadlessDartRunner.h \
+  /Users/ianhu/StudioProjects/hs_connect/ios/build/Debug-iphoneos/Flutter.framework/Headers/FlutterEngineGroup.h \
+  /Users/ianhu/StudioProjects/hs_connect/ios/build/Debug-iphoneos/Flutter.framework/Headers/FlutterEngine.h \
+  /Users/ianhu/StudioProjects/hs_connect/ios/build/Debug-iphoneos/Flutter.framework/Headers/FlutterDartProject.h \
+  /Users/ianhu/StudioProjects/hs_connect/ios/build/Debug-iphoneos/Flutter.framework/Headers/FlutterCallbackCache.h \
+  /Users/ianhu/StudioProjects/hs_connect/ios/build/Debug-iphoneos/Flutter.framework/Headers/FlutterTexture.h \
+  /Users/ianhu/StudioProjects/hs_connect/ios/build/Debug-iphoneos/Flutter.framework/Headers/FlutterPlatformViews.h \
+  /Users/ianhu/StudioProjects/hs_connect/ios/build/Debug-iphoneos/Flutter.framework/Headers/FlutterCodecs.h \
+  /Users/ianhu/StudioProjects/hs_connect/ios/build/Debug-iphoneos/Flutter.framework/Headers/FlutterChannels.h \
+  /Users/ianhu/StudioProjects/hs_connect/ios/build/Debug-iphoneos/Flutter.framework/Headers/FlutterBinaryMessenger.h \
+  /Users/ianhu/StudioProjects/hs_connect/ios/build/Debug-iphoneos/Flutter.framework/Headers/FlutterPlugin.h \
+  /Users/ianhu/StudioProjects/hs_connect/ios/build/Debug-iphoneos/Flutter.framework/Headers/FlutterMacros.h \
+  /Users/ianhu/StudioProjects/hs_connect/ios/build/Debug-iphoneos/Flutter.framework/Headers/FlutterAppDelegate.h \
+  /Users/ianhu/StudioProjects/hs_connect/ios/build/Debug-iphoneos/Flutter.framework/Headers/Flutter.h
