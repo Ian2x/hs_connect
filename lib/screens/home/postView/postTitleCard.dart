@@ -102,7 +102,14 @@ class _PostTitleCardState extends State<PostTitleCard> {
                     style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary, fontSize: postCardDetailSize+1)
                   ),
                 ),
-                Spacer(flex:1),
+                widget.post.mature ? Text(
+                  " • Mature",
+                  style: Theme.of(context)
+                      .textTheme
+                      .subtitle2
+                      ?.copyWith(color: colorScheme.primary, fontSize: postCardDetailSize+1),
+                ) : Container(),
+                Spacer(),
                 IconButton(
                   icon: Icon(Icons.more_horiz),
                   iconSize: 20*hp,

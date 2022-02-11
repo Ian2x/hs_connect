@@ -9,7 +9,6 @@ import 'package:hs_connect/services/polls_database.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
-import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/animatedSwitch.dart';
 import 'package:hs_connect/shared/widgets/deletableImage.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
@@ -35,7 +34,7 @@ class PostForm extends StatefulWidget {
 }
 
 class _PostFormState extends State<PostForm> {
-  late FocusNode optionalTextFocusNode;
+  FocusNode optionalTextFocusNode = FocusNode();
   final _formKey = GlobalKey<FormState>();
 
   void handleError(err) {
@@ -74,7 +73,6 @@ class _PostFormState extends State<PostForm> {
   @override
   void initState() {
     getGroupChoices();
-    optionalTextFocusNode = FocusNode();
     super.initState();
   }
 
@@ -313,9 +311,7 @@ class _PostFormState extends State<PostForm> {
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
-                      if (optionalTextFocusNode.hasFocus) {
-                        optionalTextFocusNode.unfocus();
-                      } else {
+                      if (!optionalTextFocusNode.hasFocus) {
                         optionalTextFocusNode.requestFocus();
                       }
                     },
@@ -351,85 +347,82 @@ class _PostFormState extends State<PostForm> {
       Positioned(
           bottom: MediaQuery.of(context).padding.bottom,
           left: 0,
-          child: GestureDetector(
-            onTap: ()=>dismissKeyboard(context),
+          child: Container(
+            color: userData.domainColor!=null ? userData.domainColor! : colorScheme.onSurface,
+            padding: EdgeInsets.only(top: bottomGradientThickness*hp),
+            width:MediaQuery.of(context).size.width,
             child: Container(
-              color: userData.domainColor!=null ? userData.domainColor! : colorScheme.onSurface,
-              padding: EdgeInsets.only(top: bottomGradientThickness*hp),
-              width:MediaQuery.of(context).size.width,
-              child: Container(
-                color: colorScheme.surface,
-                child: Row(children: <Widget>[
-                  SizedBox(width: 10*wp),
-                  picPickerButton(
-                      iconSize: 30*hp,
-                      color: newFile == null ? colorScheme.primary : colorScheme.secondary,
-                      setPic: ((File? f) {
-                        if (mounted) {
-                          setState(() {
-                            newFile = f;
-                            poll = null;
-                          });
-                        }
-                      }), context: context, maxHeight: 400*hp, maxWidth: 400*wp),
-                  SizedBox(width: 2 * wp),
-                  IconButton(
-                      onPressed: () {
-                        if (mounted) {
-                          setState(() {
-                            pollChoices = [];
-                            pollChoices!.add('');
-                            pollChoices!.add('');
-                            poll = NewPoll(onDeletePoll: () {
-                              if (mounted) {
-                                setState(() {
-                                  poll = null;
-                                  pollChoices = null;
-                                  if (error == emptyPollChoiceError) {
-                                    error = null;
-                                  }
-                                });
-                              }
-                            }, onUpdatePoll: (int index, String newChoice) {
-                              if (mounted) {
-                                setState(() {
-                                  pollChoices![index] = newChoice;
-                                  if (error == emptyPollChoiceError) {
-                                    for (String choice in pollChoices!) {
-                                      if (choice == '') return;
-                                    }
-                                  }
-                                  error = null;
-                                });
-                              }
-                            }, onAddPollChoice: () {
-                              if (mounted) {
-                                setState(() {
-                                  pollChoices!.add('');
-                                });
-                              }
-                            });
-                            newFile = null;
-                          });
-                        }
-                      },
-                      icon: Icon(Icons.assessment,
-                          size: 30*hp, color: poll == null ? colorScheme.primary : colorScheme.secondary),
-                  ),
-                  Spacer(),
-                  Text("Mature", style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontWeight: FontWeight.w500)),
-                  SizedBox(width: 10*wp),
-                  AnimatedSwitch(
-                    initialState: isMature,
-                    onToggle: () {
+              color: colorScheme.surface,
+              child: Row(children: <Widget>[
+                SizedBox(width: 10*wp),
+                picPickerButton(
+                    iconSize: 30*hp,
+                    color: newFile == null ? colorScheme.primary : colorScheme.secondary,
+                    setPic: ((File? f) {
                       if (mounted) {
-                        setState(() => isMature = !isMature);
+                        setState(() {
+                          newFile = f;
+                          poll = null;
+                        });
+                      }
+                    }), context: context, maxHeight: 400*hp, maxWidth: 400*wp),
+                SizedBox(width: 2 * wp),
+                IconButton(
+                    onPressed: () {
+                      if (mounted) {
+                        setState(() {
+                          pollChoices = [];
+                          pollChoices!.add('');
+                          pollChoices!.add('');
+                          poll = NewPoll(onDeletePoll: () {
+                            if (mounted) {
+                              setState(() {
+                                poll = null;
+                                pollChoices = null;
+                                if (error == emptyPollChoiceError) {
+                                  error = null;
+                                }
+                              });
+                            }
+                          }, onUpdatePoll: (int index, String newChoice) {
+                            if (mounted) {
+                              setState(() {
+                                pollChoices![index] = newChoice;
+                                if (error == emptyPollChoiceError) {
+                                  for (String choice in pollChoices!) {
+                                    if (choice == '') return;
+                                  }
+                                }
+                                error = null;
+                              });
+                            }
+                          }, onAddPollChoice: () {
+                            if (mounted) {
+                              setState(() {
+                                pollChoices!.add('');
+                              });
+                            }
+                          });
+                          newFile = null;
+                        });
                       }
                     },
-                  ),
-                  SizedBox(width: 10*wp),
-                ]),
-              ),
+                    icon: Icon(Icons.assessment,
+                        size: 30*hp, color: poll == null ? colorScheme.primary : colorScheme.secondary),
+                ),
+                Spacer(),
+                Text("Mature", style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontWeight: FontWeight.w500)),
+                SizedBox(width: 10*wp),
+                AnimatedSwitch(
+                  initialState: isMature,
+                  onToggle: () {
+                    if (mounted) {
+                      setState(() => isMature = !isMature);
+                    }
+                  },
+                ),
+                SizedBox(width: 10*wp),
+              ]),
             ),
           )),
     ]);

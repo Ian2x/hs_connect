@@ -5,6 +5,7 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/postView/postCard.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/myStorageManager.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -14,9 +15,8 @@ class DomainFeed extends StatefulWidget {
   final UserData currUser;
   final bool isDomain;
   final bool searchByTrending;
-  final bool matureEnabled;
 
-  const DomainFeed({Key? key, required this.currUser, required this.isDomain, required this.searchByTrending, required this.matureEnabled}) : super(key: key);
+  const DomainFeed({Key? key, required this.currUser, required this.isDomain, required this.searchByTrending}) : super(key: key);
 
   @override
   _DomainFeedState createState() => _DomainFeedState();
@@ -32,6 +32,8 @@ class _DomainFeedState extends State<DomainFeed> with AutomaticKeepAliveClientMi
 
   late PostsDatabaseService _posts;
 
+  bool? showMaturePosts;
+
 
   @override
   void initState() {
@@ -39,7 +41,19 @@ class _DomainFeedState extends State<DomainFeed> with AutomaticKeepAliveClientMi
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
+    getShowMaturePosts();
     super.initState();
+  }
+
+  void getShowMaturePosts() async {
+    final data = await MyStorageManager.readData('mature');
+    if (mounted) {
+      if (data==false) {
+        setState(() => showMaturePosts = false);
+      } else {
+        setState(() => showMaturePosts = true);
+      }
+    }
   }
 
   Future<void> _fetchPage(DocumentSnapshot? pageKey) async {
@@ -66,7 +80,7 @@ class _DomainFeedState extends State<DomainFeed> with AutomaticKeepAliveClientMi
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    if (!widget.isDomain) return Loading();
+    if (!widget.isDomain || showMaturePosts==null) return Loading();
 
     final hp = Provider.of<HeightPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
@@ -84,7 +98,7 @@ class _DomainFeedState extends State<DomainFeed> with AutomaticKeepAliveClientMi
           padding: EdgeInsets.zero,
           builderDelegate: PagedChildBuilderDelegate<Post>(
               itemBuilder: (context, post, index) {
-                if (!widget.matureEnabled && post.mature) {
+                if (!(showMaturePosts!) && post.mature) {
                   return Container();
                 }
                 return Center(

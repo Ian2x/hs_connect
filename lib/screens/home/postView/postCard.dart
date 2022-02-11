@@ -202,6 +202,13 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                             .subtitle2
                             ?.copyWith(color: colorScheme.primary, fontSize: postCardDetailSize),
                       ),
+                      widget.post.mature ? Text(
+                        " • Mature",
+                        style: Theme.of(context)
+                            .textTheme
+                            .subtitle2
+                            ?.copyWith(color: colorScheme.primary, fontSize: postCardDetailSize),
+                      ) : Container(),
                       Spacer(),
                       widget.post.isFeatured
                           ? Container(

@@ -12,8 +12,6 @@ class MessagesBubble extends StatelessWidget {
 
   MessagesBubble({Key? key, required this.message, required this.isSentMessage}) : super(key: key);
 
-  final ImageStorage _images = ImageStorage();
-
   @override
   Widget build(BuildContext context) {
     final wp = Provider.of<WidthPixel>(context).value;

@@ -222,4 +222,5 @@ class C {
   static const postId = 'postId';
   static const launchDate = 'launchDate';
   static const mature = 'mature';
+  static const user = 'user';
 }

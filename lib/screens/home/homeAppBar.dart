@@ -21,11 +21,9 @@ class HomeAppBar extends SliverPersistentHeaderDelegate{
   final VoidFunction toggleSearch;
   final double hp;
   final double safeAreaHeight;
-  final bool matureEnabled;
-  final VoidFunction toggleMature;
 
   HomeAppBar({required this.tabController, required this.userData, required this.isDomain,
-    required this.searchByTrending, required this.hp, required this.toggleSearch, required this.safeAreaHeight, required this.matureEnabled, required this.toggleMature});
+    required this.searchByTrending, required this.hp, required this.toggleSearch, required this.safeAreaHeight});
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
@@ -96,15 +94,6 @@ class HomeAppBar extends SliverPersistentHeaderDelegate{
                       ],
                     ),
                   ],
-                ),
-                Positioned(
-                  left: 14*wp,
-                  top: 6.5*hp,
-                  child: GestureDetector(
-                    onTap: () {
-                      toggleMature();
-                    },
-                    child: Text('Mature', style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 13*hp, decoration: matureEnabled ? null : TextDecoration.lineThrough)))
                 ),
                 Positioned(
                     left: 333*wp,

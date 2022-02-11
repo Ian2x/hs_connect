@@ -36,7 +36,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   ScrollController scrollController = ScrollController();
   var top = 0.0;
   bool searchByTrending = true;
-  bool matureEnabled = true;
 
   void toggleSearch() {
     if (mounted) {
@@ -162,13 +161,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       searchByTrending: searchByTrending,
                       hp: hp,
                       toggleSearch: toggleSearch,
-                      safeAreaHeight: MediaQuery.of(context).padding.top,
-                      matureEnabled: matureEnabled,
-                      toggleMature: () {
-                        if (mounted){
-                          setState(() => matureEnabled = !matureEnabled);
-                        }
-                      }),
+                      safeAreaHeight: MediaQuery.of(context).padding.top),
                   pinned: true,
                   floating: true,
                 ),
@@ -181,14 +174,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     isDomain: isDomain,
                     searchByTrending: searchByTrending,
                     key: ValueKey<bool>(searchByTrending),
-                    matureEnabled: matureEnabled,
                 ),
                 PublicFeed(
                     currUser: userData,
                     isDomain: isDomain,
                     searchByTrending: searchByTrending,
                     key: ValueKey<bool>(!searchByTrending),
-                    matureEnabled: matureEnabled,
                 ),
               ],
               controller: tabController,

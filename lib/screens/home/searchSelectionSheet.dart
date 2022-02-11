@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pixels.dart';
@@ -28,9 +30,11 @@ class _SearchSelectionSheetState extends State<SearchSelectionSheet> {
     final wp = Provider.of<WidthPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
 
+    final bottomSpace = max(MediaQuery.of(context).padding.bottom, 25*hp);
+
     return Container(
-      height: 208*hp,
-        padding: EdgeInsets.fromLTRB(25*wp, 25*hp, 25*wp, 25*hp),
+      height: 167*hp + bottomSpace,
+        padding: EdgeInsets.fromLTRB(25*wp, 25*hp, 25*wp, bottomSpace),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
