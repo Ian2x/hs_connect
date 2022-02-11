@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/models/comment.dart';
 import 'package:hs_connect/shared/pixels.dart';
@@ -58,6 +59,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               color: colorScheme.secondary,
               icon: Icon(Arrows.up_open_big, color: colorScheme.secondary),
               onPressed: () {
+                HapticFeedback.heavyImpact();
                 _comments.unLikeComment(widget.comment.creatorRef!);
                 if (mounted) {
                   setState(() {
@@ -76,6 +78,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               color: colorScheme.primaryVariant,
               icon: Icon(Arrows.up_open_big),
               onPressed: () {
+                HapticFeedback.heavyImpact();
                 if (mounted) {
                   setState(() {
                     likeCount += 1;
@@ -105,6 +108,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               color: colorScheme.secondary,
               icon: Icon(Arrows.down_open_big, color: colorScheme.secondary),
               onPressed: () {
+                HapticFeedback.heavyImpact();
                 _comments.unDislikeComment();
                 if (mounted) {
                   setState(() {
@@ -123,6 +127,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               color: colorScheme.primaryVariant,
               icon: Icon(Arrows.down_open_big),
               onPressed: () {
+                HapticFeedback.heavyImpact();
                 _comments.dislikeComment();
                 setState(() {
                   dislikeCount += 1;

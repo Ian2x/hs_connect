@@ -411,9 +411,9 @@ class _PostFormState extends State<PostForm> {
                         size: 30*hp, color: poll == null ? colorScheme.primary : colorScheme.secondary),
                 ),
                 Spacer(),
-                Text("Mature", style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontWeight: FontWeight.w500)),
+                Text("Mature", style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.primary, fontWeight: FontWeight.w500)),
                 SizedBox(width: 10*wp),
-                AnimatedSwitch(
+                AnimatedSwitch2(
                   initialState: isMature,
                   onToggle: () {
                     if (mounted) {

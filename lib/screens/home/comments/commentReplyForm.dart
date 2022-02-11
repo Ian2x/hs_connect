@@ -132,7 +132,8 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
               isReply: widget.isReply,
               onPressed: () async {
                 onSubmit();
-              }, isFocused: widget.focusNode.hasFocus, hasText: _text!=''),
+              },
+              isFocused: widget.focusNode.hasFocus, hasText: _text!=''),
           validator:
             widget.isReply!= false ? (val) {
                 if (val == null) return 'Write a reply...';

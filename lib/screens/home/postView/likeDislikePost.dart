@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/postLikesManager.dart';
 import 'package:hs_connect/services/posts_database.dart';
@@ -47,6 +48,7 @@ class LikeDislikePost extends StatelessWidget {
               color: colorScheme.secondary,
               icon: Icon(Arrows.up_open_big, color: colorScheme.secondary),
               onPressed: () {
+                HapticFeedback.heavyImpact();
                 _posts.unLikePost(post);
                 postLikesManager.onUnLike();
               },
@@ -59,6 +61,7 @@ class LikeDislikePost extends StatelessWidget {
               constraints: BoxConstraints(),
               icon: Icon(Arrows.up_open_big),
               onPressed: () {
+                HapticFeedback.heavyImpact();
                 _posts.likePost(post, postLikesManager.likeCount);
                 postLikesManager.onLike();
               },
@@ -84,6 +87,7 @@ class LikeDislikePost extends StatelessWidget {
               color: colorScheme.secondary,
               icon: Icon(Arrows.down_open_big, color: colorScheme.onBackground),
               onPressed: () {
+                HapticFeedback.heavyImpact();
                 _posts.unDislikePost();
                 postLikesManager.onUnDislike();
               },
@@ -96,6 +100,7 @@ class LikeDislikePost extends StatelessWidget {
               constraints: BoxConstraints(),
               icon: Icon(Arrows.down_open_big),
               onPressed: () {
+                HapticFeedback.heavyImpact();
                 _posts.dislikePost();
                 postLikesManager.onDislike();
               },

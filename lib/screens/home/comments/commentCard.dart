@@ -93,41 +93,62 @@ class _CommentCardState extends State<CommentCard> {
     return Container(
         padding: EdgeInsets.fromLTRB(17 * wp, 0 * hp, 17 * wp, 0 * hp),
         child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-          Container(
-            alignment: Alignment.centerLeft,
-            height: 33 * hp,
-            child: TextButton(
-              style: TextButton.styleFrom(
-                  splashFactory: NoSplash.splashFactory, padding: EdgeInsets.zero, alignment: Alignment.centerLeft),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => pixelProvider(context,
-                          child:
-                              ProfilePage(profileRef: widget.comment.creatorRef!, currUserData: widget.currUserData))),
-                );
-              },
-              child: RichText(text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: localCreatorName + " • ",
-                    style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                        color: colorScheme.primaryVariant,
-                        fontSize: commentReplyDetailSize,
-                        fontWeight: FontWeight.w300)
+          Row(
+            children: [
+              Container(
+                alignment: Alignment.centerLeft,
+                height: 33 * hp,
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                      splashFactory: NoSplash.splashFactory, padding: EdgeInsets.zero, alignment: Alignment.centerLeft),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => pixelProvider(context,
+                              child:
+                                  ProfilePage(profileRef: widget.comment.creatorRef!, currUserData: widget.currUserData))),
+                    );
+                  },
+                  child: RichText(text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: localCreatorName + " • ",
+                        style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                            color: colorScheme.primaryVariant,
+                            fontSize: commentReplyDetailSize,
+                            fontWeight: FontWeight.w300)
+                      ),
+                      TextSpan(
+                        text: localCreatorGroupName,
+                        style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                            color: creatorGroupColor != null ? creatorGroupColor : colorScheme.primaryVariant,
+                            fontSize: commentReplyDetailSize,
+                            fontWeight: FontWeight.w300)
+                      )
+                    ]
                   ),
-                  TextSpan(
-                    text: localCreatorGroupName,
-                    style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                        color: creatorGroupColor != null ? creatorGroupColor : colorScheme.primaryVariant,
-                        fontSize: commentReplyDetailSize,
-                        fontWeight: FontWeight.w300)
                   )
-                ]
+                ),
               ),
+              Spacer(),
+              widget.comment.creatorRef==widget.currUserData.userRef
+                  ? Container(
+                padding: EdgeInsets.only(right: 10 * wp, top: 5 * hp),
+                child: Container(
+                    decoration: BoxDecoration(
+                        color: creatorGroupColor != null ? creatorGroupColor : colorScheme.primary, borderRadius: BorderRadius.circular(17 * hp)),
+                    child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(17 * hp),
+                          color: Theme.of(context).colorScheme.surface,
+                        ),
+                        padding: EdgeInsets.fromLTRB(10 * wp, 0* hp, 10 * wp, 1 * hp),
+                        margin: EdgeInsets.all(1 * hp),
+                        child: Text('Creator', style: Theme.of(context).textTheme.subtitle2?.copyWith(color: creatorGroupColor != null ? creatorGroupColor : colorScheme.primary, fontSize: 12)))),
               )
-            ),
+                  : Container(),
+            ],
           ),
           SizedBox(height: 4*hp),
           SizedBox(
