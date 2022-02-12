@@ -61,7 +61,9 @@ class UserDataDatabaseService {
       C.numReports: 0,
       C.private: false,
       C.notificationsLastViewed: Timestamp.now(),
-      C.recoveryCode: sha1.convert(utf8.encode(domainEmail)).toString()
+      C.recoveryCode: sha1.convert(utf8.encode(domainEmail)).toString(),
+      C.blockedUserRefs: [],
+      C.blockedPostRefs: []
     });
     // join domain group
     await joinGroup(groupRef: domainGroupRef);

@@ -41,6 +41,9 @@ class _RepliesFeedState extends State<RepliesFeed> {
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               itemBuilder: (BuildContext context, int index) {
+                  if (userData.blockedUserRefs.contains(replies[index].creatorRef)) {
+                    return Container();
+                  }
                   return Center(
                     child: ReplyCard(
                     isLast: index==replies.length-1,

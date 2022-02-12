@@ -79,9 +79,13 @@ class _CommentsFeedState extends State<CommentsFeed> {
               });
 
               return GestureDetector(
-                onTap: () {
+                onVerticalDragDown: (DragDownDetails ddd) {
                   dismissKeyboard(context);
-                  isReply = false;
+                },
+                onPanUpdate: (details) {
+                  if (details.delta.dx > 15) {
+                    Navigator.of(context).pop();
+                  }
                 },
                 child: ListView.builder(
                   itemCount: comments.length + 3,
@@ -98,8 +102,11 @@ class _CommentsFeedState extends State<CommentsFeed> {
                     } else if (index == 1) {
                       return Divider(thickness: 5 * hp, color: colorScheme.background, height: 10 * hp);
                     } else if (index == comments.length + 2) {
-                      return SizedBox(height: 70 * hp);
+                      return SizedBox(height: 130 * hp);
                     } else {
+                      if (userData.blockedUserRefs.contains(comments[index - 2].creatorRef)) {
+                        return Container();
+                      }
                       return CommentCard(
                         focusKeyboard: () {
                           myFocusNode.requestFocus();

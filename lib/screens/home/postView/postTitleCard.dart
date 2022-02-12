@@ -37,6 +37,7 @@ class PostTitleCard extends StatefulWidget {
 
 class _PostTitleCardState extends State<PostTitleCard> {
   String? creatorName;
+  String? creatorGroup;
   Poll? poll;
 
   @override
@@ -53,6 +54,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
     if (mounted) {
       setState(() {
         creatorName = fetchUserData != null ? fetchUserData.fundamentalName : null;
+        creatorGroup = fetchUserData != null ? (fetchUserData.fullDomainName!=null ? fetchUserData.fullDomainName : fetchUserData.domain) : null;
       });
     }
   }
@@ -77,6 +79,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
     final leftRightPadding = 15*wp;
 
     final localCreatorName = creatorName != null ? creatorName! : '';
+    final localCreatorGroup = creatorGroup != null ? creatorGroup! : '';
 
     return Container(
         padding: EdgeInsets.fromLTRB(leftRightPadding*wp, 0, leftRightPadding*wp, 10*hp),
@@ -98,19 +101,19 @@ class _PostTitleCardState extends State<PostTitleCard> {
                       );
                     }
                   },
-                  child: Text("from " + localCreatorName + " • " + convertTime(widget.post.createdAt.toDate()),
+                  child: Text("from " + localCreatorName + " • " + localCreatorGroup + " • " + convertTime(widget.post.createdAt.toDate()),
                     style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary, fontSize: postCardDetailSize+1)
                   ),
                 ),
+                Spacer(),
                 widget.post.mature ? Text(
-                  " • Mature",
+                  "Mature",
                   style: Theme.of(context)
                       .textTheme
                       .subtitle2
                       ?.copyWith(color: colorScheme.primary, fontSize: postCardDetailSize+1),
                 ) : Container(),
-                Spacer(),
-                IconButton(
+                widget.post.creatorRef!=widget.currUserRef ? IconButton(
                   icon: Icon(Icons.more_horiz),
                   iconSize: 20*hp,
                   color: colorScheme.primary,
@@ -124,10 +127,11 @@ class _PostTitleCardState extends State<PostTitleCard> {
                         builder: (context) => pixelProvider(context, child: ReportSheet(
                           reportType: ReportType.post,
                           entityRef: widget.post.postRef,
+                          entityCreatorRef: widget.post.creatorRef,
                         )));
 
                   },
-                )
+                ) : Container(height: 48*hp)
               ]
             ), //introRow
             Text( widget.post.title,
@@ -136,7 +140,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
             SizedBox(height:12*hp),
             widget.post.text!= null && widget.post.text!=""?
               Text(widget.post.text!,
-                style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16*hp)) : Container(),
+                style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16*hp, fontFamily: "Roboto", height: 1.3)) : Container(),
             widget.post.mediaURL != null ?
               ExpandableImage(imageURL: widget.post.mediaURL!, maxHeight: 450*hp, containerWidth: MediaQuery.of(context).size.width-2*leftRightPadding)
                 : Container(),

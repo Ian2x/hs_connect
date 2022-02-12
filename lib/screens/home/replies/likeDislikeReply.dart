@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hs_connect/models/reply.dart';
 import 'package:hs_connect/services/replies_database.dart';
 import 'package:hs_connect/shared/pixels.dart';
@@ -61,6 +62,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
               color: colorScheme.secondary,
               icon: Icon(Arrows.up_open_big, color: colorScheme.secondary),
               onPressed: () {
+                HapticFeedback.heavyImpact();
                 _replies.unLikeReply(widget.reply.creatorRef!);
                 if (mounted) {
                   setState(() {
@@ -79,6 +81,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
               color: colorScheme.primaryVariant,
               icon: Icon(Arrows.up_open_big),
               onPressed: () {
+                HapticFeedback.heavyImpact();
                 if (mounted) {
                   setState(() {
                     likeCount += 1;
@@ -108,6 +111,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
               color: colorScheme.secondary,
               icon: Icon(Arrows.down_open_big, color: colorScheme.secondary),
               onPressed: () {
+                HapticFeedback.heavyImpact();
                 _replies.unDislikeReply();
                 if (mounted) {
                   setState(() {
@@ -126,6 +130,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
               color: colorScheme.primaryVariant,
               icon: Icon(Arrows.down_open_big),
               onPressed: () {
+                HapticFeedback.heavyImpact();
                 _replies.dislikeReply();
                 if (mounted) {
                   setState(() {

@@ -223,4 +223,6 @@ class C {
   static const launchDate = 'launchDate';
   static const mature = 'mature';
   static const user = 'user';
+  static const blockedPostRefs = 'blockedPostRefs';
+  static const blockedUserRefs = 'blockedUserRefs';
 }

@@ -50,25 +50,15 @@ class PostPage extends StatelessWidget {
         bottom: MyDivider()
       ),
       body:
-          GestureDetector(
-            onVerticalDragDown: (DragDownDetails ddd) {
-              dismissKeyboard(context);
-            },
-            onPanUpdate: (details) {
-              if (details.delta.dx > 15) {
-                Navigator.of(context).pop();
-              }
-            },
-            child: Container(
-              padding: EdgeInsets.zero,
-              constraints: BoxConstraints(
-                minHeight: MediaQuery.of(context).size.height,
-              ),
-              child: Provider<PostLikesManager>.value(
-                value: postLikesManager,
-                child: CommentsFeed(post: post, group: group),
-              )
+          Container(
+            padding: EdgeInsets.zero,
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height,
             ),
+            child: Provider<PostLikesManager>.value(
+              value: postLikesManager,
+              child: CommentsFeed(post: post, group: group),
+            )
           )
     );
   }

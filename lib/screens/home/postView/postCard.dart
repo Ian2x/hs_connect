@@ -202,14 +202,23 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                             .subtitle2
                             ?.copyWith(color: colorScheme.primary, fontSize: postCardDetailSize),
                       ),
-                      widget.post.mature ? Text(
-                        " • Mature",
-                        style: Theme.of(context)
-                            .textTheme
-                            .subtitle2
-                            ?.copyWith(color: colorScheme.primary, fontSize: postCardDetailSize),
-                      ) : Container(),
                       Spacer(),
+                      widget.post.mature && !widget.post.isFeatured
+                          ? Container(
+                              padding: EdgeInsets.only(right: 10 * wp, top: 0 * hp),
+                              child: Container(
+                                  decoration: BoxDecoration(
+                                      color: colorScheme.primary, borderRadius: BorderRadius.circular(17 * hp)),
+                                  child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(17 * hp),
+                                        color: Theme.of(context).colorScheme.surface,
+                                      ),
+                                      padding: EdgeInsets.fromLTRB(14 * wp, 2* hp, 14 * wp, 3 * hp),
+                                      margin: EdgeInsets.all(1.5 * hp),
+                                      child: Text('Mature', style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary, fontSize: 12)))),
+                            )
+                          : Container(),
                       widget.post.isFeatured
                           ? Container(
                               padding: EdgeInsets.only(right: 10 * wp, top: 0 * hp),
@@ -221,9 +230,9 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                                         borderRadius: BorderRadius.circular(17 * hp),
                                         color: Theme.of(context).colorScheme.surface,
                                       ),
-                                      padding: EdgeInsets.fromLTRB(17 * wp, 5 * hp, 17 * wp, 6 * hp),
-                                      margin: EdgeInsets.all(2 * hp),
-                                      child: Text('Featured', style: Theme.of(context).textTheme.subtitle2))),
+                                      padding: EdgeInsets.fromLTRB(14 * wp, 2 * hp, 14 * wp, 3 * hp),
+                                      margin: EdgeInsets.all(1.5 * hp),
+                                      child: Text('Featured', style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 12)))),
                             )
                           : Container(),
                     ],
@@ -265,24 +274,27 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                               .subtitle2
                               ?.copyWith(color: colorScheme.primary, fontSize: postCardDetailSize),
                         ),
-                        IconButton(
-                          constraints: BoxConstraints(),
-                          splashRadius: .1,
-                          icon: Icon(Icons.more_horiz, size: 20 * hp, color: colorScheme.primary),
-                          onPressed: () {
-                            showModalBottomSheet(
-                                context: context,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(20 * hp),
-                                )),
-                                builder: (context) => pixelProvider(context,
-                                    child: ReportSheet(
-                                      reportType: ReportType.post,
-                                      entityRef: widget.post.postRef,
-                                    )));
-                          },
-                        ),
+                        widget.currUser.userRef != widget.post.creatorRef
+                            ? IconButton(
+                                constraints: BoxConstraints(),
+                                splashRadius: .1,
+                                icon: Icon(Icons.more_horiz, size: 20 * hp, color: colorScheme.primary),
+                                onPressed: () {
+                                  showModalBottomSheet(
+                                      context: context,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(20 * hp),
+                                      )),
+                                      builder: (context) => pixelProvider(context,
+                                          child: ReportSheet(
+                                            reportType: ReportType.post,
+                                            entityRef: widget.post.postRef,
+                                            entityCreatorRef: widget.post.creatorRef,
+                                          )));
+                                },
+                              )
+                            : Container(height: 38 * hp),
                         Spacer(),
                         fetchUserData != null && fetchUserData!.userRef != widget.currUser.userRef
                             ? dmButton(currUserData: widget.currUser, otherUserData: fetchUserData)

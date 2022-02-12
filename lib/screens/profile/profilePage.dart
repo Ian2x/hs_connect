@@ -23,6 +23,7 @@ class ProfilePage extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
 
+
     if (profileRef == currUserData.userRef) {
       return Scaffold(
         appBar: AppBar(
@@ -71,6 +72,7 @@ class ProfilePage extends StatelessWidget {
                             child: ReportSheet(
                               reportType: ReportType.user,
                               entityRef: profileRef,
+                              entityCreatorRef: profileRef,
                             )));
                   })
             ],

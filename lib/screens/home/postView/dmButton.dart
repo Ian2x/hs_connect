@@ -15,23 +15,26 @@ class dmButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hp = Provider.of<HeightPixel>(context).value;
+    final wp = Provider.of<WidthPixel>(context).value;
 
     return IconButton(
-
-            onPressed: () {
-              if (otherUserData != null && otherUserData!.userRef != currUserData.userRef){
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => pixelProvider(context, child: MessagesPage(
-                          currUserData: currUserData,
-                          otherUserData: otherUserData!,
-                          onUpdateLastMessage: () {},
-                          onUpdateLastViewed: () {},
-                        ))));
-              }
-            },
-            icon: Icon(Icons.chat_bubble_outline_rounded, size: 18*hp, color: Theme.of(context).colorScheme.primary),
-          );
+      constraints: BoxConstraints(),
+      padding: EdgeInsets.only(top: 3*hp, right: 10*wp),
+      onPressed: () {
+        if (otherUserData != null && otherUserData!.userRef != currUserData.userRef) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => pixelProvider(context,
+                      child: MessagesPage(
+                        currUserData: currUserData,
+                        otherUserData: otherUserData!,
+                        onUpdateLastMessage: () {},
+                        onUpdateLastViewed: () {},
+                      ))));
+        }
+      },
+      icon: Icon(Icons.chat_bubble_outline_rounded, size: 18 * hp, color: Theme.of(context).colorScheme.primary),
+    );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
@@ -59,6 +60,7 @@ class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorShee
               Spacer(),
               MyOutlinedButton(
                 onPressed: () async {
+                  HapticFeedback.heavyImpact();
                   if (deleteEmail=='Invalidate email') {
                     try {
                       widget.cancelTimer();
@@ -80,14 +82,17 @@ class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorShee
                 padding: EdgeInsets.symmetric(horizontal: 15*wp),
                 backgroundColor: Colors.white,
                 child: Container(
-                  height: 40*hp,
-                  width: 140*wp,
+                  height: 30*hp,
+                  width: 100*wp,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        deleteEmail,
-                        style: ThemeText.inter(fontWeight: FontWeight.w600, fontSize: 16*hp, color: Colors.black
+                      FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: Text(
+                          deleteEmail,
+                          style: ThemeText.inter(fontWeight: FontWeight.w600, fontSize: 16*hp, color: Colors.black
+                          ),
                         ),
                       ),
                     ],
@@ -102,16 +107,20 @@ class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorShee
                 gradient: Gradients.blueRed(begin: Alignment.topCenter, end: Alignment.bottomCenter),
                 borderRadius: 20*hp,
                 thickness:1.5*hp,
+                padding: EdgeInsets.symmetric(horizontal: 15*wp),
                 backgroundColor: Colors.white,
                 child: Container(
-                  height: 40*hp,
-                  width: 120*wp,
+                  height: 30*hp,
+                  width: 70*wp,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        "Start Over",
-                        style: ThemeText.inter(fontWeight: FontWeight.w600, fontSize: 16*hp, color: Colors.black
+                      FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: Text(
+                          "Start Over",
+                          style: ThemeText.inter(fontWeight: FontWeight.w600, fontSize: 16*hp, color: Colors.black
+                          ),
                         ),
                       ),
                     ],

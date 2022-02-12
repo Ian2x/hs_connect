@@ -9,6 +9,7 @@ import 'package:hs_connect/services/polls_database.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
+import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/animatedSwitch.dart';
 import 'package:hs_connect/shared/widgets/deletableImage.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
@@ -281,6 +282,7 @@ class _PostFormState extends State<PostForm> {
                     style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18*hp),
                     maxLines: null,
                     autocorrect: true,
+                    textCapitalization: TextCapitalization.sentences,
                     decoration: InputDecoration(
                         hintStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18*hp, color: colorScheme.primaryVariant),
                         border: InputBorder.none,
@@ -325,6 +327,7 @@ class _PostFormState extends State<PostForm> {
                             style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16*hp),
                             maxLines: null,
                             autocorrect: true,
+                            textCapitalization: TextCapitalization.sentences,
                             decoration: InputDecoration(
                                 hintStyle: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16*hp, color: colorScheme.primary),
                                 border: InputBorder.none,
@@ -411,9 +414,9 @@ class _PostFormState extends State<PostForm> {
                         size: 30*hp, color: poll == null ? colorScheme.primary : colorScheme.secondary),
                 ),
                 Spacer(),
-                Text("Mature", style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontWeight: FontWeight.w500)),
+                Text("Mature", style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.primary, fontWeight: FontWeight.w500)),
                 SizedBox(width: 10*wp),
-                AnimatedSwitch(
+                AnimatedSwitch2(
                   initialState: isMature,
                   onToggle: () {
                     if (mounted) {

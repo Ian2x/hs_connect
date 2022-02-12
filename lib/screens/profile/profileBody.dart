@@ -67,6 +67,9 @@ class _ProfileBodyState extends State<ProfileBody> {
     final wp = Provider.of<WidthPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
 
+
+
+
     if (profileData == null) return Loading();
     bool isOwnProfile = widget.profileUserRef == widget.currUserData.userRef &&
         userData != null &&
@@ -86,7 +89,7 @@ class _ProfileBodyState extends State<ProfileBody> {
           Text(
             profileData!.fundamentalName,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.headline5,
+            style: Theme.of(context).textTheme.headline5?.copyWith(fontWeight:FontWeight.w600),
           ),
           SizedBox(height: 14 * hp),
           Row(

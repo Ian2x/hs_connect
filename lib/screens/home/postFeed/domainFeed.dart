@@ -98,7 +98,7 @@ class _DomainFeedState extends State<DomainFeed> with AutomaticKeepAliveClientMi
           padding: EdgeInsets.zero,
           builderDelegate: PagedChildBuilderDelegate<Post>(
               itemBuilder: (context, post, index) {
-                if (!(showMaturePosts!) && post.mature) {
+                if ((!(showMaturePosts!) && post.mature) || (widget.currUser.blockedPostRefs.contains(post.postRef)) || (widget.currUser.blockedUserRefs.contains(post.creatorRef))) {
                   return Container();
                 }
                 return Center(

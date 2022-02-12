@@ -73,7 +73,6 @@ class _PublicFeedState extends State<PublicFeed> with AutomaticKeepAliveClientMi
       }
     } catch (error) {
       _pagingController.error = error;
-      print(error.runtimeType);
     }
   }
 
@@ -99,7 +98,7 @@ class _PublicFeedState extends State<PublicFeed> with AutomaticKeepAliveClientMi
           builderDelegate: PagedChildBuilderDelegate<Post>(
             //animateTransitions: true,
               itemBuilder: (context, post, index) {
-                if (!(showMaturePosts!) && post.mature) {
+                if ((!(showMaturePosts!) && post.mature) || (widget.currUser.blockedPostRefs.contains(post.postRef)) || (widget.currUser.blockedUserRefs.contains(post.creatorRef))) {
                   return Container();
                 }
                 return Center(

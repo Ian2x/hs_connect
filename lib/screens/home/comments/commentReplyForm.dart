@@ -126,13 +126,15 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
           initialValue: '',
           focusNode: widget.focusNode,
           style: Theme.of(context).textTheme.bodyText1,
+          textCapitalization: TextCapitalization.sentences,
           autocorrect: true,
           decoration: commentReplyInputDecoration(
               context: context,
               isReply: widget.isReply,
               onPressed: () async {
                 onSubmit();
-              }, isFocused: widget.focusNode.hasFocus, hasText: _text!=''),
+              },
+              isFocused: widget.focusNode.hasFocus, hasText: _text!=''),
           validator:
             widget.isReply!= false ? (val) {
                 if (val == null) return 'Write a reply...';

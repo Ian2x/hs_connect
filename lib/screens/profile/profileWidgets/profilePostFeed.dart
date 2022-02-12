@@ -4,6 +4,7 @@ import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profilePostCard.dart';
 import 'package:hs_connect/services/posts_database.dart';
+import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +20,9 @@ class ProfilePostFeed extends StatefulWidget {
 class _ProfilePostFeedState extends State<ProfilePostFeed> {
   bool isReply = false;
   DocumentReference? commentRef;
+
+
+  bool test=false;
 
   List<Post>? _userPosts;
 
@@ -38,6 +42,14 @@ class _ProfilePostFeedState extends State<ProfilePostFeed> {
       setState(()=>_userPosts = tempTempPosts);
     }
   }
+
+  reload(){
+    setState((){
+      test= !test;
+    }
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
