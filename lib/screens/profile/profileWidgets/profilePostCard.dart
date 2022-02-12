@@ -4,9 +4,10 @@ import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/postLikesManager.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/postView/postCard.dart';
-import 'package:hs_connect/screens/home/postView/postCard.dart';
 import 'package:hs_connect/screens/home/postView/postPage.dart';
+import 'package:hs_connect/screens/profile/profileWidgets/deleteSheet.dart';
 import 'package:hs_connect/services/groups_database.dart';
+import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/buildCircle.dart';
@@ -16,8 +17,11 @@ import 'package:provider/provider.dart';
 class ProfilePostCard extends StatefulWidget {
   final Post post;
   final UserData currUserData;
+  final VoidFunction reload;
 
-  ProfilePostCard({Key? key, required this.post, required this.currUserData}) : super(key: key);
+  ProfilePostCard({Key? key, required this.post,
+  required this.reload,
+  required this.currUserData}) : super(key: key);
 
   @override
   _ProfilePostCardState createState() => _ProfilePostCardState();
@@ -153,7 +157,30 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
                         backgroundColor: colorScheme.background),
                     SizedBox(width: 5*wp),
                     Text(group!.name, style: Theme.of(context).textTheme.subtitle2?.copyWith
-                      (fontWeight: FontWeight.w500, color: colorScheme.primary, fontSize: postCardDetailSize))
+                      (fontWeight: FontWeight.w500, color: colorScheme.primary, fontSize: postCardDetailSize)),
+                    Spacer(),
+
+                    IconButton(
+                      constraints:BoxConstraints(),
+                      padding: EdgeInsets.all(0),
+                      icon:Icon(Icons.more_horiz, size:18*hp, color: colorScheme.primary),
+                      onPressed: () {
+                        showModalBottomSheet(
+                            context: context,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(20 * hp),
+                                )),
+                            builder: (context) => pixelProvider(context,
+                                child: deleteSheet(
+                                  currUserRef: widget.currUserData.userRef,
+                                  postUserRef: widget.post.creatorRef,
+                                  groupRef: widget.post.groupRef,
+                                  postRef: widget.post.postRef,
+                                  reload: widget.reload,
+                          )));
+                      },
+                    )
                   ],
                 ),
               ),

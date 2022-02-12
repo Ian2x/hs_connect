@@ -6,6 +6,7 @@ import 'package:hs_connect/screens/profile/profileWidgets/newMessageButton.dart'
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/groupTag.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
@@ -25,6 +26,12 @@ class ProfileBody extends StatefulWidget {
 class _ProfileBodyState extends State<ProfileBody> {
   UserData? profileData;
   String? domainImage;
+
+  reload(){
+    setState(() {
+
+    });
+  }
 
   void getProfileUserData() async {
     UserData? fetchUserData;
@@ -66,6 +73,9 @@ class _ProfileBodyState extends State<ProfileBody> {
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
+
+
+
 
     if (profileData == null) return Loading();
     bool isOwnProfile = widget.profileUserRef == widget.currUserData.userRef &&
@@ -123,7 +133,7 @@ class _ProfileBodyState extends State<ProfileBody> {
                 )
               : Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
                   SizedBox(height: 40 * hp),
-                  ProfilePostFeed(profileUserData: profileData!),
+                  ProfilePostFeed(profileUserData: profileData!, reload: reload),
                 ])
         ],
       ),

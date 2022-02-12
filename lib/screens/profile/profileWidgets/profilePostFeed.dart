@@ -4,13 +4,15 @@ import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profilePostCard.dart';
 import 'package:hs_connect/services/posts_database.dart';
+import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePostFeed extends StatefulWidget {
   final UserData profileUserData;
+  final VoidFunction reload;
 
-  ProfilePostFeed({Key? key, required this.profileUserData}) : super(key: key);
+  ProfilePostFeed({Key? key, required this.profileUserData, required this.reload}) : super(key: key);
 
   @override
   _ProfilePostFeedState createState() => _ProfilePostFeedState();
@@ -19,6 +21,9 @@ class ProfilePostFeed extends StatefulWidget {
 class _ProfilePostFeedState extends State<ProfilePostFeed> {
   bool isReply = false;
   DocumentReference? commentRef;
+
+
+  bool test=false;
 
   List<Post>? _userPosts;
 
@@ -38,6 +43,14 @@ class _ProfilePostFeedState extends State<ProfilePostFeed> {
       setState(()=>_userPosts = tempTempPosts);
     }
   }
+
+  reload(){
+    setState((){
+      test= !test;
+    }
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +88,7 @@ class _ProfilePostFeedState extends State<ProfilePostFeed> {
                         ProfilePostCard(
                           post: _userPosts![index],
                           currUserData: widget.profileUserData,
+                          reload: widget.reload,
                         ),
                         SizedBox(height: 10 * hp),
                       ],
