@@ -11,27 +11,29 @@ import 'package:hs_connect/shared/widgets/blockConfirmationDialog.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
-class deleteSheet extends StatefulWidget {
+class DeleteSheet extends StatefulWidget {
   final DocumentReference currUserRef;
   final DocumentReference postUserRef;
   final DocumentReference groupRef;
   final DocumentReference postRef;
   final String? media;
+  final VoidFunction onDelete;
 
-  const deleteSheet(
+  const DeleteSheet(
       {Key? key,
-        required this.currUserRef,
-        required this.postUserRef,
-        required this.groupRef,
-        required this.postRef,
-        this.media})
+      required this.currUserRef,
+      required this.postUserRef,
+      required this.groupRef,
+      required this.postRef,
+      this.media,
+      required this.onDelete})
       : super(key: key);
 
   @override
-  _deleteSheetState createState() => _deleteSheetState();
+  _DeleteSheetState createState() => _DeleteSheetState();
 }
 
-class _deleteSheetState extends State<deleteSheet> with TickerProviderStateMixin {
+class _DeleteSheetState extends State<DeleteSheet> with TickerProviderStateMixin {
   static const double iconSize = 20;
   late AnimationController controller;
   bool disposeController = true;
@@ -51,82 +53,63 @@ class _deleteSheetState extends State<deleteSheet> with TickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-
     PostsDatabaseService _posts = PostsDatabaseService(currUserRef: widget.currUserRef);
 
-
-    final hp = Provider
-        .of<HeightPixel>(context)
-        .value;
-    final wp = Provider
-        .of<WidthPixel>(context)
-        .value;
-    final colorScheme = Theme
-        .of(context)
-        .colorScheme;
+    final hp = Provider.of<HeightPixel>(context).value;
+    final wp = Provider.of<WidthPixel>(context).value;
+    final colorScheme = Theme.of(context).colorScheme;
 
     final userData = Provider.of<UserData?>(context);
     if (userData == null) return Loading();
 
     return Container(
-      constraints: BoxConstraints(
-        maxHeight:
-              165 * hp + MediaQuery
-            .of(context)
-            .padding
-            .bottom,
-      ),
-      padding: EdgeInsets.fromLTRB(13 * wp, 0, 0, MediaQuery
-          .of(context)
-          .padding
-          .bottom),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-              TextButton(
-                onPressed: () {
-                  _posts.deletePost(
-                      postRef: widget.postRef, userRef: widget.currUserRef, groupRef: widget.groupRef, media: widget.media);
-                },
-                child: Row(
-                  children: [
-                    Icon(Icons.delete_rounded, color: colorScheme.primary, size: iconSize * hp),
-                    SizedBox(width: 20 * wp),
-                    Text(
-                      "Delete forever",
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .subtitle1
-                          ?.copyWith(color: colorScheme.primaryVariant),
-                    ),
-                  ],
-                ),
+        constraints: BoxConstraints(
+          maxHeight: 115 * hp + MediaQuery.of(context).padding.bottom,
+        ),
+        padding: EdgeInsets.fromLTRB(13 * wp, 5*hp, 0, MediaQuery.of(context).padding.bottom),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextButton(
+              onPressed: () async {
+                await _posts.deletePost(
+                    postRef: widget.postRef,
+                    userRef: widget.currUserRef,
+                    groupRef: widget.groupRef,
+                    media: widget.media);
+                widget.onDelete();
+                Navigator.of(context).pop();
+              },
+              child: Row(
+                children: [
+                  Icon(Icons.delete_rounded, color: colorScheme.primary, size: iconSize * hp),
+                  SizedBox(width: 20 * wp),
+                  Text(
+                    "Delete forever",
+                    style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.primaryVariant),
+                  ),
+                ],
               ),
-              Divider(color: colorScheme.background, thickness: 1 * hp, height: 0),
-              Container(
-                //color: Colors.orange,
-                child: TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Row(
-                      children: [
-                        Icon(Icons.close_rounded, size: iconSize * hp, color: colorScheme.primary),
-                        SizedBox(width: 20 * wp),
-                        Text(
-                          "Cancel",
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .subtitle1
-                              ?.copyWith(color: colorScheme.primaryVariant),
-                        ),
-                      ],
-                    )),
-              ),
-            ],
-          )
-      );
+            ),
+            Divider(color: colorScheme.background, thickness: 1 * hp, height: 0),
+            Container(
+              //color: Colors.orange,
+              child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Row(
+                    children: [
+                      Icon(Icons.close_rounded, size: iconSize * hp, color: colorScheme.primary),
+                      SizedBox(width: 20 * wp),
+                      Text(
+                        "Cancel",
+                        style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.primaryVariant),
+                      ),
+                    ],
+                  )),
+            ),
+          ],
+        ));
   }
 }

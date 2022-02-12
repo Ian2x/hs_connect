@@ -29,6 +29,7 @@ class _NotificationCardState extends State<NotificationCard> {
   String? sourceUserFullDomainName;
   String? postGroupName;
   bool loading = false;
+  bool badPost = false;
 
   final ImageStorage _images = ImageStorage();
 
@@ -42,13 +43,21 @@ class _NotificationCardState extends State<NotificationCard> {
 
   void fetchPostGroup() async {
     final postData = await widget.myNotification.parentPostRef.get();
-    final post = postFromSnapshot(postData);
-    final groupData = await post.groupRef.get();
-    final group = await groupFromSnapshot(groupData);
-    if (group != null) {
+    try {
+      final post = postFromSnapshot(postData);
+      final groupData = await post.groupRef.get();
+      final group = await groupFromSnapshot(groupData);
+      if (group != null) {
+        if (mounted) {
+          setState(() {
+            postGroupName = group.name;
+          });
+        }
+      }
+    } catch (error) {
       if (mounted) {
         setState(() {
-          postGroupName = group.name;
+          badPost = true;
         });
       }
     }
@@ -72,6 +81,10 @@ class _NotificationCardState extends State<NotificationCard> {
     final wp = Provider.of<WidthPixel>(context).value;
     final hp = Provider.of<HeightPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
+
+    if (badPost) {
+      return Container();
+    }
 
     if (userData == null ||
         sourceUserName == null ||
