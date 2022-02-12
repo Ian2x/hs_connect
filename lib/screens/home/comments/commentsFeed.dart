@@ -78,59 +78,52 @@ class _CommentsFeedState extends State<CommentsFeed> {
                 return a.createdAt.compareTo(b.createdAt);
               });
 
-              return ListView.builder(
-                itemCount: comments.length + 3,
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                physics: BouncingScrollPhysics(),
-                itemBuilder: (BuildContext context, int index) {
-                  if (index == 0) {
-                    return PostTitleCard(
-                      post: widget.post,
-                      group: widget.group,
-                      currUserRef: userData.userRef,
-                    );
-                  } else if (index == 1) {
-                    return Divider(thickness: 5 * hp, color: colorScheme.background, height: 10 * hp);
-                  } else if (index == comments.length + 2) {
-                    return SizedBox(height: 70 * hp);
-                  } else {
-                    if (userData.blockedUserRefs.contains(comments[index - 2].creatorRef)) {
-                      return Container();
+              return
+                  GestureDetector(
+                    onVerticalDragDown: (DragDownDetails ddd) {
+                      dismissKeyboard(context);
+                    },
+                    onPanUpdate: (details) {
+                      if (details.delta.dx > 15) {
+                        Navigator.of(context).pop();
+                      }
+                    },
+                child: ListView.builder(
+                  itemCount: comments.length + 3,
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  physics: BouncingScrollPhysics(),
+                  itemBuilder: (BuildContext context, int index) {
+                    if (index == 0) {
+                      return PostTitleCard(
+                        post: widget.post,
+                        group: widget.group,
+                        currUserRef: userData.userRef,
+                      );
+                    } else if (index == 1) {
+                      return Divider(thickness: 5 * hp, color: colorScheme.background, height: 10 * hp);
+                    } else if (index == comments.length + 2) {
+                      return SizedBox(height: 70 * hp);
+                    } else {
+                      if (userData.blockedUserRefs.contains(comments[index - 2].creatorRef)) {
+                        return Container();
+                      }
+                      return CommentCard(
+                        focusKeyboard: () {
+                          myFocusNode.requestFocus();
+                        },
+                        switchFormBool: switchFormBool,
+                        comment: comments[index - 2],
+                        currUserData: userData,
+                      );
                     }
-                    return CommentCard(
-                      focusKeyboard: () {
-                        myFocusNode.requestFocus();
-                      },
-                      switchFormBool: switchFormBool,
-                      comment: comments[index - 2],
-                      currUserData: userData,
-                    );
-                  }
-                },
+                  },
+                ),
               );
             }
           },
         ),
-        Positioned(
-          bottom: 0,
-          right: 0,
-          child: Container(
-            padding: EdgeInsets.only(top: bottomGradientThickness * hp),
-            color: widget.group.hexColor!=null ? HexColor(widget.group.hexColor!) : colorScheme.onSurface,
-            child: Container(
-                width: MediaQuery.of(context).size.width,
-                color: colorScheme.background,
-                padding: EdgeInsets.fromLTRB(10*wp, 10*hp, 10*wp, MediaQuery.of(context).padding.bottom>10 ? MediaQuery.of(context).padding.bottom : 10*hp),
-                child: CommentReplyForm(
-                    focusNode: myFocusNode,
-                    currUserRef: userData.userRef,
-                    switchFormBool: switchFormBool,
-                    commentReference: commentRef,
-                    isReply: isReply,
-                    post: widget.post)),
-          ),
-        ),
+
       ],
     );
   }

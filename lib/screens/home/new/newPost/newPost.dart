@@ -18,15 +18,10 @@ class NewPost extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      body: GestureDetector(
-        onVerticalDragDown: (DragDownDetails ddd) {
-          dismissKeyboard(context);
-        },
-        child: Container(
+      body:  Container(
           constraints: BoxConstraints.expand(),
           child: PostForm(userData: userData),
         ),
-      ),
-    );
+      );
   }
 }

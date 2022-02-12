@@ -23,6 +23,7 @@ class ProfilePage extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
 
+
     if (profileRef == currUserData.userRef) {
       return Scaffold(
         appBar: AppBar(
