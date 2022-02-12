@@ -19,8 +19,6 @@ class _Main2State extends State<Main2> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User?>(context);
-    print("NEW");
-    print(user);
     return StreamProvider<UserData?>.value(
       value: user != null
           ? UserDataDatabaseService(currUserRef: FirebaseFirestore.instance.collection(C.userData).doc(user.uid))

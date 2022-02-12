@@ -10,9 +10,8 @@ import 'package:provider/provider.dart';
 
 class ProfilePostFeed extends StatefulWidget {
   final UserData profileUserData;
-  final VoidFunction reload;
 
-  ProfilePostFeed({Key? key, required this.profileUserData, required this.reload}) : super(key: key);
+  ProfilePostFeed({Key? key, required this.profileUserData}) : super(key: key);
 
   @override
   _ProfilePostFeedState createState() => _ProfilePostFeedState();
@@ -88,7 +87,6 @@ class _ProfilePostFeedState extends State<ProfilePostFeed> {
                         ProfilePostCard(
                           post: _userPosts![index],
                           currUserData: widget.profileUserData,
-                          reload: widget.reload,
                         ),
                         SizedBox(height: 10 * hp),
                       ],

@@ -17,7 +17,6 @@ class deleteSheet extends StatefulWidget {
   final DocumentReference groupRef;
   final DocumentReference postRef;
   final String? media;
-  final VoidFunction reload;
 
   const deleteSheet(
       {Key? key,
@@ -25,7 +24,6 @@ class deleteSheet extends StatefulWidget {
         required this.postUserRef,
         required this.groupRef,
         required this.postRef,
-        required this.reload,
         this.media})
       : super(key: key);
 
@@ -87,8 +85,6 @@ class _deleteSheetState extends State<deleteSheet> with TickerProviderStateMixin
         children: [
               TextButton(
                 onPressed: () {
-                  widget.reload();
-                  print("called widget reload");
                   _posts.deletePost(
                       postRef: widget.postRef, userRef: widget.currUserRef, groupRef: widget.groupRef, media: widget.media);
                 },

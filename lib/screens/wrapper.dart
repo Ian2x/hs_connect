@@ -19,10 +19,6 @@ class _WrapperState extends State<Wrapper> {
   Widget build(BuildContext context) {
     final user = Provider.of<User?>(context);
     final userData = Provider.of<UserData?>(context);
-    print("1 " + user.toString());
-    print("2 " + userData.toString());
-    print("3 ");
-    print(user?.email);
 
     if (user == null || userData == null || user.email==null || !user.email!.endsWith('@ianeric.com')) {
       return pixelProvider(context, child: PreviewPage());

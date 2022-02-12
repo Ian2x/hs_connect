@@ -17,10 +17,8 @@ import 'package:provider/provider.dart';
 class ProfilePostCard extends StatefulWidget {
   final Post post;
   final UserData currUserData;
-  final VoidFunction reload;
 
   ProfilePostCard({Key? key, required this.post,
-  required this.reload,
   required this.currUserData}) : super(key: key);
 
   @override
@@ -177,7 +175,6 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
                                   postUserRef: widget.post.creatorRef,
                                   groupRef: widget.post.groupRef,
                                   postRef: widget.post.postRef,
-                                  reload: widget.reload,
                           )));
                       },
                     )
