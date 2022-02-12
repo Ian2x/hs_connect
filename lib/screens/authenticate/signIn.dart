@@ -134,7 +134,8 @@ class _SignInState extends State<SignIn> {
                                               }
                                             }),
                                         Divider(height:0, thickness: 2*hp, color: authHintTextColor),
-                                        myCheckBoxFormField(textTheme)
+                                        SizedBox(height:20*hp),
+                                        myCheckBoxFormField(textTheme),
                                       ],
                                     ),
                                   ),
