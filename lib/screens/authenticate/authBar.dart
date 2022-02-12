@@ -34,7 +34,6 @@ class AuthBar extends StatelessWidget {
               backgroundColor: Colors.white,
               thickness: 1.2*hp,
               child: FittedBox(
-                fit: BoxFit.fitWidth,
                 child: Text(
                   buttonText,
                   softWrap: false,
