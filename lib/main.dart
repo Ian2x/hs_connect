@@ -65,10 +65,22 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider<ThemeNotifier>(
       create: (_) => ThemeNotifier(context),
       child: StreamProvider<User?>.value(
+        value: AuthService().user,
+        initialData: null,
+        child: Main2(),
+      ),
+    );
+  }
+
+  /*@override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider<ThemeNotifier>(
+      create: (_) => ThemeNotifier(context),
+      child: StreamProvider<User?>.value(
           value: AuthService().user,
           initialData: null,
           child: Main2(),
       ),
     );
-  }
+  }*/
 }

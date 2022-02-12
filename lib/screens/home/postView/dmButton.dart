@@ -15,9 +15,11 @@ class dmButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hp = Provider.of<HeightPixel>(context).value;
+    final wp = Provider.of<WidthPixel>(context).value;
 
     return IconButton(
       constraints: BoxConstraints(),
+      padding: EdgeInsets.only(top: 3*hp, right: 10*wp),
       onPressed: () {
         if (otherUserData != null && otherUserData!.userRef != currUserData.userRef) {
           Navigator.push(

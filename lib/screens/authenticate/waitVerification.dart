@@ -30,7 +30,7 @@ class _WaitVerificationState extends State<WaitVerification> {
     user = auth.currentUser;
     user!.sendEmailVerification();
 
-    timer = Timer.periodic(Duration(seconds: 5), (timer) {
+    timer = Timer.periodic(Duration(seconds: 3), (timer) {
       checkEmailVerified();
     });
     super.initState();
@@ -71,7 +71,7 @@ class _WaitVerificationState extends State<WaitVerification> {
                 ),
                 SizedBox(height: 15 * hp),
                 Center(
-                  child: Text("Check the link in your school email.\nAfter, you'll be automatically redirected.",
+                  child: Text("Click the link in your school email.\nWait a bit to be redirected afterwards.",
                       textAlign: TextAlign.center,
                       style: Theme.of(context)
                           .textTheme
@@ -97,7 +97,7 @@ class _WaitVerificationState extends State<WaitVerification> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Your email is for verification only.\nIt'll never be linked to your account.",
+                          "Your email is for verification only. It'll never be linked to your account.",
                           style: ThemeText.inter(
                             fontWeight: FontWeight.w600,
                             fontSize: 14.5 * hp,

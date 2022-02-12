@@ -33,11 +33,14 @@ class AuthBar extends StatelessWidget {
               borderRadius: 40*hp,
               backgroundColor: Colors.white,
               thickness: 1.2*hp,
-              child: Text(
-                buttonText,
-                softWrap: false,
-                overflow: TextOverflow.ellipsis,
-                style: ThemeText.inter(fontWeight: FontWeight.w500, fontSize: 17*hp, color: Colors.black,
+              child: FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Text(
+                  buttonText,
+                  softWrap: false,
+                  overflow: TextOverflow.ellipsis,
+                  style: ThemeText.inter(fontWeight: FontWeight.w500, color: Colors.black,
+                  ),
                 ),
               ),
             )

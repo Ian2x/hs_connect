@@ -172,6 +172,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
               color: colorScheme.secondary,
               icon: Icon(Arrows.up_open_big, color: colorScheme.secondary),
               onPressed: () {
+                HapticFeedback.heavyImpact();
                 _posts.unLikePost(widget.post);
                 widget.postLikesManager.onUnLike();
                 if (mounted) {
@@ -191,6 +192,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
               color: colorScheme.primaryVariant,
               icon: Icon(Arrows.up_open_big),
               onPressed: () {
+                HapticFeedback.heavyImpact();
                 _posts.likePost(widget.post, likeCount);
                 widget.postLikesManager.onLike();
                 if (mounted) {
@@ -225,6 +227,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
               color: colorScheme.secondary,
               icon: Icon(Arrows.down_open_big, color: colorScheme.secondary),
               onPressed: () {
+                HapticFeedback.heavyImpact();
                 _posts.unDislikePost();
                 widget.postLikesManager.onUnDislike();
                 if (mounted) {
@@ -244,6 +247,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
               color: colorScheme.primaryVariant,
               icon: Icon(Arrows.down_open_big),
               onPressed: () {
+                HapticFeedback.heavyImpact();
                 _posts.dislikePost();
                 widget.postLikesManager.onDislike();
                 if (mounted) {

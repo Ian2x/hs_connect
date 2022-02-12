@@ -78,36 +78,46 @@ class _CommentsFeedState extends State<CommentsFeed> {
                 return a.createdAt.compareTo(b.createdAt);
               });
 
-              return ListView.builder(
-                itemCount: comments.length + 3,
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                physics: BouncingScrollPhysics(),
-                itemBuilder: (BuildContext context, int index) {
-                  if (index == 0) {
-                    return PostTitleCard(
-                      post: widget.post,
-                      group: widget.group,
-                      currUserRef: userData.userRef,
-                    );
-                  } else if (index == 1) {
-                    return Divider(thickness: 5 * hp, color: colorScheme.background, height: 10 * hp);
-                  } else if (index == comments.length + 2) {
-                    return SizedBox(height: 70 * hp);
-                  } else {
-                    if (userData.blockedUserRefs.contains(comments[index - 2].creatorRef)) {
-                      return Container();
-                    }
-                    return CommentCard(
-                      focusKeyboard: () {
-                        myFocusNode.requestFocus();
-                      },
-                      switchFormBool: switchFormBool,
-                      comment: comments[index - 2],
-                      currUserData: userData,
-                    );
+              return GestureDetector(
+                onVerticalDragDown: (DragDownDetails ddd) {
+                  dismissKeyboard(context);
+                },
+                onPanUpdate: (details) {
+                  if (details.delta.dx > 15) {
+                    Navigator.of(context).pop();
                   }
                 },
+                child: ListView.builder(
+                  itemCount: comments.length + 3,
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  physics: BouncingScrollPhysics(),
+                  itemBuilder: (BuildContext context, int index) {
+                    if (index == 0) {
+                      return PostTitleCard(
+                        post: widget.post,
+                        group: widget.group,
+                        currUserRef: userData.userRef,
+                      );
+                    } else if (index == 1) {
+                      return Divider(thickness: 5 * hp, color: colorScheme.background, height: 10 * hp);
+                    } else if (index == comments.length + 2) {
+                      return SizedBox(height: 130 * hp);
+                    } else {
+                      if (userData.blockedUserRefs.contains(comments[index - 2].creatorRef)) {
+                        return Container();
+                      }
+                      return CommentCard(
+                        focusKeyboard: () {
+                          myFocusNode.requestFocus();
+                        },
+                        switchFormBool: switchFormBool,
+                        comment: comments[index - 2],
+                        currUserData: userData,
+                      );
+                    }
+                  },
+                ),
               );
             }
           },

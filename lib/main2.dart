@@ -8,29 +8,34 @@ import 'package:hs_connect/shared/themeManager.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class Main2 extends StatelessWidget {
+class Main2 extends StatefulWidget {
   const Main2({Key? key}) : super(key: key);
 
   @override
+  _Main2State createState() => _Main2State();
+}
+
+class _Main2State extends State<Main2> {
+  @override
   Widget build(BuildContext context) {
-    {
-      final user = Provider.of<User?>(context);
-      return StreamProvider<UserData?>.value(
-        value: user != null
-            ? UserDataDatabaseService(currUserRef: FirebaseFirestore.instance.collection(C.userData).doc(user.uid))
-            .userData
-            : null,
-        initialData: null,
-        child: Consumer<ThemeNotifier>(
-          builder: (context, theme, _) => MaterialApp(
-            theme: theme.getTheme(),
-            /*themeMode: ThemeMode.system,
+    final user = Provider.of<User?>(context);
+    print("NEW");
+    print(user);
+    return StreamProvider<UserData?>.value(
+      value: user != null
+          ? UserDataDatabaseService(currUserRef: FirebaseFirestore.instance.collection(C.userData).doc(user.uid))
+          .userData
+          : null,
+      initialData: null,
+      child: Consumer<ThemeNotifier>(
+        builder: (context, theme, _) => MaterialApp(
+          theme: theme.getTheme(),
+          /*themeMode: ThemeMode.system,
             theme: ThemeNotifier.lightTheme,
             darkTheme: ThemeNotifier.darkTheme,*/
-            home: Wrapper(),
-          ),
+          home: Wrapper(),
         ),
-      );
-    }
+      ),
+    );
   }
 }

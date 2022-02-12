@@ -209,10 +209,14 @@ class _RegisterUserState extends State<RegisterUser> {
                                         MyOutlinedButton(
                                           padding: EdgeInsets.symmetric(vertical: 6 * hp, horizontal: 20 * wp),
                                           onPressed: () {
-                                            Navigator.of(context).pushAndRemoveUntil(
+                                            Navigator.of(context).pushReplacement(
+                                                MaterialPageRoute(
+                                                    builder: (context) => pixelProvider(context, child: Wrapper()))
+                                            );
+                                            /*Navigator.of(context).pushAndRemoveUntil(
                                                 MaterialPageRoute(
                                                     builder: (context) => pixelProvider(context, child: Wrapper())),
-                                                (Route<dynamic> route) => false);
+                                                (Route<dynamic> route) => false);*/
                                           },
                                           gradient: Gradients.blueRed(
                                               begin: Alignment.topCenter, end: Alignment.bottomCenter),
