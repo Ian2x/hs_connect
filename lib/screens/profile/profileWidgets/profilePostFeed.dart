@@ -4,7 +4,6 @@ import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profilePostCard.dart';
 import 'package:hs_connect/services/posts_database.dart';
-import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:provider/provider.dart';
 
@@ -21,8 +20,7 @@ class _ProfilePostFeedState extends State<ProfilePostFeed> {
   bool isReply = false;
   DocumentReference? commentRef;
 
-
-  bool test=false;
+  bool test = false;
 
   List<Post>? _userPosts;
 
@@ -36,20 +34,12 @@ class _ProfilePostFeedState extends State<ProfilePostFeed> {
     PostsDatabaseService _posts = PostsDatabaseService(currUserRef: widget.profileUserData.userRef);
     List<Post?> tempPosts = await _posts.getUserPosts();
     tempPosts.removeWhere((value) => value == null);
-    List<Post> tempTempPosts = tempPosts.map((item)=>item!).toList();
-    tempTempPosts.sort((a,b) => b.createdAt.compareTo(a.createdAt));
+    List<Post> tempTempPosts = tempPosts.map((item) => item!).toList();
+    tempTempPosts.sort((a, b) => b.createdAt.compareTo(a.createdAt));
     if (mounted) {
-      setState(()=>_userPosts = tempTempPosts);
+      setState(() => _userPosts = tempTempPosts);
     }
   }
-
-  reload(){
-    setState((){
-      test= !test;
-    }
-    );
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -63,14 +53,17 @@ class _ProfilePostFeedState extends State<ProfilePostFeed> {
         Row(
           children: [
             SizedBox(width: 10 * wp),
-            Text("Your Posts", style: Theme.of(context).textTheme.headline5?.copyWith(fontSize: 22), textAlign: TextAlign.left),
+            Text("Your Posts",
+                style: Theme.of(context).textTheme.headline5?.copyWith(fontSize: 22), textAlign: TextAlign.left),
           ],
         ),
         SizedBox(height: 10 * hp),
         Row(
           children: [
             SizedBox(width: 10 * wp),
-            Text("Visible to only you", style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary), textAlign: TextAlign.left),
+            Text("Visible to only you",
+                style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary),
+                textAlign: TextAlign.left),
           ],
         ),
         SizedBox(height: 20 * hp),
@@ -85,9 +78,17 @@ class _ProfilePostFeedState extends State<ProfilePostFeed> {
                     return Column(
                       children: [
                         ProfilePostCard(
-                          post: _userPosts![index],
-                          currUserData: widget.profileUserData,
-                        ),
+                            post: _userPosts![index],
+                            currUserData: widget.profileUserData,
+                            onDelete: () {
+                              if (mounted) {
+                                setState(() {
+                                  List<Post> copy = new List<Post>.from(_userPosts!);
+                                  copy.removeAt(index);
+                                  _userPosts = copy;
+                                });
+                              }
+                            }),
                         SizedBox(height: 10 * hp),
                       ],
                     );

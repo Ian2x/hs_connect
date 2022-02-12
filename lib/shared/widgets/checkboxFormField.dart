@@ -42,42 +42,45 @@ CheckboxFormField myCheckBoxFormField(TextTheme textTheme) {
         } else
           return null;
       },
-      title: RichText(
-          text: TextSpan(
-              style: textTheme.caption?.copyWith(color: Colors.black),
-              children: [
-                TextSpan(text: "I have read and agree to Circles.co's "),
-                TextSpan(
-                    text: "Terms of Service",
-                    style: textTheme.caption
-                        ?.copyWith(color: Color(0xFF13a1f0), fontWeight: FontWeight.w600),
-                    recognizer: new TapGestureRecognizer()
-                      ..onTap = () async {
-                        if (await canLaunch('https://www.getcircles.co/terms')) {
-                          await launch('https://www.getcircles.co/terms');
+      title: FittedBox(
+        child: RichText(
+            maxLines: 3,
+            text: TextSpan(
+                style: textTheme.caption?.copyWith(color: Colors.black),
+                children: [
+                  TextSpan(text: "I have read and agree to Circles.co's "),
+                  TextSpan(
+                      text: "Terms\nof Service",
+                      style: textTheme.caption
+                          ?.copyWith(color: Color(0xFF13a1f0), fontWeight: FontWeight.w600),
+                      recognizer: new TapGestureRecognizer()
+                        ..onTap = () async {
+                          if (await canLaunch('https://www.getcircles.co/terms')) {
+                            await launch('https://www.getcircles.co/terms');
+                          }
+                        }),
+                  TextSpan(text: ", "),
+                  TextSpan(text: "Content Policy",
+                      style: textTheme.caption
+                          ?.copyWith(color: Color(0xFF13a1f0), fontWeight: FontWeight.w600),
+                      recognizer: new TapGestureRecognizer()
+                        ..onTap = () async {
+                          if (await canLaunch('https://www.getcircles.co/content')) {
+                            await launch('https://www.getcircles.co/content');
+                          }
                         }
-                      }),
-                TextSpan(text: ", "),
-                TextSpan(text: "Content Policy",
-                    style: textTheme.caption
-                        ?.copyWith(color: Color(0xFF13a1f0), fontWeight: FontWeight.w600),
-                    recognizer: new TapGestureRecognizer()
-                      ..onTap = () async {
-                        if (await canLaunch('https://www.getcircles.co/content')) {
-                          await launch('https://www.getcircles.co/content');
+                  ),
+                  TextSpan(text: ", and "),
+                  TextSpan(text: "Privacy Policy",
+                      style: textTheme.caption
+                          ?.copyWith(color: Color(0xFF13a1f0), fontWeight: FontWeight.w600),
+                      recognizer: new TapGestureRecognizer()
+                        ..onTap = () async {
+                          if (await canLaunch('https://www.getcircles.co/privacy')) {
+                            await launch('https://www.getcircles.co/privacy');
+                          }
                         }
-                      }
-                ),
-                TextSpan(text: ", and "),
-                TextSpan(text: "Privacy Policy",
-                    style: textTheme.caption
-                        ?.copyWith(color: Color(0xFF13a1f0), fontWeight: FontWeight.w600),
-                    recognizer: new TapGestureRecognizer()
-                      ..onTap = () async {
-                        if (await canLaunch('https://www.getcircles.co/privacy')) {
-                          await launch('https://www.getcircles.co/privacy');
-                        }
-                      }
-                )
-              ])));
+                  )
+                ])),
+      ));
 }

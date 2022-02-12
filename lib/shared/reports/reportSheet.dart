@@ -68,122 +68,116 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
             .padding
             .bottom,
       ),
-      padding: EdgeInsets.fromLTRB(13 * wp, 0, 0, MediaQuery
+      padding: EdgeInsets.fromLTRB(13 * wp, 5*hp, 0, MediaQuery
           .of(context)
           .padding
           .bottom),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextButton(
-              onPressed: () {},
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) =>
+                      pixelProvider(context,
+                          child: ReportForm(entityRef: widget.entityRef, reportType: widget.reportType))));
+            },
+            child: Row(
+              children: [
+                Icon(Icons.flag, color: colorScheme.primary, size: iconSize * hp),
+                SizedBox(width: 20 * wp),
+                Text(
+                  "Report " + widget.reportType.string,
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .subtitle1
+                      ?.copyWith(color: colorScheme.primaryVariant),
+                ),
+              ],
+            ),
+          ),
+          Divider(color: colorScheme.background, thickness: 1 * hp, height: 0),
+          widget.reportType == ReportType.post
+              ? Column(children: [
+            TextButton(
+              onPressed: () {
+                blockConfirmationDialog(context,
+                    content: "Would you like to hide this post? This action cannot be undone.",
+                    action: () async {
+                      await userData.userRef.update({
+                        C.blockedPostRefs: FieldValue.arrayUnion([widget.entityRef])
+                      });
+                      Navigator.of(context).pop();
+                    });
+              },
+              child: Row(
                 children: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>
-                              pixelProvider(context,
-                                  child: ReportForm(entityRef: widget.entityRef, reportType: widget.reportType))));
-                    },
-                    child: Row(
-                      children: [
-                        Icon(Icons.flag, color: colorScheme.primary, size: iconSize * hp),
-                        SizedBox(width: 20 * wp),
-                        Text(
-                          "Report " + widget.reportType.string,
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .subtitle1
-                              ?.copyWith(color: colorScheme.primaryVariant),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Divider(color: colorScheme.background, thickness: 1 * hp, height: 0),
-                  widget.reportType == ReportType.post
-                      ? Column(children: [
-                    TextButton(
-                      onPressed: () {
-                        blockConfirmationDialog(context,
-                            content: "Would you like to hide this post? This action cannot be undone.",
-                            action: () async {
-                              await userData.userRef.update({
-                                C.blockedPostRefs: FieldValue.arrayUnion([widget.entityRef])
-                              });
-                              Navigator.of(context).pop();
-                            });
-                      },
-                      child: Row(
-                        children: [
-                          Icon(Icons.remove_circle_rounded, color: colorScheme.primary, size: iconSize * hp),
-                          SizedBox(width: 20 * wp),
-                          Text(
-                            "Hide post",
-                            style: Theme
-                                .of(context)
-                                .textTheme
-                                .subtitle1
-                                ?.copyWith(color: colorScheme.primaryVariant),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Divider(color: colorScheme.background, thickness: 1 * hp, height: 0),
-                  ])
-                      : Container(),
-                  TextButton(
-                    onPressed: () async {
-                      blockConfirmationDialog(context,
-                          content:
-                          "Would you like to block this user and all their content? This action cannot be undone.",
-                          action: () async {
-                            await userData.userRef.update({
-                              C.blockedUserRefs: FieldValue.arrayUnion([widget.entityCreatorRef])
-                            });
-                            Navigator.of(context).pop();
-                          });
-                    },
-                    child: Row(
-                      children: [
-                        Icon(Icons.no_accounts_rounded, color: colorScheme.primary, size: iconSize * hp),
-                        SizedBox(width: 20 * wp),
-                        Text(
-                          "Block user",
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .subtitle1
-                              ?.copyWith(color: colorScheme.primaryVariant),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Divider(color: colorScheme.background, thickness: 1 * hp, height: 0),
-                  Container(
-                    //color: Colors.orange,
-                    child: TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Row(
-                          children: [
-                            Icon(Icons.close_rounded, size: iconSize * hp, color: colorScheme.primary),
-                            SizedBox(width: 20 * wp),
-                            Text(
-                              "Cancel",
-                              style: Theme
-                                  .of(context)
-                                  .textTheme
-                                  .subtitle1
-                                  ?.copyWith(color: colorScheme.primaryVariant),
-                            ),
-                          ],
-                        )),
+                  Icon(Icons.remove_circle_rounded, color: colorScheme.primary, size: iconSize * hp),
+                  SizedBox(width: 20 * wp),
+                  Text(
+                    "Hide post",
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .subtitle1
+                        ?.copyWith(color: colorScheme.primaryVariant),
                   ),
                 ],
-              ))
+              ),
+            ),
+            Divider(color: colorScheme.background, thickness: 1 * hp, height: 0),
+          ])
+              : Container(),
+          TextButton(
+            onPressed: () async {
+              blockConfirmationDialog(context,
+                  content:
+                  "Would you like to block this user and all their content? This action cannot be undone.",
+                  action: () async {
+                    await userData.userRef.update({
+                      C.blockedUserRefs: FieldValue.arrayUnion([widget.entityCreatorRef])
+                    });
+                    Navigator.of(context).pop();
+                  });
+            },
+            child: Row(
+              children: [
+                Icon(Icons.no_accounts_rounded, color: colorScheme.primary, size: iconSize * hp),
+                SizedBox(width: 20 * wp),
+                Text(
+                  "Block user",
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .subtitle1
+                      ?.copyWith(color: colorScheme.primaryVariant),
+                ),
+              ],
+            ),
+          ),
+          Divider(color: colorScheme.background, thickness: 1 * hp, height: 0),
+          Container(
+            //color: Colors.orange,
+            child: TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Row(
+                  children: [
+                    Icon(Icons.close_rounded, size: iconSize * hp, color: colorScheme.primary),
+                    SizedBox(width: 20 * wp),
+                    Text(
+                      "Cancel",
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .subtitle1
+                          ?.copyWith(color: colorScheme.primaryVariant),
+                    ),
+                  ],
+                )),
+          ),
         ],
       ),
     );

@@ -17,9 +17,10 @@ import 'package:provider/provider.dart';
 class ProfilePostCard extends StatefulWidget {
   final Post post;
   final UserData currUserData;
+  final VoidFunction onDelete;
 
   ProfilePostCard({Key? key, required this.post,
-  required this.currUserData}) : super(key: key);
+  required this.currUserData, required this.onDelete}) : super(key: key);
 
   @override
   _ProfilePostCardState createState() => _ProfilePostCardState();
@@ -170,11 +171,12 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
                                   top: Radius.circular(20 * hp),
                                 )),
                             builder: (context) => pixelProvider(context,
-                                child: deleteSheet(
+                                child: DeleteSheet(
                                   currUserRef: widget.currUserData.userRef,
                                   postUserRef: widget.post.creatorRef,
                                   groupRef: widget.post.groupRef,
                                   postRef: widget.post.postRef,
+                                  onDelete: widget.onDelete
                           )));
                       },
                     )
