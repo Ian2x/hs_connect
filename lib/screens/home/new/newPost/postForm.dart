@@ -191,14 +191,16 @@ class _PostFormState extends State<PostForm> {
                       children: [
                         Icon(Icons.add, size: 20*hp),
                         SizedBox(width: 3*wp),
-                        Container(
-                          padding: EdgeInsets.only(bottom: 2*hp),
-                          child:
-                          Text("Post",
-                              style: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w500),
-                              maxLines: 1,
-                              softWrap: false,
-                              overflow: TextOverflow.fade),
+                        FittedBox(
+                          child: Container(
+                            padding: EdgeInsets.only(bottom: 2*hp),
+                            child:
+                            Text("Post",
+                                style: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w500),
+                                maxLines: 1,
+                                softWrap: false,
+                                overflow: TextOverflow.fade),
+                          ),
                         ),
                       ],
                     ),

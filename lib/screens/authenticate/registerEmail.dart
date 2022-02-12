@@ -114,7 +114,12 @@ class _RegisterEmailState extends State<RegisterEmail> {
                                     },
                                   ),
                                   Divider(height: 0, thickness: 2 * hp, color: authHintTextColor),
-                                  myCheckBoxFormField(textTheme)
+                                  SizedBox(height:20*hp),
+                                  FittedBox(
+                                    fit:BoxFit.fitWidth,
+                                    child:
+                                    myCheckBoxFormField(textTheme),
+                                  )
                                 ],
                               )),
                         ),
