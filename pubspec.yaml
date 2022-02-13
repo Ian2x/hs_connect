@@ -54,6 +54,7 @@ dependencies:
   firebase_messaging: ^11.2.6
   tuple: ^2.0.0
   share_plus: ^3.0.4
+  flutter_linkify: ^5.0.2
 
 flutter_native_splash:
   color: "#ffffff"

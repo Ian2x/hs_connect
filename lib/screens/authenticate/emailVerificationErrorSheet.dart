@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -42,8 +44,10 @@ class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorShee
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<HeightPixel>(context).value;
 
+    final bottomSpace = max(MediaQuery.of(context).padding.bottom, 35*hp);
+
     return Container(
-        padding: EdgeInsets.fromLTRB(20*wp, 25*hp, 20*wp, 35*hp),
+        padding: EdgeInsets.fromLTRB(20*wp, 25*hp, 20*wp, bottomSpace),
         color: Colors.white,
         alignment: Alignment.center,
         child: Column(

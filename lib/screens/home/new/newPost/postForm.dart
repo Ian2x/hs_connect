@@ -275,7 +275,7 @@ class _PostFormState extends State<PostForm> {
                 padding: EdgeInsets.fromLTRB(20*wp, 10*hp, 20*wp, 10*hp),
                 child: Column(children: <Widget>[
                   error != null
-                      ? Text(error!, style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.onSurface))
+                      ? FittedBox(child: Text(error!, style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.onSurface)))
                       : Container(),
                   error != null
                       ? SizedBox(height:10*wp)

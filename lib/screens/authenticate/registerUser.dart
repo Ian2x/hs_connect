@@ -84,9 +84,11 @@ class _RegisterUserState extends State<RegisterUser> {
                               padding: EdgeInsets.symmetric(horizontal: 20 * wp),
                               alignment: Alignment.bottomCenter,
                               child: error != null
-                                  ? Text(error!,
-                                  style: ThemeText.inter(fontWeight: FontWeight.w500, fontSize: 13*hp, color: Colors.black),
-                                      textAlign: TextAlign.center)
+                                  ? FittedBox(
+                                    child: Text(error!,
+                                    style: ThemeText.inter(fontWeight: FontWeight.w500, fontSize: 13*hp, color: Colors.black),
+                                        textAlign: TextAlign.center),
+                                  )
                                   : Container()),
                           Container(
                             padding: EdgeInsets.fromLTRB(20 * wp, 0, 20 * wp, 0),
@@ -209,14 +211,10 @@ class _RegisterUserState extends State<RegisterUser> {
                                         MyOutlinedButton(
                                           padding: EdgeInsets.symmetric(vertical: 6 * hp, horizontal: 20 * wp),
                                           onPressed: () {
-                                            Navigator.of(context).pushReplacement(
-                                                MaterialPageRoute(
-                                                    builder: (context) => pixelProvider(context, child: Wrapper()))
-                                            );
-                                            /*Navigator.of(context).pushAndRemoveUntil(
+                                            Navigator.of(context).pushAndRemoveUntil(
                                                 MaterialPageRoute(
                                                     builder: (context) => pixelProvider(context, child: Wrapper())),
-                                                (Route<dynamic> route) => false);*/
+                                                (Route<dynamic> route) => false);
                                           },
                                           gradient: Gradients.blueRed(
                                               begin: Alignment.topCenter, end: Alignment.bottomCenter),

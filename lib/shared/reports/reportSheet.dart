@@ -1,10 +1,12 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/reports/reportForm.dart';
-import 'package:hs_connect/shared/widgets/blockConfirmationDialog.dart';
+import 'package:hs_connect/shared/widgets/confirmationDialogs.dart';
 import 'package:provider/provider.dart';
 
 import '../constants.dart';
@@ -56,22 +58,15 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
     final userData = Provider.of<UserData?>(context);
     if (userData == null) return Loading();
 
+    final bottomSpace = max(MediaQuery.of(context).padding.bottom, 25*hp);
+
     return Container(
       constraints: BoxConstraints(
         maxHeight: widget.reportType == ReportType.post
-            ? 213 * hp + MediaQuery
-            .of(context)
-            .padding
-            .bottom
-            : 165 * hp + MediaQuery
-            .of(context)
-            .padding
-            .bottom,
+            ? 200 * hp + bottomSpace
+            : 152 * hp + bottomSpace,
       ),
-      padding: EdgeInsets.fromLTRB(13 * wp, 5*hp, 0, MediaQuery
-          .of(context)
-          .padding
-          .bottom),
+      padding: EdgeInsets.fromLTRB(13 * wp, 5*hp, 0, bottomSpace),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

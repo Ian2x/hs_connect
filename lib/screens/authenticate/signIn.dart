@@ -28,6 +28,7 @@ class _SignInState extends State<SignIn> {
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
   bool passwordHidden = true;
+  bool termsAccepted = false;
 
   // text field state
   String username = '';
@@ -36,6 +37,7 @@ class _SignInState extends State<SignIn> {
   String error = '';
 
   String authError = "Invalid username and password";
+  String termsError = "Must read and agree to policies/terms";
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +137,14 @@ class _SignInState extends State<SignIn> {
                                             }),
                                         Divider(height:0, thickness: 2*hp, color: authHintTextColor),
                                         SizedBox(height:20*hp),
-                                        myCheckBoxFormField(textTheme),
+                                        MyCheckboxFormField(termsAccepted: termsAccepted, toggleTerms: (bool val) {
+                                          if (error==termsError) {
+                                            error = '';
+                                          }
+                                          if (mounted) {
+                                            setState(()=> termsAccepted = val);
+                                          }
+                                        })
                                       ],
                                     ),
                                   ),
@@ -153,6 +162,12 @@ class _SignInState extends State<SignIn> {
                 left:0,
                 child: AuthBar(buttonText: "Sign in",
                   onPressed: () async {
+                    if (!termsAccepted) {
+                      if (mounted) {
+                        setState(() => error = termsError);
+                      }
+                      return;
+                    }
                     dismissKeyboard(context);
                     if (_formKey.currentState != null && _formKey.currentState!.validate()) {
                       if (mounted) {

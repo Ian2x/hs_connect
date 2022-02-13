@@ -26,10 +26,13 @@ class _RegisterEmailState extends State<RegisterEmail> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
+  bool termsAccepted = false;
 
   // text field state
   String email = '';
   String? error;
+
+  String termsError = "Must read and agree to policies/terms";
 
   @override
   Widget build(BuildContext context) {
@@ -82,10 +85,12 @@ class _RegisterEmailState extends State<RegisterEmail> {
                                   padding: EdgeInsets.symmetric(horizontal: 20 * wp),
                                   alignment: Alignment.bottomCenter,
                                   child: error != null
-                                      ? Text(error!,
-                                          style: ThemeText.inter(
-                                              fontWeight: FontWeight.w500, fontSize: 13 * hp, color: Colors.black),
-                                          textAlign: TextAlign.center)
+                                      ? FittedBox(
+                                        child: Text(error!,
+                                            style: ThemeText.inter(
+                                                fontWeight: FontWeight.w500, fontSize: 13 * hp, color: Colors.black),
+                                            textAlign: TextAlign.center),
+                                      )
                                       : Container())
                             ],
                           )),
@@ -115,11 +120,14 @@ class _RegisterEmailState extends State<RegisterEmail> {
                                   ),
                                   Divider(height: 0, thickness: 2 * hp, color: authHintTextColor),
                                   SizedBox(height:20*hp),
-                                  FittedBox(
-                                    fit:BoxFit.fitWidth,
-                                    child:
-                                    myCheckBoxFormField(textTheme),
-                                  )
+                                  MyCheckboxFormField(termsAccepted: termsAccepted, toggleTerms: (bool val) {
+                                    if (error==termsError) {
+                                      error = null;
+                                    }
+                                    if (mounted) {
+                                      setState(()=> termsAccepted = val);
+                                    }
+                                  })
                                 ],
                               )),
                         ),
@@ -133,6 +141,13 @@ class _RegisterEmailState extends State<RegisterEmail> {
                     child: AuthBar(
                         buttonText: "Register",
                         onPressed: () async {
+                          if (!termsAccepted) {
+                            if (mounted) {
+                              setState(() => error = termsError);
+                            }
+                            return;
+                          }
+                          dismissKeyboard(context);
                           if (_formKey.currentState!.validate()) {
                             if (mounted) {
                               setState(() => loading = true);

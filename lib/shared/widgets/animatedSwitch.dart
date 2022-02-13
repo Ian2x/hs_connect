@@ -100,7 +100,7 @@ class _AnimatedSwitchState2 extends State<AnimatedSwitch2> {
       },
       child: AnimatedContainer(
         height: 23*hp,
-        width: 42*wp,
+        width: 39*wp,
         duration: animationDuration,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15*hp),

@@ -1,17 +1,16 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
-import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
-import 'package:hs_connect/shared/reports/reportForm.dart';
-import 'package:hs_connect/shared/widgets/blockConfirmationDialog.dart';
+import 'package:hs_connect/shared/widgets/confirmationDialogs.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
-class DeleteSheet extends StatefulWidget {
+class DeletePostSheet extends StatefulWidget {
   final DocumentReference currUserRef;
   final DocumentReference postUserRef;
   final DocumentReference groupRef;
@@ -19,7 +18,7 @@ class DeleteSheet extends StatefulWidget {
   final String? media;
   final VoidFunction onDelete;
 
-  const DeleteSheet(
+  const DeletePostSheet(
       {Key? key,
       required this.currUserRef,
       required this.postUserRef,
@@ -30,10 +29,10 @@ class DeleteSheet extends StatefulWidget {
       : super(key: key);
 
   @override
-  _DeleteSheetState createState() => _DeleteSheetState();
+  _DeletePostSheetState createState() => _DeletePostSheetState();
 }
 
-class _DeleteSheetState extends State<DeleteSheet> with TickerProviderStateMixin {
+class _DeletePostSheetState extends State<DeletePostSheet> with TickerProviderStateMixin {
   static const double iconSize = 20;
   late AnimationController controller;
   bool disposeController = true;
@@ -62,23 +61,31 @@ class _DeleteSheetState extends State<DeleteSheet> with TickerProviderStateMixin
     final userData = Provider.of<UserData?>(context);
     if (userData == null) return Loading();
 
+    final bottomSpace = max(MediaQuery.of(context).padding.bottom, 25*hp);
+
     return Container(
         constraints: BoxConstraints(
-          maxHeight: 115 * hp + MediaQuery.of(context).padding.bottom,
+          maxHeight: 104 * hp + bottomSpace,
         ),
-        padding: EdgeInsets.fromLTRB(13 * wp, 5*hp, 0, MediaQuery.of(context).padding.bottom),
+        padding: EdgeInsets.fromLTRB(13 * wp, 5*hp, 0, bottomSpace),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextButton(
               onPressed: () async {
-                await _posts.deletePost(
-                    postRef: widget.postRef,
-                    userRef: widget.currUserRef,
-                    groupRef: widget.groupRef,
-                    media: widget.media);
-                widget.onDelete();
-                Navigator.of(context).pop();
+                deletePostConfirmationDialog(context,
+                    content:
+                    "Would you like to delete this post? This action cannot be undone.",
+                    action: () async {
+                      await _posts.deletePost(
+                          postRef: widget.postRef,
+                          userRef: widget.currUserRef,
+                          groupRef: widget.groupRef,
+                          media: widget.media);
+                      widget.onDelete();
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop();
+                    });
               },
               child: Row(
                 children: [
