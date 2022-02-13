@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/myNotification.dart';
 import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 List<DocumentReference> docRefList(dynamic input) {
   return (input as List).map((item) => item as DocumentReference).toList();
@@ -54,4 +56,12 @@ Future<Tuple2<T1, T2>> waitConcurrently<T1, T2>(
   ]);
 
   return Future.value(Tuple2(result1, result2));
+}
+
+Future<void> openLink(LinkableElement link) async {
+  if (await canLaunch(link.url)) {
+    await launch(link.url);
+  } else {
+    throw 'Could not launch $link';
+  }
 }

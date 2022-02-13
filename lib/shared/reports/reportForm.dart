@@ -166,7 +166,7 @@ class _ReportFormState extends State<ReportForm> {
               error != null
                   ? Container(
                   padding: EdgeInsets.only(top: 12*hp),
-                  child: Text(error!, style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.error)))
+                  child: FittedBox(child: Text(error!, style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.error))))
                   : Container(height: 0),
               GestureDetector(
                 behavior: HitTestBehavior.translucent,

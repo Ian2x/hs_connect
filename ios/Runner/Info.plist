@@ -31,7 +31,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app lets you add photos to your posts.</string>
+	<string>This lets you share photos with other users through posts or messages.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

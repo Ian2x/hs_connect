@@ -199,7 +199,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   feedbackError != null
                       ? Container(
                       padding: EdgeInsets.only(top: 12*hp),
-                      child: Text(feedbackError!, style: textTheme.bodyText2))
+                      child: FittedBox(child: Text(feedbackError!, style: textTheme.bodyText2)))
                       : SizedBox(height: 6),
                   Form(
                     key: _feedbackFormKey,

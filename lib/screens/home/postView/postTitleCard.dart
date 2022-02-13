@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/poll.dart';
 import 'package:hs_connect/models/post.dart';
@@ -15,6 +16,7 @@ import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
+import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/expandableImage.dart';
 import 'package:hs_connect/shared/reports/reportSheet.dart';
 import 'package:provider/provider.dart';
@@ -134,13 +136,14 @@ class _PostTitleCardState extends State<PostTitleCard> {
                 ) : Container(height: 48*hp)
               ]
             ), //introRow
-            Text( widget.post.title,
-              style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18*hp)
-            ),
+            SelectableLinkify(text: widget.post.title,
+              onOpen: openLink,
+              style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18*hp)),
             SizedBox(height:12*hp),
             widget.post.text!= null && widget.post.text!=""?
-              Text(widget.post.text!,
-                style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16*hp, fontFamily: "Roboto", height: 1.3)) : Container(),
+            SelectableLinkify(text: widget.post.text!,
+                onOpen: openLink,
+                style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16*hp, fontFamily: "Roboto", height: 1.3), ) : Container(),
             widget.post.mediaURL != null ?
               ExpandableImage(imageURL: widget.post.mediaURL!, maxHeight: 450*hp, containerWidth: MediaQuery.of(context).size.width-2*leftRightPadding)
                 : Container(),

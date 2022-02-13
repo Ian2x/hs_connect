@@ -5,7 +5,7 @@ import 'package:hs_connect/models/postLikesManager.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/postView/postCard.dart';
 import 'package:hs_connect/screens/home/postView/postPage.dart';
-import 'package:hs_connect/screens/profile/profileWidgets/deleteSheet.dart';
+import 'package:hs_connect/screens/profile/profileWidgets/deletePostSheet.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
@@ -171,7 +171,7 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
                                   top: Radius.circular(20 * hp),
                                 )),
                             builder: (context) => pixelProvider(context,
-                                child: DeleteSheet(
+                                child: DeletePostSheet(
                                   currUserRef: widget.currUserData.userRef,
                                   postUserRef: widget.post.creatorRef,
                                   groupRef: widget.post.groupRef,
