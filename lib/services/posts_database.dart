@@ -34,6 +34,7 @@ class PostsDatabaseService {
       required String? tagString,
       required bool mature,
       required DocumentReference? pollRef,
+      required String? link,
       Function(void) onValue = defaultFunc,
       Function onError = defaultFunc}) async {
     DocumentReference newPostRef = postsCollection.doc();
@@ -62,7 +63,8 @@ class PostsDatabaseService {
           C.pollRef: pollRef,
           C.tag: tagString == '' ? null : tagString,
           C.isFeatured: false,
-          C.mature: mature
+          C.mature: mature,
+          C.link: link
         })
         .then(onValue)
         .catchError(onError);

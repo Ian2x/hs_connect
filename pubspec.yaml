@@ -55,6 +55,9 @@ dependencies:
   tuple: ^2.0.0
   share_plus: ^3.0.4
   flutter_linkify: ^5.0.2
+  flutter_link_previewer: ^2.6.2
+  flutter_chat_types: ^3.2.2
+  validators: ^3.0.0
 
 flutter_native_splash:
   color: "#ffffff"
