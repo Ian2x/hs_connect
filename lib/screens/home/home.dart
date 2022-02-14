@@ -38,6 +38,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   void toggleSearch() {
     if (mounted) {
+      MyStorageManager.saveData('searchByTrending', !searchByTrending);
       setState(() => searchByTrending = !searchByTrending);
     }
   }
@@ -46,6 +47,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void initState() {
     setupInteractedMessage();
     subscribeToDomain();
+    getSearchByTrending();
     tabController = TabController(length: 2, vsync: this);
     tabController.addListener(() {
       if (mounted) {
@@ -56,6 +58,17 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       scrollController.jumpTo(0);
     });
     super.initState();
+  }
+
+  void getSearchByTrending() async {
+    final data = await MyStorageManager.readData('searchByTrending');
+    if (mounted) {
+      if (data==false) {
+        setState(() => searchByTrending = false);
+      } else {
+        setState(() => searchByTrending = true);
+      }
+    }
   }
 
   void subscribeToDomain() async {
