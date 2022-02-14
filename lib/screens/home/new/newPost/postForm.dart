@@ -220,7 +220,6 @@ class _PostFormState extends State<PostForm> {
                         return;
                       }
                       // check link is good
-                      // www.tiktok.com/@nbcolympics/video/7063681523190369583
                       if (link != null) {
                         if (!isURL(link!)) {
                           if (mounted) {
@@ -380,6 +379,9 @@ class _PostFormState extends State<PostForm> {
                                         filled: true,
                                         hintText: 'https://website.com',
                                         isCollapsed: true,
+                                        border: InputBorder.none,
+                                        enabledBorder: InputBorder.none,
+                                        focusedBorder: InputBorder.none,
                                         hintStyle: Theme.of(context)
                                             .textTheme
                                             .bodyText2

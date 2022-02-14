@@ -65,3 +65,15 @@ Future<void> openLink(LinkableElement link) async {
     throw 'Could not launch $link';
   }
 }
+
+String? httpsLink(String? link) {
+  if (link!=null) {
+    if (link.startsWith(RegExp("http|https|ftp"))) {
+      return link;
+    } else {
+      return "https://" + link;
+    }
+  } else {
+    return null;
+  }
+}

@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/activity/Messages/messagesPage.dart';
@@ -6,11 +5,11 @@ import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:provider/provider.dart';
 
-class dmButton extends StatelessWidget {
+class DMButton extends StatelessWidget {
   final UserData? otherUserData;
   final UserData currUserData;
 
-  const dmButton({Key? key, required this.otherUserData, required this.currUserData}) : super(key: key);
+  const DMButton({Key? key, required this.otherUserData, required this.currUserData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

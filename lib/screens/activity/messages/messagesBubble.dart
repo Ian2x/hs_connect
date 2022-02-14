@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/message.dart';
 import 'package:bubble/bubble.dart';
-import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/expandableImage.dart';
 import 'package:provider/provider.dart';

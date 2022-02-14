@@ -43,7 +43,6 @@ class _SignInState extends State<SignIn> {
   Widget build(BuildContext context) {
     final wp = Provider.of<WidthPixel>(context).value;
     final hp = Provider.of<HeightPixel>(context).value;
-    final textTheme = Theme.of(context).textTheme;
 
     return loading
         ? Scaffold(

@@ -64,7 +64,7 @@ class PostsDatabaseService {
           C.tag: tagString == '' ? null : tagString,
           C.isFeatured: false,
           C.mature: mature,
-          C.link: link
+          C.link: httpsLink(link)
         })
         .then(onValue)
         .catchError(onError);
