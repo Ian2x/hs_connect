@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/searchSelectionSheet.dart';
-import 'package:hs_connect/services/auth.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
@@ -51,7 +50,7 @@ class HomeAppBar extends SliverPersistentHeaderDelegate{
                   children: [
                     SizedBox(height: 3*hp),
                     GestureDetector(
-                      onTap: () async => await AuthService().signOut(),
+                      //onTap: () async => await AuthService().signOut(),
                       child: Text("circles.co",
                           style: Theme.of(context)
                               .textTheme

@@ -165,11 +165,11 @@ class _MyLinkPreviewState extends State<MyLinkPreview> with SingleTickerProvider
     return previewData?.title != null || previewData?.description != null || previewData?.image?.url != null;
   }
 
-  bool _hasOnlyImage() {
+  /*bool _hasOnlyImage() {
     return widget.previewData?.title == null &&
         widget.previewData?.description == null &&
         widget.previewData?.image?.url != null;
-  }
+  }*/
 
   Future<void> _onOpen(LinkableElement link) async {
     if (await canLaunch(link.url)) {
@@ -195,7 +195,7 @@ class _MyLinkPreviewState extends State<MyLinkPreview> with SingleTickerProvider
     return Column(
       children: <Widget>[
         if (data.title != null) _titleWidget(data.title!),
-        if (data.description != null && data.title != data.description) _descriptionWidget(data.description!),
+        if (data.description != null && data.title != data.description) _descriptionWidget(data.description!, true),
         if (data.image?.url != null && widget.hideImage != true) _imageWidget(data.image!.url, width),
         _linkify(true),
       ],
@@ -238,11 +238,11 @@ class _MyLinkPreviewState extends State<MyLinkPreview> with SingleTickerProvider
     );
   }
 
-  Widget _descriptionWidget(String description) {
+  Widget _descriptionWidget(String description, bool withBottomPadding) {
     return Container(
-      padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+      padding: EdgeInsets.fromLTRB(10, 0, 10, withBottomPadding ? 10 : 3),
       child: Text(
-        description,
+        description + "idk some more text to boost this length to two lines",
         maxLines: 3,
         overflow: TextOverflow.ellipsis,
         style: widget.metadataTextStyle,
@@ -273,7 +273,7 @@ class _MyLinkPreviewState extends State<MyLinkPreview> with SingleTickerProvider
           ? SelectableLinkify(
               linkifiers: [const EmailLinkifier(), UrlLinkifier()],
               linkStyle: widget.linkStyle,
-              maxLines: 100,
+              maxLines: 1,
               minLines: 1,
               onOpen: widget.onLinkPressed != null ? (element) => widget.onLinkPressed!(element.url) : _onOpen,
               options: const LinkifyOptions(
@@ -282,13 +282,9 @@ class _MyLinkPreviewState extends State<MyLinkPreview> with SingleTickerProvider
                 looseUrl: true,
               ),
               text: widget.text,
-              style: widget.textStyle,
+              style: widget.textStyle?.copyWith(overflow: TextOverflow.ellipsis),
               textAlign: TextAlign.center,
-              onTap: () async {
-                if (await canLaunch(widget.text)) {
-                  await launch(widget.text);
-                }
-              })
+              )
           : Text(Uri.parse(widget.text).host, style: widget.textStyle),
     );
   }
@@ -300,12 +296,11 @@ class _MyLinkPreviewState extends State<MyLinkPreview> with SingleTickerProvider
           Container(height: 120, width: 120, child: _minimizedImageWidget(data.image!.url)),
         Expanded(
           child: Container(
-            margin: const EdgeInsets.only(right: 4),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 if (data.title != null) _titleWidget(data.title!),
-                if (data.description != null && data.title != data.description) _descriptionWidget(data.description!),
+                if (data.description != null && data.title != data.description) _descriptionWidget(data.description!, false),
                 _linkify(false),
               ],
             ),

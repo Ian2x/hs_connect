@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:hs_connect/models/group.dart';
@@ -317,7 +316,7 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                             : Container(height: 38 * hp),
                         Spacer(),
                         fetchUserData != null && fetchUserData!.userRef != widget.currUser.userRef
-                            ? dmButton(currUserData: widget.currUser, otherUserData: fetchUserData)
+                            ? DMButton(currUserData: widget.currUser, otherUserData: fetchUserData)
                             : Container(),
                         LikeDislikePost(
                             currUserRef: widget.currUser.userRef,
