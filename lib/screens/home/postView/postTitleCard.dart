@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/poll.dart';
@@ -19,6 +20,7 @@ import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/expandableImage.dart';
 import 'package:hs_connect/shared/reports/reportSheet.dart';
+import 'package:hs_connect/shared/widgets/myLinkPreview.dart';
 import 'package:provider/provider.dart';
 
 class PostTitleCard extends StatefulWidget {
@@ -56,20 +58,24 @@ class _PostTitleCardState extends State<PostTitleCard> {
     if (mounted) {
       setState(() {
         creatorName = fetchUserData != null ? fetchUserData.fundamentalName : null;
-        creatorGroup = fetchUserData != null ? (fetchUserData.fullDomainName!=null ? fetchUserData.fullDomainName : fetchUserData.domain) : null;
+        creatorGroup = fetchUserData != null
+            ? (fetchUserData.fullDomainName != null ? fetchUserData.fullDomainName : fetchUserData.domain)
+            : null;
       });
     }
   }
 
   void getPoll() async {
-    if (widget.post.pollRef!=null) {
+    if (widget.post.pollRef != null) {
       PollsDatabaseService _polls = PollsDatabaseService(pollRef: widget.post.pollRef!);
       final tempPoll = await _polls.getPoll();
-      if (tempPoll!=null && mounted) {
-        setState(()=>poll = tempPoll);
+      if (tempPoll != null && mounted) {
+        setState(() => poll = tempPoll);
       }
     }
   }
+
+  PreviewData? previewData;
 
   @override
   Widget build(BuildContext context) {
@@ -78,90 +84,131 @@ class _PostTitleCardState extends State<PostTitleCard> {
     final colorScheme = Theme.of(context).colorScheme;
     UserData? userData = Provider.of<UserData?>(context);
     PostLikesManager postLikesManager = Provider.of<PostLikesManager>(context);
-    final leftRightPadding = 15*wp;
+    final leftRightPadding = 15 * wp;
 
     final localCreatorName = creatorName != null ? creatorName! : '';
     final localCreatorGroup = creatorGroup != null ? creatorGroup! : '';
 
     return Container(
-        padding: EdgeInsets.fromLTRB(leftRightPadding*wp, 0, leftRightPadding*wp, 10*hp),
-        child:
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(  //intro row + three dots
+      padding: EdgeInsets.fromLTRB(leftRightPadding * wp, 0, leftRightPadding * wp, 10 * hp),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(//intro row + three dots
               children: [
-                GestureDetector(
-                  onTap: () {
-                    if (userData!=null) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => pixelProvider(context, child: ProfilePage(
-                              profileRef: widget.post.creatorRef, currUserData: userData,
+            GestureDetector(
+              onTap: () {
+                if (userData != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => pixelProvider(context,
+                            child: ProfilePage(
+                              profileRef: widget.post.creatorRef,
+                              currUserData: userData,
                             ))),
-                      );
-                    }
-                  },
-                  child: Text("from " + localCreatorName + " • " + localCreatorGroup + " • " + convertTime(widget.post.createdAt.toDate()),
-                    style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary, fontSize: postCardDetailSize+1)
-                  ),
-                ),
-                Spacer(),
-                widget.post.mature ? Text(
-                  "Mature",
+                  );
+                }
+              },
+              child: Text(
+                  "from " +
+                      localCreatorName +
+                      " • " +
+                      localCreatorGroup +
+                      " • " +
+                      convertTime(widget.post.createdAt.toDate()),
                   style: Theme.of(context)
                       .textTheme
                       .subtitle2
-                      ?.copyWith(color: colorScheme.primary, fontSize: postCardDetailSize+1),
-                ) : Container(),
-                widget.post.creatorRef!=widget.currUserRef ? IconButton(
-                  icon: Icon(Icons.more_horiz),
-                  iconSize: 20*hp,
-                  color: colorScheme.primary,
-                  onPressed: (){
-                    showModalBottomSheet(
-                        context: context,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(20*hp),
-                            )),
-                        builder: (context) => pixelProvider(context, child: ReportSheet(
-                          reportType: ReportType.post,
-                          entityRef: widget.post.postRef,
-                          entityCreatorRef: widget.post.creatorRef,
-                        )));
-
-                  },
-                ) : Container(height: 48*hp)
-              ]
-            ), //introRow
-            SelectableLinkify(text: widget.post.title,
-              onOpen: openLink,
-              style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18*hp)),
-            SizedBox(height:12*hp),
-            widget.post.text!= null && widget.post.text!=""?
-            SelectableLinkify(text: widget.post.text!,
-                onOpen: openLink,
-                style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16*hp, fontFamily: "Roboto", height: 1.3), ) : Container(),
-            widget.post.mediaURL != null ?
-              ExpandableImage(imageURL: widget.post.mediaURL!, maxHeight: 450*hp, containerWidth: MediaQuery.of(context).size.width-2*leftRightPadding)
-                : Container(),
-            poll != null ? PollView(poll: poll!, currUserRef: widget.currUserRef, post: widget.post): Container(),
-            SizedBox(height:25*hp),
-            Row(
-              children: [
-                Text(
-                  widget.post.numComments + widget.post.numReplies < 2 ? 'Comments' : (widget.post.numComments + widget.post.numReplies).toString() + ' Comments',
-                  style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 16*hp),
-                ),
-                Spacer(),
-                LikeDislikePostStateful(currUserRef: widget.currUserRef, post: widget.post, postLikesManager: postLikesManager),
-              ],
+                      ?.copyWith(color: colorScheme.primary, fontSize: postCardDetailSize + 1)),
             ),
-            SizedBox(height:8*hp),
-          ],
-        ),
-      );
+            Spacer(),
+            widget.post.mature
+                ? Text(
+                    "Mature",
+                    style: Theme.of(context)
+                        .textTheme
+                        .subtitle2
+                        ?.copyWith(color: colorScheme.primary, fontSize: postCardDetailSize + 1),
+                  )
+                : Container(),
+            widget.post.creatorRef != widget.currUserRef
+                ? IconButton(
+                    icon: Icon(Icons.more_horiz),
+                    iconSize: 20 * hp,
+                    color: colorScheme.primary,
+                    onPressed: () {
+                      showModalBottomSheet(
+                          context: context,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(20 * hp),
+                          )),
+                          builder: (context) => pixelProvider(context,
+                              child: ReportSheet(
+                                reportType: ReportType.post,
+                                entityRef: widget.post.postRef,
+                                entityCreatorRef: widget.post.creatorRef,
+                              )));
+                    },
+                  )
+                : Container(height: 48 * hp)
+          ]), //introRow
+          SelectableLinkify(
+              text: widget.post.title,
+              onOpen: openLink,
+              style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18 * hp)),
+          SizedBox(height: 12 * hp),
+          widget.post.text != null && widget.post.text != ""
+              ? SelectableLinkify(
+                  text: widget.post.text!,
+                  onOpen: openLink,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText2
+                      ?.copyWith(fontSize: 16 * hp, fontFamily: "Roboto", height: 1.3),
+                )
+              : Container(),
+          widget.post.link != null ? Container(
+            margin: EdgeInsets.only(top: 10 * hp),
+            child: MyLinkPreview(
+              enableAnimation: true,
+              onPreviewDataFetched: (data) {
+                setState(() => previewData = data);
+              },
+              metadataTitleStyle: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.bold),
+              metadataTextStyle: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 14),
+              previewData: previewData,
+              text: widget.post.link!,
+              textStyle: Theme.of(context).textTheme.subtitle2,
+              linkStyle: Theme.of(context).textTheme.subtitle2,
+              width: MediaQuery.of(context).size.width - 2 * leftRightPadding,
+            ),
+          ) : Container(),
+          widget.post.mediaURL != null
+              ? ExpandableImage(
+                  imageURL: widget.post.mediaURL!,
+                  maxHeight: 450 * hp,
+                  containerWidth: MediaQuery.of(context).size.width - 2 * leftRightPadding)
+              : Container(),
+          poll != null ? PollView(poll: poll!, currUserRef: widget.currUserRef, post: widget.post) : Container(),
+          SizedBox(height: 25 * hp),
+          Row(
+            children: [
+              Text(
+                widget.post.numComments + widget.post.numReplies < 2
+                    ? 'Comments'
+                    : (widget.post.numComments + widget.post.numReplies).toString() + ' Comments',
+                style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 16 * hp),
+              ),
+              Spacer(),
+              LikeDislikePostStateful(
+                  currUserRef: widget.currUserRef, post: widget.post, postLikesManager: postLikesManager),
+            ],
+          ),
+          SizedBox(height: 8 * hp),
+        ],
+      ),
+    );
   }
 }

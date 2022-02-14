@@ -9,7 +9,6 @@ import 'package:hs_connect/services/polls_database.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
-import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/animatedSwitch.dart';
 import 'package:hs_connect/shared/widgets/deletableImage.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
@@ -19,15 +18,17 @@ import 'package:hs_connect/shared/widgets/picPickerButton.dart';
 import 'package:provider/provider.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:validators/validators.dart';
 
 import 'groupSelectionSheet.dart';
 
 const String emptyPollChoiceError = 'Can\'t create a poll with an empty choice';
 const String emptyTitleError = 'Can\'t create a post with an empty title';
+const String badLinkError = 'Please enter a valid URL link';
 
 class PostForm extends StatefulWidget {
   final UserData userData;
-  
+
   const PostForm({Key? key, required this.userData}) : super(key: key);
 
   @override
@@ -52,6 +53,7 @@ class _PostFormState extends State<PostForm> {
 
   File? newFile;
   Widget? poll;
+  String? link;
   List<String>? pollChoices;
 
   // form values
@@ -120,7 +122,6 @@ class _PostFormState extends State<PostForm> {
     final wp = Provider.of<WidthPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
 
-
     final userData = Provider.of<UserData?>(context);
     if (userData == null || groupChoices == null || selectedGroup == null || loading) {
       // Don't expect to be here, but just in case
@@ -139,9 +140,13 @@ class _PostFormState extends State<PostForm> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 //Top ROW
                 children: [
-                  SizedBox(width: 10*wp),
+                  SizedBox(width: 10 * wp),
                   TextButton(
-                    child: Text("Cancel", style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.onSurface, fontWeight: FontWeight.w500)),
+                    child: Text("Cancel",
+                        style: Theme.of(context)
+                            .textTheme
+                            .subtitle1
+                            ?.copyWith(color: colorScheme.onSurface, fontWeight: FontWeight.w500)),
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -152,35 +157,31 @@ class _PostFormState extends State<PostForm> {
                         context: context,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(20*hp),
+                          top: Radius.circular(20 * hp),
                         )),
-                        builder: (context) => pixelProvider(context, child: GroupSelectionSheet(
-                              initialSelectedGroup: selectedGroup!,
-                              onSelectGroup: (Group? group) {
-                                if (mounted) {
-                                  setState(() {
-                                    selectedGroup = group;
-                                  });
-                                }
-                              },
-                              groups: groupChoices!
-                            ))),
+                        builder: (context) => pixelProvider(context,
+                            child: GroupSelectionSheet(
+                                initialSelectedGroup: selectedGroup!,
+                                onSelectGroup: (Group? group) {
+                                  if (mounted) {
+                                    setState(() {
+                                      selectedGroup = group;
+                                    });
+                                  }
+                                },
+                                groups: groupChoices!))),
                     child: Container(
                         alignment: Alignment.center,
-                        padding: EdgeInsets.fromLTRB(15*wp, 6*hp, 8*wp, 6*hp),
+                        padding: EdgeInsets.fromLTRB(15 * wp, 6 * hp, 8 * wp, 6 * hp),
                         decoration: BoxDecoration(
                             border: Border.all(
                               color: colorScheme.surface,
-                              width: 3*hp,
+                              width: 3 * hp,
                             ),
-                            borderRadius: BorderRadius.circular(10)
-                        ),
+                            borderRadius: BorderRadius.circular(10)),
                         child: Row(
                           children: [
-                            Text(
-                              selectedGroup!.name,
-                              style: Theme.of(context).textTheme.headline6
-                            ),
+                            Text(selectedGroup!.name, style: Theme.of(context).textTheme.headline6),
                             Icon(Icons.keyboard_arrow_down_rounded),
                           ],
                         )),
@@ -189,13 +190,12 @@ class _PostFormState extends State<PostForm> {
                   MyOutlinedButton(
                     child: Row(
                       children: [
-                        Icon(Icons.add, size: 20*hp),
-                        SizedBox(width: 3*wp),
+                        Icon(Icons.add, size: 20 * hp),
+                        SizedBox(width: 3 * wp),
                         FittedBox(
                           child: Container(
-                            padding: EdgeInsets.only(bottom: 2*hp),
-                            child:
-                            Text("Post",
+                            padding: EdgeInsets.only(bottom: 2 * hp),
+                            child: Text("Post",
                                 style: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w500),
                                 maxLines: 1,
                                 softWrap: false,
@@ -204,12 +204,12 @@ class _PostFormState extends State<PostForm> {
                         ),
                       ],
                     ),
-                    borderRadius: 25*hp,
-                    thickness: 1.5*hp,
-                    padding: EdgeInsets.fromLTRB(8*wp,4.5*hp,13.5*wp,4.5*hp),
+                    borderRadius: 25 * hp,
+                    thickness: 1.5 * hp,
+                    padding: EdgeInsets.fromLTRB(8 * wp, 4.5 * hp, 13.5 * wp, 4.5 * hp),
                     gradient: Gradients.blueRed(),
                     backgroundColor: colorScheme.surface,
-                    onPressed: () async{
+                    onPressed: () async {
                       // check header isn't empty
                       if (_title.isEmpty) {
                         if (mounted) {
@@ -218,6 +218,18 @@ class _PostFormState extends State<PostForm> {
                           });
                         }
                         return;
+                      }
+                      // check link is good
+                      // www.tiktok.com/@nbcolympics/video/7063681523190369583
+                      if (link != null) {
+                        if (!isURL(link!)) {
+                          if (mounted) {
+                            setState(() {
+                              error = badLinkError;
+                            });
+                          }
+                          return;
+                        }
                       }
                       // check no empty poll choices
                       if (poll != null && pollChoices != null) {
@@ -255,6 +267,7 @@ class _PostFormState extends State<PostForm> {
                           tagString: _tag,
                           media: downloadURL,
                           pollRef: pollRef,
+                          link: link,
                           groupRef: selectedGroup!.groupRef,
                           mature: isMature,
                           onValue: handleValue,
@@ -263,32 +276,36 @@ class _PostFormState extends State<PostForm> {
                       }
                     },
                   ),
-                  SizedBox(width: 10*wp),
+                  SizedBox(width: 10 * wp),
                 ],
               ),
-              Divider(height: 4*hp, indent: 0, thickness: .5*hp, color: Theme.of(context).colorScheme.onError),
+              Divider(height: 4 * hp, indent: 0, thickness: .5 * hp, color: Theme.of(context).colorScheme.onError),
               Container(
                 //TextInput Container
                 constraints: BoxConstraints(
                   minHeight: phoneHeight * 0.75,
                 ),
-                padding: EdgeInsets.fromLTRB(20*wp, 10*hp, 20*wp, 10*hp),
+                padding: EdgeInsets.fromLTRB(20 * wp, 10 * hp, 20 * wp, 10 * hp),
                 child: Column(children: <Widget>[
                   error != null
-                      ? FittedBox(child: Text(error!, style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.onSurface)))
+                      ? FittedBox(
+                          child: Text(error!,
+                              style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.onSurface)))
                       : Container(),
-                  error != null
-                      ? SizedBox(height:10*wp)
-                      : Container(),
+                  error != null ? SizedBox(height: 10 * wp) : Container(),
                   TextFormField(
-                    style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18*hp),
+                    style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18 * hp),
                     maxLines: null,
                     autocorrect: true,
                     textCapitalization: TextCapitalization.sentences,
                     decoration: InputDecoration(
-                        hintStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18*hp, color: colorScheme.primaryVariant),
-                        border: InputBorder.none,
-                        hintText: "Title", ),
+                      hintStyle: Theme.of(context)
+                          .textTheme
+                          .headline6
+                          ?.copyWith(fontSize: 18 * hp, color: colorScheme.primaryVariant),
+                      border: InputBorder.none,
+                      hintText: "Title",
+                    ),
                     onChanged: (val) {
                       setState(() => _title = val);
                       if (error == emptyTitleError) {
@@ -302,15 +319,17 @@ class _PostFormState extends State<PostForm> {
                   ),
                   newFile != null
                       ? Semantics(
-                    label: 'new_post_pic_image',
-                    child: DeletableImage(
-                      image: Image.file(File(newFile!.path), fit: BoxFit.contain),
-                      onDelete: () {
-                        if (mounted) {
-                          setState(() => newFile = null);
-                        }
-                      }, height: 400*hp, width: 400*wp),
-                  )
+                          label: 'new_post_pic_image',
+                          child: DeletableImage(
+                              image: Image.file(File(newFile!.path), fit: BoxFit.contain),
+                              onDelete: () {
+                                if (mounted) {
+                                  setState(() => newFile = null);
+                                }
+                              },
+                              height: 400 * hp,
+                              width: 400 * wp),
+                        )
                       : Container(),
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
@@ -321,24 +340,77 @@ class _PostFormState extends State<PostForm> {
                     },
                     child: Container(
                       constraints: BoxConstraints(
-                        minHeight: newFile == null ? 492*hp : 242*hp,
+                        minHeight: newFile == null ? 492 * hp : 242 * hp,
                       ),
                       child: Column(
                         children: [
                           TextFormField(
-                            style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16*hp),
+                            style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16 * hp),
                             maxLines: null,
                             autocorrect: true,
                             textCapitalization: TextCapitalization.sentences,
                             decoration: InputDecoration(
-                                hintStyle: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16*hp, color: colorScheme.primary),
+                                hintStyle: Theme.of(context)
+                                    .textTheme
+                                    .bodyText2
+                                    ?.copyWith(fontSize: 16 * hp, color: colorScheme.primary),
                                 border: InputBorder.none,
                                 hintText: "Optional text"),
                             onChanged: (val) => setState(() => _text = val),
                             focusNode: optionalTextFocusNode,
                           ),
-                          SizedBox(height: 30*hp),
+                          SizedBox(height: 30 * hp),
                           poll != null ? poll! : Container(),
+                          link != null
+                              ? Container(
+                                  width: MediaQuery.of(context).size.width * 0.9,
+                                  decoration: ShapeDecoration(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5 * hp),
+                                      side: BorderSide(
+                                        color: colorScheme.onError,
+                                        width: 1 * hp,
+                                      ),
+                                    ),
+                                  ),
+                                  child: TextFormField(
+                                    style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16 * hp),
+                                    decoration: new InputDecoration(
+                                        fillColor: colorScheme.surface,
+                                        filled: true,
+                                        hintText: 'https://website.com',
+                                        isCollapsed: true,
+                                        hintStyle: Theme.of(context)
+                                            .textTheme
+                                            .bodyText2
+                                            ?.copyWith(fontSize: 16 * hp, color: colorScheme.primary),
+                                        contentPadding: EdgeInsets.symmetric(horizontal: 10*wp),
+                                        suffixIcon: IconButton(
+                                          padding: EdgeInsets.zero,
+                                          constraints: BoxConstraints(),
+                                          onPressed: () {
+                                            if (mounted) {
+                                              setState(() => link = null);
+                                            }
+                                          },
+                                          icon: Icon(Icons.close, size: 20*hp),
+                                        )
+                                    ),
+                                    autocorrect: false,
+                                    onChanged: (val) {
+                                      setState(() => link = val);
+                                      if (error == badLinkError) {
+                                        if (mounted) {
+                                          setState(() {
+                                            error = null;
+                                          });
+                                        }
+                                      }
+                                    },
+                                    textAlignVertical: TextAlignVertical.center,
+                                  ),
+                                )
+                              : Container()
                         ],
                       ),
                     ),
@@ -353,71 +425,93 @@ class _PostFormState extends State<PostForm> {
           bottom: MediaQuery.of(context).padding.bottom,
           left: 0,
           child: Container(
-            color: userData.domainColor!=null ? userData.domainColor! : colorScheme.onSurface,
-            padding: EdgeInsets.only(top: bottomGradientThickness*hp),
-            width:MediaQuery.of(context).size.width,
+            color: userData.domainColor != null ? userData.domainColor! : colorScheme.onSurface,
+            padding: EdgeInsets.only(top: bottomGradientThickness * hp),
+            width: MediaQuery.of(context).size.width,
             child: Container(
               color: colorScheme.surface,
               child: Row(children: <Widget>[
-                SizedBox(width: 10*wp),
+                SizedBox(width: 10 * wp),
                 picPickerButton(
-                    iconSize: 30*hp,
+                    iconSize: 30 * hp,
                     color: newFile == null ? colorScheme.primary : colorScheme.secondary,
                     setPic: ((File? f) {
                       if (mounted) {
                         setState(() {
                           newFile = f;
                           poll = null;
+                          link = null;
                         });
                       }
-                    }), context: context, maxHeight: 400*hp, maxWidth: 400*wp),
+                    }),
+                    context: context,
+                    maxHeight: 400 * hp,
+                    maxWidth: 400 * wp),
                 SizedBox(width: 2 * wp),
                 IconButton(
-                    onPressed: () {
-                      if (mounted) {
-                        setState(() {
-                          pollChoices = [];
-                          pollChoices!.add('');
-                          pollChoices!.add('');
-                          poll = NewPoll(onDeletePoll: () {
-                            if (mounted) {
-                              setState(() {
-                                poll = null;
-                                pollChoices = null;
-                                if (error == emptyPollChoiceError) {
-                                  error = null;
-                                }
-                              });
-                            }
-                          }, onUpdatePoll: (int index, String newChoice) {
-                            if (mounted) {
-                              setState(() {
-                                pollChoices![index] = newChoice;
-                                if (error == emptyPollChoiceError) {
-                                  for (String choice in pollChoices!) {
-                                    if (choice == '') return;
-                                  }
-                                }
+                  onPressed: () {
+                    if (mounted) {
+                      setState(() {
+                        pollChoices = [];
+                        pollChoices!.add('');
+                        pollChoices!.add('');
+                        poll = NewPoll(onDeletePoll: () {
+                          if (mounted) {
+                            setState(() {
+                              poll = null;
+                              pollChoices = null;
+                              if (error == emptyPollChoiceError) {
                                 error = null;
-                              });
-                            }
-                          }, onAddPollChoice: () {
-                            if (mounted) {
-                              setState(() {
-                                pollChoices!.add('');
-                              });
-                            }
-                          });
-                          newFile = null;
+                              }
+                            });
+                          }
+                        }, onUpdatePoll: (int index, String newChoice) {
+                          if (mounted) {
+                            setState(() {
+                              pollChoices![index] = newChoice;
+                              if (error == emptyPollChoiceError) {
+                                for (String choice in pollChoices!) {
+                                  if (choice == '') return;
+                                }
+                              }
+                              error = null;
+                            });
+                          }
+                        }, onAddPollChoice: () {
+                          if (mounted) {
+                            setState(() {
+                              pollChoices!.add('');
+                            });
+                          }
                         });
-                      }
-                    },
-                    icon: Icon(Icons.assessment,
-                        size: 30*hp, color: poll == null ? colorScheme.primary : colorScheme.secondary),
+                        newFile = null;
+                        link = null;
+                      });
+                    }
+                  },
+                  icon: Icon(Icons.assessment,
+                      size: 30 * hp, color: poll == null ? colorScheme.primary : colorScheme.secondary),
+                ),
+                IconButton(
+                  onPressed: () {
+                    if (mounted) {
+                      setState(() {
+                        link = '';
+                        newFile = null;
+                        poll = null;
+                      });
+                    }
+                  },
+                  icon: Icon(Icons.link_rounded,
+                      size: 30 * hp, color: link == null ? colorScheme.primary : colorScheme.secondary),
                 ),
                 Spacer(),
-                Text("Mature", style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.primary, fontWeight: FontWeight.w500)),
-                SizedBox(width: 10*wp),
+                Text("Mature",
+                    style: Theme.of(context)
+                        .textTheme
+                        .subtitle1
+                        ?.copyWith(color: colorScheme.primary, fontWeight: FontWeight.w500)),
+                SizedBox(width: 10 * wp),
                 AnimatedSwitch2(
                   initialState: isMature,
                   onToggle: () {
@@ -426,7 +520,7 @@ class _PostFormState extends State<PostForm> {
                     }
                   },
                 ),
-                SizedBox(width: 10*wp),
+                SizedBox(width: 10 * wp),
               ]),
             ),
           )),

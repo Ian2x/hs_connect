@@ -68,6 +68,7 @@ class Post {
   final Tag? tag;
   final bool isFeatured;
   final bool mature;
+  final String? link;
 
   Post({
     required this.postRef,
@@ -88,12 +89,17 @@ class Post {
     required this.pollRef,
     required this.tag,
     required this.isFeatured,
-    required this.mature
+    required this.mature,
+    required this.link
   });
 }
 
 postFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
   final accessRestriction = querySnapshot[C.accessRestriction];
+  String? localLink;
+  try {
+    localLink = querySnapshot[C.link];
+  } catch (e) {}
   return Post(
     postRef: querySnapshot.reference,
     groupRef: querySnapshot[C.groupRef],
@@ -113,12 +119,18 @@ postFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
     pollRef: querySnapshot[C.pollRef],
     tag: tagFrom(querySnapshot[C.tag]),
     isFeatured: querySnapshot[C.isFeatured],
-    mature: querySnapshot[C.mature]
+    mature: querySnapshot[C.mature],
+    link: localLink
   );
 }
 
 Post postFromSnapshot(DocumentSnapshot snapshot) {
   final accessRestriction = snapshot[C.accessRestriction];
+
+  String? localLink;
+  try {
+    localLink = snapshot[C.link];
+  } catch (e) {}
   return Post(
     postRef: snapshot.reference,
     groupRef: snapshot[C.groupRef],
@@ -138,6 +150,7 @@ Post postFromSnapshot(DocumentSnapshot snapshot) {
     pollRef: snapshot[C.pollRef],
     tag: tagFrom(snapshot[C.tag]),
     isFeatured: snapshot[C.isFeatured],
-    mature: snapshot[C.mature]
+    mature: snapshot[C.mature],
+    link: localLink
   );
 }

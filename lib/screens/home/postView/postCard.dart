@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/poll.dart';
 import 'package:hs_connect/models/post.dart';
@@ -21,6 +22,7 @@ import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/reports/reportSheet.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/expandableImage.dart';
+import 'package:hs_connect/shared/widgets/myLinkPreview.dart';
 import 'package:provider/provider.dart';
 
 const postCardDetailSize = 12.0;
@@ -133,6 +135,8 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
       });
     }
   }
+
+  PreviewData? previewData;
 
   @override
   Widget build(BuildContext context) {
@@ -248,6 +252,22 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                         overflow: TextOverflow.ellipsis, // default is .clip
                         maxLines: 3),
                   ),
+                  widget.post.link != null ? Container(
+                    margin: EdgeInsets.only(top: 10 * hp),
+                    child: MyLinkPreview(
+                      enableAnimation: true,
+                      onPreviewDataFetched: (data) {
+                        setState(() => previewData = data);
+                      },
+                      metadataTitleStyle: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.bold),
+                      metadataTextStyle: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 14),
+                      previewData: previewData,
+                      text: widget.post.link!,
+                      textStyle: Theme.of(context).textTheme.subtitle2,
+                      linkStyle: Theme.of(context).textTheme.subtitle2,
+                      width: MediaQuery.of(context).size.width - 2 * leftRightMargin,
+                    ),
+                  ) : Container(),
                   widget.post.mediaURL != null
                       ? ExpandableImage(
                           imageURL: widget.post.mediaURL!,

@@ -92,7 +92,7 @@ class _DeletePostSheetState extends State<DeletePostSheet> with TickerProviderSt
                   Icon(Icons.delete_rounded, color: colorScheme.primary, size: iconSize * hp),
                   SizedBox(width: 20 * wp),
                   Text(
-                    "Delete forever",
+                    "Delete",
                     style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.primaryVariant),
                   ),
                 ],

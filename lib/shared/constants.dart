@@ -225,4 +225,5 @@ class C {
   static const user = 'user';
   static const blockedPostRefs = 'blockedPostRefs';
   static const blockedUserRefs = 'blockedUserRefs';
+  static const link = 'link';
 }
