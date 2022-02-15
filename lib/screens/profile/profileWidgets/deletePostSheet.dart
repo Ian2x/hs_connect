@@ -73,7 +73,7 @@ class _DeletePostSheetState extends State<DeletePostSheet> with TickerProviderSt
           children: [
             TextButton(
               onPressed: () async {
-                deletePostConfirmationDialog(context,
+                confirmationDialog(context,
                     content:
                     "Would you like to delete this post? This action cannot be undone.",
                     action: () async {

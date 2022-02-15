@@ -50,7 +50,6 @@ class HomeAppBar extends SliverPersistentHeaderDelegate{
                   children: [
                     SizedBox(height: 3*hp),
                     GestureDetector(
-                      //onTap: () async => await AuthService().signOut(),
                       child: Text("circles.co",
                           style: Theme.of(context)
                               .textTheme

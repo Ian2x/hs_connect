@@ -85,20 +85,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   void subscribeToDomain() async {
     NotificationSettings settings = await FirebaseMessaging.instance.getNotificationSettings();
-    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      MyStorageManager.readData('subscribed').then((value) async {
-        if (value == true) {
-          print('Already subscribed to topic');
-        } else {
-          print('Subscribing to topic: ' + widget.userData.domain.substring(1));
-          FirebaseMessaging.instance.subscribeToTopic(widget.userData.domain.substring(1)).then((aVoid) {
-            MyStorageManager.saveData('subscribed', true);
-            print("Successfully subscribed");
-          }, onError: (aVoid) {
-            MyStorageManager.saveData('subscribed', false);
-          });
-        }
-      });
+    if (settings.authorizationStatus==AuthorizationStatus.authorized) {
+      await FirebaseMessaging.instance.subscribeToTopic(widget.userData.domain.substring(1));
     }
   }
 

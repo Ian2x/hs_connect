@@ -149,10 +149,6 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
       return Container();
     }
 
-    if (widget.post.mediaURL!=null) {
-      print(FirebaseStorage.instance.refFromURL(widget.post.mediaURL!));
-    }
-
     final postLikesManager = PostLikesManager(
         onLike: onLike,
         onUnLike: onUnLike,

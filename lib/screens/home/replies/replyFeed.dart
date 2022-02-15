@@ -9,10 +9,10 @@ import 'package:provider/provider.dart';
 
 class RepliesFeed extends StatefulWidget {
   final DocumentReference commentRef;
-  final DocumentReference postRef;
+  final DocumentReference postCreatorRef;
   final DocumentReference groupRef;
 
-  const RepliesFeed({Key? key, required this.commentRef, required this.postRef, required this.groupRef})
+  const RepliesFeed({Key? key, required this.commentRef, required this.postCreatorRef, required this.groupRef})
       : super(key: key);
 
   @override
@@ -49,6 +49,7 @@ class _RepliesFeedState extends State<RepliesFeed> {
                     isLast: index==replies.length-1,
                     reply: replies[index],
                     currUserData: userData,
+                    postCreatorRef: widget.postCreatorRef,
                   ));
               },
             );

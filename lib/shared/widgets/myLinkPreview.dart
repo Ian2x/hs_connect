@@ -281,11 +281,11 @@ class _MyLinkPreviewState extends State<MyLinkPreview> with SingleTickerProvider
                 humanize: true,
                 looseUrl: true,
               ),
-              text: widget.text,
+              text: Uri.parse(widget.text).host,
               style: widget.textStyle?.copyWith(overflow: TextOverflow.ellipsis),
               textAlign: TextAlign.center,
               )
-          : Text(Uri.parse(widget.text).host, style: widget.textStyle),
+          : Text(widget.text, style: widget.textStyle),
     );
   }
 
