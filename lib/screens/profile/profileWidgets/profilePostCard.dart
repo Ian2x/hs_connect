@@ -176,6 +176,7 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
                                   postUserRef: widget.post.creatorRef,
                                   groupRef: widget.post.groupRef,
                                   postRef: widget.post.postRef,
+                                  media: widget.post.mediaURL,
                                   onDelete: widget.onDelete
                           )));
                       },

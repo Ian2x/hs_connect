@@ -76,6 +76,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
     final wp = Provider.of<WidthPixel>(context).value;
     final hp = Provider.of<HeightPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
     if (UMs == null || otherUsers == null) {
       return Loading();
@@ -86,7 +87,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
           padding: EdgeInsets.only(top: 50 * hp),
           alignment: Alignment.topCenter,
           child: Text("No messages :/",
-              style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.normal)));
+              style: textTheme.headline6?.copyWith(fontWeight: FontWeight.normal)));
     }
 
     // sorted by latest first
@@ -135,15 +136,15 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                           height: 33 * hp,
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              image: new DecorationImage(
+                              image: DecorationImage(
                                   fit: BoxFit.fill, image: _images.profileImageProvider(otherUser.profileImageURL)))),
                       SizedBox(width: 14 * wp),
                       Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                         Text(otherUser.fundamentalName,
-                            style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold)),
+                            style: textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold)),
                         SizedBox(height: 4 * hp),
                         Text(otherUser.fullDomainName != null ? otherUser.fullDomainName! : otherUser.domain,
-                            style: Theme.of(context).textTheme.bodyText2?.copyWith(color: otherUser.domainColor!=null ? otherUser.domainColor! : colorScheme.primary))
+                            style: textTheme.bodyText2?.copyWith(color: otherUser.domainColor!=null ? otherUser.domainColor! : colorScheme.primary))
                       ]),
                       Flexible(
                           child: Column(children: <Widget>[
@@ -151,9 +152,9 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                           Spacer(),
                           isToday(UMUDcache[index].UM!.lastMessage.toDate())
                               ? Text(DateFormat.jm().format(UMUDcache[index].UM!.lastMessage.toDate()),
-                                  style: Theme.of(context).textTheme.bodyText2?.copyWith(color: colorScheme.primary))
+                                  style: textTheme.bodyText2?.copyWith(color: colorScheme.primary))
                               : Text(DateFormat.yMd().format(UMUDcache[index].UM!.lastMessage.toDate()),
-                                  style: Theme.of(context).textTheme.bodyText2?.copyWith(color: colorScheme.primary))
+                                  style: textTheme.bodyText2?.copyWith(color: colorScheme.primary))
                         ])
                       ]))
                     ])),

@@ -29,13 +29,12 @@ class ImageStorage {
 
   CachedNetworkImage getCachedImage(String imageURL, {double? width, double? height, BoxFit? fit}) {
     return CachedNetworkImage(
-      imageUrl: imageURL,
-      placeholder: (context, url) => CircularProgressIndicator(),
-      errorWidget: (context, url, error) => Icon(Icons.error),
-      width: width,
-      height: height,
-      fit: fit
-    );
+        imageUrl: imageURL,
+        placeholder: (context, url) => CircularProgressIndicator(),
+        errorWidget: (context, url, error) => Icon(Icons.error),
+        width: width,
+        height: height,
+        fit: fit);
   }
 
   ImageProvider profileImageProvider(String? imageURL) {
@@ -75,10 +74,11 @@ class ImageStorage {
   }
 
   Future deleteImage({required String imageURL}) async {
-    defaultCacheManager.removeFile(imageURL); // remove from cache
-    final index = imageURL.indexOf("images%2F") + "images%2F".length;
+    await Future.wait(
+        [defaultCacheManager.removeFile(imageURL), FirebaseStorage.instance.refFromURL(imageURL).delete()]);
+    /*final index = imageURL.indexOf("images%2F") + "images%2F".length;
     final imagePath = imageURL.substring(index, index + 36);
-    await imagesRef.child(imagePath).delete();
+    await imagesRef.child(imagePath).delete();*/
   }
 
   Future uploadProfilePic({required File file, required String? oldImageURL}) async {
@@ -94,10 +94,11 @@ class ImageStorage {
     });
     // delete old profilePic
     if (oldImageURL != null) {
-      defaultCacheManager.removeFile(oldImageURL); // remove from cache
+      deleteImage(imageURL: oldImageURL);
+      /*defaultCacheManager.removeFile(oldImageURL); // remove from cache
       final index = oldImageURL.indexOf("profilePics%2F") + "profilePics%2F".length;
       final oldImagePath = oldImageURL.substring(index, index + 36);
-      await profilePicsRef.child(oldImagePath).delete();
+      await profilePicsRef.child(oldImagePath).delete();*/
     }
     final downloadURL = await snapshot.ref.getDownloadURL();
     // store into cache

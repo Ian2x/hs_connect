@@ -1,7 +1,4 @@
 import 'dart:async';
-import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
@@ -39,13 +36,13 @@ void main() async {
 }
 
 void launchDelay(BuildContext context) async {
-  await Future.delayed(const Duration(milliseconds: 500), () {});
+  await Future.delayed(const Duration(milliseconds: 1000), () {});
 }
 
 void getNotificationsPermissions() async {
   NotificationSettings origSettings = await FirebaseMessaging.instance.getNotificationSettings();
   if (origSettings.authorizationStatus==AuthorizationStatus.notDetermined) {
-    NotificationSettings newSettings = await FirebaseMessaging.instance.requestPermission();
+    await FirebaseMessaging.instance.requestPermission();
   }
 }
 
@@ -59,7 +56,6 @@ class MyApp extends StatelessWidget {
 
   static final FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ThemeNotifier>(
@@ -71,16 +67,4 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
-
-  /*@override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider<ThemeNotifier>(
-      create: (_) => ThemeNotifier(context),
-      child: StreamProvider<User?>.value(
-          value: AuthService().user,
-          initialData: null,
-          child: Main2(),
-      ),
-    );
-  }*/
 }

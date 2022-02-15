@@ -33,10 +33,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   bool isDomain = true;
   late TabController tabController;
   ScrollController scrollController = ScrollController();
-  var top = 0.0;
   bool searchByTrending = true;
 
-  void toggleSearch() {
+  void toggleSearch(bool newSearchByTrending) {
     if (mounted) {
       MyStorageManager.saveData('searchByTrending', !searchByTrending);
       setState(() => searchByTrending = !searchByTrending);
@@ -48,6 +47,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     setupInteractedMessage();
     subscribeToDomain();
     getSearchByTrending();
+    saveTokenToDatabase();
     tabController = TabController(length: 2, vsync: this);
     tabController.addListener(() {
       if (mounted) {
@@ -58,6 +58,18 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       scrollController.jumpTo(0);
     });
     super.initState();
+  }
+
+  void saveTokenToDatabaseHelper(String token) async {
+    widget.userData.userRef.update({C.tokens: FieldValue.arrayUnion([token])});
+  }
+
+  void saveTokenToDatabase() async {
+    final token = await FirebaseMessaging.instance.getToken();
+    if (token!=null) {
+      saveTokenToDatabaseHelper(token);
+    }
+    FirebaseMessaging.instance.onTokenRefresh.listen(saveTokenToDatabaseHelper);
   }
 
   void getSearchByTrending() async {
@@ -94,12 +106,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   Future<void> setupInteractedMessage() async {
     // Get any messages which caused the application to open from a terminated state.
     RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
-
     // If the message also contains a data property with a "type" of "chat", navigate to a chat screen
     if (initialMessage != null) {
       _handleMessage(initialMessage);
     }
-
     // Also handle any interaction when the app is in the background via a Stream listener
     FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
   }
@@ -143,15 +153,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final userData = Provider.of<UserData?>(context);
     final colorScheme = Theme.of(context).colorScheme;
 
-    if (userData == null) {
-      return Scaffold(backgroundColor: colorScheme.background, body: Loading());
-    }
-
-    if (userData.launchDate != null && userData.launchDate!.compareTo(Timestamp.now()) > 0) {
-      return LaunchCountdown(userData: userData);
+    if (widget.userData.launchDate != null && widget.userData.launchDate!.compareTo(Timestamp.now()) > 0) {
+      return LaunchCountdown(userData: widget.userData);
     }
 
     final hp = Provider.of<HeightPixel>(context).value;
@@ -168,7 +173,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 SliverPersistentHeader(
                   delegate: HomeAppBar(
                       tabController: tabController,
-                      userData: userData,
+                      userData: widget.userData,
                       isDomain: isDomain,
                       searchByTrending: searchByTrending,
                       hp: hp,
@@ -182,13 +187,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             body: TabBarView(
               children: [
                 DomainFeed(
-                    currUser: userData,
+                    currUser: widget.userData,
                     isDomain: isDomain,
                     searchByTrending: searchByTrending,
                     key: ValueKey<bool>(searchByTrending),
                 ),
                 PublicFeed(
-                    currUser: userData,
+                    currUser: widget.userData,
                     isDomain: isDomain,
                     searchByTrending: searchByTrending,
                     key: ValueKey<bool>(!searchByTrending),

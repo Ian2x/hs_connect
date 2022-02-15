@@ -1,3 +1,4 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:hs_connect/models/group.dart';
@@ -146,6 +147,10 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
 
     if (group == null || username == null) {
       return Container();
+    }
+
+    if (widget.post.mediaURL!=null) {
+      print(FirebaseStorage.instance.refFromURL(widget.post.mediaURL!));
     }
 
     final postLikesManager = PostLikesManager(

@@ -21,9 +21,7 @@
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>FirebaseDynamicLinksCustomDomains</key>
-	<array>
-		<string>https://getcircles.co/</string>
-	</array>
+	<array/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>https</string>
