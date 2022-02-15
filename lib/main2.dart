@@ -28,9 +28,6 @@ class _Main2State extends State<Main2> {
       child: Consumer<ThemeNotifier>(
         builder: (context, theme, _) => MaterialApp(
           theme: theme.getTheme(),
-          /*themeMode: ThemeMode.system,
-            theme: ThemeNotifier.lightTheme,
-            darkTheme: ThemeNotifier.darkTheme,*/
           home: Wrapper(),
         ),
       ),

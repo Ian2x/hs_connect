@@ -18,7 +18,7 @@ class HomeAppBar extends SliverPersistentHeaderDelegate{
   final UserData userData;
   final bool isDomain;
   final bool searchByTrending;
-  final VoidFunction toggleSearch;
+  final VoidBoolParamFunction toggleSearch;
   final double hp;
   final double safeAreaHeight;
 

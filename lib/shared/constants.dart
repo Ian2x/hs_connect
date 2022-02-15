@@ -226,4 +226,5 @@ class C {
   static const blockedPostRefs = 'blockedPostRefs';
   static const blockedUserRefs = 'blockedUserRefs';
   static const link = 'link';
+  static const tokens = 'tokens';
 }

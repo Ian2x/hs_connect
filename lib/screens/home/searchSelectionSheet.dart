@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 
 class SearchSelectionSheet extends StatefulWidget {
   final bool initialSearchByTrending;
-  final VoidFunction toggleSearch;
+  final VoidBoolParamFunction toggleSearch;
 
   const SearchSelectionSheet({Key? key, required this.initialSearchByTrending, required this.toggleSearch}) : super(key: key);
 
@@ -50,7 +50,7 @@ class _SearchSelectionSheetState extends State<SearchSelectionSheet> {
               behavior: HitTestBehavior.translucent,
               onTap: () {
                 if (!searchByTrending && mounted) {
-                  widget.toggleSearch();
+                  widget.toggleSearch(true);
                   setState(() {
                     searchByTrending = true;
                   });
@@ -80,7 +80,7 @@ class _SearchSelectionSheetState extends State<SearchSelectionSheet> {
                             onChanged: (bool? value) {
                               if (value==true) {
                                 if (!searchByTrending && mounted) {
-                                  widget.toggleSearch();
+                                  widget.toggleSearch(true);
                                   setState(() {
                                     searchByTrending = true;
                                   });
@@ -98,7 +98,7 @@ class _SearchSelectionSheetState extends State<SearchSelectionSheet> {
                 behavior: HitTestBehavior.translucent,
                 onTap: () {
                   if (searchByTrending && mounted) {
-                    widget.toggleSearch();
+                    widget.toggleSearch(false);
                     setState(() {
                       searchByTrending = false;
                     });
@@ -128,7 +128,7 @@ class _SearchSelectionSheetState extends State<SearchSelectionSheet> {
                               onChanged: (bool? value) {
                                 if (value==true) {
                                   if (searchByTrending && mounted) {
-                                    widget.toggleSearch();
+                                    widget.toggleSearch(false);
                                     setState(() {
                                       searchByTrending = false;
                                     });

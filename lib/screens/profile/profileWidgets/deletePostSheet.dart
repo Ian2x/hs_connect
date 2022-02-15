@@ -24,7 +24,7 @@ class DeletePostSheet extends StatefulWidget {
       required this.postUserRef,
       required this.groupRef,
       required this.postRef,
-      this.media,
+      required this.media,
       required this.onDelete})
       : super(key: key);
 
