@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hs_connect/models/userData.dart';
+import 'package:hs_connect/services/auth.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/myStorageManager.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/themeManager.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/animatedSwitch.dart';
+import 'package:hs_connect/shared/widgets/confirmationDialogs.dart';
 import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
 import 'package:hs_connect/shared/widgets/myDivider.dart';
 import 'package:provider/provider.dart';
@@ -194,13 +197,38 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                   Divider(thickness: 1*hp, height: 1*hp),
-                  SizedBox(height: 20*hp),
-                  Text("Send feedback", style: textTheme.subtitle1),
                   feedbackError != null
                       ? Container(
                       padding: EdgeInsets.only(top: 12*hp),
                       child: FittedBox(child: Text(feedbackError!, style: textTheme.bodyText2)))
                       : SizedBox(height: 6),
+                  GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      confirmationDialog(context,
+                          content: "You may need to reload your app afterwards to complete the logout process.",
+                          action: () async {
+                            HapticFeedback.heavyImpact();
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                            await AuthService().signOut();
+                          });
+                    },
+                    child: Container(
+                      height: 55*hp,
+                      alignment: Alignment.center,
+                      child: Row(
+                          children: [
+                            Text('Logout', style: textTheme.subtitle1),
+                            Spacer(),
+                            Icon(Icons.keyboard_arrow_right)
+                          ]
+                      ),
+                    ),
+                  ),
+                  Divider(thickness: 1*hp, height: 1*hp),
+                  SizedBox(height: 20*hp),
+                  Text("Send feedback", style: textTheme.subtitle1),
                   Form(
                     key: _feedbackFormKey,
                     child: Column(

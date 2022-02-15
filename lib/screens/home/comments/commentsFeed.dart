@@ -114,6 +114,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
                         switchFormBool: switchFormBool,
                         comment: comments[index - 2],
                         currUserData: userData,
+                        postCreatorRef: widget.post.creatorRef,
                       );
                     }
                   },

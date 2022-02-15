@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/reply.dart';
 import 'package:hs_connect/models/report.dart';
@@ -17,8 +18,9 @@ class ReplyCard extends StatefulWidget {
   final Reply reply;
   final UserData currUserData;
   final bool isLast;
+  final DocumentReference postCreatorRef;
 
-  ReplyCard({Key? key, required this.isLast, required this.reply, required this.currUserData}) : super(key: key);
+  ReplyCard({Key? key, required this.isLast, required this.reply, required this.currUserData, required this.postCreatorRef}) : super(key: key);
 
   @override
   _ReplyCardState createState() => _ReplyCardState();
@@ -125,7 +127,7 @@ class _ReplyCardState extends State<ReplyCard> {
                 ),
               ),
               Spacer(),
-              widget.reply.creatorRef==widget.currUserData.userRef
+              widget.reply.creatorRef==widget.postCreatorRef
                   ? Container(
                 padding: EdgeInsets.only(right: 10 * wp, top: 5 * hp),
                 child: Container(

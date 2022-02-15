@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 const maxDataCollectionRate = 3; // in hours (for trending groups)
 const maxDataCollectionDays = 2; // in days (for trending groups)
-const notificationStorageDays = 7; // in days
+const notificationStorageDays = 3; // in days
 
 // trendingCreatedAt factors
 const trendingCommentBoost = 0.08;

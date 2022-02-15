@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/models/userData.dart';
@@ -19,6 +20,7 @@ class CommentCard extends StatefulWidget {
   final UserData currUserData;
   final VoidDocParamFunction switchFormBool;
   final VoidFunction focusKeyboard;
+  final DocumentReference postCreatorRef;
 
   CommentCard({
     Key? key,
@@ -26,6 +28,7 @@ class CommentCard extends StatefulWidget {
     required this.switchFormBool,
     required this.comment,
     required this.currUserData,
+    required this.postCreatorRef
   }) : super(key: key);
 
   @override
@@ -132,7 +135,7 @@ class _CommentCardState extends State<CommentCard> {
                 ),
               ),
               Spacer(),
-              widget.comment.creatorRef==widget.currUserData.userRef
+              widget.comment.creatorRef==widget.postCreatorRef
                   ? Container(
                 padding: EdgeInsets.only(right: 10 * wp, top: 5 * hp),
                 child: Container(
@@ -215,8 +218,8 @@ class _CommentCardState extends State<CommentCard> {
           SizedBox(height: 4*hp),
           RepliesFeed(
               commentRef: widget.comment.commentRef,
-              postRef: widget.comment.postRef,
-              groupRef: widget.comment.groupRef),
+              groupRef: widget.comment.groupRef,
+              postCreatorRef: widget.postCreatorRef),
           Divider(thickness: 3 * hp, color: colorScheme.background, height: 0),
         ]));
   }

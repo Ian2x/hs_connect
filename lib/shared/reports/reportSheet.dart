@@ -97,7 +97,7 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
               ? Column(children: [
             TextButton(
               onPressed: () {
-                blockConfirmationDialog(context,
+                confirmationDialog(context,
                     content: "Would you like to hide this post? This action cannot be undone.",
                     action: () async {
                       await userData.userRef.update({
@@ -126,7 +126,7 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
               : Container(),
           TextButton(
             onPressed: () async {
-              blockConfirmationDialog(context,
+              confirmationDialog(context,
                   content:
                   "Would you like to block this user and all their content? This action cannot be undone.",
                   action: () async {

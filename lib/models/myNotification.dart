@@ -100,7 +100,7 @@ class MyNotification {
       case MyNotificationType.postVotes:
         return '';
       case MyNotificationType.fromMe:
-        return 'The creators';
+        return 'The team at Circles.co have a message: ';
       case MyNotificationType.featuredPost:
         return '';
     }
