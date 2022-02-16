@@ -11,6 +11,7 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/postView/likeDislikePost.dart';
 import 'package:hs_connect/screens/home/postView/pollView.dart';
 import 'package:hs_connect/screens/home/postView/postCard.dart';
+import 'package:hs_connect/screens/home/postView/profileSheet.dart';
 import 'package:hs_connect/screens/profile/profilePage.dart';
 import 'package:hs_connect/services/polls_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
@@ -26,13 +27,13 @@ import 'package:provider/provider.dart';
 class PostTitleCard extends StatefulWidget {
   final Post post;
   final Group group;
-  final DocumentReference currUserRef;
+  final UserData currUserData;
 
   PostTitleCard({
     Key? key,
     required this.post,
     required this.group,
-    required this.currUserRef,
+    required this.currUserData,
   }) : super(key: key);
 
   @override
@@ -43,6 +44,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
   String? creatorName;
   String? creatorGroup;
   Poll? poll;
+  UserData? fetchUserData;
 
   @override
   void initState() {
@@ -53,13 +55,13 @@ class _PostTitleCardState extends State<PostTitleCard> {
   }
 
   void getPostCreatorData() async {
-    UserDataDatabaseService _userDataDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserRef);
-    final UserData? fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.post.creatorRef);
+    UserDataDatabaseService _userDataDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserData.userRef);
+    fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.post.creatorRef);
     if (mounted) {
       setState(() {
-        creatorName = fetchUserData != null ? fetchUserData.fundamentalName : null;
+        creatorName = fetchUserData != null ? fetchUserData!.fundamentalName : null;
         creatorGroup = fetchUserData != null
-            ? (fetchUserData.fullDomainName != null ? fetchUserData.fullDomainName : fetchUserData.domain)
+            ? (fetchUserData!.fullDomainName != null ? fetchUserData!.fullDomainName : fetchUserData!.domain)
             : null;
       });
     }
@@ -99,15 +101,17 @@ class _PostTitleCardState extends State<PostTitleCard> {
             GestureDetector(
               onTap: () {
                 if (userData != null) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => pixelProvider(context,
-                            child: ProfilePage(
-                              profileRef: widget.post.creatorRef,
-                              currUserData: userData,
-                            ))),
-                  );
+                  showModalBottomSheet(
+                      context: context,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(20 * hp),
+                          )),
+                      builder: (context) => pixelProvider(context,
+                          child: ProfileSheet(
+                            otherUserData: fetchUserData!,
+                            currUserData: widget.currUserData,
+                          )));
                 }
               },
               child: Text(
@@ -132,7 +136,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
                         ?.copyWith(color: colorScheme.primary, fontSize: postCardDetailSize + 1),
                   )
                 : Container(),
-            widget.post.creatorRef != widget.currUserRef
+            widget.post.creatorRef != widget.currUserData.userRef
                 ? IconButton(
                     icon: Icon(Icons.more_horiz),
                     iconSize: 20 * hp,
@@ -191,7 +195,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
                   maxHeight: 450 * hp,
                   containerWidth: MediaQuery.of(context).size.width - 2 * leftRightPadding)
               : Container(),
-          poll != null ? PollView(poll: poll!, currUserRef: widget.currUserRef, post: widget.post) : Container(),
+          poll != null ? PollView(poll: poll!, currUserRef: widget.currUserData.userRef, post: widget.post) : Container(),
           SizedBox(height: 25 * hp),
           Row(
             children: [
@@ -203,7 +207,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
               ),
               Spacer(),
               LikeDislikePostStateful(
-                  currUserRef: widget.currUserRef, post: widget.post, postLikesManager: postLikesManager),
+                  currUserRef: widget.currUserData.userRef, post: widget.post, postLikesManager: postLikesManager),
             ],
           ),
           SizedBox(height: 8 * hp),
