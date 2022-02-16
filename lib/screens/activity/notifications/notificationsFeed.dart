@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/myNotification.dart';
 import 'package:hs_connect/models/userData.dart';
+import 'package:hs_connect/services/myNotifications_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
@@ -20,41 +21,32 @@ class NotificationsFeed extends StatefulWidget {
 
 class _NotificationsFeedState extends State<NotificationsFeed> {
   bool loading = true;
+  List<MyNotification>? notifications;
 
   @override
   initState() {
-    // remove old notifications
-    removeOldNotifications();
+    fetchNotifications();
     super.initState();
   }
 
-  Future _initStateHelper(MyNotification MN) async {
-    if (DateTime.now().difference(MN.createdAt.toDate()).compareTo(Duration(days: notificationStorageDays)) > 0) {
-      await widget.userData.userRef.update({
-        C.myNotifications: FieldValue.arrayRemove([MN.asMap()])
-      });
-    }
-  }
-
-  void removeOldNotifications() async {
-    await Future.wait([for (MyNotification MN in widget.userData.myNotifications) _initStateHelper(MN)]);
+  void fetchNotifications() async {
+    final notificationss = await MyNotificationsDatabaseService(userRef: widget.userData.userRef).getNotifications();
     if (mounted) {
       setState(() {
-        loading = false;
+        notifications = notificationss;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final userData = Provider.of<UserData?>(context);
 
-    if (userData == null || loading) {
+    if (notifications == null || loading) {
       return Loading();
     }
     final hp = Provider.of<HeightPixel>(context).value;
 
-    int numberNotifications = userData.myNotifications.length;
+    int numberNotifications = notifications!.length;
 
     if (numberNotifications == 0) {
       return Container(
@@ -72,19 +64,19 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
         physics: BouncingScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
           int trueIndex = numberNotifications - index - 1;
-          if (userData.blockedUserRefs.contains(userData.myNotifications[trueIndex].sourceUserRef)) {
+          if (widget.userData.blockedUserRefs.contains(notifications![trueIndex].sourceUserRef)) {
             return Container();
           }
           if (trueIndex == numberNotifications-1) {
             return Container(
                 padding: EdgeInsets.only(top: 2.5*hp),
-                child: NotificationCard(myNotification: userData.myNotifications[trueIndex]));
+                child: NotificationCard(myNotification: notifications![trueIndex]));
           } else if (trueIndex == 0) {
             return Container(
                 padding: EdgeInsets.only(bottom: 2.5*hp),
-                child: NotificationCard(myNotification: userData.myNotifications[trueIndex]));
+                child: NotificationCard(myNotification: notifications![trueIndex]));
           } else {
-            return NotificationCard(myNotification: userData.myNotifications[trueIndex]);
+            return NotificationCard(myNotification: notifications![trueIndex]);
           }
         });
   }

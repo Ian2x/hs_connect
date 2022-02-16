@@ -7,6 +7,8 @@ import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 
+import 'myNotifications_database.dart';
+
 void defaultFunc(dynamic parameter) {}
 
 class CommentsDatabaseService {
@@ -40,7 +42,6 @@ class CommentsDatabaseService {
         C.createdAt: Timestamp.now(),
         C.extraData: text
       }])});
-      cleanNotifications(postCreatorRef);
     }
 
     // update post's commentsRefs and trendingCreatedAt
@@ -107,9 +108,8 @@ class CommentsDatabaseService {
     });
     if (likeCount==1 || likeCount==10 || likeCount==20 || likeCount==50 || likeCount==100) {
       bool update = true;
-      final commentCreatorData = await commentCreatorRef.get();
-      final commentCreator = await userDataFromSnapshot(commentCreatorData, commentCreatorRef);
-      for (MyNotification MN in commentCreator.myNotifications) {
+      final notifications = await MyNotificationsDatabaseService(userRef: commentCreatorRef).getNotifications();
+      for (MyNotification MN in notifications) {
         if (MN.sourceRef == commentRef! && MN.myNotificationType==MyNotificationType.commentVotes && MN.extraData==likeCount.toString()) {
           update = false;
           break;

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 const maxDataCollectionRate = 3; // in hours (for trending groups)
 const maxDataCollectionDays = 2; // in days (for trending groups)
-const notificationStorageDays = 3; // in days
 
 // trendingCreatedAt factors
 const trendingCommentBoost = 0.08;
@@ -178,7 +177,6 @@ class C {
   static const time = 'time';
   static const postsOverTime = 'postsOverTime';
   static const membersOverTime = 'membersOverTime';
-  static const lastOverTimeUpdate = 'lastOverTimeUpdate';
   static const hexColor = 'hexColor';
   static const otherUserRef = 'otherUserRef';
   static const lastMessage = 'lastMessage';
@@ -232,4 +230,5 @@ class C {
   static const contentNotification = 'contentNotification';
   static const dmNotification = 'dmNotification';
   static const otherUserId = 'otherUserId';
+  static const notifiedUserRef = 'notifiedRef';
 }

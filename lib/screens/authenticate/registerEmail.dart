@@ -120,7 +120,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                                   ),
                                   Divider(height: 0, thickness: 2 * hp, color: authHintTextColor),
                                   SizedBox(height:20*hp),
-                                  MyCheckboxFormField(termsAccepted: termsAccepted, toggleTerms: (bool val) {
+                                  AuthCheckboxFormField(termsAccepted: termsAccepted, toggleTerms: (bool val) {
                                     if (error==termsError) {
                                       error = null;
                                     }

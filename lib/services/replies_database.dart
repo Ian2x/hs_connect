@@ -7,6 +7,8 @@ import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 
+import 'myNotifications_database.dart';
+
 void defaultFunc(dynamic parameter) {}
 
 class RepliesDatabaseService {
@@ -43,7 +45,6 @@ class RepliesDatabaseService {
         C.createdAt: Timestamp.now(),
         C.extraData: text
       }])});
-      cleanNotifications(commentCreatorRef);
     }
     // update other repliers' activity
     repliesCollection.where(C.commentRef, isEqualTo: commentRef).get().then(
@@ -131,9 +132,9 @@ class RepliesDatabaseService {
     });
     if (likeCount==1 || likeCount==10 || likeCount==20 || likeCount==50 || likeCount==100) {
       bool update = true;
-      final replyCreatorData = await replyCreatorRef.get();
-      final replyCreator = await userDataFromSnapshot(replyCreatorData, replyCreatorRef);
-      for (MyNotification MN in replyCreator.myNotifications) {
+      final notifications = await MyNotificationsDatabaseService(userRef: replyCreatorRef).getNotifications();
+
+      for (MyNotification MN in notifications) {
         if (MN.sourceRef == replyRef! && MN.myNotificationType==MyNotificationType.replyVotes && MN.extraData==likeCount.toString()) {
           update = false;
           break;

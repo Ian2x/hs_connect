@@ -39,7 +39,6 @@ class UserData {
   final List<DocumentReference> modGroupsRefs;
   final List<UserMessage> userMessages;
   final List<DocumentReference> savedPostsRefs;
-  final List<MyNotification> myNotifications;
   final String? profileImageURL;
   final int score;
   final int numReports;
@@ -74,7 +73,6 @@ class UserData {
     required this.modGroupsRefs,
     required this.userMessages,
     required this.savedPostsRefs,
-    required this.myNotifications,
     required this.profileImageURL,
     required this.score,
     required this.numReports,
@@ -107,7 +105,6 @@ Future<UserData> userDataFromSnapshot(DocumentSnapshot snapshot, DocumentReferen
     modGroupsRefs: docRefList(snapshot.get(C.modGroupRefs)),
     userMessages: snapshot.get(C.userMessages).map<UserMessage>((userMessage) => userMessageFromMap(map: userMessage)).toList(),
     savedPostsRefs: docRefList(snapshot.get(C.savedPostsRefs)),
-    myNotifications: myNotificationList(snapshot.get(C.myNotifications)),
     profileImageURL: snapshot.get(C.profileImageURL),
     score: snapshot.get(C.score),
     numReports: snapshot.get(C.numReports),

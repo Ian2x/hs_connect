@@ -54,7 +54,6 @@ class UserDataDatabaseService {
       C.groups: [domainGroupRef],
       C.modGroupRefs: [],
       C.userMessages: [],
-      C.myNotifications: [],
       C.savedPostsRefs: [],
       C.profileImageURL: null,
       C.score: 0,
@@ -95,8 +94,6 @@ class UserDataDatabaseService {
     final result = await currUserRef.update({
       C.groups: FieldValue.arrayUnion([groupRef])
     });
-    GroupsDatabaseService _tempGroups = GroupsDatabaseService(currUserRef: currUserRef);
-    _tempGroups.updateGroupStats(groupRef: groupRef);
     return result;
   }
 
