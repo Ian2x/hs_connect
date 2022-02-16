@@ -138,7 +138,7 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
                 borderRadius: BorderRadius.circular(16 * hp),
                 side: BorderSide(
                   color: colorScheme.background,
-                  width: 3 * hp,
+                  width: 1.5 * hp,
                 )),
           ),
           child: Column(
@@ -158,7 +158,6 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
                     Text(group!.name, style: Theme.of(context).textTheme.subtitle2?.copyWith
                       (fontWeight: FontWeight.w500, color: colorScheme.primary, fontSize: postCardDetailSize)),
                     Spacer(),
-
                     IconButton(
                       constraints:BoxConstraints(),
                       padding: EdgeInsets.all(0),

@@ -52,7 +52,7 @@ class _ProfilePostFeedState extends State<ProfilePostFeed> {
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
         Row(
           children: [
-            SizedBox(width: 10 * wp),
+            SizedBox(width: 5 * wp),
             Text("Your Posts",
                 style: Theme.of(context).textTheme.headline5?.copyWith(fontSize: 22), textAlign: TextAlign.left),
           ],
@@ -60,13 +60,15 @@ class _ProfilePostFeedState extends State<ProfilePostFeed> {
         SizedBox(height: 10 * hp),
         Row(
           children: [
-            SizedBox(width: 10 * wp),
+            SizedBox(width: 5 * wp),
             Text("Visible to only you",
                 style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary),
                 textAlign: TextAlign.left),
           ],
         ),
-        SizedBox(height: 20 * hp),
+        SizedBox(height: 15 * hp),
+        Divider(color: colorScheme.background, thickness: 3 * hp, height: 0),
+        SizedBox(height: 15 * hp),
         _userPosts != null && _userPosts!.length != 0
             ? Container(
                 child: ListView.builder(

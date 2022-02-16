@@ -43,6 +43,7 @@ class RepliesDatabaseService {
         C.createdAt: Timestamp.now(),
         C.extraData: text
       }])});
+      cleanNotifications(postCreatorRef);
     }
     // update other repliers' activity
     repliesCollection.where(C.commentRef, isEqualTo: commentRef).get().then(

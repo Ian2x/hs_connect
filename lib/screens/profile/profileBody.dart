@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
+import 'package:hs_connect/screens/home/postView/profileSheetTitle.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profilePostFeed.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/newMessageButton.dart';
 import 'package:hs_connect/services/groups_database.dart';
@@ -78,53 +79,16 @@ class _ProfileBodyState extends State<ProfileBody> {
         physics: BouncingScrollPhysics(),
         children: [
           SizedBox(height: 20 * hp),
-          ProfileImage(
-            profileImageURL: profileData!.profileImageURL,
-            currUserName: profileData!.fundamentalName,
-            showEditIcon: isOwnProfile,
-          ),
-          SizedBox(height: 30 * hp),
-          Text(
-            profileData!.fundamentalName,
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.headline5?.copyWith(fontWeight:FontWeight.w600),
-          ),
-          SizedBox(height: 14 * hp),
           Row(
-            children: <Widget>[
-              Spacer(),
-              GroupTag(
-                groupImageURL: profileData!.domainImage,
-                groupName: profileData!.fullDomainName != null ? profileData!.fullDomainName! : profileData!.domain,
-                borderRadius: 30*hp,
-                padding: EdgeInsets.fromLTRB(30 * wp, 5 * hp, 30 * wp, 5 * hp),
-                thickness: 1.5*hp,
-                fontSize: 18*hp,
-                groupColor: profileData!.domainColor!=null ? profileData!.domainColor! : null,
+            children: [
+              ProfileTitle(
+                otherUserData: widget.currUserData,
               ),
-              Spacer(),
             ],
           ),
-          SizedBox(height: 14 * hp),
-          Center(
-            child: Text(profileData!.score.toString() + " Likes", style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 17))
-          ),
-          widget.profileUserRef != widget.currUserData.userRef
-              ? Column(
-                  children: <Widget>[
-                    SizedBox(height: 78 * hp),
-                    Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
-                      SizedBox(width: 45 * wp),
-                      NewMessageButton(
-                        otherUserData: profileData!,
-                        currUserData: widget.currUserData,
-                      )
-                    ])
-                  ],
-                )
-              : Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
-                  SizedBox(height: 40 * hp),
-                  ProfilePostFeed(profileUserData: profileData!),
+          Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
+              SizedBox(height: 30 * hp),
+              ProfilePostFeed(profileUserData: profileData!),
                 ])
         ],
       ),
