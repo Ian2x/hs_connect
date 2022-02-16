@@ -97,7 +97,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
                       return PostTitleCard(
                         post: widget.post,
                         group: widget.group,
-                        currUserRef: userData.userRef,
+                        currUserData: userData,
                       );
                     } else if (index == 1) {
                       return Divider(thickness: 5 * hp, color: colorScheme.background, height: 10 * hp);
