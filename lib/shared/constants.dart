@@ -27,6 +27,8 @@ const authPrimaryTextColor = Color(0xFFa1a1a1);
 
 const commentReplyDetailSize = 13.0;
 
+const int maxNumNotifications = 50;
+
 class _Gradient extends Color {
   _Gradient(int value) : super(value);
 
@@ -227,4 +229,5 @@ class C {
   static const blockedUserRefs = 'blockedUserRefs';
   static const link = 'link';
   static const tokens = 'tokens';
+  static const contentNotification = 'contentNotification';
 }

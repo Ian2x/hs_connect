@@ -447,8 +447,8 @@ class _PostFormState extends State<PostForm> {
                       }
                     }),
                     context: context,
-                    maxHeight: 400 * hp,
-                    maxWidth: 400 * wp),
+                    maxHeight: 1200,
+                    maxWidth: 1200),
                 SizedBox(width: 2 * wp),
                 IconButton(
                   onPressed: () {

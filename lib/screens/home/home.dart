@@ -102,33 +102,39 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
   }
 
+  Future openMessagePost(RemoteMessage message) async {
+    Post post =
+    postFromSnapshot(await FirebaseFirestore.instance.collection(C.posts).doc(message.data[C.postId]).get());
+    final data = await waitConcurrently(groupFromSnapshot(await post.groupRef.get()),
+        userDataFromSnapshot(await post.creatorRef.get(), post.creatorRef));
+    Group? group = data.item1;
+    UserData creatorData = data.item2;
+    if (group != null) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => pixelProvider(context,
+                  child: PostPage(
+                      post: post,
+                      group: group,
+                      creatorData: creatorData,
+                      postLikesManager: PostLikesManager(
+                          likeStatus: post.likes.contains(widget.userData.userRef),
+                          dislikeStatus: post.dislikes.contains(widget.userData.userRef),
+                          likeCount: post.likes.length,
+                          dislikeCount: post.dislikes.length,
+                          onLike: () {},
+                          onUnLike: () {},
+                          onDislike: () {},
+                          onUnDislike: () {})))));
+    }
+  }
+
   void _handleMessage(RemoteMessage message) async {
     if (message.data[C.type] == C.featuredPost) {
-      Post post =
-          postFromSnapshot(await FirebaseFirestore.instance.collection(C.posts).doc(message.data[C.postId]).get());
-      final data = await waitConcurrently(groupFromSnapshot(await post.groupRef.get()),
-          userDataFromSnapshot(await post.creatorRef.get(), post.creatorRef));
-      Group? group = data.item1;
-      UserData creatorData = data.item2;
-      if (group != null) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => pixelProvider(context,
-                    child: PostPage(
-                        post: post,
-                        group: group,
-                        creatorData: creatorData,
-                        postLikesManager: PostLikesManager(
-                            likeStatus: post.likes.contains(widget.userData.userRef),
-                            dislikeStatus: post.dislikes.contains(widget.userData.userRef),
-                            likeCount: post.likes.length,
-                            dislikeCount: post.dislikes.length,
-                            onLike: () {},
-                            onUnLike: () {},
-                            onDislike: () {},
-                            onUnDislike: () {})))));
-      }
+      await openMessagePost(message);
+    } else if (message.data[C.type] == C.contentNotification) {
+      await openMessagePost(message);
     }
   }
 

@@ -77,7 +77,7 @@ InputDecoration messageInputDecoration({required VoidFunction onPressed, require
         borderRadius: new BorderRadius.circular(25.7*hp),
         borderSide: new BorderSide(width: 3*wp, color: colorScheme.background)),
     suffixIcon: Row(mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.min, children: <Widget>[
-      picPickerButton(setPic: setPic, iconSize: 16*hp, context: context, maxWidth: 400*hp, maxHeight: 400*hp, color: hasImage ? colorScheme.secondary : colorScheme.primary),
+      picPickerButton(setPic: setPic, iconSize: 16*hp, context: context, maxWidth: 1200, maxHeight: 1200, color: hasImage ? colorScheme.secondary : colorScheme.primary),
       IconButton(
           icon: Icon(Icons.send),
           color: hasText ? colorScheme.secondary : colorScheme.primary,

@@ -40,6 +40,7 @@ class CommentsDatabaseService {
         C.createdAt: Timestamp.now(),
         C.extraData: text
       }])});
+      cleanNotifications(postCreatorRef);
     }
 
     // update post's commentsRefs and trendingCreatedAt

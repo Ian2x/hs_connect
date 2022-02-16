@@ -91,7 +91,7 @@ class _MessagesFormState extends State<MessagesForm> {
                            if (mounted) {
                              setState(() => loading = true);
                            }
-
+                           print(newFile?.stat());
                            if (newFile != null) {
                              // upload newFile
                              final downloadURL = await _images.uploadImage(file: newFile!);

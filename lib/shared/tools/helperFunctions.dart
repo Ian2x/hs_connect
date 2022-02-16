@@ -3,6 +3,8 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/myNotification.dart';
 import 'package:flutter/material.dart';
+import 'package:hs_connect/models/userData.dart';
+import 'package:hs_connect/shared/constants.dart';
 import 'package:tuple/tuple.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -76,4 +78,17 @@ String? httpsLink(String? link) {
   } else {
     return null;
   }
+}
+
+void cleanNotifications(DocumentReference userRef) async {
+  final user = await userDataFromSnapshot(await userRef.get(), userRef);
+  List<MyNotification> allNotifications = user.myNotifications;
+  allNotifications.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+  final notificationsLength = allNotifications.length;
+  List<Map> temp = [];
+  for (int i=maxNumNotifications; i<notificationsLength; i++) {
+    temp.add(allNotifications[i].asMap());
+  }
+  print(temp);
+  await userRef.update({C.myNotifications: FieldValue.arrayRemove(temp)});
 }
