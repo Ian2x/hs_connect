@@ -35,11 +35,12 @@ class _NotificationCardState extends State<NotificationCard> {
 
   @override
   void initState() {
-    fetchPostGroup();
-    fetchSourceUser();
+    if (widget.myNotification.myNotificationType != MyNotificationType.fromMe) {
+      fetchPostGroup();
+      fetchSourceUser();
+    }
     super.initState();
   }
-
 
   void fetchPostGroup() async {
     final postData = await widget.myNotification.parentPostRef.get();
@@ -86,17 +87,37 @@ class _NotificationCardState extends State<NotificationCard> {
       return Container();
     }
 
-    if (userData == null ||
-        sourceUserName == null ||
-        sourceUserFullDomainName == null ||
-        postGroupName == null) {
+    if (widget.myNotification.myNotificationType == MyNotificationType.fromMe) {
       return Container(
-          margin: EdgeInsets.only(top: 2*hp),
-          padding: EdgeInsets.fromLTRB(14*wp, 13*hp, 14*wp, 15*hp),
-          height: 65*hp,
+          margin: EdgeInsets.only(top: 2.5 * hp),
+          padding: EdgeInsets.fromLTRB(14 * wp, 13 * hp, 14 * wp, 15 * hp),
           color: colorScheme.surface,
-        child: loading ? Loading(backgroundColor: Colors.transparent) : null
-      );
+          child: Row(
+            children: [
+              SizedBox(
+                  width: 307 * wp,
+                  child: Text(widget.myNotification.extraData!,
+                      maxLines: 100, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.bodyText2)),
+              Flexible(
+                child: Row(
+                  children: [
+                    Spacer(),
+                    Text(convertTime(widget.myNotification.createdAt.toDate()),
+                        style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary))
+                  ],
+                ),
+              ),
+            ],
+          ));
+    }
+
+    if (userData == null || sourceUserName == null || sourceUserFullDomainName == null || postGroupName == null) {
+      return Container(
+          margin: EdgeInsets.only(top: 2 * hp),
+          padding: EdgeInsets.fromLTRB(14 * wp, 13 * hp, 14 * wp, 15 * hp),
+          height: 65 * hp,
+          color: colorScheme.surface,
+          child: loading ? Loading(backgroundColor: Colors.transparent) : null);
     }
 
     return GestureDetector(
@@ -108,24 +129,25 @@ class _NotificationCardState extends State<NotificationCard> {
           }
           final post = postFromSnapshot(await widget.myNotification.parentPostRef.get());
           final group = await groupFromSnapshot(await post.groupRef.get());
-          if (group!=null) {
+          if (group != null) {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => pixelProvider(context, child: PostPage(
-                      creatorData: userData,
-                      post: post,
-                      group: group,
-                      postLikesManager: PostLikesManager(
-                        likeStatus: post.likes.contains(userData.userRef),
-                        dislikeStatus: post.dislikes.contains(userData.userRef),
-                        likeCount: post.likes.length,
-                        dislikeCount: post.dislikes.length,
-                        onLike: () {},
-                        onUnLike: () {},
-                        onDislike: () {},
-                        onUnDislike: () {},
-                    )))));
+                    builder: (context) => pixelProvider(context,
+                        child: PostPage(
+                            creatorData: userData,
+                            post: post,
+                            group: group,
+                            postLikesManager: PostLikesManager(
+                              likeStatus: post.likes.contains(userData.userRef),
+                              dislikeStatus: post.dislikes.contains(userData.userRef),
+                              likeCount: post.likes.length,
+                              dislikeCount: post.dislikes.length,
+                              onLike: () {},
+                              onUnLike: () {},
+                              onDislike: () {},
+                              onUnDislike: () {},
+                            )))));
           } else {
             log('Error fetching group');
             if (mounted) {
@@ -136,8 +158,8 @@ class _NotificationCardState extends State<NotificationCard> {
           }
         },
         child: Container(
-            margin: EdgeInsets.only(top: 2.5*hp),
-            padding: EdgeInsets.fromLTRB(14*wp, 13*hp, 14*wp, 15*hp),
+            margin: EdgeInsets.only(top: 2.5 * hp),
+            padding: EdgeInsets.fromLTRB(14 * wp, 13 * hp, 14 * wp, 15 * hp),
             color: colorScheme.surface,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,13 +168,15 @@ class _NotificationCardState extends State<NotificationCard> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                        height: 33*hp,
-                        width: 33*hp,
+                        height: 33 * hp,
+                        width: 33 * hp,
                         decoration: BoxDecoration(
-                            shape: BoxShape.circle, image: DecorationImage(fit: BoxFit.fill, image: _images.profileImageProvider(profileImageURL)))),
-                    SizedBox(width: 14*wp),
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                fit: BoxFit.fill, image: _images.profileImageProvider(profileImageURL)))),
+                    SizedBox(width: 14 * wp),
                     SizedBox(
-                      width: 260*wp,
+                      width: 260 * wp,
                       child: RichText(
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
@@ -179,36 +203,32 @@ class _NotificationCardState extends State<NotificationCard> {
                       ),
                     ),
                     Flexible(
-                      child: Column(children: <Widget>[
-                        Row(
-                          children: [
-                            Spacer(),
-                            Text(convertTime(widget.myNotification.createdAt.toDate()),
-                                style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary))
-                          ],
-                        )
-                      ]),
+                      child: Row(
+                        children: [
+                          Spacer(),
+                          Text(convertTime(widget.myNotification.createdAt.toDate()),
+                              style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary))
+                        ],
+                      ),
                     ),
                   ],
                 ),
-                widget.myNotification.myNotificationType == MyNotificationType.featuredPost ? Container(
-                  padding: EdgeInsets.fromLTRB(54*wp, 5*hp, 0, 0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        gradient: Gradients.blueRed(),
-                        borderRadius: BorderRadius.circular(17*hp)
-                    ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(17*hp),
-                        color: Theme.of(context).colorScheme.surface,
-                      ),
-                      padding: EdgeInsets.fromLTRB(17*wp, 5*hp, 17*wp, 6*hp),
-                      margin: EdgeInsets.all(1),
-                      child: Text('Featured Post')
-                    )
-                  ),
-                ) : Container()
+                widget.myNotification.myNotificationType == MyNotificationType.featuredPost
+                    ? Container(
+                        padding: EdgeInsets.fromLTRB(54 * wp, 5 * hp, 0, 0),
+                        child: Container(
+                            decoration: BoxDecoration(
+                                gradient: Gradients.blueRed(), borderRadius: BorderRadius.circular(17 * hp)),
+                            child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(17 * hp),
+                                  color: Theme.of(context).colorScheme.surface,
+                                ),
+                                padding: EdgeInsets.fromLTRB(17 * wp, 5 * hp, 17 * wp, 6 * hp),
+                                margin: EdgeInsets.all(1),
+                                child: Text('Featured Post'))),
+                      )
+                    : Container()
               ],
             )));
   }

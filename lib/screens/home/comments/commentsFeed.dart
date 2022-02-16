@@ -27,7 +27,7 @@ class CommentsFeed extends StatefulWidget {
 
 class _CommentsFeedState extends State<CommentsFeed> {
   bool isReply = false;
-  DocumentReference? commentRef;
+  Comment? comment;
 
   late FocusNode myFocusNode;
 
@@ -51,11 +51,13 @@ class _CommentsFeedState extends State<CommentsFeed> {
     final wp = Provider.of<WidthPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
 
-    switchFormBool(DocumentReference? passedRef) {
-      setState(() {
-        isReply = !isReply;
-        commentRef = passedRef;
-      });
+    switchFormBool(Comment? passedComment) {
+      if (mounted) {
+        setState(() {
+          isReply = !isReply;
+          comment = passedComment;
+        });
+      }
     }
 
     if (userData == null) return Loading();
@@ -137,7 +139,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
                     focusNode: myFocusNode,
                     currUserRef: userData.userRef,
                     switchFormBool: switchFormBool,
-                    commentReference: commentRef,
+                    comment: comment,
                     isReply: isReply,
                     post: widget.post)),
           ),

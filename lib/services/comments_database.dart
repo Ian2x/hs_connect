@@ -80,12 +80,10 @@ class CommentsDatabaseService {
     final comment = await commentRef.get();
     if (comment.exists) {
       if (currUserRef == comment.get(C.creatorRef)) {
-
         // delete media (if applicable)
         if (media != null) {
           _images.deleteImage(imageURL: media);
         }
-
         if (weakDelete) {
           // "delete" comment
           return await commentRef

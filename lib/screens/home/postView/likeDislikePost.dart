@@ -49,8 +49,8 @@ class LikeDislikePost extends StatelessWidget {
               icon: Icon(Arrows.up_open_big, color: colorScheme.secondary),
               onPressed: () {
                 HapticFeedback.heavyImpact();
-                _posts.unLikePost(post);
                 postLikesManager.onUnLike();
+                _posts.unLikePost(post);
               },
             );
           } else {
@@ -62,8 +62,8 @@ class LikeDislikePost extends StatelessWidget {
               icon: Icon(Arrows.up_open_big),
               onPressed: () {
                 HapticFeedback.heavyImpact();
-                _posts.likePost(post, postLikesManager.likeCount);
                 postLikesManager.onLike();
+                _posts.likePost(post, postLikesManager.likeCount + 1); // because postLikesManager.likeCount is behind
               },
             );
           }
@@ -88,8 +88,8 @@ class LikeDislikePost extends StatelessWidget {
               icon: Icon(Arrows.down_open_big, color: colorScheme.onBackground),
               onPressed: () {
                 HapticFeedback.heavyImpact();
-                _posts.unDislikePost();
                 postLikesManager.onUnDislike();
+                _posts.unDislikePost();
               },
             );
           } else {
@@ -101,8 +101,8 @@ class LikeDislikePost extends StatelessWidget {
               icon: Icon(Arrows.down_open_big),
               onPressed: () {
                 HapticFeedback.heavyImpact();
-                _posts.dislikePost();
                 postLikesManager.onDislike();
+                _posts.dislikePost();
               },
             );
           }
@@ -173,7 +173,6 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
               icon: Icon(Arrows.up_open_big, color: colorScheme.secondary),
               onPressed: () {
                 HapticFeedback.heavyImpact();
-                _posts.unLikePost(widget.post);
                 widget.postLikesManager.onUnLike();
                 if (mounted) {
                   setState(() {
@@ -181,6 +180,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
                     likeStatus = false;
                   });
                 }
+                _posts.unLikePost(widget.post);
               },
             );
           } else {
@@ -193,7 +193,6 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
               icon: Icon(Arrows.up_open_big),
               onPressed: () {
                 HapticFeedback.heavyImpact();
-                _posts.likePost(widget.post, likeCount);
                 widget.postLikesManager.onLike();
                 if (mounted) {
                   setState(() {
@@ -203,6 +202,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
                     dislikeStatus = false;
                   });
                 }
+                _posts.likePost(widget.post, likeCount);
               },
             );
           }
@@ -228,7 +228,6 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
               icon: Icon(Arrows.down_open_big, color: colorScheme.secondary),
               onPressed: () {
                 HapticFeedback.heavyImpact();
-                _posts.unDislikePost();
                 widget.postLikesManager.onUnDislike();
                 if (mounted) {
                   setState(() {
@@ -236,6 +235,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
                     dislikeStatus = false;
                   });
                 }
+                _posts.unDislikePost();
               },
             );
           } else {
@@ -248,7 +248,6 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
               icon: Icon(Arrows.down_open_big),
               onPressed: () {
                 HapticFeedback.heavyImpact();
-                _posts.dislikePost();
                 widget.postLikesManager.onDislike();
                 if (mounted) {
                   setState(() {
@@ -258,6 +257,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
                     likeStatus = false;
                   });
                 }
+                _posts.dislikePost();
               },
             );
           }

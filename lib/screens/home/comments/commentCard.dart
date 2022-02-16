@@ -18,7 +18,7 @@ import 'package:provider/provider.dart';
 class CommentCard extends StatefulWidget {
   final Comment comment;
   final UserData currUserData;
-  final VoidDocParamFunction switchFormBool;
+  final VoidOptionalCommentParamFunction switchFormBool;
   final VoidFunction focusKeyboard;
   final DocumentReference postCreatorRef;
 
@@ -204,7 +204,7 @@ class _CommentCardState extends State<CommentCard> {
                             color: colorScheme.onSurface, fontWeight: FontWeight.w500, fontSize: commentReplyDetailSize)),
                     onPressed: () {
                       widget.focusKeyboard();
-                      widget.switchFormBool(widget.comment.commentRef);
+                      widget.switchFormBool(widget.comment);
                     }),
               ),
               widget.comment.creatorRef != null

@@ -230,4 +230,6 @@ class C {
   static const link = 'link';
   static const tokens = 'tokens';
   static const contentNotification = 'contentNotification';
+  static const dmNotification = 'dmNotification';
+  static const otherUserId = 'otherUserId';
 }

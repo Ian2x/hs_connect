@@ -29,13 +29,13 @@ class RepliesDatabaseService {
       required DocumentReference commentRef,
       required Post post,
       required DocumentReference groupRef,
-      required DocumentReference postCreatorRef,
+      required DocumentReference commentCreatorRef,
       Function(void) onValue = defaultFunc,
       Function onError = defaultFunc}) async {
     DocumentReference newReplyRef = repliesCollection.doc();
     // update comment creator's activity if not self
-    if (postCreatorRef != currUserRef) {
-      postCreatorRef.update({C.myNotifications: FieldValue.arrayUnion([{
+    if (commentCreatorRef != currUserRef) {
+      commentCreatorRef.update({C.myNotifications: FieldValue.arrayUnion([{
         C.parentPostRef: post.postRef,
         C.myNotificationType: MyNotificationType.replyToComment.string,
         C.sourceRef: newReplyRef,
@@ -43,7 +43,7 @@ class RepliesDatabaseService {
         C.createdAt: Timestamp.now(),
         C.extraData: text
       }])});
-      cleanNotifications(postCreatorRef);
+      cleanNotifications(commentCreatorRef);
     }
     // update other repliers' activity
     repliesCollection.where(C.commentRef, isEqualTo: commentRef).get().then(
@@ -104,20 +104,10 @@ class RepliesDatabaseService {
     final reply = await replyRef.get();
     if (reply.exists) {
       if (currUserRef == reply.get(C.creatorRef)) {
-        // update user's replies
-        currUserRef.update({
-          C.numReplies: FieldValue.increment(-1)
-        });
-        // update post's repliesRefs
-        // postRef.update({C.repliesRefs: FieldValue.arrayRemove([replyRef])});
-        // update comment's numReplies
-        // commentRef.update({C.numReplies: FieldValue.increment(-1)});
-
         // delete media (if applicable)
         if (media != null) {
           await _images.deleteImage(imageURL: media);
         }
-
         if (weakDelete) {
           // "delete" reply
           return await replyRef

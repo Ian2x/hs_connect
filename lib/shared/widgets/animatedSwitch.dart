@@ -32,9 +32,11 @@ class _AnimatedSwitchState extends State<AnimatedSwitch> {
 
     return GestureDetector(
       onTap: (){
-        setState((){
-          isEnabled = !isEnabled;
-        });
+        if (mounted) {
+          setState((){
+            isEnabled = !isEnabled;
+          });
+        }
         widget.onToggle();
       },
       child: AnimatedContainer(
@@ -93,9 +95,11 @@ class _AnimatedSwitchState2 extends State<AnimatedSwitch2> {
 
     return GestureDetector(
       onTap: (){
-        setState((){
-          isEnabled = !isEnabled;
-        });
+        if (mounted) {
+          setState((){
+            isEnabled = !isEnabled;
+          });
+        }
         widget.onToggle();
       },
       child: AnimatedContainer(

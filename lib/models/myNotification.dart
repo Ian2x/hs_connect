@@ -100,7 +100,7 @@ class MyNotification {
       case MyNotificationType.postVotes:
         return '';
       case MyNotificationType.fromMe:
-        return 'The team at Circles.co have a message: ';
+        return '';
       case MyNotificationType.featuredPost:
         return '';
     }
@@ -120,7 +120,7 @@ class MyNotification {
       case MyNotificationType.postVotes:
         return 'Your post in ';
       case MyNotificationType.fromMe:
-        return ' have a message: ';
+        return '';
       case MyNotificationType.featuredPost:
         return '';
     }
@@ -175,7 +175,7 @@ class MyNotification {
         if (extraData! == '100') return ' got 100 likes! Legendary.';
         return '<Error: Unexpected data in MyNotificationType.replyVotes.extraData>';
       case MyNotificationType.fromMe:
-        return extraData!=null ? extraData! : 'ummm something went wrong :/';
+        return '';
       case MyNotificationType.featuredPost:
         return extraData!=null ? extraData! : 'ummm something went wrong :/';
     }
