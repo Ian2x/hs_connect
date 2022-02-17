@@ -11,8 +11,9 @@ import 'package:provider/provider.dart';
 class LikeDislikeReply extends StatefulWidget {
   final DocumentReference currUserRef;
   final Reply reply;
+  final Color? currUserColor;
 
-  const LikeDislikeReply({Key? key, required this.currUserRef, required this.reply}) : super(key: key);
+  const LikeDislikeReply({Key? key, required this.currUserRef, required this.reply, required this.currUserColor}) : super(key: key);
 
   @override
   _LikeDislikeReplyState createState() => _LikeDislikeReplyState();
@@ -50,6 +51,8 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
         commentRef: widget.reply.commentRef,
         postRef: widget.reply.postRef);
 
+    Color activeColor = widget.currUserColor!=null ? widget.currUserColor! : colorScheme.secondary;
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -61,7 +64,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
               padding: EdgeInsets.all(3*hp),
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
-              icon: Icon(ThickArrow.angle_up_icon, color: colorScheme.secondary),
+              icon: Icon(ThickArrow.angle_up_icon, color: activeColor),
               onPressed: () {
                 HapticFeedback.heavyImpact();
                 _replies.unLikeReply(widget.reply.creatorRef!);
@@ -110,7 +113,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
               padding: EdgeInsets.all(3*hp),
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
-              icon: Icon(ThickArrow.angle_down_icon, color: colorScheme.secondary),
+              icon: Icon(ThickArrow.angle_down_icon, color: activeColor),
               onPressed: () {
                 HapticFeedback.heavyImpact();
                 _replies.unDislikeReply();

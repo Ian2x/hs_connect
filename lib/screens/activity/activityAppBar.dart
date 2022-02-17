@@ -8,6 +8,7 @@ PreferredSizeWidget activityAppBar({required BuildContext context, required bool
   final wp = Provider.of<WidthPixel>(context).value;
   final hp = Provider.of<HeightPixel>(context).value;
   final colorScheme = Theme.of(context).colorScheme;
+  final textTheme = Theme.of(context).textTheme;
 
   final safeAreaHeight = MediaQuery.of(context).padding.top;
 
@@ -22,8 +23,7 @@ PreferredSizeWidget activityAppBar({required BuildContext context, required bool
           Container(
             padding: EdgeInsets.fromLTRB(30*wp, 4*hp, 30*wp, 0),
             child: Text('Activity',
-                style: Theme.of(context)
-                    .textTheme
+                style: textTheme
                     .headline4
                     ?.copyWith(fontSize: 18*hp, fontWeight: FontWeight.w600))
           ),
@@ -37,8 +37,8 @@ PreferredSizeWidget activityAppBar({required BuildContext context, required bool
             ),
             indicatorPadding: HomeAppBar.tabBarPadding,
             indicatorWeight: 0.001*hp,
-            labelStyle: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.w500, fontSize: 15, color: colorScheme.onSurface),
-            unselectedLabelStyle: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.w500, fontSize: 15, color: colorScheme.primary),
+            labelStyle: textTheme.subtitle2?.copyWith(fontWeight: FontWeight.w500, fontSize: 15, color: colorScheme.onSurface),
+            unselectedLabelStyle: textTheme.subtitle2?.copyWith(fontWeight: FontWeight.w500, fontSize: 15, color: colorScheme.primary),
             tabs: <Widget>[
               Tab(
                   iconMargin: EdgeInsets.zero,

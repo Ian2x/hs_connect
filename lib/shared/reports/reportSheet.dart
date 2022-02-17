@@ -104,6 +104,7 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
                         C.blockedPostRefs: FieldValue.arrayUnion([widget.entityRef])
                       });
                       Navigator.of(context).pop();
+                      Navigator.of(context).pop();
                     });
               },
               child: Row(
@@ -133,6 +134,7 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
                     await userData.userRef.update({
                       C.blockedUserRefs: FieldValue.arrayUnion([widget.entityCreatorRef])
                     });
+                    Navigator.of(context).pop();
                     Navigator.of(context).pop();
                   });
             },

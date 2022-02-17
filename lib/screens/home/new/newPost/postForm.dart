@@ -122,9 +122,7 @@ class _PostFormState extends State<PostForm> {
     final wp = Provider.of<WidthPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
 
-    final userData = Provider.of<UserData?>(context);
-    if (userData == null || groupChoices == null || selectedGroup == null || loading) {
-      // Don't expect to be here, but just in case
+    if (groupChoices == null || selectedGroup == null || loading) {
       return Loading();
     }
 
@@ -260,7 +258,7 @@ class _PostFormState extends State<PostForm> {
                           pollRef = await _polls.newPoll(choices: pollChoices!);
                         }
 
-                        await PostsDatabaseService(currUserRef: userData.userRef).newPost(
+                        await PostsDatabaseService(currUserRef: widget.userData.userRef).newPost(
                           title: _title,
                           text: _text,
                           tagString: _tag,
@@ -427,7 +425,7 @@ class _PostFormState extends State<PostForm> {
           bottom: MediaQuery.of(context).padding.bottom,
           left: 0,
           child: Container(
-            color: userData.domainColor != null ? userData.domainColor! : colorScheme.onSurface,
+            color: widget.userData.domainColor != null ? widget.userData.domainColor! : colorScheme.onSurface,
             padding: EdgeInsets.only(top: bottomGradientThickness * hp),
             width: MediaQuery.of(context).size.width,
             child: Container(

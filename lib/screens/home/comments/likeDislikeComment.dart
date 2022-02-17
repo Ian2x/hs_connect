@@ -10,8 +10,9 @@ import 'package:provider/provider.dart';
 class LikeDislikeComment extends StatefulWidget {
   final DocumentReference currUserRef;
   final Comment comment;
+  final Color? currUserColor;
 
-  const LikeDislikeComment({Key? key, required this.currUserRef, required this.comment}) : super(key: key);
+  const LikeDislikeComment({Key? key, required this.currUserRef, required this.comment, required this.currUserColor}) : super(key: key);
 
   @override
   _LikeDislikeCommentState createState() => _LikeDislikeCommentState();
@@ -46,6 +47,8 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
     CommentsDatabaseService _comments = CommentsDatabaseService(
         currUserRef: widget.currUserRef, commentRef: widget.comment.commentRef, postRef: widget.comment.postRef);
 
+    Color activeColor = widget.currUserColor!=null ? widget.currUserColor! : colorScheme.secondary;
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -57,7 +60,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               padding: EdgeInsets.all(3*hp),
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
-              icon: Icon(ThickArrow.angle_down_icon, color: colorScheme.primary),
+              icon: Icon(ThickArrow.angle_down_icon, color: activeColor),
               onPressed: () {
                 HapticFeedback.heavyImpact();
                 _comments.unLikeComment(widget.comment.creatorRef!);
@@ -106,7 +109,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               padding: EdgeInsets.all(3*hp),
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
-              icon: Icon(ThickArrow.angle_down_icon, color: colorScheme.secondary),
+              icon: Icon(ThickArrow.angle_down_icon, color: activeColor),
               onPressed: () {
                 HapticFeedback.heavyImpact();
                 _comments.unDislikeComment();

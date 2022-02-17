@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileImage.dart';
-import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
@@ -32,7 +31,6 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
   List<UserMessage>? UMs;
   List<UserData>? otherUsers;
   List<UMUD> UMUDcache = [];
-  final ImageStorage _images = ImageStorage();
 
   @override
   void initState() {

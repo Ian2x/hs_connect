@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/message.dart';
 import 'package:hs_connect/services/messages_database.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
-import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 import 'messagesBubble.dart';
 
@@ -36,7 +34,6 @@ class _MessagesFeedState extends State<MessagesFeed> {
 
   @override
   Widget build(BuildContext context) {
-    final hp = Provider.of<HeightPixel>(context).value;
 
     MessagesDatabaseService _messages =
         new MessagesDatabaseService(currUserRef: widget.currUserRef, otherUserRef: widget.otherUserRef);

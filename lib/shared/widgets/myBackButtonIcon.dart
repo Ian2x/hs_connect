@@ -7,7 +7,7 @@ IconButton myBackButtonIcon(BuildContext context, {Color? overrideColor}) {
   final colorScheme = Theme.of(context).colorScheme;
   return IconButton(
     constraints: BoxConstraints(),
-    icon: Icon(Icons.arrow_back_ios, color: overrideColor!= null ? overrideColor : colorScheme.onSurface, size: 26*hp),
+    icon: Icon(Icons.arrow_back_ios, color: overrideColor!= null ? overrideColor : colorScheme.onSurface, size: 22*hp),
     onPressed: () => Navigator.of(context).pop(),
   );
 }

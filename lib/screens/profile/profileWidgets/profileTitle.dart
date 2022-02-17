@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileImage.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:provider/provider.dart';

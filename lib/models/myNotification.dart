@@ -172,8 +172,8 @@ class MyNotification {
       case MyNotificationType.postVotes:
         if (extraData! == '1') return ' got its first like.';
         if (extraData! == '10') return ' got 10 likes! Check it out.';
-        if (extraData! == '20') return ' got 20 likes! Check it out.';
-        if (extraData! == '50') return ' got 50 likes! Check it out.';
+        if (extraData! == '20') return ' got 20 likes! Rare.';
+        if (extraData! == '50') return ' got 50 likes! Epic.';
         if (extraData! == '100') return ' got 100 likes! Legendary.';
         return '<Error: Unexpected data in MyNotificationType.replyVotes.extraData>';
       case MyNotificationType.fromMe:

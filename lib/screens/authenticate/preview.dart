@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hs_connect/screens/authenticate/authenticate.dart';
+import 'package:hs_connect/screens/authenticate/registerEmail.dart';
+import 'package:hs_connect/screens/authenticate/signIn.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
@@ -55,7 +56,7 @@ class PreviewPage extends StatelessWidget {
                 ),
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => pixelProvider(context, child: Authenticate(signIn: false))));
+                      builder: (context) => pixelProvider(context, child: RegisterEmail())));
                 },
               ),
               SizedBox(height: 15 * hp),
@@ -66,7 +67,7 @@ class PreviewPage extends StatelessWidget {
                 ),
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => pixelProvider(context, child: Authenticate(signIn: true))));
+                      builder: (context) => pixelProvider(context, child: SignIn())));
                 },
               ),
               SizedBox(height: 65 * hp),

@@ -16,12 +16,12 @@ import 'likeDislikeReply.dart';
 
 class ReplyCard extends StatefulWidget {
   final Reply reply;
-  final DocumentReference currUserRef;
+  final UserData currUserData;
   final DocumentReference postCreatorRef;
 
   ReplyCard({Key? key,
     required this.reply,
-    required this.currUserRef,
+    required this.currUserData,
     required this.postCreatorRef}) : super(key: key);
 
   @override
@@ -40,13 +40,13 @@ class _ReplyCardState extends State<ReplyCard> {
   void initState() {
     super.initState();
     // initialize liked/disliked
-    if (widget.reply.likes.contains(widget.currUserRef)) {
+    if (widget.reply.likes.contains(widget.currUserData.userRef)) {
       if (mounted) {
         setState(() {
           liked = true;
         });
       }
-    } else if (widget.reply.likes.contains(widget.currUserRef)) {
+    } else if (widget.reply.likes.contains(widget.currUserData.userRef)) {
       if (mounted) {
         setState(() {
           disliked = true;
@@ -59,7 +59,7 @@ class _ReplyCardState extends State<ReplyCard> {
   void getUserData() async {
     if (widget.reply.creatorRef != null) {
       UserDataDatabaseService _userInfoDatabaseService =
-          UserDataDatabaseService(currUserRef: widget.currUserRef);
+          UserDataDatabaseService(currUserRef: widget.currUserData.userRef);
       final UserData? fetchUserData = await _userInfoDatabaseService.getUserData(userRef: widget.reply.creatorRef!);
       if (mounted) {
         setState(() {
@@ -111,7 +111,7 @@ class _ReplyCardState extends State<ReplyCard> {
                                 )),
                             builder: (context) => pixelProvider(context,
                                 child: ProfileSheet(
-                                  currUserRef: widget.currUserRef,
+                                  currUserRef: widget.currUserData.userRef,
                                   otherUserScore: replierScore!,
                                   otherUserFundName: localCreatorName,
                                   otherUserFullDomain: localCreatorGroupName,
@@ -175,7 +175,7 @@ class _ReplyCardState extends State<ReplyCard> {
                       .subtitle2
                       ?.copyWith(color: colorScheme.primary, fontSize: commentReplyDetailSize)),
               SizedBox(width: 8 * wp),
-              widget.reply.creatorRef != null && widget.reply.creatorRef != widget.currUserRef
+              widget.reply.creatorRef != null && widget.reply.creatorRef != widget.currUserData.userRef
                   ? Container(
                 height: 30 * hp,
                 child: IconButton(
@@ -202,7 +202,8 @@ class _ReplyCardState extends State<ReplyCard> {
               widget.reply.creatorRef != null
                   ? LikeDislikeReply(
                       reply: widget.reply,
-                      currUserRef: widget.currUserRef,
+                      currUserRef: widget.currUserData.userRef,
+                      currUserColor: widget.currUserData.domainColor,
                     )
                   : Container()
             ],

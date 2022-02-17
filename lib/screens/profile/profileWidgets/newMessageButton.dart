@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/activity/Messages/messagesPage.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
@@ -55,7 +54,7 @@ class _NewMessageButtonState extends State<NewMessageButton> {
                       ))));
       },
       child: Container(
-        margin:EdgeInsets.fromLTRB(13.0*hp,20*hp,18.0*hp,0),
+        margin:EdgeInsets.fromLTRB(13*wp,20*hp,18*wp,0),
         padding: EdgeInsets.all(15*hp),
         alignment: Alignment.center,
         decoration: BoxDecoration(

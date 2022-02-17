@@ -223,6 +223,7 @@ class _CommentCardState extends State<CommentCard> {
                   ? LikeDislikeComment(
                       comment: widget.comment,
                       currUserRef: widget.currUserData.userRef,
+                      currUserColor: widget.currUserData.domainColor,
                     )
                   : Container()
             ],

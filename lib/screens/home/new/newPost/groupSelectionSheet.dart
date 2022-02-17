@@ -5,8 +5,6 @@ import 'package:hs_connect/models/accessRestriction.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pixels.dart';
-import 'package:hs_connect/shared/tools/helperFunctions.dart';
-import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
 class GroupSelectionSheet extends StatefulWidget {
@@ -21,7 +19,7 @@ class GroupSelectionSheet extends StatefulWidget {
 }
 
 class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
-  Group? selectedGroup;
+  late Group selectedGroup;
 
   @override
   void initState() {
@@ -36,7 +34,6 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
     final colorScheme = Theme.of(context).colorScheme;
     final bottomSpace = max(MediaQuery.of(context).padding.bottom, 25*hp);
 
-    if (selectedGroup==null) return Loading();
     return Container(
         height: 167*hp + bottomSpace,
         padding: EdgeInsets.fromLTRB(25*wp, 25*hp, 25*wp, bottomSpace),
