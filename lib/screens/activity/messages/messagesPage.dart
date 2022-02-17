@@ -90,7 +90,7 @@ class MessagesPage extends StatelessWidget {
           ),
         )),
         Container(
-            height: bottomGradientThickness * hp,
+            height: 0,
             color:  colorScheme.onSurface), //can add domain color but...
         MessagesForm(
             currUserRef: currUserRef,

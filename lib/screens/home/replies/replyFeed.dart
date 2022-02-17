@@ -46,9 +46,8 @@ class _RepliesFeedState extends State<RepliesFeed> {
                   }
                   return Center(
                     child: ReplyCard(
-                    isLast: index==replies.length-1,
                     reply: replies[index],
-                    currUserData: userData,
+                    currUserRef: userData.userRef,
                     postCreatorRef: widget.postCreatorRef,
                   ));
               },

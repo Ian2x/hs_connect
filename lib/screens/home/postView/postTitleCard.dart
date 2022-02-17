@@ -110,7 +110,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
                       builder: (context) => pixelProvider(context,
                           child: ProfileSheet(
                             currUserRef: widget.currUserRef,
-                            otherUserFullDomain: fetchUserData!.domain,
+                            otherUserFullDomain: fetchUserData!.fullDomainName!,
                             otherUserRef: fetchUserData!.userRef,
                             otherUserDomainColor: fetchUserData!.domainColor ,
                             otherUserFundName: fetchUserData!.fundamentalName,

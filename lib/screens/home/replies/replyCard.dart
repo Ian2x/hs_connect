@@ -4,6 +4,7 @@ import 'package:hs_connect/models/reply.dart';
 import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/profile/profilePage.dart';
+import 'package:hs_connect/screens/profile/profileWidgets/profileSheet.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
@@ -16,11 +17,13 @@ import 'likeDislikeReply.dart';
 
 class ReplyCard extends StatefulWidget {
   final Reply reply;
-  final UserData currUserData;
-  final bool isLast;
+  final DocumentReference currUserRef;
   final DocumentReference postCreatorRef;
 
-  ReplyCard({Key? key, required this.isLast, required this.reply, required this.currUserData, required this.postCreatorRef}) : super(key: key);
+  ReplyCard({Key? key,
+    required this.reply,
+    required this.currUserRef,
+    required this.postCreatorRef}) : super(key: key);
 
   @override
   _ReplyCardState createState() => _ReplyCardState();
@@ -29,21 +32,22 @@ class ReplyCard extends StatefulWidget {
 class _ReplyCardState extends State<ReplyCard> {
   bool liked = false;
   bool disliked = false;
-  String? creatorName;
-  String? creatorGroupName;
-  Color? groupColor;
+  String? replierName;
+  String? replierGroupName;
+  Color? replierGroupColor;
+  int? replierScore;
 
   @override
   void initState() {
     super.initState();
     // initialize liked/disliked
-    if (widget.reply.likes.contains(widget.currUserData.userRef)) {
+    if (widget.reply.likes.contains(widget.currUserRef)) {
       if (mounted) {
         setState(() {
           liked = true;
         });
       }
-    } else if (widget.reply.likes.contains(widget.currUserData.userRef)) {
+    } else if (widget.reply.likes.contains(widget.currUserRef)) {
       if (mounted) {
         setState(() {
           disliked = true;
@@ -56,21 +60,22 @@ class _ReplyCardState extends State<ReplyCard> {
   void getUserData() async {
     if (widget.reply.creatorRef != null) {
       UserDataDatabaseService _userInfoDatabaseService =
-          UserDataDatabaseService(currUserRef: widget.currUserData.userRef);
+          UserDataDatabaseService(currUserRef: widget.currUserRef);
       final UserData? fetchUserData = await _userInfoDatabaseService.getUserData(userRef: widget.reply.creatorRef!);
       if (mounted) {
         setState(() {
-          creatorName = fetchUserData != null ? fetchUserData.fundamentalName : null;
-          creatorGroupName = fetchUserData != null
+          replierName = fetchUserData != null ? fetchUserData.fundamentalName : null;
+          replierScore = fetchUserData != null ? fetchUserData.score : null;
+          replierGroupName = fetchUserData != null
               ? (fetchUserData.fullDomainName != null ? fetchUserData.fullDomainName : fetchUserData.domain)
               : null;
-          groupColor = fetchUserData != null ? fetchUserData.domainColor : null;
+          replierGroupColor = fetchUserData != null ? fetchUserData.domainColor : null;
         });
       }
     } else {
       if (mounted) {
         setState(() {
-          creatorName = '[Removed]';
+          replierName = '[Removed]';
         });
       }
     }
@@ -82,8 +87,8 @@ class _ReplyCardState extends State<ReplyCard> {
     final wp = Provider.of<WidthPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
 
-    final localCreatorName = creatorName != null ? creatorName! : '';
-    final localCreatorGroupName = creatorGroupName != null ? creatorGroupName! : '';
+    final localCreatorName = replierName != null ? replierName! : '';
+    final localCreatorGroupName = replierGroupName != null ? replierGroupName! : '';
 
     return Container(
         padding: EdgeInsets.fromLTRB(17 * wp, 0 * hp, 0 * wp, 0 * hp),
@@ -97,14 +102,25 @@ class _ReplyCardState extends State<ReplyCard> {
                 child: TextButton(
                   style: TextButton.styleFrom(
                       splashFactory: NoSplash.splashFactory, padding: EdgeInsets.zero, alignment: Alignment.centerLeft),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => pixelProvider(context,
-                              child: ProfilePage(profileRef: widget.reply.creatorRef!, currUserData: widget.currUserData))),
-                    );
-                  },
+                    onPressed: () {
+                      if (replierName != null) {
+                        showModalBottomSheet(
+                            context: context,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(20 * hp),
+                                )),
+                            builder: (context) => pixelProvider(context,
+                                child: ProfileSheet(
+                                  currUserRef: widget.currUserRef,
+                                  otherUserScore: replierScore!,
+                                  otherUserFundName: localCreatorName,
+                                  otherUserFullDomain: localCreatorGroupName,
+                                  otherUserDomainColor: replierGroupColor,
+                                  otherUserRef: widget.reply.creatorRef!,
+                                )));
+                      }
+                    },
                   child: RichText(text: TextSpan(
                       children: [
                         TextSpan(
@@ -117,7 +133,7 @@ class _ReplyCardState extends State<ReplyCard> {
                         TextSpan(
                             text: localCreatorGroupName,
                             style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                                color: groupColor != null ? groupColor : colorScheme.primaryVariant,
+                                color: replierGroupColor != null ? replierGroupColor : colorScheme.primaryVariant,
                                 fontSize: commentReplyDetailSize,
                                 fontWeight: FontWeight.w300)
                         )
@@ -132,7 +148,7 @@ class _ReplyCardState extends State<ReplyCard> {
                 padding: EdgeInsets.only(right: 10 * wp, top: 5 * hp),
                 child: Container(
                     decoration: BoxDecoration(
-                        color: groupColor != null ? groupColor : colorScheme.primary, borderRadius: BorderRadius.circular(17 * hp)),
+                        color: replierGroupColor != null ? replierGroupColor : colorScheme.primary, borderRadius: BorderRadius.circular(17 * hp)),
                     child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(17 * hp),
@@ -140,7 +156,7 @@ class _ReplyCardState extends State<ReplyCard> {
                         ),
                         padding: EdgeInsets.fromLTRB(10 * wp, 0* hp, 10 * wp, 1 * hp),
                         margin: EdgeInsets.all(1 * hp),
-                        child: Text('Creator', style: Theme.of(context).textTheme.subtitle2?.copyWith(color: groupColor != null ? groupColor : colorScheme.primary, fontSize: 12)))),
+                        child: Text('Creator', style: Theme.of(context).textTheme.subtitle2?.copyWith(color: replierGroupColor != null ? replierGroupColor : colorScheme.primary, fontSize: 12)))),
               )
                   : Container(),
             ],
@@ -160,7 +176,7 @@ class _ReplyCardState extends State<ReplyCard> {
                       .subtitle2
                       ?.copyWith(color: colorScheme.primary, fontSize: commentReplyDetailSize)),
               SizedBox(width: 8 * wp),
-              widget.reply.creatorRef != null && widget.reply.creatorRef != widget.currUserData.userRef
+              widget.reply.creatorRef != null && widget.reply.creatorRef != widget.currUserRef
                   ? Container(
                 height: 30 * hp,
                 child: IconButton(
@@ -187,7 +203,7 @@ class _ReplyCardState extends State<ReplyCard> {
               widget.reply.creatorRef != null
                   ? LikeDislikeReply(
                       reply: widget.reply,
-                      currUserRef: widget.currUserData.userRef,
+                      currUserRef: widget.currUserRef,
                     )
                   : Container()
             ],

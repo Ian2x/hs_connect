@@ -2,12 +2,15 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileSheetTitle.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/newMessageButton.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
+import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
+import 'package:hs_connect/shared/reports/reportSheet.dart';
 import 'package:hs_connect/shared/widgets/confirmationDialogs.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
@@ -85,15 +88,36 @@ class _ProfileSheetState extends State<ProfileSheet> with TickerProviderStateMix
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Row(
-                  children: [
-                    Icon(Icons.close_rounded, size: iconSize * hp, color: colorScheme.primary),
-                  ],
-                )),
+            Row(
+              children: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Row(
+                      children: [
+                        Icon(Icons.close_rounded, size: iconSize * hp, color: colorScheme.primary),
+                      ],
+                    )),
+                Spacer(),
+                IconButton(
+                    icon: Icon(Icons.more_horiz, color: colorScheme.primaryVariant),
+                    onPressed: () {
+                      showModalBottomSheet(
+                          context: context,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(20 * hp),
+                              )),
+                          builder: (context) => pixelProvider(context,
+                              child: ReportSheet(
+                                reportType: ReportType.user,
+                                entityRef: widget.otherUserRef,
+                                entityCreatorRef: widget.otherUserRef,
+                              )));
+                    })
+              ],
+            ),
             ProfileSheetTitle(
                 otherUserDomainColor: widget.otherUserDomainColor!,
                 otherUserFullDomain: widget.otherUserFullDomain,

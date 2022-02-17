@@ -49,7 +49,7 @@ class _ProfileBodyState extends State<ProfileBody> {
 
   @override
   void initState() {
-    getProfileUserData();
+    //doesn't fetch ImageData
     super.initState();
   }
 

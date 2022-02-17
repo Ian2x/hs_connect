@@ -39,36 +39,37 @@ class _NewMessageButtonState extends State<NewMessageButton> {
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
 
-    return Container(
-      margin:EdgeInsets.fromLTRB(13.0*hp,20*hp,18.0*hp,0),
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(60)),
-          color: Theme.of(context).colorScheme.onError,
-      ),
-      child: Row(
-        children: [
-          SizedBox(width:15*hp),
-          TextButton(
-            child: Text("Message...",
+    return GestureDetector(
+      onTap: ()
+      {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => pixelProvider(context,
+                      child: MessagesPage(
+                        currUserRef: widget.currUserRef,
+                        otherUserRef: widget.otherUserRef,
+                        otherUserFundName:widget.otherUserFundName,
+                        onUpdateLastMessage: () {},
+                        onUpdateLastViewed: () {},
+                      ))));
+      },
+      child: Container(
+        margin:EdgeInsets.fromLTRB(13.0*hp,20*hp,18.0*hp,0),
+        padding: EdgeInsets.all(15*hp),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(60)),
+            color: Theme.of(context).colorScheme.onError,
+        ),
+        child: Row(
+          children: [
+            SizedBox(width:15*hp),
+            Text("Message...",
               style: Theme.of(context).textTheme.subtitle1!.copyWith(fontSize:14),
             ),
-            onPressed: ()
-            {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => pixelProvider(context,
-                          child: MessagesPage(
-                            currUserRef: widget.currUserRef,
-                            otherUserRef: widget.otherUserRef,
-                            otherUserFundName:widget.otherUserFundName,
-                            onUpdateLastMessage: () {},
-                            onUpdateLastViewed: () {},
-                          ))));
-            }
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

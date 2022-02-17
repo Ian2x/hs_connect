@@ -168,7 +168,7 @@ class _NotificationCardState extends State<NotificationCard> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    SizedBox(width: 14 * wp),
+                    SizedBox(width: 5 * wp),
                     ProfileImage(
                       background: domainColor!,
                       size:33*hp,
