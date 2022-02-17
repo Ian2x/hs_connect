@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/models/userData.dart';
@@ -15,15 +16,17 @@ import 'package:provider/provider.dart';
 import 'messagesFeed.dart';
 
 class MessagesPage extends StatelessWidget {
-  final UserData otherUserData;
-  final UserData currUserData;
+  final DocumentReference otherUserRef;
+  final String otherUserFundName;
+  final DocumentReference currUserRef;
   final VoidFunction onUpdateLastMessage;
   final VoidFunction onUpdateLastViewed;
 
   const MessagesPage(
       {Key? key,
-      required this.otherUserData,
-      required this.currUserData,
+      required this.otherUserRef,
+      required this.currUserRef,
+      required this.otherUserFundName,
       required this.onUpdateLastMessage,
       required this.onUpdateLastViewed})
       : super(key: key);
@@ -39,7 +42,7 @@ class MessagesPage extends StatelessWidget {
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
         backgroundColor: colorScheme.surface,
-        title: Text(otherUserData.fundamentalName),
+        title: Text(otherUserFundName),
         leading: myBackButtonIcon(context),
         elevation: 0,
         bottom: MyDivider(),
@@ -59,8 +62,8 @@ class MessagesPage extends StatelessWidget {
                   builder: (context) => pixelProvider(context,
                       child: ReportSheet(
                         reportType: ReportType.message,
-                        entityRef: otherUserData.userRef,
-                        entityCreatorRef: otherUserData.userRef,
+                        entityRef: otherUserRef,
+                        entityCreatorRef: otherUserRef
                       )));
             },
           ),
@@ -80,18 +83,18 @@ class MessagesPage extends StatelessWidget {
               }
             },
             child: MessagesFeed(
-              currUserRef: currUserData.userRef,
-              otherUserRef: otherUserData.userRef,
+              currUserRef: currUserRef,
+              otherUserRef: otherUserRef,
               onUpdateLastViewed: onUpdateLastViewed,
             ),
           ),
         )),
         Container(
             height: bottomGradientThickness * hp,
-            color: currUserData.domainColor!=null ? currUserData.domainColor! : colorScheme.onSurface),
+            color:  colorScheme.onSurface), //can add domain color but...
         MessagesForm(
-            currUserRef: currUserData.userRef,
-            otherUserRef: otherUserData.userRef,
+            currUserRef: currUserRef,
+            otherUserRef: otherUserRef,
             onUpdateLastMessage: onUpdateLastMessage,
             onUpdateLastViewed: onUpdateLastViewed)
       ]),

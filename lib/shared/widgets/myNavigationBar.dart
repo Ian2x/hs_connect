@@ -4,6 +4,7 @@ import 'package:hs_connect/screens/activity/activityPage.dart';
 import 'package:hs_connect/screens/home/home.dart';
 import 'package:hs_connect/screens/home/new/newPost/newPost.dart';
 import 'package:hs_connect/screens/profile/profilePage.dart';
+import 'package:hs_connect/services/my_notifications_database.dart';
 import 'package:provider/provider.dart';
 
 import '../constants.dart';
@@ -24,19 +25,28 @@ class MyNavigationBar extends StatefulWidget {
 
 class _MyNavigationBarState extends State<MyNavigationBar> {
   bool loading = false;
-  late int numNotifications;
+  int? numNotifications;
 
   @override
   void initState() {
-    numNotifications = widget.currUserData.myNotifications
-            .where((element) => element.createdAt.compareTo(widget.currUserData.notificationsLastViewed) > 0)
-            .length +
-        widget.currUserData.userMessages
-            .where((element) =>
-                element.lastViewed == null ||
-                (element.lastViewed != null && element.lastMessage.compareTo(element.lastViewed!) > 0))
-            .length;
+    getNumNotifications();
     super.initState();
+  }
+
+  void getNumNotifications() async {
+    final notifications = await MyNotificationsDatabaseService(userRef: widget.currUserData.userRef).getNotifications();
+    if (mounted) {
+      setState(() {
+        numNotifications = notifications
+                .where((element) => element.createdAt.compareTo(widget.currUserData.notificationsLastViewed) > 0)
+                .length +
+            widget.currUserData.userMessages
+                .where((element) =>
+                    element.lastViewed == null ||
+                    (element.lastViewed != null && element.lastMessage.compareTo(element.lastViewed!) > 0))
+                .length;
+      });
+    }
   }
 
   @override
@@ -51,11 +61,11 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
     return Stack(
       children: [
         Container(
-          color: userData.domainColor!=null ? userData.domainColor! : colorScheme.surface, //colorScheme.surface,
+          color: userData.domainColor != null ? userData.domainColor! : colorScheme.surface, //colorScheme.surface,
           padding: EdgeInsets.only(top: bottomGradientThickness * hp),
           child: Container(
             color: colorScheme.surface,
-            height: 45*hp + MediaQuery.of(context).padding.bottom,
+            height: 45 * hp + MediaQuery.of(context).padding.bottom,
             child: BottomNavigationBar(
               backgroundColor: colorScheme.surface,
               type: BottomNavigationBarType.fixed,
@@ -63,10 +73,10 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
               showUnselectedLabels: true,
               currentIndex: widget.currentIndex,
               selectedItemColor: colorScheme.onSurface,
-              selectedFontSize: 6*hp,
-              unselectedFontSize: 6*hp,
+              selectedFontSize: 6 * hp,
+              unselectedFontSize: 6 * hp,
               onTap: (int index) {
-                if (index==0) {
+                if (index == 0) {
                   Navigator.pushReplacement(
                     context,
                     NoAnimationMaterialPageRoute(
@@ -75,15 +85,18 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
                 } else if (index == 1) {
                   Navigator.pushReplacement(
                     context,
-                    NoAnimationMaterialPageRoute(builder: (context) => pixelProvider(context, child: ActivityPage(currUserData: userData,))),
+                    NoAnimationMaterialPageRoute(
+                        builder: (context) => pixelProvider(context,
+                            child: ActivityPage(
+                              currUserData: userData,
+                            ))),
                   );
                 } else if (index == 2) {
                   Navigator.pushReplacement(
                     context,
                     NoAnimationMaterialPageRoute(
                         builder: (context) => pixelProvider(context,
-                            child: ProfilePage(profileRef: userData.userRef, currUserData: userData)
-                        )),
+                            child: ProfilePage(profileRef: userData.userRef, currUserData: userData))),
                   );
                 } else if (index == 3) {
                   Navigator.push(
@@ -93,10 +106,10 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
                 }
               },
               items: <BottomNavigationBarItem>[
-                BottomNavigationBarItem(label: '', icon: Icon(Icons.home_rounded, size: 30*hp)),
-                BottomNavigationBarItem(label: '', icon: Icon(Icons.notifications_rounded, size: 30*hp)),
-                BottomNavigationBarItem(label: '', icon: Icon(Icons.person_rounded, size: 30*hp)),
-                BottomNavigationBarItem(label: '', icon: Icon(Icons.add_rounded, size: 30*hp)),
+                BottomNavigationBarItem(label: '', icon: Icon(Icons.home_rounded, size: 30 * hp)),
+                BottomNavigationBarItem(label: '', icon: Icon(Icons.notifications_rounded, size: 30 * hp)),
+                BottomNavigationBarItem(label: '', icon: Icon(Icons.person_rounded, size: 30 * hp)),
+                BottomNavigationBarItem(label: '', icon: Icon(Icons.add_rounded, size: 30 * hp)),
               ],
             ),
           ),
@@ -104,26 +117,28 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
         Positioned(
             left: 148.5 * wp,
             top: 5 * hp,
-            child: numNotifications!=0 ? Container(
-              height: 20*hp,
-              width: 20*hp,
-              decoration: BoxDecoration(
-                color: colorScheme.surface,
-                shape: BoxShape.circle,
-              ),
-              padding: EdgeInsets.all(1.5 * hp),
-              child: Container(
-                  padding: EdgeInsets.fromLTRB(2.5*wp, 2*hp, 2*wp, 2.5*hp),
-                  decoration: BoxDecoration(
-                    color: colorScheme.secondary,
-                    shape: BoxShape.circle,
-                  ),
-                  alignment: Alignment.center,
-                  child: FittedBox(
-                    child: Text(numNotifications.toString(),
-                        style: Theme.of(context).textTheme.subtitle2?.copyWith(color: Colors.white)),
-                  )),
-            ) : Container())
+            child: numNotifications != null && numNotifications != 0
+                ? Container(
+                    height: 20 * hp,
+                    width: 20 * hp,
+                    decoration: BoxDecoration(
+                      color: colorScheme.surface,
+                      shape: BoxShape.circle,
+                    ),
+                    padding: EdgeInsets.all(1.5 * hp),
+                    child: Container(
+                        padding: EdgeInsets.fromLTRB(2.5 * wp, 2 * hp, 2 * wp, 2.5 * hp),
+                        decoration: BoxDecoration(
+                          color: colorScheme.secondary,
+                          shape: BoxShape.circle,
+                        ),
+                        alignment: Alignment.center,
+                        child: FittedBox(
+                          child: Text(numNotifications.toString(),
+                              style: Theme.of(context).textTheme.subtitle2?.copyWith(color: Colors.white)),
+                        )),
+                  )
+                : Container())
       ],
     );
   }

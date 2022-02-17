@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 const maxDataCollectionRate = 3; // in hours (for trending groups)
 const maxDataCollectionDays = 2; // in days (for trending groups)
-const notificationStorageDays = 3; // in days
 
 // trendingCreatedAt factors
 const trendingCommentBoost = 0.08;
@@ -87,7 +86,7 @@ class Gradients {
 }
 
 class ThemeText {
-  static TextStyle inter({Color? color, double? fontSize, double? height,
+  static TextStyle helvetica({Color? color, double? fontSize, double? height,
     TextDecoration? decoration1, FontWeight? fontWeight}) {
     return TextStyle(
         color: color,
@@ -95,7 +94,7 @@ class ThemeText {
         height: height,
         decoration: decoration1,
         fontWeight: fontWeight,
-        fontFamily: "Inter"
+        fontFamily: "HelveticaNeue"
     );
   }
 }
@@ -178,7 +177,6 @@ class C {
   static const time = 'time';
   static const postsOverTime = 'postsOverTime';
   static const membersOverTime = 'membersOverTime';
-  static const lastOverTimeUpdate = 'lastOverTimeUpdate';
   static const hexColor = 'hexColor';
   static const otherUserRef = 'otherUserRef';
   static const lastMessage = 'lastMessage';
@@ -230,4 +228,7 @@ class C {
   static const link = 'link';
   static const tokens = 'tokens';
   static const contentNotification = 'contentNotification';
+  static const dmNotification = 'dmNotification';
+  static const otherUserId = 'otherUserId';
+  static const notifiedUserRef = 'notifiedUserRef';
 }

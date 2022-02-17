@@ -4,6 +4,8 @@ import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/postLikesManager.dart';
 import 'package:hs_connect/models/userData.dart';
+import 'package:hs_connect/screens/activity/activityPage.dart';
+import 'package:hs_connect/screens/activity/messages/messagesPage.dart';
 import 'package:hs_connect/screens/home/postFeed/domainFeed.dart';
 import 'package:hs_connect/screens/home/postFeed/publicFeed.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +15,6 @@ import 'package:hs_connect/shared/myStorageManager.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
-import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
 import 'package:provider/provider.dart';
 
@@ -131,10 +132,32 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   void _handleMessage(RemoteMessage message) async {
-    if (message.data[C.type] == C.featuredPost) {
+    if (message.data[C.type] == C.featuredPost) { // not really gonna be using this model much anymore
       await openMessagePost(message);
     } else if (message.data[C.type] == C.contentNotification) {
-      await openMessagePost(message);
+      if (message.data[C.postId] == 'fake') {
+        Navigator.pushReplacement(
+          context,
+          NoAnimationMaterialPageRoute(builder: (context) => pixelProvider(context, child: ActivityPage(currUserData: widget.userData))),
+        );
+      } else {
+        await openMessagePost(message);
+      }
+    } else if (message.data[C.type] == C.dmNotification) {
+      final otherUserRef = FirebaseFirestore.instance.collection(C.userData).doc(message.data[C.otherUserId]);
+      final otherUser = await userDataFromSnapshot(await otherUserRef.get(), otherUserRef);
+      Navigator.push(
+        context,
+          MaterialPageRoute(
+              builder: (context) => pixelProvider(context,
+                  child: MessagesPage(
+                    currUserRef: widget.userData.userRef,
+                    otherUserRef: otherUser.userRef,
+                    onUpdateLastMessage: () {},
+                    onUpdateLastViewed: () {},
+                    otherUserFundName: otherUser.fundamentalName,
+                  )))
+      );
     }
   }
 

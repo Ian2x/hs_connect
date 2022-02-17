@@ -67,7 +67,6 @@ class GroupsDatabaseService {
             C.postsOverTime: [],
             C.numMembers: 0,
             C.membersOverTime: [],
-            C.lastOverTimeUpdate: DateTime.now(),
             C.numReports: 0,
             C.hexColor: null,
             C.selfRef: newGroupRef,
@@ -91,30 +90,6 @@ class GroupsDatabaseService {
   Future<Group?> groupFromRef(DocumentReference groupRef) async {
     final snapshot = await groupRef.get();
     return groupFromSnapshot(snapshot);
-  }
-
-  void updateGroupStats({required DocumentReference groupRef}) async {
-    final group = await groupFromRef(groupRef);
-    if (group==null) return;
-    // return if there's been an update less than 3 hours ago
-    if (DateTime.now().difference(group.lastOverTimeUpdate.toDate()).compareTo(Duration(hours: maxDataCollectionRate)) < 0) return;
-    // remove postCountAtTime and memberCountAtTime that are over 2 days old
-    final postCountAtTimes = group.postsOverTime;
-    final memberCountAtTimes = group.membersOverTime;
-    postCountAtTimes.forEach((postCountAtTime) {
-      if (DateTime.now().difference(postCountAtTime.time.toDate()).compareTo(Duration(days: maxDataCollectionDays)) > 0) {
-        groupRef.update({C.postsOverTime: FieldValue.arrayRemove([postCountAtTime.asMap()])});
-      }
-    });
-    memberCountAtTimes.forEach((memberCountAtTime) {
-      if (DateTime.now().difference(memberCountAtTime.time.toDate()).compareTo(Duration(days: maxDataCollectionDays)) > 0) {
-        groupRef.update({C.membersOverTime: FieldValue.arrayRemove([memberCountAtTime.asMap()])});
-      }
-    });
-    // Add new postCountAtTime and memberCountAtTime
-    groupRef.update({C.postsOverTime: FieldValue.arrayUnion([{C.count: group.numPosts, C.time: Timestamp.now()}])});
-    groupRef.update({C.membersOverTime: FieldValue.arrayUnion([{C.count: group.numMembers, C.time: Timestamp.now()}])});
-    groupRef.update({C.lastOverTimeUpdate: Timestamp.now()});
   }
 
   Future<Group?> getGroup(DocumentReference groupRef) async {

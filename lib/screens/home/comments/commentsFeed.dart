@@ -27,7 +27,7 @@ class CommentsFeed extends StatefulWidget {
 
 class _CommentsFeedState extends State<CommentsFeed> {
   bool isReply = false;
-  DocumentReference? commentRef;
+  Comment? comment;
 
   late FocusNode myFocusNode;
 
@@ -51,11 +51,13 @@ class _CommentsFeedState extends State<CommentsFeed> {
     final wp = Provider.of<WidthPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
 
-    switchFormBool(DocumentReference? passedRef) {
-      setState(() {
-        isReply = !isReply;
-        commentRef = passedRef;
-      });
+    switchFormBool(Comment? passedComment) {
+      if (mounted) {
+        setState(() {
+          isReply = !isReply;
+          comment = passedComment;
+        });
+      }
     }
 
     if (userData == null) return Loading();
@@ -77,49 +79,53 @@ class _CommentsFeedState extends State<CommentsFeed> {
               comments.sort((a, b) {
                 return a.createdAt.compareTo(b.createdAt);
               });
-
-              return GestureDetector(
-                onVerticalDragDown: (DragDownDetails ddd) {
-                  dismissKeyboard(context);
-                },
-                onPanUpdate: (details) {
-                  if (details.delta.dx > 15) {
-                    Navigator.of(context).pop();
-                  }
-                },
-                child: ListView.builder(
-                  itemCount: comments.length + 3,
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  physics: BouncingScrollPhysics(),
-                  itemBuilder: (BuildContext context, int index) {
-                    if (index == 0) {
-                      return PostTitleCard(
-                        post: widget.post,
-                        group: widget.group,
-                        currUserData: userData,
-                      );
-                    } else if (index == 1) {
-                      return Divider(thickness: 5 * hp, color: colorScheme.background, height: 10 * hp);
-                    } else if (index == comments.length + 2) {
-                      return SizedBox(height: 130 * hp);
-                    } else {
-                      if (userData.blockedUserRefs.contains(comments[index - 2].creatorRef)) {
-                        return Container();
-                      }
-                      return CommentCard(
-                        focusKeyboard: () {
-                          myFocusNode.requestFocus();
-                        },
-                        switchFormBool: switchFormBool,
-                        comment: comments[index - 2],
-                        currUserData: userData,
-                        postCreatorRef: widget.post.creatorRef,
-                      );
+                return GestureDetector(
+                  onVerticalDragDown: (DragDownDetails ddd) {
+                    dismissKeyboard(context);
+                  },
+                  onPanUpdate: (details) {
+                    if (details.delta.dx > 15) {
+                      Navigator.of(context).pop();
                     }
                   },
-                ),
-              );
+                  child: Container(
+                    constraints: BoxConstraints(
+                        minHeight: MediaQuery.of(context).size.height*.75,
+                    ),
+                    child: ListView.builder(
+                      itemCount: comments.length + 3,
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      physics: BouncingScrollPhysics(),
+                      itemBuilder: (BuildContext context, int index) {
+                        if (index == 0) {
+                          return PostTitleCard(
+                            post: widget.post,
+                            group: widget.group,
+                            currUserRef: userData.userRef,
+                          );
+                        } else if (index == 1) {
+                          return Divider(thickness: 5 * hp, color: colorScheme.background, height: 10 * hp);
+                        } else if (index == comments.length + 2) {
+                          return SizedBox(height: 130 * hp);
+                        } else {
+                          if (userData.blockedUserRefs.contains(comments[index - 2].creatorRef)) {
+                            return Container();
+                          }
+                          return CommentCard(
+                            focusKeyboard: () {
+                              myFocusNode.requestFocus();
+                            },
+                            switchFormBool: switchFormBool,
+                            comment: comments[index - 2],
+                            currUserData: userData,
+                            postCreatorRef: widget.post.creatorRef,
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                );
             }
           },
         ),
@@ -137,7 +143,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
                     focusNode: myFocusNode,
                     currUserRef: userData.userRef,
                     switchFormBool: switchFormBool,
-                    commentReference: commentRef,
+                    comment: comment,
                     isReply: isReply,
                     post: widget.post)),
           ),

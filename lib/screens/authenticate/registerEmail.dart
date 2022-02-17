@@ -5,6 +5,7 @@ import 'package:hs_connect/services/auth.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
+import 'package:hs_connect/shared/themeManager.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/checkboxFormField.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
@@ -46,7 +47,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
         : Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
-              leading: myBackButtonIcon(context),
+              leading: myBackButtonIcon(context, overrideColor: ThemeNotifier.lightThemeOnSurface),
               elevation: 0,
               backgroundColor: Colors.white,
             ),
@@ -70,7 +71,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                               SizedBox(height: 15 * hp),
                               Text(
                                 'Sign Up',
-                                style: ThemeText.inter(
+                                style: ThemeText.helvetica(
                                     fontWeight: FontWeight.w700, fontSize: 28 * hp, color: Colors.black),
                               ),
                               SizedBox(height: 10 * hp),
@@ -87,7 +88,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                                   child: error != null
                                       ? FittedBox(
                                         child: Text(error!,
-                                            style: ThemeText.inter(
+                                            style: ThemeText.helvetica(
                                                 fontWeight: FontWeight.w500, fontSize: 13 * hp, color: Colors.black),
                                             textAlign: TextAlign.center),
                                       )
@@ -120,7 +121,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                                   ),
                                   Divider(height: 0, thickness: 2 * hp, color: authHintTextColor),
                                   SizedBox(height:20*hp),
-                                  MyCheckboxFormField(termsAccepted: termsAccepted, toggleTerms: (bool val) {
+                                  AuthCheckboxFormField(termsAccepted: termsAccepted, toggleTerms: (bool val) {
                                     if (error==termsError) {
                                       error = null;
                                     }

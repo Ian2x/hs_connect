@@ -5,7 +5,7 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/models/comment.dart';
 import 'package:hs_connect/screens/home/comments/likeDislikeComment.dart';
 import 'package:hs_connect/screens/home/replies/replyFeed.dart';
-import 'package:hs_connect/screens/profile/profilePage.dart';
+import 'package:hs_connect/screens/profile/profileWidgets/profileSheet.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
@@ -18,7 +18,7 @@ import 'package:provider/provider.dart';
 class CommentCard extends StatefulWidget {
   final Comment comment;
   final UserData currUserData;
-  final VoidDocParamFunction switchFormBool;
+  final VoidOptionalCommentParamFunction switchFormBool;
   final VoidFunction focusKeyboard;
   final DocumentReference postCreatorRef;
 
@@ -28,7 +28,7 @@ class CommentCard extends StatefulWidget {
     required this.switchFormBool,
     required this.comment,
     required this.currUserData,
-    required this.postCreatorRef
+    required this.postCreatorRef,
   }) : super(key: key);
 
   @override
@@ -40,7 +40,8 @@ class _CommentCardState extends State<CommentCard> {
   bool disliked = false;
   String? creatorName;
   Color? creatorGroupColor;
-  String? creatorGroupName;
+  String? creatorDomainName;
+  int? creatorScore;
 
   @override
   void initState() {
@@ -70,7 +71,8 @@ class _CommentCardState extends State<CommentCard> {
       if (mounted) {
         setState(() {
           creatorName = fetchUserData != null ? fetchUserData.fundamentalName : null;
-          creatorGroupName = fetchUserData != null
+          creatorScore = fetchUserData != null ? fetchUserData.score : null;
+          creatorDomainName = fetchUserData != null
               ? (fetchUserData.fullDomainName != null ? fetchUserData.fullDomainName : fetchUserData.domain)
               : null;
           creatorGroupColor = fetchUserData != null ? fetchUserData.domainColor : null;
@@ -92,7 +94,7 @@ class _CommentCardState extends State<CommentCard> {
     final colorScheme = Theme.of(context).colorScheme;
 
     final localCreatorName = creatorName != null ? creatorName! : '';
-    final localCreatorGroupName = creatorGroupName != null ? creatorGroupName! : '';
+    final localCreatorGroupName = creatorDomainName != null ? creatorDomainName! : '';
     return Container(
         padding: EdgeInsets.fromLTRB(17 * wp, 0 * hp, 17 * wp, 0 * hp),
         child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
@@ -105,13 +107,23 @@ class _CommentCardState extends State<CommentCard> {
                   style: TextButton.styleFrom(
                       splashFactory: NoSplash.splashFactory, padding: EdgeInsets.zero, alignment: Alignment.centerLeft),
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
+                    if (creatorName != null) {
+                      showModalBottomSheet(
+                          context: context,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(20 * hp),
+                              )),
                           builder: (context) => pixelProvider(context,
-                              child:
-                                  ProfilePage(profileRef: widget.comment.creatorRef!, currUserData: widget.currUserData))),
-                    );
+                              child: ProfileSheet(
+                                currUserRef: widget.currUserData.userRef,
+                                otherUserScore: creatorScore!,
+                                otherUserFundName: creatorName!,
+                                otherUserFullDomain: creatorDomainName!,
+                                otherUserDomainColor: creatorGroupColor,
+                                otherUserRef: widget.postCreatorRef,
+                              )));
+                    }
                   },
                   child: RichText(text: TextSpan(
                     children: [
@@ -204,7 +216,7 @@ class _CommentCardState extends State<CommentCard> {
                             color: colorScheme.onSurface, fontWeight: FontWeight.w500, fontSize: commentReplyDetailSize)),
                     onPressed: () {
                       widget.focusKeyboard();
-                      widget.switchFormBool(widget.comment.commentRef);
+                      widget.switchFormBool(widget.comment);
                     }),
               ),
               widget.comment.creatorRef != null

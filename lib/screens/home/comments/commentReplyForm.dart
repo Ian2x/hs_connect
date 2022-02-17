@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hs_connect/models/comment.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/comments_database.dart';
@@ -14,8 +15,8 @@ class CommentReplyForm extends StatefulWidget {
   final DocumentReference currUserRef;
   final Post post;
   final bool isReply;
-  final DocumentReference? commentReference;
-  final VoidDocParamFunction switchFormBool;
+  final Comment? comment;
+  final VoidOptionalCommentParamFunction switchFormBool;
   final FocusNode focusNode;
 
   CommentReplyForm({Key? key,
@@ -23,7 +24,7 @@ class CommentReplyForm extends StatefulWidget {
     required this.post,
     required this.isReply,
     required this.switchFormBool,
-    required this.commentReference,
+    required this.comment,
     required this.focusNode,
   }) : super(key: key);
 
@@ -85,13 +86,13 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
         widget.switchFormBool(null);
         await RepliesDatabaseService(currUserRef: widget.currUserRef).newReply(
           post: widget.post,
-          commentRef: widget.commentReference!,
+          commentRef: widget.comment!.commentRef,
           text: _text,
           media: newFileURL,
           onValue: handleValue,
           onError: handleError,
           groupRef: widget.post.groupRef,
-          postCreatorRef: widget.post.creatorRef,
+          commentCreatorRef: widget.comment!.creatorRef!,
         );
       } else {
         await _comments!.newComment(
@@ -132,25 +133,11 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
               context: context,
               isReply: widget.isReply,
               onPressed: () async {
-                onSubmit();
+                if (_text!=''){
+                  onSubmit();
+                }
               },
               isFocused: widget.focusNode.hasFocus, hasText: _text!=''),
-          validator:
-            widget.isReply!= false ? (val) {
-                if (val == null) return 'Write a reply...';
-                if (val.isEmpty)
-                  return 'Can\'t create an empty reply';
-                else
-              return null;
-              }
-            : (val) {
-              if (val == null) return 'Write a comment...';
-              if (val.isEmpty)
-                return 'Can\'t create an empty comment';
-              else
-                return null;
-            }
-           ,
           onChanged: (val) {
             if (mounted) {
               setState(() => _text = val);

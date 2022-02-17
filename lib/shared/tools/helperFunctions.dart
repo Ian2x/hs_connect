@@ -79,16 +79,3 @@ String? httpsLink(String? link) {
     return null;
   }
 }
-
-void cleanNotifications(DocumentReference userRef) async {
-  final user = await userDataFromSnapshot(await userRef.get(), userRef);
-  List<MyNotification> allNotifications = user.myNotifications;
-  allNotifications.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-  final notificationsLength = allNotifications.length;
-  List<Map> temp = [];
-  for (int i=maxNumNotifications; i<notificationsLength; i++) {
-    temp.add(allNotifications[i].asMap());
-  }
-  print(temp);
-  await userRef.update({C.myNotifications: FieldValue.arrayRemove(temp)});
-}

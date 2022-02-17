@@ -62,6 +62,7 @@ class MyNotification {
   final MyNotificationType myNotificationType;
   final DocumentReference sourceRef;
   final DocumentReference sourceUserRef;
+  final DocumentReference notifiedUserRef;
   final Timestamp createdAt;
   final String? extraData;
 
@@ -70,6 +71,7 @@ class MyNotification {
     required this.myNotificationType,
     required this.sourceRef,
     required this.sourceUserRef,
+    required this.notifiedUserRef,
     required this.createdAt,
     required this.extraData,
   });
@@ -100,7 +102,7 @@ class MyNotification {
       case MyNotificationType.postVotes:
         return '';
       case MyNotificationType.fromMe:
-        return 'The team at Circles.co have a message: ';
+        return '';
       case MyNotificationType.featuredPost:
         return '';
     }
@@ -120,7 +122,7 @@ class MyNotification {
       case MyNotificationType.postVotes:
         return 'Your post in ';
       case MyNotificationType.fromMe:
-        return ' have a message: ';
+        return '';
       case MyNotificationType.featuredPost:
         return '';
     }
@@ -175,7 +177,7 @@ class MyNotification {
         if (extraData! == '100') return ' got 100 likes! Legendary.';
         return '<Error: Unexpected data in MyNotificationType.replyVotes.extraData>';
       case MyNotificationType.fromMe:
-        return extraData!=null ? extraData! : 'ummm something went wrong :/';
+        return '';
       case MyNotificationType.featuredPost:
         return extraData!=null ? extraData! : 'ummm something went wrong :/';
     }
@@ -188,6 +190,19 @@ MyNotification myNotificationFromMap({required Map map}) {
       myNotificationType: myNotificationTypeFrom(map[C.myNotificationType]),
       sourceRef: map[C.sourceRef],
       sourceUserRef: map[C.sourceUserRef],
+      notifiedUserRef: map[C.notifiedUserRef],
       createdAt: map[C.createdAt],
       extraData: map[C.extraData]);
+}
+
+MyNotification myNotificationFromSnapshot(DocumentSnapshot snapshot) {
+  return MyNotification(
+    parentPostRef: snapshot.get(C.parentPostRef),
+    myNotificationType: myNotificationTypeFrom(snapshot.get(C.myNotificationType)),
+    sourceRef: snapshot.get(C.sourceRef),
+    sourceUserRef: snapshot.get(C.sourceUserRef),
+    notifiedUserRef: snapshot.get(C.notifiedUserRef),
+    createdAt: snapshot.get(C.createdAt),
+    extraData: snapshot.get(C.extraData)
+  );
 }

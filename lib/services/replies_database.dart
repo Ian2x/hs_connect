@@ -7,6 +7,8 @@ import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 
+import 'my_notifications_database.dart';
+
 void defaultFunc(dynamic parameter) {}
 
 class RepliesDatabaseService {
@@ -29,21 +31,19 @@ class RepliesDatabaseService {
       required DocumentReference commentRef,
       required Post post,
       required DocumentReference groupRef,
-      required DocumentReference postCreatorRef,
+      required DocumentReference commentCreatorRef,
       Function(void) onValue = defaultFunc,
       Function onError = defaultFunc}) async {
     DocumentReference newReplyRef = repliesCollection.doc();
     // update comment creator's activity if not self
-    if (postCreatorRef != currUserRef) {
-      postCreatorRef.update({C.myNotifications: FieldValue.arrayUnion([{
-        C.parentPostRef: post.postRef,
-        C.myNotificationType: MyNotificationType.replyToComment.string,
-        C.sourceRef: newReplyRef,
-        C.sourceUserRef: currUserRef,
-        C.createdAt: Timestamp.now(),
-        C.extraData: text
-      }])});
-      cleanNotifications(postCreatorRef);
+    if (commentCreatorRef != currUserRef) {
+      MyNotificationsDatabaseService(userRef: currUserRef).newNotification(
+          parentPostRef: post.postRef,
+          myNotificationType: MyNotificationType.replyToComment,
+          sourceRef: newReplyRef,
+          sourceUserRef: currUserRef,
+          notifiedUserRef: commentCreatorRef,
+          extraData: text);
     }
     // update other repliers' activity
     repliesCollection.where(C.commentRef, isEqualTo: commentRef).get().then(
@@ -53,16 +53,13 @@ class RepliesDatabaseService {
             if (r!=null) {
               // check not updating for multiple replies by self
               if (r.creatorRef!=currUserRef && r.creatorRef!=null) {
-                r.creatorRef!.update({
-                  C.myNotifications: FieldValue.arrayUnion([{
-                    C.parentPostRef: post.postRef,
-                    C.myNotificationType: MyNotificationType.replyToReply.string,
-                    C.sourceRef: newReplyRef,
-                    C.sourceUserRef: currUserRef,
-                    C.createdAt: Timestamp.now(),
-                    C.extraData: text
-                  }])
-                });
+                MyNotificationsDatabaseService(userRef: currUserRef).newNotification(
+                    parentPostRef: post.postRef,
+                    myNotificationType: MyNotificationType.replyToReply,
+                    sourceRef: newReplyRef,
+                    sourceUserRef: currUserRef,
+                    notifiedUserRef: r.creatorRef!,
+                    extraData: text);
               }
             }
           }
@@ -104,20 +101,10 @@ class RepliesDatabaseService {
     final reply = await replyRef.get();
     if (reply.exists) {
       if (currUserRef == reply.get(C.creatorRef)) {
-        // update user's replies
-        currUserRef.update({
-          C.numReplies: FieldValue.increment(-1)
-        });
-        // update post's repliesRefs
-        // postRef.update({C.repliesRefs: FieldValue.arrayRemove([replyRef])});
-        // update comment's numReplies
-        // commentRef.update({C.numReplies: FieldValue.increment(-1)});
-
         // delete media (if applicable)
         if (media != null) {
           await _images.deleteImage(imageURL: media);
         }
-
         if (weakDelete) {
           // "delete" reply
           return await replyRef
@@ -141,23 +128,22 @@ class RepliesDatabaseService {
     });
     if (likeCount==1 || likeCount==10 || likeCount==20 || likeCount==50 || likeCount==100) {
       bool update = true;
-      final replyCreatorData = await replyCreatorRef.get();
-      final replyCreator = await userDataFromSnapshot(replyCreatorData, replyCreatorRef);
-      for (MyNotification MN in replyCreator.myNotifications) {
+      final notifications = await MyNotificationsDatabaseService(userRef: replyCreatorRef).getNotifications();
+
+      for (MyNotification MN in notifications) {
         if (MN.sourceRef == replyRef! && MN.myNotificationType==MyNotificationType.replyVotes && MN.extraData==likeCount.toString()) {
           update = false;
           break;
         }
       }
       if (update) {
-        replyCreatorRef.update({C.myNotifications: FieldValue.arrayUnion([{
-          C.parentPostRef: postRef!,
-          C.myNotificationType: MyNotificationType.replyVotes.string,
-          C.sourceRef: replyRef!,
-          C.sourceUserRef: currUserRef,
-          C.createdAt: Timestamp.now(),
-          C.extraData: likeCount.toString()
-        }])});
+        MyNotificationsDatabaseService(userRef: currUserRef).newNotification(
+            parentPostRef: postRef!,
+            myNotificationType: MyNotificationType.replyVotes,
+            sourceRef: replyRef!,
+            sourceUserRef: currUserRef,
+            notifiedUserRef: replyCreatorRef,
+            extraData: likeCount.toString());
       }
     }
   }

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/activity/Messages/messagesPage.dart';
@@ -6,10 +7,14 @@ import 'package:hs_connect/shared/pixels.dart';
 import 'package:provider/provider.dart';
 
 class DMButton extends StatelessWidget {
-  final UserData? otherUserData;
-  final UserData currUserData;
+  final DocumentReference? otherUserRef;
+  final DocumentReference currUserRef;
+  final String otherUserFundName;
 
-  const DMButton({Key? key, required this.otherUserData, required this.currUserData}) : super(key: key);
+  const DMButton({Key? key, required this.otherUserRef,
+    required this.currUserRef,
+    required this.otherUserFundName,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,14 +25,15 @@ class DMButton extends StatelessWidget {
       constraints: BoxConstraints(),
       padding: EdgeInsets.only(top: 3*hp, right: 10*wp),
       onPressed: () {
-        if (otherUserData != null && otherUserData!.userRef != currUserData.userRef) {
+        if (otherUserRef != null && otherUserRef != currUserRef) {
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => pixelProvider(context,
                       child: MessagesPage(
-                        currUserData: currUserData,
-                        otherUserData: otherUserData!,
+                        currUserRef: currUserRef,
+                        otherUserRef: otherUserRef!,
+                        otherUserFundName: otherUserFundName,
                         onUpdateLastMessage: () {},
                         onUpdateLastViewed: () {},
                       ))));

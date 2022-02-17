@@ -45,7 +45,6 @@ class ProfilePage extends StatelessWidget {
             elevation: 0),
         backgroundColor: colorScheme.surface,
         body: ProfileBody(
-          profileUserRef: profileRef,
           currUserData: currUserData,
         ),
         bottomNavigationBar: MyNavigationBar(
@@ -79,7 +78,6 @@ class ProfilePage extends StatelessWidget {
             elevation: 0),
         backgroundColor: colorScheme.surface,
         body: ProfileBody(
-          profileUserRef: profileRef,
           currUserData: currUserData,
         ),
       );

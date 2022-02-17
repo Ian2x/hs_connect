@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:hs_connect/models/comment.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/picPickerButton.dart';
@@ -19,6 +20,8 @@ typedef VoidPollDataParamFunction = void Function (int, String);
 typedef VoidDocSnapParamFunction = void Function (DocumentSnapshot);
 
 typedef VoidBoolParamFunction = void Function(bool);
+
+typedef VoidOptionalCommentParamFunction = void Function (Comment?);
 
 
 InputDecoration commentReplyInputDecoration({required VoidFunction onPressed, required bool isReply, required bool isFocused, required BuildContext context, required bool hasText}) {

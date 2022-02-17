@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
+import 'package:hs_connect/screens/profile/profileWidgets/profileImage.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
@@ -116,8 +117,9 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                   MaterialPageRoute(
                       builder: (context) => pixelProvider(context,
                           child: MessagesPage(
-                            currUserData: widget.userData,
-                            otherUserData: otherUser,
+                            currUserRef: widget.userData.userRef,
+                            otherUserRef: otherUser.userRef,
+                            otherUserFundName: otherUser.fundamentalName,
                             onUpdateLastMessage: updateLastMessage,
                             onUpdateLastViewed: updateLastViewed,
                           ))));
@@ -131,13 +133,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                     padding: EdgeInsets.fromLTRB(20 * wp, 13 * hp, 14 * wp, 15 * hp),
                     color: colorScheme.surface,
                     child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
-                      Container(
-                          width: 33 * hp,
-                          height: 33 * hp,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                  fit: BoxFit.fill, image: _images.profileImageProvider(otherUser.profileImageURL)))),
+                      ProfileImage(background: otherUser.domainColor, size: 33*hp),
                       SizedBox(width: 14 * wp),
                       Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                         Text(otherUser.fundamentalName,

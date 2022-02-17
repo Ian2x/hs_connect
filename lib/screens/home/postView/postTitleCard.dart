@@ -11,7 +11,7 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/postView/likeDislikePost.dart';
 import 'package:hs_connect/screens/home/postView/pollView.dart';
 import 'package:hs_connect/screens/home/postView/postCard.dart';
-import 'package:hs_connect/screens/home/postView/profileSheet.dart';
+import 'package:hs_connect/screens/profile/profileWidgets/profileSheet.dart';
 import 'package:hs_connect/screens/profile/profilePage.dart';
 import 'package:hs_connect/services/polls_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
@@ -27,13 +27,13 @@ import 'package:provider/provider.dart';
 class PostTitleCard extends StatefulWidget {
   final Post post;
   final Group group;
-  final UserData currUserData;
+  final DocumentReference currUserRef;
 
   PostTitleCard({
     Key? key,
     required this.post,
     required this.group,
-    required this.currUserData,
+    required this.currUserRef,
   }) : super(key: key);
 
   @override
@@ -55,7 +55,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
   }
 
   void getPostCreatorData() async {
-    UserDataDatabaseService _userDataDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserData.userRef);
+    UserDataDatabaseService _userDataDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserRef);
     fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.post.creatorRef);
     if (mounted) {
       setState(() {
@@ -100,7 +100,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
               children: [
             GestureDetector(
               onTap: () {
-                if (userData != null) {
+                if (fetchUserData != null) {
                   showModalBottomSheet(
                       context: context,
                       shape: RoundedRectangleBorder(
@@ -109,8 +109,12 @@ class _PostTitleCardState extends State<PostTitleCard> {
                           )),
                       builder: (context) => pixelProvider(context,
                           child: ProfileSheet(
-                            otherUserData: fetchUserData!,
-                            currUserData: widget.currUserData,
+                            currUserRef: widget.currUserRef,
+                            otherUserFullDomain: fetchUserData!.domain,
+                            otherUserRef: fetchUserData!.userRef,
+                            otherUserDomainColor: fetchUserData!.domainColor ,
+                            otherUserFundName: fetchUserData!.fundamentalName,
+                            otherUserScore: fetchUserData!.score,
                           )));
                 }
               },
@@ -136,7 +140,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
                         ?.copyWith(color: colorScheme.primary, fontSize: postCardDetailSize + 1),
                   )
                 : Container(),
-            widget.post.creatorRef != widget.currUserData.userRef
+            widget.post.creatorRef != widget.currUserRef
                 ? IconButton(
                     icon: Icon(Icons.more_horiz),
                     iconSize: 20 * hp,
@@ -195,7 +199,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
                   maxHeight: 450 * hp,
                   containerWidth: MediaQuery.of(context).size.width - 2 * leftRightPadding)
               : Container(),
-          poll != null ? PollView(poll: poll!, currUserRef: widget.currUserData.userRef, post: widget.post) : Container(),
+          poll != null ? PollView(poll: poll!, currUserRef: widget.currUserRef, post: widget.post) : Container(),
           SizedBox(height: 25 * hp),
           Row(
             children: [
@@ -207,7 +211,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
               ),
               Spacer(),
               LikeDislikePostStateful(
-                  currUserRef: widget.currUserData.userRef, post: widget.post, postLikesManager: postLikesManager),
+                  currUserRef: widget.currUserRef, post: widget.post, postLikesManager: postLikesManager),
             ],
           ),
           SizedBox(height: 8 * hp),

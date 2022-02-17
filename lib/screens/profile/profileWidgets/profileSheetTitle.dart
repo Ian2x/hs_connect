@@ -3,11 +3,19 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileImage.dart';
 
 
-class ProfileTitle extends StatelessWidget {
+class ProfileSheetTitle extends StatelessWidget {
 
-  final UserData otherUserData;
+  final Color? otherUserDomainColor;
+  final String otherUserFundName;
+  final String? otherUserFullDomain;
+  final int otherUserScore;
 
-  const ProfileTitle({Key? key, required this.otherUserData}) : super(key: key);
+  const ProfileSheetTitle({Key? key,
+    required this.otherUserDomainColor,
+    required this.otherUserFundName,
+    required this.otherUserFullDomain,
+    required this.otherUserScore,})
+  : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +24,7 @@ class ProfileTitle extends StatelessWidget {
         Column(
           children: [
             ProfileImage(
-              background:otherUserData.domainColor,
-              currUserName: otherUserData.fundamentalName,
-              showEditIcon: false,
+              background:otherUserDomainColor,
             ),
           ],
         ),
@@ -28,17 +34,17 @@ class ProfileTitle extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  otherUserData.fundamentalName,
+                  otherUserFundName,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.headline5?.copyWith(fontWeight:FontWeight.w600, fontSize: 19),
                 ),
               ],
             ),
-            SizedBox(height:2),
+            SizedBox(height:5),
             Row(
               children: [
                 Text(
-                    otherUserData.fullDomainName! + " ∙ " + otherUserData.score.toString() + " Likes",
+                    otherUserFullDomain! + " ∙ " + otherUserScore.toString() + " Likes",
                     style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 17)),
               ],
             ),

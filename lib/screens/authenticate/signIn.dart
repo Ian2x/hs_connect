@@ -5,6 +5,7 @@ import 'package:hs_connect/services/auth.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
+import 'package:hs_connect/shared/themeManager.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/checkboxFormField.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
@@ -51,7 +52,7 @@ class _SignInState extends State<SignIn> {
     )
         : Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(leading: myBackButtonIcon(context), elevation: 0, backgroundColor: Colors.white,),
+        appBar: AppBar(leading: myBackButtonIcon(context, overrideColor: ThemeNotifier.lightThemeOnSurface), elevation: 0, backgroundColor: Colors.white,),
         body: Stack(
             children: [
               GestureDetector(
@@ -72,7 +73,7 @@ class _SignInState extends State<SignIn> {
                                 SizedBox(height: 15*hp),
                                 Text(
                                   'Login',
-                                  style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 28*hp, color: Colors.black
+                                  style: ThemeText.helvetica(fontWeight: FontWeight.w700, fontSize: 28*hp, color: Colors.black
                                   ),
                                 ),
                                 SizedBox(height: 10*hp),
@@ -86,7 +87,7 @@ class _SignInState extends State<SignIn> {
                                   height: 20*hp,
                                   alignment: Alignment.bottomCenter,
                                   child: Text(error,
-                                    style: ThemeText.inter(fontWeight: FontWeight.w500, fontSize: 13*hp, color: Colors.black), textAlign: TextAlign.center),
+                                    style: ThemeText.helvetica(fontWeight: FontWeight.w500, fontSize: 13*hp, color: Colors.black), textAlign: TextAlign.center),
                                 )
                                 : Container(height: 20*hp),
                                 Container(
@@ -136,7 +137,7 @@ class _SignInState extends State<SignIn> {
                                             }),
                                         Divider(height:0, thickness: 2*hp, color: authHintTextColor),
                                         SizedBox(height:20*hp),
-                                        MyCheckboxFormField(termsAccepted: termsAccepted, toggleTerms: (bool val) {
+                                        AuthCheckboxFormField(termsAccepted: termsAccepted, toggleTerms: (bool val) {
                                           if (error==termsError) {
                                             error = '';
                                           }

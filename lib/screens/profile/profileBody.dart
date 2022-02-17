@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/screens/home/postView/profileSheetTitle.dart';
+import 'package:hs_connect/screens/profile/profileWidgets/profileSheetTitle.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profilePostFeed.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/newMessageButton.dart';
 import 'package:hs_connect/services/groups_database.dart';
@@ -14,10 +14,9 @@ import 'package:provider/provider.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileImage.dart';
 
 class ProfileBody extends StatefulWidget {
-  final DocumentReference profileUserRef;
   final UserData currUserData;
 
-  ProfileBody({Key? key, required this.profileUserRef, required this.currUserData}) : super(key: key);
+  ProfileBody({Key? key, required this.currUserData}) : super(key: key);
 
   @override
   _ProfileBodyState createState() => _ProfileBodyState();
@@ -29,16 +28,9 @@ class _ProfileBodyState extends State<ProfileBody> {
 
   void getProfileUserData() async {
     UserData? fetchUserData;
-    if (widget.profileUserRef != widget.currUserData.userRef) {
-      // get other profile data
-      UserDataDatabaseService _userInfoDatabaseService =
-          UserDataDatabaseService(currUserRef: widget.currUserData.userRef);
-      fetchUserData = await _userInfoDatabaseService.getUserData(userRef: widget.profileUserRef);
-    } else {
-      // use own profile data
       fetchUserData = widget.currUserData;
-    }
-    if (fetchUserData != null && mounted) {
+
+    if (mounted) {
       setState(() {
         profileData = fetchUserData;
       });
@@ -70,9 +62,6 @@ class _ProfileBodyState extends State<ProfileBody> {
 
 
     if (profileData == null) return Loading();
-    bool isOwnProfile = widget.profileUserRef == widget.currUserData.userRef &&
-        userData != null &&
-        widget.currUserData.userRef == userData.userRef;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: ListView(
@@ -81,8 +70,11 @@ class _ProfileBodyState extends State<ProfileBody> {
           SizedBox(height: 20 * hp),
           Row(
             children: [
-              ProfileTitle(
-                otherUserData: widget.currUserData,
+              ProfileSheetTitle(
+                otherUserFundName: widget.currUserData.fundamentalName,
+                otherUserScore: widget.currUserData.score,
+                otherUserDomainColor: widget.currUserData.domainColor,
+                otherUserFullDomain: widget.currUserData.fullDomainName,
               ),
             ],
           ),

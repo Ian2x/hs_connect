@@ -40,7 +40,6 @@ class Group {
   final List<CountAtTime> postsOverTime;
   final int numMembers;
   final List<CountAtTime> membersOverTime;
-  final Timestamp lastOverTimeUpdate;
   final int numReports;
   final String? hexColor;
 
@@ -58,7 +57,6 @@ class Group {
     required this.postsOverTime,
     required this.numMembers,
     required this.membersOverTime,
-    required this.lastOverTimeUpdate,
     required this.numReports,
     required this.hexColor,
   });
@@ -79,7 +77,6 @@ Group groupFromMap({required Map map}) {
     postsOverTime: map[C.postsOverTime],
     numMembers: map[C.numMembers],
     membersOverTime: map[C.membersOverTime],
-    lastOverTimeUpdate: map[C.lastOverTimeUpdate],
     numReports: map[C.numReports],
     hexColor: map[C.hexColor],
   );
@@ -109,7 +106,6 @@ Future<Group?> groupFromSnapshot(DocumentSnapshot snapshot) async {
       postsOverTime: countAtTimeList(snapshot.get(C.postsOverTime)),
       numMembers: snapshot.get(C.numMembers),
       membersOverTime: countAtTimeList(snapshot.get(C.membersOverTime)),
-      lastOverTimeUpdate: snapshot.get(C.lastOverTimeUpdate),
       numReports: snapshot.get(C.numReports),
       hexColor: domainData.color!=null ? domainData.color : snapshot.get(C.hexColor),
     );

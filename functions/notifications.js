@@ -83,19 +83,6 @@ function notificationArrayIncludes(notificationArray, notification) {
     return false;
 }
 
-function userMessageArrayIncludes(userMessagesArray, userMessage) {
-    const length = userMessagesArray.length;
-    for (var i = 0; i < length; i++) {
-        const testUserMessage = userMessagesArray[i];
-        if (testUserMessage.otherUserRef._path.segments[1] == userMessage.otherUserRef._path.segments[1] &&
-            testUserMessage.lastMessage._seconds == userMessage.lastMessage._seconds &&
-            testUserMessage.lastMessage._nanoseconds == userMessage.lastMessage._nanoseconds) {
-            return true;
-        }
-    }
-    return false;
-}
-
 function fakeRefsArrayIncludes(fakeRefsArray, fakeRef) {
     const length = fakeRefsArray.length;
     for (var i = 0; i< length; i++) {
@@ -107,7 +94,7 @@ function fakeRefsArrayIncludes(fakeRefsArray, fakeRef) {
     }
     return false;
 }
-
+/*
 exports.contentNotifications = functions.firestore
     .document("userData/{userId}")
     .onUpdate((change, context) => {
@@ -120,76 +107,107 @@ exports.contentNotifications = functions.firestore
                 const oldMyNotifications = oldData.myNotifications;
                 if (newMyNotifications.length != oldMyNotifications.length) {
                     const newNotifications = newMyNotifications.filter(x => !notificationArrayIncludes(oldMyNotifications, x));
-                    newNotifications.forEach(
-                        async function (notification) {
-                            if (!fakeRefsArrayIncludes(newData.blockedUserRefs, notification.sourceUserRef) && !fakeRefsArrayIncludes(newData.blockedPostRefs, notification.parentPostRef)) {
-                                const payload = {
-                                    tokens: tokens,
-                                    notification: {
-                                        title: await notificationTitle(notification),
-                                        body: notificationBody(notification),
-                                    },
-                                    data: {
-                                        type: "contentNotification",
-                                        postId: notification.parentPostRef._path.segments[1],
-                                    },
-                                    apns: {
-                                        payload: {
-                                            aps: {
-                                                sound: "default",
+                    return Promise.all(
+                        newNotifications.map(
+                            async function (notification) {
+                                if (!fakeRefsArrayIncludes(newData.blockedUserRefs, notification.sourceUserRef) && !fakeRefsArrayIncludes(newData.blockedPostRefs, notification.parentPostRef)) {
+                                    const payload = {
+                                        tokens: tokens,
+                                        notification: {
+                                            title: await notificationTitle(notification),
+                                            body: notificationBody(notification),
+                                        },
+                                        data: {
+                                            type: "contentNotification",
+                                            postId: notification.parentPostRef._path.segments[1],
+                                        },
+                                        apns: {
+                                            payload: {
+                                                aps: {
+                                                    sound: "default",
+                                                },
                                             },
                                         },
-                                    },
-                                };
-                                return await admin.messaging().sendMulticast(payload).then((response) => {
-                                    return true;
-                                });
+                                    };
+                                    return admin.messaging().sendMulticast(payload).then((response) => {
+                                        return true;
+                                    });
+                                }
+                                return null;
                             }
-                        }
+                        )
                     );
                 }
             }
         }
+        return null;
     });
-
-exports.dmNotification = functions.firestore
-    .document("userData/{userId}")
-    .onUpdate((change, context) => {
-        const newData = change.after.data();
-        const oldData = change.before.data();
-        if (newData.hasOwnProperty("tokens")) {
-            const tokens = newData.tokens;
-            if (tokens.length != 0) {
-                const newUserMessages = newData.userMessages;
-                const oldUserMessages = oldData.userMessages;
-                const newMessages = newUserMessages.filter(x => !userMessageArrayIncludes(oldUserMessages, x));
-                newMessages.forEach(async function (message) {
-                    if (!fakeRefsArrayIncludes(newData.blockedUserRefs, message.otherUserRef)) {
-                        const otherUser = await realRef(message.otherUserRef).get();
-                        const payload = {
-                            tokens: tokens,
-                            notification: {
-                                title: "",
-                                body: "New message from " + otherUser.get("fundamentalName"),
+*/
+exports.contentNotifications = functions.firestore
+    .document("myNotifications/{myNotificationId}")
+    .onCreate(async (snap, context) => {
+        const notification = snap.data();
+        const notifiedUser = await realRef(notification.notifiedUserRef).get();
+        const tokens = notifiedUser.get('tokens');
+        if (tokens.length != 0) {
+            if (!fakeRefsArrayIncludes(notifiedUser.get('blockedUserRefs'), notification.sourceUserRef) && !fakeRefsArrayIncludes(notifiedUser.get('blockedPostRefs'), notification.parentPostRef)) {
+                const payload = {
+                    tokens: tokens,
+                    notification: {
+                        title: await notificationTitle(notification),
+                        body: notificationBody(notification),
+                    },
+                    data: {
+                        type: "contentNotification",
+                        postId: notification.parentPostRef._path.segments[1],
+                    },
+                    apns: {
+                        payload: {
+                            aps: {
+                                sound: "default",
                             },
-                            data: {
-                                type: "dmNotification",
-                                otherUserId: message.otherUserRef._path.segments[1],
-                            },
-                            apns: {
-                                payload: {
-                                    aps: {
-                                        sound: "default",
-                                    },
-                                },
-                            },
-                        };
-                        return await admin.messaging().sendMulticast(payload).then((response) => {
-                            return true;
-                        });
-                    }
+                        },
+                    },
+                };
+                return admin.messaging().sendMulticast(payload).then((response) => {
+                    return true;
                 });
-
             }
         }
+        return null;
+    })
+
+exports.dmNotification = functions.firestore
+    .document("messages/{messageId}")
+    .onCreate(async (snap, context) => {
+        const message = snap.data();
+        const receiver = await realRef(message.receiverRef).get();
+        const tokens = receiver.get('tokens');
+        if (tokens.length != 0) {
+            if (!fakeRefsArrayIncludes(receiver.get('blockedUserRefs'), message.senderRef)) {
+                const sender = await realRef(message.senderRef).get();
+                const payload = {
+                    tokens: tokens,
+                    notification: {
+                        title: "New message from " + sender.get("fundamentalName"),
+                        body: message.text,
+                    },
+                    data: {
+                        type: "dmNotification",
+                        otherUserId: message.senderRef._path.segments[1],
+                    },
+                    apns: {
+                        payload: {
+                            aps: {
+                                sound: "default",
+                            },
+                        },
+                    },
+                };
+                return admin.messaging().sendMulticast(payload).then((response) => {
+                    return true;
+                });
+            }
+        }
+        return null;
     });
