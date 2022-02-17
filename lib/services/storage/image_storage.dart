@@ -15,7 +15,7 @@ class ImageStorage {
 
   static final defaultCacheManager = DefaultCacheManager();
 
-  Future<void> listExample() async {
+  /*Future<void> listExample() async {
     ListResult result = await imagesRef.listAll();
 
     result.items.forEach((Reference ref) {
@@ -25,9 +25,9 @@ class ImageStorage {
     result.prefixes.forEach((Reference ref) {
       print('Found directory: $ref');
     });
-  }
+  }*/
 
-  CachedNetworkImage getCachedImage(String imageURL, {double? width, double? height, BoxFit? fit}) {
+  /*CachedNetworkImage getCachedImage(String imageURL, {double? width, double? height, BoxFit? fit}) {
     return CachedNetworkImage(
         imageUrl: imageURL,
         placeholder: (context, url) => CircularProgressIndicator(),
@@ -35,15 +35,7 @@ class ImageStorage {
         width: width,
         height: height,
         fit: fit);
-  }
-
-  ImageProvider profileImageProvider(String? imageURL) {
-    if (imageURL != null) {
-      return CachedNetworkImageProvider(imageURL);
-    } else {
-      return defaultProfilePic;
-    }
-  }
+  }*/
 
   ImageProvider groupImageProvider(String? imageURL) {
     if (imageURL != null) {
@@ -53,9 +45,9 @@ class ImageStorage {
     }
   }
 
-  CachedNetworkImageProvider getCachedImageProvider(String imageURL) {
+  /*CachedNetworkImageProvider getCachedImageProvider(String imageURL) {
     return CachedNetworkImageProvider(imageURL);
-  }
+  }*/
 
   Future uploadImage({required File file}) async {
     SettableMetadata metadata = SettableMetadata(
@@ -78,7 +70,7 @@ class ImageStorage {
         [defaultCacheManager.removeFile(imageURL), FirebaseStorage.instance.refFromURL(imageURL).delete()]);
   }
 
-  Future uploadProfilePic({required File file, required String? oldImageURL}) async {
+  /*Future uploadProfilePic({required File file, required String? oldImageURL}) async {
     SettableMetadata metadata = SettableMetadata(
       customMetadata: <String, String>{
         'uploadedOn': DateTime.now().toString(),
@@ -97,5 +89,5 @@ class ImageStorage {
     // store into cache
     defaultCacheManager.putFile(downloadURL, await file.readAsBytes(), fileExtension: 'jpeg');
     return downloadURL;
-  }
+  }*/
 }

@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
@@ -26,13 +25,13 @@ import 'package:provider/provider.dart';
 class PostTitleCard extends StatefulWidget {
   final Post post;
   final Group group;
-  final DocumentReference currUserRef;
+  final UserData currUserData;
 
   PostTitleCard({
     Key? key,
     required this.post,
     required this.group,
-    required this.currUserRef,
+    required this.currUserData,
   }) : super(key: key);
 
   @override
@@ -54,7 +53,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
   }
 
   void getPostCreatorData() async {
-    UserDataDatabaseService _userDataDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserRef);
+    UserDataDatabaseService _userDataDatabaseService = UserDataDatabaseService(currUserRef: widget.currUserData.userRef);
     fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.post.creatorRef);
     if (mounted) {
       setState(() {
@@ -83,7 +82,6 @@ class _PostTitleCardState extends State<PostTitleCard> {
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
-    UserData? userData = Provider.of<UserData?>(context);
     PostLikesManager postLikesManager = Provider.of<PostLikesManager>(context);
     final leftRightPadding = 15 * wp;
 
@@ -108,7 +106,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
                           )),
                       builder: (context) => pixelProvider(context,
                           child: ProfileSheet(
-                            currUserRef: widget.currUserRef,
+                            currUserRef: widget.currUserData.userRef,
                             otherUserFullDomain: fetchUserData!.fullDomainName!,
                             otherUserRef: fetchUserData!.userRef,
                             otherUserDomainColor: fetchUserData!.domainColor ,
@@ -139,7 +137,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
                         ?.copyWith(color: colorScheme.primary, fontSize: postCardDetailSize + 1),
                   )
                 : Container(),
-            widget.post.creatorRef != widget.currUserRef
+            widget.post.creatorRef != widget.currUserData.userRef
                 ? IconButton(
                     icon: Icon(Icons.more_horiz),
                     iconSize: 20 * hp,
@@ -173,7 +171,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
                   style: Theme.of(context)
                       .textTheme
                       .bodyText2
-                      ?.copyWith(fontSize: 16 * hp, fontFamily: "Roboto", height: 1.3),
+                      ?.copyWith(fontSize: 16 * hp, height: 1.3),
                 )
               : Container(),
           widget.post.link != null ? Container(
@@ -181,7 +179,9 @@ class _PostTitleCardState extends State<PostTitleCard> {
             child: MyLinkPreview(
               enableAnimation: true,
               onPreviewDataFetched: (data) {
-                setState(() => previewData = data);
+                if (mounted) {
+                  setState(() => previewData = data);
+                }
               },
               metadataTitleStyle: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.bold),
               metadataTextStyle: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 14),
@@ -198,7 +198,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
                   maxHeight: 450 * hp,
                   containerWidth: MediaQuery.of(context).size.width - 2 * leftRightPadding)
               : Container(),
-          poll != null ? PollView(poll: poll!, currUserRef: widget.currUserRef, post: widget.post) : Container(),
+          poll != null ? PollView(poll: poll!, currUserRef: widget.currUserData.userRef, post: widget.post) : Container(),
           SizedBox(height: 25 * hp),
           Row(
             children: [
@@ -210,7 +210,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
               ),
               Spacer(),
               LikeDislikePostStateful(
-                  currUserRef: widget.currUserRef, post: widget.post, postLikesManager: postLikesManager),
+                  currUserRef: widget.currUserData.userRef, post: widget.post, postLikesManager: postLikesManager, currUserColor: widget.currUserData.domainColor,),
             ],
           ),
           SizedBox(height: 8 * hp),

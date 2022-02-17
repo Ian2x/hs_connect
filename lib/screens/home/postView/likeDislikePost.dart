@@ -17,9 +17,10 @@ class LikeDislikePost extends StatelessWidget {
   final DocumentReference currUserRef;
   final Post post;
   final PostLikesManager postLikesManager;
+  final Color? currUserColor;
 
 
-  const LikeDislikePost({Key? key, required this.currUserRef, required this.post, required this.postLikesManager})
+  const LikeDislikePost({Key? key, required this.currUserRef, required this.post, required this.postLikesManager, required this.currUserColor})
       : super(key: key);
 
   @override
@@ -35,7 +36,7 @@ class LikeDislikePost extends StatelessWidget {
         .colorScheme;
 
     PostsDatabaseService _posts = PostsDatabaseService(currUserRef: currUserRef, postRef: post.postRef);
-
+    Color activeColor = currUserColor!=null ? currUserColor! : colorScheme.secondary;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -47,7 +48,7 @@ class LikeDislikePost extends StatelessWidget {
               padding: postIconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
-              icon: Icon(ThickArrow.angle_up_icon, color: colorScheme.secondary),
+              icon: Icon(ThickArrow.angle_up_icon, color: activeColor),
               onPressed: () {
                 HapticFeedback.heavyImpact();
                 postLikesManager.onUnLike();
@@ -86,7 +87,7 @@ class LikeDislikePost extends StatelessWidget {
               padding: postIconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
-              icon: Icon(ThickArrow.angle_down_icon, color: colorScheme.onBackground),
+              icon: Icon(ThickArrow.angle_down_icon, color: activeColor),
               onPressed: () {
                 HapticFeedback.heavyImpact();
                 postLikesManager.onUnDislike();
@@ -118,9 +119,10 @@ class LikeDislikePostStateful extends StatefulWidget {
   final DocumentReference currUserRef;
   final Post post;
   final PostLikesManager postLikesManager;
+  final Color? currUserColor;
 
   const LikeDislikePostStateful(
-      {Key? key, required this.currUserRef, required this.post, required this.postLikesManager})
+      {Key? key, required this.currUserRef, required this.post, required this.postLikesManager, required this.currUserColor})
       : super(key: key);
 
   @override
@@ -160,6 +162,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
 
     PostsDatabaseService _posts = PostsDatabaseService(currUserRef: widget.currUserRef, postRef: widget.post.postRef);
 
+    Color activeColor = widget.currUserColor!=null ? widget.currUserColor! : colorScheme.secondary;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -171,7 +174,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
               padding: postIconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
-              icon: Icon(ThickArrow.angle_up_icon, color: colorScheme.secondary),
+              icon: Icon(ThickArrow.angle_up_icon, color: activeColor),
               onPressed: () {
                 HapticFeedback.heavyImpact();
                 widget.postLikesManager.onUnLike();
@@ -226,7 +229,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
               padding: postIconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
-              icon: Icon(ThickArrow.angle_down_icon, color: colorScheme.secondary),
+              icon: Icon(ThickArrow.angle_down_icon, color: activeColor),
               onPressed: () {
                 HapticFeedback.heavyImpact();
                 widget.postLikesManager.onUnDislike();

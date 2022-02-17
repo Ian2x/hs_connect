@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:provider/provider.dart';
 
 class ProfileImage extends StatelessWidget {
   final Color? background;
-  double? size;
+  final double? size;
 
   ProfileImage({
     Key? key,
@@ -25,7 +24,6 @@ class ProfileImage extends StatelessWidget {
       logoImage = Image.asset("assets/sublogo2.png");
     } else {
       logoImage = Image.asset("assets/images/defaultgroupimage1.png");
-
     }
 
 

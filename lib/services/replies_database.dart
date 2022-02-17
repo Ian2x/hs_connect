@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/myNotification.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/reply.dart';
-import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
@@ -49,10 +48,12 @@ class RepliesDatabaseService {
     repliesCollection.where(C.commentRef, isEqualTo: commentRef).get().then(
         (QuerySnapshot QS) {
           final replies = QS.docs.map((QDS) =>_replyFromQuerySnapshot(QDS)).toList();
+          List<DocumentReference> notified = [];
           for (Reply? r in replies) {
             if (r!=null) {
-              // check not updating for multiple replies by self
-              if (r.creatorRef!=currUserRef && r.creatorRef!=null) {
+              // check not updating nobody, not updating self, not updating if already updating for comment, and not updating for multiple replies
+              if (r.creatorRef!=null && r.creatorRef!=currUserRef && r.creatorRef != commentCreatorRef && !notified.contains(r.creatorRef)) {
+                notified.add(r.creatorRef!);
                 MyNotificationsDatabaseService(userRef: currUserRef).newNotification(
                     parentPostRef: post.postRef,
                     myNotificationType: MyNotificationType.replyToReply,

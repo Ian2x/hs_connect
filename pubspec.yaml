@@ -126,13 +126,12 @@ flutter:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   assets:
-    - assets/blankProfile.png
     - assets/defaultgroupimage1.png
     - assets/launchicon1.png
     - assets/splash1cropped.png
     - assets/sublogo1cropped.png
     - assets/sublogo2.png
-    - assets/defaultgroupimage2.png
+    - assets/defaultgroupimage4.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -12,8 +12,7 @@ const numWidthPixels = 392.7;
 const initialPostsFetchSize = 20;
 const nextPostsFetchSize = 20;
 
-const defaultProfilePic = AssetImage('assets/blankProfile.png');
-const defaultGroupPic = AssetImage('assets/defaultgroupimage2.png');
+const defaultGroupPic = AssetImage('assets/defaultgroupimage4.png');
 
 const bottomGradientThickness = 1.3;
 const topGradientThickness = 2.0;

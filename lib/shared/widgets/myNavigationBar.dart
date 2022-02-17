@@ -78,27 +78,54 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
               unselectedFontSize: 6 * hp,
               onTap: (int index) {
                 if (index == 0) {
-                  Navigator.pushReplacement(
-                    context,
-                    NoAnimationMaterialPageRoute(
-                        builder: (context) => pixelProvider(context, child: Home(userData: userData))),
-                  );
+                  if (widget.currentIndex == 0) {
+                    Navigator.pushReplacement(
+                      context,
+                      NoAnimationMaterialPageRoute(
+                          builder: (context) => pixelProvider(context,
+                              child: Home(
+                                userData: userData,
+                              ))),
+                    );
+                  } else {
+                    Navigator.pop(context);
+                  }
                 } else if (index == 1) {
-                  Navigator.pushReplacement(
-                    context,
-                    NoAnimationMaterialPageRoute(
-                        builder: (context) => pixelProvider(context,
-                            child: ActivityPage(
-                              currUserData: userData,
-                            ))),
-                  );
+                  if (widget.currentIndex == 0) {
+                    Navigator.push(
+                      context,
+                      NoAnimationMaterialPageRoute(
+                          builder: (context) => pixelProvider(context,
+                              child: ActivityPage(
+                                userData: userData,
+                              ))),
+                    );
+                  } else {
+                    Navigator.pushReplacement(
+                      context,
+                      NoAnimationMaterialPageRoute(
+                          builder: (context) => pixelProvider(context,
+                              child: ActivityPage(
+                                userData: userData,
+                              ))),
+                    );
+                  }
                 } else if (index == 2) {
-                  Navigator.pushReplacement(
-                    context,
-                    NoAnimationMaterialPageRoute(
-                        builder: (context) => pixelProvider(context,
-                            child: ProfilePage(currUserData: userData))),
-                  );
+                  if (widget.currentIndex == 0) {
+                    Navigator.push(
+                      context,
+                      NoAnimationMaterialPageRoute(
+                          builder: (context) => pixelProvider(context,
+                              child: ProfilePage(currUserData: userData))),
+                    );
+                  } else {
+                    Navigator.pushReplacement(
+                      context,
+                      NoAnimationMaterialPageRoute(
+                          builder: (context) => pixelProvider(context,
+                              child: ProfilePage(currUserData: userData))),
+                    );
+                  }
                 } else if (index == 3) {
                   Navigator.push(
                     context,
@@ -107,10 +134,10 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
                 }
               },
               items: <BottomNavigationBarItem>[
-                BottomNavigationBarItem(label: '', icon: Icon(Thicker.home_square, size: 30 * hp)),
-                BottomNavigationBarItem(label: '', icon: Icon(Thicker.notification, size: 30 * hp)),
-                BottomNavigationBarItem(label: '', icon: Icon(Thicker.profile_1, size: 30 * hp)),
-                BottomNavigationBarItem(label: '', icon: Icon(Thicker.add_1, size: 30 * hp)),
+                BottomNavigationBarItem(label: '', icon: Icon(Thicker.home_square, size: 25 * hp)),
+                BottomNavigationBarItem(label: '', icon: Icon(Thicker.notification, size: 25 * hp)),
+                BottomNavigationBarItem(label: '', icon: Icon(Thicker.profile_1, size: 20 * hp)),
+                BottomNavigationBarItem(label: '', icon: Icon(Thicker.add_1, size: 25 * hp)),
               ],
             ),
           ),

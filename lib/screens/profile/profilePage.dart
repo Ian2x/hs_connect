@@ -17,6 +17,7 @@ class ProfilePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
           backgroundColor: colorScheme.surface,
           actions: [
             IconButton(
@@ -35,7 +36,7 @@ class ProfilePage extends StatelessWidget {
           elevation: 0),
       backgroundColor: colorScheme.surface,
       body: ProfileBody(
-        currUserData: currUserData,
+        profileUserData: currUserData,
       ),
       bottomNavigationBar: MyNavigationBar(
         currentIndex: 2,

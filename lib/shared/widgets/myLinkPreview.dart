@@ -119,13 +119,13 @@ class _MyLinkPreviewState extends State<MyLinkPreview> with SingleTickerProvider
       _fetchData(widget.text);
     }
 
-    if (widget.previewData != null && oldWidget.previewData == null) {
+    if (widget.previewData != null && oldWidget.previewData == null && mounted) {
       setState(() {
         shouldAnimate = true;
       });
       _controller.reset();
       _controller.forward();
-    } else if (widget.previewData != null) {
+    } else if (widget.previewData != null && mounted) {
       setState(() {
         shouldAnimate = false;
       });
@@ -139,9 +139,11 @@ class _MyLinkPreviewState extends State<MyLinkPreview> with SingleTickerProvider
   }
 
   Future<PreviewData> _fetchData(String text) async {
-    setState(() {
-      isFetchingPreviewData = true;
-    });
+    if (mounted) {
+      setState(() {
+        isFetchingPreviewData = true;
+      });
+    }
 
     final previewData = await getPreviewData(text, proxy: widget.corsProxy);
     _handlePreviewDataFetched(previewData);

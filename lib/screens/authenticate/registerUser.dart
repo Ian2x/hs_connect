@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/screens/wrapper.dart';
@@ -11,7 +12,7 @@ import 'package:hs_connect/shared/widgets/myOutlinedButton.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
-import 'authBar.dart';
+import 'authButton.dart';
 
 class RegisterUser extends StatefulWidget {
   const RegisterUser({Key? key, required this.domain, required this.domainEmail}) : super(key: key);
@@ -158,9 +159,11 @@ class _RegisterUserState extends State<RegisterUser> {
                 ),
                 Positioned(
                   bottom: 0,
-                  left: 0,
-                  child: new AuthBar(
+                  left: MediaQuery.of(context).size.width * 0.5 - 70,
+                  width: 140,
+                  child: new AuthButton(
                     buttonText: "Register",
+                    hasText: username!="" && password!="",
                     onPressed: () async {
                       dismissKeyboard(context);
                       if (_formKey.currentState != null && _formKey.currentState!.validate()) {

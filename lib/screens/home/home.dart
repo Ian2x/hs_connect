@@ -133,15 +133,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   void _handleMessage(RemoteMessage message) async {
     if (message.data[C.type] == C.featuredPost) { // not really gonna be using this model much anymore
-      await openMessagePost(message);
+      openMessagePost(message);
     } else if (message.data[C.type] == C.contentNotification) {
       if (message.data[C.postId] == 'fake') {
-        Navigator.pushReplacement(
-          context,
-          NoAnimationMaterialPageRoute(builder: (context) => pixelProvider(context, child: ActivityPage(currUserData: widget.userData))),
-        );
+        // figure out something later
       } else {
-        await openMessagePost(message);
+        openMessagePost(message);
       }
     } else if (message.data[C.type] == C.dmNotification) {
       final otherUserRef = FirebaseFirestore.instance.collection(C.userData).doc(message.data[C.otherUserId]);

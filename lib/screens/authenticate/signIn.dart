@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/screens/wrapper.dart';
@@ -12,12 +13,11 @@ import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
 import 'package:provider/provider.dart';
 
-import 'authBar.dart';
+import 'authButton.dart';
 
 class SignIn extends StatefulWidget {
-  final Function toggleView;
 
-  const SignIn({Key? key, required this.toggleView}) : super(key: key);
+  const SignIn({Key? key}) : super(key: key);
 
 
   @override
@@ -158,9 +158,10 @@ class _SignInState extends State<SignIn> {
               ),
               Positioned(
                 bottom:0,
-                right:0,
-                left:0,
-                child: AuthBar(buttonText: "Sign in",
+                left: MediaQuery.of(context).size.width * 0.5 - 70,
+                width: 140,
+                child: AuthButton(buttonText: "Sign in",
+                  hasText: username!="" && password!="",
                   onPressed: () async {
                     if (!termsAccepted) {
                       if (mounted) {

@@ -78,12 +78,14 @@ class _NewPollState extends State<NewPoll> {
                     padding: EdgeInsets.zero,
                     constraints: BoxConstraints(),
                     onPressed: () {
-                      setState(() {
-                        choices.add('');
-                        choicesLengths.add(0);
-                        numOptions += 1;
-                      });
-                      widget.onAddPollChoice();
+                      if (mounted) {
+                        setState(() {
+                          choices.add('');
+                          choicesLengths.add(0);
+                          numOptions += 1;
+                        });
+                        widget.onAddPollChoice();
+                      }
                     },
                     icon: Icon(Icons.add),
                   )
@@ -122,11 +124,13 @@ class _NewPollState extends State<NewPoll> {
                             return null;
                         },
                         onChanged: (val) {
-                          setState(() {
-                            choices[trueIndex] = val;
-                            choicesLengths[trueIndex] = val.length;
-                          });
-                          widget.onUpdatePoll(trueIndex, val);
+                          if (mounted) {
+                            setState(() {
+                              choices[trueIndex] = val;
+                              choicesLengths[trueIndex] = val.length;
+                            });
+                            widget.onUpdatePoll(trueIndex, val);
+                          }
                         }));
               }
             },

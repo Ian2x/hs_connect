@@ -1,4 +1,3 @@
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:hs_connect/models/group.dart';
@@ -315,18 +314,19 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                                 },
                               )
                             : Container(height: 38 * hp),
-                        Spacer(),
                         fetchUserData != null && fetchUserData!.userRef != widget.currUser.userRef
                             ? DMButton(currUserRef: widget.currUser.userRef,
-                              otherUserRef: fetchUserData!.userRef,
-                              otherUserFundName: fetchUserData!.fundamentalName,
-                            )
+                          otherUserRef: fetchUserData!.userRef,
+                          otherUserFundName: fetchUserData!.fundamentalName,
+                        )
                             : Container(),
-                        SizedBox(width: 10 * wp),
+                        Spacer(),
                         LikeDislikePost(
                             currUserRef: widget.currUser.userRef,
                             post: widget.post,
-                            postLikesManager: postLikesManager),
+                            postLikesManager: postLikesManager,
+                            currUserColor: widget.currUser.domainColor,
+                        ),
                         SizedBox(width: 10 * wp),
                       ],
                     ),

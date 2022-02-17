@@ -12,12 +12,11 @@ import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
 import 'package:provider/provider.dart';
 
-import 'authBar.dart';
+import 'authButton.dart';
 
 class RegisterEmail extends StatefulWidget {
-  final Function toggleView;
 
-  const RegisterEmail({Key? key, required this.toggleView}) : super(key: key);
+  const RegisterEmail({Key? key}) : super(key: key);
 
   @override
   _RegisterEmailState createState() => _RegisterEmailState();
@@ -138,9 +137,11 @@ class _RegisterEmailState extends State<RegisterEmail> {
                   ),
                   Positioned(
                     bottom: 0,
-                    left: 0,
-                    child: AuthBar(
+                    left: MediaQuery.of(context).size.width * 0.5 - 70,
+                    width: 140,
+                    child: AuthButton(
                         buttonText: "Register",
+                        hasText: email!="",
                         onPressed: () async {
                           if (!termsAccepted) {
                             if (mounted) {
