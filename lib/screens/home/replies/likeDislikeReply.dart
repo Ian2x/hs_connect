@@ -5,6 +5,7 @@ import 'package:hs_connect/models/reply.dart';
 import 'package:hs_connect/services/replies_database.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/arrows_icons.dart';
+import 'package:hs_connect/shared/widgets/thick_arrow_icons.dart';
 import 'package:provider/provider.dart';
 
 class LikeDislikeReply extends StatefulWidget {
@@ -60,7 +61,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
               padding: EdgeInsets.all(3*hp),
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
-              icon: Icon(Arrows.up_open_big, color: colorScheme.secondary),
+              icon: Icon(ThickArrow.angle_up_icon, color: colorScheme.secondary),
               onPressed: () {
                 HapticFeedback.heavyImpact();
                 _replies.unLikeReply(widget.reply.creatorRef!);
@@ -79,7 +80,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
               padding: EdgeInsets.all(3*hp),
               constraints: BoxConstraints(),
               color: colorScheme.primaryVariant,
-              icon: Icon(Arrows.up_open_big),
+              icon: Icon(ThickArrow.angle_up_icon),
               onPressed: () {
                 HapticFeedback.heavyImpact();
                 if (mounted) {
@@ -109,7 +110,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
               padding: EdgeInsets.all(3*hp),
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
-              icon: Icon(Arrows.down_open_big, color: colorScheme.secondary),
+              icon: Icon(ThickArrow.angle_down_icon, color: colorScheme.secondary),
               onPressed: () {
                 HapticFeedback.heavyImpact();
                 _replies.unDislikeReply();
@@ -128,7 +129,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
               padding: EdgeInsets.all(3*hp),
               constraints: BoxConstraints(),
               color: colorScheme.primaryVariant,
-              icon: Icon(Arrows.down_open_big),
+              icon: Icon(ThickArrow.angle_down_icon),
               onPressed: () {
                 HapticFeedback.heavyImpact();
                 _replies.dislikeReply();

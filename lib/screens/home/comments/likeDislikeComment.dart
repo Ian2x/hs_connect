@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/models/comment.dart';
 import 'package:hs_connect/shared/pixels.dart';
-import 'package:hs_connect/shared/widgets/arrows_icons.dart';
+import 'package:hs_connect/shared/widgets/thick_arrow_icons.dart';
 import 'package:provider/provider.dart';
 
 class LikeDislikeComment extends StatefulWidget {
@@ -57,7 +57,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               padding: EdgeInsets.all(3*hp),
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
-              icon: Icon(Arrows.up_open_big, color: colorScheme.secondary),
+              icon: Icon(ThickArrow.angle_down_icon, color: colorScheme.primary),
               onPressed: () {
                 HapticFeedback.heavyImpact();
                 _comments.unLikeComment(widget.comment.creatorRef!);
@@ -76,7 +76,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               padding: EdgeInsets.all(3*hp),
               constraints: BoxConstraints(),
               color: colorScheme.primaryVariant,
-              icon: Icon(Arrows.up_open_big),
+              icon: Icon(ThickArrow.angle_up_icon),
               onPressed: () {
                 HapticFeedback.heavyImpact();
                 if (mounted) {
@@ -106,7 +106,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               padding: EdgeInsets.all(3*hp),
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
-              icon: Icon(Arrows.down_open_big, color: colorScheme.secondary),
+              icon: Icon(ThickArrow.angle_down_icon, color: colorScheme.secondary),
               onPressed: () {
                 HapticFeedback.heavyImpact();
                 _comments.unDislikeComment();
@@ -125,7 +125,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               padding: EdgeInsets.all(3*hp),
               constraints: BoxConstraints(),
               color: colorScheme.primaryVariant,
-              icon: Icon(Arrows.down_open_big),
+              icon: Icon(ThickArrow.angle_down_icon),
               onPressed: () {
                 HapticFeedback.heavyImpact();
                 _comments.dislikeComment();
