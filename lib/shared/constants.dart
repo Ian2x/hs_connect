@@ -230,5 +230,5 @@ class C {
   static const contentNotification = 'contentNotification';
   static const dmNotification = 'dmNotification';
   static const otherUserId = 'otherUserId';
-  static const notifiedUserRef = 'notifiedRef';
+  static const notifiedUserRef = 'notifiedUserRef';
 }

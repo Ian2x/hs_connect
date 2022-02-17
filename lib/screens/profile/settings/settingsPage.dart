@@ -197,11 +197,6 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                   Divider(thickness: 1*hp, height: 1*hp),
-                  feedbackError != null
-                      ? Container(
-                      padding: EdgeInsets.only(top: 12*hp),
-                      child: FittedBox(child: Text(feedbackError!, style: textTheme.bodyText2)))
-                      : SizedBox(height: 6),
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
@@ -229,6 +224,11 @@ class _SettingsPageState extends State<SettingsPage> {
                   Divider(thickness: 1*hp, height: 1*hp),
                   SizedBox(height: 20*hp),
                   Text("Send feedback", style: textTheme.subtitle1),
+                  feedbackError != null
+                      ? Container(
+                      padding: EdgeInsets.only(top: 12*hp),
+                      child: FittedBox(child: Text(feedbackError!, style: textTheme.bodyText2)))
+                      : SizedBox(height: 6),
                   Form(
                     key: _feedbackFormKey,
                     child: Column(

@@ -3,11 +3,11 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileImage.dart';
 
 
-class ProfileTitle extends StatelessWidget {
+class ProfileSheetTitle extends StatelessWidget {
 
   final UserData otherUserData;
 
-  const ProfileTitle({Key? key, required this.otherUserData}) : super(key: key);
+  const ProfileSheetTitle({Key? key, required this.otherUserData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class ProfileTitle extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height:2),
+            SizedBox(height:5),
             Row(
               children: [
                 Text(

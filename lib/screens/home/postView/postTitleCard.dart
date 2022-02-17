@@ -11,7 +11,7 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/postView/likeDislikePost.dart';
 import 'package:hs_connect/screens/home/postView/pollView.dart';
 import 'package:hs_connect/screens/home/postView/postCard.dart';
-import 'package:hs_connect/screens/home/postView/profileSheet.dart';
+import 'package:hs_connect/screens/profile/profileWidgets/profileSheet.dart';
 import 'package:hs_connect/screens/profile/profilePage.dart';
 import 'package:hs_connect/services/polls_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';

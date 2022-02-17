@@ -7,7 +7,7 @@ import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 
-import 'myNotifications_database.dart';
+import 'my_notifications_database.dart';
 
 void defaultFunc(dynamic parameter) {}
 
@@ -37,14 +37,13 @@ class RepliesDatabaseService {
     DocumentReference newReplyRef = repliesCollection.doc();
     // update comment creator's activity if not self
     if (commentCreatorRef != currUserRef) {
-      commentCreatorRef.update({C.myNotifications: FieldValue.arrayUnion([{
-        C.parentPostRef: post.postRef,
-        C.myNotificationType: MyNotificationType.replyToComment.string,
-        C.sourceRef: newReplyRef,
-        C.sourceUserRef: currUserRef,
-        C.createdAt: Timestamp.now(),
-        C.extraData: text
-      }])});
+      MyNotificationsDatabaseService(userRef: currUserRef).newNotification(
+          parentPostRef: post.postRef,
+          myNotificationType: MyNotificationType.replyToComment,
+          sourceRef: newReplyRef,
+          sourceUserRef: currUserRef,
+          notifiedUserRef: commentCreatorRef,
+          extraData: text);
     }
     // update other repliers' activity
     repliesCollection.where(C.commentRef, isEqualTo: commentRef).get().then(
@@ -54,16 +53,13 @@ class RepliesDatabaseService {
             if (r!=null) {
               // check not updating for multiple replies by self
               if (r.creatorRef!=currUserRef && r.creatorRef!=null) {
-                r.creatorRef!.update({
-                  C.myNotifications: FieldValue.arrayUnion([{
-                    C.parentPostRef: post.postRef,
-                    C.myNotificationType: MyNotificationType.replyToReply.string,
-                    C.sourceRef: newReplyRef,
-                    C.sourceUserRef: currUserRef,
-                    C.createdAt: Timestamp.now(),
-                    C.extraData: text
-                  }])
-                });
+                MyNotificationsDatabaseService(userRef: currUserRef).newNotification(
+                    parentPostRef: post.postRef,
+                    myNotificationType: MyNotificationType.replyToReply,
+                    sourceRef: newReplyRef,
+                    sourceUserRef: currUserRef,
+                    notifiedUserRef: r.creatorRef!,
+                    extraData: text);
               }
             }
           }
@@ -141,14 +137,13 @@ class RepliesDatabaseService {
         }
       }
       if (update) {
-        replyCreatorRef.update({C.myNotifications: FieldValue.arrayUnion([{
-          C.parentPostRef: postRef!,
-          C.myNotificationType: MyNotificationType.replyVotes.string,
-          C.sourceRef: replyRef!,
-          C.sourceUserRef: currUserRef,
-          C.createdAt: Timestamp.now(),
-          C.extraData: likeCount.toString()
-        }])});
+        MyNotificationsDatabaseService(userRef: currUserRef).newNotification(
+            parentPostRef: postRef!,
+            myNotificationType: MyNotificationType.replyVotes,
+            sourceRef: replyRef!,
+            sourceUserRef: currUserRef,
+            notifiedUserRef: replyCreatorRef,
+            extraData: likeCount.toString());
       }
     }
   }

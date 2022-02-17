@@ -13,7 +13,7 @@ import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 
-import 'myNotifications_database.dart';
+import 'my_notifications_database.dart';
 
 void defaultFunc(dynamic parameter) {}
 
@@ -162,18 +162,13 @@ class PostsDatabaseService {
         }
       }
       if (update) {
-        post.creatorRef.update({
-          C.myNotifications: FieldValue.arrayUnion([
-            {
-              C.parentPostRef: post.postRef,
-              C.myNotificationType: MyNotificationType.postVotes.string,
-              C.sourceRef: post.postRef,
-              C.sourceUserRef: currUserRef,
-              C.createdAt: Timestamp.now(),
-              C.extraData: likeCount.toString()
-            }
-          ])
-        });
+        MyNotificationsDatabaseService(userRef: currUserRef).newNotification(
+            parentPostRef: post.postRef,
+            myNotificationType: MyNotificationType.postVotes,
+            sourceRef: post.postRef,
+            sourceUserRef: currUserRef,
+            notifiedUserRef: post.creatorRef,
+            extraData: likeCount.toString());
       }
     }
   }

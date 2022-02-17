@@ -24,7 +24,8 @@ class MyNotificationsDatabaseService {
       C.sourceRef: sourceRef,
       C.sourceUserRef: sourceUserRef,
       C.notifiedUserRef: notifiedUserRef,
-      C.extraData: extraData
+      C.createdAt: Timestamp.now(),
+      C.extraData: extraData,
     });
     return messageRef;
   }
@@ -39,8 +40,8 @@ class MyNotificationsDatabaseService {
   }
 
   Future<List<MyNotification>> getNotifications() async {
-    final snapshot = await myNotificationsCollection.where(C.notifiedUserRef, isEqualTo: userRef).get();
-    List<MyNotification?> notificationss = snapshot.docs.map(_myNotificationFromDocument).toList();
+    final querySnapshot = await myNotificationsCollection.where(C.notifiedUserRef, isEqualTo: userRef).orderBy(C.createdAt).get();
+    List<MyNotification?> notificationss = querySnapshot.docs.map(_myNotificationFromDocument).toList();
     notificationss.removeWhere((value) => value == null);
     return notificationss.map((item) => item!).toList();
   }

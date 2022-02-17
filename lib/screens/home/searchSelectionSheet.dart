@@ -30,7 +30,7 @@ class _SearchSelectionSheetState extends State<SearchSelectionSheet> {
     final wp = Provider.of<WidthPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
 
-    final bottomSpace = max(MediaQuery.of(context).padding.bottom, 25*hp);
+    final bottomSpace = max(MediaQuery.of(context).padding.bottom+1, 25*hp);
 
     return Container(
       height: 167*hp + bottomSpace,
@@ -77,6 +77,7 @@ class _SearchSelectionSheetState extends State<SearchSelectionSheet> {
                           Checkbox(
                             value: searchByTrending,
                             shape: CircleBorder(),
+                            activeColor: colorScheme.secondary,
                             onChanged: (bool? value) {
                               if (value==true) {
                                 if (!searchByTrending && mounted) {
@@ -125,6 +126,7 @@ class _SearchSelectionSheetState extends State<SearchSelectionSheet> {
                             Checkbox(
                               value: !searchByTrending,
                               shape: CircleBorder(),
+                              activeColor: colorScheme.secondary,
                               onChanged: (bool? value) {
                                 if (value==true) {
                                   if (searchByTrending && mounted) {

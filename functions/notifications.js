@@ -94,7 +94,7 @@ function fakeRefsArrayIncludes(fakeRefsArray, fakeRef) {
     }
     return false;
 }
-
+/*
 exports.contentNotifications = functions.firestore
     .document("userData/{userId}")
     .onUpdate((change, context) => {
@@ -142,6 +142,40 @@ exports.contentNotifications = functions.firestore
         }
         return null;
     });
+*/
+exports.contentNotifications = functions.firestore
+    .document("myNotifications/{myNotificationId}")
+    .onCreate(async (snap, context) => {
+        const notification = snap.data();
+        const notifiedUser = await realRef(notification.notifiedUserRef).get();
+        const tokens = notifiedUser.get('tokens');
+        if (tokens.length != 0) {
+            if (!fakeRefsArrayIncludes(notifiedUser.get('blockedUserRefs'), notification.sourceUserRef) && !fakeRefsArrayIncludes(notifiedUser.get('blockedPostRefs'), notification.parentPostRef)) {
+                const payload = {
+                    tokens: tokens,
+                    notification: {
+                        title: await notificationTitle(notification),
+                        body: notificationBody(notification),
+                    },
+                    data: {
+                        type: "contentNotification",
+                        postId: notification.parentPostRef._path.segments[1],
+                    },
+                    apns: {
+                        payload: {
+                            aps: {
+                                sound: "default",
+                            },
+                        },
+                    },
+                };
+                return admin.messaging().sendMulticast(payload).then((response) => {
+                    return true;
+                });
+            }
+        }
+        return null;
+    })
 
 exports.dmNotification = functions.firestore
     .document("messages/{messageId}")

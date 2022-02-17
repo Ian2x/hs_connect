@@ -4,7 +4,7 @@ import 'package:hs_connect/screens/activity/activityPage.dart';
 import 'package:hs_connect/screens/home/home.dart';
 import 'package:hs_connect/screens/home/new/newPost/newPost.dart';
 import 'package:hs_connect/screens/profile/profilePage.dart';
-import 'package:hs_connect/services/myNotifications_database.dart';
+import 'package:hs_connect/services/my_notifications_database.dart';
 import 'package:provider/provider.dart';
 
 import '../constants.dart';

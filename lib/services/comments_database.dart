@@ -7,7 +7,7 @@ import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 
-import 'myNotifications_database.dart';
+import 'my_notifications_database.dart';
 
 void defaultFunc(dynamic parameter) {}
 
@@ -33,15 +33,14 @@ class CommentsDatabaseService {
       Function onError = defaultFunc}) async {
     DocumentReference newCommentRef = commentsCollection.doc();
     // update post creator's activity if not self
-    if (postCreatorRef!=currUserRef) {
-      postCreatorRef.update({C.myNotifications: FieldValue.arrayUnion([{
-        C.parentPostRef: post.postRef,
-        C.myNotificationType: MyNotificationType.commentToPost.string,
-        C.sourceRef: newCommentRef,
-        C.sourceUserRef: currUserRef,
-        C.createdAt: Timestamp.now(),
-        C.extraData: text
-      }])});
+    if (postCreatorRef != currUserRef) {
+      MyNotificationsDatabaseService(userRef: currUserRef).newNotification(
+          parentPostRef: post.postRef,
+          myNotificationType: MyNotificationType.commentToPost,
+          sourceRef: newCommentRef,
+          sourceUserRef: currUserRef,
+          notifiedUserRef: postCreatorRef,
+          extraData: text);
     }
 
     // update post's commentsRefs and trendingCreatedAt
@@ -106,24 +105,25 @@ class CommentsDatabaseService {
       C.dislikes: FieldValue.arrayRemove([currUserRef]),
       C.likes: FieldValue.arrayUnion([currUserRef])
     });
-    if (likeCount==1 || likeCount==10 || likeCount==20 || likeCount==50 || likeCount==100) {
+    if (likeCount == 1 || likeCount == 10 || likeCount == 20 || likeCount == 50 || likeCount == 100) {
       bool update = true;
       final notifications = await MyNotificationsDatabaseService(userRef: commentCreatorRef).getNotifications();
       for (MyNotification MN in notifications) {
-        if (MN.sourceRef == commentRef! && MN.myNotificationType==MyNotificationType.commentVotes && MN.extraData==likeCount.toString()) {
+        if (MN.sourceRef == commentRef! &&
+            MN.myNotificationType == MyNotificationType.commentVotes &&
+            MN.extraData == likeCount.toString()) {
           update = false;
           break;
         }
       }
       if (update) {
-        commentCreatorRef.update({C.myNotifications: FieldValue.arrayUnion([{
-          C.parentPostRef: postRef!,
-          C.myNotificationType: MyNotificationType.commentVotes.string,
-          C.sourceRef: commentRef!,
-          C.sourceUserRef: currUserRef,
-          C.createdAt: Timestamp.now(),
-          C.extraData: likeCount.toString()
-        }])});
+        MyNotificationsDatabaseService(userRef: currUserRef).newNotification(
+            parentPostRef: postRef!,
+            myNotificationType: MyNotificationType.commentVotes,
+            sourceRef: commentRef!,
+            sourceUserRef: currUserRef,
+            notifiedUserRef: commentCreatorRef,
+            extraData: likeCount.toString());
       }
     }
   }
@@ -174,8 +174,8 @@ class CommentsDatabaseService {
 
   Stream get postComments {
     return commentsCollection
-      .where('postRef', isEqualTo: postRef!)
-      .snapshots()
-      .map((snapshot) => snapshot.docs.map(_commentFromQuerySnapshot).toList());
+        .where('postRef', isEqualTo: postRef!)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map(_commentFromQuerySnapshot).toList());
   }
 }

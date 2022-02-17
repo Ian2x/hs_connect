@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/screens/home/postView/profileSheetTitle.dart';
+import 'package:hs_connect/screens/profile/profileWidgets/profileSheetTitle.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profilePostFeed.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/newMessageButton.dart';
 import 'package:hs_connect/services/groups_database.dart';
@@ -41,7 +41,7 @@ class _ProfileBodyState extends State<ProfileBody> {
           SizedBox(height: 20 * hp),
           Row(
             children: [
-              ProfileTitle(
+              ProfileSheetTitle(
                 otherUserData: userData,
               ),
             ],

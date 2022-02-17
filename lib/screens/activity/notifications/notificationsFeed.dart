@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/myNotification.dart';
 import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/services/myNotifications_database.dart';
+import 'package:hs_connect/services/my_notifications_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
@@ -20,7 +20,6 @@ class NotificationsFeed extends StatefulWidget {
 }
 
 class _NotificationsFeedState extends State<NotificationsFeed> {
-  bool loading = true;
   List<MyNotification>? notifications;
 
   @override
@@ -41,7 +40,7 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
   @override
   Widget build(BuildContext context) {
 
-    if (notifications == null || loading) {
+    if (notifications == null) {
       return Loading();
     }
     final hp = Provider.of<HeightPixel>(context).value;

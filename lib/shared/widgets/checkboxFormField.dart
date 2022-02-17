@@ -31,6 +31,18 @@ class CheckboxFormField extends FormField<bool> {
             });
 }
 
+Color authCheckboxGetColor(Set<MaterialState> states) {
+  const Set<MaterialState> interactiveStates = <MaterialState>{
+    MaterialState.pressed,
+    MaterialState.hovered,
+    MaterialState.focused,
+  };
+  if (states.any(interactiveStates.contains)) {
+    return Colors.black;
+  }
+  return Color(0xFF13a1f0);
+}
+
 class AuthCheckboxFormField extends StatelessWidget {
   final bool termsAccepted;
   final VoidBoolParamFunction toggleTerms;
@@ -40,18 +52,6 @@ class AuthCheckboxFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-
-    Color getColor(Set<MaterialState> states) {
-      const Set<MaterialState> interactiveStates = <MaterialState>{
-        MaterialState.pressed,
-        MaterialState.hovered,
-        MaterialState.focused,
-      };
-      if (states.any(interactiveStates.contains)) {
-        return Colors.black;
-      }
-      return Color(0xFF13a1f0);
-    }
 
     return Row(
       children: [
@@ -65,7 +65,7 @@ class AuthCheckboxFormField extends StatelessWidget {
             }
           },
           side: BorderSide(width: 1, color: Colors.black),
-          fillColor: MaterialStateProperty.resolveWith(getColor),
+          fillColor: MaterialStateProperty.resolveWith(authCheckboxGetColor),
         ),
         RichText(
             maxLines: 3,

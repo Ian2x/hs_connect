@@ -5,6 +5,7 @@ import 'package:hs_connect/services/auth.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
+import 'package:hs_connect/shared/themeManager.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/checkboxFormField.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
@@ -46,7 +47,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
         : Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
-              leading: myBackButtonIcon(context),
+              leading: myBackButtonIcon(context, overrideColor: ThemeNotifier.lightThemeOnSurface),
               elevation: 0,
               backgroundColor: Colors.white,
             ),

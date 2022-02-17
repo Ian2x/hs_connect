@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/screens/home/postView/profileSheetTitle.dart';
+import 'package:hs_connect/screens/profile/profileWidgets/profileSheetTitle.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/newMessageButton.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
@@ -76,7 +76,7 @@ class _ProfileSheetState extends State<ProfileSheet> with TickerProviderStateMix
                     Icon(Icons.close_rounded, size: iconSize * hp, color: colorScheme.primary),
                   ],
                 )),
-            ProfileTitle(otherUserData: widget.otherUserData),
+            ProfileSheetTitle(otherUserData: widget.otherUserData),
             widget.otherUserData.userRef == widget.currUserData.userRef?
                 Container():
             NewMessageButton(otherUserData: widget.otherUserData, currUserData: widget.currUserData),
