@@ -33,8 +33,7 @@ class ProfileImage extends StatelessWidget {
       Container(
       width: size != null ? size : 60*hp,
       height: size != null ? size : 60*hp,
-      margin: EdgeInsets.symmetric(vertical: 0,
-          horizontal: size != null ? size! * .1 : 20*hp),
+      margin: EdgeInsets.zero,
       padding: EdgeInsets.zero,
       alignment: Alignment.center,
       child: Stack(

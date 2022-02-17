@@ -18,7 +18,7 @@ const nextPostsFetchSize = 20;
 const defaultProfilePic = AssetImage('assets/blankProfile.png');
 const defaultGroupPic = AssetImage('assets/defaultgroupimage2.png');
 
-const bottomGradientThickness = 2.0;
+const bottomGradientThickness = 1.3;
 const topGradientThickness = 2.0;
 
 const authHintTextColor = Color(0xffdbdada);

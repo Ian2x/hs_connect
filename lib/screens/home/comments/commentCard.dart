@@ -118,10 +118,10 @@ class _CommentCardState extends State<CommentCard> {
                               child: ProfileSheet(
                                 currUserRef: widget.currUserData.userRef,
                                 otherUserScore: creatorScore!,
-                                otherUserFundName: creatorName!,
-                                otherUserFullDomain: creatorDomainName!,
+                                otherUserFundName: localCreatorName,
+                                otherUserFullDomain: localCreatorGroupName,
                                 otherUserDomainColor: creatorGroupColor,
-                                otherUserRef: widget.postCreatorRef,
+                                otherUserRef: widget.comment.creatorRef!,
                               )));
                     }
                   },

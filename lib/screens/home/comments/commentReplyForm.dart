@@ -7,6 +7,7 @@ import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/services/replies_database.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
+import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -136,6 +137,7 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
                 if (_text!=''){
                   onSubmit();
                 }
+                dismissKeyboard(context);
               },
               isFocused: widget.focusNode.hasFocus, hasText: _text!=''),
           onChanged: (val) {
