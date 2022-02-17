@@ -72,21 +72,19 @@ class _MessagesFeedState extends State<MessagesFeed> {
                 lastDate = tempDate;
               }
             }
-            return Container(
-              padding: EdgeInsets.symmetric(vertical: 5*hp),
-              child: ListView.builder(
-                itemCount: messages.length,
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                physics: BouncingScrollPhysics(),
-                reverse: true,
-                itemBuilder: (BuildContext context, int index) {
-                  return MessagesBubble(
-                    message: messages[index],
-                    isSentMessage: messages[index].senderRef == widget.currUserRef,
-                  );
-                },
-              ),
+            return ListView.builder(
+              itemCount: messages.length,
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              physics: BouncingScrollPhysics(),
+              reverse: true,
+              padding: EdgeInsets.zero,
+              itemBuilder: (BuildContext context, int index) {
+                return MessagesBubble(
+                  message: messages[index],
+                  isSentMessage: messages[index].senderRef == widget.currUserRef,
+                );
+              },
             );
           }
         });

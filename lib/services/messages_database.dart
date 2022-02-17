@@ -68,7 +68,6 @@ class MessagesDatabaseService {
     final DocumentReference senderRef = message.get(C.senderRef);
     final DocumentReference receiverRef = message.get(C.receiverRef);
     if (currUserRef != senderRef && currUserRef != receiverRef) {
-      print("Not allowed to delete arbitrary message");
       return null;
     }
     await messageRef.delete();

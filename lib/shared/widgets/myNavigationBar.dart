@@ -96,7 +96,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
                     context,
                     NoAnimationMaterialPageRoute(
                         builder: (context) => pixelProvider(context,
-                            child: ProfilePage(profileRef: userData.userRef, currUserData: userData))),
+                            child: ProfilePage(currUserData: userData))),
                   );
                 } else if (index == 3) {
                   Navigator.push(

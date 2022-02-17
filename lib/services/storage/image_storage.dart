@@ -76,9 +76,6 @@ class ImageStorage {
   Future deleteImage({required String imageURL}) async {
     return Future.wait(
         [defaultCacheManager.removeFile(imageURL), FirebaseStorage.instance.refFromURL(imageURL).delete()]);
-    /*final index = imageURL.indexOf("images%2F") + "images%2F".length;
-    final imagePath = imageURL.substring(index, index + 36);
-    await imagesRef.child(imagePath).delete();*/
   }
 
   Future uploadProfilePic({required File file, required String? oldImageURL}) async {
@@ -95,10 +92,6 @@ class ImageStorage {
     // delete old profilePic
     if (oldImageURL != null) {
       deleteImage(imageURL: oldImageURL);
-      /*defaultCacheManager.removeFile(oldImageURL); // remove from cache
-      final index = oldImageURL.indexOf("profilePics%2F") + "profilePics%2F".length;
-      final oldImagePath = oldImageURL.substring(index, index + 36);
-      await profilePicsRef.child(oldImagePath).delete();*/
     }
     final downloadURL = await snapshot.ref.getDownloadURL();
     // store into cache

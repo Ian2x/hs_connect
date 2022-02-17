@@ -31,15 +31,17 @@ class MessagesBubble extends StatelessWidget {
               child: ExpandableImage(imageURL: message.text, maxHeight: 900 * hp, containerWidth: 300 * wp)));
     }
     return Bubble(
-      color: isSentMessage ? colorScheme.secondary.withOpacity(0.6) : colorScheme.primary.withOpacity(0.4),
-      margin: BubbleEdges.fromLTRB(isSentMessage ? 50 * wp : 0 * wp, 5 * wp, isSentMessage ? 0 : 50 * hp, 5 * hp),
+      color: isSentMessage ? colorScheme.secondary : colorScheme.primary.withOpacity(0.3),
+      margin: BubbleEdges.fromLTRB(isSentMessage ? 50 * wp : 10 * wp, 5 * hp, isSentMessage ? 10 * wp: 50 * wp, 5 * hp),
       alignment: isSentMessage ? Alignment.centerRight : Alignment.centerLeft,
       radius: Radius.circular(11 * hp),
       child: Container(
           padding: EdgeInsets.fromLTRB(4 * wp, 0, 4 * wp, 1 * hp),
           child: Text(
             message.text,
-            style: textTheme.bodyText2?.copyWith(fontSize: 15.5 * hp),
+            style: textTheme.bodyText2?.copyWith
+              (fontSize: 15.5 * hp,
+                color: isSentMessage?  Colors.white : colorScheme.onSurface),
             textWidthBasis: TextWidthBasis.longestLine,
           )),
       elevation: 0,

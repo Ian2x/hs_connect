@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileImage.dart';
+import 'package:hs_connect/shared/pixels.dart';
+import 'package:provider/provider.dart';
 
 
-class ProfileSheetTitle extends StatelessWidget {
+class ProfileTitle extends StatelessWidget {
 
   final Color? otherUserDomainColor;
   final String otherUserFundName;
   final String? otherUserFullDomain;
   final int otherUserScore;
 
-  const ProfileSheetTitle({Key? key,
+  const ProfileTitle({Key? key,
     required this.otherUserDomainColor,
     required this.otherUserFundName,
     required this.otherUserFullDomain,
@@ -19,12 +21,18 @@ class ProfileSheetTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final wp= Provider.of<HeightPixel>(context).value;
+
     return Row(
       children: [
         Column(
           children: [
-            ProfileImage(
-              background:otherUserDomainColor,
+            Container(
+              margin: EdgeInsets.symmetric(horizontal:20*wp),
+              child: ProfileImage(
+                background:otherUserDomainColor,
+              ),
             ),
           ],
         ),

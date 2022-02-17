@@ -30,10 +30,10 @@ class _SearchSelectionSheetState extends State<SearchSelectionSheet> {
     final wp = Provider.of<WidthPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
 
-    final bottomSpace = max(MediaQuery.of(context).padding.bottom+1, 25*hp);
+    final bottomSpace = max(MediaQuery.of(context).padding.bottom, 25*hp);
 
     return Container(
-      height: 167*hp + bottomSpace,
+      height: 169*hp + bottomSpace,
         padding: EdgeInsets.fromLTRB(25*wp, 25*hp, 25*wp, bottomSpace),
         child: Column(
           mainAxisSize: MainAxisSize.min,

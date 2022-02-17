@@ -1,2 +1,3 @@
 exports.notifications = require("./notifications");
-exports.scheduled = required("./scheduled");
+exports.scheduled = require("./scheduled");
+

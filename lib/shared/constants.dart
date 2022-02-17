@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 
-const maxDataCollectionRate = 3; // in hours (for trending groups)
-const maxDataCollectionDays = 2; // in days (for trending groups)
-
 // trendingCreatedAt factors
 const trendingCommentBoost = 0.08;
 const trendingReplyBoost = 0.1;
@@ -18,7 +15,7 @@ const nextPostsFetchSize = 20;
 const defaultProfilePic = AssetImage('assets/blankProfile.png');
 const defaultGroupPic = AssetImage('assets/defaultgroupimage2.png');
 
-const bottomGradientThickness = 2.0;
+const bottomGradientThickness = 1.3;
 const topGradientThickness = 2.0;
 
 const authHintTextColor = Color(0xffdbdada);
