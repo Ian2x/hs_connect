@@ -70,7 +70,7 @@ class _ProfileBodyState extends State<ProfileBody> {
           SizedBox(height: 20 * hp),
           Row(
             children: [
-              ProfileTitle(
+              ProfileSheetTitle(
                 otherUserFundName: widget.currUserData.fundamentalName,
                 otherUserScore: widget.currUserData.score,
                 otherUserDomainColor: widget.currUserData.domainColor,

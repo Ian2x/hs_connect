@@ -151,10 +151,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           MaterialPageRoute(
               builder: (context) => pixelProvider(context,
                   child: MessagesPage(
-                    currUserData: widget.userData,
-                    otherUserData: otherUser,
+                    currUserRef: widget.userData.userRef,
+                    otherUserRef: otherUser.userRef,
                     onUpdateLastMessage: () {},
                     onUpdateLastViewed: () {},
+                    otherUserFundName: otherUser.fundamentalName,
                   )))
       );
     }

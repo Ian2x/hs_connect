@@ -10,7 +10,7 @@ class ProfileSheetTitle extends StatelessWidget {
   final String? otherUserFullDomain;
   final int otherUserScore;
 
-  const ProfileTitle({Key? key,
+  const ProfileSheetTitle({Key? key,
     required this.otherUserDomainColor,
     required this.otherUserFundName,
     required this.otherUserFullDomain,
