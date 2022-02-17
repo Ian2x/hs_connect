@@ -6,6 +6,7 @@ import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/postLikesManager.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/postView/postPage.dart';
+import 'package:hs_connect/screens/profile/profileWidgets/profileImage.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
@@ -24,10 +25,10 @@ class NotificationCard extends StatefulWidget {
 }
 
 class _NotificationCardState extends State<NotificationCard> {
-  String? profileImageURL;
   String? sourceUserName;
   String? sourceUserFullDomainName;
   String? postGroupName;
+  Color? domainColor;
   bool loading = false;
   bool badPost = false;
 
@@ -68,9 +69,9 @@ class _NotificationCardState extends State<NotificationCard> {
     final sourceUser = await userDataFromSnapshot(sourceUserData, widget.myNotification.sourceUserRef);
     if (mounted) {
       setState(() {
-        profileImageURL = sourceUser.profileImageURL;
         sourceUserName = sourceUser.fundamentalName;
         sourceUserFullDomainName = sourceUser.fullDomainName != null ? sourceUser.fullDomainName : sourceUser.domain;
+        domainColor = sourceUser.domainColor;
       });
     }
   }
@@ -145,11 +146,10 @@ class _NotificationCardState extends State<NotificationCard> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Container(
-                        height: 33*hp,
-                        width: 33*hp,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle, image: DecorationImage(fit: BoxFit.fill, image: _images.profileImageProvider(profileImageURL)))),
+                    ProfileImage(
+                      background: domainColor!,
+                      size:33*hp,
+                    ),
                     SizedBox(width: 14*wp),
                     SizedBox(
                       width: 260*wp,

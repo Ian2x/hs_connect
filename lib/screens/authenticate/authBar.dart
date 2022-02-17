@@ -38,7 +38,7 @@ class AuthBar extends StatelessWidget {
                   buttonText,
                   softWrap: false,
                   overflow: TextOverflow.ellipsis,
-                  style: ThemeText.inter(fontWeight: FontWeight.w500, color: Colors.black,
+                  style: ThemeText.helvetica(fontWeight: FontWeight.w500, color: Colors.black,
                   ),
                 ),
               ),

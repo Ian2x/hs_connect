@@ -4,15 +4,11 @@ import 'package:hs_connect/shared/pixels.dart';
 import 'package:provider/provider.dart';
 
 class ProfileImage extends StatelessWidget {
-  final String currUserName;
-  final bool showEditIcon;
   final Color? background;
   double? size;
 
   ProfileImage({
     Key? key,
-    required this.currUserName,
-    required this.showEditIcon,
     required this.background,
     this.size,
   }) : super(key: key);
@@ -21,32 +17,48 @@ class ProfileImage extends StatelessWidget {
   Widget build(BuildContext context) {
     final hp = Provider.of<HeightPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
+    Image logoImage;
 
     final widthP= size != null ? size : 60*hp;
 
+    if (background != null){
+      logoImage = Image.asset("assets/sublogo2.png");
+    } else {
+      logoImage = Image.asset("assets/images/defaultgroupimage1.png");
+
+    }
+
+
     return
       Container(
+      width: size != null ? size : 60*hp,
+      height: size != null ? size : 60*hp,
+      margin: EdgeInsets.symmetric(vertical: 0,
+          horizontal: size != null ? size! * .1 : 20*hp),
+      padding: EdgeInsets.zero,
+      alignment: Alignment.center,
       child: Stack(
         children: [
-          Container(
-              margin: EdgeInsets.symmetric(vertical: 0, horizontal: 20.0),
-              width: widthP,
-              height: widthP,
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: background,
-                  border: Border.all(color: colorScheme.background, width: 1.5*hp),
-              )
+          Center(
+            child: Container(
+                width: size != null ? size : 60*hp,
+                height: size != null ? size : 60*hp,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: background != null ? background: colorScheme.surface,
+                    border: Border.all(color: colorScheme.background, width: 1.5*hp),
+                )
+            ),
           ),
           Positioned(
-            left:widthP!*.53,
+            left:widthP!*.23,
             top:widthP*.2,
             child: ConstrainedBox(
               constraints: BoxConstraints(
-                maxWidth:widthP*.6,
-                maxHeight: widthP*.6,
+                maxWidth:widthP*.55,
+                maxHeight: widthP*.55,
               ),
-              child:Image.asset("assets/sublogo2.png"),
+              child:logoImage,
             ),
           ),
         ],

@@ -72,7 +72,7 @@ class _SignInState extends State<SignIn> {
                                 SizedBox(height: 15*hp),
                                 Text(
                                   'Login',
-                                  style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 28*hp, color: Colors.black
+                                  style: ThemeText.helvetica(fontWeight: FontWeight.w700, fontSize: 28*hp, color: Colors.black
                                   ),
                                 ),
                                 SizedBox(height: 10*hp),
@@ -86,7 +86,7 @@ class _SignInState extends State<SignIn> {
                                   height: 20*hp,
                                   alignment: Alignment.bottomCenter,
                                   child: Text(error,
-                                    style: ThemeText.inter(fontWeight: FontWeight.w500, fontSize: 13*hp, color: Colors.black), textAlign: TextAlign.center),
+                                    style: ThemeText.helvetica(fontWeight: FontWeight.w500, fontSize: 13*hp, color: Colors.black), textAlign: TextAlign.center),
                                 )
                                 : Container(height: 20*hp),
                                 Container(

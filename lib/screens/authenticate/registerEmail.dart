@@ -70,7 +70,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                               SizedBox(height: 15 * hp),
                               Text(
                                 'Sign Up',
-                                style: ThemeText.inter(
+                                style: ThemeText.helvetica(
                                     fontWeight: FontWeight.w700, fontSize: 28 * hp, color: Colors.black),
                               ),
                               SizedBox(height: 10 * hp),
@@ -87,7 +87,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                                   child: error != null
                                       ? FittedBox(
                                         child: Text(error!,
-                                            style: ThemeText.inter(
+                                            style: ThemeText.helvetica(
                                                 fontWeight: FontWeight.w500, fontSize: 13 * hp, color: Colors.black),
                                             textAlign: TextAlign.center),
                                       )

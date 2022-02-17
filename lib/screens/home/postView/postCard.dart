@@ -317,7 +317,10 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                             : Container(height: 38 * hp),
                         Spacer(),
                         fetchUserData != null && fetchUserData!.userRef != widget.currUser.userRef
-                            ? DMButton(currUserData: widget.currUser, otherUserData: fetchUserData)
+                            ? DMButton(currUserRef: widget.currUser.userRef,
+                              otherUserRef: fetchUserData!.userRef,
+                              otherUserFundName: fetchUserData!.fundamentalName,
+                            )
                             : Container(),
                         LikeDislikePost(
                             currUserRef: widget.currUser.userRef,
