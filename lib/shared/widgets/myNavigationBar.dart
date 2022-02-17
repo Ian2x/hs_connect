@@ -5,6 +5,7 @@ import 'package:hs_connect/screens/home/home.dart';
 import 'package:hs_connect/screens/home/new/newPost/newPost.dart';
 import 'package:hs_connect/screens/profile/profilePage.dart';
 import 'package:hs_connect/services/my_notifications_database.dart';
+import 'package:hs_connect/shared/widgets/thicker_icons.dart';
 import 'package:provider/provider.dart';
 
 import '../constants.dart';
@@ -106,10 +107,10 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
                 }
               },
               items: <BottomNavigationBarItem>[
-                BottomNavigationBarItem(label: '', icon: Icon(Icons.home_rounded, size: 30 * hp)),
-                BottomNavigationBarItem(label: '', icon: Icon(Icons.notifications_rounded, size: 30 * hp)),
-                BottomNavigationBarItem(label: '', icon: Icon(Icons.person_rounded, size: 30 * hp)),
-                BottomNavigationBarItem(label: '', icon: Icon(Icons.add_rounded, size: 30 * hp)),
+                BottomNavigationBarItem(label: '', icon: Icon(Thicker.home_square, size: 30 * hp)),
+                BottomNavigationBarItem(label: '', icon: Icon(Thicker.notification, size: 30 * hp)),
+                BottomNavigationBarItem(label: '', icon: Icon(Thicker.profile_1, size: 30 * hp)),
+                BottomNavigationBarItem(label: '', icon: Icon(Thicker.add_1, size: 30 * hp)),
               ],
             ),
           ),

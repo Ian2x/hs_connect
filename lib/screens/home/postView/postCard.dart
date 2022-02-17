@@ -322,6 +322,7 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                               otherUserFundName: fetchUserData!.fundamentalName,
                             )
                             : Container(),
+                        SizedBox(width: 10 * wp),
                         LikeDislikePost(
                             currUserRef: widget.currUser.userRef,
                             post: widget.post,

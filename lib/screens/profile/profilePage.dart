@@ -4,6 +4,7 @@ import 'package:hs_connect/screens/profile/profileBody.dart';
 import 'package:hs_connect/screens/profile/settings/settingsPage.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
+import 'package:hs_connect/shared/widgets/thicker_icons.dart';
 
 class ProfilePage extends StatelessWidget {
   final UserData currUserData;
@@ -19,7 +20,7 @@ class ProfilePage extends StatelessWidget {
           backgroundColor: colorScheme.surface,
           actions: [
             IconButton(
-                icon: Icon(Icons.settings, color: colorScheme.primaryVariant),
+                icon: Icon(Thicker.settings_1, color: colorScheme.primaryVariant),
                 onPressed: () {
                   Navigator.push(
                       context,
