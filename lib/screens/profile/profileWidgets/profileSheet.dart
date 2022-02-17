@@ -13,13 +13,21 @@ import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
 class ProfileSheet extends StatefulWidget {
-  final UserData currUserData;
-  final UserData otherUserData;
+  final DocumentReference otherUserRef;
+  final DocumentReference currUserRef;
+  final String otherUserFundName;
+  final String otherUserFullDomain;
+  final int otherUserScore;
+  final Color? otherUserDomainColor;
 
   const ProfileSheet(
       {Key? key,
-        required this.otherUserData,
-        required this.currUserData,
+        required this.otherUserScore,
+        required this.otherUserRef,
+        required this.currUserRef,
+        required this.otherUserFullDomain,
+        required this.otherUserDomainColor,
+        required this.otherUserFundName,
         })
       : super(key: key);
 
@@ -31,6 +39,10 @@ class _ProfileSheetState extends State<ProfileSheet> with TickerProviderStateMix
   static const double iconSize = 20;
   late AnimationController controller;
   bool disposeController = true;
+
+  bool isOwn=false;
+
+
 
   @override
   void initState() {
@@ -45,8 +57,14 @@ class _ProfileSheetState extends State<ProfileSheet> with TickerProviderStateMix
     super.dispose();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
+
+    if (widget.currUserRef == widget.otherUserRef){
+      isOwn=true;
+    }
 
     final hp = Provider.of<HeightPixel>(context).value;
     final wp = Provider.of<WidthPixel>(context).value;
@@ -59,7 +77,7 @@ class _ProfileSheetState extends State<ProfileSheet> with TickerProviderStateMix
 
     return Container(
         constraints: BoxConstraints(
-          maxHeight:widget.otherUserData.userRef == widget.currUserData.userRef?
+          maxHeight:isOwn?
           140 * hp + bottomSpace:
           204 * hp + bottomSpace,
         ),
@@ -76,10 +94,18 @@ class _ProfileSheetState extends State<ProfileSheet> with TickerProviderStateMix
                     Icon(Icons.close_rounded, size: iconSize * hp, color: colorScheme.primary),
                   ],
                 )),
-            ProfileSheetTitle(otherUserData: widget.otherUserData),
-            widget.otherUserData.userRef == widget.currUserData.userRef?
+            ProfileSheetTitle(
+                otherUserDomainColor: widget.otherUserDomainColor!,
+                otherUserFullDomain: widget.otherUserFullDomain,
+                otherUserFundName: widget.otherUserFundName,
+                otherUserScore: widget.otherUserScore,
+            ),
+            isOwn?
                 Container():
-            NewMessageButton(otherUserData: widget.otherUserData, currUserData: widget.currUserData),
+            NewMessageButton(otherUserRef: widget.otherUserRef,
+              currUserRef: widget.currUserRef,
+              otherUserFundName: widget.otherUserFundName,
+            ),
           ],
         ));
   }

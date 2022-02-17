@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/activity/Messages/messagesPage.dart';
@@ -6,10 +7,15 @@ import 'package:hs_connect/shared/pixels.dart';
 import 'package:provider/provider.dart';
 
 class NewMessageButton extends StatefulWidget {
-  final UserData otherUserData;
-  final UserData currUserData;
+  final DocumentReference otherUserRef;
+  final DocumentReference currUserRef;
+  final String otherUserFundName;
 
-  const NewMessageButton({Key? key, required this.otherUserData, required this.currUserData}) : super(key: key);
+  const NewMessageButton({Key? key,
+    required this.otherUserRef,
+    required this.currUserRef,
+    required this.otherUserFundName,
+  }) : super(key: key);
 
   @override
   _NewMessageButtonState createState() => _NewMessageButtonState();
@@ -47,18 +53,20 @@ class _NewMessageButtonState extends State<NewMessageButton> {
             child: Text("Message...",
               style: Theme.of(context).textTheme.subtitle1!.copyWith(fontSize:14),
             ),
-            onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => pixelProvider(context,
-                            child: MessagesPage(
-                              currUserData: widget.currUserData,
-                              otherUserData: widget.otherUserData,
-                              onUpdateLastMessage: () {},
-                              onUpdateLastViewed: () {},
-                            ))));
-              }
+            onPressed: ()
+            {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => pixelProvider(context,
+                          child: MessagesPage(
+                            currUserRef: widget.currUserRef,
+                            otherUserRef: widget.otherUserRef,
+                            otherUserFundName:widget.otherUserFundName,
+                            onUpdateLastMessage: () {},
+                            onUpdateLastViewed: () {},
+                          ))));
+            }
           ),
         ],
       ),

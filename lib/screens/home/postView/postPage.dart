@@ -6,6 +6,7 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/comments/commentsFeed.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/pixels.dart';
+import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
 import 'package:hs_connect/shared/widgets/myDivider.dart';
 import 'package:provider/provider.dart';
@@ -49,16 +50,16 @@ class PostPage extends StatelessWidget {
         bottom: MyDivider()
       ),
       body:
-          Container(
-            padding: EdgeInsets.zero,
-            constraints: BoxConstraints(
-              minHeight: MediaQuery.of(context).size.height,
-            ),
-            child: Provider<PostLikesManager>.value(
-              value: postLikesManager,
-              child: CommentsFeed(post: post, group: group),
-            )
+        Container(
+          padding: EdgeInsets.zero,
+          constraints: BoxConstraints(
+            minHeight: MediaQuery.of(context).size.height,
+          ),
+          child: Provider<PostLikesManager>.value(
+            value: postLikesManager,
+            child: CommentsFeed(post: post, group: group),
           )
+        ),
     );
   }
 }

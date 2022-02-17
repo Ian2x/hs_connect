@@ -67,7 +67,7 @@ class _WaitVerificationState extends State<WaitVerification> {
                 SizedBox(height: 20 * hp),
                 Text(
                   'We sent you a link',
-                  style: ThemeText.inter(fontWeight: FontWeight.w700, fontSize: 24 * hp, color: Colors.black),
+                  style: ThemeText.helvetica(fontWeight: FontWeight.w700, fontSize: 24 * hp, color: Colors.black),
                 ),
                 SizedBox(height: 15 * hp),
                 Center(
@@ -98,7 +98,7 @@ class _WaitVerificationState extends State<WaitVerification> {
                       children: [
                         Text(
                           "Your email is for verification only. It'll never be linked to your account.",
-                          style: ThemeText.inter(
+                          style: ThemeText.helvetica(
                             fontWeight: FontWeight.w600,
                             fontSize: 14.5 * hp,
                             color: Colors.black,
@@ -132,7 +132,7 @@ class _WaitVerificationState extends State<WaitVerification> {
                                 domainEmail: widget.domainEmail)));
                   },
                   child: Text(" Didn't get it? Click here.",
-                      style: ThemeText.inter(
+                      style: ThemeText.helvetica(
                         fontWeight: FontWeight.w400,
                         fontSize: 15 * hp,
                         color: Colors.black,

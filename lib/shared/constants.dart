@@ -86,7 +86,7 @@ class Gradients {
 }
 
 class ThemeText {
-  static TextStyle inter({Color? color, double? fontSize, double? height,
+  static TextStyle helvetica({Color? color, double? fontSize, double? height,
     TextDecoration? decoration1, FontWeight? fontWeight}) {
     return TextStyle(
         color: color,
@@ -94,7 +94,7 @@ class ThemeText {
         height: height,
         decoration: decoration1,
         fontWeight: fontWeight,
-        fontFamily: "Inter"
+        fontFamily: "HelveticaNeue"
     );
   }
 }
