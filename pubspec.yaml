@@ -85,6 +85,15 @@ flutter:
     - family: Arrows
       fonts:
         - asset: assets/icons/Arrows.ttf
+    - family: Thicker
+      fonts:
+        - asset: assets/icons/Thicker.ttf
+    - family: ThickArrow
+      fonts:
+        - asset: assets/icons/ThickArrow.ttf
+    - family: Chat
+      fonts:
+        - asset: assets/icons/Chat.ttf
     - family: Roboto
       fonts:
         - asset: assets/fonts/Roboto-Regular.ttf

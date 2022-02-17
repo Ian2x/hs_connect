@@ -4,6 +4,7 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/activity/Messages/messagesPage.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
+import 'package:hs_connect/shared/widgets/chat_icons.dart';
 import 'package:provider/provider.dart';
 
 class DMButton extends StatelessWidget {
@@ -23,7 +24,7 @@ class DMButton extends StatelessWidget {
 
     return IconButton(
       constraints: BoxConstraints(),
-      padding: EdgeInsets.only(top: 3*hp, right: 10*wp),
+      padding: EdgeInsets.only(top: 5*hp, right: 10*wp,bottom:5*hp),
       onPressed: () {
         if (otherUserRef != null && otherUserRef != currUserRef) {
           Navigator.push(
@@ -39,7 +40,7 @@ class DMButton extends StatelessWidget {
                       ))));
         }
       },
-      icon: Icon(Icons.chat_bubble_outline_rounded, size: 18 * hp, color: Theme.of(context).colorScheme.primary),
+      icon: Icon(Chat.chat_bubble, size: 20 * hp, color: Theme.of(context).colorScheme.primaryVariant),
     );
   }
 }

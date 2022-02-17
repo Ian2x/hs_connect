@@ -5,6 +5,7 @@ import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/postLikesManager.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/pixels.dart';
+import 'package:hs_connect/shared/widgets/thick_arrow_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:hs_connect/shared/widgets/arrows_icons.dart';
 
@@ -46,7 +47,7 @@ class LikeDislikePost extends StatelessWidget {
               padding: postIconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
-              icon: Icon(Arrows.up_open_big, color: colorScheme.secondary),
+              icon: Icon(ThickArrow.angle_up_icon, color: colorScheme.secondary),
               onPressed: () {
                 HapticFeedback.heavyImpact();
                 postLikesManager.onUnLike();
@@ -59,7 +60,7 @@ class LikeDislikePost extends StatelessWidget {
               splashColor: Colors.transparent,
               padding: postIconPadding,
               constraints: BoxConstraints(),
-              icon: Icon(Arrows.up_open_big),
+              icon: Icon(ThickArrow.angle_up_icon),
               onPressed: () {
                 HapticFeedback.heavyImpact();
                 postLikesManager.onLike();
@@ -85,7 +86,7 @@ class LikeDislikePost extends StatelessWidget {
               padding: postIconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
-              icon: Icon(Arrows.down_open_big, color: colorScheme.onBackground),
+              icon: Icon(ThickArrow.angle_down_icon, color: colorScheme.onBackground),
               onPressed: () {
                 HapticFeedback.heavyImpact();
                 postLikesManager.onUnDislike();
@@ -98,7 +99,7 @@ class LikeDislikePost extends StatelessWidget {
               splashColor: Colors.transparent,
               padding: postIconPadding,
               constraints: BoxConstraints(),
-              icon: Icon(Arrows.down_open_big),
+              icon: Icon(ThickArrow.angle_down_icon),
               onPressed: () {
                 HapticFeedback.heavyImpact();
                 postLikesManager.onDislike();
@@ -170,7 +171,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
               padding: postIconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
-              icon: Icon(Arrows.up_open_big, color: colorScheme.secondary),
+              icon: Icon(ThickArrow.angle_up_icon, color: colorScheme.secondary),
               onPressed: () {
                 HapticFeedback.heavyImpact();
                 widget.postLikesManager.onUnLike();
@@ -190,7 +191,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
               padding: postIconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.primaryVariant,
-              icon: Icon(Arrows.up_open_big),
+              icon: Icon(ThickArrow.angle_up_icon),
               onPressed: () {
                 HapticFeedback.heavyImpact();
                 widget.postLikesManager.onLike();
@@ -225,7 +226,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
               padding: postIconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
-              icon: Icon(Arrows.down_open_big, color: colorScheme.secondary),
+              icon: Icon(ThickArrow.angle_down_icon, color: colorScheme.secondary),
               onPressed: () {
                 HapticFeedback.heavyImpact();
                 widget.postLikesManager.onUnDislike();
@@ -245,7 +246,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
               padding: postIconPadding,
               constraints: BoxConstraints(),
               color: colorScheme.primaryVariant,
-              icon: Icon(Arrows.down_open_big),
+              icon: Icon(ThickArrow.angle_down_icon),
               onPressed: () {
                 HapticFeedback.heavyImpact();
                 widget.postLikesManager.onDislike();
