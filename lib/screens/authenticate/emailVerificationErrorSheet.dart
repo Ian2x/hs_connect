@@ -54,7 +54,7 @@ class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorShee
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-                "If you haven't received an email after 2 minutes, it is recommended that you invalidate the email from our systems and start over. Otherwise, you'll never be able to make an account from this address. Please contact us at app@getcircles.co if you still have questions.",
+                "Make sure to check a spam/junk folder.",
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.black)),
             SizedBox(

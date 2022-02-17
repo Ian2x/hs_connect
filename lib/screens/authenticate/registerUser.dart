@@ -36,7 +36,7 @@ class _RegisterUserState extends State<RegisterUser> {
   bool passwordHidden = true;
 
   static const String authError = 'That username has already been taken.';
-  static const String lengthError = 'Username and Password should be 6+ characters long.';
+  static const String lengthError = 'Username and Password should be \n 6+ characters long.';
 
   @override
   Widget build(BuildContext context) {
@@ -72,24 +72,21 @@ class _RegisterUserState extends State<RegisterUser> {
                             'Make an Account',
                             style: ThemeText.helvetica(fontWeight: FontWeight.w700, fontSize: 28 * hp, color: Colors.black),
                           ),
-                          SizedBox(height: 10 * hp),
-                          Text("Your username is only used for logging in.\n(No one else will see it)",
+                          SizedBox(height: 20 * hp),
+                          error != null ?
+                          FittedBox(
+                            child: Text(error!,
+                                style: ThemeText.helvetica(fontWeight: FontWeight.normal, fontSize: 15*hp, color: Colors.black),
+                                textAlign: TextAlign.center),
+                          ) :
+                          Text(
+                              "Your username is only used for logging in.\n(No one else will see it)",
                               textAlign: TextAlign.center,
                               style: Theme.of(context)
                                   .textTheme
                                   .subtitle1
                                   ?.copyWith(color: Colors.black, fontSize: 15 * hp, height: 1.5)),
-                          Container(
-                              height: 40 * hp,
-                              padding: EdgeInsets.symmetric(horizontal: 20 * wp),
-                              alignment: Alignment.bottomCenter,
-                              child: error != null
-                                  ? FittedBox(
-                                    child: Text(error!,
-                                    style: ThemeText.helvetica(fontWeight: FontWeight.w500, fontSize: 13*hp, color: Colors.black),
-                                        textAlign: TextAlign.center),
-                                  )
-                                  : Container()),
+                          SizedBox(height:15*hp),
                           Container(
                             padding: EdgeInsets.fromLTRB(20 * wp, 0, 20 * wp, 0),
                             child: Column(
@@ -187,7 +184,10 @@ class _RegisterUserState extends State<RegisterUser> {
                               barrierDismissible: false,
                               builder: (BuildContext context) {
                                 return new AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(20*hp))),
                                   backgroundColor: Colors.white,
+                                  contentPadding: EdgeInsets.symmetric(vertical:10*hp),
                                   title: Text(
                                     "You're user number " +
                                         result.item3.toString() +
