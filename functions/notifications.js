@@ -70,19 +70,6 @@ function notificationBody(notification) {
     }
 }
 
-function notificationArrayIncludes(notificationArray, notification) {
-    const length = notificationArray.length;
-    for (var i = 0; i < length; i++) {
-        const testNotification = notificationArray[i];
-        if (testNotification.createdAt._seconds == notification.createdAt._seconds &&
-            testNotification.createdAt._nanoseconds == notification.createdAt._nanoseconds &&
-            testNotification.extraData == notification.extraData) {
-            return true;
-        }
-    }
-    return false;
-}
-
 function fakeRefsArrayIncludes(fakeRefsArray, fakeRef) {
     const length = fakeRefsArray.length;
     for (var i = 0; i< length; i++) {
@@ -94,55 +81,7 @@ function fakeRefsArrayIncludes(fakeRefsArray, fakeRef) {
     }
     return false;
 }
-/*
-exports.contentNotifications = functions.firestore
-    .document("userData/{userId}")
-    .onUpdate((change, context) => {
-        const newData = change.after.data();
-        const oldData = change.before.data();
-        if (newData.hasOwnProperty("tokens")) {
-            const tokens = newData.tokens;
-            if (tokens.length != 0) {
-                const newMyNotifications = newData.myNotifications;
-                const oldMyNotifications = oldData.myNotifications;
-                if (newMyNotifications.length != oldMyNotifications.length) {
-                    const newNotifications = newMyNotifications.filter(x => !notificationArrayIncludes(oldMyNotifications, x));
-                    return Promise.all(
-                        newNotifications.map(
-                            async function (notification) {
-                                if (!fakeRefsArrayIncludes(newData.blockedUserRefs, notification.sourceUserRef) && !fakeRefsArrayIncludes(newData.blockedPostRefs, notification.parentPostRef)) {
-                                    const payload = {
-                                        tokens: tokens,
-                                        notification: {
-                                            title: await notificationTitle(notification),
-                                            body: notificationBody(notification),
-                                        },
-                                        data: {
-                                            type: "contentNotification",
-                                            postId: notification.parentPostRef._path.segments[1],
-                                        },
-                                        apns: {
-                                            payload: {
-                                                aps: {
-                                                    sound: "default",
-                                                },
-                                            },
-                                        },
-                                    };
-                                    return admin.messaging().sendMulticast(payload).then((response) => {
-                                        return true;
-                                    });
-                                }
-                                return null;
-                            }
-                        )
-                    );
-                }
-            }
-        }
-        return null;
-    });
-*/
+
 exports.contentNotifications = functions.firestore
     .document("myNotifications/{myNotificationId}")
     .onCreate(async (snap, context) => {
