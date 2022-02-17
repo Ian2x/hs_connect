@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/comment.dart';
 import 'package:hs_connect/models/myNotification.dart';
 import 'package:hs_connect/models/post.dart';
-import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';

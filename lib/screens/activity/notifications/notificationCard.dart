@@ -32,8 +32,6 @@ class _NotificationCardState extends State<NotificationCard> {
   bool loading = false;
   bool badPost = false;
 
-  final ImageStorage _images = ImageStorage();
-
   @override
   void initState() {
     if (widget.myNotification.myNotificationType != MyNotificationType.fromMe) {

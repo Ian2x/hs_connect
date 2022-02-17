@@ -3,7 +3,13 @@ const functions = require("firebase-functions");
 
 // The Firebase Admin SDK to access Firestore.
 const admin = require("firebase-admin");
-admin.initializeApp();
+
+if (!admin.apps.length) {
+    const firebaseAdmin = admin.initializeApp({
+        credential: admin.credential.applicationDefault(),
+        storageBucket: 'gs://hs-connect-db0c0.appspot.com'
+    });
+}
 
 async function notificationTitle(notification) {
     switch (notification.myNotificationType) {
@@ -125,11 +131,15 @@ exports.dmNotification = functions.firestore
         if (tokens.length != 0) {
             if (!fakeRefsArrayIncludes(receiver.get('blockedUserRefs'), message.senderRef)) {
                 const sender = await realRef(message.senderRef).get();
+                var body = message.text;
+                if (message.isMedia) {
+                    body = "(an image)"
+                }
                 const payload = {
                     tokens: tokens,
                     notification: {
                         title: "New message from " + sender.get("fundamentalName"),
-                        body: message.text,
+                        body: body,
                     },
                     data: {
                         type: "dmNotification",

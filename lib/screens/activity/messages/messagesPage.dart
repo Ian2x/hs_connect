@@ -72,6 +72,8 @@ class MessagesPage extends StatelessWidget {
       body: Column(children: <Widget>[
         Expanded(
             child: Container(
+              color: Colors.green,
+          alignment: Alignment.bottomCenter,
           padding: EdgeInsets.only(left: 10 * wp, right: 10 * wp),
           child: GestureDetector(
             onVerticalDragDown: (DragDownDetails ddd) {
@@ -82,10 +84,13 @@ class MessagesPage extends StatelessWidget {
                 Navigator.of(context).pop();
               }
             },
-            child: MessagesFeed(
-              currUserRef: currUserRef,
-              otherUserRef: otherUserRef,
-              onUpdateLastViewed: onUpdateLastViewed,
+            child: Container(
+              color: Colors.blue,
+              child: MessagesFeed(
+                currUserRef: currUserRef,
+                otherUserRef: otherUserRef,
+                onUpdateLastViewed: onUpdateLastViewed,
+              ),
             ),
           ),
         )),
