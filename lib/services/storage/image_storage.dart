@@ -74,7 +74,7 @@ class ImageStorage {
   }
 
   Future deleteImage({required String imageURL}) async {
-    await Future.wait(
+    return Future.wait(
         [defaultCacheManager.removeFile(imageURL), FirebaseStorage.instance.refFromURL(imageURL).delete()]);
     /*final index = imageURL.indexOf("images%2F") + "images%2F".length;
     final imagePath = imageURL.substring(index, index + 36);
