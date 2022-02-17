@@ -31,8 +31,8 @@ class MessagesBubble extends StatelessWidget {
               child: ExpandableImage(imageURL: message.text, maxHeight: 900 * hp, containerWidth: 300 * wp)));
     }
     return Bubble(
-      color: isSentMessage ? Colors.blue : colorScheme.primary.withOpacity(0.3),
-      margin: BubbleEdges.fromLTRB(isSentMessage ? 50 * wp : 0 * wp, 5 * wp, isSentMessage ? 0 : 50 * hp, 5 * hp),
+      color: isSentMessage ? colorScheme.secondary : colorScheme.primary.withOpacity(0.3),
+      margin: BubbleEdges.fromLTRB(isSentMessage ? 50 * wp : 10 * wp, 5 * hp, isSentMessage ? 10 * wp: 50 * wp, 5 * hp),
       alignment: isSentMessage ? Alignment.centerRight : Alignment.centerLeft,
       radius: Radius.circular(11 * hp),
       child: Container(

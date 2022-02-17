@@ -5,14 +5,14 @@ import 'package:hs_connect/shared/pixels.dart';
 import 'package:provider/provider.dart';
 
 
-class ProfileSheetTitle extends StatelessWidget {
+class ProfileTitle extends StatelessWidget {
 
   final Color? otherUserDomainColor;
   final String otherUserFundName;
   final String? otherUserFullDomain;
   final int otherUserScore;
 
-  const ProfileSheetTitle({Key? key,
+  const ProfileTitle({Key? key,
     required this.otherUserDomainColor,
     required this.otherUserFundName,
     required this.otherUserFullDomain,

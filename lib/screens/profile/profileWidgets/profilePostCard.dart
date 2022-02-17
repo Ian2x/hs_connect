@@ -104,9 +104,6 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
                   color: colorScheme.background,
                   width: 3 * hp,
                 )),
-          ),
-          child: Loading(
-            backgroundColor: Colors.transparent,
           ));
     }
 

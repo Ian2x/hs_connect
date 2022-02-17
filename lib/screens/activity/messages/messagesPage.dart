@@ -72,28 +72,23 @@ class MessagesPage extends StatelessWidget {
       body: Column(children: <Widget>[
         Expanded(
             child: Container(
-              color: Colors.green,
-          alignment: Alignment.bottomCenter,
-          padding: EdgeInsets.only(left: 10 * wp, right: 10 * wp),
-          child: GestureDetector(
-            onVerticalDragDown: (DragDownDetails ddd) {
-              dismissKeyboard(context);
-            },
-            onPanUpdate: (details) {
-              if (details.delta.dx > 15) {
-                Navigator.of(context).pop();
-              }
-            },
-            child: Container(
-              color: Colors.blue,
-              child: MessagesFeed(
-                currUserRef: currUserRef,
-                otherUserRef: otherUserRef,
-                onUpdateLastViewed: onUpdateLastViewed,
+              padding: EdgeInsets.symmetric(vertical: 5*hp),
+              child: GestureDetector(
+                onVerticalDragDown: (DragDownDetails ddd) {
+                  dismissKeyboard(context);
+                },
+                onPanUpdate: (details) {
+                  if (details.delta.dx > 15) {
+                    Navigator.of(context).pop();
+                  }
+                },
+                child: MessagesFeed(
+                  currUserRef: currUserRef,
+                  otherUserRef: otherUserRef,
+                  onUpdateLastViewed: onUpdateLastViewed,
+                ),
               ),
-            ),
-          ),
-        )),
+            )),
         Container(
             height: 0,
             color:  colorScheme.onSurface), //can add domain color but...

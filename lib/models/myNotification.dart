@@ -87,7 +87,7 @@ class MyNotification {
     };
   }
 
-  String printA(String sourceUserName, String sourceUserFullDomainName, String postGroupName) {
+  String printA(String sourceUserName, String postGroupName) {
     switch (myNotificationType) {
       case MyNotificationType.commentToPost:
         return sourceUserName;
@@ -107,14 +107,14 @@ class MyNotification {
         return '';
     }
   }
-  String printB(String sourceUserName, String sourceUserFullDomainName, String postGroupName) {
+  String printB(String sourceUserName, String postGroupName) {
     switch (myNotificationType) {
       case MyNotificationType.commentToPost:
-        return '';//' from ';
+        return '';
       case MyNotificationType.replyToReply:
-        return '';//' from ';
+        return '';
       case MyNotificationType.replyToComment:
-        return '';//' from ';
+        return '';
       case MyNotificationType.replyVotes:
         return 'Your reply in ';
       case MyNotificationType.commentVotes:
@@ -127,14 +127,14 @@ class MyNotification {
         return '';
     }
   }
-  String printC(String sourceUserName, String sourceUserFullDomainName, String postGroupName) {
+  String printC(String sourceUserName, String postGroupName) {
     switch (myNotificationType) {
       case MyNotificationType.commentToPost:
-        return '';//sourceUserFullDomainName;
+        return '';
       case MyNotificationType.replyToReply:
-        return '';//sourceUserFullDomainName;
+        return '';
       case MyNotificationType.replyToComment:
-        return '';//sourceUserFullDomainName;
+        return '';
       case MyNotificationType.replyVotes:
         return postGroupName;
       case MyNotificationType.commentVotes:
@@ -147,7 +147,7 @@ class MyNotification {
         return '';
     }
   }
-  String printD(String sourceUserDisplayedName, String sourceUserFullDomainName, String postGroupName) {
+  String printD(String sourceUserDisplayedName, String postGroupName) {
     switch (myNotificationType) {
       case MyNotificationType.commentToPost:
         return ' commented on your post: ' + extraData!;

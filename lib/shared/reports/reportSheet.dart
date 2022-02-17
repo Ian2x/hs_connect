@@ -58,7 +58,7 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
     final userData = Provider.of<UserData?>(context);
     if (userData == null) return Loading();
 
-    final bottomSpace = max(MediaQuery.of(context).padding.bottom, 25*hp);
+    final bottomSpace = max(MediaQuery.of(context).padding.bottom, 5*hp);
 
     return Container(
       constraints: BoxConstraints(

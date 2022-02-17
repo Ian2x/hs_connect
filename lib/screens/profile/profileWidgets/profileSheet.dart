@@ -3,15 +3,11 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/report.dart';
-import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/screens/profile/profileWidgets/profileSheetTitle.dart';
+import 'package:hs_connect/screens/profile/profileWidgets/profileTitle.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/newMessageButton.dart';
-import 'package:hs_connect/services/posts_database.dart';
-import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/reports/reportSheet.dart';
-import 'package:hs_connect/shared/widgets/confirmationDialogs.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
@@ -39,7 +35,6 @@ class ProfileSheet extends StatefulWidget {
 }
 
 class _ProfileSheetState extends State<ProfileSheet> with TickerProviderStateMixin {
-  static const double iconSize = 20;
   late AnimationController controller;
   bool disposeController = true;
 
@@ -73,9 +68,6 @@ class _ProfileSheetState extends State<ProfileSheet> with TickerProviderStateMix
     final wp = Provider.of<WidthPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
 
-    final userData = Provider.of<UserData?>(context);
-    if (userData == null) return Loading();
-
     final bottomSpace = max(MediaQuery.of(context).padding.bottom, 25*hp);
 
     return Container(
@@ -84,21 +76,19 @@ class _ProfileSheetState extends State<ProfileSheet> with TickerProviderStateMix
           140 * hp + bottomSpace:
           204 * hp + bottomSpace,
         ),
-        padding: EdgeInsets.fromLTRB(13 * wp, 5*hp, 0, bottomSpace),
+        padding: EdgeInsets.fromLTRB(5 * wp, 5 * hp, 5 * wp, bottomSpace),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Row(
-                      children: [
-                        Icon(Icons.close_rounded, size: iconSize * hp, color: colorScheme.primary),
-                      ],
-                    )),
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  constraints: BoxConstraints(),
+                  icon: Icon(Icons.close_rounded, size: 20 * hp, color: colorScheme.primary),
+                ),
                 Spacer(),
                 IconButton(
                     icon: Icon(Icons.more_horiz, color: colorScheme.primaryVariant),
@@ -118,7 +108,7 @@ class _ProfileSheetState extends State<ProfileSheet> with TickerProviderStateMix
                     })
               ],
             ),
-            ProfileSheetTitle(
+            ProfileTitle(
                 otherUserDomainColor: widget.otherUserDomainColor!,
                 otherUserFullDomain: widget.otherUserFullDomain,
                 otherUserFundName: widget.otherUserFundName,

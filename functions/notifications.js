@@ -133,7 +133,7 @@ exports.dmNotification = functions.firestore
                 const sender = await realRef(message.senderRef).get();
                 var body = message.text;
                 if (message.isMedia) {
-                    body = "(an image)"
+                    body = "[an image]"
                 }
                 const payload = {
                     tokens: tokens,

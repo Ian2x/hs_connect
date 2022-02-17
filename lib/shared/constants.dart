@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 
-const maxDataCollectionRate = 3; // in hours (for trending groups)
-const maxDataCollectionDays = 2; // in days (for trending groups)
-
 // trendingCreatedAt factors
 const trendingCommentBoost = 0.08;
 const trendingReplyBoost = 0.1;

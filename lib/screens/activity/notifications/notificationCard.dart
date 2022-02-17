@@ -7,7 +7,6 @@ import 'package:hs_connect/models/postLikesManager.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/postView/postPage.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileImage.dart';
-import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/pixels.dart';
@@ -26,7 +25,6 @@ class NotificationCard extends StatefulWidget {
 
 class _NotificationCardState extends State<NotificationCard> {
   String? sourceUserName;
-  String? sourceUserFullDomainName;
   String? postGroupName;
   Color? domainColor;
   bool loading = false;
@@ -42,22 +40,30 @@ class _NotificationCardState extends State<NotificationCard> {
   }
 
   void fetchPostGroup() async {
-    final postData = await widget.myNotification.parentPostRef.get();
-    try {
-      final post = postFromSnapshot(postData);
-      final groupData = await post.groupRef.get();
-      final group = await groupFromSnapshot(groupData);
-      if (group != null) {
+    if (widget.myNotification.myNotificationType==MyNotificationType.commentVotes || widget.myNotification.myNotificationType==MyNotificationType.postVotes || widget.myNotification.myNotificationType==MyNotificationType.replyVotes) {
+      final postData = await widget.myNotification.parentPostRef.get();
+      try {
+        final post = postFromSnapshot(postData);
+        final groupData = await post.groupRef.get();
+        final group = await groupFromSnapshot(groupData);
+        if (group != null) {
+          if (mounted) {
+            setState(() {
+              postGroupName = group.name;
+            });
+          }
+        }
+      } catch (error) {
         if (mounted) {
           setState(() {
-            postGroupName = group.name;
+            badPost = true;
           });
         }
       }
-    } catch (error) {
+    } else {
       if (mounted) {
         setState(() {
-          badPost = true;
+          postGroupName = "";
         });
       }
     }
@@ -69,7 +75,6 @@ class _NotificationCardState extends State<NotificationCard> {
     if (mounted) {
       setState(() {
         sourceUserName = sourceUser.fundamentalName;
-        sourceUserFullDomainName = sourceUser.fullDomainName != null ? sourceUser.fullDomainName : sourceUser.domain;
         domainColor = sourceUser.domainColor;
       });
     }
@@ -81,6 +86,7 @@ class _NotificationCardState extends State<NotificationCard> {
     final wp = Provider.of<WidthPixel>(context).value;
     final hp = Provider.of<HeightPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
     if (badPost) {
       return Container();
@@ -95,14 +101,26 @@ class _NotificationCardState extends State<NotificationCard> {
             children: [
               SizedBox(
                   width: 307 * wp,
-                  child: Text(widget.myNotification.extraData!,
-                      maxLines: 100, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.bodyText2)),
+                  child: RichText(
+                    maxLines: 100,
+                    overflow: TextOverflow.ellipsis,
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "Circles.co: ", style: textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w600)
+                        ),
+                        TextSpan(
+                            text: widget.myNotification.extraData!, style: textTheme.bodyText2
+                        ),
+                      ]
+                    )
+                  )),
               Flexible(
                 child: Row(
                   children: [
                     Spacer(),
                     Text(convertTime(widget.myNotification.createdAt.toDate()),
-                        style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary))
+                        style: textTheme.subtitle2?.copyWith(color: colorScheme.primary))
                   ],
                 ),
               ),
@@ -110,7 +128,7 @@ class _NotificationCardState extends State<NotificationCard> {
           ));
     }
 
-    if (userData == null || sourceUserName == null || sourceUserFullDomainName == null || postGroupName == null) {
+    if (userData == null || sourceUserName == null || postGroupName == null) {
       return Container(
           margin: EdgeInsets.only(top: 2 * hp),
           padding: EdgeInsets.fromLTRB(14 * wp, 13 * hp, 14 * wp, 15 * hp),
@@ -166,7 +184,6 @@ class _NotificationCardState extends State<NotificationCard> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    SizedBox(width: 5 * wp),
                     ProfileImage(
                       background: domainColor!,
                       size:33*hp,
@@ -181,20 +198,20 @@ class _NotificationCardState extends State<NotificationCard> {
                           children: <TextSpan>[
                             TextSpan(
                                 text: widget.myNotification
-                                    .printA(sourceUserName!, sourceUserFullDomainName!, postGroupName!),
-                                style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w600)),
+                                    .printA(sourceUserName!, postGroupName!),
+                                style: textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w600)),
                             TextSpan(
                                 text: widget.myNotification
-                                    .printB(sourceUserName!, sourceUserFullDomainName!, postGroupName!),
-                                style: Theme.of(context).textTheme.bodyText2),
+                                    .printB(sourceUserName!, postGroupName!),
+                                style: textTheme.bodyText2),
                             TextSpan(
                                 text: widget.myNotification
-                                    .printC(sourceUserName!, sourceUserFullDomainName!, postGroupName!),
-                                style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w600)),
+                                    .printC(sourceUserName!, postGroupName!),
+                                style: textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w600)),
                             TextSpan(
                                 text: widget.myNotification
-                                    .printD(sourceUserName!, sourceUserFullDomainName!, postGroupName!),
-                                style: Theme.of(context).textTheme.bodyText2),
+                                    .printD(sourceUserName!, postGroupName!),
+                                style: textTheme.bodyText2),
                           ],
                         ),
                       ),
@@ -204,7 +221,7 @@ class _NotificationCardState extends State<NotificationCard> {
                         children: [
                           Spacer(),
                           Text(convertTime(widget.myNotification.createdAt.toDate()),
-                              style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary))
+                              style: textTheme.subtitle2?.copyWith(color: colorScheme.primary))
                         ],
                       ),
                     ),
@@ -212,7 +229,7 @@ class _NotificationCardState extends State<NotificationCard> {
                 ),
                 widget.myNotification.myNotificationType == MyNotificationType.featuredPost
                     ? Container(
-                        padding: EdgeInsets.fromLTRB(54 * wp, 5 * hp, 0, 0),
+                        padding: EdgeInsets.fromLTRB(47 * wp, 5 * hp, 0, 0),
                         child: Container(
                             decoration: BoxDecoration(
                                 gradient: Gradients.blueRed(), borderRadius: BorderRadius.circular(17 * hp)),
