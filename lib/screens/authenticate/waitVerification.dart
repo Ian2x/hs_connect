@@ -56,7 +56,7 @@ class _WaitVerificationState extends State<WaitVerification> {
         ),
         body: Stack(children: [
           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            SizedBox(height: 60 * hp),
+            SizedBox(height: 30 * hp),
             Center(
                 child: Column(
               children: [
@@ -110,33 +110,14 @@ class _WaitVerificationState extends State<WaitVerification> {
                     ),
                   ),
                 ),
-                SizedBox(height: 100 * hp),
-                TextButton(
-                  onPressed: () {
-                    showModalBottomSheet(
-                        context: context,
-                        constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.40),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(20 * hp),
-                        )),
-                        builder: (context) => pixelProvider(context,
-                            child: EmailVerificationErrorSheet(
-                                cancelTimer: () => timer!.cancel(),
-                                onDeleteEmail: () {
-                                  if (mounted) {
-                                    setState(() => emailDeleted = true);
-                                  }
-                                },
-                                emailDeleted: emailDeleted,
-                                domainEmail: widget.domainEmail)));
-                  },
-                  child: Text(" Didn't get it? Click here.",
-                      style: ThemeText.helvetica(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 15 * hp,
-                        color: Colors.black,
-                      )),
+                SizedBox(height: 190 * hp),
+                Center(
+                  child: Text("Make sure to check your spam/junk folder.",
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context)
+                          .textTheme
+                          .subtitle1
+                          ?.copyWith(color: Colors.black, height: 1.5)),
                 ),
               ],
             )),

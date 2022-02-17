@@ -73,25 +73,15 @@ class _RegisterEmailState extends State<RegisterEmail> {
                                 style: ThemeText.helvetica(
                                     fontWeight: FontWeight.w700, fontSize: 28 * hp, color: Colors.black),
                               ),
-                              SizedBox(height: 10 * hp),
+                              SizedBox(height: 20 * hp),
                               Text(
-                                "We'll send you an email to verify your school.",
+                                error != null ? error!
+                                  : "We'll send you an email to verify your school.",
                                 style:
                                     textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 14 * hp, height: 1.3),
                                 textAlign: TextAlign.center,
                               ),
-                              Container(
-                                  height: 40 * hp,
-                                  padding: EdgeInsets.symmetric(horizontal: 20 * wp),
-                                  alignment: Alignment.bottomCenter,
-                                  child: error != null
-                                      ? FittedBox(
-                                        child: Text(error!,
-                                            style: ThemeText.helvetica(
-                                                fontWeight: FontWeight.w500, fontSize: 13 * hp, color: Colors.black),
-                                            textAlign: TextAlign.center),
-                                      )
-                                      : Container())
+                              SizedBox(height:20*hp),
                             ],
                           )),
                         ),
@@ -165,7 +155,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                             } else if (result is FirebaseAuthException) {
                               if (mounted) {
                                 setState(() {
-                                  String errorMsg = 'Error: ';
+                                  String errorMsg = '';
                                   if (result.message != null) errorMsg += result.message!;
                                   error = errorMsg;
                                   loading = false;
@@ -174,7 +164,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                             } else {
                               if (mounted) {
                                 setState(() {
-                                  error = "Error: " + result.toString();
+                                  error = result.toString();
                                   loading = false;
                                 });
                               }

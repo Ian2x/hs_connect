@@ -79,17 +79,12 @@ class _SignInState extends State<SignIn> {
                                 SizedBox(height: 10*hp),
                                 Container(
                                   padding: EdgeInsets.symmetric(horizontal: 25*wp),
-                                  child: Text("Enter your login credentials.",
+                                  child: Text(
+                                    error != '' ? error:
+                                    "Enter your login credentials.",
                                     style: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 14*hp, height: 1.3), textAlign: TextAlign.center,),
                                 ),
-                                error != '' ?
-                                Container(
-                                  height: 20*hp,
-                                  alignment: Alignment.bottomCenter,
-                                  child: Text(error,
-                                    style: ThemeText.helvetica(fontWeight: FontWeight.w500, fontSize: 13*hp, color: Colors.black), textAlign: TextAlign.center),
-                                )
-                                : Container(height: 20*hp),
+                                SizedBox(height:20*hp),
                                 Container(
                                   padding:EdgeInsets.fromLTRB(20*wp,0,20*wp,0),
                                   child: Form(
