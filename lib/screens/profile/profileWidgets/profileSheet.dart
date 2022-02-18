@@ -5,6 +5,7 @@ import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileTitle.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/newMessageButton.dart';
 import 'package:hs_connect/shared/reports/reportSheet.dart';
+import 'package:hs_connect/shared/widgets/modalTab.dart';
 
 class ProfileSheet extends StatefulWidget {
   final DocumentReference otherUserRef;
@@ -76,33 +77,13 @@ class _ProfileSheetState extends State<ProfileSheet> with TickerProviderStateMix
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  constraints: BoxConstraints(),
-                  icon: Icon(Icons.close_rounded, size: 20, color: colorScheme.primary),
-                ),
-                Spacer(),
-                IconButton(
-                    icon: Icon(Icons.more_horiz, color: colorScheme.primaryVariant),
-                    onPressed: () {
-                      showModalBottomSheet(
-                          context: context,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(20),
-                              )),
-                          builder: (context) => ReportSheet(
-                                reportType: ReportType.user,
-                                entityRef: widget.otherUserRef,
-                                entityCreatorRef: widget.otherUserRef,
-                              ));
-                    })
+                modalTab(),
               ],
             ),
             ProfileTitle(
+                otherUserRef: widget.otherUserRef,
                 otherUserDomainColor: widget.otherUserDomainColor!,
                 otherUserFullDomain: widget.otherUserFullDomain,
                 otherUserFundName: widget.otherUserFundName,
