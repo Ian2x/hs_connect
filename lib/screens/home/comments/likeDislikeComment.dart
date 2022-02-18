@@ -60,7 +60,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               padding: EdgeInsets.all(3*hp),
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
-              icon: Icon(ThickArrow.angle_down_icon, color: activeColor),
+              icon: Icon(ThickArrow.angle_up_icon, color: activeColor),
               onPressed: () {
                 HapticFeedback.heavyImpact();
                 _comments.unLikeComment(widget.comment.creatorRef!);

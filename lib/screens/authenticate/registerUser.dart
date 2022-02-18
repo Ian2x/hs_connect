@@ -230,7 +230,8 @@ class _RegisterUserState extends State<RegisterUser> {
                                             style: ThemeText.helvetica(
                                                 fontWeight: FontWeight.w500, fontSize: 14 * hp, color: Colors.black),
                                           ),
-                                        )
+                                        ),
+                                        SizedBox(height: 10*hp)
                                       ],
                                     ),
                                   ),

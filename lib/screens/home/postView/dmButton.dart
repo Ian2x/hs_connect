@@ -39,7 +39,7 @@ class DMButton extends StatelessWidget {
                       ))));
         }
       },
-      icon: Icon(Chat.chat_bubble, size: 18 * hp, color: Theme.of(context).colorScheme.primaryVariant),
+      icon: Icon(Chat.chat_bubble, size: 18 * hp, color: Theme.of(context).colorScheme.primary),
     );
   }
 }
