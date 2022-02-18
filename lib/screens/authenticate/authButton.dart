@@ -15,11 +15,10 @@ class AuthButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final wp = Provider.of<WidthPixel>(context).value;
     final hp = Provider.of<HeightPixel>(context).value;
 
     return MyOutlinedButton(
-      padding: EdgeInsets.symmetric(vertical: 9*hp, horizontal: 35*wp),
+      padding: EdgeInsets.symmetric(vertical: 9*hp, horizontal: 35),
       onPressed: onPressed,
       outlineColor: hasText ? Colors.black : Colors.black54,
       borderRadius: 40*hp,
@@ -30,8 +29,7 @@ class AuthButton extends StatelessWidget {
           buttonText,
           softWrap: false,
           overflow: TextOverflow.ellipsis,
-          style: ThemeText.helvetica(fontWeight: FontWeight.w500, color: hasText ? Colors.black : Colors.black54,
-          ),
+          style: ThemeText.helvetica(fontWeight: FontWeight.w500, color: hasText ? Colors.black : Colors.black54),
         ),
       ),
     );

@@ -28,7 +28,25 @@ class MyOutlinedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+          decoration: BoxDecoration(
+            gradient: gradient,
+            color: outlineColor,
+            borderRadius: BorderRadius.circular(borderRadius),
+          ),
+          child: Container(
+            padding: padding,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(borderRadius-thickness),
+              color: backgroundColor,
+            ),
+            margin: EdgeInsets.all(thickness),
+            child: child,
+          )
+      ),
+    );
     return ActionChip(
       labelPadding: EdgeInsets.zero,
       padding: EdgeInsets.zero,
