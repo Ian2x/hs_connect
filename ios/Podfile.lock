@@ -336,7 +336,7 @@ PODS:
     - abseil/utility/utility
   - abseil/utility/utility (0.20200225.0):
     - abseil/base/base_internal
-    - abseil/base/config
+    - abseil/base/configm
     - abseil/meta/type_traits
   - BoringSSL-GRPC (0.0.7):
     - BoringSSL-GRPC/Implementation (= 0.0.7)
