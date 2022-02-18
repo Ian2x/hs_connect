@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/screens/authenticate/registerEmail.dart';
 import 'package:hs_connect/screens/authenticate/signIn.dart';
 import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/pageRoutes.dart';
-import 'package:hs_connect/shared/pixels.dart';
-import 'package:provider/provider.dart';
-
 import 'aboutUs.dart';
 
 class PreviewPage extends StatelessWidget {
@@ -16,8 +12,6 @@ class PreviewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final hp = Provider.of<HeightPixel>(context).value;
-    final wp = Provider.of<WidthPixel>(context).value;
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
@@ -29,27 +23,27 @@ class PreviewPage extends StatelessWidget {
           ),
           child: Column(
             children: [
-              SizedBox(height: 180 * hp),
+              SizedBox(height: 180),
               SizedBox(
-                height: 95 * hp,
+                height: 95,
                 child: Image.asset('assets/sublogo2.png'),
               ),
-              SizedBox(height: 60 * hp),
+              SizedBox(height: 60),
               Text("circles.co",
-                  style: textTheme.headline4?.copyWith(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 28*hp)),
-              SizedBox(height: 15 * hp),
+                  style: textTheme.headline4?.copyWith(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 28)),
+              SizedBox(height: 15),
               Text(
                 "Talk with your classmates,",
-                style: textTheme.subtitle1?.copyWith(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 19*hp),
+                style: textTheme.subtitle1?.copyWith(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 19),
               ),
-              SizedBox(height: 4 * hp),
+              SizedBox(height: 4),
               Text(
                 "anonymously.",
-                style: textTheme.subtitle1?.copyWith(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 19*hp),
+                style: textTheme.subtitle1?.copyWith(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 19),
               ),
-              SizedBox(height: 100 * hp),
+              SizedBox(height: 100),
               ActionChip(
-                padding: EdgeInsets.fromLTRB(35 * wp, 15 * hp, 35 * wp, 15 * hp),
+                padding: EdgeInsets.fromLTRB(35, 15, 35, 15),
                 backgroundColor: Colors.white,
                 label: Text(
                   'Sign up',
@@ -57,10 +51,10 @@ class PreviewPage extends StatelessWidget {
                 ),
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => pixelProvider(context, child: RegisterEmail())));
+                      builder: (context) => RegisterEmail()));
                 },
               ),
-              SizedBox(height: 15 * hp),
+              SizedBox(height: 15),
               TextButton(
                 child: Text(
                   "Login",
@@ -68,21 +62,21 @@ class PreviewPage extends StatelessWidget {
                 ),
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => pixelProvider(context, child: SignIn())));
+                      builder: (context) => SignIn()));
                 },
               ),
-              SizedBox(height: 65 * hp),
+              SizedBox(height: 65),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextButton(
                       onPressed: () {
                         Navigator.push(
-                            context, MaterialPageRoute(builder: (context) => pixelProvider(context, child: AboutUs())));
+                            context, MaterialPageRoute(builder: (context) => AboutUs()));
                       },
                       child: Text(
                         "About",
-                        style: textTheme.subtitle1?.copyWith(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 19*hp)
+                        style: textTheme.subtitle1?.copyWith(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 19)
                       ))
                 ],
               )

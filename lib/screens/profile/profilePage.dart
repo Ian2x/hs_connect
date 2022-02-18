@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/profile/profileBody.dart';
 import 'package:hs_connect/screens/profile/settings/settingsPage.dart';
-import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
 import 'package:hs_connect/shared/widgets/thicker_icons.dart';
 
@@ -26,11 +25,10 @@ class ProfilePage extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => pixelProvider(context,
-                              child: SettingsPage(
+                          builder: (context) => SettingsPage(
                                 initialIsLightTheme: Theme.of(context).brightness == Brightness.light,
                                 currUserData: currUserData,
-                              ))));
+                              )));
                 })
           ],
           elevation: 0),

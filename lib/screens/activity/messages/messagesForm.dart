@@ -5,7 +5,7 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/messages_database.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
-import 'package:hs_connect/shared/pixels.dart';
+
 import 'package:hs_connect/shared/widgets/deletableImage.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
@@ -45,8 +45,6 @@ class _MessagesFormState extends State<MessagesForm> {
   @override
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
-    final wp = Provider.of<WidthPixel>(context).value;
-    final hp = Provider.of<HeightPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
 
     if (userData == null) {
@@ -56,7 +54,7 @@ class _MessagesFormState extends State<MessagesForm> {
     MessagesDatabaseService _messages = MessagesDatabaseService(currUserRef: userData.userRef);
 
     return Container(
-      padding: EdgeInsets.fromLTRB(10*wp, 10*hp, 10*wp, MediaQuery.of(context).padding.bottom>10 ? MediaQuery.of(context).padding.bottom : 10*hp),
+      padding: EdgeInsets.fromLTRB(10, 10, 10, MediaQuery.of(context).padding.bottom>10 ? MediaQuery.of(context).padding.bottom : 10),
       color: colorScheme.background,
       child: Form(
              key: _formKey,
@@ -66,13 +64,13 @@ class _MessagesFormState extends State<MessagesForm> {
                    ? Semantics(
                        label: 'new_message_image',
                        child: Container(
-                         width: 150*wp,
-                         height: 150*hp,
+                         width: 150,
+                         height: 150,
                          decoration: BoxDecoration(borderRadius: imageBorderRadius),
                          child: DeletableImage(
                            image: Image.file(File(newFile!.path), fit: BoxFit.contain),
                            onDelete: () => setPic(null),
-                           height: 144*hp, width: 144*wp,
+                           height: 144, width: 144,
                          ),
                        ))
                    : Container(),

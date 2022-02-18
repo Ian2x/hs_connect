@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../inputDecorations.dart';
-import '../pixels.dart';
 
 class AnimatedSwitch extends StatefulWidget {
   final bool initialState;
@@ -26,8 +24,6 @@ class _AnimatedSwitchState extends State<AnimatedSwitch> {
   @override
   Widget build(BuildContext context) {
 
-    final hp = Provider.of<HeightPixel>(context).value;
-    final wp = Provider.of<WidthPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
 
     return GestureDetector(
@@ -40,21 +36,21 @@ class _AnimatedSwitchState extends State<AnimatedSwitch> {
         widget.onToggle();
       },
       child: AnimatedContainer(
-        height: 28*hp,
-        width: 50*wp,
+        height: 28,
+        width: 50,
         duration: animationDuration,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15*hp),
+          borderRadius: BorderRadius.circular(15),
           color: isEnabled ? colorScheme.secondary.withAlpha(255) : colorScheme.primary,
         ),
         child: AnimatedAlign(
           duration: animationDuration,
           alignment: isEnabled ? Alignment.centerRight : Alignment.centerLeft,
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 3*wp),
+            padding: EdgeInsets.symmetric(horizontal: 3),
             child: Container(
-              width: 22*wp,
-              height: 22*hp,
+              width: 22,
+              height: 22,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.white,
@@ -89,8 +85,8 @@ class _AnimatedSwitchState2 extends State<AnimatedSwitch2> {
   @override
   Widget build(BuildContext context) {
 
-    final hp = Provider.of<HeightPixel>(context).value;
-    final wp = Provider.of<WidthPixel>(context).value;
+
+
     final colorScheme = Theme.of(context).colorScheme;
 
     return GestureDetector(
@@ -103,21 +99,21 @@ class _AnimatedSwitchState2 extends State<AnimatedSwitch2> {
         widget.onToggle();
       },
       child: AnimatedContainer(
-        height: 23*hp,
-        width: 39*wp,
+        height: 23,
+        width: 39,
         duration: animationDuration,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15*hp),
+          borderRadius: BorderRadius.circular(15),
           color: isEnabled ? colorScheme.secondary.withAlpha(255) : colorScheme.primary,
         ),
         child: AnimatedAlign(
           duration: animationDuration,
           alignment: isEnabled ? Alignment.centerRight : Alignment.centerLeft,
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 3*wp),
+            padding: EdgeInsets.symmetric(horizontal: 3),
             child: Container(
-              width: 17*wp,
-              height: 17*hp,
+              width: 17,
+              height: 17,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.white,

@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/services/posts_database.dart';
-import 'package:hs_connect/shared/pixels.dart';
-import 'package:provider/provider.dart';
 
 class DeletePost extends StatefulWidget {
   final DocumentReference currUserRef;
@@ -28,7 +26,7 @@ class _DeletePostState extends State<DeletePost> {
 
   @override
   Widget build(BuildContext context) {
-    final hp = Provider.of<HeightPixel>(context).value;
+
     PostsDatabaseService _posts = PostsDatabaseService(currUserRef: widget.currUserRef);
 
     if (widget.currUserRef != widget.postUserRef) {
@@ -36,7 +34,7 @@ class _DeletePostState extends State<DeletePost> {
     } else {
       return IconButton(
         icon: Icon(Icons.delete),
-        iconSize: 24*hp,
+        iconSize: 24,
         onPressed: () {
           _posts.deletePost(
               postRef: widget.postRef, userRef: widget.currUserRef, groupRef: widget.groupRef, media: widget.media);

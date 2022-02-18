@@ -4,10 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/postLikesManager.dart';
 import 'package:hs_connect/services/posts_database.dart';
-import 'package:hs_connect/shared/pixels.dart';
+
 import 'package:hs_connect/shared/widgets/thick_arrow_icons.dart';
-import 'package:provider/provider.dart';
-import 'package:hs_connect/shared/widgets/arrows_icons.dart';
 
 const double postIconSizeStateless = 18;
 const double postIconSizeStateful = 22;
@@ -25,12 +23,6 @@ class LikeDislikePost extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hp = Provider
-        .of<HeightPixel>(context)
-        .value;
-    final wp = Provider
-        .of<WidthPixel>(context)
-        .value;
     final colorScheme = Theme
         .of(context)
         .colorScheme;
@@ -43,7 +35,7 @@ class LikeDislikePost extends StatelessWidget {
             () {
           if (postLikesManager.likeStatus == true) {
             return IconButton(
-              iconSize: postIconSizeStateless * hp,
+              iconSize: postIconSizeStateless,
               splashColor: Colors.transparent,
               padding: postIconPadding,
               constraints: BoxConstraints(),
@@ -57,7 +49,7 @@ class LikeDislikePost extends StatelessWidget {
             );
           } else {
             return IconButton(
-              iconSize: postIconSizeStateless * hp,
+              iconSize: postIconSizeStateless,
               splashColor: Colors.transparent,
               padding: postIconPadding,
               constraints: BoxConstraints(),
@@ -70,19 +62,19 @@ class LikeDislikePost extends StatelessWidget {
             );
           }
         }(),
-        SizedBox(width: 8 * wp),
+        SizedBox(width: 8),
         Text(
           (postLikesManager.likeCount - postLikesManager.dislikeCount).toString(),
           style: Theme
               .of(context)
               .textTheme
-              .subtitle1?.copyWith(fontSize: postIconSizeStateless * hp),
+              .subtitle1?.copyWith(fontSize: postIconSizeStateless),
         ),
-        SizedBox(width: 8 * wp),
+        SizedBox(width: 8),
             () {
           if (postLikesManager.dislikeStatus == true) {
             return IconButton(
-              iconSize: postIconSizeStateless * hp,
+              iconSize: postIconSizeStateless,
               splashColor: Colors.transparent,
               padding: postIconPadding,
               constraints: BoxConstraints(),
@@ -96,7 +88,7 @@ class LikeDislikePost extends StatelessWidget {
             );
           } else {
             return IconButton(
-              iconSize: postIconSizeStateless * hp,
+              iconSize: postIconSizeStateless,
               splashColor: Colors.transparent,
               padding: postIconPadding,
               constraints: BoxConstraints(),
@@ -150,12 +142,6 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
 
   @override
   Widget build(BuildContext context) {
-    final hp = Provider
-        .of<HeightPixel>(context)
-        .value;
-    final wp = Provider
-        .of<WidthPixel>(context)
-        .value;
     final colorScheme = Theme
         .of(context)
         .colorScheme;
@@ -169,7 +155,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
             () {
           if (likeStatus == true) {
             return IconButton(
-              iconSize: postIconSizeStateful * hp,
+              iconSize: postIconSizeStateful,
               splashColor: Colors.transparent,
               padding: postIconPadding,
               constraints: BoxConstraints(),
@@ -189,7 +175,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
             );
           } else {
             return IconButton(
-              iconSize: postIconSizeStateful * hp,
+              iconSize: postIconSizeStateful,
               splashColor: Colors.transparent,
               padding: postIconPadding,
               constraints: BoxConstraints(),
@@ -211,20 +197,20 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
             );
           }
         }(),
-        SizedBox(width: 10 * wp),
+        SizedBox(width: 10),
         Text(
           (likeCount - dislikeCount).toString(),
           style: Theme
               .of(context)
               .textTheme
-              .subtitle1?.copyWith(fontSize: 0.75 * postIconSizeStateful * hp),
+              .subtitle1?.copyWith(fontSize: 0.75 * postIconSizeStateful),
         ),
-        SizedBox(width: 10 * wp),
+        SizedBox(width: 10),
 
             () {
           if (dislikeStatus == true) {
             return IconButton(
-              iconSize: postIconSizeStateful * hp,
+              iconSize: postIconSizeStateful,
               splashColor: Colors.transparent,
               padding: postIconPadding,
               constraints: BoxConstraints(),
@@ -244,7 +230,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
             );
           } else {
             return IconButton(
-              iconSize: postIconSizeStateful * hp,
+              iconSize: postIconSizeStateful,
               splashColor: Colors.transparent,
               padding: postIconPadding,
               constraints: BoxConstraints(),

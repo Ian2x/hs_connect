@@ -6,10 +6,8 @@ import 'package:hs_connect/screens/home/postView/postCard.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/myStorageManager.dart';
-import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:provider/provider.dart';
 
 class PublicFeed extends StatefulWidget {
   final UserData currUser;
@@ -81,11 +79,10 @@ class _PublicFeedState extends State<PublicFeed> with AutomaticKeepAliveClientMi
     super.build(context);
     if (widget.isDomain || showMaturePosts==null) return Loading();
 
-    final hp = Provider.of<HeightPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
-      padding: EdgeInsets.only(top: 3*hp),
+      padding: EdgeInsets.symmetric(vertical: 3),
       child: RefreshIndicator(
         onRefresh: () =>
             Future.sync(
@@ -108,7 +105,7 @@ class _PublicFeedState extends State<PublicFeed> with AutomaticKeepAliveClientMi
                     ));
               },
               noItemsFoundIndicatorBuilder: (BuildContext context) => Container(
-                  padding: EdgeInsets.only(top: 50*hp),
+                  padding: EdgeInsets.only(top: 50),
                   alignment: Alignment.topCenter,
                   child: Text("No posts found",
                       style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.normal, color: colorScheme.onSurface))),

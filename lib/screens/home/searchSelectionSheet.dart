@@ -1,9 +1,6 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
-import 'package:hs_connect/shared/pixels.dart';
-import 'package:provider/provider.dart';
 
 class SearchSelectionSheet extends StatefulWidget {
   final bool initialSearchByTrending;
@@ -26,15 +23,15 @@ class _SearchSelectionSheetState extends State<SearchSelectionSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final hp = Provider.of<HeightPixel>(context).value;
-    final wp = Provider.of<WidthPixel>(context).value;
+
+
     final colorScheme = Theme.of(context).colorScheme;
 
-    final bottomSpace = max(MediaQuery.of(context).padding.bottom, 25*hp);
+    final double bottomSpace = max(MediaQuery.of(context).padding.bottom, 25);
 
     return Container(
-      height: 169*hp + bottomSpace,
-        padding: EdgeInsets.fromLTRB(25*wp, 25*hp, 25*wp, bottomSpace),
+      height: 169 + bottomSpace,
+        padding: EdgeInsets.fromLTRB(25, 25, 25, bottomSpace),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,14 +62,14 @@ class _SearchSelectionSheetState extends State<SearchSelectionSheet> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text('Hot', style: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w500)),
-                          SizedBox(height: 5*hp),
+                          SizedBox(height: 5),
                           Text("Show trending posts", style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary)),
-                          SizedBox(height: 2*hp)
+                          SizedBox(height: 2)
                         ],
                       ),
                       Spacer(),
                       ConstrainedBox(
-                          constraints: BoxConstraints(maxHeight: 40*hp),
+                          constraints: BoxConstraints(maxHeight: 40),
                           child:
                           Checkbox(
                             value: searchByTrending,
@@ -114,14 +111,14 @@ class _SearchSelectionSheetState extends State<SearchSelectionSheet> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('New', style: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w500)),
-                            SizedBox(height: 5*hp),
+                            SizedBox(height: 5),
                             Text("Show the newest posts", style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary)),
-                            SizedBox(height: 2*hp)
+                            SizedBox(height: 2)
                           ],
                         ),
                         Spacer(),
                         ConstrainedBox(
-                            constraints: BoxConstraints(maxHeight: 40*hp),
+                            constraints: BoxConstraints(maxHeight: 40),
                             child:
                             Checkbox(
                               value: !searchByTrending,

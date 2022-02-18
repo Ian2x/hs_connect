@@ -1,15 +1,11 @@
 import 'dart:math';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
-import 'package:hs_connect/shared/pageRoutes.dart';
-import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/myOutlinedButton.dart';
-import 'package:provider/provider.dart';
 
 import '../wrapper.dart';
 
@@ -41,13 +37,11 @@ class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorShee
 
   @override
   Widget build(BuildContext context) {
-    final hp = Provider.of<HeightPixel>(context).value;
-    final wp = Provider.of<HeightPixel>(context).value;
 
-    final bottomSpace = max(MediaQuery.of(context).padding.bottom, 35*hp);
+    final double bottomSpace = max(MediaQuery.of(context).padding.bottom, 35);
 
     return Container(
-        padding: EdgeInsets.fromLTRB(20*wp, 25*hp, 20*wp, bottomSpace),
+        padding: EdgeInsets.fromLTRB(20, 25, 20, bottomSpace),
         color: Colors.white,
         alignment: Alignment.center,
         child: Column(
@@ -58,7 +52,7 @@ class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorShee
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.black)),
             SizedBox(
-                height: error=='' ? 40*hp : 80*hp,
+                height: error=='' ? 40 : 80,
                 child: Center(child: Text(error, textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyText2?.copyWith(color: Color(0xFFb2b2b2))))),
             Row(children: <Widget>[
               Spacer(),
@@ -81,13 +75,13 @@ class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorShee
                   }
                 },
                 gradient: Gradients.blueRed(begin: Alignment.topCenter, end: Alignment.bottomCenter),
-                borderRadius: 20*hp,
-                thickness: 1.5*hp,
-                padding: EdgeInsets.symmetric(horizontal: 15*wp),
+                borderRadius: 20,
+                thickness: 1.5,
+                padding: EdgeInsets.symmetric(horizontal: 15),
                 backgroundColor: Colors.white,
                 child: Container(
-                  height: 30*hp,
-                  width: 100*wp,
+                  height: 30,
+                  width: 100,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -95,7 +89,7 @@ class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorShee
                         fit: BoxFit.fitWidth,
                         child: Text(
                           deleteEmail,
-                          style: ThemeText.helvetica(fontWeight: FontWeight.w600, fontSize: 16*hp, color: Colors.black
+                          style: ThemeText.helvetica(fontWeight: FontWeight.w600, fontSize: 16, color: Colors.black
                           ),
                         ),
                       ),
@@ -103,19 +97,19 @@ class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorShee
                   ),
                 ),
               ),
-              SizedBox(width: 30*wp),
+              SizedBox(width: 30),
               MyOutlinedButton(
                 onPressed: () {
-                  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => pixelProvider(context, child: Wrapper())), (Route<dynamic> route) => false);
+                  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => Wrapper()), (Route<dynamic> route) => false);
                 },
                 gradient: Gradients.blueRed(begin: Alignment.topCenter, end: Alignment.bottomCenter),
-                borderRadius: 20*hp,
-                thickness:1.5*hp,
-                padding: EdgeInsets.symmetric(horizontal: 15*wp),
+                borderRadius: 20,
+                thickness:1.5,
+                padding: EdgeInsets.symmetric(horizontal: 15),
                 backgroundColor: Colors.white,
                 child: Container(
-                  height: 30*hp,
-                  width: 70*wp,
+                  height: 30,
+                  width: 70,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -123,7 +117,7 @@ class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorShee
                         fit: BoxFit.fitWidth,
                         child: Text(
                           "Start Over",
-                          style: ThemeText.helvetica(fontWeight: FontWeight.w600, fontSize: 16*hp, color: Colors.black
+                          style: ThemeText.helvetica(fontWeight: FontWeight.w600, fontSize: 16, color: Colors.black
                           ),
                         ),
                       ),

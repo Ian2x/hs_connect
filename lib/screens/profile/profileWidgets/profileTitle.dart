@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileImage.dart';
-import 'package:hs_connect/shared/pixels.dart';
-import 'package:provider/provider.dart';
-
 
 class ProfileTitle extends StatelessWidget {
 
@@ -21,14 +18,12 @@ class ProfileTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final wp= Provider.of<HeightPixel>(context).value;
-
     return Row(
       children: [
         Column(
           children: [
             Container(
-              margin: EdgeInsets.symmetric(horizontal:20*wp),
+              margin: EdgeInsets.symmetric(horizontal:20),
               child: ProfileImage(
                 background:otherUserDomainColor,
               ),

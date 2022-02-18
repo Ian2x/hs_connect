@@ -1,11 +1,8 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/accessRestriction.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
-import 'package:hs_connect/shared/pixels.dart';
-import 'package:provider/provider.dart';
 
 class GroupSelectionSheet extends StatefulWidget {
   final List<Group> groups;
@@ -29,14 +26,14 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final hp = Provider.of<HeightPixel>(context).value;
-    final wp = Provider.of<WidthPixel>(context).value;
+
+
     final colorScheme = Theme.of(context).colorScheme;
-    final bottomSpace = max(MediaQuery.of(context).padding.bottom, 25*hp);
+    final double bottomSpace = max(MediaQuery.of(context).padding.bottom, 25);
 
     return Container(
-        height: 167*hp + bottomSpace,
-        padding: EdgeInsets.fromLTRB(25*wp, 25*hp, 25*wp, bottomSpace),
+        height: 167 + bottomSpace,
+        padding: EdgeInsets.fromLTRB(25, 25, 25, bottomSpace),
         child: ListView.builder(
           itemCount: widget.groups.length + 1,
           scrollDirection: Axis.vertical,
@@ -75,18 +72,18 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
                           group.name == "Public"
                               ? Column(
                                 children: [
-                                  SizedBox(height:5*hp),
+                                  SizedBox(height:5),
                                   Text("Anyone can see", style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary)),
-                                  SizedBox(height:2*hp),
+                                  SizedBox(height:2),
                                 ],
                               )
                               : Container(),
                           group.accessRestriction.restrictionType == AccessRestrictionType.domain
                               ? Column(
                                 children: [
-                                  SizedBox(height:5*hp),
+                                  SizedBox(height:5),
                                   Text("Only for your school", style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary)),
-                                  SizedBox(height:2*hp),
+                                  SizedBox(height:2),
                                 ],
                               )
                               : Container()
@@ -94,7 +91,7 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
                       ),
                       Spacer(),
                       ConstrainedBox(
-                          constraints: BoxConstraints(maxHeight: 40*hp),
+                          constraints: BoxConstraints(maxHeight: 40),
                           child:
                           Checkbox(
                             value: selectedGroup == widget.groups[index - 1],

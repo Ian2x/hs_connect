@@ -8,8 +8,6 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/postView/postPage.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileImage.dart';
 import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/pageRoutes.dart';
-import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
@@ -83,8 +81,6 @@ class _NotificationCardState extends State<NotificationCard> {
   @override
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
-    final wp = Provider.of<WidthPixel>(context).value;
-    final hp = Provider.of<HeightPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
@@ -94,13 +90,13 @@ class _NotificationCardState extends State<NotificationCard> {
 
     if (widget.myNotification.myNotificationType == MyNotificationType.fromMe) {
       return Container(
-          margin: EdgeInsets.only(top: 2.5 * hp),
-          padding: EdgeInsets.fromLTRB(14 * wp, 13 * hp, 14 * wp, 15 * hp),
+          margin: EdgeInsets.only(top: 2.5),
+          padding: EdgeInsets.fromLTRB(14, 13, 14, 15),
           color: colorScheme.surface,
           child: Row(
             children: [
               SizedBox(
-                  width: 307 * wp,
+                  width: 307,
                   child: RichText(
                     maxLines: 100,
                     overflow: TextOverflow.ellipsis,
@@ -130,9 +126,9 @@ class _NotificationCardState extends State<NotificationCard> {
 
     if (userData == null || sourceUserName == null || postGroupName == null) {
       return Container(
-          margin: EdgeInsets.only(top: 2 * hp),
-          padding: EdgeInsets.fromLTRB(14 * wp, 13 * hp, 14 * wp, 15 * hp),
-          height: 65 * hp,
+          margin: EdgeInsets.only(top: 2),
+          padding: EdgeInsets.fromLTRB(14, 13, 14, 15),
+          height: 65,
           color: colorScheme.surface,
           child: loading ? Loading(backgroundColor: Colors.transparent) : null);
     }
@@ -150,8 +146,7 @@ class _NotificationCardState extends State<NotificationCard> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => pixelProvider(context,
-                        child: PostPage(
+                    builder: (context) => PostPage(
                             creatorData: userData,
                             post: post,
                             group: group,
@@ -164,7 +159,7 @@ class _NotificationCardState extends State<NotificationCard> {
                               onUnLike: () {},
                               onDislike: () {},
                               onUnDislike: () {},
-                            )))));
+                            ))));
           } else {
             log('Error fetching group');
             if (mounted) {
@@ -175,8 +170,8 @@ class _NotificationCardState extends State<NotificationCard> {
           }
         },
         child: Container(
-            margin: EdgeInsets.only(top: 2.5 * hp),
-            padding: EdgeInsets.fromLTRB(14 * wp, 13 * hp, 14 * wp, 15 * hp),
+            margin: EdgeInsets.only(top: 2.5),
+            padding: EdgeInsets.fromLTRB(14, 13, 14, 15),
             color: colorScheme.surface,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -186,11 +181,11 @@ class _NotificationCardState extends State<NotificationCard> {
                   children: <Widget>[
                     ProfileImage(
                       background: domainColor!,
-                      size:33*hp,
+                      size:33,
                     ),
-                    SizedBox(width: 14*wp),
+                    SizedBox(width: 14),
                     SizedBox(
-                      width: 260 * wp,
+                      width: 260,
                       child: RichText(
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
@@ -229,16 +224,16 @@ class _NotificationCardState extends State<NotificationCard> {
                 ),
                 widget.myNotification.myNotificationType == MyNotificationType.featuredPost
                     ? Container(
-                        padding: EdgeInsets.fromLTRB(47 * wp, 5 * hp, 0, 0),
+                        padding: EdgeInsets.fromLTRB(47, 5, 0, 0),
                         child: Container(
                             decoration: BoxDecoration(
-                                gradient: Gradients.blueRed(), borderRadius: BorderRadius.circular(17 * hp)),
+                                gradient: Gradients.blueRed(), borderRadius: BorderRadius.circular(17)),
                             child: Container(
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(17 * hp),
+                                  borderRadius: BorderRadius.circular(17),
                                   color: Theme.of(context).colorScheme.surface,
                                 ),
-                                padding: EdgeInsets.fromLTRB(17 * wp, 5 * hp, 17 * wp, 6 * hp),
+                                padding: EdgeInsets.fromLTRB(17, 5, 17, 6),
                                 margin: EdgeInsets.all(1),
                                 child: Text('Featured Post'))),
                       )

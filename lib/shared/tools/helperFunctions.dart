@@ -3,8 +3,6 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/myNotification.dart';
 import 'package:flutter/material.dart';
-import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/shared/constants.dart';
 import 'package:tuple/tuple.dart';
 import 'package:url_launcher/url_launcher.dart';
 

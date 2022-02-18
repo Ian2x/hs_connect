@@ -5,7 +5,6 @@ import 'package:hs_connect/models/postLikesManager.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/comments/commentsFeed.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
-import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
 import 'package:hs_connect/shared/widgets/myDivider.dart';
 import 'package:provider/provider.dart';
@@ -22,8 +21,6 @@ class PostPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final hp = Provider.of<HeightPixel>(context).value;
-    final wp = Provider.of<WidthPixel>(context).value;
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
@@ -33,12 +30,12 @@ class PostPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              height: 20*hp, width: 20*hp,
+              height: 20, width: 20,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
               image: DecorationImage(image: ImageStorage().groupImageProvider(group.image))
             )),
-            SizedBox(width: 8*wp),
+            SizedBox(width: 8),
             Flexible(child: Text(group.name, overflow: TextOverflow.ellipsis)),
           ],
         ),

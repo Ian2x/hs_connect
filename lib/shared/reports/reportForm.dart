@@ -5,7 +5,6 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/reports_database.dart';
 import 'package:provider/provider.dart';
 
-import '../pixels.dart';
 import '../widgets/loading.dart';
 
 class ReportForm extends StatefulWidget {
@@ -48,8 +47,8 @@ class _ReportFormState extends State<ReportForm> {
     double phoneWidth = MediaQuery.of(context).size.width;
 
     final userData = Provider.of<UserData?>(context);
-    final hp = Provider.of<HeightPixel>(context).value;
-    final wp = Provider.of<WidthPixel>(context).value;
+
+
     final colorScheme = Theme.of(context).colorScheme;
 
     if (loading || userData==null) {
@@ -70,12 +69,12 @@ class _ReportFormState extends State<ReportForm> {
         Container(
           width: phoneWidth,
           constraints: BoxConstraints(),
-          padding: EdgeInsets.fromLTRB(10*wp, 7*hp, 10*wp, 4*hp),
+          padding: EdgeInsets.fromLTRB(10, 7, 10, 4),
           child: Row(children: <Widget>[
             IconButton(
               constraints: BoxConstraints(),
               icon: Icon(Icons.close),
-              iconSize: 30*hp,
+              iconSize: 30,
               onPressed: () {
                 int count = 0;
                 Navigator.popUntil(context, (route) {
@@ -86,13 +85,13 @@ class _ReportFormState extends State<ReportForm> {
             Spacer(),
             Text("Report received.", style: Theme.of(context).textTheme.headline5),
             Spacer(),
-            SizedBox(width: 30*wp)
+            SizedBox(width: 30)
           ]),
         ),
         Divider(height: 0),
         Spacer(),
         Container(
-          padding: EdgeInsets.fromLTRB(35*wp, 0, 35*wp, 30*hp),
+          padding: EdgeInsets.fromLTRB(35, 0, 35, 30),
           child: Text(
               'Thank you for reporting harmful content. You are making this platform a better place. We will review your report very soon.',
               style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 19),
@@ -110,12 +109,12 @@ class _ReportFormState extends State<ReportForm> {
               Container(
                 width: phoneWidth,
                 constraints: BoxConstraints(),
-                padding: EdgeInsets.fromLTRB(10*wp, 7*hp, 10*wp, 4*hp),
+                padding: EdgeInsets.fromLTRB(10, 7, 10, 4),
                 child: Row(children: <Widget>[
                   IconButton(
                     constraints: BoxConstraints(),
                     icon: Icon(Icons.close),
-                    iconSize: 30*hp,
+                    iconSize: 30,
                     onPressed: () {
                       int count = 0;
                       Navigator.popUntil(context, (route) {
@@ -126,11 +125,11 @@ class _ReportFormState extends State<ReportForm> {
                   Spacer(),
                   Text("Submit a Report", style: Theme.of(context).textTheme.headline5),
                   Spacer(),
-                  SizedBox(width: 8*wp),
+                  SizedBox(width: 8),
                   IconButton(
                     constraints: BoxConstraints(),
                     icon: Icon(Icons.send),
-                    iconSize: 22*hp,
+                    iconSize: 22,
                     onPressed: () async {
                       // check report isn't empty
                       if (_text.isEmpty) {
@@ -165,7 +164,7 @@ class _ReportFormState extends State<ReportForm> {
               Divider(height: 0),
               error != null
                   ? Container(
-                  padding: EdgeInsets.only(top: 12*hp),
+                  padding: EdgeInsets.only(top: 12),
                   child: FittedBox(child: Text(error!, style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.error))))
                   : Container(height: 0),
               GestureDetector(
@@ -178,7 +177,7 @@ class _ReportFormState extends State<ReportForm> {
                   }
                 },
                 child: Container(
-                  padding: EdgeInsets.fromLTRB(15*wp, 0, 15*wp, 0),
+                  padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
                   constraints: BoxConstraints(minHeight: phoneHeight),
                   child: TextFormField(
                     style: Theme.of(context).textTheme.subtitle1,

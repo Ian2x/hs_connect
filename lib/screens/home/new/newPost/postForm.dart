@@ -7,15 +7,12 @@ import 'package:hs_connect/screens/home/new/newPost/newPoll.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/polls_database.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
-import 'package:hs_connect/shared/pageRoutes.dart';
-import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/animatedSwitch.dart';
 import 'package:hs_connect/shared/widgets/deletableImage.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/widgets/myOutlinedButton.dart';
 import 'package:hs_connect/shared/widgets/picPickerButton.dart';
-import 'package:provider/provider.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:validators/validators.dart';
@@ -118,8 +115,6 @@ class _PostFormState extends State<PostForm> {
   @override
   Widget build(BuildContext context) {
     double phoneHeight = MediaQuery.of(context).size.height;
-    final hp = Provider.of<HeightPixel>(context).value;
-    final wp = Provider.of<WidthPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
 
     if (groupChoices == null || selectedGroup == null || loading) {
@@ -138,7 +133,7 @@ class _PostFormState extends State<PostForm> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 //Top ROW
                 children: [
-                  SizedBox(width: 10 * wp),
+                  SizedBox(width: 10),
                   TextButton(
                     child: Text("Cancel",
                         style: Theme.of(context)
@@ -155,10 +150,9 @@ class _PostFormState extends State<PostForm> {
                         context: context,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(20 * hp),
+                          top: Radius.circular(20),
                         )),
-                        builder: (context) => pixelProvider(context,
-                            child: GroupSelectionSheet(
+                        builder: (context) => GroupSelectionSheet(
                                 initialSelectedGroup: selectedGroup!,
                                 onSelectGroup: (Group? group) {
                                   if (mounted) {
@@ -167,14 +161,14 @@ class _PostFormState extends State<PostForm> {
                                     });
                                   }
                                 },
-                                groups: groupChoices!))),
+                                groups: groupChoices!)),
                     child: Container(
                         alignment: Alignment.center,
-                        padding: EdgeInsets.fromLTRB(15 * wp, 6 * hp, 8 * wp, 6 * hp),
+                        padding: EdgeInsets.fromLTRB(15, 6, 8, 6),
                         decoration: BoxDecoration(
                             border: Border.all(
                               color: colorScheme.surface,
-                              width: 3 * hp,
+                              width: 3,
                             ),
                             borderRadius: BorderRadius.circular(10)),
                         child: Row(
@@ -188,11 +182,11 @@ class _PostFormState extends State<PostForm> {
                   MyOutlinedButton(
                     child: Row(
                       children: [
-                        Icon(Icons.add, size: 20 * hp),
-                        SizedBox(width: 3 * wp),
+                        Icon(Icons.add, size: 20),
+                        SizedBox(width: 3),
                         FittedBox(
                           child: Container(
-                            padding: EdgeInsets.only(bottom: 2 * hp),
+                            padding: EdgeInsets.only(bottom: 2),
                             child: Text("Post",
                                 style: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w500),
                                 maxLines: 1,
@@ -202,9 +196,9 @@ class _PostFormState extends State<PostForm> {
                         ),
                       ],
                     ),
-                    borderRadius: 25 * hp,
-                    thickness: 1.5 * hp,
-                    padding: EdgeInsets.fromLTRB(8 * wp, 4.5 * hp, 13.5 * wp, 4.5 * hp),
+                    borderRadius: 25,
+                    thickness: 1.5,
+                    padding: EdgeInsets.fromLTRB(8, 4.5, 13.5, 4.5),
                     gradient: Gradients.blueRed(),
                     backgroundColor: colorScheme.surface,
                     onPressed: () async {
@@ -273,25 +267,25 @@ class _PostFormState extends State<PostForm> {
                       }
                     },
                   ),
-                  SizedBox(width: 10 * wp),
+                  SizedBox(width: 10),
                 ],
               ),
-              Divider(height: 4 * hp, indent: 0, thickness: .5 * hp, color: Theme.of(context).colorScheme.onError),
+              Divider(height: 4, indent: 0, thickness: .5, color: Theme.of(context).colorScheme.onError),
               Container(
                 //TextInput Container
                 constraints: BoxConstraints(
                   minHeight: phoneHeight * 0.75,
                 ),
-                padding: EdgeInsets.fromLTRB(20 * wp, 10 * hp, 20 * wp, 10 * hp),
+                padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                 child: Column(children: <Widget>[
                   error != null
                       ? FittedBox(
                           child: Text(error!,
                               style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.onSurface)))
                       : Container(),
-                  error != null ? SizedBox(height: 10 * wp) : Container(),
+                  error != null ? SizedBox(height: 10) : Container(),
                   TextFormField(
-                    style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18 * hp),
+                    style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
                     maxLines: null,
                     autocorrect: true,
                     textCapitalization: TextCapitalization.sentences,
@@ -299,7 +293,7 @@ class _PostFormState extends State<PostForm> {
                       hintStyle: Theme.of(context)
                           .textTheme
                           .headline6
-                          ?.copyWith(fontSize: 18 * hp, color: colorScheme.primaryVariant),
+                          ?.copyWith(fontSize: 18, color: colorScheme.primaryVariant),
                       border: InputBorder.none,
                       hintText: "Title",
                     ),
@@ -324,8 +318,8 @@ class _PostFormState extends State<PostForm> {
                                   setState(() => newFile = null);
                                 }
                               },
-                              height: 400 * hp,
-                              width: 400 * wp),
+                              height: 400,
+                              width: 400),
                         )
                       : Container(),
                   GestureDetector(
@@ -337,12 +331,12 @@ class _PostFormState extends State<PostForm> {
                     },
                     child: Container(
                       constraints: BoxConstraints(
-                        minHeight: newFile == null ? 492 * hp : 242 * hp,
+                        minHeight: newFile == null ? 492 : 242,
                       ),
                       child: Column(
                         children: [
                           TextFormField(
-                            style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16 * hp),
+                            style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16),
                             maxLines: null,
                             autocorrect: true,
                             textCapitalization: TextCapitalization.sentences,
@@ -350,28 +344,28 @@ class _PostFormState extends State<PostForm> {
                                 hintStyle: Theme.of(context)
                                     .textTheme
                                     .bodyText2
-                                    ?.copyWith(fontSize: 16 * hp, color: colorScheme.primary),
+                                    ?.copyWith(fontSize: 16, color: colorScheme.primary),
                                 border: InputBorder.none,
                                 hintText: "Optional text"),
                             onChanged: (val) => setState(() => _text = val),
                             focusNode: optionalTextFocusNode,
                           ),
-                          SizedBox(height: 30 * hp),
+                          SizedBox(height: 30),
                           poll != null ? poll! : Container(),
                           link != null
                               ? Container(
                                   width: MediaQuery.of(context).size.width * 0.9,
                                   decoration: ShapeDecoration(
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5 * hp),
+                                      borderRadius: BorderRadius.circular(5),
                                       side: BorderSide(
                                         color: colorScheme.onError,
-                                        width: 1 * hp,
+                                        width: 1,
                                       ),
                                     ),
                                   ),
                                   child: TextFormField(
-                                    style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16 * hp),
+                                    style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16),
                                     decoration: new InputDecoration(
                                         fillColor: colorScheme.surface,
                                         filled: true,
@@ -383,8 +377,8 @@ class _PostFormState extends State<PostForm> {
                                         hintStyle: Theme.of(context)
                                             .textTheme
                                             .bodyText2
-                                            ?.copyWith(fontSize: 16 * hp, color: colorScheme.primary),
-                                        contentPadding: EdgeInsets.symmetric(horizontal: 10*wp),
+                                            ?.copyWith(fontSize: 16, color: colorScheme.primary),
+                                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
                                         suffixIcon: IconButton(
                                           padding: EdgeInsets.zero,
                                           constraints: BoxConstraints(),
@@ -393,7 +387,7 @@ class _PostFormState extends State<PostForm> {
                                               setState(() => link = null);
                                             }
                                           },
-                                          icon: Icon(Icons.close, size: 20*hp),
+                                          icon: Icon(Icons.close, size: 20),
                                         )
                                     ),
                                     autocorrect: false,
@@ -422,18 +416,18 @@ class _PostFormState extends State<PostForm> {
         ),
       ),
       Positioned(
-          bottom: MediaQuery.of(context).padding.bottom,
+          bottom: 0,
           left: 0,
           child: Container(
             color: widget.userData.domainColor != null ? widget.userData.domainColor! : colorScheme.onSurface,
-            padding: EdgeInsets.only(top: bottomGradientThickness * hp),
+            padding: EdgeInsets.only(top: bottomGradientThickness, bottom: MediaQuery.of(context).padding.bottom),
             width: MediaQuery.of(context).size.width,
             child: Container(
               color: colorScheme.surface,
               child: Row(children: <Widget>[
-                SizedBox(width: 10 * wp),
+                SizedBox(width: 10),
                 picPickerButton(
-                    iconSize: 30 * hp,
+                    iconSize: 30,
                     color: newFile == null ? colorScheme.primary : colorScheme.secondary,
                     setPic: ((File? f) {
                       if (mounted) {
@@ -447,7 +441,7 @@ class _PostFormState extends State<PostForm> {
                     context: context,
                     maxHeight: 1200,
                     maxWidth: 1200),
-                SizedBox(width: 2 * wp),
+                SizedBox(width: 2),
                 IconButton(
                   onPressed: () {
                     if (mounted) {
@@ -490,7 +484,7 @@ class _PostFormState extends State<PostForm> {
                     }
                   },
                   icon: Icon(Icons.assessment,
-                      size: 30 * hp, color: poll == null ? colorScheme.primary : colorScheme.secondary),
+                      size: 30, color: poll == null ? colorScheme.primary : colorScheme.secondary),
                 ),
                 IconButton(
                   onPressed: () {
@@ -503,7 +497,7 @@ class _PostFormState extends State<PostForm> {
                     }
                   },
                   icon: Icon(Icons.link_rounded,
-                      size: 30 * hp, color: link == null ? colorScheme.primary : colorScheme.secondary),
+                      size: 30, color: link == null ? colorScheme.primary : colorScheme.secondary),
                 ),
                 Spacer(),
                 Text("Mature",
@@ -511,7 +505,7 @@ class _PostFormState extends State<PostForm> {
                         .textTheme
                         .subtitle1
                         ?.copyWith(color: colorScheme.primary, fontWeight: FontWeight.w500)),
-                SizedBox(width: 10 * wp),
+                SizedBox(width: 10),
                 AnimatedSwitch2(
                   initialState: isMature,
                   onToggle: () {
@@ -520,7 +514,7 @@ class _PostFormState extends State<PostForm> {
                     }
                   },
                 ),
-                SizedBox(width: 10 * wp),
+                SizedBox(width: 10),
               ]),
             ),
           )),

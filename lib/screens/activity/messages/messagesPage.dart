@@ -3,13 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/screens/activity/Messages/messagesForm.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
-import 'package:hs_connect/shared/pageRoutes.dart';
-import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/reports/reportSheet.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
 import 'package:hs_connect/shared/widgets/myDivider.dart';
-import 'package:provider/provider.dart';
 
 import 'messagesFeed.dart';
 
@@ -31,8 +28,6 @@ class MessagesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final wp = Provider.of<WidthPixel>(context).value;
-    final hp = Provider.of<HeightPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
@@ -48,21 +43,20 @@ class MessagesPage extends StatelessWidget {
           IconButton(
             constraints: BoxConstraints(),
             splashRadius: .1,
-            icon: Icon(Icons.more_horiz, size: 24 * hp, color: colorScheme.primary),
-            padding: EdgeInsets.fromLTRB(8*wp, 8*hp, 14*wp, 8*hp),
+            icon: Icon(Icons.more_horiz, size: 24, color: colorScheme.primary),
+            padding: EdgeInsets.fromLTRB(8, 8, 14, 8),
             onPressed: () {
               showModalBottomSheet(
                   context: context,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(20 * hp),
+                        top: Radius.circular(20),
                       )),
-                  builder: (context) => pixelProvider(context,
-                      child: ReportSheet(
+                  builder: (context) => ReportSheet(
                         reportType: ReportType.message,
                         entityRef: otherUserRef,
                         entityCreatorRef: otherUserRef
-                      )));
+                      ));
             },
           ),
         ]
@@ -70,7 +64,7 @@ class MessagesPage extends StatelessWidget {
       body: Column(children: <Widget>[
         Expanded(
             child: Container(
-              padding: EdgeInsets.symmetric(vertical: 5*hp),
+              padding: EdgeInsets.symmetric(vertical: 5),
               child: GestureDetector(
                 onVerticalDragDown: (DragDownDetails ddd) {
                   dismissKeyboard(context);

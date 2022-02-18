@@ -2,8 +2,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
-import 'package:hs_connect/shared/pixels.dart';
-import 'package:provider/provider.dart';
 
 const maxNumOptions = 6;
 
@@ -36,22 +34,22 @@ class _NewPollState extends State<NewPoll> {
 
   @override
   Widget build(BuildContext context) {
-    final hp = Provider.of<HeightPixel>(context).value;
-    final wp = Provider.of<WidthPixel>(context).value;
+
+
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
         width: MediaQuery.of(context).size.width * 0.9,
         decoration: ShapeDecoration(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5*hp),
+            borderRadius: BorderRadius.circular(5),
             side: BorderSide(
               color: colorScheme.onError,
-              width: 1*hp,
+              width: 1,
             ),
           ),
         ),
-        padding: EdgeInsets.all(10*hp),
+        padding: EdgeInsets.all(10),
         margin: EdgeInsets.zero,
         child: Form(
           key: _formKey,
@@ -93,14 +91,14 @@ class _NewPollState extends State<NewPoll> {
               } else {
                 int trueIndex = index - 1;
                 return Container(
-                    margin: EdgeInsets.all(5*hp),
-                    padding: EdgeInsets.only(left: 5*wp, right: 5*wp),
+                    margin: EdgeInsets.all(5),
+                    padding: EdgeInsets.only(left: 5, right: 5),
                     decoration: ShapeDecoration(
                         shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5),
                       side: BorderSide(
                         color: colorScheme.onError,
-                        width: 1*hp,
+                        width: 1,
                       ),
                     )),
                     child: TextFormField(
