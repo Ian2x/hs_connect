@@ -5,8 +5,6 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profilePostCard.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileTitle.dart';
 import 'package:hs_connect/services/posts_database.dart';
-import 'package:hs_connect/shared/pixels.dart';
-import 'package:provider/provider.dart';
 
 class ProfileBody extends StatefulWidget {
   final UserData profileUserData;
@@ -44,8 +42,6 @@ class _ProfileBodyState extends State<ProfileBody> {
 
   @override
   Widget build(BuildContext context) {
-    final hp = Provider.of<HeightPixel>(context).value;
-    final wp = Provider.of<WidthPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
@@ -58,29 +54,29 @@ class _ProfileBodyState extends State<ProfileBody> {
           otherUserFullDomain: widget.profileUserData.fullDomainName,
         ),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 15 * wp),
+          padding: EdgeInsets.symmetric(horizontal: 15),
           child: Column(
             children: [
-              SizedBox(height: 30 * hp),
+              SizedBox(height: 30),
               Row(
                 children: [
-                  SizedBox(width: 5 * wp),
+                  SizedBox(width: 5),
                   Text("Your Posts",
                       style: Theme.of(context).textTheme.headline5?.copyWith(fontSize: 22), textAlign: TextAlign.left),
                 ],
               ),
-              SizedBox(height: 10 * hp),
+              SizedBox(height: 10),
               Row(
                 children: [
-                  SizedBox(width: 5 * wp),
+                  SizedBox(width: 5),
                   Text("Visible to only you",
                       style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary),
                       textAlign: TextAlign.left),
                 ],
               ),
-              SizedBox(height: 15 * hp),
-              Divider(color: colorScheme.background, thickness: 3 * hp, height: 0),
-              SizedBox(height: 15 * hp),
+              SizedBox(height: 15),
+              Divider(color: colorScheme.background, thickness: 3, height: 0),
+              SizedBox(height: 15),
             ],
           ),
         ),
@@ -98,7 +94,7 @@ class _ProfileBodyState extends State<ProfileBody> {
                     physics: BouncingScrollPhysics(),
                     itemBuilder: (BuildContext context, int index) {
                       return Container(
-                        padding: EdgeInsets.fromLTRB(15 * wp, 0, 15 * wp, 10 * hp),
+                        padding: EdgeInsets.fromLTRB(15, 0, 15, 10),
                         child: ProfilePostCard(
                             post: _userPosts![index],
                             currUserData: widget.profileUserData,
@@ -117,7 +113,7 @@ class _ProfileBodyState extends State<ProfileBody> {
                 ),
               )
             : Container(
-                height: 90 * hp,
+                height: 90,
                 child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Text(
                     "You have no posts",

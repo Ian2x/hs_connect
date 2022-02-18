@@ -4,13 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/reports/reportForm.dart';
 import 'package:hs_connect/shared/widgets/confirmationDialogs.dart';
 import 'package:provider/provider.dart';
 
 import '../constants.dart';
-import '../pixels.dart';
 import '../widgets/loading.dart';
 
 class ReportSheet extends StatefulWidget {
@@ -45,12 +43,6 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-    final hp = Provider
-        .of<HeightPixel>(context)
-        .value;
-    final wp = Provider
-        .of<WidthPixel>(context)
-        .value;
     final colorScheme = Theme
         .of(context)
         .colorScheme;
@@ -58,15 +50,15 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
     final userData = Provider.of<UserData?>(context);
     if (userData == null) return Loading();
 
-    final bottomSpace = max(MediaQuery.of(context).padding.bottom, 5*hp);
+    final double bottomSpace = max(MediaQuery.of(context).padding.bottom, 5);
 
     return Container(
       constraints: BoxConstraints(
         maxHeight: widget.reportType == ReportType.post
-            ? 200 * hp + bottomSpace
-            : 152 * hp + bottomSpace,
+            ? 200 + bottomSpace
+            : 152 + bottomSpace,
       ),
-      padding: EdgeInsets.fromLTRB(13 * wp, 5*hp, 0, bottomSpace),
+      padding: EdgeInsets.fromLTRB(13, 5, 0, bottomSpace),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -74,13 +66,12 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) =>
-                      pixelProvider(context,
-                          child: ReportForm(entityRef: widget.entityRef, reportType: widget.reportType))));
+                      ReportForm(entityRef: widget.entityRef, reportType: widget.reportType)));
             },
             child: Row(
               children: [
-                Icon(Icons.flag, color: colorScheme.primary, size: iconSize * hp),
-                SizedBox(width: 20 * wp),
+                Icon(Icons.flag, color: colorScheme.primary, size: iconSize),
+                SizedBox(width: 20),
                 Text(
                   "Report " + widget.reportType.string,
                   style: Theme
@@ -92,7 +83,7 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
               ],
             ),
           ),
-          Divider(color: colorScheme.background, thickness: 1 * hp, height: 0),
+          Divider(color: colorScheme.background, thickness: 1, height: 0),
           widget.reportType == ReportType.post
               ? Column(children: [
             TextButton(
@@ -109,8 +100,8 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
               },
               child: Row(
                 children: [
-                  Icon(Icons.remove_circle_rounded, color: colorScheme.primary, size: iconSize * hp),
-                  SizedBox(width: 20 * wp),
+                  Icon(Icons.remove_circle_rounded, color: colorScheme.primary, size: iconSize),
+                  SizedBox(width: 20),
                   Text(
                     "Hide post",
                     style: Theme
@@ -122,7 +113,7 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
                 ],
               ),
             ),
-            Divider(color: colorScheme.background, thickness: 1 * hp, height: 0),
+            Divider(color: colorScheme.background, thickness: 1, height: 0),
           ])
               : Container(),
           TextButton(
@@ -140,8 +131,8 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
             },
             child: Row(
               children: [
-                Icon(Icons.no_accounts_rounded, color: colorScheme.primary, size: iconSize * hp),
-                SizedBox(width: 20 * wp),
+                Icon(Icons.no_accounts_rounded, color: colorScheme.primary, size: iconSize),
+                SizedBox(width: 20),
                 Text(
                   "Block user",
                   style: Theme
@@ -153,7 +144,7 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
               ],
             ),
           ),
-          Divider(color: colorScheme.background, thickness: 1 * hp, height: 0),
+          Divider(color: colorScheme.background, thickness: 1, height: 0),
           Container(
             //color: Colors.orange,
             child: TextButton(
@@ -162,8 +153,8 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
                 },
                 child: Row(
                   children: [
-                    Icon(Icons.close_rounded, size: iconSize * hp, color: colorScheme.primary),
-                    SizedBox(width: 20 * wp),
+                    Icon(Icons.close_rounded, size: iconSize, color: colorScheme.primary),
+                    SizedBox(width: 20),
                     Text(
                       "Cancel",
                       style: Theme

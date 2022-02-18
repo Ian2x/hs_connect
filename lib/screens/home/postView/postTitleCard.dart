@@ -13,8 +13,6 @@ import 'package:hs_connect/screens/home/postView/postCard.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileSheet.dart';
 import 'package:hs_connect/services/polls_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
-import 'package:hs_connect/shared/pageRoutes.dart';
-import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/expandableImage.dart';
@@ -79,17 +77,15 @@ class _PostTitleCardState extends State<PostTitleCard> {
 
   @override
   Widget build(BuildContext context) {
-    final hp = Provider.of<HeightPixel>(context).value;
-    final wp = Provider.of<WidthPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
     PostLikesManager postLikesManager = Provider.of<PostLikesManager>(context);
-    final leftRightPadding = 15 * wp;
+    final leftRightPadding = 15.0;
 
     final localCreatorName = creatorName != null ? creatorName! : '';
     final localCreatorGroup = creatorGroup != null ? creatorGroup! : '';
 
     return Container(
-      padding: EdgeInsets.fromLTRB(leftRightPadding * wp, 0, leftRightPadding * wp, 10 * hp),
+      padding: EdgeInsets.fromLTRB(leftRightPadding, 0, leftRightPadding, 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -102,17 +98,16 @@ class _PostTitleCardState extends State<PostTitleCard> {
                       context: context,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(20 * hp),
+                            top: Radius.circular(20),
                           )),
-                      builder: (context) => pixelProvider(context,
-                          child: ProfileSheet(
+                      builder: (context) => ProfileSheet(
                             currUserRef: widget.currUserData.userRef,
                             otherUserFullDomain: fetchUserData!.fullDomainName!,
                             otherUserRef: fetchUserData!.userRef,
                             otherUserDomainColor: fetchUserData!.domainColor ,
                             otherUserFundName: fetchUserData!.fundamentalName,
                             otherUserScore: fetchUserData!.score,
-                          )));
+                          ));
                 }
               },
               child: Text(
@@ -140,30 +135,29 @@ class _PostTitleCardState extends State<PostTitleCard> {
             widget.post.creatorRef != widget.currUserData.userRef
                 ? IconButton(
                     icon: Icon(Icons.more_horiz),
-                    iconSize: 20 * hp,
+                    iconSize: 20,
                     color: colorScheme.primary,
                     onPressed: () {
                       showModalBottomSheet(
                           context: context,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(20 * hp),
+                            top: Radius.circular(20),
                           )),
-                          builder: (context) => pixelProvider(context,
-                              child: ReportSheet(
+                          builder: (context) => ReportSheet(
                                 reportType: ReportType.post,
                                 entityRef: widget.post.postRef,
                                 entityCreatorRef: widget.post.creatorRef,
-                              )));
+                              ));
                     },
                   )
-                : Container(height: 48 * hp)
+                : Container(height: 48)
           ]), //introRow
           SelectableLinkify(
               text: widget.post.title,
               onOpen: openLink,
-              style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18 * hp)),
-          SizedBox(height: 12 * hp),
+              style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18)),
+          SizedBox(height: 12),
           widget.post.text != null && widget.post.text != ""
               ? SelectableLinkify(
                   text: widget.post.text!,
@@ -171,11 +165,11 @@ class _PostTitleCardState extends State<PostTitleCard> {
                   style: Theme.of(context)
                       .textTheme
                       .bodyText2
-                      ?.copyWith(fontSize: 16 * hp, height: 1.3),
+                      ?.copyWith(fontSize: 16, height: 1.3),
                 )
               : Container(),
           widget.post.link != null ? Container(
-            margin: EdgeInsets.only(top: 10 * hp),
+            margin: EdgeInsets.only(top: 10),
             child: MyLinkPreview(
               enableAnimation: true,
               onPreviewDataFetched: (data) {
@@ -195,25 +189,25 @@ class _PostTitleCardState extends State<PostTitleCard> {
           widget.post.mediaURL != null
               ? ExpandableImage(
                   imageURL: widget.post.mediaURL!,
-                  maxHeight: 450 * hp,
+                  maxHeight: 450,
                   containerWidth: MediaQuery.of(context).size.width - 2 * leftRightPadding)
               : Container(),
           poll != null ? PollView(poll: poll!, currUserRef: widget.currUserData.userRef, post: widget.post) : Container(),
-          SizedBox(height: 25 * hp),
+          SizedBox(height: 25),
           Row(
             children: [
               Text(
                 widget.post.numComments + widget.post.numReplies < 2
                     ? 'Comments'
                     : (widget.post.numComments + widget.post.numReplies).toString() + ' Comments',
-                style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 16 * hp),
+                style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 16),
               ),
               Spacer(),
               LikeDislikePostStateful(
                   currUserRef: widget.currUserData.userRef, post: widget.post, postLikesManager: postLikesManager, currUserColor: widget.currUserData.domainColor,),
             ],
           ),
-          SizedBox(height: 8 * hp),
+          SizedBox(height: 8),
         ],
       ),
     );

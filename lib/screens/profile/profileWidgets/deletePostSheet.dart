@@ -1,11 +1,9 @@
 import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
-import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/confirmationDialogs.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
@@ -54,20 +52,20 @@ class _DeletePostSheetState extends State<DeletePostSheet> with TickerProviderSt
   Widget build(BuildContext context) {
     PostsDatabaseService _posts = PostsDatabaseService(currUserRef: widget.currUserRef);
 
-    final hp = Provider.of<HeightPixel>(context).value;
-    final wp = Provider.of<WidthPixel>(context).value;
+
+
     final colorScheme = Theme.of(context).colorScheme;
 
     final userData = Provider.of<UserData?>(context);
     if (userData == null) return Loading();
 
-    final bottomSpace = max(MediaQuery.of(context).padding.bottom, 5*hp);
+    final double bottomSpace = max(MediaQuery.of(context).padding.bottom, 5);
 
     return Container(
         constraints: BoxConstraints(
-          maxHeight: 104 * hp + bottomSpace,
+          maxHeight: 104 + bottomSpace,
         ),
-        padding: EdgeInsets.fromLTRB(13 * wp, 5*hp, 0, bottomSpace),
+        padding: EdgeInsets.fromLTRB(13, 5, 0, bottomSpace),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -89,8 +87,8 @@ class _DeletePostSheetState extends State<DeletePostSheet> with TickerProviderSt
               },
               child: Row(
                 children: [
-                  Icon(Icons.delete_rounded, color: colorScheme.primary, size: iconSize * hp),
-                  SizedBox(width: 20 * wp),
+                  Icon(Icons.delete_rounded, color: colorScheme.primary, size: iconSize),
+                  SizedBox(width: 20),
                   Text(
                     "Delete",
                     style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.primaryVariant),
@@ -98,7 +96,7 @@ class _DeletePostSheetState extends State<DeletePostSheet> with TickerProviderSt
                 ],
               ),
             ),
-            Divider(color: colorScheme.background, thickness: 1 * hp, height: 0),
+            Divider(color: colorScheme.background, thickness: 1, height: 0),
             Container(
               //color: Colors.orange,
               child: TextButton(
@@ -107,8 +105,8 @@ class _DeletePostSheetState extends State<DeletePostSheet> with TickerProviderSt
                   },
                   child: Row(
                     children: [
-                      Icon(Icons.close_rounded, size: iconSize * hp, color: colorScheme.primary),
-                      SizedBox(width: 20 * wp),
+                      Icon(Icons.close_rounded, size: iconSize, color: colorScheme.primary),
+                      SizedBox(width: 20),
                       Text(
                         "Cancel",
                         style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.primaryVariant),

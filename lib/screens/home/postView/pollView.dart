@@ -4,9 +4,8 @@ import 'package:hs_connect/models/poll.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/services/polls_database.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
-import 'package:hs_connect/shared/pixels.dart';
+
 import 'package:percent_indicator/linear_percent_indicator.dart';
-import 'package:provider/provider.dart';
 
 class PollView extends StatefulWidget {
   final Poll poll;
@@ -46,22 +45,22 @@ class _PollViewState extends State<PollView> {
 
   @override
   Widget build(BuildContext context) {
-    final hp = Provider.of<HeightPixel>(context).value;
+
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
         width: MediaQuery.of(context).size.width * 0.9,
         decoration: ShapeDecoration(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5 * hp),
+            borderRadius: BorderRadius.circular(5),
             side: BorderSide(
               color: colorScheme.onError,
-              width: 1 * hp,
+              width: 1,
             ),
           )
         ),
-        padding: EdgeInsets.all(10 * hp),
-        margin: EdgeInsets.only(top: 20 * hp),
+        padding: EdgeInsets.all(10),
+        margin: EdgeInsets.only(top: 20),
         child: ListView.builder(
           itemCount: widget.poll.choices.length,
           shrinkWrap: true,
@@ -115,8 +114,8 @@ class PollChoiceView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hp = Provider.of<HeightPixel>(context).value;
-    final wp = Provider.of<WidthPixel>(context).value;
+
+
     final colorScheme = Theme.of(context).colorScheme;
 
     String votePercentage = totalVotes != 0 ? (100*numChoiceVotes/totalVotes).round().toString()+'%' : '0%';
@@ -127,13 +126,13 @@ class PollChoiceView extends StatelessWidget {
         }
       },
       child: Container(
-          margin: EdgeInsets.all(5 * hp),
+          margin: EdgeInsets.all(5),
           decoration: ShapeDecoration(
               shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10*hp),
+            borderRadius: BorderRadius.circular(10),
             side: BorderSide(
               color: colorScheme.onError,
-              width: 1 * hp,
+              width: 1,
             ),
           )),
           child: Stack(children: <Widget>[
@@ -142,17 +141,17 @@ class PollChoiceView extends StatelessWidget {
                     padding: EdgeInsets.zero,
                     backgroundColor: colorScheme.surface,
                     animation: true,
-                    lineHeight: 32*hp,
+                    lineHeight: 32,
                     animationDuration: 700,
                     percent: totalVotes!=0 ? numChoiceVotes / totalVotes : 0,
-                    barRadius: Radius.circular(10*hp),
+                    barRadius: Radius.circular(10),
                     progressColor: colorScheme.primary.withOpacity(0.4),
                   )
-                : Container(height: 32*hp),
+                : Container(height: 32),
             AnimatedPositioned(
                 child: Text(text, style: Theme.of(context).textTheme.bodyText2),
-                top: 7*hp,
-                left: voted != null ? 86*wp : 10*wp,
+                top: 7,
+                left: voted != null ? 86 : 10,
                 duration: Duration(milliseconds: 400),
                 curve: Curves.linear),
             AnimatedOpacity(
@@ -160,8 +159,8 @@ class PollChoiceView extends StatelessWidget {
               duration: const Duration(milliseconds: 600),
               curve: Curves.easeIn,
               child: Container(
-                  padding: EdgeInsets.only(top: 7*hp),
-                  width: 75*wp,
+                  padding: EdgeInsets.only(top: 7),
+                  width: 75,
                   child: Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
                     Text(votePercentage + '   |', style: Theme.of(context).textTheme.bodyText2)
                   ])),
@@ -171,10 +170,10 @@ class PollChoiceView extends StatelessWidget {
               duration: const Duration(milliseconds: 600),
               curve: Curves.easeIn,
               child: Container(
-                  padding: EdgeInsets.fromLTRB(0, 4*hp, 8*wp, 0),
+                  padding: EdgeInsets.fromLTRB(0, 4, 8, 0),
                   alignment: Alignment.centerRight,
                   width: double.infinity,
-                  child: Icon(Icons.check_circle_outline_sharp, size: 23*hp, color: colorScheme.primaryVariant)),
+                  child: Icon(Icons.check_circle_outline_sharp, size: 23, color: colorScheme.primaryVariant)),
             )
           ])),
     );

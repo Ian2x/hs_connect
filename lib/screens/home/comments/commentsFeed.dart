@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/comment.dart';
 import 'package:hs_connect/models/group.dart';
@@ -9,7 +8,6 @@ import 'package:hs_connect/screens/home/comments/commentReplyForm.dart';
 import 'package:hs_connect/screens/home/postView/postTitleCard.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
@@ -47,8 +45,6 @@ class _CommentsFeedState extends State<CommentsFeed> {
   @override
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
-    final hp = Provider.of<HeightPixel>(context).value;
-    final wp = Provider.of<WidthPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
 
     switchFormBool(Comment? passedComment) {
@@ -105,9 +101,9 @@ class _CommentsFeedState extends State<CommentsFeed> {
                             currUserData: userData,
                           );
                         } else if (index == 1) {
-                          return Divider(thickness: 5 * hp, color: colorScheme.background, height: 10 * hp);
+                          return Divider(thickness: 5, color: colorScheme.background, height: 10);
                         } else if (index == comments.length + 2) {
-                          return SizedBox(height: 130 * hp);
+                          return SizedBox(height: 130);
                         } else {
                           if (userData.blockedUserRefs.contains(comments[index - 2].creatorRef)) {
                             return Container();
@@ -133,12 +129,12 @@ class _CommentsFeedState extends State<CommentsFeed> {
           bottom: 0,
           right: 0,
           child: Container(
-            padding: EdgeInsets.only(top: bottomGradientThickness * hp),
+            padding: EdgeInsets.only(top: bottomGradientThickness),
             color: widget.group.hexColor!=null ? HexColor(widget.group.hexColor!) : colorScheme.onSurface,
             child: Container(
                 width: MediaQuery.of(context).size.width,
                 color: colorScheme.background,
-                padding: EdgeInsets.fromLTRB(10*wp, 10*hp, 10*wp, MediaQuery.of(context).padding.bottom>10 ? MediaQuery.of(context).padding.bottom : 10*hp),
+                padding: EdgeInsets.fromLTRB(10, 10, 10, MediaQuery.of(context).padding.bottom>10 ? MediaQuery.of(context).padding.bottom : 10),
                 child: CommentReplyForm(
                     focusNode: myFocusNode,
                     currUserRef: userData.userRef,

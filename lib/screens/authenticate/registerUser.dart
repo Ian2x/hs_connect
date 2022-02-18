@@ -1,15 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/screens/wrapper.dart';
 import 'package:hs_connect/services/auth.dart';
 import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/pageRoutes.dart';
-import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/myOutlinedButton.dart';
-import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
 import 'authButton.dart';
@@ -41,8 +37,6 @@ class _RegisterUserState extends State<RegisterUser> {
 
   @override
   Widget build(BuildContext context) {
-    final wp = Provider.of<WidthPixel>(context).value;
-    final hp = Provider.of<HeightPixel>(context).value;
 
     return loading
         ? Scaffold(
@@ -65,19 +59,19 @@ class _RegisterUserState extends State<RegisterUser> {
                           child: Column(
                         children: [
                           SizedBox(
-                            height: 70 * hp,
+                            height: 70,
                             child: Image.asset('assets/splash1cropped.png'),
                           ),
-                          SizedBox(height: 15 * hp),
+                          SizedBox(height: 15),
                           Text(
                             'Make an Account',
-                            style: ThemeText.helvetica(fontWeight: FontWeight.w700, fontSize: 28 * hp, color: Colors.black),
+                            style: ThemeText.helvetica(fontWeight: FontWeight.w700, fontSize: 28, color: Colors.black),
                           ),
-                          SizedBox(height: 20 * hp),
+                          SizedBox(height: 20),
                           error != null ?
                           FittedBox(
                             child: Text(error!,
-                                style: ThemeText.helvetica(fontWeight: FontWeight.normal, fontSize: 15*hp, color: Colors.black),
+                                style: ThemeText.helvetica(fontWeight: FontWeight.normal, fontSize: 15, color: Colors.black),
                                 textAlign: TextAlign.center),
                           ) :
                           Text(
@@ -86,10 +80,10 @@ class _RegisterUserState extends State<RegisterUser> {
                               style: Theme.of(context)
                                   .textTheme
                                   .subtitle1
-                                  ?.copyWith(color: Colors.black, fontSize: 15 * hp, height: 1.5)),
-                          SizedBox(height:15*hp),
+                                  ?.copyWith(color: Colors.black, fontSize: 15, height: 1.5)),
+                          SizedBox(height:15),
                           Container(
-                            padding: EdgeInsets.fromLTRB(20 * wp, 0, 20 * wp, 0),
+                            padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                             child: Column(
                               children: [
                                 TextFormField(
@@ -113,7 +107,7 @@ class _RegisterUserState extends State<RegisterUser> {
                                         }
                                       }
                                     }),
-                                Divider(height: 0, thickness: 2 * hp, color: authHintTextColor),
+                                Divider(height: 0, thickness: 2, color: authHintTextColor),
                                 TextFormField(
                                     style: Theme.of(context).textTheme.headline6?.copyWith(color: authPrimaryTextColor),
                                     autocorrect: false,
@@ -144,11 +138,11 @@ class _RegisterUserState extends State<RegisterUser> {
                                         }
                                       }
                                     }),
-                                Divider(height: 0, thickness: 2 * hp, color: Color(0xffdbdada)),
+                                Divider(height: 0, thickness: 2, color: Color(0xffdbdada)),
                               ],
                             ),
                           ),
-                          SizedBox(height: 120 * hp),
+                          SizedBox(height: 120),
                         ],
                       )),
                     ]),
@@ -188,9 +182,9 @@ class _RegisterUserState extends State<RegisterUser> {
                               builder: (BuildContext context) {
                                 return new AlertDialog(
                                   shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(20*hp))),
+                                      borderRadius: BorderRadius.all(Radius.circular(20))),
                                   backgroundColor: Colors.white,
-                                  contentPadding: EdgeInsets.symmetric(vertical:10*hp),
+                                  contentPadding: EdgeInsets.symmetric(vertical:10),
                                   title: Text(
                                     "You're user number " +
                                         result.item3.toString() +
@@ -198,40 +192,40 @@ class _RegisterUserState extends State<RegisterUser> {
                                         result.item4 +
                                         ". We gave you the name:",
                                     textAlign: TextAlign.center,
-                                    style: ThemeText.helvetica(fontSize: 15 * hp, color: Colors.black),
+                                    style: ThemeText.helvetica(fontSize: 15, color: Colors.black),
                                   ),
                                   content: Container(
-                                    padding: EdgeInsets.fromLTRB(10 * wp, 0, 10 * wp, 0),
+                                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: <Widget>[
                                         Text(
                                           result.item2,
-                                          style: ThemeText.helvetica(fontSize: 20 * hp, color: Colors.black),
+                                          style: ThemeText.helvetica(fontSize: 20, color: Colors.black),
                                         ),
-                                        SizedBox(height: 25 * hp),
+                                        SizedBox(height: 25),
                                         MyOutlinedButton(
-                                          padding: EdgeInsets.symmetric(vertical: 6 * hp, horizontal: 20 * wp),
+                                          padding: EdgeInsets.symmetric(vertical: 6, horizontal: 20),
                                           onPressed: () {
                                             Navigator.of(context).pushAndRemoveUntil(
                                                 MaterialPageRoute(
-                                                    builder: (context) => pixelProvider(context, child: Wrapper())),
+                                                    builder: (context) => Wrapper()),
                                                 (Route<dynamic> route) => false);
                                           },
                                           gradient: Gradients.blueRed(
                                               begin: Alignment.topCenter, end: Alignment.bottomCenter),
-                                          borderRadius: 30 * hp,
+                                          borderRadius: 30,
                                           backgroundColor: Colors.white,
                                           child: Text(
                                             "Continue",
                                             softWrap: false,
                                             overflow: TextOverflow.ellipsis,
                                             style: ThemeText.helvetica(
-                                                fontWeight: FontWeight.w500, fontSize: 14 * hp, color: Colors.black),
+                                                fontWeight: FontWeight.w500, fontSize: 14, color: Colors.black),
                                           ),
                                         ),
-                                        SizedBox(height: 10*hp)
+                                        SizedBox(height: 10)
                                       ],
                                     ),
                                   ),

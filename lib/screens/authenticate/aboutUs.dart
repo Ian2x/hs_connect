@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/pixels.dart';
-import 'package:provider/provider.dart';
 
 class AboutUs extends StatelessWidget {
   const AboutUs({Key? key}) : super(key: key);
@@ -11,8 +9,6 @@ class AboutUs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hp = Provider.of<HeightPixel>(context).value;
-    final wp = Provider.of<WidthPixel>(context).value;
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
@@ -25,10 +21,10 @@ class AboutUs extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: MediaQuery.of(context).padding.top+5*hp),
+              SizedBox(height: MediaQuery.of(context).padding.top+5),
               Row(
                 children: [
-                  SizedBox(width: 10 * wp),
+                  SizedBox(width: 10),
                   TextButton(
                       onPressed: () {
                         Navigator.pop(context);
@@ -39,34 +35,34 @@ class AboutUs extends StatelessWidget {
                       )),
                 ],
               ),
-              SizedBox(height: 40 * hp),
+              SizedBox(height: 40),
               SizedBox(
-                height: 90 * hp,
+                height: 90,
                 child: Image.asset('assets/sublogo2.png'),
               ),
-              SizedBox(height: 35 * hp),
+              SizedBox(height: 35),
               Text(
                 "About Circles",
                 style: textTheme.headline4?.copyWith(fontWeight: FontWeight.bold, color: Colors.white),
               ),
-              SizedBox(height: 0 * hp),
+              SizedBox(height: 0),
               Container(
-                  margin: EdgeInsets.symmetric(horizontal: 30 * wp),
+                  margin: EdgeInsets.symmetric(horizontal: 30),
                   child: Column(
                     children: [
-                      SizedBox(height: 40 * hp),
+                      SizedBox(height: 40),
                       Text(
                         "Circles.co is an app made by other students that lets highschoolers chat anonymously. ",
                         style: textTheme.bodyText2?.copyWith(color: Colors.white, fontSize: fontSize, height: 1.5),
                         textAlign: TextAlign.center,
                       ),
-                      SizedBox(height: 30 * hp),
+                      SizedBox(height: 30),
                       Text(
                         "Talk with people from just your high school, or other high schools on the app.",
                         style: textTheme.bodyText2?.copyWith(color: Colors.white, fontSize: fontSize, height: 1.5),
                         textAlign: TextAlign.center,
                       ),
-                      SizedBox(height: 30 * hp),
+                      SizedBox(height: 30),
                       Text(
                         "Post about classes, sports, memes, upcoming events, etc.",
                         style: textTheme.bodyText2?.copyWith(color: Colors.white, fontSize: fontSize, height: 1.5),

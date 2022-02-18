@@ -5,7 +5,6 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/auth.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/myStorageManager.dart';
-import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/themeManager.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/animatedSwitch.dart';
@@ -56,8 +55,8 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
 
-    final hp = Provider.of<HeightPixel>(context).value;
-    final wp = Provider.of<WidthPixel>(context).value;
+
+
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
@@ -68,7 +67,7 @@ class _SettingsPageState extends State<SettingsPage> {
           backgroundColor: colorScheme.surface,
           title: Row(
             children: [
-              SizedBox(width: 85*wp),
+              SizedBox(width: 85),
               Text("Settings"),
             ],
           ),
@@ -87,12 +86,12 @@ class _SettingsPageState extends State<SettingsPage> {
             },
             child: Container(
               //width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.symmetric(horizontal: 11*wp, vertical: 0),
+              padding: EdgeInsets.symmetric(horizontal: 11, vertical: 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    height: 55*hp,
+                    height: 55,
                     alignment: Alignment.center,
                     child: Row(
                       children: [
@@ -113,9 +112,9 @@ class _SettingsPageState extends State<SettingsPage> {
                       ]
                     ),
                   ),
-                  Divider(thickness: 1*hp, height: 1*hp),
+                  Divider(thickness: 1, height: 1),
                   Container(
-                    height: 55*hp,
+                    height: 55,
                     alignment: Alignment.center,
                     child: Row(
                         children: [
@@ -136,7 +135,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         ]
                     ),
                   ),
-                  Divider(thickness: 1*hp, height: 1*hp),
+                  Divider(thickness: 1, height: 1),
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () async{
@@ -145,7 +144,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       }
                     },
                     child: Container(
-                      height: 55*hp,
+                      height: 55,
                       alignment: Alignment.center,
                       child: Row(
                           children: [
@@ -156,7 +155,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                     ),
                   ),
-                  Divider(thickness: 1*hp, height: 1*hp),
+                  Divider(thickness: 1, height: 1),
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () async{
@@ -165,7 +164,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       }
                     },
                     child: Container(
-                      height: 55*hp,
+                      height: 55,
                       alignment: Alignment.center,
                       child: Row(
                           children: [
@@ -176,7 +175,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                     ),
                   ),
-                  Divider(thickness: 1*hp, height: 1*hp),
+                  Divider(thickness: 1, height: 1),
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () async{
@@ -185,7 +184,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       }
                     },
                     child: Container(
-                      height: 55*hp,
+                      height: 55,
                       alignment: Alignment.center,
                       child: Row(
                           children: [
@@ -196,7 +195,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                     ),
                   ),
-                  Divider(thickness: 1*hp, height: 1*hp),
+                  Divider(thickness: 1, height: 1),
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
@@ -210,7 +209,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           });
                     },
                     child: Container(
-                      height: 55*hp,
+                      height: 55,
                       alignment: Alignment.center,
                       child: Row(
                           children: [
@@ -221,12 +220,12 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                     ),
                   ),
-                  Divider(thickness: 1*hp, height: 1*hp),
-                  SizedBox(height: 20*hp),
+                  Divider(thickness: 1, height: 1),
+                  SizedBox(height: 20),
                   Text("Send feedback", style: textTheme.subtitle1),
                   feedbackError != null
                       ? Container(
-                      padding: EdgeInsets.only(top: 12*hp),
+                      padding: EdgeInsets.only(top: 12),
                       child: FittedBox(child: Text(feedbackError!, style: textTheme.bodyText2)))
                       : SizedBox(height: 6),
                   Form(
@@ -237,7 +236,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           decoration: ShapeDecoration(
                             color: colorScheme.background,
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10*hp)),
+                                borderRadius: BorderRadius.circular(10)),
                           ),
                           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                           margin: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
@@ -265,10 +264,10 @@ class _SettingsPageState extends State<SettingsPage> {
                             decoration: ShapeDecoration(
                               color: colorScheme.onError,
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10*hp),
+                                  borderRadius: BorderRadius.circular(10),
                                   side: BorderSide(
                                     color: Theme.of(context).colorScheme.onError,
-                                    width: 1*hp,
+                                    width: 1,
                                   )),
                             ),
                             child: Text("Submit", style: Theme.of(context).textTheme.bodyText2)

@@ -2,10 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/myOutlinedButton.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 class LaunchCountdown extends StatefulWidget {
@@ -35,8 +33,8 @@ class _LaunchCountdownState extends State<LaunchCountdown> {
 
   @override
   Widget build(BuildContext context) {
-    final hp = Provider.of<HeightPixel>(context).value;
-    final wp = Provider.of<WidthPixel>(context).value;
+
+
     final textTheme = Theme.of(context).textTheme;
 
     String groupName = widget.userData.fullDomainName!=null ? widget.userData.fullDomainName! : widget.userData.domain;
@@ -46,44 +44,44 @@ class _LaunchCountdownState extends State<LaunchCountdown> {
         body: Container(
           width: MediaQuery.of(context).size.width,
           alignment: Alignment.center,
-          padding: EdgeInsets.only(top: 25*hp),
+          padding: EdgeInsets.only(top: 25),
           child: Container(
               decoration: BoxDecoration(
               gradient: Gradients.blueRedFull(begin: Alignment.topCenter, end: Alignment.bottomCenter),
-              borderRadius: BorderRadius.circular(30*hp),
+              borderRadius: BorderRadius.circular(30),
             ),
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(27.5*hp),
+                borderRadius: BorderRadius.circular(27.5),
                 color: Colors.white,
               ),
-              margin: EdgeInsets.all(2.5*hp),
-              child: Container(height: 540*hp, width: 320*hp, padding: EdgeInsets.symmetric(horizontal: 20*wp), child:
+              margin: EdgeInsets.all(2.5),
+              child: Container(height: 540, width: 320, padding: EdgeInsets.symmetric(horizontal: 20), child:
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        height: 80*hp,
-                        width: 80*hp,
+                        height: 80,
+                        width: 80,
                         decoration: BoxDecoration(
                           image: DecorationImage(
                             image: AssetImage('assets/splash1cropped.png')
                           )
                         )
                       ),
-                      SizedBox(height: 25*hp),
+                      SizedBox(height: 25),
                       Text("Welcome, you're early.", style: textTheme.headline6?.copyWith(color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
-                      SizedBox(height: 20*hp),
+                      SizedBox(height: 20),
                       Text("circles.co will launch at " + groupName + " on:", style: textTheme.headline6?.copyWith(color: Colors.black), textAlign: TextAlign.center),
-                      SizedBox(height: 50*hp),
+                      SizedBox(height: 50),
                       Text(DateFormat('EEEEEEEEE, MMMM d').format(widget.userData.launchDate!.toDate()), style: textTheme.headline6?.copyWith(color: Colors.black), textAlign: TextAlign.center),
-                      SizedBox(height: 50*hp),
+                      SizedBox(height: 50),
                       Text("Tell your friends to sign up!", style: textTheme.headline6?.copyWith(color: Colors.black), textAlign: TextAlign.center),
-                      SizedBox(height: 25*hp),
+                      SizedBox(height: 25),
                       MyOutlinedButton(
-                          borderRadius: 30*hp,
+                          borderRadius: 30,
                           backgroundColor: Colors.white,
-                          padding: EdgeInsets.fromLTRB(35*wp,10*hp,35*wp,10*hp),
+                          padding: EdgeInsets.fromLTRB(35,10,35,10),
                           gradient: Gradients.blueRedFull(
                               begin: Alignment.topCenter, end: Alignment.bottomCenter),
                           onPressed: () {

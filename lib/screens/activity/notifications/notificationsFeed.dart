@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/myNotification.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/my_notifications_database.dart';
-import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
-import 'package:provider/provider.dart';
 
 import 'notificationCard.dart';
 
@@ -41,13 +39,12 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
     if (notifications == null) {
       return Loading();
     }
-    final hp = Provider.of<HeightPixel>(context).value;
 
     int numberNotifications = notifications!.length;
 
     if (numberNotifications == 0) {
       return Container(
-          padding: EdgeInsets.only(top: 50*hp),
+          padding: EdgeInsets.only(top: 50),
           alignment: Alignment.topCenter,
           child: Text("No notifications",
               style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.normal)));
@@ -66,11 +63,11 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
           }
           if (trueIndex == numberNotifications-1) {
             return Container(
-                padding: EdgeInsets.only(top: 2.5*hp),
+                padding: EdgeInsets.only(top: 2.5),
                 child: NotificationCard(myNotification: notifications![trueIndex]));
           } else if (trueIndex == 0) {
             return Container(
-                padding: EdgeInsets.only(bottom: 2.5*hp),
+                padding: EdgeInsets.only(bottom: 2.5),
                 child: NotificationCard(myNotification: notifications![trueIndex]));
           } else {
             return NotificationCard(myNotification: notifications![trueIndex]);

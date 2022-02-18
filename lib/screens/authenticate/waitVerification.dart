@@ -1,12 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hs_connect/screens/authenticate/emailVerificationErrorSheet.dart';
 import 'package:hs_connect/screens/authenticate/registerUser.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'dart:async';
-import 'package:hs_connect/shared/pageRoutes.dart';
-import 'package:hs_connect/shared/pixels.dart';
-import 'package:provider/provider.dart';
 
 class WaitVerification extends StatefulWidget {
   final domainEmail;
@@ -44,8 +40,6 @@ class _WaitVerificationState extends State<WaitVerification> {
 
   @override
   Widget build(BuildContext context) {
-    final hp = Provider.of<HeightPixel>(context).value;
-    final wp = Provider.of<WidthPixel>(context).value;
 
     return Scaffold(
         backgroundColor: Colors.white,
@@ -56,20 +50,20 @@ class _WaitVerificationState extends State<WaitVerification> {
         ),
         body: Stack(children: [
           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            SizedBox(height: 30 * hp),
+            SizedBox(height: 30),
             Center(
                 child: Column(
               children: [
                 SizedBox(
-                  height: 80 * hp,
+                  height: 80,
                   child: Image.asset('assets/splash1cropped.png'),
                 ),
-                SizedBox(height: 20 * hp),
+                SizedBox(height: 20),
                 Text(
                   'We sent you a link',
-                  style: ThemeText.helvetica(fontWeight: FontWeight.w700, fontSize: 24 * hp, color: Colors.black),
+                  style: ThemeText.helvetica(fontWeight: FontWeight.w700, fontSize: 24, color: Colors.black),
                 ),
-                SizedBox(height: 15 * hp),
+                SizedBox(height: 15),
                 Center(
                   child: Text("Click the link in your school email.\nWait a bit to be redirected afterwards.",
                       textAlign: TextAlign.center,
@@ -78,10 +72,10 @@ class _WaitVerificationState extends State<WaitVerification> {
                           .subtitle1
                           ?.copyWith(color: Colors.black, height: 1.5)),
                 ),
-                SizedBox(height: 85 * hp),
+                SizedBox(height: 85),
                 Container(
-                  height: 100*hp,
-                  width: 300*wp,
+                  height: 100,
+                  width: 300,
                   decoration: BoxDecoration(
                     gradient: Gradients.blueRed(begin: Alignment.topCenter, end: Alignment.bottomCenter),
                     borderRadius: BorderRadius.circular(20),
@@ -100,7 +94,7 @@ class _WaitVerificationState extends State<WaitVerification> {
                           "Your email is for verification only. It'll never be linked to your account.",
                           style: ThemeText.helvetica(
                             fontWeight: FontWeight.w600,
-                            fontSize: 14.5 * hp,
+                            fontSize: 14.5,
                             color: Colors.black,
                             height: 1.5,
                           ),
@@ -110,7 +104,7 @@ class _WaitVerificationState extends State<WaitVerification> {
                     ),
                   ),
                 ),
-                SizedBox(height: 190 * hp),
+                SizedBox(height: 190),
                 Center(
                   child: Text("Make sure to check your spam/junk folder.",
                       textAlign: TextAlign.center,
@@ -132,7 +126,7 @@ class _WaitVerificationState extends State<WaitVerification> {
       timer!.cancel();
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) =>
-              pixelProvider(context, child: RegisterUser(domain: widget.domain, domainEmail: widget.domainEmail))));
+              RegisterUser(domain: widget.domain, domainEmail: widget.domainEmail)));
     }
   }
 }

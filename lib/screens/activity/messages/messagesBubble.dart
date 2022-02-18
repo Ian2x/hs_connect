@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/message.dart';
 import 'package:bubble/bubble.dart';
-import 'package:hs_connect/shared/pixels.dart';
+
 import 'package:hs_connect/shared/widgets/expandableImage.dart';
-import 'package:provider/provider.dart';
 
 class MessagesBubble extends StatelessWidget {
   final Message message;
@@ -13,34 +12,32 @@ class MessagesBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final wp = Provider.of<WidthPixel>(context).value;
-    final hp = Provider.of<HeightPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
     if (message.timeMessage) {
       return Container(
-          margin: EdgeInsets.only(top: 5 * hp, bottom: 5 * hp),
+          margin: EdgeInsets.only(top: 5, bottom: 5),
           child: Center(child: Text(message.text, style: textTheme.bodyText2)));
     }
     if (message.isMedia!) {
       return Container(
-          margin: EdgeInsets.only(top: 5 * hp, bottom: 5 * hp),
+          margin: EdgeInsets.only(top: 5, bottom: 5),
           child: Align(
               alignment: isSentMessage ? Alignment.centerRight : Alignment.centerLeft,
-              child: ExpandableImage(imageURL: message.text, maxHeight: 900 * hp, containerWidth: 300 * wp)));
+              child: ExpandableImage(imageURL: message.text, maxHeight: 900, containerWidth: 300)));
     }
     return Bubble(
       color: isSentMessage ? colorScheme.secondary : colorScheme.primary.withOpacity(0.3),
-      margin: BubbleEdges.fromLTRB(isSentMessage ? 50 * wp : 10 * wp, 5 * hp, isSentMessage ? 10 * wp: 50 * wp, 5 * hp),
+      margin: BubbleEdges.fromLTRB(isSentMessage ? 50 : 10, 5, isSentMessage ? 10: 50, 5),
       alignment: isSentMessage ? Alignment.centerRight : Alignment.centerLeft,
-      radius: Radius.circular(11 * hp),
+      radius: Radius.circular(11),
       child: Container(
-          padding: EdgeInsets.fromLTRB(4 * wp, 0, 4 * wp, 1 * hp),
+          padding: EdgeInsets.fromLTRB(4, 0, 4, 1),
           child: Text(
             message.text,
             style: textTheme.bodyText2?.copyWith
-              (fontSize: 15.5 * hp,
+              (fontSize: 15.5,
                 color: isSentMessage?  Colors.white : colorScheme.onSurface),
             textWidthBasis: TextWidthBasis.longestLine,
           )),

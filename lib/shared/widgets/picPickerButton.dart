@@ -7,12 +7,11 @@ import '../constants.dart';
 IconButton picPickerButton(
     {required Function setPic, required double iconSize, required double maxHeight, required double maxWidth, imageQuality = 100, Color? color, required BuildContext context}) {
   final colorScheme = Theme.of(context).colorScheme;
-  final wp = MediaQuery.of(context).size.width / numWidthPixels;
   return IconButton(
     icon: Icon(Icons.photo),
     iconSize: iconSize,
     constraints: BoxConstraints(),
-    padding: EdgeInsets.only(left: 5*wp, right: 5*wp),
+    padding: EdgeInsets.only(left: 5, right: 5),
     color: color != null ? color : colorScheme.onError,
     onPressed: () async {
       try {

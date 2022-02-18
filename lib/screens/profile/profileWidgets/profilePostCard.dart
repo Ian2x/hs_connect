@@ -8,10 +8,7 @@ import 'package:hs_connect/screens/home/postView/postPage.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/deletePostSheet.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
-import 'package:hs_connect/shared/pageRoutes.dart';
-import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/buildCircle.dart';
-import 'package:provider/provider.dart';
 
 class ProfilePostCard extends StatefulWidget {
   final Post post;
@@ -87,21 +84,21 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
 
   @override
   Widget build(BuildContext context) {
-    final hp = Provider.of<HeightPixel>(context).value;
-    final wp = Provider.of<WidthPixel>(context).value;
+
+
     final colorScheme = Theme.of(context).colorScheme;
 
     if (group == null) {
       return Container(
-          height: 124 * hp,
-          padding: EdgeInsets.fromLTRB(10 * wp, 0, 5 * wp, 10 * hp),
+          height: 124,
+          padding: EdgeInsets.fromLTRB(10, 0, 5, 10),
           decoration: ShapeDecoration(
             color: colorScheme.surface,
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16 * hp),
+                borderRadius: BorderRadius.circular(16),
                 side: BorderSide(
                   color: colorScheme.background,
-                  width: 3 * hp,
+                  width: 3,
                 )),
           ));
     }
@@ -122,66 +119,64 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      pixelProvider(context,
-                          child: PostPage(post: widget.post, group: group!, creatorData: widget.currUserData, postLikesManager: postLikesManager, )))
+                      PostPage(post: widget.post, group: group!, creatorData: widget.currUserData, postLikesManager: postLikesManager))
           );
         },
         child: Container(
-          padding: EdgeInsets.fromLTRB(10 * wp, 0, 10 * wp, 10 * hp),
+          padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
           decoration: ShapeDecoration(
             color: colorScheme.surface,
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16 * hp),
+                borderRadius: BorderRadius.circular(16),
                 side: BorderSide(
                   color: colorScheme.background,
-                  width: 1.5 * hp,
+                  width: 1.5,
                 )),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: EdgeInsets.fromLTRB(2*wp, 10*hp, 0, 0),
+                padding: EdgeInsets.fromLTRB(2, 10, 0, 0),
                 child: Row(
                   children: [
                     buildGroupCircle(
                         groupImage: group!.image,
                         context: context,
-                        height: 20*hp,
-                        width: 20*hp,
+                        height: 20,
+                        width: 20,
                         backgroundColor: colorScheme.background),
-                    SizedBox(width: 5*wp),
+                    SizedBox(width: 5),
                     Text(group!.name, style: Theme.of(context).textTheme.subtitle2?.copyWith
                       (fontWeight: FontWeight.w500, color: colorScheme.primary, fontSize: postCardDetailSize)),
                     Spacer(),
                     IconButton(
                       constraints:BoxConstraints(),
                       padding: EdgeInsets.all(0),
-                      icon:Icon(Icons.more_horiz, size:18*hp, color: colorScheme.primary),
+                      icon:Icon(Icons.more_horiz, size:18, color: colorScheme.primary),
                       onPressed: () {
                         showModalBottomSheet(
                             context: context,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(20 * hp),
+                                  top: Radius.circular(20),
                                 )),
-                            builder: (context) => pixelProvider(context,
-                                child: DeletePostSheet(
+                            builder: (context) => DeletePostSheet(
                                   currUserRef: widget.currUserData.userRef,
                                   postUserRef: widget.post.creatorRef,
                                   groupRef: widget.post.groupRef,
                                   postRef: widget.post.postRef,
                                   media: widget.post.mediaURL,
                                   onDelete: widget.onDelete
-                          )));
+                          ));
                       },
                     )
                   ],
                 ),
               ),
-              SizedBox(height: 10 * hp),
-              Text(widget.post.title, style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 16*hp), overflow: TextOverflow.ellipsis, maxLines: 3),
-              SizedBox(height: 10 * hp),
+              SizedBox(height: 10),
+              Text(widget.post.title, style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 16), overflow: TextOverflow.ellipsis, maxLines: 3),
+              SizedBox(height: 10),
               Row(
                 children: [
                   Text((widget.post.numComments + widget.post.numReplies).toString() + " Comments",

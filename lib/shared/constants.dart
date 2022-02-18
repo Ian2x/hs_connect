@@ -6,9 +6,6 @@ const trendingReplyBoost = 0.1;
 const trendingPostLikeBoost = 0.04;
 const trendingPollVoteBoost = 0.06;
 
-const numHeightPixels = 781.1;
-const numWidthPixels = 392.7;
-
 const initialPostsFetchSize = 20;
 const nextPostsFetchSize = 20;
 

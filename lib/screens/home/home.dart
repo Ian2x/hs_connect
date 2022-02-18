@@ -4,7 +4,6 @@ import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/postLikesManager.dart';
 import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/screens/activity/activityPage.dart';
 import 'package:hs_connect/screens/activity/messages/messagesPage.dart';
 import 'package:hs_connect/screens/home/postFeed/domainFeed.dart';
 import 'package:hs_connect/screens/home/postFeed/publicFeed.dart';
@@ -12,12 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/screens/home/postView/postPage.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/myStorageManager.dart';
-import 'package:hs_connect/shared/pageRoutes.dart';
-import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
-import 'package:provider/provider.dart';
-
 import 'homeAppBar.dart';
 import 'launchCountdown.dart';
 
@@ -114,8 +109,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => pixelProvider(context,
-                  child: PostPage(
+              builder: (context) => PostPage(
                       post: post,
                       group: group,
                       creatorData: creatorData,
@@ -127,7 +121,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                           onLike: () {},
                           onUnLike: () {},
                           onDislike: () {},
-                          onUnDislike: () {})))));
+                          onUnDislike: () {}))));
     }
   }
 
@@ -146,14 +140,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       Navigator.push(
         context,
           MaterialPageRoute(
-              builder: (context) => pixelProvider(context,
-                  child: MessagesPage(
+              builder: (context) => MessagesPage(
                     currUserRef: widget.userData.userRef,
                     otherUserRef: otherUser.userRef,
                     onUpdateLastMessage: () {},
                     onUpdateLastViewed: () {},
                     otherUserFundName: otherUser.fundamentalName,
-                  )))
+                  ))
       );
     }
   }
@@ -173,7 +166,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       return LaunchCountdown(userData: widget.userData);
     }
 
-    final hp = Provider.of<HeightPixel>(context).value;
+
 
     return Scaffold(
       backgroundColor: colorScheme.background,
@@ -190,7 +183,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       userData: widget.userData,
                       isDomain: isDomain,
                       searchByTrending: searchByTrending,
-                      hp: hp,
                       toggleSearch: toggleSearch,
                       safeAreaHeight: MediaQuery.of(context).padding.top),
                   pinned: true,

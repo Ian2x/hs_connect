@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hs_connect/services/comments_database.dart';
 import 'package:hs_connect/models/comment.dart';
-import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/widgets/thick_arrow_icons.dart';
-import 'package:provider/provider.dart';
 
 class LikeDislikeComment extends StatefulWidget {
   final DocumentReference currUserRef;
@@ -40,8 +38,8 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
 
   @override
   Widget build(BuildContext context) {
-    final hp = Provider.of<HeightPixel>(context).value;
-    final wp = Provider.of<WidthPixel>(context).value;
+
+
     final colorScheme = Theme.of(context).colorScheme;
 
     CommentsDatabaseService _comments = CommentsDatabaseService(
@@ -57,7 +55,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
             return IconButton(
               iconSize: iconSize,
               splashColor: Colors.transparent,
-              padding: EdgeInsets.all(3*hp),
+              padding: EdgeInsets.all(3),
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
               icon: Icon(ThickArrow.angle_up_icon, color: activeColor),
@@ -76,7 +74,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
             return IconButton(
               iconSize: iconSize,
               splashColor: Colors.transparent,
-              padding: EdgeInsets.all(3*hp),
+              padding: EdgeInsets.all(3),
               constraints: BoxConstraints(),
               color: colorScheme.primaryVariant,
               icon: Icon(ThickArrow.angle_up_icon),
@@ -95,18 +93,18 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
             );
           }
         }(),
-        SizedBox(width: 8*wp),
+        SizedBox(width: 8),
         Text(
           (likeCount - dislikeCount).toString(),
-          style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 0.75 * iconSize * hp)
+          style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 0.75 * iconSize)
         ),
-        SizedBox(width: 8*wp),
+        SizedBox(width: 8),
             () {
           if (dislikeStatus == true) {
             return IconButton(
-              iconSize: iconSize*hp,
+              iconSize: iconSize,
               splashColor: Colors.transparent,
-              padding: EdgeInsets.all(3*hp),
+              padding: EdgeInsets.all(3),
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
               icon: Icon(ThickArrow.angle_down_icon, color: activeColor),
@@ -125,7 +123,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
             return IconButton(
               iconSize: iconSize,
               splashColor: Colors.transparent,
-              padding: EdgeInsets.all(3*hp),
+              padding: EdgeInsets.all(3),
               constraints: BoxConstraints(),
               color: colorScheme.primaryVariant,
               icon: Icon(ThickArrow.angle_down_icon),

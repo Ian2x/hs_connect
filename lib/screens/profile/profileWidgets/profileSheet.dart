@@ -1,14 +1,10 @@
 import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileTitle.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/newMessageButton.dart';
-import 'package:hs_connect/shared/pageRoutes.dart';
-import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/reports/reportSheet.dart';
-import 'package:provider/provider.dart';
 
 class ProfileSheet extends StatefulWidget {
   final DocumentReference otherUserRef;
@@ -63,19 +59,19 @@ class _ProfileSheetState extends State<ProfileSheet> with TickerProviderStateMix
       isOwn=true;
     }
 
-    final hp = Provider.of<HeightPixel>(context).value;
-    final wp = Provider.of<WidthPixel>(context).value;
+
+
     final colorScheme = Theme.of(context).colorScheme;
 
-    final bottomSpace = max(MediaQuery.of(context).padding.bottom, 25*hp);
+    final double bottomSpace = max(MediaQuery.of(context).padding.bottom, 25);
 
     return Container(
         constraints: BoxConstraints(
           maxHeight:isOwn?
-          140 * hp + bottomSpace:
-          204 * hp + bottomSpace,
+          140 + bottomSpace:
+          204 + bottomSpace,
         ),
-        padding: EdgeInsets.fromLTRB(5 * wp, 5 * hp, 5 * wp, bottomSpace),
+        padding: EdgeInsets.fromLTRB(5, 5, 5, bottomSpace),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -86,7 +82,7 @@ class _ProfileSheetState extends State<ProfileSheet> with TickerProviderStateMix
                     Navigator.pop(context);
                   },
                   constraints: BoxConstraints(),
-                  icon: Icon(Icons.close_rounded, size: 20 * hp, color: colorScheme.primary),
+                  icon: Icon(Icons.close_rounded, size: 20, color: colorScheme.primary),
                 ),
                 Spacer(),
                 IconButton(
@@ -96,14 +92,13 @@ class _ProfileSheetState extends State<ProfileSheet> with TickerProviderStateMix
                           context: context,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(20 * hp),
+                                top: Radius.circular(20),
                               )),
-                          builder: (context) => pixelProvider(context,
-                              child: ReportSheet(
+                          builder: (context) => ReportSheet(
                                 reportType: ReportType.user,
                                 entityRef: widget.otherUserRef,
                                 entityCreatorRef: widget.otherUserRef,
-                              )));
+                              ));
                     })
               ],
             ),

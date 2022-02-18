@@ -1,17 +1,13 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/screens/wrapper.dart';
 import 'package:hs_connect/services/auth.dart';
 import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/pageRoutes.dart';
-import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/themeManager.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/checkboxFormField.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
-import 'package:provider/provider.dart';
 
 import 'authButton.dart';
 
@@ -42,8 +38,6 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
-    final wp = Provider.of<WidthPixel>(context).value;
-    final hp = Provider.of<HeightPixel>(context).value;
 
     return loading
         ? Scaffold(
@@ -66,27 +60,27 @@ class _SignInState extends State<SignIn> {
                             Column(
                               children: [
                                 SizedBox(
-                                  height: 70 *hp,
+                                  height: 70 ,
                                   child:
                                   Image.asset('assets/splash1cropped.png'),
                                 ),
-                                SizedBox(height: 15*hp),
+                                SizedBox(height: 15),
                                 Text(
                                   'Login',
-                                  style: ThemeText.helvetica(fontWeight: FontWeight.w700, fontSize: 28*hp, color: Colors.black
+                                  style: ThemeText.helvetica(fontWeight: FontWeight.w700, fontSize: 28, color: Colors.black
                                   ),
                                 ),
-                                SizedBox(height: 10*hp),
+                                SizedBox(height: 10),
                                 Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 25*wp),
+                                  padding: EdgeInsets.symmetric(horizontal: 25),
                                   child: Text(
                                     error != '' ? error:
                                     "Enter your login credentials.",
-                                    style: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 14*hp, height: 1.3), textAlign: TextAlign.center,),
+                                    style: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 14, height: 1.3), textAlign: TextAlign.center,),
                                 ),
-                                SizedBox(height:20*hp),
+                                SizedBox(height:20),
                                 Container(
-                                  padding:EdgeInsets.fromLTRB(20*wp,0,20*wp,0),
+                                  padding:EdgeInsets.fromLTRB(20,0,20,0),
                                   child: Form(
                                     key: _formKey,
                                     child: Column(
@@ -105,8 +99,8 @@ class _SignInState extends State<SignIn> {
                                               }
                                             }
                                         ),
-                                        Divider(height:0, thickness: 2*hp, color: authHintTextColor),
-                                        SizedBox(height:10*hp),
+                                        Divider(height:0, thickness: 2, color: authHintTextColor),
+                                        SizedBox(height:10),
                                         TextFormField(
                                             autocorrect:false,
                                             style: Theme.of(context).textTheme.headline6?.copyWith(color: authPrimaryTextColor),
@@ -130,8 +124,8 @@ class _SignInState extends State<SignIn> {
                                                 setState(() => password = val);
                                               }
                                             }),
-                                        Divider(height:0, thickness: 2*hp, color: authHintTextColor),
-                                        SizedBox(height:20*hp),
+                                        Divider(height:0, thickness: 2, color: authHintTextColor),
+                                        SizedBox(height:20),
                                         AuthCheckboxFormField(termsAccepted: termsAccepted, toggleTerms: (bool val) {
                                           if (error==termsError) {
                                             error = '';
@@ -144,7 +138,7 @@ class _SignInState extends State<SignIn> {
                                     ),
                                   ),
                                 ),
-                                  SizedBox(height: 105*hp),
+                                  SizedBox(height: 105),
                                 ],
                               )
                           ),
@@ -179,7 +173,7 @@ class _SignInState extends State<SignIn> {
                           });
                         }
                       } else {
-                        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => pixelProvider(context, child: Wrapper())), (Route<dynamic> route) => false);
+                        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => Wrapper()), (Route<dynamic> route) => false);
                       }
                     }
                   },

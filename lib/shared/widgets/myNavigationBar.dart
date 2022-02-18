@@ -11,7 +11,6 @@ import 'package:provider/provider.dart';
 import '../constants.dart';
 import '../pageRoutes.dart';
 
-import '../pixels.dart';
 import 'loading.dart';
 
 class MyNavigationBar extends StatefulWidget {
@@ -54,8 +53,8 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
     final colorScheme = Theme.of(context).colorScheme;
-    final hp = Provider.of<HeightPixel>(context).value;
-    final wp = Provider.of<WidthPixel>(context).value;
+
+
 
     if (loading || userData == null) return Loading();
 
@@ -63,51 +62,55 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
       children: [
         Container(
           color: userData.domainColor != null ? userData.domainColor! : colorScheme.surface, //colorScheme.surface,
-          padding: EdgeInsets.only(top: bottomGradientThickness * hp),
+          padding: EdgeInsets.only(top: bottomGradientThickness),
           child: Container(
             color: colorScheme.surface,
-            height: 45 * hp + MediaQuery.of(context).padding.bottom,
+            height: 45 + MediaQuery.of(context).padding.bottom,
             child: BottomNavigationBar(
               backgroundColor: colorScheme.surface,
               type: BottomNavigationBarType.fixed,
-              showSelectedLabels: true,
-              showUnselectedLabels: true,
+              showSelectedLabels: false,
+              showUnselectedLabels: false,
               currentIndex: widget.currentIndex,
               selectedItemColor: colorScheme.onSurface,
-              selectedFontSize: 6 * hp,
-              unselectedFontSize: 6 * hp,
-              onTap: (int index) {
+              selectedFontSize: 1,
+              unselectedFontSize: 1,
+              onTap: (int index) async {
                 if (index == 0) {
                   if (widget.currentIndex == 0) {
                     Navigator.pushReplacement(
                       context,
                       NoAnimationMaterialPageRoute(
-                          builder: (context) => pixelProvider(context,
-                              child: Home(
+                          builder: (context) => Home(
                                 userData: userData,
-                              ))),
+                              )),
                     );
                   } else {
                     Navigator.pop(context);
+                    Navigator.pushReplacement(
+                      context,
+                      NoAnimationMaterialPageRoute(
+                          builder: (context) => Home(
+                            userData: userData,
+                          )),
+                    );
                   }
                 } else if (index == 1) {
                   if (widget.currentIndex == 0) {
                     Navigator.push(
                       context,
                       NoAnimationMaterialPageRoute(
-                          builder: (context) => pixelProvider(context,
-                              child: ActivityPage(
+                          builder: (context) => ActivityPage(
                                 userData: userData,
-                              ))),
+                              )),
                     );
                   } else {
                     Navigator.pushReplacement(
                       context,
                       NoAnimationMaterialPageRoute(
-                          builder: (context) => pixelProvider(context,
-                              child: ActivityPage(
+                          builder: (context) => ActivityPage(
                                 userData: userData,
-                              ))),
+                              )),
                     );
                   }
                 } else if (index == 2) {
@@ -115,57 +118,55 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
                     Navigator.push(
                       context,
                       NoAnimationMaterialPageRoute(
-                          builder: (context) => pixelProvider(context,
-                              child: ProfilePage(currUserData: userData))),
+                          builder: (context) => ProfilePage(currUserData: userData)),
                     );
                   } else {
                     Navigator.pushReplacement(
                       context,
                       NoAnimationMaterialPageRoute(
-                          builder: (context) => pixelProvider(context,
-                              child: ProfilePage(currUserData: userData))),
+                          builder: (context) => ProfilePage(currUserData: userData)),
                     );
                   }
                 } else if (index == 3) {
                   Navigator.push(
                     context,
-                    NoAnimationMaterialPageRoute(builder: (context) => pixelProvider(context, child: NewPost())),
+                    NoAnimationMaterialPageRoute(builder: (context) => NewPost()),
                   );
                 }
               },
               items: <BottomNavigationBarItem>[
-                BottomNavigationBarItem(label: '', icon: Icon(Thicker.home_square, size: 25 * hp)),
-                BottomNavigationBarItem(label: '', icon: Icon(Thicker.notification, size: 25 * hp)),
-                BottomNavigationBarItem(label: '', icon: Icon(Thicker.profile_1, size: 20 * hp)),
-                BottomNavigationBarItem(label: '', icon: Icon(Thicker.add_1, size: 25 * hp)),
+                BottomNavigationBarItem(label: '', icon: Icon(Thicker.home_square, size: 25)),
+                BottomNavigationBarItem(label: '23', icon: Icon(Thicker.notification, size: 25)),
+                BottomNavigationBarItem(label: '', icon: Icon(Thicker.profile_1, size: 20)),
+                BottomNavigationBarItem(label: '', icon: Icon(Thicker.add_1, size: 25)),
               ],
             ),
           ),
         ),
         Positioned(
-            left: 148.5 * wp,
-            top: 5 * hp,
+            left: MediaQuery.of(context).size.width * 0.375,
+            top: 7,
             child: numNotifications != null && numNotifications != 0
                 ? Container(
-                    height: 20 * hp,
-                    width: 20 * hp,
-                    decoration: BoxDecoration(
-                      color: colorScheme.surface,
-                      shape: BoxShape.circle,
-                    ),
-                    padding: EdgeInsets.all(1.5 * hp),
-                    child: Container(
-                        padding: EdgeInsets.fromLTRB(2.5 * wp, 2 * hp, 2 * wp, 2.5 * hp),
-                        decoration: BoxDecoration(
-                          color: colorScheme.secondary,
-                          shape: BoxShape.circle,
-                        ),
-                        alignment: Alignment.center,
-                        child: FittedBox(
-                          child: Text(numNotifications.toString(),
-                              style: Theme.of(context).textTheme.subtitle2?.copyWith(color: Colors.white)),
-                        )),
-                  )
+              height: 20,
+              width: 20,
+              decoration: BoxDecoration(
+                color: colorScheme.surface,
+                shape: BoxShape.circle,
+              ),
+              padding: EdgeInsets.all(1.5),
+              child: Container(
+                  padding: EdgeInsets.fromLTRB(2.5, 2, 2, 2.5),
+                  decoration: BoxDecoration(
+                    color: colorScheme.secondary,
+                    shape: BoxShape.circle,
+                  ),
+                  alignment: Alignment.center,
+                  child: FittedBox(
+                    child: Text(numNotifications.toString(),
+                        style: Theme.of(context).textTheme.subtitle2?.copyWith(color: Colors.white)),
+                  )),
+            )
                 : Container())
       ],
     );

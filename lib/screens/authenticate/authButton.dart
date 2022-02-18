@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
-import 'package:hs_connect/shared/pixels.dart';
-import 'package:hs_connect/shared/widgets/myOutlinedButton.dart';
-import 'package:provider/provider.dart';
 
+import 'package:hs_connect/shared/widgets/myOutlinedButton.dart';
 
 class AuthButton extends StatelessWidget {
   final String buttonText;
@@ -15,15 +13,14 @@ class AuthButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hp = Provider.of<HeightPixel>(context).value;
 
     return MyOutlinedButton(
-      padding: EdgeInsets.symmetric(vertical: 9*hp, horizontal: 35),
+      padding: EdgeInsets.symmetric(vertical: 9, horizontal: 35),
       onPressed: onPressed,
       outlineColor: hasText ? Colors.black : Colors.black54,
-      borderRadius: 40*hp,
+      borderRadius: 40,
       backgroundColor: Colors.white,
-      thickness: 1.2*hp,
+      thickness: 1.2,
       child: FittedBox(
         child: Text(
           buttonText,

@@ -3,9 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/comment.dart';
 import 'package:hs_connect/models/group.dart';
-import 'package:hs_connect/shared/pixels.dart';
+
 import 'package:hs_connect/shared/widgets/picPickerButton.dart';
-import 'package:provider/provider.dart';
 
 typedef VoidFunction = void Function();
 
@@ -26,31 +25,31 @@ typedef VoidOptionalCommentParamFunction = void Function (Comment?);
 
 InputDecoration commentReplyInputDecoration({required VoidFunction onPressed, required bool isReply, required bool isFocused, required BuildContext context, required bool hasText}) {
   final colorScheme = Theme.of(context).colorScheme;
-  final hp = Provider.of<HeightPixel>(context).value;
-  final wp = Provider.of<WidthPixel>(context).value;
+
+
   return InputDecoration(
     fillColor: colorScheme.surface,
     filled: true,
     hintText: isReply != false ? "Reply..." : "Comment...",
     hintStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: colorScheme.primary),
     labelStyle: Theme.of(context).textTheme.bodyText1,
-    contentPadding: EdgeInsets.fromLTRB(20*wp, 14*hp, 0*wp, 14*hp),
+    contentPadding: EdgeInsets.fromLTRB(20, 14, 0, 14),
     border: new OutlineInputBorder(
-      borderRadius: new BorderRadius.circular(25.7*hp),
-      borderSide: new BorderSide(width: 3*wp, color: colorScheme.background),
+      borderRadius: new BorderRadius.circular(25.7),
+      borderSide: new BorderSide(width: 3, color: colorScheme.background),
     ),
     enabledBorder: new OutlineInputBorder(
-        borderRadius: new BorderRadius.circular(25.7*hp),
-        borderSide: new BorderSide(width: 3*wp, color: colorScheme.background)),
+        borderRadius: new BorderRadius.circular(25.7),
+        borderSide: new BorderSide(width: 3, color: colorScheme.background)),
     focusedBorder: OutlineInputBorder(
-        borderRadius: new BorderRadius.circular(25.7*hp),
-        borderSide: new BorderSide(width: 3*wp, color: colorScheme.background)),
+        borderRadius: new BorderRadius.circular(25.7),
+        borderSide: new BorderSide(width: 3, color: colorScheme.background)),
     suffixIcon: isFocused ? Row(mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.min, children: <Widget>[
       IconButton(
           icon: Icon(Icons.send),
           color: hasText? colorScheme.secondary : colorScheme.primary,
-          iconSize: 16*hp,
-          padding: EdgeInsets.only(left: 5*wp, right: 15*wp),
+          iconSize: 16,
+          padding: EdgeInsets.only(left: 5, right: 15),
           splashColor: Colors.transparent,
           onPressed: onPressed,
           constraints: BoxConstraints()),
@@ -59,8 +58,8 @@ InputDecoration commentReplyInputDecoration({required VoidFunction onPressed, re
 }
 
 InputDecoration messageInputDecoration({required VoidFunction onPressed, required Function setPic, required BuildContext context, required bool hasText, required bool hasImage}) {
-  final hp = Provider.of<HeightPixel>(context).value;
-  final wp = Provider.of<WidthPixel>(context).value;
+
+
   final colorScheme = Theme.of(context).colorScheme;
   return InputDecoration(
     hintText: 'Message...',
@@ -68,24 +67,24 @@ InputDecoration messageInputDecoration({required VoidFunction onPressed, require
     filled: true,
     hintStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: colorScheme.primary),
     labelStyle: Theme.of(context).textTheme.bodyText1,
-    contentPadding: EdgeInsets.fromLTRB(20*wp, 14*hp, 0*wp, 14*hp),
+    contentPadding: EdgeInsets.fromLTRB(20, 14, 0, 14),
     border: new OutlineInputBorder(
-        borderRadius: new BorderRadius.circular(25.7*hp),
-        borderSide: new BorderSide(width: 3*wp, color: colorScheme.background),
+        borderRadius: new BorderRadius.circular(25.7),
+        borderSide: new BorderSide(width: 3, color: colorScheme.background),
     ),
     enabledBorder: new OutlineInputBorder(
-        borderRadius: new BorderRadius.circular(25.7*hp),
-        borderSide: new BorderSide(width: 3*wp, color: colorScheme.background)),
+        borderRadius: new BorderRadius.circular(25.7),
+        borderSide: new BorderSide(width: 3, color: colorScheme.background)),
     focusedBorder: OutlineInputBorder(
-        borderRadius: new BorderRadius.circular(25.7*hp),
-        borderSide: new BorderSide(width: 3*wp, color: colorScheme.background)),
+        borderRadius: new BorderRadius.circular(25.7),
+        borderSide: new BorderSide(width: 3, color: colorScheme.background)),
     suffixIcon: Row(mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.min, children: <Widget>[
-      picPickerButton(setPic: setPic, iconSize: 16*hp, context: context, maxWidth: 1200, maxHeight: 1200, color: hasImage ? colorScheme.secondary : colorScheme.primary),
+      picPickerButton(setPic: setPic, iconSize: 16, context: context, maxWidth: 1200, maxHeight: 1200, color: hasImage ? colorScheme.secondary : colorScheme.primary),
       IconButton(
           icon: Icon(Icons.send),
           color: hasText ? colorScheme.secondary : colorScheme.primary,
-          iconSize: 16*hp,
-          padding: EdgeInsets.only(left: 5*wp, right: 15*wp),
+          iconSize: 16,
+          padding: EdgeInsets.only(left: 5, right: 15),
           splashColor: Colors.transparent,
           onPressed: onPressed,
           constraints: BoxConstraints()),

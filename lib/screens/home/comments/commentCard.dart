@@ -9,11 +9,8 @@ import 'package:hs_connect/screens/profile/profileWidgets/profileSheet.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
-import 'package:hs_connect/shared/pageRoutes.dart';
-import 'package:hs_connect/shared/pixels.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/reports/reportSheet.dart';
-import 'package:provider/provider.dart';
 
 class CommentCard extends StatefulWidget {
   final Comment comment;
@@ -89,20 +86,18 @@ class _CommentCardState extends State<CommentCard> {
 
   @override
   Widget build(BuildContext context) {
-    final wp = Provider.of<WidthPixel>(context).value;
-    final hp = Provider.of<HeightPixel>(context).value;
     final colorScheme = Theme.of(context).colorScheme;
 
     final localCreatorName = creatorName != null ? creatorName! : '';
     final localCreatorGroupName = creatorDomainName != null ? creatorDomainName! : '';
     return Container(
-        padding: EdgeInsets.fromLTRB(17 * wp, 0 * hp, 17 * wp, 0 * hp),
+        padding: EdgeInsets.fromLTRB(17, 0, 17, 0),
         child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
           Row(
             children: [
               Container(
                 alignment: Alignment.centerLeft,
-                height: 33 * hp,
+                height: 33,
                 child: TextButton(
                   style: TextButton.styleFrom(
                       splashFactory: NoSplash.splashFactory, padding: EdgeInsets.zero, alignment: Alignment.centerLeft),
@@ -112,17 +107,16 @@ class _CommentCardState extends State<CommentCard> {
                           context: context,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(20 * hp),
+                                top: Radius.circular(20),
                               )),
-                          builder: (context) => pixelProvider(context,
-                              child: ProfileSheet(
+                          builder: (context) => ProfileSheet(
                                 currUserRef: widget.currUserData.userRef,
                                 otherUserScore: creatorScore!,
                                 otherUserFundName: localCreatorName,
                                 otherUserFullDomain: localCreatorGroupName,
                                 otherUserDomainColor: creatorGroupColor,
                                 otherUserRef: widget.comment.creatorRef!,
-                              )));
+                              ));
                     }
                   },
                   child: RichText(text: TextSpan(
@@ -149,29 +143,29 @@ class _CommentCardState extends State<CommentCard> {
               Spacer(),
               widget.comment.creatorRef==widget.postCreatorRef
                   ? Container(
-                padding: EdgeInsets.only(right: 10 * wp, top: 5 * hp),
+                padding: EdgeInsets.only(right: 10, top: 5),
                 child: Container(
                     decoration: BoxDecoration(
-                        color: creatorGroupColor != null ? creatorGroupColor : colorScheme.primary, borderRadius: BorderRadius.circular(17 * hp)),
+                        color: creatorGroupColor != null ? creatorGroupColor : colorScheme.primary, borderRadius: BorderRadius.circular(17)),
                     child: Container(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(17 * hp),
+                          borderRadius: BorderRadius.circular(17),
                           color: Theme.of(context).colorScheme.surface,
                         ),
-                        padding: EdgeInsets.fromLTRB(10 * wp, 0* hp, 10 * wp, 1 * hp),
-                        margin: EdgeInsets.all(1 * hp),
+                        padding: EdgeInsets.fromLTRB(10, 0, 10, 1),
+                        margin: EdgeInsets.all(1),
                         child: Text('Creator', style: Theme.of(context).textTheme.subtitle2?.copyWith(color: creatorGroupColor != null ? creatorGroupColor : colorScheme.primary, fontSize: 12)))),
               )
                   : Container(),
             ],
           ),
-          SizedBox(height: 4*hp),
+          SizedBox(height: 4),
           SizedBox(
             width: (MediaQuery.of(context).size.width) * .85,
             child: Text(widget.comment.text,
                 style: Theme.of(context).textTheme.bodyText1?.copyWith(fontWeight: FontWeight.w600)),
           ),
-          SizedBox(height: 7*hp),
+          SizedBox(height: 7),
           Row(
             children: [
               Text(convertTime(widget.comment.createdAt.toDate()),
@@ -179,12 +173,12 @@ class _CommentCardState extends State<CommentCard> {
                       .textTheme
                       .subtitle2
                       ?.copyWith(color: colorScheme.primary, fontSize: commentReplyDetailSize)),
-              SizedBox(width: 8 * wp),
+              SizedBox(width: 8),
               widget.comment.creatorRef != null && widget.comment.creatorRef != widget.currUserData.userRef
                   ? Container(
-                height: 30*hp,
+                height: 30,
                 child: IconButton(
-                  icon: Icon(Icons.more_horiz, size: 20 * hp, color: colorScheme.primary),
+                  icon: Icon(Icons.more_horiz, size: 20, color: colorScheme.primary),
                   alignment: Alignment.centerLeft,
                   padding: EdgeInsets.zero,
                   onPressed: () {
@@ -192,20 +186,19 @@ class _CommentCardState extends State<CommentCard> {
                         context: context,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(20 * hp),
+                          top: Radius.circular(20),
                         )),
-                        builder: (context) => pixelProvider(context,
-                            child: ReportSheet(
+                        builder: (context) => ReportSheet(
                               reportType: ReportType.comment,
                               entityRef: widget.comment.commentRef,
                               entityCreatorRef: widget.comment.creatorRef!,
-                            )));
+                            ));
                   },
                 ),
-              ) : Container(height: 30*hp),
+              ) : Container(height: 30),
               Spacer(),
               Container(
-                height: 30*hp,
+                height: 30,
                 child: TextButton(
                     style: TextButton.styleFrom(
                         splashFactory: NoSplash.splashFactory,
@@ -228,12 +221,12 @@ class _CommentCardState extends State<CommentCard> {
                   : Container()
             ],
           ),
-          SizedBox(height: 4*hp),
+          SizedBox(height: 4),
           RepliesFeed(
               commentRef: widget.comment.commentRef,
               groupRef: widget.comment.groupRef,
               postCreatorRef: widget.postCreatorRef),
-          Divider(thickness: 3 * hp, color: colorScheme.background, height: 0),
+          Divider(thickness: 3, color: colorScheme.background, height: 0),
         ]));
   }
 }
