@@ -66,7 +66,7 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              modalTab(bottomMargin: 15),
+              ModalTab(bottomMargin: 15),
             ],
           ),
           Divider(color: colorScheme.background, thickness: 1, height: 0),

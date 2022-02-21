@@ -48,6 +48,7 @@ class _ProfileBodyState extends State<ProfileBody> {
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: <Widget>[
         ProfileTitle(
+          showMoreHoriz: true,
           otherUserRef: widget.profileUserData.userRef,
           otherUserFundName: widget.profileUserData.fundamentalName,
           otherUserScore: widget.profileUserData.score,

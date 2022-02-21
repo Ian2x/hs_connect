@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 
-class modalTab extends StatelessWidget {
+class ModalTab extends StatelessWidget {
 
   final double? bottomMargin;
 
-  const modalTab({
+  const ModalTab({
     this.bottomMargin,
     Key? key}) : super(key: key);
 
@@ -18,7 +18,7 @@ class modalTab extends StatelessWidget {
       margin: EdgeInsets.fromLTRB(0, 15, 0,
           bottomMargin != null ? bottomMargin! : 25),
       height:3,
-      width: MediaQuery.of(context).size.width*.2,
+      width: MediaQuery.of(context).size.width*.1,
       decoration: BoxDecoration(
           border: Border.all(
             color: color,

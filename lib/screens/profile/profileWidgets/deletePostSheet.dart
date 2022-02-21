@@ -73,7 +73,7 @@ class _DeletePostSheetState extends State<DeletePostSheet> with TickerProviderSt
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                modalTab(bottomMargin: 13),
+                ModalTab(bottomMargin: 13),
               ],
             ),
             TextButton(
