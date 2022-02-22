@@ -139,8 +139,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () async{
-                      if (await canLaunch('https://www.getcircles.co/privacy')) {
-                        await launch('https://www.getcircles.co/privacy');
+                      if (await canLaunch('https://www.getconvo.app/privacy')) {
+                        await launch('https://www.getconvo.app/privacy');
                       }
                     },
                     child: Container(
@@ -159,8 +159,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () async{
-                      if (await canLaunch('https://www.getcircles.co/content')) {
-                        await launch('https://www.getcircles.co/content');
+                      if (await canLaunch('https://www.getconvo.app/content')) {
+                        await launch('https://www.getconvo.app/content');
                       }
                     },
                     child: Container(
@@ -179,8 +179,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () async{
-                      if (await canLaunch('https://www.getcircles.co/terms')) {
-                        await launch('https://www.getcircles.co/terms');
+                      if (await canLaunch('https://www.getconvo.app/terms')) {
+                        await launch('https://www.getconvo.app/terms');
                       }
                     },
                     child: Container(

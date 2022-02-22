@@ -70,14 +70,14 @@ class AuthCheckboxFormField extends StatelessWidget {
         RichText(
             maxLines: 3,
             text: TextSpan(style: textTheme.caption?.copyWith(color: Colors.black), children: [
-              TextSpan(text: "I have read and agree to Circles.co's "),
+              TextSpan(text: "I have read and agree to convo's "),
               TextSpan(
                   text: "Terms\nof Service",
                   style: textTheme.caption?.copyWith(color: Color(0xFF13a1f0), fontWeight: FontWeight.w600),
                   recognizer: new TapGestureRecognizer()
                     ..onTap = () async {
-                      if (await canLaunch('https://www.getcircles.co/terms')) {
-                        await launch('https://www.getcircles.co/terms');
+                      if (await canLaunch('https://www.getconvo.app/terms')) {
+                        await launch('https://www.getconvo.app/terms');
                       }
                     }),
               TextSpan(text: ", "),
@@ -86,8 +86,8 @@ class AuthCheckboxFormField extends StatelessWidget {
                   style: textTheme.caption?.copyWith(color: Color(0xFF13a1f0), fontWeight: FontWeight.w600),
                   recognizer: new TapGestureRecognizer()
                     ..onTap = () async {
-                      if (await canLaunch('https://www.getcircles.co/content')) {
-                        await launch('https://www.getcircles.co/content');
+                      if (await canLaunch('https://www.getconvo.app/content')) {
+                        await launch('https://www.getconvo.app/content');
                       }
                     }),
               TextSpan(text: ", and "),
@@ -96,8 +96,8 @@ class AuthCheckboxFormField extends StatelessWidget {
                   style: textTheme.caption?.copyWith(color: Color(0xFF13a1f0), fontWeight: FontWeight.w600),
                   recognizer: new TapGestureRecognizer()
                     ..onTap = () async {
-                      if (await canLaunch('https://www.getcircles.co/privacy')) {
-                        await launch('https://www.getcircles.co/privacy');
+                      if (await canLaunch('https://www.getconvo.app/privacy')) {
+                        await launch('https://www.getconvo.app/privacy');
                       }
                     })
             ])),

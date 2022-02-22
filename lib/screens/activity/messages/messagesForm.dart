@@ -61,18 +61,16 @@ class _MessagesFormState extends State<MessagesForm> {
              child: Column(crossAxisAlignment: CrossAxisAlignment.end,
              children: <Widget>[
                newFile != null && !loading
-                   ? Semantics(
-                       label: 'new_message_image',
-                       child: Container(
-                         width: 150,
-                         height: 150,
-                         decoration: BoxDecoration(borderRadius: imageBorderRadius),
+                   ? Container(
+                    padding: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                     child: Semantics(
+                         label: 'new_message_image',
                          child: DeletableImage(
                            image: Image.file(File(newFile!.path), fit: BoxFit.contain),
                            onDelete: () => setPic(null),
-                           height: 144, width: 144,
-                         ),
-                       ))
+                           maxHeight: 150, containerWidth: MediaQuery.of(context).size.width / 2,
+                         )),
+                   )
                    : Container(),
                TextFormField(
                    autocorrect: true,

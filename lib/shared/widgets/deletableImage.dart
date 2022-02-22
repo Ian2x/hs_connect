@@ -1,36 +1,87 @@
+import 'dart:async';
 import 'dart:math';
-
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 
 class DeletableImage extends StatelessWidget {
   final Image image;
   final VoidFunction onDelete;
-  final double width;
-  final double height;
+  final double containerWidth;
+  final double maxHeight;
 
-  const DeletableImage({Key? key, required this.image, required this.onDelete, required this.width, required this.height})
+  const DeletableImage({Key? key, required this.image, required this.onDelete, required this.containerWidth, required this.maxHeight})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
 
-    final sizing = min(width, height) * 0.07 + 15;
+    Completer<ui.Image> completer = new Completer<ui.Image>();
+    image.image
+        .resolve(ImageConfiguration())
+        .addListener(ImageStreamListener((ImageInfo info, bool _) {
+      completer.complete(info.image);}));
+
+    final sizing = min(containerWidth, maxHeight) * 0.07 + 15;
+    return FutureBuilder(
+      future: completer.future,
+      initialData: null,
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        if (!snapshot.hasData) {
+          return Container(
+              width: containerWidth,
+              constraints: BoxConstraints(maxHeight: maxHeight),
+              decoration: BoxDecoration(
+                image: DecorationImage(image: image.image)
+              )
+          );
+        } else {
+          final origWidth = snapshot.data.width;
+          final origHeight = snapshot.data.height;
+          final scale = min(containerWidth / origWidth, maxHeight / origHeight);
+          final newWidth = origWidth * scale;
+          final newHeight = origHeight * scale;
+          final sizing = min<double>(newWidth, newHeight) * 0.07 + 15;
+          return Container(
+            width: newWidth,
+            height: newHeight,
+            //color: Colors.purple,
+            child: Stack(
+              children: [
+                Container(
+                  width: newWidth,
+                  height: newHeight,
+                  child: image
+                ),
+                Positioned(
+                    right: sizing/3,
+                    top: sizing/3,
+                    child: DeleteImageButton(onDelete: onDelete, buttonSize: sizing))
+              ],
+            ),
+          );
+        }
+      },
+    );
     return Container(
-      width: width,
+      width: containerWidth,
+      constraints: BoxConstraints(maxHeight: maxHeight),
       child: Stack(
-        alignment: Alignment.center,
         children: [
-          Container(width: width, alignment: Alignment.center, child: Stack(
-            children: [
-              image,
-              Positioned(
-                  right: sizing/3,
-                  top: sizing/3,
-                  child:DeleteImageButton(onDelete: onDelete, buttonSize: sizing))
-            ],
-          )),
-        ]
+          Container(
+            width: containerWidth,
+            constraints: BoxConstraints(maxHeight: maxHeight),
+            child: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(image: image.image)
+              ),
+            ),
+          ),
+          Positioned(
+              right: sizing/3,
+              top: sizing/3,
+              child:DeleteImageButton(onDelete: onDelete, buttonSize: sizing))
+        ],
       ),
     );
   }

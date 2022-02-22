@@ -318,8 +318,8 @@ class _PostFormState extends State<PostForm> {
                                   setState(() => newFile = null);
                                 }
                               },
-                              height: 400,
-                              width: 400),
+                              maxHeight: 400,
+                              containerWidth: 400),
                         )
                       : Container(),
                   GestureDetector(
@@ -420,10 +420,11 @@ class _PostFormState extends State<PostForm> {
           left: 0,
           child: Container(
             color: widget.userData.domainColor != null ? widget.userData.domainColor! : colorScheme.onSurface,
-            padding: EdgeInsets.only(top: bottomGradientThickness, bottom: MediaQuery.of(context).padding.bottom),
+            padding: EdgeInsets.only(top: bottomGradientThickness),
             width: MediaQuery.of(context).size.width,
             child: Container(
               color: colorScheme.surface,
+              padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
               child: Row(children: <Widget>[
                 SizedBox(width: 10),
                 picPickerButton(

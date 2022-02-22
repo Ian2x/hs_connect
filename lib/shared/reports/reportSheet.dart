@@ -6,6 +6,7 @@ import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/shared/reports/reportForm.dart';
 import 'package:hs_connect/shared/widgets/confirmationDialogs.dart';
+import 'package:hs_connect/shared/widgets/modalTab.dart';
 import 'package:provider/provider.dart';
 
 import '../constants.dart';
@@ -62,6 +63,13 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ModalTab(bottomMargin: 15),
+            ],
+          ),
+          Divider(color: colorScheme.background, thickness: 1, height: 0),
           TextButton(
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
@@ -143,28 +151,6 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
                 ),
               ],
             ),
-          ),
-          Divider(color: colorScheme.background, thickness: 1, height: 0),
-          Container(
-            //color: Colors.orange,
-            child: TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Row(
-                  children: [
-                    Icon(Icons.close_rounded, size: iconSize, color: colorScheme.primary),
-                    SizedBox(width: 20),
-                    Text(
-                      "Cancel",
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .subtitle1
-                          ?.copyWith(color: colorScheme.primaryVariant),
-                    ),
-                  ],
-                )),
           ),
         ],
       ),

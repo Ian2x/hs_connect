@@ -6,6 +6,7 @@ import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/widgets/confirmationDialogs.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
+import 'package:hs_connect/shared/widgets/modalTab.dart';
 import 'package:provider/provider.dart';
 
 class DeletePostSheet extends StatefulWidget {
@@ -69,6 +70,12 @@ class _DeletePostSheetState extends State<DeletePostSheet> with TickerProviderSt
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ModalTab(bottomMargin: 13),
+              ],
+            ),
             TextButton(
               onPressed: () async {
                 confirmationDialog(context,
@@ -97,23 +104,7 @@ class _DeletePostSheetState extends State<DeletePostSheet> with TickerProviderSt
               ),
             ),
             Divider(color: colorScheme.background, thickness: 1, height: 0),
-            Container(
-              //color: Colors.orange,
-              child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Row(
-                    children: [
-                      Icon(Icons.close_rounded, size: iconSize, color: colorScheme.primary),
-                      SizedBox(width: 20),
-                      Text(
-                        "Cancel",
-                        style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.primaryVariant),
-                      ),
-                    ],
-                  )),
-            ),
+
           ],
         ));
   }
