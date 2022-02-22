@@ -46,7 +46,7 @@ class HomeAppBar extends SliverPersistentHeaderDelegate{
                   children: [
                     SizedBox(height: 3),
                     GestureDetector(
-                      child: Text("circles.co",
+                      child: Text("convo",
                           style: Theme.of(context)
                               .textTheme
                               .headline4

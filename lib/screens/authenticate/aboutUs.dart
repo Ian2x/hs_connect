@@ -42,7 +42,7 @@ class AboutUs extends StatelessWidget {
               ),
               SizedBox(height: 35),
               Text(
-                "About Circles",
+                "About Convo",
                 style: textTheme.headline4?.copyWith(fontWeight: FontWeight.bold, color: Colors.white),
               ),
               SizedBox(height: 0),
@@ -52,7 +52,7 @@ class AboutUs extends StatelessWidget {
                     children: [
                       SizedBox(height: 40),
                       Text(
-                        "Circles.co is an app made by other students that lets highschoolers chat anonymously. ",
+                        "Convo is an app made by other students that lets highschoolers chat anonymously. ",
                         style: textTheme.bodyText2?.copyWith(color: Colors.white, fontSize: fontSize, height: 1.5),
                         textAlign: TextAlign.center,
                       ),
