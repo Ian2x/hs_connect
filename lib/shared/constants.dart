@@ -9,7 +9,7 @@ const trendingPollVoteBoost = 0.06;
 const initialPostsFetchSize = 20;
 const nextPostsFetchSize = 20;
 
-const defaultGroupPic = AssetImage('assets/defaultgroupimage4.png');
+const defaultGroupPic = AssetImage('assets/Splash2.png');
 
 const bottomGradientThickness = 1.3;
 const topGradientThickness = 2.0;

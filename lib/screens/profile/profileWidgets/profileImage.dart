@@ -16,9 +16,9 @@ class ProfileImage extends StatelessWidget {
     Image logoImage;
 
     if (background != null) {
-      logoImage = Image.asset("assets/sublogo2.png");
+      logoImage = Image.asset("assets/White400.png");
     } else {
-      logoImage = Image.asset("assets/images/defaultgroupimage1.png");
+      logoImage = Image.asset("assets/Splash2.png");
     }
 
     return Container(

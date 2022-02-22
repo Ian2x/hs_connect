@@ -38,7 +38,7 @@ class AboutUs extends StatelessWidget {
               SizedBox(height: 40),
               SizedBox(
                 height: 90,
-                child: Image.asset('assets/sublogo2.png'),
+                child: Image.asset('assets/White1500.png'),
               ),
               SizedBox(height: 35),
               Text(

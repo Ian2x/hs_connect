@@ -60,7 +60,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                             children: [
                               SizedBox(
                                 height: 70,
-                                child: Image.asset('assets/splash1cropped.png'),
+                                child: Image.asset('assets/Splash2.png'),
                               ),
                               SizedBox(height: 15),
                               Text(
