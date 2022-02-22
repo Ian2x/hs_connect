@@ -29,7 +29,7 @@ class PreviewPage extends StatelessWidget {
                 child: Image.asset('assets/sublogo2.png'),
               ),
               SizedBox(height: 60),
-              Text("circles.co",
+              Text("convo",
                   style: textTheme.headline4?.copyWith(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 28)),
               SizedBox(height: 15),
               Text(

@@ -72,7 +72,7 @@ class _LaunchCountdownState extends State<LaunchCountdown> {
                       SizedBox(height: 25),
                       Text("Welcome, you're early.", style: textTheme.headline6?.copyWith(color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
                       SizedBox(height: 20),
-                      Text("circles.co will launch at " + groupName + " on:", style: textTheme.headline6?.copyWith(color: Colors.black), textAlign: TextAlign.center),
+                      Text("Convo will launch at " + groupName + " on:", style: textTheme.headline6?.copyWith(color: Colors.black), textAlign: TextAlign.center),
                       SizedBox(height: 50),
                       Text(DateFormat('EEEEEEEEE, MMMM d').format(widget.userData.launchDate!.toDate()), style: textTheme.headline6?.copyWith(color: Colors.black), textAlign: TextAlign.center),
                       SizedBox(height: 50),

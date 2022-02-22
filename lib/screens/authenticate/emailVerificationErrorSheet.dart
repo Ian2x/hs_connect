@@ -69,7 +69,7 @@ class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorShee
                       }
                     } on FirebaseAuthException catch (e) {
                       if (mounted) {
-                        setState(() =>error = "Error: " + e.code + "\nPlease contact us at app@getcircles.co for support. Use this code: " + shortHash(widget.domainEmail.toLowerCase()));
+                        setState(() =>error = "Error: " + e.code + "\nPlease contact us at team@getconvo.app for support. Use this code: " + shortHash(widget.domainEmail.toLowerCase()));
                       }
                     }
                   }

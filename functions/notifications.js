@@ -41,7 +41,7 @@ async function notificationTitle(notification) {
         case "postVotes":
             return "";
         case "fromMe":
-            return "The team at Circles.co have a message:";
+            return "The team at convo have a message:";
         case "featuredPost":
             return "Featured post:";
         default:

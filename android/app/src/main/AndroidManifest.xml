@@ -3,7 +3,7 @@
     <uses-permission android:name="android.permission.INTERNET"/> <!-- Ian added 2/9/22-->
     <uses-permission android:name="android.permission.VIBRATE"/> <!-- Ian added 2/11/22-->
     <application
-        android:label="Circles.co"
+        android:label="Convo"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
