@@ -14,8 +14,8 @@ class Loading extends StatelessWidget {
     return Container(
       color: backgroundColor!= null ? backgroundColor : colorScheme.background,
       child: Center(
-        child: SpinKitFadingCircle(
-          color: spinColor != null ? spinColor! : colorScheme.primaryVariant,
+        child: SpinKitPulse(
+          color: spinColor != null ? spinColor! : colorScheme.primary,
           size: size,
         ),
       ),

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class ProfileImage extends StatelessWidget {
-  final Color? background;
+  final Color? backgroundColor;
   final double size;
 
   ProfileImage({
     Key? key,
-    required this.background,
+    required this.backgroundColor,
     this.size=60,
   }) : super(key: key);
 
@@ -15,7 +15,7 @@ class ProfileImage extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     Image logoImage;
 
-    if (background != null) {
+    if (backgroundColor != null) {
       logoImage = Image.asset("assets/White400.png");
     } else {
       logoImage = Image.asset("assets/Splash2.png");
@@ -27,7 +27,7 @@ class ProfileImage extends StatelessWidget {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: background != null ? background : colorScheme.surface,
+          color: backgroundColor != null ? backgroundColor : colorScheme.surface,
           border: Border.all(color: colorScheme.background, width: 1.5),
         ),
       child: Container(

@@ -103,7 +103,7 @@ class _NotificationCardState extends State<NotificationCard> {
                     text: TextSpan(
                       children: [
                         TextSpan(
-                          text: "convo: ", style: textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w600)
+                          text: "Convo team: ", style: textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w600)
                         ),
                         TextSpan(
                             text: widget.myNotification.extraData!, style: textTheme.bodyText2
@@ -180,7 +180,7 @@ class _NotificationCardState extends State<NotificationCard> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     ProfileImage(
-                      background: domainColor!,
+                      backgroundColor: domainColor!,
                       size:33,
                     ),
                     SizedBox(width: 14),

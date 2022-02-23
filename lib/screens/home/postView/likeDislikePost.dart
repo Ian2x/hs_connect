@@ -7,9 +7,8 @@ import 'package:hs_connect/services/posts_database.dart';
 
 import 'package:hs_connect/shared/widgets/thick_arrow_icons.dart';
 
-const double postIconSizeStateless = 18;
-const double postIconSizeStateful = 22;
-const EdgeInsets postIconPadding = EdgeInsets.zero;
+const double postIconSizeStateless = 20;
+const double postIconSizeStateful = 25;
 
 class LikeDislikePost extends StatelessWidget {
   final DocumentReference currUserRef;
@@ -37,7 +36,7 @@ class LikeDislikePost extends StatelessWidget {
             return IconButton(
               iconSize: postIconSizeStateless,
               splashColor: Colors.transparent,
-              padding: postIconPadding,
+              padding: EdgeInsets.all(9),
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
               icon: Icon(ThickArrow.angle_up_icon, color: activeColor),
@@ -51,7 +50,7 @@ class LikeDislikePost extends StatelessWidget {
             return IconButton(
               iconSize: postIconSizeStateless,
               splashColor: Colors.transparent,
-              padding: postIconPadding,
+              padding: EdgeInsets.all(9),
               constraints: BoxConstraints(),
               icon: Icon(ThickArrow.angle_up_icon),
               onPressed: () {
@@ -62,21 +61,22 @@ class LikeDislikePost extends StatelessWidget {
             );
           }
         }(),
-        SizedBox(width: 8),
-        Text(
-          (postLikesManager.likeCount - postLikesManager.dislikeCount).toString(),
-          style: Theme
-              .of(context)
-              .textTheme
-              .subtitle1?.copyWith(fontSize: postIconSizeStateless),
+        GestureDetector(
+          onTap: () {},
+          child: Text(
+            (postLikesManager.likeCount - postLikesManager.dislikeCount).toString(),
+            style: Theme
+                .of(context)
+                .textTheme
+                .subtitle1?.copyWith(fontSize: 0.8 * postIconSizeStateless),
+          ),
         ),
-        SizedBox(width: 8),
             () {
           if (postLikesManager.dislikeStatus == true) {
             return IconButton(
               iconSize: postIconSizeStateless,
               splashColor: Colors.transparent,
-              padding: postIconPadding,
+              padding: EdgeInsets.all(9),
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
               icon: Icon(ThickArrow.angle_down_icon, color: activeColor),
@@ -90,7 +90,7 @@ class LikeDislikePost extends StatelessWidget {
             return IconButton(
               iconSize: postIconSizeStateless,
               splashColor: Colors.transparent,
-              padding: postIconPadding,
+              padding: EdgeInsets.all(9),
               constraints: BoxConstraints(),
               icon: Icon(ThickArrow.angle_down_icon),
               onPressed: () {
@@ -157,7 +157,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
             return IconButton(
               iconSize: postIconSizeStateful,
               splashColor: Colors.transparent,
-              padding: postIconPadding,
+              padding: EdgeInsets.zero,
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
               icon: Icon(ThickArrow.angle_up_icon, color: activeColor),
@@ -177,7 +177,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
             return IconButton(
               iconSize: postIconSizeStateful,
               splashColor: Colors.transparent,
-              padding: postIconPadding,
+              padding: EdgeInsets.zero,
               constraints: BoxConstraints(),
               color: colorScheme.primaryVariant,
               icon: Icon(ThickArrow.angle_up_icon),
@@ -203,16 +203,15 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
           style: Theme
               .of(context)
               .textTheme
-              .subtitle1?.copyWith(fontSize: 0.75 * postIconSizeStateful),
+              .subtitle1?.copyWith(fontSize: 0.8 * postIconSizeStateful),
         ),
         SizedBox(width: 10),
-
             () {
           if (dislikeStatus == true) {
             return IconButton(
               iconSize: postIconSizeStateful,
               splashColor: Colors.transparent,
-              padding: postIconPadding,
+              padding: EdgeInsets.zero,
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
               icon: Icon(ThickArrow.angle_down_icon, color: activeColor),
@@ -232,7 +231,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
             return IconButton(
               iconSize: postIconSizeStateful,
               splashColor: Colors.transparent,
-              padding: postIconPadding,
+              padding: EdgeInsets.zero,
               constraints: BoxConstraints(),
               color: colorScheme.primaryVariant,
               icon: Icon(ThickArrow.angle_down_icon),
