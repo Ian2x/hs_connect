@@ -64,7 +64,7 @@ class _DeletePostSheetState extends State<DeletePostSheet> with TickerProviderSt
 
     return Container(
         constraints: BoxConstraints(
-          maxHeight: 104 + bottomSpace,
+          maxHeight: 89 + bottomSpace,
         ),
         padding: EdgeInsets.fromLTRB(13, 5, 0, bottomSpace),
         child: Column(
@@ -76,6 +76,7 @@ class _DeletePostSheetState extends State<DeletePostSheet> with TickerProviderSt
                 ModalTab(bottomMargin: 13),
               ],
             ),
+            Divider(color: colorScheme.background, thickness: 1, height: 0),
             TextButton(
               onPressed: () async {
                 confirmationDialog(context,
@@ -103,8 +104,6 @@ class _DeletePostSheetState extends State<DeletePostSheet> with TickerProviderSt
                 ],
               ),
             ),
-            Divider(color: colorScheme.background, thickness: 1, height: 0),
-
           ],
         ));
   }
