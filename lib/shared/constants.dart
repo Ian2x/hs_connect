@@ -9,7 +9,7 @@ const trendingPollVoteBoost = 0.06;
 const initialPostsFetchSize = 20;
 const nextPostsFetchSize = 20;
 
-const defaultGroupPic = AssetImage('assets/defaultgroupimage4.png');
+const defaultGroupPic = AssetImage('assets/Splash2.png');
 
 const bottomGradientThickness = 1.3;
 const topGradientThickness = 2.0;
@@ -17,7 +17,8 @@ const topGradientThickness = 2.0;
 const authHintTextColor = Color(0xffdbdada);
 const authPrimaryTextColor = Color(0xFFa1a1a1);
 
-const commentReplyDetailSize = 13.0;
+const commentReplyDetailSize = 14.0;
+const postCardDetailSize = 12.0;
 
 const int maxNumNotifications = 50;
 

@@ -32,7 +32,7 @@ class ProfileTitle extends StatelessWidget {
             Container(
               margin: EdgeInsets.symmetric(horizontal:20, vertical: 10),
               child: ProfileImage(
-                background: otherUserDomainColor,
+                backgroundColor: otherUserDomainColor,
               ),
             ),
             Column(

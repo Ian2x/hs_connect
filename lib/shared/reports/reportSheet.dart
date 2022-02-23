@@ -56,8 +56,8 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
     return Container(
       constraints: BoxConstraints(
         maxHeight: widget.reportType == ReportType.post
-            ? 200 + bottomSpace
-            : 152 + bottomSpace,
+            ? 187 + bottomSpace
+            : 139 + bottomSpace,
       ),
       padding: EdgeInsets.fromLTRB(13, 5, 0, bottomSpace),
       child: Column(

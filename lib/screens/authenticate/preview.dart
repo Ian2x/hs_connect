@@ -26,7 +26,7 @@ class PreviewPage extends StatelessWidget {
               SizedBox(height: 180),
               SizedBox(
                 height: 95,
-                child: Image.asset('assets/sublogo2.png'),
+                child: Image.asset('assets/White1500.png'),
               ),
               SizedBox(height: 60),
               Text("convo",
@@ -34,12 +34,12 @@ class PreviewPage extends StatelessWidget {
               SizedBox(height: 15),
               Text(
                 "Talk with your classmates,",
-                style: textTheme.subtitle1?.copyWith(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 19),
+                style: textTheme.subtitle1?.copyWith(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 18),
               ),
               SizedBox(height: 4),
               Text(
                 "anonymously.",
-                style: textTheme.subtitle1?.copyWith(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 19),
+                style: textTheme.subtitle1?.copyWith(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 18),
               ),
               SizedBox(height: 100),
               ActionChip(

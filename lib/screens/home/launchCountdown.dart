@@ -65,7 +65,7 @@ class _LaunchCountdownState extends State<LaunchCountdown> {
                         width: 80,
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                            image: AssetImage('assets/splash1cropped.png')
+                            image: AssetImage('assets/Splash2.png')
                           )
                         )
                       ),

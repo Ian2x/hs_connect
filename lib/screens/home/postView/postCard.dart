@@ -21,8 +21,6 @@ import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/expandableImage.dart';
 import 'package:hs_connect/shared/widgets/myLinkPreview.dart';
 
-const postCardDetailSize = 12.0;
-
 class PostCard extends StatefulWidget {
   final Post post;
   final UserData currUser;
@@ -183,8 +181,8 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                       SizedBox(width: 10),
                       buildGroupCircle(
                           groupImage: group != null ? group!.image : null,
-                          height: 24,
-                          width: 24,
+                          height: 21,
+                          width: 21,
                           context: context,
                           backgroundColor: colorScheme.surface),
                       SizedBox(width: 5),
@@ -322,7 +320,7 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                             postLikesManager: postLikesManager,
                             currUserColor: widget.currUser.domainColor,
                         ),
-                        SizedBox(width: 10),
+                        SizedBox(width: 1),
                       ],
                     ),
                   )

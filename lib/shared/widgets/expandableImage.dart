@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
-
+import 'package:hs_connect/shared/pageRoutes.dart';
 import 'loading.dart';
 
 class ExpandableImage extends StatefulWidget {
@@ -39,7 +39,7 @@ class _ExpandableImageState extends State<ExpandableImage> {
       onTap: () {
         Navigator.push(
             context,
-            TransparentRoute(builder: (context) {
+            MyTransparentRoute(builder: (context) {
               return DismissiblePage(
                 direction: DismissDirection.vertical,
                 onDismiss: ()=>Navigator.pop(context),
@@ -64,7 +64,7 @@ class _ExpandableImageState extends State<ExpandableImage> {
                   ),
                 ),
               );
-            }, backgroundColor: Colors.transparent
+            },
             )
         );
       },

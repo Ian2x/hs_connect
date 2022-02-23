@@ -70,7 +70,7 @@ class AuthCheckboxFormField extends StatelessWidget {
         RichText(
             maxLines: 3,
             text: TextSpan(style: textTheme.caption?.copyWith(color: Colors.black), children: [
-              TextSpan(text: "I have read and agree to convo's "),
+              TextSpan(text: "I have read and agree to Convo's "),
               TextSpan(
                   text: "Terms\nof Service",
                   style: textTheme.caption?.copyWith(color: Color(0xFF13a1f0), fontWeight: FontWeight.w600),

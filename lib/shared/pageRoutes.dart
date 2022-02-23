@@ -17,8 +17,8 @@ class NoAnimationMaterialPageRoute<T> extends MaterialPageRoute<T> {
   }
 }
 
-class TransparentRoute extends PageRoute<void> {
-  TransparentRoute({
+class MyTransparentRoute extends PageRoute<void> {
+  MyTransparentRoute({
     required this.builder,
     RouteSettings? settings,
   })  : super(settings: settings, fullscreenDialog: false);

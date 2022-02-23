@@ -3,10 +3,10 @@ import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/postLikesManager.dart';
 import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/screens/home/postView/postCard.dart';
 import 'package:hs_connect/screens/home/postView/postPage.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/deletePostSheet.dart';
 import 'package:hs_connect/services/groups_database.dart';
+import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/tools/buildCircle.dart';
 

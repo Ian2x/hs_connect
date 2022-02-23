@@ -50,13 +50,13 @@ class HomeAppBar extends SliverPersistentHeaderDelegate{
                           style: Theme.of(context)
                               .textTheme
                               .headline4
-                              ?.copyWith(fontSize: 18, fontWeight: FontWeight.bold)),
+                              ?.copyWith(fontSize: 18, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic)),
                     ),
                     TabBar(
                       controller: tabController,
                       padding: EdgeInsets.zero,
                       indicator: BoxDecoration(
-                        border: Border(bottom: BorderSide(width: 2.0, color: userData.domainColor!=null ? userData.domainColor! : colorScheme.surface), //colorScheme.surface,)
+                        border: Border(bottom: BorderSide(width: 2.5, color: userData.domainColor!=null ? userData.domainColor! : colorScheme.surface), //colorScheme.surface,)
                         )
                       ),
                       indicatorPadding: tabBarPadding,

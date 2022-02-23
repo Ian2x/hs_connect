@@ -125,7 +125,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                     padding: EdgeInsets.fromLTRB(20, 13, 14, 15),
                     color: colorScheme.surface,
                     child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
-                      ProfileImage(background: otherUser.domainColor, size: 33),
+                      ProfileImage(backgroundColor: otherUser.domainColor, size: 33),
                       SizedBox(width: 14),
                       Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                         Text(otherUser.fundamentalName,

@@ -56,7 +56,7 @@ class _WaitVerificationState extends State<WaitVerification> {
               children: [
                 SizedBox(
                   height: 80,
-                  child: Image.asset('assets/splash1cropped.png'),
+                  child: Image.asset('assets/Splash2.png'),
                 ),
                 SizedBox(height: 20),
                 Text(
