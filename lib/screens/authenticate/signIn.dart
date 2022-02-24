@@ -67,7 +67,7 @@ class _SignInState extends State<SignIn> {
                                 SizedBox(height: 15),
                                 Text(
                                   'Login',
-                                  style: ThemeText.helvetica(fontWeight: FontWeight.w700, fontSize: 28, color: Colors.black
+                                  style: ThemeText.quicksand(fontWeight: FontWeight.w700, fontSize: 28, color: Colors.black
                                   ),
                                 ),
                                 SizedBox(height: 10),

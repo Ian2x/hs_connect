@@ -18,6 +18,7 @@ class CommentCard extends StatefulWidget {
   final VoidOptionalCommentParamFunction switchFormBool;
   final VoidFunction focusKeyboard;
   final DocumentReference postCreatorRef;
+  final Color? groupColor;
 
   CommentCard({
     Key? key,
@@ -26,6 +27,7 @@ class CommentCard extends StatefulWidget {
     required this.comment,
     required this.currUserData,
     required this.postCreatorRef,
+    required this.groupColor
   }) : super(key: key);
 
   @override
@@ -124,16 +126,14 @@ class _CommentCardState extends State<CommentCard> {
                       TextSpan(
                         text: localCreatorName + " • ",
                         style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                            color: colorScheme.primaryVariant,
-                            fontSize: commentReplyDetailSize,
-                            fontWeight: FontWeight.w300)
+                            color: colorScheme.primary,
+                            fontSize: commentReplyDetailSize)
                       ),
                       TextSpan(
                         text: localCreatorGroupName,
                         style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                            color: creatorGroupColor != null ? creatorGroupColor : colorScheme.primaryVariant,
-                            fontSize: commentReplyDetailSize,
-                            fontWeight: FontWeight.w300)
+                            color: creatorGroupColor != null ? creatorGroupColor : colorScheme.primary,
+                            fontSize: commentReplyDetailSize)
                       )
                     ]
                   ),
@@ -143,19 +143,13 @@ class _CommentCardState extends State<CommentCard> {
               Spacer(),
               widget.comment.creatorRef==widget.postCreatorRef
                   ? Container(
-                padding: EdgeInsets.only(right: 10, top: 5),
-                child: Container(
-                    decoration: BoxDecoration(
-                        color: creatorGroupColor != null ? creatorGroupColor : colorScheme.primary, borderRadius: BorderRadius.circular(17)),
-                    child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(17),
-                          color: Theme.of(context).colorScheme.surface,
-                        ),
-                        padding: EdgeInsets.fromLTRB(10, 0, 10, 1),
-                        margin: EdgeInsets.all(1),
-                        child: Text('Creator', style: Theme.of(context).textTheme.subtitle2?.copyWith(color: creatorGroupColor != null ? creatorGroupColor : colorScheme.primary, fontSize: 12)))),
-              )
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(17),
+                        color: Theme.of(context).colorScheme.surface,
+                      ),
+                      padding: EdgeInsets.fromLTRB(10, 5, 0, 1),
+                      margin: EdgeInsets.all(1),
+                      child: Text('Creator', style: Theme.of(context).textTheme.subtitle2?.copyWith(color: widget.groupColor != null ? widget.groupColor : colorScheme.onSurface, fontSize: 12)))
                   : Container(),
             ],
           ),
@@ -163,7 +157,7 @@ class _CommentCardState extends State<CommentCard> {
           SizedBox(
             width: (MediaQuery.of(context).size.width) * .85,
             child: Text(widget.comment.text,
-                style: Theme.of(context).textTheme.bodyText1?.copyWith(fontWeight: FontWeight.w600)),
+                style: Theme.of(context).textTheme.bodyText1),
           ),
           SizedBox(height: 7),
           Row(
@@ -206,7 +200,7 @@ class _CommentCardState extends State<CommentCard> {
                         alignment: Alignment.center),
                     child: Text("Reply",
                         style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                            color: colorScheme.onSurface, fontWeight: FontWeight.w500, fontSize: commentReplyDetailSize)),
+                            color: colorScheme.onSurface, fontWeight: FontWeight.w600, fontSize: commentReplyDetailSize+1.5)),
                     onPressed: () {
                       widget.focusKeyboard();
                       widget.switchFormBool(widget.comment);
@@ -224,7 +218,7 @@ class _CommentCardState extends State<CommentCard> {
           SizedBox(height: 4),
           RepliesFeed(
               commentRef: widget.comment.commentRef,
-              groupRef: widget.comment.groupRef,
+              groupColor: widget.groupColor,
               postCreatorRef: widget.postCreatorRef),
           Divider(thickness: 3, color: colorScheme.background, height: 0),
         ]));

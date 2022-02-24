@@ -56,7 +56,7 @@ class ProfileTitle extends StatelessWidget {
         showMoreHoriz ? Column(
           children: [
             IconButton(
-                icon: Icon(Icons.more_horiz, color: Theme.of(context).colorScheme.primaryVariant),
+                icon: Icon(Icons.more_horiz, color: Theme.of(context).colorScheme.primaryContainer),
                 constraints: BoxConstraints(),
                 onPressed: () {
                   showModalBottomSheet(

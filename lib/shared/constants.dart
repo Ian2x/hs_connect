@@ -17,7 +17,7 @@ const topGradientThickness = 2.0;
 const authHintTextColor = Color(0xffdbdada);
 const authPrimaryTextColor = Color(0xFFa1a1a1);
 
-const commentReplyDetailSize = 14.0;
+const commentReplyDetailSize = 12.0;
 const postCardDetailSize = 12.0;
 
 const int maxNumNotifications = 50;
@@ -80,7 +80,7 @@ class Gradients {
 }
 
 class ThemeText {
-  static TextStyle helvetica({Color? color, double? fontSize, double? height,
+  static TextStyle quicksand({Color? color, double? fontSize, double? height,
     TextDecoration? decoration1, FontWeight? fontWeight}) {
     return TextStyle(
         color: color,
@@ -88,7 +88,7 @@ class ThemeText {
         height: height,
         decoration: decoration1,
         fontWeight: fontWeight,
-        fontFamily: "HelveticaNeue"
+        fontFamily: "Quicksand"
     );
   }
 }

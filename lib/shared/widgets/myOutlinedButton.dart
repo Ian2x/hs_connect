@@ -11,6 +11,8 @@ class MyOutlinedButton extends StatelessWidget {
   final double? pressElevation;
   final Color? backgroundColor;
   final Color? outlineColor;
+  final double? width;
+  final double? height;
 
   const MyOutlinedButton({
     Key? key,
@@ -23,7 +25,9 @@ class MyOutlinedButton extends StatelessWidget {
     this.pressElevation,
     this.thickness = 2,
     this.backgroundColor,
-    this.outlineColor
+    this.outlineColor,
+    this.width,
+    this.height,
   }) : super(key: key);
 
   @override
@@ -46,29 +50,6 @@ class MyOutlinedButton extends StatelessWidget {
             child: child,
           )
       ),
-    );
-    return ActionChip(
-      labelPadding: EdgeInsets.zero,
-      padding: EdgeInsets.zero,
-      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      pressElevation: pressElevation,
-      label: Container(
-        decoration: BoxDecoration(
-            gradient: gradient,
-            color: outlineColor,
-            borderRadius: BorderRadius.circular(borderRadius),
-        ),
-        child: Container(
-          padding: padding,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(borderRadius-thickness),
-            color: backgroundColor,
-          ),
-          margin: EdgeInsets.all(thickness),
-          child: child,
-        )
-      ),
-      onPressed: onPressed,
     );
   }
 }

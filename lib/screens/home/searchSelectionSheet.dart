@@ -1,6 +1,9 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
+import 'package:provider/provider.dart';
+
+import '../../models/userData.dart';
 
 class SearchSelectionSheet extends StatefulWidget {
   final bool initialSearchByTrending;
@@ -28,9 +31,11 @@ class _SearchSelectionSheetState extends State<SearchSelectionSheet> {
     final colorScheme = Theme.of(context).colorScheme;
 
     final double bottomSpace = max(MediaQuery.of(context).padding.bottom, 25);
+    final userData = Provider.of<UserData?>(context);
+    final activeColor = userData?.domainColor ?? colorScheme.secondary;
 
     return Container(
-      height: 169 + bottomSpace,
+      height: 176 + bottomSpace,
         padding: EdgeInsets.fromLTRB(25, 25, 25, bottomSpace),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -74,7 +79,7 @@ class _SearchSelectionSheetState extends State<SearchSelectionSheet> {
                           Checkbox(
                             value: searchByTrending,
                             shape: CircleBorder(),
-                            activeColor: colorScheme.secondary,
+                            activeColor: activeColor,
                             onChanged: (bool? value) {
                               if (value==true) {
                                 if (!searchByTrending && mounted) {
@@ -123,7 +128,7 @@ class _SearchSelectionSheetState extends State<SearchSelectionSheet> {
                             Checkbox(
                               value: !searchByTrending,
                               shape: CircleBorder(),
-                              activeColor: colorScheme.secondary,
+                              activeColor: activeColor,
                               onChanged: (bool? value) {
                                 if (value==true) {
                                   if (searchByTrending && mounted) {

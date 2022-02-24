@@ -15,6 +15,7 @@ import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
+import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/expandableImage.dart';
 import 'package:hs_connect/shared/reports/reportSheet.dart';
 import 'package:hs_connect/shared/widgets/myLinkPreview.dart';
@@ -39,6 +40,7 @@ class PostTitleCard extends StatefulWidget {
 class _PostTitleCardState extends State<PostTitleCard> {
   String? creatorName;
   String? creatorGroup;
+  Color? creatorColor;
   Poll? poll;
   UserData? fetchUserData;
 
@@ -59,6 +61,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
         creatorGroup = fetchUserData != null
             ? (fetchUserData!.fullDomainName != null ? fetchUserData!.fullDomainName : fetchUserData!.domain)
             : null;
+        creatorColor = fetchUserData != null ? fetchUserData!.domainColor : null;
       });
     }
   }
@@ -110,17 +113,34 @@ class _PostTitleCardState extends State<PostTitleCard> {
                           ));
                 }
               },
-              child: Text(
-                  "from " +
-                      localCreatorName +
-                      " • " +
-                      localCreatorGroup +
-                      " • " +
-                      convertTime(widget.post.createdAt.toDate()),
+              child: RichText(
+                text: TextSpan(
                   style: Theme.of(context)
                       .textTheme
                       .subtitle2
-                      ?.copyWith(color: colorScheme.primary, fontSize: postCardDetailSize + 1)),
+                      ?.copyWith(color: colorScheme.primary, fontSize: postCardDetailSize + 1),
+                  children: [
+                    TextSpan(
+                      text: "from " +
+                          localCreatorName +
+                          " • "
+                    ),
+                    TextSpan(
+                      style: Theme.of(context)
+                          .textTheme
+                          .subtitle2
+                          ?.copyWith(color: creatorColor!=null ? creatorColor: colorScheme.primary, fontSize: postCardDetailSize + 1),
+                      text: localCreatorGroup
+                    ),
+                    TextSpan(
+                      text: " • " +
+                          convertTime(widget.post.createdAt.toDate()
+                    ))
+                  ]
+                ),
+
+              )
+
             ),
             Spacer(),
             widget.post.mature
@@ -193,7 +213,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
                   containerWidth: MediaQuery.of(context).size.width - 2 * leftRightPadding)
               : Container(),
           poll != null ? PollView(poll: poll!, currUserRef: widget.currUserData.userRef, post: widget.post) : Container(),
-          SizedBox(height: 25),
+          SizedBox(height: 17),
           Row(
             children: [
               Text(
@@ -207,7 +227,6 @@ class _PostTitleCardState extends State<PostTitleCard> {
                   currUserRef: widget.currUserData.userRef, post: widget.post, postLikesManager: postLikesManager, currUserColor: widget.currUserData.domainColor,),
             ],
           ),
-          SizedBox(height: 8),
         ],
       ),
     );

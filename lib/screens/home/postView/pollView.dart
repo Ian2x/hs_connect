@@ -173,7 +173,7 @@ class PollChoiceView extends StatelessWidget {
                   padding: EdgeInsets.fromLTRB(0, 4, 8, 0),
                   alignment: Alignment.centerRight,
                   width: double.infinity,
-                  child: Icon(Icons.check_circle_outline_sharp, size: 23, color: colorScheme.primaryVariant)),
+                  child: Icon(Icons.check_circle_outline_sharp, size: 23, color: colorScheme.primaryContainer)),
             )
           ])),
     );

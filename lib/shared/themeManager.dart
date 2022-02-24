@@ -14,16 +14,16 @@ class ThemeNotifier with ChangeNotifier {
       brightness: Brightness.dark,
       background: Color(0xff262626),
       onSurface: darkThemeOnSurface, //Color(0xffd4d3d3),
-      error: Color(0xFF4d4d4d),
-      primaryVariant: Color(0xffbab9b9),
-      secondaryVariant: Color(0xFF137ef0),
-      secondary: Color(0xFF13a1f0),
+      error: Color(0xff4d4d4d),
+      primaryContainer: Color(0xffbab9b9),
+      secondaryContainer: Color(0xff3f99ee),
+      secondary: Color(0xff2992f4),
       surface: Color(0xff131313),
       primary: Color(0xffa1a1a1),
       onError: Color(0xff353636),
-      onSecondary: Color(0xFFff004d),
-      onPrimary: Color(0xFF000000),
-      onBackground: Color(0xFF000000),
+      onSecondary: Color(0xffff004d),
+      onPrimary: Color(0xff000000),
+      onBackground: Color(0xff000000),
     ),
     primarySwatch: createMaterialColor(Color(0xFFA1A1A1)),
     // from primary color
@@ -38,18 +38,18 @@ class ThemeNotifier with ChangeNotifier {
     // background
     colorScheme: ColorScheme(
       brightness: Brightness.light,
-      background: Color(0xFFf4f4f4), // background grey / light grey
+      background: Color(0xfff4f4f4), // background grey / light grey
       onSurface: lightThemeOnSurface, // black
-      error: Color(0xFFb2b2b2),
-      primaryVariant: Color(0xff60676c), // dark grey
-      secondaryVariant: Color(0xFF137ef0), // darker secondary blue
-      secondary: Color(0xFF13a1f0), // secondary blue
-      surface: Color(0xFFffffff), // white
-      primary: Color(0xFFa1a1a1), // medium grey
+      error: Color(0xffb2b2b2),
+      primaryContainer: Color(0xff60676c), // dark grey
+      secondaryContainer: Color(0xff1186f3), // darker secondary blue
+      secondary: Color(0xff2992f4), // secondary blue
+      surface: Color(0xffffffff), // white
+      primary: Color(0xffa1a1a1), // medium grey
       onError: Color(0xffdbdada), // light medium grey
-      onSecondary: Color(0xFFff004d), // secondary red
-      onPrimary: Color(0xFF000000),
-      onBackground: Color(0xFF000000),
+      onSecondary: Color(0xffff004d), // secondary red
+      onPrimary: Color(0xff000000),
+      onBackground: Color(0xff000000),
     ),
     primarySwatch: createMaterialColor(Color(0xFFA1A1A1)),
     // from primary color
@@ -58,24 +58,24 @@ class ThemeNotifier with ChangeNotifier {
   );
 
   static const myTextTheme = TextTheme(
-    headline1: TextStyle(fontFamily: "HelveticaNeue", fontSize: 93, fontWeight: FontWeight.w300, letterSpacing: -1.5),
-    headline2: TextStyle(fontFamily: "HelveticaNeue", fontSize: 58, fontWeight: FontWeight.w300, letterSpacing: -0.5),
-    headline3: TextStyle(fontFamily: "HelveticaNeue", fontSize: 47, fontWeight: FontWeight.w400),
-    headline4: TextStyle(fontFamily: "HelveticaNeue", fontSize: 33, fontWeight: FontWeight.w400, letterSpacing: 0.25),
-    headline5: TextStyle(fontFamily: "HelveticaNeue", fontSize: 23, fontWeight: FontWeight.w400),
-    headline6: TextStyle(fontFamily: "HelveticaNeue", fontSize: 19, fontWeight: FontWeight.w500, letterSpacing: 0.15),
+    headline1: TextStyle(fontFamily: "Quicksand", fontSize: 93, fontWeight: FontWeight.w400, letterSpacing: -1.5),
+    headline2: TextStyle(fontFamily: "Quicksand", fontSize: 58, fontWeight: FontWeight.w400, letterSpacing: -0.5),
+    headline3: TextStyle(fontFamily: "Quicksand", fontSize: 47, fontWeight: FontWeight.w500),
+    headline4: TextStyle(fontFamily: "Quicksand", fontSize: 33, fontWeight: FontWeight.w500, letterSpacing: 0.25),
+    headline5: TextStyle(fontFamily: "Quicksand", fontSize: 23, fontWeight: FontWeight.w500),
+    headline6: TextStyle(fontFamily: "Quicksand", fontSize: 19, fontWeight: FontWeight.w600, letterSpacing: 0.15),
     subtitle1: TextStyle(
-      fontFamily: "HelveticaNeue",
+      fontFamily: "Quicksand",
       fontSize: 16,
-      fontWeight: FontWeight.w400,
+      fontWeight: FontWeight.w500,
       letterSpacing: 0.15,
     ),
-    subtitle2: TextStyle(fontFamily: "HelveticaNeue", fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 0.1),
-    bodyText1: TextStyle(fontFamily: "HelveticaNeue", fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.5),
-    bodyText2: TextStyle(fontFamily: "HelveticaNeue", fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.25),
-    button: TextStyle(fontFamily: "HelveticaNeue", fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 1.25),
-    caption: TextStyle(fontFamily: "HelveticaNeue", fontSize: 12, fontWeight: FontWeight.w400, letterSpacing: 0.4),
-    overline: TextStyle(fontFamily: "HelveticaNeue", fontSize: 10, fontWeight: FontWeight.w400, letterSpacing: 1.5),
+    subtitle2: TextStyle(fontFamily: "Quicksand", fontSize: 14, fontWeight: FontWeight.w600, letterSpacing: 0.1),
+    bodyText1: TextStyle(fontFamily: "Quicksand", fontSize: 16, fontWeight: FontWeight.w500, letterSpacing: 0.5),
+    bodyText2: TextStyle(fontFamily: "Quicksand", fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 0.25),
+    button: TextStyle(fontFamily: "Quicksand", fontSize: 14, fontWeight: FontWeight.w600, letterSpacing: 1.25),
+    caption: TextStyle(fontFamily: "Quicksand", fontSize: 12, fontWeight: FontWeight.w500, letterSpacing: 0.4),
+    overline: TextStyle(fontFamily: "Quicksand", fontSize: 10, fontWeight: FontWeight.w500, letterSpacing: 1.5),
   );
 
   late ThemeData _themeData;

@@ -8,25 +8,33 @@ class AuthButton extends StatelessWidget {
   final String buttonText;
   final VoidFunction onPressed;
   final bool hasText;
+  final double? width;
 
-  const AuthButton({Key? key, required this.buttonText, required this.onPressed, required this.hasText}) : super(key: key);
+  const AuthButton({Key? key, required this.buttonText,
+    required this.onPressed,
+    required this.hasText,
+    this.width,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
 
     return MyOutlinedButton(
-      padding: EdgeInsets.symmetric(vertical: 9, horizontal: 35),
+      padding: EdgeInsets.symmetric(vertical: 9, horizontal: 30),
       onPressed: onPressed,
       outlineColor: hasText ? Colors.black : Colors.black54,
       borderRadius: 40,
       backgroundColor: Colors.white,
-      thickness: 1.2,
-      child: FittedBox(
+      thickness: 2,
+      child: Container(
+        alignment: Alignment.center,
         child: Text(
           buttonText,
           softWrap: false,
           overflow: TextOverflow.ellipsis,
-          style: ThemeText.helvetica(fontWeight: FontWeight.w500, color: hasText ? Colors.black : Colors.black54),
+          style: ThemeText.quicksand(
+              fontWeight: FontWeight.w600, fontSize: 18,
+              color: hasText ? Colors.black : Colors.black54),
         ),
       ),
     );

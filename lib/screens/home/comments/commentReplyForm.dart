@@ -133,6 +133,7 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
           decoration: commentReplyInputDecoration(
               context: context,
               isReply: widget.isReply,
+              activeColor: userData.domainColor ?? Theme.of(context).colorScheme.secondary,
               onPressed: () async {
                 if (_text!=''){
                   onSubmit();

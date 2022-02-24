@@ -14,7 +14,7 @@ import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/polls_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/tools/buildCircle.dart';
+import 'package:hs_connect/shared/widgets/buildGroupCircle.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/reports/reportSheet.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
@@ -168,7 +168,10 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
       child: Card(
           //if border then ShapeDecoration
           color: colorScheme.surface,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            side: BorderSide(color: widget.post.isFeatured ? (widget.currUser.domainColor!=null ? widget.currUser.domainColor! : colorScheme.primary) : Colors.transparent, width: 1),
+            borderRadius: BorderRadius.circular(12),
+          ),
           margin: EdgeInsets.fromLTRB(leftRightMargin, 4, leftRightMargin, 4),
           elevation: 0,
           child: Container(
@@ -181,8 +184,7 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                       SizedBox(width: 10),
                       buildGroupCircle(
                           groupImage: group != null ? group!.image : null,
-                          height: 21,
-                          width: 21,
+                          size: 21,
                           context: context,
                           backgroundColor: colorScheme.surface),
                       SizedBox(width: 5),
@@ -202,35 +204,23 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                       Spacer(),
                       widget.post.mature && !widget.post.isFeatured
                           ? Container(
-                              padding: EdgeInsets.only(right: 10, top: 0),
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      color: colorScheme.primary, borderRadius: BorderRadius.circular(17)),
-                                  child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(17),
-                                        color: Theme.of(context).colorScheme.surface,
-                                      ),
-                                      padding: EdgeInsets.fromLTRB(14, 2, 14, 3),
-                                      margin: EdgeInsets.all(1.5),
-                                      child: Text('Mature', style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary, fontSize: 12)))),
-                            )
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(17),
+                                color: Theme.of(context).colorScheme.surface,
+                              ),
+                              padding: EdgeInsets.fromLTRB(14, 2, 14, 3),
+                              margin: EdgeInsets.all(1.5),
+                              child: Text('Mature', style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary, fontSize: 12)))
                           : Container(),
                       widget.post.isFeatured
                           ? Container(
-                              padding: EdgeInsets.only(right: 10, top: 0),
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      gradient: Gradients.blueRed(), borderRadius: BorderRadius.circular(17)),
-                                  child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(17),
-                                        color: Theme.of(context).colorScheme.surface,
-                                      ),
-                                      padding: EdgeInsets.fromLTRB(14, 2, 14, 3),
-                                      margin: EdgeInsets.all(1.5),
-                                      child: Text('Featured', style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 12)))),
-                            )
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(17),
+                                color: Theme.of(context).colorScheme.surface,
+                              ),
+                              padding: EdgeInsets.fromLTRB(14, 2, 14, 3),
+                              margin: EdgeInsets.all(1.5),
+                              child: Text('Trending', style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 12, color: widget.currUser.domainColor != null ? widget.currUser.domainColor : colorScheme.primary)))
                           : Container(),
                     ],
                   ),
@@ -240,7 +230,7 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                     child: Text(widget.post.title,
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                               fontSize: 16,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w600,
                             ),
                         overflow: TextOverflow.ellipsis, // default is .clip
                         maxLines: 3),

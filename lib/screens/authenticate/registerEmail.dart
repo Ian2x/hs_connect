@@ -23,7 +23,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
-  bool termsAccepted = false;
+  bool termsAccepted = true;
 
   // text field state
   String email = '';
@@ -45,129 +45,136 @@ class _RegisterEmailState extends State<RegisterEmail> {
               elevation: 0,
               backgroundColor: Colors.white,
             ),
-            body: GestureDetector(
-              onTap: () => dismissKeyboard(context),
-              child: Stack(
-                children: [
-                  SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          alignment: Alignment.topCenter,
-                          child: Center(
-                              child: Column(
-                            children: [
+            body: Stack(
+              children: [
+                SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      /*Container(
+                        padding: EdgeInsets.fromLTRB(20.0,0,0,0),
+                        alignment: Alignment.topLeft,
+                        child: Column(
+                        children: [
+                        Row(
+                          children: [
+                            Spacer(),
+                            Container(
+                              padding:EdgeInsets.fromLTRB(0, 0, 15, 0),
+                              child:
                               SizedBox(
-                                height: 70,
+                                height: 50,
                                 child: Image.asset('assets/Splash2.png'),
                               ),
-                              SizedBox(height: 15),
-                              Text(
-                                'Sign Up',
-                                style: ThemeText.helvetica(
-                                    fontWeight: FontWeight.w700, fontSize: 28, color: Colors.black),
-                              ),
-                              SizedBox(height: 20),
-                              Text(
-                                error != null ? error!
-                                  : "We'll send you an email to verify your school.",
-                                style:
-                                    textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 14, height: 1.3),
-                                textAlign: TextAlign.center,
-                              ),
-                              SizedBox(height:20),
-                            ],
-                          )),
+                            ),
+                            Spacer(),
+                          ],
                         ),
-                        Form(
-                          key: _formKey,
-                          child: Container(
-                              padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                              child: Column(
-                                children: [
-                                  TextField(
-                                    autocorrect: false,
-                                    style: textTheme.headline6?.copyWith(color: authPrimaryTextColor),
-                                    maxLines: null,
-                                    keyboardType: TextInputType.emailAddress,
-                                    decoration: InputDecoration(
-                                        hintStyle: textTheme.headline6?.copyWith(color: authHintTextColor),
-                                        border: InputBorder.none,
-                                        hintText: "Your School Email"),
-                                    onChanged: (value) {
-                                      if (mounted) {
-                                        setState(() {
-                                          email = value.trim();
-                                        });
-                                      }
-                                    },
-                                  ),
-                                  Divider(height: 0, thickness: 2, color: authHintTextColor),
-                                  SizedBox(height:20),
-                                  AuthCheckboxFormField(termsAccepted: termsAccepted, toggleTerms: (bool val) {
-                                    if (error==termsError) {
-                                      error = null;
-                                    }
+                          ],
+                        ),
+                      ),*/
+                      SizedBox(height: 60),
+                      Container(
+                        padding:EdgeInsets.symmetric(horizontal: 20),
+                        child: Text(
+                          'Your school email is...',
+                          style: ThemeText.quicksand(
+                              fontWeight: FontWeight.w700, fontSize: 26, color: Colors.black),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Form(
+                        key: _formKey,
+                        child: Container(
+                            alignment: Alignment.topLeft,
+                            padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                            child: Column(
+                              children: [
+                                TextField(
+                                  autofocus:true,
+                                  autocorrect: false,
+                                  style: textTheme.headline6?.copyWith(color: authPrimaryTextColor,
+                                    fontSize: 25),
+                                  maxLines: null,
+                                  keyboardType: TextInputType.emailAddress,
+                                  decoration: InputDecoration(
+                                      hintStyle: textTheme.headline6?.copyWith(color: authHintTextColor, fontSize: 25),
+                                      border: InputBorder.none,
+                                      hintText: "convo@school.org"),
+                                  onChanged: (value) {
                                     if (mounted) {
-                                      setState(()=> termsAccepted = val);
+                                      setState(() {
+                                        email = value.trim();
+                                      });
                                     }
-                                  })
-                                ],
-                              )),
+                                  },
+                                ),
+                              ],
+                            )),
+                      ),
+                      SizedBox(height:20),
+                      Container(
+                        padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          error != null ? error!
+                              : "We'll send you an email to verify your school.",
+                          style:
+                          textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 14, height: 1.3),
+                          textAlign: TextAlign.left,
                         ),
-                        SizedBox(height: 110)
-                      ],
-                    ),
+                      ),
+                      SizedBox(height: 160)
+                    ],
                   ),
-                  Positioned(
-                    bottom: 0,
-                    left: MediaQuery.of(context).size.width * 0.5 - 70,
-                    width: 140,
-                    child: AuthButton(
-                        buttonText: "Register",
-                        hasText: email!="",
-                        onPressed: () async {
-                          if (!termsAccepted) {
-                            if (mounted) {
-                              setState(() => error = termsError);
-                            }
-                            return;
+                ),
+                Positioned(
+                  bottom: 0,
+                  left: MediaQuery.of(context).size.width * 0.5 - 180,
+                  width: 360,
+                  child: AuthButton(
+                      buttonText: "Register",
+                      hasText: email!="",
+                      onPressed: () async {
+                        if (!termsAccepted) {
+                          if (mounted) {
+                            setState(() => error = termsError);
                           }
-                          dismissKeyboard(context);
-                          if (_formKey.currentState!.validate()) {
+                          return;
+                        }
+                        dismissKeyboard(context);
+                        if (_formKey.currentState!.validate()) {
+                          if (mounted) {
+                            setState(() => loading = true);
+                          }
+                          String localEmail = email.toLowerCase();
+                          dynamic result = await _auth.createEmailUser(localEmail);
+                          if (result is User?) {
+                            final int tempIndex = localEmail.lastIndexOf('@');
+                            final String domain = localEmail.substring(tempIndex);
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => WaitVerification(domain: domain, domainEmail: localEmail)));
+                          } else if (result is FirebaseAuthException) {
                             if (mounted) {
-                              setState(() => loading = true);
+                              setState(() {
+                                String errorMsg = '';
+                                if (result.message != null) errorMsg += result.message!;
+                                error = errorMsg;
+                                loading = false;
+                              });
                             }
-                            String localEmail = email.toLowerCase();
-                            dynamic result = await _auth.createEmailUser(localEmail);
-                            if (result is User?) {
-                              final int tempIndex = localEmail.lastIndexOf('@');
-                              final String domain = localEmail.substring(tempIndex);
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => WaitVerification(domain: domain, domainEmail: localEmail)));
-                            } else if (result is FirebaseAuthException) {
-                              if (mounted) {
-                                setState(() {
-                                  String errorMsg = '';
-                                  if (result.message != null) errorMsg += result.message!;
-                                  error = errorMsg;
-                                  loading = false;
-                                });
-                              }
-                            } else {
-                              if (mounted) {
-                                setState(() {
-                                  error = result.toString();
-                                  loading = false;
-                                });
-                              }
+                          } else {
+                            if (mounted) {
+                              setState(() {
+                                error = result.toString();
+                                loading = false;
+                              });
                             }
                           }
-                        }),
-                  ),
-                ],
-              ),
+                        }
+                      }),
+                ),
+              ],
             ),
           );
   }

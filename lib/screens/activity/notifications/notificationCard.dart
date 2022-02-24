@@ -7,7 +7,6 @@ import 'package:hs_connect/models/postLikesManager.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/postView/postPage.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileImage.dart';
-import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
@@ -128,7 +127,7 @@ class _NotificationCardState extends State<NotificationCard> {
       return Container(
           margin: EdgeInsets.only(top: 2),
           padding: EdgeInsets.fromLTRB(14, 13, 14, 15),
-          height: 65,
+          height: 55.2,
           color: colorScheme.surface,
           child: loading ? Loading(backgroundColor: Colors.transparent) : null);
     }
@@ -180,7 +179,7 @@ class _NotificationCardState extends State<NotificationCard> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     ProfileImage(
-                      backgroundColor: domainColor!,
+                      backgroundColor: domainColor,
                       size:33,
                     ),
                     SizedBox(width: 14),
@@ -222,22 +221,6 @@ class _NotificationCardState extends State<NotificationCard> {
                     ),
                   ],
                 ),
-                widget.myNotification.myNotificationType == MyNotificationType.featuredPost
-                    ? Container(
-                        padding: EdgeInsets.fromLTRB(47, 5, 0, 0),
-                        child: Container(
-                            decoration: BoxDecoration(
-                                gradient: Gradients.blueRed(), borderRadius: BorderRadius.circular(17)),
-                            child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(17),
-                                  color: Theme.of(context).colorScheme.surface,
-                                ),
-                                padding: EdgeInsets.fromLTRB(17, 5, 17, 6),
-                                margin: EdgeInsets.all(1),
-                                child: Text('Featured Post'))),
-                      )
-                    : Container()
               ],
             )));
   }

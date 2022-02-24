@@ -33,8 +33,8 @@ PreferredSizeWidget activityAppBar({required BuildContext context, required bool
             ),
             indicatorPadding: HomeAppBar.tabBarPadding,
             indicatorWeight: 0.001,
-            labelStyle: textTheme.subtitle2?.copyWith(fontWeight: FontWeight.w500, fontSize: 15, color: colorScheme.onSurface),
-            unselectedLabelStyle: textTheme.subtitle2?.copyWith(fontWeight: FontWeight.w500, fontSize: 15, color: colorScheme.primary),
+            labelStyle: textTheme.subtitle2?.copyWith(fontWeight: FontWeight.bold, fontSize: 15, color: colorScheme.onSurface),
+            unselectedLabelStyle: textTheme.subtitle2?.copyWith(fontWeight: FontWeight.bold, fontSize: 15, color: colorScheme.primary),
             tabs: <Widget>[
               Tab(
                   iconMargin: EdgeInsets.zero,

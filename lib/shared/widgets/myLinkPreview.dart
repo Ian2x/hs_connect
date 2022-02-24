@@ -91,15 +91,8 @@ class MyLinkPreview extends StatefulWidget {
 }
 
 class _MyLinkPreviewState extends State<MyLinkPreview> with SingleTickerProviderStateMixin {
-  late final AnimationController _controller = AnimationController(
-    duration: widget.animationDuration ?? const Duration(milliseconds: 300),
-    vsync: this,
-  );
-
-  late final Animation<double> _animation = CurvedAnimation(
-    parent: _controller,
-    curve: Curves.easeOutQuad,
-  );
+  late final AnimationController _controller;
+  late final Animation<double> _animation;
 
   bool isFetchingPreviewData = false;
   bool shouldAnimate = false;
@@ -107,7 +100,14 @@ class _MyLinkPreviewState extends State<MyLinkPreview> with SingleTickerProvider
   @override
   void initState() {
     super.initState();
-
+    _controller = AnimationController(
+      duration: widget.animationDuration ?? const Duration(milliseconds: 300),
+      vsync: this,
+    );
+    _animation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOutQuad,
+    );
     didUpdateWidget(widget);
   }
 
@@ -220,9 +220,8 @@ class _MyLinkPreviewState extends State<MyLinkPreview> with SingleTickerProvider
       child: Container(
         width: widget.width,
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          border: Border.all(width: 1, color: Theme.of(context).colorScheme.onError)
-        ),
+            color: Theme.of(context).colorScheme.surface,
+            border: Border.all(width: 1, color: Theme.of(context).colorScheme.onError)),
         padding: isMinimized ? null : EdgeInsets.symmetric(vertical: 10),
         child: Column(
           children: [
@@ -286,7 +285,7 @@ class _MyLinkPreviewState extends State<MyLinkPreview> with SingleTickerProvider
               text: Uri.parse(widget.text).host,
               style: widget.textStyle?.copyWith(overflow: TextOverflow.ellipsis),
               textAlign: TextAlign.center,
-              )
+            )
           : Text(widget.text, style: widget.textStyle),
     );
   }
@@ -302,7 +301,8 @@ class _MyLinkPreviewState extends State<MyLinkPreview> with SingleTickerProvider
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 if (data.title != null) _titleWidget(data.title!),
-                if (data.description != null && data.title != data.description) _descriptionWidget(data.description!, false),
+                if (data.description != null && data.title != data.description)
+                  _descriptionWidget(data.description!, false),
                 _linkify(false),
               ],
             ),

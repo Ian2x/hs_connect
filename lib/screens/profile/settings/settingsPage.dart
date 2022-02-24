@@ -245,7 +245,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             maxLines: null,
                             autocorrect: true,
                             decoration: InputDecoration(
-                                hintStyle: Theme.of(context).textTheme.subtitle1, border: InputBorder.none, hintText: "What can we improve on?"),
+                                hintStyle: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.primary), border: InputBorder.none, hintText: "What can we improve on?"),
                             onChanged: (val) {
                               setState(() => _feedbackText = val);
                               if (feedbackError == emptyFeedbackError) {
@@ -260,17 +260,12 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                         TextButton(
                           child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                            decoration: ShapeDecoration(
-                              color: colorScheme.onError,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  side: BorderSide(
-                                    color: Theme.of(context).colorScheme.onError,
-                                    width: 1,
-                                  )),
+                            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(25),
+                              border: Border.all(width: 1, color: _feedbackText!="" ? colorScheme.onSurface : colorScheme.primary)
                             ),
-                            child: Text("Submit", style: Theme.of(context).textTheme.bodyText2)
+                            child: Text("Submit", style: Theme.of(context).textTheme.bodyText2?.copyWith(color: _feedbackText!="" ? colorScheme.onSurface : colorScheme.primary))
                           ),
                           onPressed: () async {
                             // check feedback isn't empty

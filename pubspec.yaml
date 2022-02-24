@@ -94,13 +94,29 @@ flutter:
     - family: Chat
       fonts:
         - asset: assets/icons/Chat.ttf
-    - family: Roboto
+    - family: Baloo
       fonts:
-        - asset: assets/fonts/Roboto-Regular.ttf
-        - asset: assets/fonts/Roboto-Bold.ttf
+        - asset: assets/fonts/Baloo/BalooBhaijaan2-Bold.ttf
           weight: 700
-        - asset: assets/fonts/Roboto-Medium.ttf
+        - asset: assets/fonts/Baloo/BalooBhaijaan2-Medium.ttf
           weight: 500
+        - asset: assets/fonts/Baloo/BalooBhaijaan2-Regular.ttf
+        - asset: assets/fonts/Baloo/BalooBhaijaan2-SemiBold.ttf
+          weight: 600
+    - family: Shippori
+      fonts:
+        - asset: assets/fonts/ShipporiAntiqueB1-Regular.ttf
+    - family: Quicksand
+      fonts:
+        - asset: assets/fonts/Quicksand/Quicksand-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Quicksand/Quicksand-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Quicksand/Quicksand-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Quicksand/Quicksand-Regular.ttf
+        - asset: assets/fonts/Quicksand/Quicksand-SemiBold.ttf
+          weight: 600
     - family: HelveticaNeue
       fonts:
         - asset: assets/fonts/HelveticaNeue-Regular.otf

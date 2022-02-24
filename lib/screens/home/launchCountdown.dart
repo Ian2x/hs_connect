@@ -8,6 +8,7 @@ import 'package:share_plus/share_plus.dart';
 
 class LaunchCountdown extends StatefulWidget {
   final UserData userData;
+
   const LaunchCountdown({Key? key, required this.userData}) : super(key: key);
 
   @override
@@ -22,7 +23,7 @@ class _LaunchCountdownState extends State<LaunchCountdown> {
     getShareURL();
     super.initState();
   }
-  
+
   void getShareURL() async {
     final temp = await FirebaseFirestore.instance.collection('appStoreLink').doc('appStoreLink').get();
     if (mounted) {
@@ -30,15 +31,13 @@ class _LaunchCountdownState extends State<LaunchCountdown> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-
-
     final textTheme = Theme.of(context).textTheme;
 
-    String groupName = widget.userData.fullDomainName!=null ? widget.userData.fullDomainName! : widget.userData.domain;
-
+    String groupName =
+        widget.userData.fullDomainName != null ? widget.userData.fullDomainName! : widget.userData.domain;
+    Color groupColor = widget.userData.domainColor ?? Colors.blue;
     return Scaffold(
         backgroundColor: Colors.white,
         body: Container(
@@ -46,56 +45,39 @@ class _LaunchCountdownState extends State<LaunchCountdown> {
           alignment: Alignment.center,
           padding: EdgeInsets.only(top: 25),
           child: Container(
-              decoration: BoxDecoration(
-              gradient: Gradients.blueRedFull(begin: Alignment.topCenter, end: Alignment.bottomCenter),
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(27.5),
-                color: Colors.white,
-              ),
-              margin: EdgeInsets.all(2.5),
-              child: Container(height: 540, width: 320, padding: EdgeInsets.symmetric(horizontal: 20), child:
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: 80,
-                        width: 80,
+              child: Container(
+                  height: 540,
+                  width: 320,
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    SizedBox(height: 110),
+                    Text("Welcome, you're early.",
+                        style: textTheme.headline4?.copyWith(color: Colors.black, fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center),
+                    SizedBox(height: 30),
+                    Text("Convo will launch at " + groupName + " on:",
+                        style: textTheme.headline6?.copyWith(color: Colors.black), textAlign: TextAlign.center),
+                    SizedBox(height: 10),
+                    Text(DateFormat('EEEEEEEEE, MMMM d').format(widget.userData.launchDate!.toDate()),
+                        style: textTheme.headline6?.copyWith(color: Colors.black.withOpacity(0.65)), textAlign: TextAlign.center),
+                    SizedBox(height: 130),
+                    GestureDetector(
+                      onTap: () {
+                        if (shareURL != null) {
+                          Share.share(shareURL!);
+                        }
+                      },
+                      child: Container(
+                        padding: EdgeInsets.fromLTRB(95, 10, 95, 10),
                         decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage('assets/Splash2.png')
-                          )
-                        )
-                      ),
-                      SizedBox(height: 25),
-                      Text("Welcome, you're early.", style: textTheme.headline6?.copyWith(color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
-                      SizedBox(height: 20),
-                      Text("Convo will launch at " + groupName + " on:", style: textTheme.headline6?.copyWith(color: Colors.black), textAlign: TextAlign.center),
-                      SizedBox(height: 50),
-                      Text(DateFormat('EEEEEEEEE, MMMM d').format(widget.userData.launchDate!.toDate()), style: textTheme.headline6?.copyWith(color: Colors.black), textAlign: TextAlign.center),
-                      SizedBox(height: 50),
-                      Text("Tell your friends to sign up!", style: textTheme.headline6?.copyWith(color: Colors.black), textAlign: TextAlign.center),
-                      SizedBox(height: 25),
-                      MyOutlinedButton(
-                          borderRadius: 30,
-                          backgroundColor: Colors.white,
-                          padding: EdgeInsets.fromLTRB(35,10,35,10),
-                          gradient: Gradients.blueRedFull(
-                              begin: Alignment.topCenter, end: Alignment.bottomCenter),
-                          onPressed: () {
-                            if (shareURL!=null) {
-                              Share.share(shareURL!);
-                            }
-                          },
-                          child: Text('Share', style: textTheme.headline6?.copyWith(color: Colors.black)))
-                    ]
-                  )
-              )
-            )
-          ),
-        )
-    );
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(30),
+                          border: Border.all(color: groupColor, width: 1.5)
+                        ),
+                        child: Text('Share', style: textTheme.headline6?.copyWith(color: groupColor))
+                      )
+                    ),
+                  ]))),
+        ));
   }
 }

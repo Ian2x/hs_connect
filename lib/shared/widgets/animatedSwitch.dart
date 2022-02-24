@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../models/userData.dart';
 import '../inputDecorations.dart';
 
 class AnimatedSwitch extends StatefulWidget {
@@ -25,7 +27,8 @@ class _AnimatedSwitchState extends State<AnimatedSwitch> {
   Widget build(BuildContext context) {
 
     final colorScheme = Theme.of(context).colorScheme;
-
+    final userData = Provider.of<UserData?>(context);
+    final onColor = userData?.domainColor ?? colorScheme.secondary.withAlpha(255);
     return GestureDetector(
       onTap: (){
         if (mounted) {
@@ -41,7 +44,7 @@ class _AnimatedSwitchState extends State<AnimatedSwitch> {
         duration: animationDuration,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          color: isEnabled ? colorScheme.secondary.withAlpha(255) : colorScheme.primary,
+          color: isEnabled ? onColor : colorScheme.primary,
         ),
         child: AnimatedAlign(
           duration: animationDuration,
@@ -63,16 +66,16 @@ class _AnimatedSwitchState extends State<AnimatedSwitch> {
   }
 }
 
-class AnimatedSwitch2 extends StatefulWidget {
+class AnimatedSwitchSmall extends StatefulWidget {
   final bool initialState;
   final VoidFunction onToggle;
-  const AnimatedSwitch2({Key? key, required this.initialState, required this.onToggle}) : super(key: key);
+  const AnimatedSwitchSmall({Key? key, required this.initialState, required this.onToggle}) : super(key: key);
 
   @override
-  _AnimatedSwitchState2 createState() => _AnimatedSwitchState2();
+  _AnimatedSwitchStateSmall createState() => _AnimatedSwitchStateSmall();
 }
 
-class _AnimatedSwitchState2 extends State<AnimatedSwitch2> {
+class _AnimatedSwitchStateSmall extends State<AnimatedSwitchSmall> {
   late bool isEnabled;
   final animationDuration = Duration(milliseconds: 100);
 
@@ -84,11 +87,9 @@ class _AnimatedSwitchState2 extends State<AnimatedSwitch2> {
 
   @override
   Widget build(BuildContext context) {
-
-
-
     final colorScheme = Theme.of(context).colorScheme;
-
+    final userData = Provider.of<UserData?>(context);
+    final onColor = userData?.domainColor ?? colorScheme.secondary.withAlpha(255);
     return GestureDetector(
       onTap: (){
         if (mounted) {
@@ -104,7 +105,7 @@ class _AnimatedSwitchState2 extends State<AnimatedSwitch2> {
         duration: animationDuration,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          color: isEnabled ? colorScheme.secondary.withAlpha(255) : colorScheme.primary,
+          color: isEnabled ? onColor : colorScheme.primary,
         ),
         child: AnimatedAlign(
           duration: animationDuration,

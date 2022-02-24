@@ -7,26 +7,21 @@ import 'package:hs_connect/services/replies_database.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
-class RepliesFeed extends StatefulWidget {
+class RepliesFeed extends StatelessWidget {
   final DocumentReference commentRef;
   final DocumentReference postCreatorRef;
-  final DocumentReference groupRef;
+  final Color? groupColor;
 
-  const RepliesFeed({Key? key, required this.commentRef, required this.postCreatorRef, required this.groupRef})
+  const RepliesFeed({Key? key, required this.commentRef, required this.postCreatorRef, required this.groupColor})
       : super(key: key);
 
-  @override
-  _RepliesFeedState createState() => _RepliesFeedState();
-}
-
-class _RepliesFeedState extends State<RepliesFeed> {
   @override
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
 
     if (userData == null) return Loading();
 
-    RepliesDatabaseService _replies = RepliesDatabaseService(commentRef: widget.commentRef, currUserRef: userData.userRef);
+    RepliesDatabaseService _replies = RepliesDatabaseService(commentRef: commentRef, currUserRef: userData.userRef);
 
     return StreamBuilder(
       stream: _replies.commentReplies,
@@ -48,7 +43,8 @@ class _RepliesFeedState extends State<RepliesFeed> {
                     child: ReplyCard(
                     reply: replies[index],
                     currUserData: userData,
-                    postCreatorRef: widget.postCreatorRef,
+                    postCreatorRef: postCreatorRef,
+                    groupColor: groupColor,
                   ));
               },
             );

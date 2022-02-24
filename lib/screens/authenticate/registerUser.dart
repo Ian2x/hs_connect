@@ -55,103 +55,101 @@ class _RegisterUserState extends State<RegisterUser> {
                   key: _formKey,
                   child: SingleChildScrollView(
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                      Center(
-                          child: Column(
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(20,0,0,0),
+                        child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(
-                            height: 70,
-                            child: Image.asset('assets/Splash2.png'),
-                          ),
-                          SizedBox(height: 15),
-                          Text(
-                            'Make an Account',
-                            style: ThemeText.helvetica(fontWeight: FontWeight.w700, fontSize: 28, color: Colors.black),
-                          ),
-                          SizedBox(height: 20),
-                          error != null ?
-                          FittedBox(
-                            child: Text(error!,
-                                style: ThemeText.helvetica(fontWeight: FontWeight.normal, fontSize: 15, color: Colors.black),
-                                textAlign: TextAlign.center),
-                          ) :
-                          Text(
-                              "Your username is only used for logging in.\n(No one else will see it)",
-                              textAlign: TextAlign.center,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle1
-                                  ?.copyWith(color: Colors.black, fontSize: 15, height: 1.5)),
-                          SizedBox(height:15),
-                          Container(
-                            padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                            child: Column(
-                              children: [
-                                TextFormField(
-                                    style: Theme.of(context).textTheme.headline6?.copyWith(color: authPrimaryTextColor),
-                                    autocorrect: false,
-                                    obscureText: false,
-                                    decoration: InputDecoration(
-                                        hintStyle:
-                                            Theme.of(context).textTheme.headline6?.copyWith(color: authHintTextColor),
-                                        border: InputBorder.none,
-                                        hintText: "Login Username..."),
-                                    onChanged: (val) {
+                        SizedBox(height: 15),
+                        Text(
+                          'Make an Account',
+                          style: ThemeText.quicksand(fontWeight: FontWeight.w700, fontSize: 28, color: Colors.black),
+                        ),
+                        SizedBox(height: 35),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextFormField(
+                                autofocus:true,
+                                style: Theme.of(context).textTheme.headline6?.copyWith(color: authPrimaryTextColor),
+                                autocorrect: false,
+                                obscureText: false,
+                                decoration: InputDecoration(
+                                    hintStyle:
+                                        Theme.of(context).textTheme.headline6?.copyWith(color: authHintTextColor),
+                                    border: InputBorder.none,
+                                    hintText: "Login Username..."),
+                                onChanged: (val) {
+                                  if (mounted) {
+                                    setState(() => username = val);
+                                    if (username.length >= 6) {
                                       if (mounted) {
-                                        setState(() => username = val);
-                                        if (username.length >= 6) {
-                                          if (mounted) {
-                                            setState(() {
-                                              error = null;
-                                            });
-                                          }
-                                        }
+                                        setState(() {
+                                          error = null;
+                                        });
                                       }
-                                    }),
-                                Divider(height: 0, thickness: 2, color: authHintTextColor),
-                                TextFormField(
-                                    style: Theme.of(context).textTheme.headline6?.copyWith(color: authPrimaryTextColor),
-                                    autocorrect: false,
-                                    obscureText: passwordHidden,
-                                    decoration: InputDecoration(
-                                        hintStyle:
-                                            Theme.of(context).textTheme.headline6?.copyWith(color: authHintTextColor),
-                                        border: InputBorder.none,
-                                        hintText: "Password...",
-                                        suffixIcon: IconButton(
-                                          icon: passwordHidden ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
-                                          iconSize: 17,
-                                          onPressed: () {
-                                            if (mounted) {
-                                              setState(() => passwordHidden = !passwordHidden);
-                                            }
-                                          },
-                                        )),
-                                    onChanged: (val) {
+                                    }
+                                  }
+                                }),
+                            Divider(height: 0, thickness: 2, color: authHintTextColor),
+                            TextFormField(
+                                style: Theme.of(context).textTheme.headline6?.copyWith(color: authPrimaryTextColor),
+                                autocorrect: false,
+                                obscureText: passwordHidden,
+                                decoration: InputDecoration(
+                                    hintStyle:
+                                        Theme.of(context).textTheme.headline6?.copyWith(color: authHintTextColor),
+                                    border: InputBorder.none,
+                                    hintText: "Password...",
+                                    suffixIcon: IconButton(
+                                      icon: passwordHidden ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
+                                      iconSize: 17,
+                                      onPressed: () {
+                                        if (mounted) {
+                                          setState(() => passwordHidden = !passwordHidden);
+                                        }
+                                      },
+                                    )),
+                                onChanged: (val) {
+                                  if (mounted) {
+                                    setState(() => password = val);
+                                    if (val.length >= 6) {
                                       if (mounted) {
-                                        setState(() => password = val);
-                                        if (val.length >= 6) {
-                                          if (mounted) {
-                                            setState(() {
-                                              error = null;
-                                            });
-                                          }
-                                        }
+                                        setState(() {
+                                          error = null;
+                                        });
                                       }
-                                    }),
-                                Divider(height: 0, thickness: 2, color: Color(0xffdbdada)),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 120),
-                        ],
-                      )),
+                                    }
+                                  }
+                                }),
+                            Divider(height: 0, thickness: 2, color: Color(0xffdbdada)),
+                            SizedBox(height:20),
+                            error != null ?
+                            FittedBox(
+                              child: Text(error!,
+                                  style: ThemeText.quicksand(fontWeight: FontWeight.normal, fontSize: 15, color: Colors.black),
+                                  textAlign: TextAlign.left),
+                            ) :
+                            Text(
+                                "Your username is only used for logging in.\n(No one else will see it)",
+                                textAlign: TextAlign.left,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .subtitle1
+                                    ?.copyWith(color: Colors.black, fontSize: 15, height: 1.5)),
+                          ],
+                        ),
+                        SizedBox(height: 120),
+                          ],
+                        ),
+                      ),
                     ]),
                   ),
                 ),
                 Positioned(
                   bottom: 0,
-                  left: MediaQuery.of(context).size.width * 0.5 - 70,
-                  width: 140,
+                  left: MediaQuery.of(context).size.width * 0.5 - 180,
+                  width: 360,
                   child: new AuthButton(
                     buttonText: "Register",
                     hasText: username!="" && password!="",
@@ -192,7 +190,7 @@ class _RegisterUserState extends State<RegisterUser> {
                                         result.item4 +
                                         ". We gave you the name:",
                                     textAlign: TextAlign.center,
-                                    style: ThemeText.helvetica(fontSize: 15, color: Colors.black),
+                                    style: ThemeText.quicksand(fontSize: 15, color: Colors.black),
                                   ),
                                   content: Container(
                                     padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -202,7 +200,7 @@ class _RegisterUserState extends State<RegisterUser> {
                                       children: <Widget>[
                                         Text(
                                           result.item2,
-                                          style: ThemeText.helvetica(fontSize: 20, color: Colors.black),
+                                          style: ThemeText.quicksand(fontSize: 20, color: Colors.black),
                                         ),
                                         SizedBox(height: 25),
                                         MyOutlinedButton(
@@ -221,7 +219,7 @@ class _RegisterUserState extends State<RegisterUser> {
                                             "Continue",
                                             softWrap: false,
                                             overflow: TextOverflow.ellipsis,
-                                            style: ThemeText.helvetica(
+                                            style: ThemeText.quicksand(
                                                 fontWeight: FontWeight.w500, fontSize: 14, color: Colors.black),
                                           ),
                                         ),
