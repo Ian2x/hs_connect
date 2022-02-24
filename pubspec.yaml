@@ -115,7 +115,6 @@ flutter:
         - asset: assets/fonts/Quicksand/Quicksand-Medium.ttf
           weight: 500
         - asset: assets/fonts/Quicksand/Quicksand-Regular.ttf
-          weight: 400
         - asset: assets/fonts/Quicksand/Quicksand-SemiBold.ttf
           weight: 600
     - family: Roboto
