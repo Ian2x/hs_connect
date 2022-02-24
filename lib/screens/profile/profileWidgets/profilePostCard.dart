@@ -8,7 +8,7 @@ import 'package:hs_connect/screens/profile/profileWidgets/deletePostSheet.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
-import 'package:hs_connect/shared/tools/buildCircle.dart';
+import 'package:hs_connect/shared/widgets/buildGroupCircle.dart';
 
 class ProfilePostCard extends StatefulWidget {
   final Post post;
@@ -143,8 +143,7 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
                     buildGroupCircle(
                         groupImage: group!.image,
                         context: context,
-                        height: 20,
-                        width: 20,
+                        size: 20,
                         backgroundColor: colorScheme.background),
                     SizedBox(width: 5),
                     Text(group!.name, style: Theme.of(context).textTheme.subtitle2?.copyWith

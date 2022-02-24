@@ -14,7 +14,7 @@ import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/polls_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/tools/buildCircle.dart';
+import 'package:hs_connect/shared/widgets/buildGroupCircle.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/reports/reportSheet.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
@@ -184,8 +184,7 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                       SizedBox(width: 10),
                       buildGroupCircle(
                           groupImage: group != null ? group!.image : null,
-                          height: 21,
-                          width: 21,
+                          size: 21,
                           context: context,
                           backgroundColor: colorScheme.surface),
                       SizedBox(width: 5),

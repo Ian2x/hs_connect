@@ -1,18 +1,15 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
 
 Widget buildGroupCircle(
     {required String? groupImage,
-    required double height,
-    required double width,
+    required double size,
     required BuildContext context,
     required Color backgroundColor,
     required}) {
   return Container(
-    height: height,
-    width: width,
+    height: size,
+    width: size,
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(100),
       color: Theme.of(context).colorScheme.surface,
@@ -20,10 +17,10 @@ Widget buildGroupCircle(
     ),
     alignment: Alignment.center,
     child: Container(
-        height: groupImage == null ? 0.6 * min(height, width) : null,
-        width: groupImage == null ? 0.6 * min(height, width) : null,
+        height: groupImage == null ? 0.6 * size : null,
+        width: groupImage == null ? 0.6 * size : null,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(100),
+            borderRadius: groupImage != null ? BorderRadius.circular(100) : null,
             image: DecorationImage(image: ImageStorage().groupImageProvider(groupImage)))),
   );
 }

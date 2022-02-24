@@ -23,7 +23,7 @@ typedef VoidBoolParamFunction = void Function(bool);
 typedef VoidOptionalCommentParamFunction = void Function (Comment?);
 
 
-InputDecoration commentReplyInputDecoration({required VoidFunction onPressed, required bool isReply, required bool isFocused, required BuildContext context, required bool hasText}) {
+InputDecoration commentReplyInputDecoration({required VoidFunction onPressed, required bool isReply, required bool isFocused, required BuildContext context, required bool hasText, required Color activeColor}) {
   final colorScheme = Theme.of(context).colorScheme;
 
 
@@ -47,7 +47,7 @@ InputDecoration commentReplyInputDecoration({required VoidFunction onPressed, re
     suffixIcon: isFocused ? Row(mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.min, children: <Widget>[
       IconButton(
           icon: Icon(Icons.send),
-          color: hasText? colorScheme.secondary : colorScheme.primary,
+          color: hasText? activeColor : colorScheme.primary,
           iconSize: 16,
           padding: EdgeInsets.only(left: 5, right: 15),
           splashColor: Colors.transparent,
@@ -57,7 +57,7 @@ InputDecoration commentReplyInputDecoration({required VoidFunction onPressed, re
   );
 }
 
-InputDecoration messageInputDecoration({required VoidFunction onPressed, required Function setPic, required BuildContext context, required bool hasText, required bool hasImage}) {
+InputDecoration messageInputDecoration({required VoidFunction onPressed, required Function setPic, required BuildContext context, required bool hasText, required bool hasImage, required Color activeColor}) {
 
 
   final colorScheme = Theme.of(context).colorScheme;
@@ -79,10 +79,10 @@ InputDecoration messageInputDecoration({required VoidFunction onPressed, require
         borderRadius: new BorderRadius.circular(25.7),
         borderSide: new BorderSide(width: 3, color: colorScheme.background)),
     suffixIcon: Row(mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.min, children: <Widget>[
-      picPickerButton(setPic: setPic, iconSize: 16, context: context, maxWidth: 1200, maxHeight: 1200, color: hasImage ? colorScheme.secondary : colorScheme.primary),
+      picPickerButton(setPic: setPic, iconSize: 16, context: context, maxWidth: 1200, maxHeight: 1200, color: hasImage ? activeColor : colorScheme.primary),
       IconButton(
           icon: Icon(Icons.send),
-          color: hasText ? colorScheme.secondary : colorScheme.primary,
+          color: hasText ? activeColor : colorScheme.primary,
           iconSize: 16,
           padding: EdgeInsets.only(left: 5, right: 15),
           splashColor: Colors.transparent,

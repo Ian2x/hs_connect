@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/activity/activityPage.dart';
 import 'package:hs_connect/screens/home/home.dart';
-import 'package:hs_connect/screens/home/new/newPost/newPost.dart';
+import 'package:hs_connect/screens/new/newPost/newPost.dart';
 import 'package:hs_connect/screens/profile/profilePage.dart';
 import 'package:hs_connect/services/my_notifications_database.dart';
 import 'package:hs_connect/shared/widgets/thicker_icons.dart';
@@ -53,8 +53,6 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
     final colorScheme = Theme.of(context).colorScheme;
-
-
 
     if (loading || userData == null) return Loading();
 
@@ -136,7 +134,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
               },
               items: <BottomNavigationBarItem>[
                 BottomNavigationBarItem(label: '', icon: Icon(Thicker.home_square, size: 25)),
-                BottomNavigationBarItem(label: '23', icon: Icon(Thicker.notification, size: 25)),
+                BottomNavigationBarItem(label: '', icon: Icon(Thicker.notification, size: 25)),
                 BottomNavigationBarItem(label: '', icon: Icon(Thicker.profile_1, size: 20)),
                 BottomNavigationBarItem(label: '', icon: Icon(Thicker.add_1, size: 25)),
               ],
@@ -144,8 +142,8 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
           ),
         ),
         Positioned(
-            left: MediaQuery.of(context).size.width * 0.375,
-            top: 7,
+            left: MediaQuery.of(context).size.width * 0.375 + 1.5,
+            top: 5.5,
             child: numNotifications != null && numNotifications != 0
                 ? Container(
               height: 20,
@@ -156,9 +154,9 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
               ),
               padding: EdgeInsets.all(1.5),
               child: Container(
-                  padding: EdgeInsets.fromLTRB(2.5, 2, 2, 2.5),
+                  padding: EdgeInsets.fromLTRB(2.5, 2, 2, 2),
                   decoration: BoxDecoration(
-                    color: colorScheme.secondary,
+                    color: userData.domainColor ?? colorScheme.secondary,
                     shape: BoxShape.circle,
                   ),
                   alignment: Alignment.center,

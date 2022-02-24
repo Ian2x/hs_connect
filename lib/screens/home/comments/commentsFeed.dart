@@ -107,7 +107,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
                             currUserData: userData,
                           );
                         } else if (index == 1) {
-                          return Divider(thickness: 5, color: colorScheme.background, height: 10);
+                          return Divider(thickness: 3, color: colorScheme.background, height: 3);
                         } else if (index == comments.length + 2) {
                           return SizedBox(height: 130);
                         } else {
@@ -136,20 +136,25 @@ class _CommentsFeedState extends State<CommentsFeed> {
           bottom: 0,
           right: 0,
           child: Container(
-            padding: EdgeInsets.only(top: bottomGradientThickness),
-            color: widget.group.hexColor!=null ? HexColor(widget.group.hexColor!) : colorScheme.onSurface,
-            child: Container(
-                width: MediaQuery.of(context).size.width,
-                color: colorScheme.background,
-                padding: EdgeInsets.fromLTRB(10, 10, 10, MediaQuery.of(context).padding.bottom>10 ? MediaQuery.of(context).padding.bottom : 10),
-                child: CommentReplyForm(
-                    focusNode: myFocusNode,
-                    currUserRef: userData.userRef,
-                    switchFormBool: switchFormBool,
-                    comment: comment,
-                    isReply: isReply,
-                    post: widget.post)),
-          ),
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                color: colorScheme.surface,
+                boxShadow: [
+                  BoxShadow(
+                    color: colorScheme.background,
+                    offset: Offset(0.0, -1.0), //(x,y)
+                    blurRadius: 5.0,
+                  ),
+                ],
+              ),
+              padding: EdgeInsets.fromLTRB(10, 10, 10, MediaQuery.of(context).padding.bottom>10 ? MediaQuery.of(context).padding.bottom : 10),
+              child: CommentReplyForm(
+                  focusNode: myFocusNode,
+                  currUserRef: userData.userRef,
+                  switchFormBool: switchFormBool,
+                  comment: comment,
+                  isReply: isReply,
+                  post: widget.post)),
         ),
       ],
     );

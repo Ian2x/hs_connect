@@ -55,7 +55,16 @@ class _MessagesFormState extends State<MessagesForm> {
 
     return Container(
       padding: EdgeInsets.fromLTRB(10, 10, 10, MediaQuery.of(context).padding.bottom>10 ? MediaQuery.of(context).padding.bottom : 10),
-      color: colorScheme.background,
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        boxShadow: [
+          BoxShadow(
+            color: colorScheme.background,
+            offset: Offset(0.0, -1.0), //(x,y)
+            blurRadius: 5.0,
+          ),
+        ],
+      ),
       child: Form(
              key: _formKey,
              child: Column(crossAxisAlignment: CrossAxisAlignment.end,
@@ -82,6 +91,7 @@ class _MessagesFormState extends State<MessagesForm> {
                    decoration: messageInputDecoration(
                        context: context,
                        setPic: setPic,
+                       activeColor: userData.domainColor ?? colorScheme.secondary,
                        onPressed: () async {
                          if (_formKey.currentState != null && _formKey.currentState!.validate()) {
                            if (mounted) {

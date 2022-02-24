@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/accessRestriction.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/screens/home/new/newPost/newPoll.dart';
+import 'package:hs_connect/screens/new/newPost/newPoll.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/services/polls_database.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
@@ -11,12 +11,12 @@ import 'package:hs_connect/shared/widgets/animatedSwitch.dart';
 import 'package:hs_connect/shared/widgets/deletableImage.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
-import 'package:hs_connect/shared/widgets/myOutlinedButton.dart';
 import 'package:hs_connect/shared/widgets/picPickerButton.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:validators/validators.dart';
 
+import '../../../shared/tools/hexColor.dart';
 import 'groupSelectionSheet.dart';
 
 const String emptyPollChoiceError = 'Can\'t create a poll with an empty choice';
@@ -121,6 +121,8 @@ class _PostFormState extends State<PostForm> {
       return Loading();
     }
 
+    Color userColor = widget.userData.domainColor != null ? widget.userData.domainColor! : colorScheme.onSurface;
+
     return Stack(children: [
       SingleChildScrollView(
         physics: BouncingScrollPhysics(),
@@ -179,29 +181,8 @@ class _PostFormState extends State<PostForm> {
                         )),
                   ),
                   Spacer(),
-                  MyOutlinedButton(
-                    child: Row(
-                      children: [
-                        Icon(Icons.add, size: 20),
-                        SizedBox(width: 3),
-                        FittedBox(
-                          child: Container(
-                            padding: EdgeInsets.only(bottom: 2),
-                            child: Text("Post",
-                                style: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w600),
-                                maxLines: 1,
-                                softWrap: false,
-                                overflow: TextOverflow.fade),
-                          ),
-                        ),
-                      ],
-                    ),
-                    borderRadius: 25,
-                    thickness: 1.5,
-                    padding: EdgeInsets.fromLTRB(8, 4.5, 13.5, 4.5),
-                    gradient: Gradients.blueRed(),
-                    backgroundColor: colorScheme.surface,
-                    onPressed: () async {
+                  GestureDetector(
+                    onTap: () async {
                       // check header isn't empty
                       if (_title.isEmpty) {
                         if (mounted) {
@@ -266,6 +247,29 @@ class _PostFormState extends State<PostForm> {
                         );
                       }
                     },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: userColor, width: 1.5),
+                        borderRadius: BorderRadius.circular(25)
+                      ),
+                      padding: EdgeInsets.symmetric(vertical: 3, horizontal: 6),
+                      child: Row(
+                        children: [
+                          Icon(Icons.add, size: 20, color: userColor),
+                          SizedBox(width: 2),
+                          FittedBox(
+                            child: Container(
+                              padding: EdgeInsets.only(bottom: 2, right: 5),
+                              child: Text("Post",
+                                  style: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w600, color: userColor),
+                                  maxLines: 1,
+                                  softWrap: false,
+                                  overflow: TextOverflow.fade),
+                            ),
+                          ),
+                        ],
+                      )
+                    )
                   ),
                   SizedBox(width: 10),
                 ],
@@ -293,7 +297,7 @@ class _PostFormState extends State<PostForm> {
                       hintStyle: Theme.of(context)
                           .textTheme
                           .headline6
-                          ?.copyWith(fontSize: 18, color: colorScheme.primaryVariant),
+                          ?.copyWith(fontSize: 18, color: colorScheme.primaryContainer),
                       border: InputBorder.none,
                       hintText: "Title",
                     ),
@@ -429,7 +433,7 @@ class _PostFormState extends State<PostForm> {
                 SizedBox(width: 10),
                 picPickerButton(
                     iconSize: 30,
-                    color: newFile == null ? colorScheme.primary : colorScheme.secondary,
+                    color: newFile == null ? colorScheme.primary : userColor,
                     setPic: ((File? f) {
                       if (mounted) {
                         setState(() {
@@ -485,7 +489,7 @@ class _PostFormState extends State<PostForm> {
                     }
                   },
                   icon: Icon(Icons.assessment,
-                      size: 30, color: poll == null ? colorScheme.primary : colorScheme.secondary),
+                      size: 30, color: poll == null ? colorScheme.primary : userColor),
                 ),
                 IconButton(
                   onPressed: () {
@@ -498,7 +502,7 @@ class _PostFormState extends State<PostForm> {
                     }
                   },
                   icon: Icon(Icons.link_rounded,
-                      size: 30, color: link == null ? colorScheme.primary : colorScheme.secondary),
+                      size: 30, color: link == null ? colorScheme.primary : userColor),
                 ),
                 Spacer(),
                 Text("Mature",
@@ -507,7 +511,7 @@ class _PostFormState extends State<PostForm> {
                         .subtitle1
                         ?.copyWith(color: colorScheme.primary, fontWeight: FontWeight.w500)),
                 SizedBox(width: 10),
-                AnimatedSwitch2(
+                AnimatedSwitchSmall(
                   initialState: isMature,
                   onToggle: () {
                     if (mounted) {

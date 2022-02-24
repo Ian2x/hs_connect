@@ -86,7 +86,7 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
                       .of(context)
                       .textTheme
                       .subtitle1
-                      ?.copyWith(color: colorScheme.primaryVariant),
+                      ?.copyWith(color: colorScheme.primaryContainer),
                 ),
               ],
             ),
@@ -116,7 +116,7 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
                         .of(context)
                         .textTheme
                         .subtitle1
-                        ?.copyWith(color: colorScheme.primaryVariant),
+                        ?.copyWith(color: colorScheme.primaryContainer),
                   ),
                 ],
               ),
@@ -147,7 +147,7 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
                       .of(context)
                       .textTheme
                       .subtitle1
-                      ?.copyWith(color: colorScheme.primaryVariant),
+                      ?.copyWith(color: colorScheme.primaryContainer),
                 ),
               ],
             ),

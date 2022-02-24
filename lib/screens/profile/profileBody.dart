@@ -76,12 +76,13 @@ class _ProfileBodyState extends State<ProfileBody> {
                       textAlign: TextAlign.left),
                 ],
               ),
-              SizedBox(height: 15),
-              Divider(color: colorScheme.background, thickness: 3, height: 0),
-              SizedBox(height: 15),
+
             ],
           ),
         ),
+        SizedBox(height: 15),
+        Divider(color: colorScheme.background, thickness: 3, height: 0),
+        SizedBox(height: 15),
         _userPosts != null && _userPosts!.length != 0
             ? Expanded(
                 child: RefreshIndicator(

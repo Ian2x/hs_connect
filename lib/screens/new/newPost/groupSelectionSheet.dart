@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/accessRestriction.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
+import 'package:provider/provider.dart';
+
+import '../../../models/userData.dart';
 
 class GroupSelectionSheet extends StatefulWidget {
   final List<Group> groups;
@@ -30,6 +33,8 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
 
     final colorScheme = Theme.of(context).colorScheme;
     final double bottomSpace = max(MediaQuery.of(context).padding.bottom, 25);
+    final userData = Provider.of<UserData?>(context);
+    final activeColor = userData?.domainColor ?? colorScheme.secondary;
 
     return Container(
         height: 167 + bottomSpace,
@@ -96,7 +101,7 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
                           Checkbox(
                             value: selectedGroup == widget.groups[index - 1],
                             shape: CircleBorder(),
-                            activeColor: colorScheme.secondary,
+                            activeColor: activeColor,
                             onChanged: (bool? value) {
                               if (value==true) {
                                 if (mounted) {

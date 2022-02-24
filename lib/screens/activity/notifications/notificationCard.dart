@@ -7,7 +7,6 @@ import 'package:hs_connect/models/postLikesManager.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/postView/postPage.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileImage.dart';
-import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
@@ -132,8 +131,6 @@ class _NotificationCardState extends State<NotificationCard> {
           color: colorScheme.surface,
           child: loading ? Loading(backgroundColor: Colors.transparent) : null);
     }
-
-    bool isFeaturedPost = widget.myNotification.myNotificationType == MyNotificationType.featuredPost;
 
     return GestureDetector(
         onTap: () async {

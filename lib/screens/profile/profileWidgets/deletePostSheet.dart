@@ -99,7 +99,7 @@ class _DeletePostSheetState extends State<DeletePostSheet> with TickerProviderSt
                   SizedBox(width: 20),
                   Text(
                     "Delete",
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.primaryVariant),
+                    style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.primaryContainer),
                   ),
                 ],
               ),

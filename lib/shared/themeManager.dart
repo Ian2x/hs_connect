@@ -14,16 +14,16 @@ class ThemeNotifier with ChangeNotifier {
       brightness: Brightness.dark,
       background: Color(0xff262626),
       onSurface: darkThemeOnSurface, //Color(0xffd4d3d3),
-      error: Color(0xFF4d4d4d),
-      primaryVariant: Color(0xffbab9b9),
-      secondaryVariant: Color(0xFF137ef0),
-      secondary: Color(0xFF13a1f0),
+      error: Color(0xff4d4d4d),
+      primaryContainer: Color(0xffbab9b9),
+      secondaryContainer: Color(0xff3f99ee),
+      secondary: Color(0xff2992f4),
       surface: Color(0xff131313),
       primary: Color(0xffa1a1a1),
       onError: Color(0xff353636),
-      onSecondary: Color(0xFFff004d),
-      onPrimary: Color(0xFF000000),
-      onBackground: Color(0xFF000000),
+      onSecondary: Color(0xffff004d),
+      onPrimary: Color(0xff000000),
+      onBackground: Color(0xff000000),
     ),
     primarySwatch: createMaterialColor(Color(0xFFA1A1A1)),
     // from primary color
@@ -38,18 +38,18 @@ class ThemeNotifier with ChangeNotifier {
     // background
     colorScheme: ColorScheme(
       brightness: Brightness.light,
-      background: Color(0xFFf4f4f4), // background grey / light grey
+      background: Color(0xfff4f4f4), // background grey / light grey
       onSurface: lightThemeOnSurface, // black
-      error: Color(0xFFb2b2b2),
-      primaryVariant: Color(0xff60676c), // dark grey
-      secondaryVariant: Color(0xFF137ef0), // darker secondary blue
-      secondary: Color(0xFF13a1f0), // secondary blue
-      surface: Color(0xFFffffff), // white
-      primary: Color(0xFFa1a1a1), // medium grey
+      error: Color(0xffb2b2b2),
+      primaryContainer: Color(0xff60676c), // dark grey
+      secondaryContainer: Color(0xff1186f3), // darker secondary blue
+      secondary: Color(0xff2992f4), // secondary blue
+      surface: Color(0xffffffff), // white
+      primary: Color(0xffa1a1a1), // medium grey
       onError: Color(0xffdbdada), // light medium grey
-      onSecondary: Color(0xFFff004d), // secondary red
-      onPrimary: Color(0xFF000000),
-      onBackground: Color(0xFF000000),
+      onSecondary: Color(0xffff004d), // secondary red
+      onPrimary: Color(0xff000000),
+      onBackground: Color(0xff000000),
     ),
     primarySwatch: createMaterialColor(Color(0xFFA1A1A1)),
     // from primary color

@@ -5,6 +5,7 @@ import 'package:hs_connect/models/postLikesManager.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/comments/commentsFeed.dart';
 import 'package:hs_connect/services/storage/image_storage.dart';
+import 'package:hs_connect/shared/widgets/buildGroupCircle.dart';
 import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
 import 'package:hs_connect/shared/widgets/myDivider.dart';
 import 'package:provider/provider.dart';
@@ -29,12 +30,7 @@ class PostPage extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              height: 20, width: 20,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-              image: DecorationImage(image: ImageStorage().groupImageProvider(group.image))
-            )),
+            buildGroupCircle(groupImage: group.image, size: 27, context: context, backgroundColor: colorScheme.surface),
             SizedBox(width: 8),
             Flexible(child: Text(group.name, overflow: TextOverflow.ellipsis)),
           ],
