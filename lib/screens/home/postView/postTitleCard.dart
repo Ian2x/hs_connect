@@ -193,7 +193,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
                   containerWidth: MediaQuery.of(context).size.width - 2 * leftRightPadding)
               : Container(),
           poll != null ? PollView(poll: poll!, currUserRef: widget.currUserData.userRef, post: widget.post) : Container(),
-          SizedBox(height: 25),
+          SizedBox(height: 17),
           Row(
             children: [
               Text(
@@ -207,7 +207,6 @@ class _PostTitleCardState extends State<PostTitleCard> {
                   currUserRef: widget.currUserData.userRef, post: widget.post, postLikesManager: postLikesManager, currUserColor: widget.currUserData.domainColor,),
             ],
           ),
-          SizedBox(height: 8),
         ],
       ),
     );

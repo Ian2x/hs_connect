@@ -78,6 +78,10 @@ class _CommentsFeedState extends State<CommentsFeed> {
                 return GestureDetector(
                   onVerticalDragDown: (DragDownDetails ddd) {
                     dismissKeyboard(context);
+                    setState(() {
+                      isReply = false;
+                      comment = null;
+                    });
                   },
                   onPanUpdate: (details) {
                     if (details.delta.dx > 15) {

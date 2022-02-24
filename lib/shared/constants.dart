@@ -17,7 +17,7 @@ const topGradientThickness = 2.0;
 const authHintTextColor = Color(0xffdbdada);
 const authPrimaryTextColor = Color(0xFFa1a1a1);
 
-const commentReplyDetailSize = 14.0;
+const commentReplyDetailSize = 12.0;
 const postCardDetailSize = 12.0;
 
 const int maxNumNotifications = 50;

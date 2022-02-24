@@ -140,19 +140,13 @@ class _ReplyCardState extends State<ReplyCard> {
               Spacer(),
               widget.reply.creatorRef==widget.postCreatorRef
                   ? Container(
-                padding: EdgeInsets.only(right: 10, top: 5),
-                child: Container(
-                    decoration: BoxDecoration(
-                        color: replierGroupColor != null ? replierGroupColor : colorScheme.primary, borderRadius: BorderRadius.circular(17)),
-                    child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(17),
-                          color: Theme.of(context).colorScheme.surface,
-                        ),
-                        padding: EdgeInsets.fromLTRB(10, 0, 10, 1),
-                        margin: EdgeInsets.all(1),
-                        child: Text('Creator', style: Theme.of(context).textTheme.subtitle2?.copyWith(color: replierGroupColor != null ? replierGroupColor : colorScheme.primary, fontSize: 12)))),
-              )
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(17),
+                        color: Theme.of(context).colorScheme.surface,
+                      ),
+                      padding: EdgeInsets.fromLTRB(10, 5, 0, 1),
+                      margin: EdgeInsets.all(1),
+                      child: Text('Creator', style: Theme.of(context).textTheme.subtitle2?.copyWith(color: replierGroupColor != null ? replierGroupColor : colorScheme.primary, fontSize: 12)))
                   : Container(),
             ],
           ),

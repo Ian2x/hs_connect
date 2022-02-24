@@ -17,7 +17,7 @@ class LikeDislikeComment extends StatefulWidget {
 }
 
 class _LikeDislikeCommentState extends State<LikeDislikeComment> {
-  static const double iconSize = 21;
+  static const double iconSize = 20;
   bool likeStatus = false;
   bool dislikeStatus = false;
   int likeCount = 0;
@@ -55,7 +55,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
             return IconButton(
               iconSize: iconSize,
               splashColor: Colors.transparent,
-              padding: EdgeInsets.all(3),
+              padding: EdgeInsets.all(5),
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
               icon: Icon(ThickArrow.angle_up_icon, color: activeColor),
@@ -74,7 +74,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
             return IconButton(
               iconSize: iconSize,
               splashColor: Colors.transparent,
-              padding: EdgeInsets.all(3),
+              padding: EdgeInsets.all(5),
               constraints: BoxConstraints(),
               color: colorScheme.primaryVariant,
               icon: Icon(ThickArrow.angle_up_icon),
@@ -93,18 +93,18 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
             );
           }
         }(),
-        SizedBox(width: 8),
+        SizedBox(width: 2),
         Text(
           (likeCount - dislikeCount).toString(),
           style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 0.8 * iconSize)
         ),
-        SizedBox(width: 8),
+        SizedBox(width: 2),
             () {
           if (dislikeStatus == true) {
             return IconButton(
               iconSize: iconSize,
               splashColor: Colors.transparent,
-              padding: EdgeInsets.all(3),
+              padding: EdgeInsets.all(5),
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
               icon: Icon(ThickArrow.angle_down_icon, color: activeColor),
@@ -123,7 +123,7 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
             return IconButton(
               iconSize: iconSize,
               splashColor: Colors.transparent,
-              padding: EdgeInsets.all(3),
+              padding: EdgeInsets.all(5),
               constraints: BoxConstraints(),
               color: colorScheme.primaryVariant,
               icon: Icon(ThickArrow.angle_down_icon),

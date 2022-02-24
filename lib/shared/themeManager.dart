@@ -58,24 +58,24 @@ class ThemeNotifier with ChangeNotifier {
   );
 
   static const myTextTheme = TextTheme(
-    headline1: TextStyle(fontFamily: "HelveticaNeue", fontSize: 93, fontWeight: FontWeight.w300, letterSpacing: -1.5),
-    headline2: TextStyle(fontFamily: "HelveticaNeue", fontSize: 58, fontWeight: FontWeight.w300, letterSpacing: -0.5),
-    headline3: TextStyle(fontFamily: "HelveticaNeue", fontSize: 47, fontWeight: FontWeight.w400),
-    headline4: TextStyle(fontFamily: "HelveticaNeue", fontSize: 33, fontWeight: FontWeight.w400, letterSpacing: 0.25),
-    headline5: TextStyle(fontFamily: "HelveticaNeue", fontSize: 23, fontWeight: FontWeight.w400),
-    headline6: TextStyle(fontFamily: "HelveticaNeue", fontSize: 19, fontWeight: FontWeight.w500, letterSpacing: 0.15),
+    headline1: TextStyle(fontFamily: "HelveticalNeue", fontSize: 93, fontWeight: FontWeight.w300, letterSpacing: -1.5),
+    headline2: TextStyle(fontFamily: "HelveticalNeue", fontSize: 58, fontWeight: FontWeight.w300, letterSpacing: -0.5),
+    headline3: TextStyle(fontFamily: "HelveticalNeue", fontSize: 47, fontWeight: FontWeight.w400),
+    headline4: TextStyle(fontFamily: "HelveticalNeue", fontSize: 33, fontWeight: FontWeight.w400, letterSpacing: 0.25),
+    headline5: TextStyle(fontFamily: "HelveticalNeue", fontSize: 23, fontWeight: FontWeight.w400),
+    headline6: TextStyle(fontFamily: "HelveticalNeue", fontSize: 19, fontWeight: FontWeight.w500, letterSpacing: 0.15),
     subtitle1: TextStyle(
-      fontFamily: "HelveticaNeue",
+      fontFamily: "HelveticalNeue",
       fontSize: 16,
       fontWeight: FontWeight.w400,
       letterSpacing: 0.15,
     ),
-    subtitle2: TextStyle(fontFamily: "HelveticaNeue", fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 0.1),
-    bodyText1: TextStyle(fontFamily: "HelveticaNeue", fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.5),
-    bodyText2: TextStyle(fontFamily: "HelveticaNeue", fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.25),
-    button: TextStyle(fontFamily: "HelveticaNeue", fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 1.25),
-    caption: TextStyle(fontFamily: "HelveticaNeue", fontSize: 12, fontWeight: FontWeight.w400, letterSpacing: 0.4),
-    overline: TextStyle(fontFamily: "HelveticaNeue", fontSize: 10, fontWeight: FontWeight.w400, letterSpacing: 1.5),
+    subtitle2: TextStyle(fontFamily: "HelveticalNeue", fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 0.1),
+    bodyText1: TextStyle(fontFamily: "HelveticalNeue", fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.5),
+    bodyText2: TextStyle(fontFamily: "HelveticalNeue", fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.25),
+    button: TextStyle(fontFamily: "HelveticalNeue", fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 1.25),
+    caption: TextStyle(fontFamily: "HelveticalNeue", fontSize: 12, fontWeight: FontWeight.w400, letterSpacing: 0.4),
+    overline: TextStyle(fontFamily: "HelveticalNeue", fontSize: 10, fontWeight: FontWeight.w400, letterSpacing: 1.5),
   );
 
   late ThemeData _themeData;

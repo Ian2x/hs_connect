@@ -104,7 +104,7 @@ class MyNotification {
       case MyNotificationType.fromMe:
         return '';
       case MyNotificationType.featuredPost:
-        return '';
+        return 'Trending: ';
     }
   }
   String printB(String sourceUserName, String postGroupName) {
@@ -156,21 +156,21 @@ class MyNotification {
       case MyNotificationType.replyToComment:
         return ' replied to your comment: ' + extraData!;
       case MyNotificationType.replyVotes:
-        if (extraData! == '1') return ' got its first like.';
+        if (extraData! == '1') return ' got its first like. ❤️';
         if (extraData! == '10') return ' got 10 likes! Check it out.';
         if (extraData! == '20') return ' got 20 likes! Rare.';
         if (extraData! == '50') return ' got 50 likes! Epic.';
         if (extraData! == '100') return ' got 100 likes! Legendary.';
         return ' <Error: Unexpected data in MyNotificationType.replyVotes.extraData>';
       case MyNotificationType.commentVotes:
-        if (extraData! == '1') return ' got its first like.';
+        if (extraData! == '1') return ' got its first like. 😀';
         if (extraData! == '10') return ' got 10 likes! Check it out.';
         if (extraData! == '20') return ' got 20 likes! Rare.';
         if (extraData! == '50') return ' got 50 likes! Epic.';
         if (extraData! == '100') return ' got 100 likes! Legendary.';
         return ' <Error: Unexpected data in MyNotificationType.replyVotes.extraData>';
       case MyNotificationType.postVotes:
-        if (extraData! == '1') return ' got its first like.';
+        if (extraData! == '1') return ' got its first like. 👍';
         if (extraData! == '10') return ' got 10 likes! Check it out.';
         if (extraData! == '20') return ' got 20 likes! Rare.';
         if (extraData! == '50') return ' got 50 likes! Epic.';

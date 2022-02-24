@@ -7,7 +7,7 @@ import 'package:hs_connect/shared/inputDecorations.dart';
 
 class HomeAppBar extends SliverPersistentHeaderDelegate{
   static const tabBarHeight = 40.0;
-  static const expandedHeight = 66.0;
+  static const expandedHeight = 69;
 
   static const tabBarPadding = EdgeInsets.symmetric(horizontal: 25);
 
@@ -25,6 +25,7 @@ class HomeAppBar extends SliverPersistentHeaderDelegate{
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     // shrink offset is 0 when fully open, 200 when closed
     final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
 
     //final safeAreaHeight = MediaQuery.of(context).padding.top;
@@ -50,18 +51,18 @@ class HomeAppBar extends SliverPersistentHeaderDelegate{
                           style: Theme.of(context)
                               .textTheme
                               .headline4
-                              ?.copyWith(fontSize: 18, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic)),
+                              ?.copyWith(fontSize: 18, fontWeight: FontWeight.w600, fontFamily: "Shippori")),
                     ),
                     TabBar(
                       controller: tabController,
                       padding: EdgeInsets.zero,
                       indicator: BoxDecoration(
-                        border: Border(bottom: BorderSide(width: 2.5, color: userData.domainColor!=null ? userData.domainColor! : colorScheme.surface), //colorScheme.surface,)
+                        border: Border(bottom: BorderSide(width: 2.5, color: userData.domainColor!=null ? userData.domainColor! : colorScheme.onSurface),
                         )
                       ),
                       indicatorPadding: tabBarPadding,
                       indicatorWeight: 0.001,
-                      labelStyle: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.w500, fontSize: 15, color: colorScheme.onSurface),
+                      labelStyle: textTheme.subtitle2?.copyWith(fontWeight: FontWeight.w500, fontSize: 15, color: colorScheme.onSurface),
                       unselectedLabelStyle: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.w500, fontSize: 15, color: colorScheme.primary),
                       tabs: <Widget>[
                         Tab(
@@ -82,6 +83,7 @@ class HomeAppBar extends SliverPersistentHeaderDelegate{
                             child: Container(
                               padding: tabBarPadding,
                               child: Text(C.Public,
+                                  textAlign: TextAlign.center,
                                   maxLines: 1,
                                   softWrap: false,
                                   overflow: TextOverflow.ellipsis),

@@ -168,7 +168,10 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
       child: Card(
           //if border then ShapeDecoration
           color: colorScheme.surface,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            side: BorderSide(color: widget.post.isFeatured ? (group!.hexColor != null ? HexColor(group!.hexColor!) : colorScheme.primary) : Colors.transparent, width: 1),
+            borderRadius: BorderRadius.circular(12),
+          ),
           margin: EdgeInsets.fromLTRB(leftRightMargin, 4, leftRightMargin, 4),
           elevation: 0,
           child: Container(
@@ -202,35 +205,23 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                       Spacer(),
                       widget.post.mature && !widget.post.isFeatured
                           ? Container(
-                              padding: EdgeInsets.only(right: 10, top: 0),
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      color: colorScheme.primary, borderRadius: BorderRadius.circular(17)),
-                                  child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(17),
-                                        color: Theme.of(context).colorScheme.surface,
-                                      ),
-                                      padding: EdgeInsets.fromLTRB(14, 2, 14, 3),
-                                      margin: EdgeInsets.all(1.5),
-                                      child: Text('Mature', style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary, fontSize: 12)))),
-                            )
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(17),
+                                color: Theme.of(context).colorScheme.surface,
+                              ),
+                              padding: EdgeInsets.fromLTRB(14, 2, 14, 3),
+                              margin: EdgeInsets.all(1.5),
+                              child: Text('Mature', style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary, fontSize: 12)))
                           : Container(),
                       widget.post.isFeatured
                           ? Container(
-                              padding: EdgeInsets.only(right: 10, top: 0),
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      gradient: Gradients.blueRed(), borderRadius: BorderRadius.circular(17)),
-                                  child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(17),
-                                        color: Theme.of(context).colorScheme.surface,
-                                      ),
-                                      padding: EdgeInsets.fromLTRB(14, 2, 14, 3),
-                                      margin: EdgeInsets.all(1.5),
-                                      child: Text('Featured', style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 12)))),
-                            )
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(17),
+                                color: Theme.of(context).colorScheme.surface,
+                              ),
+                              padding: EdgeInsets.fromLTRB(14, 2, 14, 3),
+                              margin: EdgeInsets.all(1.5),
+                              child: Text('Trending', style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 12, color: widget.currUser.domainColor != null ? widget.currUser.domainColor : colorScheme.primary)))
                           : Container(),
                     ],
                   ),

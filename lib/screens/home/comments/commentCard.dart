@@ -143,19 +143,13 @@ class _CommentCardState extends State<CommentCard> {
               Spacer(),
               widget.comment.creatorRef==widget.postCreatorRef
                   ? Container(
-                padding: EdgeInsets.only(right: 10, top: 5),
-                child: Container(
-                    decoration: BoxDecoration(
-                        color: creatorGroupColor != null ? creatorGroupColor : colorScheme.primary, borderRadius: BorderRadius.circular(17)),
-                    child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(17),
-                          color: Theme.of(context).colorScheme.surface,
-                        ),
-                        padding: EdgeInsets.fromLTRB(10, 0, 10, 1),
-                        margin: EdgeInsets.all(1),
-                        child: Text('Creator', style: Theme.of(context).textTheme.subtitle2?.copyWith(color: creatorGroupColor != null ? creatorGroupColor : colorScheme.primary, fontSize: 12)))),
-              )
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(17),
+                        color: Theme.of(context).colorScheme.surface,
+                      ),
+                      padding: EdgeInsets.fromLTRB(10, 5, 0, 1),
+                      margin: EdgeInsets.all(1),
+                      child: Text('Creator', style: Theme.of(context).textTheme.subtitle2?.copyWith(color: creatorGroupColor != null ? creatorGroupColor : colorScheme.primary, fontSize: 12)))
                   : Container(),
             ],
           ),
@@ -206,7 +200,7 @@ class _CommentCardState extends State<CommentCard> {
                         alignment: Alignment.center),
                     child: Text("Reply",
                         style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                            color: colorScheme.onSurface, fontWeight: FontWeight.w500, fontSize: commentReplyDetailSize)),
+                            color: colorScheme.onSurface, fontWeight: FontWeight.w500, fontSize: commentReplyDetailSize+1.5)),
                     onPressed: () {
                       widget.focusKeyboard();
                       widget.switchFormBool(widget.comment);

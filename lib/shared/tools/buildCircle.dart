@@ -9,7 +9,7 @@ Widget buildGroupCircle(
     required double width,
     required BuildContext context,
     required Color backgroundColor,
-    required }) {
+    required}) {
   return Container(
     height: height,
     width: width,
@@ -20,8 +20,10 @@ Widget buildGroupCircle(
     ),
     alignment: Alignment.center,
     child: Container(
-        height: groupImage==null ? 0.6 * min(height, width) : null,
-        width: groupImage==null ? 0.6 * min(height, width) : null,
-        decoration: BoxDecoration(image: DecorationImage(image: ImageStorage().groupImageProvider(groupImage)))),
+        height: groupImage == null ? 0.6 * min(height, width) : null,
+        width: groupImage == null ? 0.6 * min(height, width) : null,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(100),
+            image: DecorationImage(image: ImageStorage().groupImageProvider(groupImage)))),
   );
 }

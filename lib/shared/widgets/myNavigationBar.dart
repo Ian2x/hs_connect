@@ -61,7 +61,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
     return Stack(
       children: [
         Container(
-          color: userData.domainColor != null ? userData.domainColor! : colorScheme.surface, //colorScheme.surface,
+          color: userData.domainColor != null ? userData.domainColor! : colorScheme.onSurface,
           padding: EdgeInsets.only(top: bottomGradientThickness),
           child: Container(
             color: colorScheme.surface,

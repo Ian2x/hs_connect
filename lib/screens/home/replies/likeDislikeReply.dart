@@ -21,7 +21,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
   bool dislikeStatus = false;
   int likeCount = 0;
   int dislikeCount = 0;
-  static const double iconSize = 21;
+  static const double iconSize = 20;
 
   @override
   void initState() {
@@ -58,7 +58,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
             return IconButton(
               iconSize: iconSize,
               splashColor: Colors.transparent,
-              padding: EdgeInsets.all(3),
+              padding: EdgeInsets.all(5),
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
               icon: Icon(ThickArrow.angle_up_icon, color: activeColor),
@@ -77,7 +77,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
             return IconButton(
               iconSize: iconSize,
               splashColor: Colors.transparent,
-              padding: EdgeInsets.all(3),
+              padding: EdgeInsets.all(5),
               constraints: BoxConstraints(),
               color: colorScheme.primaryVariant,
               icon: Icon(ThickArrow.angle_up_icon),
@@ -96,18 +96,18 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
             );
           }
         }(),
-        SizedBox(width: 8),
+        SizedBox(width: 2),
         Text(
           (likeCount - dislikeCount).toString(),
           style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 0.8 * iconSize)
         ),
-        SizedBox(width: 8),
+        SizedBox(width: 2),
             () {
           if (dislikeStatus == true) {
             return IconButton(
               iconSize: iconSize,
               splashColor: Colors.transparent,
-              padding: EdgeInsets.all(3),
+              padding: EdgeInsets.all(5),
               constraints: BoxConstraints(),
               color: colorScheme.secondary,
               icon: Icon(ThickArrow.angle_down_icon, color: activeColor),
@@ -126,7 +126,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
             return IconButton(
               iconSize: iconSize,
               splashColor: Colors.transparent,
-              padding: EdgeInsets.all(3),
+              padding: EdgeInsets.all(5),
               constraints: BoxConstraints(),
               color: colorScheme.primaryVariant,
               icon: Icon(ThickArrow.angle_down_icon),
