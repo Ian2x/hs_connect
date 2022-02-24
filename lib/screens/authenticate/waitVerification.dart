@@ -52,25 +52,26 @@ class _WaitVerificationState extends State<WaitVerification> {
           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             SizedBox(height: 30),
             Center(
-                child: Column(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                SizedBox(
-                  height: 80,
-                  child: Image.asset('assets/Splash2.png'),
+                SizedBox(height: 60),
+                Container(
+                  padding:EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                    'Check your school email',
+                    style: ThemeText.quicksand(
+                        fontWeight: FontWeight.w700, fontSize: 26, color: Colors.black),
+                  ),
                 ),
                 SizedBox(height: 20),
-                Text(
-                  'We sent you a link',
-                  style: ThemeText.quicksand(fontWeight: FontWeight.w700, fontSize: 24, color: Colors.black),
-                ),
-                SizedBox(height: 15),
                 Center(
-                  child: Text("Click the link in your school email.\nWait a bit to be redirected afterwards.",
+                  child: Text("Click the link in your inbox.\nWait a bit to be redirected.",
                       textAlign: TextAlign.center,
                       style: Theme.of(context)
                           .textTheme
                           .subtitle1
-                          ?.copyWith(color: Colors.black, height: 1.5)),
+                          ?.copyWith(color: Colors.black, height: 1.5, fontSize: 18)),
                 ),
                 SizedBox(height: 85),
                 Container(
