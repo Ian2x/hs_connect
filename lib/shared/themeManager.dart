@@ -58,24 +58,24 @@ class ThemeNotifier with ChangeNotifier {
   );
 
   static const myTextTheme = TextTheme(
-    headline1: TextStyle(fontFamily: "Quicksand", fontSize: 93, fontWeight: FontWeight.w300, letterSpacing: -1.5),
-    headline2: TextStyle(fontFamily: "Quicksand", fontSize: 58, fontWeight: FontWeight.w300, letterSpacing: -0.5),
-    headline3: TextStyle(fontFamily: "Quicksand", fontSize: 47, fontWeight: FontWeight.w400),
-    headline4: TextStyle(fontFamily: "Quicksand", fontSize: 33, fontWeight: FontWeight.w400, letterSpacing: 0.25),
-    headline5: TextStyle(fontFamily: "Quicksand", fontSize: 23, fontWeight: FontWeight.w400),
-    headline6: TextStyle(fontFamily: "Quicksand", fontSize: 19, fontWeight: FontWeight.w500, letterSpacing: 0.15),
+    headline1: TextStyle(fontFamily: "Quicksand", fontSize: 93, fontWeight: FontWeight.w400, letterSpacing: -1.5),
+    headline2: TextStyle(fontFamily: "Quicksand", fontSize: 58, fontWeight: FontWeight.w400, letterSpacing: -0.5),
+    headline3: TextStyle(fontFamily: "Quicksand", fontSize: 47, fontWeight: FontWeight.w500),
+    headline4: TextStyle(fontFamily: "Quicksand", fontSize: 33, fontWeight: FontWeight.w500, letterSpacing: 0.25),
+    headline5: TextStyle(fontFamily: "Quicksand", fontSize: 23, fontWeight: FontWeight.w500),
+    headline6: TextStyle(fontFamily: "Quicksand", fontSize: 19, fontWeight: FontWeight.w600, letterSpacing: 0.15),
     subtitle1: TextStyle(
       fontFamily: "Quicksand",
       fontSize: 16,
-      fontWeight: FontWeight.w400,
+      fontWeight: FontWeight.w500,
       letterSpacing: 0.15,
     ),
-    subtitle2: TextStyle(fontFamily: "Quicksand", fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 0.1),
-    bodyText1: TextStyle(fontFamily: "Quicksand", fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.5),
-    bodyText2: TextStyle(fontFamily: "Quicksand", fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.25),
-    button: TextStyle(fontFamily: "Quicksand", fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 1.25),
-    caption: TextStyle(fontFamily: "Quicksand", fontSize: 12, fontWeight: FontWeight.w400, letterSpacing: 0.4),
-    overline: TextStyle(fontFamily: "HelveticalNeue", fontSize: 10, fontWeight: FontWeight.w400, letterSpacing: 1.5),
+    subtitle2: TextStyle(fontFamily: "Quicksand", fontSize: 14, fontWeight: FontWeight.w600, letterSpacing: 0.1),
+    bodyText1: TextStyle(fontFamily: "Quicksand", fontSize: 16, fontWeight: FontWeight.w500, letterSpacing: 0.5),
+    bodyText2: TextStyle(fontFamily: "Quicksand", fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 0.25),
+    button: TextStyle(fontFamily: "Quicksand", fontSize: 14, fontWeight: FontWeight.w600, letterSpacing: 1.25),
+    caption: TextStyle(fontFamily: "Quicksand", fontSize: 12, fontWeight: FontWeight.w500, letterSpacing: 0.4),
+    overline: TextStyle(fontFamily: "Quicksand", fontSize: 10, fontWeight: FontWeight.w500, letterSpacing: 1.5),
   );
 
   late ThemeData _themeData;

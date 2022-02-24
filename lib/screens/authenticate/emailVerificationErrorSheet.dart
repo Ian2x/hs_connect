@@ -89,7 +89,7 @@ class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorShee
                         fit: BoxFit.fitWidth,
                         child: Text(
                           deleteEmail,
-                          style: ThemeText.helvetica(fontWeight: FontWeight.w600, fontSize: 16, color: Colors.black
+                          style: ThemeText.quicksand(fontWeight: FontWeight.w600, fontSize: 16, color: Colors.black
                           ),
                         ),
                       ),
@@ -117,7 +117,7 @@ class _EmailVerificationErrorSheetState extends State<EmailVerificationErrorShee
                         fit: BoxFit.fitWidth,
                         child: Text(
                           "Start Over",
-                          style: ThemeText.helvetica(fontWeight: FontWeight.w600, fontSize: 16, color: Colors.black
+                          style: ThemeText.quicksand(fontWeight: FontWeight.w600, fontSize: 16, color: Colors.black
                           ),
                         ),
                       ),

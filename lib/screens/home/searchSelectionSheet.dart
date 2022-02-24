@@ -30,7 +30,7 @@ class _SearchSelectionSheetState extends State<SearchSelectionSheet> {
     final double bottomSpace = max(MediaQuery.of(context).padding.bottom, 25);
 
     return Container(
-      height: 169 + bottomSpace,
+      height: 176 + bottomSpace,
         padding: EdgeInsets.fromLTRB(25, 25, 25, bottomSpace),
         child: Column(
           mainAxisSize: MainAxisSize.min,

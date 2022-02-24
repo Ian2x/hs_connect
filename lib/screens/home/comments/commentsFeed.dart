@@ -60,6 +60,8 @@ class _CommentsFeedState extends State<CommentsFeed> {
     CommentsDatabaseService _comments =
         CommentsDatabaseService(currUserRef: userData.userRef, postRef: widget.post.postRef);
 
+    Color? groupColor = widget.group.hexColor!=null ? HexColor(widget.group.hexColor!) : null;
+
     return Stack(
       children: [
         StreamBuilder(
@@ -120,6 +122,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
                             comment: comments[index - 2],
                             currUserData: userData,
                             postCreatorRef: widget.post.creatorRef,
+                            groupColor: groupColor,
                           );
                         }
                       },

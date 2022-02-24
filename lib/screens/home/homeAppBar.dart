@@ -7,7 +7,7 @@ import 'package:hs_connect/shared/inputDecorations.dart';
 
 class HomeAppBar extends SliverPersistentHeaderDelegate{
   static const tabBarHeight = 40.0;
-  static const expandedHeight = 69;
+  static const expandedHeight = 69.0;
 
   static const tabBarPadding = EdgeInsets.symmetric(horizontal: 25);
 
@@ -62,8 +62,8 @@ class HomeAppBar extends SliverPersistentHeaderDelegate{
                       ),
                       indicatorPadding: tabBarPadding,
                       indicatorWeight: 0.001,
-                      labelStyle: textTheme.subtitle2?.copyWith(fontWeight: FontWeight.w500, fontSize: 15, color: colorScheme.onSurface),
-                      unselectedLabelStyle: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.w500, fontSize: 15, color: colorScheme.primary),
+                      labelStyle: textTheme.subtitle2?.copyWith(fontWeight: FontWeight.bold, fontSize: 15, color: colorScheme.onSurface),
+                      unselectedLabelStyle: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.bold, fontSize: 15, color: colorScheme.primary),
                       tabs: <Widget>[
                         Tab(
                             iconMargin: EdgeInsets.zero,

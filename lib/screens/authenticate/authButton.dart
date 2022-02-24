@@ -26,7 +26,7 @@ class AuthButton extends StatelessWidget {
           buttonText,
           softWrap: false,
           overflow: TextOverflow.ellipsis,
-          style: ThemeText.helvetica(fontWeight: FontWeight.w500, color: hasText ? Colors.black : Colors.black54),
+          style: ThemeText.quicksand(fontWeight: FontWeight.w600, color: hasText ? Colors.black : Colors.black54),
         ),
       ),
     );

@@ -139,7 +139,7 @@ class _PostFormState extends State<PostForm> {
                         style: Theme.of(context)
                             .textTheme
                             .subtitle1
-                            ?.copyWith(color: colorScheme.onSurface, fontWeight: FontWeight.w500)),
+                            ?.copyWith(color: colorScheme.onSurface, fontWeight: FontWeight.w600)),
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -188,7 +188,7 @@ class _PostFormState extends State<PostForm> {
                           child: Container(
                             padding: EdgeInsets.only(bottom: 2),
                             child: Text("Post",
-                                style: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w500),
+                                style: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w600),
                                 maxLines: 1,
                                 softWrap: false,
                                 overflow: TextOverflow.fade),

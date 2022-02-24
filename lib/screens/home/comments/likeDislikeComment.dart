@@ -57,7 +57,6 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               splashColor: Colors.transparent,
               padding: EdgeInsets.all(5),
               constraints: BoxConstraints(),
-              color: colorScheme.secondary,
               icon: Icon(ThickArrow.angle_up_icon, color: activeColor),
               onPressed: () {
                 HapticFeedback.heavyImpact();
@@ -76,7 +75,6 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               splashColor: Colors.transparent,
               padding: EdgeInsets.all(5),
               constraints: BoxConstraints(),
-              color: colorScheme.primaryVariant,
               icon: Icon(ThickArrow.angle_up_icon),
               onPressed: () {
                 HapticFeedback.heavyImpact();
@@ -106,7 +104,6 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               splashColor: Colors.transparent,
               padding: EdgeInsets.all(5),
               constraints: BoxConstraints(),
-              color: colorScheme.secondary,
               icon: Icon(ThickArrow.angle_down_icon, color: activeColor),
               onPressed: () {
                 HapticFeedback.heavyImpact();
@@ -125,7 +122,6 @@ class _LikeDislikeCommentState extends State<LikeDislikeComment> {
               splashColor: Colors.transparent,
               padding: EdgeInsets.all(5),
               constraints: BoxConstraints(),
-              color: colorScheme.primaryVariant,
               icon: Icon(ThickArrow.angle_down_icon),
               onPressed: () {
                 HapticFeedback.heavyImpact();

@@ -65,7 +65,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                               SizedBox(height: 15),
                               Text(
                                 'Sign Up',
-                                style: ThemeText.helvetica(
+                                style: ThemeText.quicksand(
                                     fontWeight: FontWeight.w700, fontSize: 28, color: Colors.black),
                               ),
                               SizedBox(height: 20),

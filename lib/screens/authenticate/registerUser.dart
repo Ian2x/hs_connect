@@ -65,13 +65,13 @@ class _RegisterUserState extends State<RegisterUser> {
                           SizedBox(height: 15),
                           Text(
                             'Make an Account',
-                            style: ThemeText.helvetica(fontWeight: FontWeight.w700, fontSize: 28, color: Colors.black),
+                            style: ThemeText.quicksand(fontWeight: FontWeight.w700, fontSize: 28, color: Colors.black),
                           ),
                           SizedBox(height: 20),
                           error != null ?
                           FittedBox(
                             child: Text(error!,
-                                style: ThemeText.helvetica(fontWeight: FontWeight.normal, fontSize: 15, color: Colors.black),
+                                style: ThemeText.quicksand(fontWeight: FontWeight.normal, fontSize: 15, color: Colors.black),
                                 textAlign: TextAlign.center),
                           ) :
                           Text(
@@ -192,7 +192,7 @@ class _RegisterUserState extends State<RegisterUser> {
                                         result.item4 +
                                         ". We gave you the name:",
                                     textAlign: TextAlign.center,
-                                    style: ThemeText.helvetica(fontSize: 15, color: Colors.black),
+                                    style: ThemeText.quicksand(fontSize: 15, color: Colors.black),
                                   ),
                                   content: Container(
                                     padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -202,7 +202,7 @@ class _RegisterUserState extends State<RegisterUser> {
                                       children: <Widget>[
                                         Text(
                                           result.item2,
-                                          style: ThemeText.helvetica(fontSize: 20, color: Colors.black),
+                                          style: ThemeText.quicksand(fontSize: 20, color: Colors.black),
                                         ),
                                         SizedBox(height: 25),
                                         MyOutlinedButton(
@@ -221,7 +221,7 @@ class _RegisterUserState extends State<RegisterUser> {
                                             "Continue",
                                             softWrap: false,
                                             overflow: TextOverflow.ellipsis,
-                                            style: ThemeText.helvetica(
+                                            style: ThemeText.quicksand(
                                                 fontWeight: FontWeight.w500, fontSize: 14, color: Colors.black),
                                           ),
                                         ),

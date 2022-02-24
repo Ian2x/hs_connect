@@ -80,7 +80,7 @@ class Gradients {
 }
 
 class ThemeText {
-  static TextStyle helvetica({Color? color, double? fontSize, double? height,
+  static TextStyle quicksand({Color? color, double? fontSize, double? height,
     TextDecoration? decoration1, FontWeight? fontWeight}) {
     return TextStyle(
         color: color,
@@ -88,7 +88,7 @@ class ThemeText {
         height: height,
         decoration: decoration1,
         fontWeight: fontWeight,
-        fontFamily: "HelveticaNeue"
+        fontFamily: "Quicksand"
     );
   }
 }

@@ -169,7 +169,7 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
           //if border then ShapeDecoration
           color: colorScheme.surface,
           shape: RoundedRectangleBorder(
-            side: BorderSide(color: widget.post.isFeatured ? (group!.hexColor != null ? HexColor(group!.hexColor!) : colorScheme.primary) : Colors.transparent, width: 1),
+            side: BorderSide(color: widget.post.isFeatured ? (widget.currUser.domainColor!=null ? widget.currUser.domainColor! : colorScheme.primary) : Colors.transparent, width: 1),
             borderRadius: BorderRadius.circular(12),
           ),
           margin: EdgeInsets.fromLTRB(leftRightMargin, 4, leftRightMargin, 4),
@@ -231,7 +231,7 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                     child: Text(widget.post.title,
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                               fontSize: 16,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w600,
                             ),
                         overflow: TextOverflow.ellipsis, // default is .clip
                         maxLines: 3),
