@@ -312,20 +312,6 @@ class _PostFormState extends State<PostForm> {
                       }
                     },
                   ),
-                  newFile != null
-                      ? Semantics(
-                          label: 'new_post_pic_image',
-                          child: DeletableImage(
-                              image: Image.file(File(newFile!.path), fit: BoxFit.contain),
-                              onDelete: () {
-                                if (mounted) {
-                                  setState(() => newFile = null);
-                                }
-                              },
-                              maxHeight: 400,
-                              containerWidth: 400),
-                        )
-                      : Container(),
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
@@ -335,7 +321,7 @@ class _PostFormState extends State<PostForm> {
                     },
                     child: Container(
                       constraints: BoxConstraints(
-                        minHeight: newFile == null ? 492 : 242,
+                        minHeight: newFile == null ? 492 : 100,
                       ),
                       child: Column(
                         children: [
@@ -354,7 +340,6 @@ class _PostFormState extends State<PostForm> {
                             onChanged: (val) => setState(() => _text = val),
                             focusNode: optionalTextFocusNode,
                           ),
-                          SizedBox(height: 30),
                           poll != null ? poll! : Container(),
                           link != null
                               ? Container(
@@ -413,6 +398,20 @@ class _PostFormState extends State<PostForm> {
                       ),
                     ),
                   ),
+                  newFile != null
+                      ? Semantics(
+                    label: 'new_post_pic_image',
+                    child: DeletableImage(
+                        image: Image.file(File(newFile!.path), fit: BoxFit.contain),
+                        onDelete: () {
+                          if (mounted) {
+                            setState(() => newFile = null);
+                          }
+                        },
+                        maxHeight: 350,
+                        containerWidth: 350),
+                  )
+                      : Container(),
                 ]),
               ), //
             ],
