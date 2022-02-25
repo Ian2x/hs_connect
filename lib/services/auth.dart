@@ -35,8 +35,8 @@ class AuthService {
       // create a document for the home with the uid
       final _userDataDatabaseService =
           UserDataDatabaseService(currUserRef: FirebaseFirestore.instance.collection(C.userData).doc(user.uid));
-      Tuple3<String, int, String> data = await _userDataDatabaseService.initUserData(domain, username, domainEmail);
-      return Tuple4<User?, String, int, String>(user, data.item1, data.item2, data.item3);
+      await _userDataDatabaseService.initUserData(domain, username, domainEmail);
+      return user;
     } catch (e) {
       return e;
     }

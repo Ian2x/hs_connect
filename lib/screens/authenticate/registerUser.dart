@@ -5,9 +5,8 @@ import 'package:hs_connect/services/auth.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
-import 'package:hs_connect/shared/widgets/myOutlinedButton.dart';
-import 'package:tuple/tuple.dart';
 
+import '../../shared/myStorageManager.dart';
 import 'authButton.dart';
 
 class RegisterUser extends StatefulWidget {
@@ -170,66 +169,15 @@ class _RegisterUserState extends State<RegisterUser> {
                           }
                           dynamic result = await _auth.registerWithUsernameAndPassword(
                               username, password, widget.domain, widget.domainEmail);
-                          if (result is Tuple4<User?, String, int, String>) {
+                          if (result is User?) {
+                            MyStorageManager.saveData('showSignUp', true);
                             if (mounted) {
                               setState(() => loading = false);
                             }
-                            showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (BuildContext context) {
-                                return new AlertDialog(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(20))),
-                                  backgroundColor: Colors.white,
-                                  contentPadding: EdgeInsets.symmetric(vertical:10),
-                                  title: Text(
-                                    "You're user number " +
-                                        result.item3.toString() +
-                                        " from " +
-                                        result.item4 +
-                                        ". We gave you the name:",
-                                    textAlign: TextAlign.center,
-                                    style: ThemeText.quicksand(fontSize: 15, color: Colors.black),
-                                  ),
-                                  content: Container(
-                                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: <Widget>[
-                                        Text(
-                                          result.item2,
-                                          style: ThemeText.quicksand(fontSize: 20, color: Colors.black),
-                                        ),
-                                        SizedBox(height: 25),
-                                        MyOutlinedButton(
-                                          padding: EdgeInsets.symmetric(vertical: 6, horizontal: 20),
-                                          onPressed: () {
-                                            Navigator.of(context).pushAndRemoveUntil(
-                                                MaterialPageRoute(
-                                                    builder: (context) => Wrapper()),
-                                                (Route<dynamic> route) => false);
-                                          },
-                                          gradient: Gradients.blueRed(
-                                              begin: Alignment.topCenter, end: Alignment.bottomCenter),
-                                          borderRadius: 30,
-                                          backgroundColor: Colors.white,
-                                          child: Text(
-                                            "Continue",
-                                            softWrap: false,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: ThemeText.quicksand(
-                                                fontWeight: FontWeight.w500, fontSize: 14, color: Colors.black),
-                                          ),
-                                        ),
-                                        SizedBox(height: 10)
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (context) => Wrapper()),
+                                    (Route<dynamic> route) => false);
                           } else if (result is FirebaseAuthException && result.code == 'email-already-in-use') {
                             if (mounted) {
                               setState(() {
