@@ -60,7 +60,7 @@ class _PollViewState extends State<PollView> {
           )
         ),
         padding: EdgeInsets.all(10),
-        margin: EdgeInsets.only(top: 20),
+        margin: EdgeInsets.only(top: 10),
         child: ListView.builder(
           itemCount: widget.poll.choices.length,
           shrinkWrap: true,
