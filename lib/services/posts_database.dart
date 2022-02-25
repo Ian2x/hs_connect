@@ -116,6 +116,13 @@ class PostsDatabaseService {
           final comments = commentsData.docs.map((commentData) => commentFromQuerySnapshot(commentData));
           Future.wait([for (Comment comment in comments) _delCommentHelper(comment, postRef)]);
         });
+        // delete post's notifications in parallel
+        final delNotifications = Future(() async {
+          final notificationsData =
+              await FirebaseFirestore.instance.collection(C.myNotifications).where(C.parentPostRef, isEqualTo: postRef).get();
+          final notificationsRefs = notificationsData.docs.map((notificationData) => notificationData.reference);
+          Future.wait([for (DocumentReference ref in notificationsRefs) ref.delete()]);
+        });
 
         var delPoll;
         // delete post's poll (if applicable)
@@ -125,6 +132,7 @@ class PostsDatabaseService {
 
         await delComments;
         await delReplies;
+        await delNotifications;
         await delPoll;
         await delPost;
         // delete image
