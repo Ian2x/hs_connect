@@ -90,15 +90,15 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
 
     if (group == null) {
       return Container(
-          height: 124,
-          padding: EdgeInsets.fromLTRB(10, 0, 5, 10),
+          height: 102,
+          padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
           decoration: ShapeDecoration(
             color: colorScheme.surface,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
                 side: BorderSide(
                   color: colorScheme.background,
-                  width: 3,
+                  width: 1.5,
                 )),
           ));
     }

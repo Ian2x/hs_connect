@@ -125,9 +125,9 @@ class _NotificationCardState extends State<NotificationCard> {
 
     if (userData == null || sourceUserName == null || postGroupName == null) {
       return Container(
-          margin: EdgeInsets.only(top: 2),
+          margin: EdgeInsets.only(top: 2.5),
           padding: EdgeInsets.fromLTRB(14, 13, 14, 15),
-          height: 55.2,
+          height: 60,
           color: colorScheme.surface,
           child: loading ? Loading(backgroundColor: Colors.transparent) : null);
     }

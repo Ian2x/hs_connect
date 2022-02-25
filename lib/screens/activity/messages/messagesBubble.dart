@@ -29,11 +29,11 @@ class MessagesBubble extends StatelessWidget {
     }
     return Bubble(
       color: isSentMessage ? colorScheme.secondary : colorScheme.primary.withOpacity(0.3),
-      margin: BubbleEdges.fromLTRB(isSentMessage ? 50 : 10, 5, isSentMessage ? 10: 50, 5),
+      margin: BubbleEdges.fromLTRB(isSentMessage ? 50 : 10, 3, isSentMessage ? 10: 50, 3),
       alignment: isSentMessage ? Alignment.centerRight : Alignment.centerLeft,
       radius: Radius.circular(11),
       child: Container(
-          padding: EdgeInsets.fromLTRB(4, 0, 4, 1),
+          padding: EdgeInsets.fromLTRB(4.5, 0, 4, 1.5),
           child: Text(
             message.text,
             style: textTheme.bodyText2?.copyWith

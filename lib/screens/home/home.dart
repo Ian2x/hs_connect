@@ -53,16 +53,63 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       }
       scrollController.jumpTo(0);
     });
+    getShowSignUp();
     super.initState();
   }
 
+  void getShowSignUp() async {
+    dynamic showSignUp = await MyStorageManager.readData('showSignUp');
+    if (showSignUp == true) {
+      WidgetsBinding.instance?.addPostFrameCallback((_) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            final textTheme = Theme.of(context).textTheme;
+            final colorScheme = Theme.of(context).colorScheme;
+            String domain = widget.userData.fullDomainName ?? widget.userData.domain;
+            return AlertDialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+              contentPadding: EdgeInsets.fromLTRB(20, 0, 20, 30),
+              backgroundColor: colorScheme.surface,
+              titlePadding: EdgeInsets.fromLTRB(20, 30, 20, 0),
+              title: Text(
+                "You're user number " +
+                    widget.userData.fundamentalName.replaceAll(
+                        RegExp(widget.userData.domain.replaceAll(RegExp(r'(\.com|\.org|\.info|\.edu|\.net)'), '')),
+                        "") +
+                    " from " +
+                    domain +
+                    ". We gave you the name:",
+                textAlign: TextAlign.center,
+                style: textTheme.headline6?.copyWith(fontSize: 18),
+              ),
+              content: Container(
+                width: 100,
+                height: 50,
+                padding: EdgeInsets.fromLTRB(10, 15, 10, 0),
+                alignment: Alignment.topCenter,
+                child: Text(
+                  widget.userData.fundamentalName,
+                  style: textTheme.headline4?.copyWith(fontSize: 24, color: widget.userData.domainColor),
+                ),
+              ),
+            );
+          },
+        );
+      });
+      MyStorageManager.deleteData('showSignUp');
+    }
+  }
+
   void saveTokenToDatabaseHelper(String token) async {
-    widget.userData.userRef.update({C.tokens: FieldValue.arrayUnion([token])});
+    widget.userData.userRef.update({
+      C.tokens: FieldValue.arrayUnion([token])
+    });
   }
 
   void saveTokenToDatabase() async {
     final token = await FirebaseMessaging.instance.getToken();
-    if (token!=null) {
+    if (token != null) {
       saveTokenToDatabaseHelper(token);
     }
     FirebaseMessaging.instance.onTokenRefresh.listen(saveTokenToDatabaseHelper);
@@ -71,7 +118,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void getSearchByTrending() async {
     final data = await MyStorageManager.readData('searchByTrending');
     if (mounted) {
-      if (data==false) {
+      if (data == false) {
         setState(() => searchByTrending = false);
       } else {
         setState(() => searchByTrending = true);
@@ -81,7 +128,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   void subscribeToDomain() async {
     NotificationSettings settings = await FirebaseMessaging.instance.getNotificationSettings();
-    if (settings.authorizationStatus==AuthorizationStatus.authorized) {
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       await FirebaseMessaging.instance.subscribeToTopic(widget.userData.domain.substring(1));
     }
   }
@@ -100,7 +147,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   Future openMessagePost(RemoteMessage message) async {
     Post post =
-    postFromSnapshot(await FirebaseFirestore.instance.collection(C.posts).doc(message.data[C.postId]).get());
+        postFromSnapshot(await FirebaseFirestore.instance.collection(C.posts).doc(message.data[C.postId]).get());
     final data = await waitConcurrently(groupFromSnapshot(await post.groupRef.get()),
         userDataFromSnapshot(await post.creatorRef.get(), post.creatorRef));
     Group? group = data.item1;
@@ -110,23 +157,24 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           context,
           MaterialPageRoute(
               builder: (context) => PostPage(
-                      post: post,
-                      group: group,
-                      creatorData: creatorData,
-                      postLikesManager: PostLikesManager(
-                          likeStatus: post.likes.contains(widget.userData.userRef),
-                          dislikeStatus: post.dislikes.contains(widget.userData.userRef),
-                          likeCount: post.likes.length,
-                          dislikeCount: post.dislikes.length,
-                          onLike: () {},
-                          onUnLike: () {},
-                          onDislike: () {},
-                          onUnDislike: () {}))));
+                  post: post,
+                  group: group,
+                  creatorData: creatorData,
+                  postLikesManager: PostLikesManager(
+                      likeStatus: post.likes.contains(widget.userData.userRef),
+                      dislikeStatus: post.dislikes.contains(widget.userData.userRef),
+                      likeCount: post.likes.length,
+                      dislikeCount: post.dislikes.length,
+                      onLike: () {},
+                      onUnLike: () {},
+                      onDislike: () {},
+                      onUnDislike: () {}))));
     }
   }
 
   void _handleMessage(RemoteMessage message) async {
-    if (message.data[C.type] == C.featuredPost) { // not really gonna be using this model much anymore
+    if (message.data[C.type] == C.featuredPost) {
+      // not really gonna be using this model much anymore
       openMessagePost(message);
     } else if (message.data[C.type] == C.contentNotification) {
       if (message.data[C.postId] == 'fake') {
@@ -138,7 +186,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       final otherUserRef = FirebaseFirestore.instance.collection(C.userData).doc(message.data[C.otherUserId]);
       final otherUser = await userDataFromSnapshot(await otherUserRef.get(), otherUserRef);
       Navigator.push(
-        context,
+          context,
           MaterialPageRoute(
               builder: (context) => MessagesPage(
                     currUserRef: widget.userData.userRef,
@@ -146,8 +194,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     onUpdateLastMessage: () {},
                     onUpdateLastViewed: () {},
                     otherUserFundName: otherUser.fundamentalName,
-                  ))
-      );
+                  )));
     }
   }
 
@@ -165,8 +212,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     if (widget.userData.launchDate != null && widget.userData.launchDate!.compareTo(Timestamp.now()) > 0) {
       return LaunchCountdown(userData: widget.userData);
     }
-
-
 
     return Scaffold(
       backgroundColor: colorScheme.background,
@@ -193,16 +238,16 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             body: TabBarView(
               children: [
                 DomainFeed(
-                    currUser: widget.userData,
-                    isDomain: isDomain,
-                    searchByTrending: searchByTrending,
-                    key: ValueKey<bool>(searchByTrending),
+                  currUser: widget.userData,
+                  isDomain: isDomain,
+                  searchByTrending: searchByTrending,
+                  key: ValueKey<bool>(searchByTrending),
                 ),
                 PublicFeed(
-                    currUser: widget.userData,
-                    isDomain: isDomain,
-                    searchByTrending: searchByTrending,
-                    key: ValueKey<bool>(!searchByTrending),
+                  currUser: widget.userData,
+                  isDomain: isDomain,
+                  searchByTrending: searchByTrending,
+                  key: ValueKey<bool>(!searchByTrending),
                 ),
               ],
               controller: tabController,

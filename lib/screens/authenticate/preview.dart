@@ -21,7 +21,7 @@ class PreviewPage extends StatelessWidget {
       body: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-
+          color: Colors.white,
           child: Column(
             children: [
               SizedBox(height: 180),
@@ -68,43 +68,40 @@ class PreviewPage extends StatelessWidget {
                 },
               ),
               SizedBox(height: 90),
-              Positioned(
-                bottom:0,
-                child: RichText(
-                    maxLines: 3,
-                    text: TextSpan(style: textTheme.caption?.copyWith(color: Colors.black), children: [
-                      TextSpan(text: "By using Convo you agree to Convo's "),
-                      TextSpan(
-                          text: "Terms\nof Service",
-                          style: textTheme.caption?.copyWith(color: Color(0xFF13a1f0), fontWeight: FontWeight.w600),
-                          recognizer: new TapGestureRecognizer()
-                            ..onTap = () async {
-                              if (await canLaunch('https://www.getconvo.app/terms')) {
-                                await launch('https://www.getconvo.app/terms');
-                              }
-                            }),
-                      TextSpan(text: ", "),
-                      TextSpan(
-                          text: "Content Policy",
-                          style: textTheme.caption?.copyWith(color: Color(0xFF13a1f0), fontWeight: FontWeight.w600),
-                          recognizer: new TapGestureRecognizer()
-                            ..onTap = () async {
-                              if (await canLaunch('https://www.getconvo.app/content')) {
-                                await launch('https://www.getconvo.app/content');
-                              }
-                            }),
-                      TextSpan(text: ", and "),
-                      TextSpan(
-                          text: "Privacy Policy",
-                          style: textTheme.caption?.copyWith(color: Color(0xFF13a1f0), fontWeight: FontWeight.w600),
-                          recognizer: new TapGestureRecognizer()
-                            ..onTap = () async {
-                              if (await canLaunch('https://www.getconvo.app/privacy')) {
-                                await launch('https://www.getconvo.app/privacy');
-                              }
-                            })
-                    ])),
-              )
+              RichText(
+                  maxLines: 3,
+                  text: TextSpan(style: textTheme.caption?.copyWith(color: Colors.black), children: [
+                    TextSpan(text: "By using Convo you agree to Convo's "),
+                    TextSpan(
+                        text: "Terms\nof Service",
+                        style: textTheme.caption?.copyWith(color: Color(0xFF13a1f0), fontWeight: FontWeight.w600),
+                        recognizer: new TapGestureRecognizer()
+                          ..onTap = () async {
+                            if (await canLaunch('https://www.getconvo.app/terms')) {
+                              await launch('https://www.getconvo.app/terms');
+                            }
+                          }),
+                    TextSpan(text: ", "),
+                    TextSpan(
+                        text: "Content Policy",
+                        style: textTheme.caption?.copyWith(color: Color(0xFF13a1f0), fontWeight: FontWeight.w600),
+                        recognizer: new TapGestureRecognizer()
+                          ..onTap = () async {
+                            if (await canLaunch('https://www.getconvo.app/content')) {
+                              await launch('https://www.getconvo.app/content');
+                            }
+                          }),
+                    TextSpan(text: ", and "),
+                    TextSpan(
+                        text: "Privacy Policy",
+                        style: textTheme.caption?.copyWith(color: Color(0xFF13a1f0), fontWeight: FontWeight.w600),
+                        recognizer: new TapGestureRecognizer()
+                          ..onTap = () async {
+                            if (await canLaunch('https://www.getconvo.app/privacy')) {
+                              await launch('https://www.getconvo.app/privacy');
+                            }
+                          })
+                  ]))
             ],
           )),
     );

@@ -260,7 +260,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                         TextButton(
                           child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 6),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(25),
                               border: Border.all(width: 1, color: _feedbackText!="" ? colorScheme.onSurface : colorScheme.primary)

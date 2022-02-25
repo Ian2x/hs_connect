@@ -32,7 +32,7 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<PostCard> {
-  static const leftRightMargin = 10.0;
+  static const leftRightMargin = 8.0;
 
   @override
   bool get wantKeepAlive => true;

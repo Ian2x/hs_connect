@@ -17,7 +17,7 @@ class UserDataDatabaseService {
   // collection reference
   static final CollectionReference userDataCollection = FirebaseFirestore.instance.collection(C.userData);
 
-  Future<Tuple3<String, int, String>> initUserData(String domain, String username, String domainEmail, {String? overrideCounty, String? overrideState, String? overrideCountry}) async {
+  Future initUserData(String domain, String username, String domainEmail, {String? overrideCounty, String? overrideState, String? overrideCountry}) async {
     String domainLC = domain.toLowerCase();
     final GroupsDatabaseService _groupDatabaseService = GroupsDatabaseService(currUserRef: currUserRef);
 
@@ -66,7 +66,7 @@ class UserDataDatabaseService {
     });
     // join domain group
     await joinGroup(groupRef: domainGroupRef);
-    return Tuple3(fundamentalName, fundamentalNumber, domainLC);
+    return;
   }
 
   Future<void> updateProfile(

@@ -243,7 +243,7 @@ class _MyLinkPreviewState extends State<MyLinkPreview> with SingleTickerProvider
     return Container(
       padding: EdgeInsets.fromLTRB(10, 0, 10, withBottomPadding ? 10 : 3),
       child: Text(
-        description + "idk some more text to boost this length to two lines",
+        description,
         maxLines: 3,
         overflow: TextOverflow.ellipsis,
         style: widget.metadataTextStyle,

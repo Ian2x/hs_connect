@@ -144,28 +144,31 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
         Positioned(
             left: MediaQuery.of(context).size.width * 0.375 + 1.5,
             top: 5.5,
-            child: numNotifications != null && numNotifications != 0
-                ? Container(
-              height: 20,
-              width: 20,
-              decoration: BoxDecoration(
-                color: colorScheme.surface,
-                shape: BoxShape.circle,
-              ),
-              padding: EdgeInsets.all(1.5),
-              child: Container(
-                  padding: EdgeInsets.fromLTRB(2.5, 2, 2, 2),
-                  decoration: BoxDecoration(
-                    color: userData.domainColor ?? colorScheme.secondary,
-                    shape: BoxShape.circle,
-                  ),
-                  alignment: Alignment.center,
-                  child: FittedBox(
-                    child: Text(numNotifications.toString(),
-                        style: Theme.of(context).textTheme.subtitle2?.copyWith(color: Colors.white)),
-                  )),
+            child: IgnorePointer(
+              child: numNotifications != null && numNotifications != 0
+                  ? Container(
+                height: 20,
+                width: 20,
+                decoration: BoxDecoration(
+                  color: colorScheme.surface,
+                  shape: BoxShape.circle,
+                ),
+                padding: EdgeInsets.all(1.5),
+                child: Container(
+                    padding: EdgeInsets.fromLTRB(2.5, 2, 2, 2),
+                    decoration: BoxDecoration(
+                      color: userData.domainColor ?? colorScheme.secondary,
+                      shape: BoxShape.circle,
+                    ),
+                    alignment: Alignment.center,
+                    child: FittedBox(
+                      child: Text(numNotifications.toString(),
+                          style: Theme.of(context).textTheme.subtitle2?.copyWith(color: Colors.white)),
+                    )),
+              )
+                  : Container(),
             )
-                : Container())
+        )
       ],
     );
   }
