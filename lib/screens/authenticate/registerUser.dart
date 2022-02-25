@@ -56,7 +56,7 @@ class _RegisterUserState extends State<RegisterUser> {
                   child: SingleChildScrollView(
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                       Padding(
-                        padding: EdgeInsets.fromLTRB(20,0,0,0),
+                        padding: EdgeInsets.fromLTRB(20,0,20,0),
                         child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -154,7 +154,7 @@ class _RegisterUserState extends State<RegisterUser> {
                     buttonText: "Register",
                     hasText: username!="" && password!="",
                     onPressed: () async {
-                      dismissKeyboard(context);
+                      if (username!="" && password!=""){
                       if (_formKey.currentState != null && _formKey.currentState!.validate()) {
                         if (username.length < 6 || password.length < 6) {
                           if (mounted) {
@@ -255,6 +255,7 @@ class _RegisterUserState extends State<RegisterUser> {
                             }
                           }
                         }
+                      }
                       }
                     },
                   ),

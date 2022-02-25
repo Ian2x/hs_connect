@@ -136,13 +136,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                       buttonText: "Register",
                       hasText: email!="",
                       onPressed: () async {
-                        if (!termsAccepted) {
-                          if (mounted) {
-                            setState(() => error = termsError);
-                          }
-                          return;
-                        }
-                        dismissKeyboard(context);
+                        if (email!= ""){
                         if (_formKey.currentState!.validate()) {
                           if (mounted) {
                             setState(() => loading = true);
@@ -170,6 +164,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                                 loading = false;
                               });
                             }
+                           }
                           }
                         }
                       }),
