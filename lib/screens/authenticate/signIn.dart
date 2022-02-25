@@ -70,7 +70,7 @@ class _SignInState extends State<SignIn> {
                               child: Column(
                                 children: [
                                   TextFormField(
-                                      autofocus:true,
+                                      focusNode:myFocusNode,
                                       autocorrect:false,
                                       style: Theme.of(context).textTheme.headline6?.copyWith(color: authPrimaryTextColor),
                                       maxLines: null,
