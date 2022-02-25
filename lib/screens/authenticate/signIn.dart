@@ -5,7 +5,6 @@ import 'package:hs_connect/services/auth.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/themeManager.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
-import 'package:hs_connect/shared/widgets/checkboxFormField.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
 
@@ -70,7 +69,6 @@ class _SignInState extends State<SignIn> {
                               child: Column(
                                 children: [
                                   TextFormField(
-                                      focusNode:myFocusNode,
                                       autocorrect:false,
                                       style: Theme.of(context).textTheme.headline6?.copyWith(color: authPrimaryTextColor),
                                       maxLines: null,

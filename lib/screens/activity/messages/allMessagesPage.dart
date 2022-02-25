@@ -86,7 +86,6 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
 
     // sorted by latest first
     UMUDcache.sort((UMUD a, UMUD b) => b.UM!.lastMessage.compareTo(a.UM!.lastMessage));
-
     return ListView.builder(
         itemCount: UMUDcache.length,
         physics: BouncingScrollPhysics(),
@@ -104,8 +103,8 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
             UMUDcache[index].UM!.lastViewed = Timestamp.now();
           };
           return GestureDetector(
-            onTap: () {
-              Navigator.push(
+            onTap: () async {
+              final _ = await Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => MessagesPage(
@@ -115,6 +114,11 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                             onUpdateLastMessage: updateLastMessage,
                             onUpdateLastViewed: updateLastViewed,
                           )));
+              if (mounted) {
+                setState(() {
+                  UMUDcache[index].UM!.lastViewed = Timestamp.now();
+                });
+              }
             },
             child: Stack(
               alignment: AlignmentDirectional.centerStart,
@@ -156,10 +160,12 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                             left: 6,
                             bottom: index == UMUDcache.length - 1 ? 2.5 : 0),
                         decoration: BoxDecoration(
-                          color: colorScheme.secondary,
+                          color: (UMUDcache[index].UM!.lastViewed == null ||
+                              UMUDcache[index].UM!.lastViewed!.compareTo(UMUDcache[index].UM!.lastMessage) < 0)
+                              ? colorScheme.secondary : Colors.green,
                           shape: BoxShape.circle,
                         ),
-                      )
+                )
                     : Container()
               ],
             ),
