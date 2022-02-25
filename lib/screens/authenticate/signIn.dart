@@ -36,8 +36,25 @@ class _SignInState extends State<SignIn> {
   String authError = "Invalid username and password";
   String termsError = "Must read and agree to policies/terms";
 
+  FocusNode myFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    myFocusNode.requestFocus();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    myFocusNode.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+
 
     return loading
         ? Scaffold(
@@ -70,7 +87,7 @@ class _SignInState extends State<SignIn> {
                               child: Column(
                                 children: [
                                   TextFormField(
-                                      autofocus:true,
+                                      focusNode:myFocusNode,
                                       autocorrect:false,
                                       style: Theme.of(context).textTheme.headline6?.copyWith(color: authPrimaryTextColor),
                                       maxLines: null,

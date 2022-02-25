@@ -31,17 +31,21 @@ class _RegisterEmailState extends State<RegisterEmail> {
 
   String termsError = "Must read and agree to policies/terms";
 
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+
 
     return loading
         ? Scaffold(
             backgroundColor: Colors.white, body: Loading(backgroundColor: Colors.white, spinColor: Color(0xff60676c)))
         : Scaffold(
+            resizeToAvoidBottomInset : false,
             backgroundColor: Colors.white,
             appBar: AppBar(
-              leading: myBackButtonIcon(context, overrideColor: ThemeNotifier.lightThemeOnSurface),
+              leading: myBackButtonIcon(context, overrideColor: ThemeNotifier.lightThemeOnSurface,
+              ),
               elevation: 0,
               backgroundColor: Colors.white,
             ),
@@ -91,7 +95,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                             child: Column(
                               children: [
                                 TextField(
-                                  autofocus:true,
+                                  autofocus: true,
                                   autocorrect: false,
                                   style: textTheme.headline6?.copyWith(color: authPrimaryTextColor,
                                     fontSize: 25),
