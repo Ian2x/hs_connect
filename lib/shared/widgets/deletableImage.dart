@@ -22,7 +22,6 @@ class DeletableImage extends StatelessWidget {
         .addListener(ImageStreamListener((ImageInfo info, bool _) {
       completer.complete(info.image);}));
 
-    final sizing = min(containerWidth, maxHeight) * 0.07 + 15;
     return FutureBuilder(
       future: completer.future,
       initialData: null,
@@ -41,7 +40,7 @@ class DeletableImage extends StatelessWidget {
           final scale = min(containerWidth / origWidth, maxHeight / origHeight);
           final newWidth = origWidth * scale;
           final newHeight = origHeight * scale;
-          final sizing = min<double>(newWidth, newHeight) * 0.07 + 15;
+          final sizing = min<double>(newWidth, newHeight) * 0.07 + 20;
           return Container(
             width: newWidth,
             height: newHeight,
@@ -63,27 +62,6 @@ class DeletableImage extends StatelessWidget {
         }
       },
     );
-    return Container(
-      width: containerWidth,
-      constraints: BoxConstraints(maxHeight: maxHeight),
-      child: Stack(
-        children: [
-          Container(
-            width: containerWidth,
-            constraints: BoxConstraints(maxHeight: maxHeight),
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(image: image.image)
-              ),
-            ),
-          ),
-          Positioned(
-              right: sizing/3,
-              top: sizing/3,
-              child:DeleteImageButton(onDelete: onDelete, buttonSize: sizing))
-        ],
-      ),
-    );
   }
 }
 
@@ -100,7 +78,7 @@ class DeleteImageButton extends StatelessWidget {
             width: buttonSize,
             height: buttonSize,
             decoration: new BoxDecoration(
-              color: colorScheme.onSurface.withOpacity(0.35),
+              color: colorScheme.onSurface.withOpacity(0.5),
               shape: BoxShape.circle,
             ),
           child: Icon(Icons.close, color: Colors.white, size: buttonSize*0.8)),

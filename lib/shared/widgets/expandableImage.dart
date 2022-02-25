@@ -80,7 +80,7 @@ class _ExpandableImageState extends State<ExpandableImage> {
             fit: BoxFit.contain,
             fadeInDuration: Duration(milliseconds: 1500),
             fadeInCurve: Curves.easeInExpo,
-            placeholder: (context, url) => Container(height: 300, width: widget.containerWidth, color: Colors.black, child: Loading()),
+            placeholder: (context, url) => Container(height: 300, width: widget.containerWidth, color: Colors.black, child: Loading(backgroundColor: Colors.black,)),
           )
         ),
       ),

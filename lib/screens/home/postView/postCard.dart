@@ -255,8 +255,8 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                       ? ExpandableImage(
                           imageURL: widget.post.mediaURL!,
                           containerWidth: MediaQuery.of(context).size.width - 2 * leftRightMargin,
-                          maxHeight: 300,
-                          loadingHeight: 300,
+                          maxHeight: 400,
+                          loadingHeight: 400,
                           margin: EdgeInsets.only(top: 10))
                       : Container(),
                   poll != null
