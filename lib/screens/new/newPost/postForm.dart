@@ -274,7 +274,7 @@ class _PostFormState extends State<PostForm> {
                   SizedBox(width: 10),
                 ],
               ),
-              Divider(height: 4, indent: 0, thickness: .5, color: Theme.of(context).colorScheme.onError),
+              Divider(height: 4, indent: 0, thickness: 2, color: Theme.of(context).colorScheme.onError),
               Container(
                 //TextInput Container
                 constraints: BoxConstraints(

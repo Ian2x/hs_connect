@@ -4,6 +4,9 @@ import 'package:hs_connect/screens/authenticate/registerUser.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'dart:async';
 
+import '../../shared/themeManager.dart';
+import '../../shared/widgets/myBackButtonIcon.dart';
+
 class WaitVerification extends StatefulWidget {
   final domainEmail;
 
@@ -42,81 +45,54 @@ class _WaitVerificationState extends State<WaitVerification> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+        resizeToAvoidBottomInset : false,
         backgroundColor: Colors.white,
         appBar: AppBar(
+          leading: myBackButtonIcon(context, overrideColor: ThemeNotifier.lightThemeOnSurface,
+          ),
           elevation: 0,
           backgroundColor: Colors.white,
-          automaticallyImplyLeading: false,
         ),
-        body: Stack(children: [
-          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            SizedBox(height: 30),
-            Center(
+        body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 60),
-                Container(
-                  padding:EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(
-                    'Check your school email',
-                    style: ThemeText.quicksand(
-                        fontWeight: FontWeight.w700, fontSize: 26, color: Colors.black),
-                  ),
+                Text(
+                  'Click the link in your \nschool email',
+                  style: ThemeText.quicksand(
+                      fontWeight: FontWeight.w700, fontSize: 26, color: Colors.black),
                 ),
                 SizedBox(height: 20),
-                Center(
-                  child: Text("Click the link in your inbox.\nWait a bit to be redirected.",
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context)
-                          .textTheme
-                          .subtitle1
-                          ?.copyWith(color: Colors.black, height: 1.5, fontSize: 18)),
-                ),
+                Text("Make sure to check your spam folder.",
+                  style: Theme.of(context).textTheme.subtitle1
+                        ?.copyWith(color: Colors.black, height: 1.5, fontSize: 18)),
                 SizedBox(height: 85),
                 Container(
-                  height: 100,
-                  width: 300,
+                  margin: const EdgeInsets.all(0),
+                  padding: const EdgeInsets.symmetric(horizontal: 15,vertical:30),
                   decoration: BoxDecoration(
-                    gradient: Gradients.blueRed(begin: Alignment.topCenter, end: Alignment.bottomCenter),
-                    borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.black, width: 2),
+                      borderRadius: BorderRadius.circular(15),
+
                   ),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(18.5),
-                      color: Colors.white,
+                  child: Text(
+                    "Email is only for verification. It'll never be linked to your account.",
+                    style: ThemeText.quicksand(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 17,
+                      color: Colors.black,
+                      height: 1.5,
                     ),
-                    margin: EdgeInsets.all(1.5),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Your email is for verification only. It'll never be linked to your account.",
-                          style: ThemeText.quicksand(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14.5,
-                            color: Colors.black,
-                            height: 1.5,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
                 SizedBox(height: 190),
-                Center(
-                  child: Text("Make sure to check your spam/junk folder.",
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context)
-                          .textTheme
-                          .subtitle1
-                          ?.copyWith(color: Colors.black, height: 1.5)),
-                ),
               ],
-            )),
-          ]),
+            ),
+          ),
         ]));
   }
 

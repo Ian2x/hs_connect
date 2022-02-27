@@ -59,12 +59,12 @@ class _RegisterUserState extends State<RegisterUser> {
                         child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                        SizedBox(height: 15),
+                        SizedBox(height: 30),
                         Text(
                           'Make an Account',
                           style: ThemeText.quicksand(fontWeight: FontWeight.w700, fontSize: 28, color: Colors.black),
                         ),
-                        SizedBox(height: 35),
+                        SizedBox(height: 15),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
