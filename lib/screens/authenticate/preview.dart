@@ -46,7 +46,7 @@ class PreviewPage extends StatelessWidget {
               ),
               SizedBox(height: 100),
               ActionChip(
-                padding: EdgeInsets.fromLTRB(50, 15, 50, 15),
+                padding: EdgeInsets.fromLTRB(60, 15, 60, 15),
                 backgroundColor: Colors.black,
                 label: Text(
                   'Sign up',
@@ -68,7 +68,7 @@ class PreviewPage extends StatelessWidget {
                       builder: (context) => SignIn()));
                 },
               ),
-              SizedBox(height: 90),
+              Spacer(),
               RichText(
                   maxLines: 3,
                   text: TextSpan(style: textTheme.caption?.copyWith(color: Colors.black), children: [
@@ -102,7 +102,8 @@ class PreviewPage extends StatelessWidget {
                               await launch('https://www.getconvo.app/privacy');
                             }
                           })
-                  ]))
+                  ])),
+              SizedBox(height:5),
             ],
           )),
     );
