@@ -119,7 +119,7 @@ class _ProfileBodyState extends State<ProfileBody> {
                 height: 90,
                 child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Text(
-                    "You have no posts",
+                    "You have no posts \n Only you can see these",
                     style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.normal),
                     textAlign: TextAlign.center,
                   ),

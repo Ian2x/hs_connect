@@ -103,6 +103,7 @@ class _RegisterPasswordState extends State<RegisterPassword> {
                 buttonText: "Next",
                 hasText: password.length >= 6,
                 onPressed: () async {
+                if (password.length >= 6){
                   if (mounted) {
                     setState(() => loading = true);
                   }
@@ -123,7 +124,8 @@ class _RegisterPasswordState extends State<RegisterPassword> {
                       setState(() {
                         error = result.toString();
                         loading = false;
-                      });
+                        });
+                      }
                     }
                   }
                 }),
