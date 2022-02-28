@@ -244,7 +244,7 @@ class _PostFormState extends State<PostForm> {
                           mature: isMature,
                           onValue: handleValue,
                           onError: handleError,
-                        );w
+                        );
                       }
                     },
                     child: Container(
@@ -256,14 +256,14 @@ class _PostFormState extends State<PostForm> {
                       padding: EdgeInsets.symmetric(vertical: 1.5, horizontal: 6),
                       child: Row(
                         children: [
-                          Icon(Icons.add, size: 20, color: userColor),
+                          Icon(Icons.add, size: 20, color: _title != '' ? colorScheme.surface : userColor),
                           SizedBox(width: 2),
                           FittedBox(
                             child: Container(
                               padding: EdgeInsets.only(bottom: 2, right: 5),
                               child: Text("Post",
                                   style: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w600,
-                                      color: _title != '' ? colorScheme.onSurface : userColor),
+                                      color: _title != '' ? colorScheme.surface : userColor),
                                   maxLines: 1,
                                   softWrap: false,
                                   overflow: TextOverflow.fade),

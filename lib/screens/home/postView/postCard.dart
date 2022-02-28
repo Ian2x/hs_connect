@@ -63,7 +63,7 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
     fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.post.creatorRef, noDomainData: true);
     if (mounted) {
       setState(() {
-        username = fetchUserData != null ? fetchUserData!.displayedName : null;
+        username = fetchUserData != null ? fetchUserData!.fundamentalName : null;
       });
     }
   }

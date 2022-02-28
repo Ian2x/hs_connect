@@ -17,8 +17,9 @@ import 'loading.dart';
 class MyNavigationBar extends StatefulWidget {
   final int currentIndex;
   final UserData currUserData;
+  final bool zeroNotifications;
 
-  const MyNavigationBar({Key? key, required this.currentIndex, required this.currUserData}) : super(key: key);
+  const MyNavigationBar({Key? key, required this.currentIndex, required this.currUserData, this.zeroNotifications = false}) : super(key: key);
 
   @override
   _MyNavigationBarState createState() => _MyNavigationBarState();
@@ -38,14 +39,15 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
     final notifications = await MyNotificationsDatabaseService(userRef: widget.currUserData.userRef).getNotifications();
     if (mounted) {
       setState(() {
-        numNotifications = notifications
-                .where((element) => element.createdAt.compareTo(widget.currUserData.notificationsLastViewed) > 0)
-                .length +
-            widget.currUserData.userMessages
-                .where((element) =>
-                    element.lastViewed == null ||
-                    (element.lastViewed != null && element.lastMessage.compareTo(element.lastViewed!) > 0))
-                .length;
+        final numActivity = widget.zeroNotifications ? 0 : notifications
+            .where((element) => element.createdAt.compareTo(widget.currUserData.notificationsLastViewed) > 0)
+            .length;
+        final numMessages = widget.currUserData.userMessages
+            .where((element) =>
+        element.lastViewed == null ||
+            (element.lastViewed != null && element.lastMessage.compareTo(element.lastViewed!) > 0))
+            .length;
+        numNotifications = numActivity + numMessages;
       });
     }
   }

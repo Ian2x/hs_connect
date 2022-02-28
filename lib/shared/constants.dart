@@ -81,14 +81,15 @@ class Gradients {
 
 class ThemeText {
   static TextStyle quicksand({Color? color, double? fontSize, double? height,
-    TextDecoration? decoration1, FontWeight? fontWeight}) {
+    TextDecoration? decoration, TextDecorationStyle? decorationStyle, FontWeight? fontWeight}) {
     return TextStyle(
         color: color,
         fontSize: fontSize,
         height: height,
-        decoration: decoration1,
+        decoration: decoration,
         fontWeight: fontWeight,
-        fontFamily: "Quicksand"
+        fontFamily: "Quicksand",
+        decorationStyle: decorationStyle
     );
   }
 }

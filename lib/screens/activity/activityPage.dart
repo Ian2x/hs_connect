@@ -35,13 +35,13 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
 
   @override
   void dispose() {
-    UserDataDatabaseService(currUserRef: widget.userData.userRef).updateNotificationsLastViewed();
     tabController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    print(widget.userData.notificationsLastViewed.toDate());
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
@@ -57,6 +57,7 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
       bottomNavigationBar: MyNavigationBar(
         currentIndex: 1,
         currUserData: widget.userData,
+        zeroNotifications: true,
       ),
     );
   }
