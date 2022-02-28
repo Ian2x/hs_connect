@@ -1,11 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/screens/authenticate/registerEmail.dart';
 import 'package:hs_connect/screens/authenticate/signIn.dart';
-import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/widgets/checkboxFormField.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'aboutUs.dart';
 
 class PreviewPage extends StatelessWidget {
   const PreviewPage({
@@ -18,7 +17,7 @@ class PreviewPage extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      resizeToAvoidBottomInset : false,
+      resizeToAvoidBottomInset: false,
       body: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
@@ -46,7 +45,7 @@ class PreviewPage extends StatelessWidget {
               ),
               SizedBox(height: 100),
               ActionChip(
-                padding: EdgeInsets.fromLTRB(50, 15, 50, 15),
+                padding: EdgeInsets.fromLTRB(60, 15, 60, 15),
                 backgroundColor: Colors.black,
                 label: Text(
                   'Sign up',
@@ -68,9 +67,10 @@ class PreviewPage extends StatelessWidget {
                       builder: (context) => SignIn()));
                 },
               ),
-              SizedBox(height: 90),
+              Spacer(),
               RichText(
                   maxLines: 3,
+                  textAlign: TextAlign.center,
                   text: TextSpan(style: textTheme.caption?.copyWith(color: Colors.black), children: [
                     TextSpan(text: "By using Convo you agree to Convo's "),
                     TextSpan(
@@ -102,7 +102,8 @@ class PreviewPage extends StatelessWidget {
                               await launch('https://www.getconvo.app/privacy');
                             }
                           })
-                  ]))
+                  ])),
+              SizedBox(height: max(10, MediaQuery.of(context).padding.bottom)),
             ],
           )),
     );

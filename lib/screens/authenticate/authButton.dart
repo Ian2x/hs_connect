@@ -20,11 +20,11 @@ class AuthButton extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return MyOutlinedButton(
-      padding: EdgeInsets.symmetric(vertical: 9, horizontal: 30),
+      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 29),
       onPressed: onPressed,
       outlineColor: hasText ? Colors.black : Colors.black54,
       borderRadius: 40,
-      backgroundColor: Colors.white,
+      backgroundColor: hasText ? Colors.black : Colors.white,
       thickness: 2,
       child: Container(
         alignment: Alignment.center,
@@ -34,7 +34,7 @@ class AuthButton extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
           style: ThemeText.quicksand(
               fontWeight: FontWeight.w600, fontSize: 18,
-              color: hasText ? Colors.black : Colors.black54),
+              color: hasText ? Colors.white : Colors.black54),
         ),
       ),
     );

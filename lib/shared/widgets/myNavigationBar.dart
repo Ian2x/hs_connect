@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/activity/activityPage.dart';
@@ -16,8 +17,9 @@ import 'loading.dart';
 class MyNavigationBar extends StatefulWidget {
   final int currentIndex;
   final UserData currUserData;
+  final bool zeroNotifications;
 
-  const MyNavigationBar({Key? key, required this.currentIndex, required this.currUserData}) : super(key: key);
+  const MyNavigationBar({Key? key, required this.currentIndex, required this.currUserData, this.zeroNotifications = false}) : super(key: key);
 
   @override
   _MyNavigationBarState createState() => _MyNavigationBarState();
@@ -37,20 +39,22 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
     final notifications = await MyNotificationsDatabaseService(userRef: widget.currUserData.userRef).getNotifications();
     if (mounted) {
       setState(() {
-        numNotifications = notifications
-                .where((element) => element.createdAt.compareTo(widget.currUserData.notificationsLastViewed) > 0)
-                .length +
-            widget.currUserData.userMessages
-                .where((element) =>
-                    element.lastViewed == null ||
-                    (element.lastViewed != null && element.lastMessage.compareTo(element.lastViewed!) > 0))
-                .length;
+        final numActivity = widget.zeroNotifications ? 0 : notifications
+            .where((element) => element.createdAt.compareTo(widget.currUserData.notificationsLastViewed) > 0)
+            .length;
+        final numMessages = widget.currUserData.userMessages
+            .where((element) =>
+        element.lastViewed == null ||
+            (element.lastViewed != null && element.lastMessage.compareTo(element.lastViewed!) > 0))
+            .length;
+        numNotifications = numActivity + numMessages;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<User?>(context);
     final userData = Provider.of<UserData?>(context);
     final colorScheme = Theme.of(context).colorScheme;
 
@@ -74,12 +78,13 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
               selectedFontSize: 1,
               unselectedFontSize: 1,
               onTap: (int index) async {
-                if (index == 0) {
+                if (index == 0 && user!=null) {
                   if (widget.currentIndex == 0) {
                     Navigator.pushReplacement(
                       context,
                       NoAnimationMaterialPageRoute(
                           builder: (context) => Home(
+                                user: user,
                                 userData: userData,
                               )),
                     );
@@ -89,6 +94,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
                       context,
                       NoAnimationMaterialPageRoute(
                           builder: (context) => Home(
+                            user: user,
                             userData: userData,
                           )),
                     );

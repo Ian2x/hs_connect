@@ -249,19 +249,21 @@ class _PostFormState extends State<PostForm> {
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        border: Border.all(color: userColor, width: 1.5),
-                        borderRadius: BorderRadius.circular(25)
+                        border: Border.all(color: userColor, width: 2),
+                        borderRadius: BorderRadius.circular(25),
+                        color: _title != '' ? userColor:colorScheme.surface,
                       ),
-                      padding: EdgeInsets.symmetric(vertical: 3, horizontal: 6),
+                      padding: EdgeInsets.symmetric(vertical: 1.5, horizontal: 6),
                       child: Row(
                         children: [
-                          Icon(Icons.add, size: 20, color: userColor),
+                          Icon(Icons.add, size: 20, color: _title != '' ? colorScheme.surface : userColor),
                           SizedBox(width: 2),
                           FittedBox(
                             child: Container(
                               padding: EdgeInsets.only(bottom: 2, right: 5),
                               child: Text("Post",
-                                  style: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w600, color: userColor),
+                                  style: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w600,
+                                      color: _title != '' ? colorScheme.surface : userColor),
                                   maxLines: 1,
                                   softWrap: false,
                                   overflow: TextOverflow.fade),
@@ -274,7 +276,7 @@ class _PostFormState extends State<PostForm> {
                   SizedBox(width: 10),
                 ],
               ),
-              Divider(height: 4, indent: 0, thickness: .5, color: Theme.of(context).colorScheme.onError),
+              Divider(height: 4, indent: 0, thickness: 2, color: Theme.of(context).colorScheme.onError),
               Container(
                 //TextInput Container
                 constraints: BoxConstraints(

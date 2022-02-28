@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/postLikesManager.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/activity/messages/messagesPage.dart';
+import 'package:hs_connect/screens/authenticate/waitVerification.dart';
 import 'package:hs_connect/screens/home/postFeed/domainFeed.dart';
 import 'package:hs_connect/screens/home/postFeed/publicFeed.dart';
 import 'package:flutter/material.dart';
@@ -17,9 +19,10 @@ import 'homeAppBar.dart';
 import 'launchCountdown.dart';
 
 class Home extends StatefulWidget {
+  final User user;
   final UserData userData;
 
-  const Home({Key? key, required this.userData}) : super(key: key);
+  const Home({Key? key, required this.user, required this.userData}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
@@ -33,13 +36,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   void toggleSearch(bool newSearchByTrending) {
     if (mounted) {
-      MyStorageManager.saveData('searchByTrending', !searchByTrending);
-      setState(() => searchByTrending = !searchByTrending);
+      MyStorageManager.saveData('searchByTrending', newSearchByTrending);
+      setState(() => searchByTrending = newSearchByTrending);
     }
   }
 
   @override
   void initState() {
+    handleNewUser();
     setupInteractedMessage();
     subscribeToDomain();
     getSearchByTrending();
@@ -53,51 +57,59 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       }
       scrollController.jumpTo(0);
     });
-    getShowSignUp();
     super.initState();
   }
 
-  void getShowSignUp() async {
-    dynamic showSignUp = await MyStorageManager.readData('showSignUp');
-    if (showSignUp == true) {
+  void handleNewUser() async {
+    if (FirebaseAuth.instance.currentUser?.emailVerified == false) {
       WidgetsBinding.instance?.addPostFrameCallback((_) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            final textTheme = Theme.of(context).textTheme;
-            final colorScheme = Theme.of(context).colorScheme;
-            String domain = widget.userData.fullDomainName ?? widget.userData.domain;
-            return AlertDialog(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
-              contentPadding: EdgeInsets.fromLTRB(20, 0, 20, 30),
-              backgroundColor: colorScheme.surface,
-              titlePadding: EdgeInsets.fromLTRB(20, 30, 20, 0),
-              title: Text(
-                "You're user number " +
-                    widget.userData.fundamentalName.replaceAll(
-                        RegExp(widget.userData.domain.replaceAll(RegExp(r'(\.com|\.org|\.info|\.edu|\.net)'), '')),
-                        "") +
-                    " from " +
-                    domain +
-                    ". We gave you the name:",
-                textAlign: TextAlign.center,
-                style: textTheme.headline6?.copyWith(fontSize: 18),
-              ),
-              content: Container(
-                width: 100,
-                height: 50,
-                padding: EdgeInsets.fromLTRB(10, 15, 10, 0),
-                alignment: Alignment.topCenter,
-                child: Text(
-                  widget.userData.fundamentalName,
-                  style: textTheme.headline4?.copyWith(fontSize: 24, color: widget.userData.domainColor),
-                ),
-              ),
-            );
-          },
-        );
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => WaitVerification(email: widget.user.email!)));
       });
-      MyStorageManager.deleteData('showSignUp');
+    } else {
+      dynamic showSignUp = await MyStorageManager.readData('showSignUp');
+      if (showSignUp == true) {
+        WidgetsBinding.instance?.addPostFrameCallback((_) {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              final textTheme = Theme.of(context).textTheme;
+              final colorScheme = Theme.of(context).colorScheme;
+              String domain = widget.userData.fullDomainName ?? widget.userData.domain;
+              return AlertDialog(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
+                contentPadding: EdgeInsets.fromLTRB(20, 0, 20, 30),
+                backgroundColor: colorScheme.surface,
+                titlePadding: EdgeInsets.fromLTRB(20, 30, 20, 0),
+                title: Text(
+                  "You're user number " +
+                      widget.userData.fundamentalName.replaceAll(
+                          RegExp(widget.userData.domain.replaceAll(RegExp(r'(\.com|\.org|\.info|\.edu|\.net)'), '')),
+                          "") +
+                      " from " +
+                      domain +
+                      ". We gave you the name:",
+                  textAlign: TextAlign.center,
+                  style: textTheme.headline6?.copyWith(fontSize: 18),
+                ),
+                content: Container(
+                  width: 100,
+                  height: 50,
+                  padding: EdgeInsets.fromLTRB(10, 15, 10, 0),
+                  alignment: Alignment.topCenter,
+                  child: Text(
+                    widget.userData.fundamentalName,
+                    style: textTheme.headline4?.copyWith(fontSize: 24, color: widget.userData.domainColor),
+                  ),
+                ),
+              );
+            },
+          );
+        });
+        MyStorageManager.deleteData('showSignUp');
+      }
     }
   }
 
