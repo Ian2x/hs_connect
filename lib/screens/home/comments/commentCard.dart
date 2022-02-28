@@ -58,15 +58,15 @@ class _CommentCardState extends State<CommentCard> {
         });
       }
     }
-    getUserData();
+    getCreatorUserData();
     super.initState();
   }
 
-  void getUserData() async {
+  void getCreatorUserData() async {
     if (widget.comment.creatorRef != null) {
       UserDataDatabaseService _userDataDatabaseService =
           UserDataDatabaseService(currUserRef: widget.currUserData.userRef);
-      final UserData? fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.comment.creatorRef!);
+      final OtherUserData? fetchUserData = await _userDataDatabaseService.getOtherUserData(userRef: widget.comment.creatorRef!);
       if (mounted) {
         setState(() {
           creatorName = fetchUserData != null ? fetchUserData.fundamentalName : null;

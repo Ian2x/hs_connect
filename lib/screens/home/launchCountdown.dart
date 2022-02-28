@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
-import 'package:hs_connect/shared/constants.dart';
-import 'package:hs_connect/shared/widgets/myOutlinedButton.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 

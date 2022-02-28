@@ -34,7 +34,7 @@ class ProfilePage extends StatelessWidget {
           elevation: 0),
       backgroundColor: colorScheme.surface,
       body: ProfileBody(
-        profileUserData: currUserData,
+        currUserData: currUserData,
       ),
       bottomNavigationBar: MyNavigationBar(
         currentIndex: 2,

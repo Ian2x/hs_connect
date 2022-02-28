@@ -10,11 +10,11 @@ import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class DomainFeed extends StatefulWidget {
-  final UserData currUser;
+  final UserData currUserData;
   final bool isDomain;
   final bool searchByTrending;
 
-  const DomainFeed({Key? key, required this.currUser, required this.isDomain, required this.searchByTrending}) : super(key: key);
+  const DomainFeed({Key? key, required this.currUserData, required this.isDomain, required this.searchByTrending}) : super(key: key);
 
   @override
   _DomainFeedState createState() => _DomainFeedState();
@@ -35,7 +35,7 @@ class _DomainFeedState extends State<DomainFeed> with AutomaticKeepAliveClientMi
 
   @override
   void initState() {
-    _posts = PostsDatabaseService(currUserRef: widget.currUser.userRef);
+    _posts = PostsDatabaseService(currUserRef: widget.currUserData.userRef);
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
@@ -58,7 +58,7 @@ class _DomainFeedState extends State<DomainFeed> with AutomaticKeepAliveClientMi
     try {
       DocumentSnapshot? tempKey;
       List<Post?> tempPosts = await _posts.getGroupPosts(
-          [FirebaseFirestore.instance.collection(C.groups).doc(widget.currUser.domain)],
+          [FirebaseFirestore.instance.collection(C.groups).doc(widget.currUserData.domain)],
           startingFrom: pageKey, setStartFrom: (DocumentSnapshot ds) {tempKey = ds;}, withPublic: false, byNew: !widget.searchByTrending);
       tempPosts.removeWhere((value) => value == null);
       final newPosts = tempPosts.map((item) => item!).toList();
@@ -95,13 +95,13 @@ class _DomainFeedState extends State<DomainFeed> with AutomaticKeepAliveClientMi
           padding: EdgeInsets.zero,
           builderDelegate: PagedChildBuilderDelegate<Post>(
               itemBuilder: (context, post, index) {
-                if ((!(showMaturePosts!) && post.mature) || (widget.currUser.blockedPostRefs.contains(post.postRef)) || (widget.currUser.blockedUserRefs.contains(post.creatorRef))) {
+                if ((!(showMaturePosts!) && post.mature) || (widget.currUserData.blockedPostRefs.contains(post.postRef)) || (widget.currUserData.blockedUserRefs.contains(post.creatorRef))) {
                   return Container();
                 }
                 return Center(
                     child: PostCard(
                       post: post,
-                currUser: widget.currUser,
+                currUserData: widget.currUserData,
               ));
             },
             noItemsFoundIndicatorBuilder: (BuildContext context) => Container(

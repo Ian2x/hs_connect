@@ -100,9 +100,8 @@ class UserDataDatabaseService {
     });
   }
 
-  Future<UserData?> getUserData({required DocumentReference userRef, bool? noDomainData}) async {
-    final snapshot = await userRef.get();
-    return await _userDataFromSnapshot(snapshot, overrideUserRef: userRef, noDomainData: noDomainData);
+  Stream<UserData?> get userData {
+    return currUserRef.snapshots().asyncMap((event) => _userDataFromSnapshot(event));
   }
 
   Future<UserData?> _userDataFromSnapshot(DocumentSnapshot snapshot, {DocumentReference? overrideUserRef, bool? noDomainData}) async {
@@ -113,8 +112,17 @@ class UserDataDatabaseService {
     }
   }
 
-  Stream<UserData?> get userData {
-    return currUserRef.snapshots().asyncMap((event) => _userDataFromSnapshot(event));
+  Future<OtherUserData?> getOtherUserData({required DocumentReference userRef, bool? noDomainData}) async {
+    final snapshot = await userRef.get();
+    return await _otherUserDataFromSnapshot(snapshot, overrideUserRef: userRef, noDomainData: noDomainData);
+  }
+
+  Future<OtherUserData?> _otherUserDataFromSnapshot(DocumentSnapshot snapshot, {DocumentReference? overrideUserRef, bool? noDomainData}) async {
+    if (snapshot.exists) {
+      return await otherUserDataFromSnapshot(snapshot, overrideUserRef != null ? overrideUserRef : currUserRef, noDomainData: noDomainData);
+    } else {
+      return null;
+    }
   }
 
   SearchResult _streamResultFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {

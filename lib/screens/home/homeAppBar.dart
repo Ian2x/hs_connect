@@ -12,13 +12,13 @@ class HomeAppBar extends SliverPersistentHeaderDelegate{
   static const tabBarPadding = EdgeInsets.symmetric(horizontal: 25);
 
   final TabController tabController;
-  final UserData userData;
+  final UserData currUserData;
   final bool isDomain;
   final bool searchByTrending;
   final VoidBoolParamFunction toggleSearch;
   final double safeAreaHeight;
 
-  HomeAppBar({required this.tabController, required this.userData, required this.isDomain,
+  HomeAppBar({required this.tabController, required this.currUserData, required this.isDomain,
     required this.searchByTrending, required this.toggleSearch, required this.safeAreaHeight});
 
   @override
@@ -29,7 +29,7 @@ class HomeAppBar extends SliverPersistentHeaderDelegate{
 
 
     //final safeAreaHeight = MediaQuery.of(context).padding.top;
-    final fullDomainName = userData.fullDomainName != null ? userData.fullDomainName! : userData.domain;
+    final fullDomainName = currUserData.fullDomainName != null ? currUserData.fullDomainName! : currUserData.domain;
     return Stack(
       children: [
         Positioned(
@@ -57,7 +57,7 @@ class HomeAppBar extends SliverPersistentHeaderDelegate{
                       controller: tabController,
                       padding: EdgeInsets.zero,
                       indicator: BoxDecoration(
-                        border: Border(bottom: BorderSide(width: 2.5, color: userData.domainColor!=null ? userData.domainColor! : colorScheme.onSurface),
+                        border: Border(bottom: BorderSide(width: 2.5, color: currUserData.domainColor!=null ? currUserData.domainColor! : colorScheme.onSurface),
                         )
                       ),
                       indicatorPadding: tabBarPadding,

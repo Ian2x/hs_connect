@@ -16,7 +16,6 @@ import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:validators/validators.dart';
 
-import '../../../shared/tools/hexColor.dart';
 import 'groupSelectionSheet.dart';
 
 const String emptyPollChoiceError = 'Can\'t create a poll with an empty choice';
@@ -24,9 +23,9 @@ const String emptyTitleError = 'Can\'t create a post with an empty title';
 const String badLinkError = 'Please enter a valid URL link';
 
 class PostForm extends StatefulWidget {
-  final UserData userData;
+  final UserData currUserData;
 
-  const PostForm({Key? key, required this.userData}) : super(key: key);
+  const PostForm({Key? key, required this.currUserData}) : super(key: key);
 
   @override
   _PostFormState createState() => _PostFormState();
@@ -84,15 +83,15 @@ class _PostFormState extends State<PostForm> {
   }
 
   Future getGroupChoices() async {
-    _groups = GroupsDatabaseService(currUserRef: widget.userData.userRef);
-    final nullGroups = await _groups!.getGroups(groupsRefs: widget.userData.groups, withPublic: true);
+    _groups = GroupsDatabaseService(currUserRef: widget.currUserData.userRef);
+    final nullGroups = await _groups!.getGroups(groupsRefs: widget.currUserData.groups, withPublic: true);
     List<Group> groups = [];
     for (Group? group in nullGroups) {
       if (group != null) {
         if (group.accessRestriction.restrictionType == AccessRestrictionType.domain) {
           // replace domain group name with full domain name
-          if (widget.userData.fullDomainName != null) {
-            group.name = widget.userData.fullDomainName!;
+          if (widget.currUserData.fullDomainName != null) {
+            group.name = widget.currUserData.fullDomainName!;
           }
           // make this the default selected group
           if (mounted) {
@@ -121,7 +120,7 @@ class _PostFormState extends State<PostForm> {
       return Loading();
     }
 
-    Color userColor = widget.userData.domainColor != null ? widget.userData.domainColor! : colorScheme.onSurface;
+    Color userColor = widget.currUserData.domainColor != null ? widget.currUserData.domainColor! : colorScheme.onSurface;
 
     return Stack(children: [
       SingleChildScrollView(
@@ -233,7 +232,7 @@ class _PostFormState extends State<PostForm> {
                           pollRef = await _polls.newPoll(choices: pollChoices!);
                         }
 
-                        await PostsDatabaseService(currUserRef: widget.userData.userRef).newPost(
+                        await PostsDatabaseService(currUserRef: widget.currUserData.userRef).newPost(
                           title: _title,
                           text: _text,
                           tagString: _tag,
@@ -424,7 +423,7 @@ class _PostFormState extends State<PostForm> {
           bottom: 0,
           left: 0,
           child: Container(
-            color: widget.userData.domainColor != null ? widget.userData.domainColor! : colorScheme.onSurface,
+            color: widget.currUserData.domainColor != null ? widget.currUserData.domainColor! : colorScheme.onSurface,
             padding: EdgeInsets.only(top: bottomGradientThickness),
             width: MediaQuery.of(context).size.width,
             child: Container(

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/postLikesManager.dart';
-import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/comments/commentsFeed.dart';
 import 'package:hs_connect/shared/widgets/buildGroupCircle.dart';
 import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
@@ -12,10 +11,9 @@ import 'package:provider/provider.dart';
 class PostPage extends StatelessWidget {
   final Post post;
   final Group group;
-  final UserData creatorData;
   final PostLikesManager postLikesManager;
 
-  PostPage({Key? key, required this.post, required this.group, required this.creatorData, required this.postLikesManager
+  PostPage({Key? key, required this.post, required this.group, required this.postLikesManager
   }) : super(key: key);
 
   @override

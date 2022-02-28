@@ -41,7 +41,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
   String? creatorGroup;
   Color? creatorColor;
   Poll? poll;
-  UserData? fetchUserData;
+  OtherUserData? fetchUserData;
 
   @override
   void initState() {
@@ -54,7 +54,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
   void getPostCreatorData() async {
     UserDataDatabaseService _userDataDatabaseService =
         UserDataDatabaseService(currUserRef: widget.currUserData.userRef);
-    fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.post.creatorRef);
+    fetchUserData = await _userDataDatabaseService.getOtherUserData(userRef: widget.post.creatorRef);
     if (mounted) {
       setState(() {
         creatorName = fetchUserData != null ? fetchUserData!.fundamentalName : null;
