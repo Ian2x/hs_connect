@@ -45,7 +45,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void initState() {
     handleNewUser();
     setupInteractedMessage();
-    subscribeToDomain();
+    subscribeToDomainTopic();
     getSearchByTrending();
     saveTokenToDatabase();
     tabController = TabController(length: 2, vsync: this);
@@ -138,7 +138,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     }
   }
 
-  void subscribeToDomain() async {
+  void subscribeToDomainTopic() async {
     NotificationSettings settings = await FirebaseMessaging.instance.getNotificationSettings();
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       await FirebaseMessaging.instance.subscribeToTopic(widget.userData.domain.substring(1));

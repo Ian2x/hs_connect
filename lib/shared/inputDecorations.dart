@@ -22,6 +22,8 @@ typedef VoidBoolParamFunction = void Function(bool);
 
 typedef VoidOptionalCommentParamFunction = void Function (Comment?);
 
+typedef VoidIntParamFunction = void Function(int);
+
 
 InputDecoration commentReplyInputDecoration({required VoidFunction onPressed, required bool isReply, required bool isFocused, required BuildContext context, required bool hasText, required Color activeColor}) {
   final colorScheme = Theme.of(context).colorScheme;
