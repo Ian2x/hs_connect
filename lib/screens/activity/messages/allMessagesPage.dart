@@ -6,6 +6,7 @@ import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:intl/intl.dart';
 
+import '../../../shared/inputDecorations.dart';
 import 'MessagesPage.dart';
 
 class UMUD {
@@ -17,8 +18,10 @@ class UMUD {
 
 class AllMessagesPage extends StatefulWidget {
   final UserData userData;
+  final VoidIntParamFunction setNumNotifications;
 
-  const AllMessagesPage({Key? key, required this.userData}) : super(key: key);
+
+  const AllMessagesPage({Key? key, required this.userData, required this.setNumNotifications}) : super(key: key);
 
   @override
   _AllMessagesPageState createState() => _AllMessagesPageState();
@@ -67,6 +70,11 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
     }
   }
 
+  void calculateNumUnread() {
+    final num = UMUDcache.where((element) => element.UM!.lastViewed == null || element.UM!.lastViewed!.compareTo(element.UM!.lastMessage) < 0).length;
+    widget.setNumNotifications(num);
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -86,6 +94,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
 
     // sorted by latest first
     UMUDcache.sort((UMUD a, UMUD b) => b.UM!.lastMessage.compareTo(a.UM!.lastMessage));
+
     return ListView.builder(
         itemCount: UMUDcache.length,
         physics: BouncingScrollPhysics(),
@@ -119,6 +128,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                   UMUDcache[index].UM!.lastViewed = Timestamp.now();
                 });
               }
+              calculateNumUnread();
             },
             child: Stack(
               alignment: AlignmentDirectional.centerStart,
