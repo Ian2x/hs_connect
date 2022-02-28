@@ -53,8 +53,6 @@ class _DeletePostSheetState extends State<DeletePostSheet> with TickerProviderSt
   Widget build(BuildContext context) {
     PostsDatabaseService _posts = PostsDatabaseService(currUserRef: widget.currUserRef);
 
-
-
     final colorScheme = Theme.of(context).colorScheme;
 
     final userData = Provider.of<UserData?>(context);

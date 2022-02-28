@@ -7,9 +7,9 @@ import 'package:hs_connect/shared/widgets/loading.dart';
 import 'notificationCard.dart';
 
 class NotificationsFeed extends StatefulWidget {
-  final UserData userData;
+  final UserData currUserData;
 
-  const NotificationsFeed({Key? key, required this.userData}) : super(key: key);
+  const NotificationsFeed({Key? key, required this.currUserData}) : super(key: key);
 
   @override
   _NotificationsFeedState createState() => _NotificationsFeedState();
@@ -25,7 +25,7 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
   }
 
   void fetchNotifications() async {
-    final notificationss = await MyNotificationsDatabaseService(userRef: widget.userData.userRef).getNotifications();
+    final notificationss = await MyNotificationsDatabaseService(userRef: widget.currUserData.userRef).getNotifications();
     if (mounted) {
       setState(() {
         notifications = notificationss;
@@ -58,7 +58,7 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
         physics: BouncingScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
           int trueIndex = numberNotifications - index - 1;
-          if (widget.userData.blockedUserRefs.contains(notifications![trueIndex].sourceUserRef)) {
+          if (widget.currUserData.blockedUserRefs.contains(notifications![trueIndex].sourceUserRef)) {
             return Container();
           }
           if (trueIndex == numberNotifications-1) {

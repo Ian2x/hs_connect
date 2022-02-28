@@ -30,10 +30,10 @@ class ReplyCard extends StatefulWidget {
 class _ReplyCardState extends State<ReplyCard> {
   bool liked = false;
   bool disliked = false;
-  String? replierName;
-  String? replierGroupName;
-  Color? replierGroupColor;
-  int? replierScore;
+  String? creatorName;
+  String? creatorGroupName;
+  Color? creatorGroupColor;
+  int? creatorScore;
 
   @override
   void initState() {
@@ -52,28 +52,28 @@ class _ReplyCardState extends State<ReplyCard> {
         });
       }
     }
-    getUserData();
+    getOtherUserData();
   }
 
-  void getUserData() async {
+  void getOtherUserData() async {
     if (widget.reply.creatorRef != null) {
       UserDataDatabaseService _userInfoDatabaseService =
           UserDataDatabaseService(currUserRef: widget.currUserData.userRef);
-      final UserData? fetchUserData = await _userInfoDatabaseService.getUserData(userRef: widget.reply.creatorRef!);
+      final OtherUserData? fetchUserData = await _userInfoDatabaseService.getOtherUserData(userRef: widget.reply.creatorRef!);
       if (mounted) {
         setState(() {
-          replierName = fetchUserData != null ? fetchUserData.fundamentalName : null;
-          replierScore = fetchUserData != null ? fetchUserData.score : null;
-          replierGroupName = fetchUserData != null
+          creatorName = fetchUserData != null ? fetchUserData.fundamentalName : null;
+          creatorScore = fetchUserData != null ? fetchUserData.score : null;
+          creatorGroupName = fetchUserData != null
               ? (fetchUserData.fullDomainName != null ? fetchUserData.fullDomainName : fetchUserData.domain)
               : null;
-          replierGroupColor = fetchUserData != null ? fetchUserData.domainColor : null;
+          creatorGroupColor = fetchUserData != null ? fetchUserData.domainColor : null;
         });
       }
     } else {
       if (mounted) {
         setState(() {
-          replierName = '[Removed]';
+          creatorName = '[Removed]';
         });
       }
     }
@@ -85,8 +85,8 @@ class _ReplyCardState extends State<ReplyCard> {
 
     final colorScheme = Theme.of(context).colorScheme;
 
-    final localCreatorName = replierName != null ? replierName! : '';
-    final localCreatorGroupName = replierGroupName != null ? replierGroupName! : '';
+    final localCreatorName = creatorName != null ? creatorName! : '';
+    final localCreatorGroupName = creatorGroupName != null ? creatorGroupName! : '';
 
     return Container(
         padding: EdgeInsets.fromLTRB(17, 0, 0, 0),
@@ -101,7 +101,7 @@ class _ReplyCardState extends State<ReplyCard> {
                   style: TextButton.styleFrom(
                       splashFactory: NoSplash.splashFactory, padding: EdgeInsets.zero, alignment: Alignment.centerLeft),
                     onPressed: () {
-                      if (replierName != null) {
+                      if (creatorName != null) {
                         showModalBottomSheet(
                             context: context,
                             shape: RoundedRectangleBorder(
@@ -110,10 +110,10 @@ class _ReplyCardState extends State<ReplyCard> {
                                 )),
                             builder: (context) => ProfileSheet(
                                   currUserRef: widget.currUserData.userRef,
-                                  otherUserScore: replierScore!,
+                                  otherUserScore: creatorScore!,
                                   otherUserFundName: localCreatorName,
                                   otherUserFullDomain: localCreatorGroupName,
-                                  otherUserDomainColor: replierGroupColor,
+                                  otherUserDomainColor: creatorGroupColor,
                                   otherUserRef: widget.reply.creatorRef!,
                                 ));
                       }
@@ -129,7 +129,7 @@ class _ReplyCardState extends State<ReplyCard> {
                         TextSpan(
                             text: localCreatorGroupName,
                             style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                                color: replierGroupColor != null ? replierGroupColor : colorScheme.primary,
+                                color: creatorGroupColor != null ? creatorGroupColor : colorScheme.primary,
                                 fontSize: commentReplyDetailSize)
                         )
                       ]

@@ -1,8 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/postLikesManager.dart';
-import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/postView/postPage.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/deletePostSheet.dart';
 import 'package:hs_connect/services/groups_database.dart';
@@ -12,11 +12,11 @@ import 'package:hs_connect/shared/widgets/buildGroupCircle.dart';
 
 class ProfilePostCard extends StatefulWidget {
   final Post post;
-  final UserData currUserData;
+  final DocumentReference currUserRef;
   final VoidFunction onDelete;
 
   ProfilePostCard({Key? key, required this.post,
-  required this.currUserData, required this.onDelete}) : super(key: key);
+  required this.currUserRef, required this.onDelete}) : super(key: key);
 
   @override
   _ProfilePostCardState createState() => _ProfilePostCardState();
@@ -32,8 +32,8 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
 
   @override
   void initState() {
-    likeStatus = widget.post.likes.contains(widget.currUserData.userRef);
-    dislikeStatus = widget.post.dislikes.contains(widget.currUserData.userRef);
+    likeStatus = widget.post.likes.contains(widget.currUserRef);
+    dislikeStatus = widget.post.dislikes.contains(widget.currUserRef);
     likeCount = widget.post.likes.length;
     dislikeCount = widget.post.dislikes.length;
     getGroupData();
@@ -41,7 +41,7 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
   }
 
   void getGroupData() async {
-    GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserData.userRef);
+    GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserRef);
     final Group? fetchGroup = await _groups.groupFromRef(widget.post.groupRef);
     if (fetchGroup != null && mounted) {
       setState(() {
@@ -119,7 +119,7 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      PostPage(post: widget.post, group: group!, creatorData: widget.currUserData, postLikesManager: postLikesManager))
+                      PostPage(post: widget.post, group: group!, postLikesManager: postLikesManager))
           );
         },
         child: Container(
@@ -161,7 +161,7 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
                                   top: Radius.circular(20),
                                 )),
                             builder: (context) => DeletePostSheet(
-                                  currUserRef: widget.currUserData.userRef,
+                                  currUserRef: widget.currUserRef,
                                   postUserRef: widget.post.creatorRef,
                                   groupRef: widget.post.groupRef,
                                   postRef: widget.post.postRef,

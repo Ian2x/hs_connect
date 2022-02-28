@@ -176,7 +176,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               builder: (context) => PostPage(
                   post: post,
                   group: group,
-                  creatorData: creatorData,
                   postLikesManager: PostLikesManager(
                       likeStatus: post.likes.contains(widget.userData.userRef),
                       dislikeStatus: post.dislikes.contains(widget.userData.userRef),
@@ -242,7 +241,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 SliverPersistentHeader(
                   delegate: HomeAppBar(
                       tabController: tabController,
-                      userData: widget.userData,
+                      currUserData: widget.userData,
                       isDomain: isDomain,
                       searchByTrending: searchByTrending,
                       toggleSearch: toggleSearch,
@@ -255,13 +254,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             body: TabBarView(
               children: [
                 DomainFeed(
-                  currUser: widget.userData,
+                  currUserData: widget.userData,
                   isDomain: isDomain,
                   searchByTrending: searchByTrending,
                   key: ValueKey<bool>(searchByTrending),
                 ),
                 PublicFeed(
-                  currUser: widget.userData,
+                  currUserData: widget.userData,
                   isDomain: isDomain,
                   searchByTrending: searchByTrending,
                   key: ValueKey<bool>(!searchByTrending),

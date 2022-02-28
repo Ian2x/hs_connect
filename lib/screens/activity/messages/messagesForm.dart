@@ -11,12 +11,11 @@ import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
 class MessagesForm extends StatefulWidget {
-  final DocumentReference currUserRef;
   final DocumentReference otherUserRef;
   final VoidFunction onUpdateLastMessage;
   final VoidFunction onUpdateLastViewed;
 
-  const MessagesForm({Key? key, required this.currUserRef, required this.otherUserRef, required this.onUpdateLastMessage, required this.onUpdateLastViewed}) : super(key: key);
+  const MessagesForm({Key? key, required this.otherUserRef, required this.onUpdateLastMessage, required this.onUpdateLastViewed}) : super(key: key);
 
   @override
   _MessagesFormState createState() => _MessagesFormState();

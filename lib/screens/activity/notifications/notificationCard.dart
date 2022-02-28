@@ -146,7 +146,6 @@ class _NotificationCardState extends State<NotificationCard> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => PostPage(
-                            creatorData: userData,
                             post: post,
                             group: group,
                             postLikesManager: PostLikesManager(

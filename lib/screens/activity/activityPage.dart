@@ -5,7 +5,6 @@ import 'package:hs_connect/screens/activity/notifications/notificationsFeed.dart
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
 
-import '../../services/my_notifications_database.dart';
 import 'activityAppBar.dart';
 
 class ActivityPage extends StatefulWidget {
@@ -64,11 +63,11 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
     return Scaffold(
       backgroundColor: colorScheme.background,
       appBar: activityAppBar(
-          context: context, isNotifications: isNotifications, tabController: tabController, userData: widget.userData),
+          context: context, isNotifications: isNotifications, tabController: tabController, currUserData: widget.userData),
       body: Container(
         color: colorScheme.background,
         child: TabBarView(children: <Widget>[
-          NotificationsFeed(userData: widget.userData),
+          NotificationsFeed(currUserData: widget.userData),
           AllMessagesPage(userData: widget.userData, setNumNotifications: setNumNotifications)
         ], controller: tabController, physics: BouncingScrollPhysics()),
       ),

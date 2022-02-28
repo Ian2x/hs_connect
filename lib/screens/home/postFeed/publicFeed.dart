@@ -10,11 +10,11 @@ import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class PublicFeed extends StatefulWidget {
-  final UserData currUser;
+  final UserData currUserData;
   final bool isDomain;
   final bool searchByTrending;
 
-  const PublicFeed({Key? key, required this.currUser, required this.isDomain, required this.searchByTrending})
+  const PublicFeed({Key? key, required this.currUserData, required this.isDomain, required this.searchByTrending})
       : super(key: key);
 
   @override
@@ -35,7 +35,7 @@ class _PublicFeedState extends State<PublicFeed> with AutomaticKeepAliveClientMi
 
   @override
   void initState() {
-    _posts = PostsDatabaseService(currUserRef: widget.currUser.userRef);
+    _posts = PostsDatabaseService(currUserRef: widget.currUserData.userRef);
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
@@ -95,13 +95,13 @@ class _PublicFeedState extends State<PublicFeed> with AutomaticKeepAliveClientMi
           builderDelegate: PagedChildBuilderDelegate<Post>(
             //animateTransitions: true,
               itemBuilder: (context, post, index) {
-                if ((!(showMaturePosts!) && post.mature) || (widget.currUser.blockedPostRefs.contains(post.postRef)) || (widget.currUser.blockedUserRefs.contains(post.creatorRef))) {
+                if ((!(showMaturePosts!) && post.mature) || (widget.currUserData.blockedPostRefs.contains(post.postRef)) || (widget.currUserData.blockedUserRefs.contains(post.creatorRef))) {
                   return Container();
                 }
                 return Center(
                     child: PostCard(
                       post: post,
-                      currUser: widget.currUser,
+                      currUserData: widget.currUserData,
                     ));
               },
               noItemsFoundIndicatorBuilder: (BuildContext context) => Container(

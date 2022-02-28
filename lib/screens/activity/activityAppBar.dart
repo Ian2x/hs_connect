@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/homeAppBar.dart';
 
-PreferredSizeWidget activityAppBar({required BuildContext context, required bool isNotifications, required TabController tabController, required UserData userData}) {
+PreferredSizeWidget activityAppBar({required BuildContext context, required bool isNotifications, required TabController tabController, required UserData currUserData}) {
   final colorScheme = Theme.of(context).colorScheme;
   final textTheme = Theme.of(context).textTheme;
 
@@ -28,7 +28,7 @@ PreferredSizeWidget activityAppBar({required BuildContext context, required bool
             controller: tabController,
             padding: EdgeInsets.zero,
             indicator: BoxDecoration(
-                border: Border(bottom: BorderSide(width: 2.0, color: userData.domainColor!=null ? userData.domainColor! : colorScheme.onSurface)
+                border: Border(bottom: BorderSide(width: 2.0, color: currUserData.domainColor!=null ? currUserData.domainColor! : colorScheme.onSurface)
                 )
             ),
             indicatorPadding: HomeAppBar.tabBarPadding,

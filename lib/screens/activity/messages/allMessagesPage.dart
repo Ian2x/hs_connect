@@ -11,7 +11,7 @@ import 'MessagesPage.dart';
 
 class UMUD {
   UserMessage? UM;
-  UserData? UD;
+  OtherUserData? UD;
 
   UMUD({required this.UM, required this.UD});
 }
@@ -29,7 +29,7 @@ class AllMessagesPage extends StatefulWidget {
 
 class _AllMessagesPageState extends State<AllMessagesPage> {
   List<UserMessage>? UMs;
-  List<UserData>? otherUsers;
+  List<OtherUserData>? otherUsers;
   List<UMUD> UMUDcache = [];
 
   @override
@@ -47,14 +47,14 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
     super.initState();
   }
 
-  Future _fetchUsersHelper(DocumentReference otherUserRef, int index, List<UserData?> results) async {
-    results[index] = await userDataFromSnapshot(await otherUserRef.get(), otherUserRef);
+  Future _fetchUsersHelper(DocumentReference otherUserRef, int index, List<OtherUserData?> results) async {
+    results[index] = await otherUserDataFromSnapshot(await otherUserRef.get(), otherUserRef);
   }
 
   Future fetchUsers(List<UserMessage> UMs) async {
-    List<UserData?> tempOtherUsers = List.filled(UMs.length, null);
+    List<OtherUserData?> tempOtherUsers = List.filled(UMs.length, null);
     await Future.wait([for (int i = 0; i < UMs.length; i++) _fetchUsersHelper(UMs[i].otherUserRef, i, tempOtherUsers)]);
-    List<UserData> tempTempOtherUsers = [];
+    List<OtherUserData> tempTempOtherUsers = [];
     for (int i = 0; i < tempOtherUsers.length; i++) {
       if (tempOtherUsers[i] != null) tempTempOtherUsers.add(tempOtherUsers[i]!);
     }

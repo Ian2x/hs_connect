@@ -27,7 +27,7 @@ class _MessagesFeedState extends State<MessagesFeed> {
   void dispose() {
     widget.onUpdateLastViewed();
     MessagesDatabaseService _messages =
-        new MessagesDatabaseService(currUserRef: widget.currUserRef, otherUserRef: widget.otherUserRef);
+        MessagesDatabaseService(currUserRef: widget.currUserRef, otherUserRef: widget.otherUserRef);
     _messages.updateLastViewed(widget.currUserRef, widget.otherUserRef);
     super.dispose();
   }
