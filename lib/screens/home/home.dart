@@ -68,7 +68,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             final colorScheme = Theme.of(context).colorScheme;
             String domain = widget.userData.fullDomainName ?? widget.userData.domain;
             return AlertDialog(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
               contentPadding: EdgeInsets.fromLTRB(20, 0, 20, 30),
               backgroundColor: colorScheme.surface,
               titlePadding: EdgeInsets.fromLTRB(20, 30, 20, 0),

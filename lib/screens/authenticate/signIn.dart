@@ -117,7 +117,7 @@ class _SignInState extends State<SignIn> {
                             padding: EdgeInsets.symmetric(horizontal: 20),
                             child: Text(
                               error != '' ? error:
-                              "Enter your login credentials.",
+                              "Enter your login info.",
                               style: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 14, height: 1.3), textAlign: TextAlign.center,),
                           ),
                           SizedBox(height: 105),

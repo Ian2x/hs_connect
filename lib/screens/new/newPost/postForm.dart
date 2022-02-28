@@ -244,15 +244,16 @@ class _PostFormState extends State<PostForm> {
                           mature: isMature,
                           onValue: handleValue,
                           onError: handleError,
-                        );
+                        );w
                       }
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        border: Border.all(color: userColor, width: 1.5),
-                        borderRadius: BorderRadius.circular(25)
+                        border: Border.all(color: userColor, width: 2),
+                        borderRadius: BorderRadius.circular(25),
+                        color: _title != '' ? userColor:colorScheme.surface,
                       ),
-                      padding: EdgeInsets.symmetric(vertical: 3, horizontal: 6),
+                      padding: EdgeInsets.symmetric(vertical: 1.5, horizontal: 6),
                       child: Row(
                         children: [
                           Icon(Icons.add, size: 20, color: userColor),
@@ -261,7 +262,8 @@ class _PostFormState extends State<PostForm> {
                             child: Container(
                               padding: EdgeInsets.only(bottom: 2, right: 5),
                               child: Text("Post",
-                                  style: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w600, color: userColor),
+                                  style: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w600,
+                                      color: _title != '' ? colorScheme.onSurface : userColor),
                                   maxLines: 1,
                                   softWrap: false,
                                   overflow: TextOverflow.fade),

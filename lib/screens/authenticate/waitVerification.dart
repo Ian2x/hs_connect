@@ -79,7 +79,7 @@ class _WaitVerificationState extends State<WaitVerification> {
 
                   ),
                   child: Text(
-                    "Email is only for verification. It'll never be linked to your account.",
+                    "Email info is only for login and will never be accessible in the app.",
                     style: ThemeText.quicksand(
                       fontWeight: FontWeight.bold,
                       fontSize: 17,
