@@ -4,6 +4,7 @@ import 'package:hs_connect/screens/authenticate/registerPassword.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
 
+import '../../services/auth.dart';
 import 'authButton.dart';
 
 class RegisterEmail extends StatefulWidget {
@@ -17,6 +18,8 @@ class _RegisterEmailState extends State<RegisterEmail> {
   // text field state
   String email = '';
   String? error;
+
+  final AuthService _auth = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +93,9 @@ class _RegisterEmailState extends State<RegisterEmail> {
                       buttonText: "Next",
                       hasText: email != "",
                       onPressed: () async {
-                        if (EmailValidator.validate(email)) {
+                        bool inUse = await _auth.checkIfEmailInUse(email);  //returns true if Used
+                        bool isEmail = EmailValidator.validate(email) && email != "";
+                        if (!inUse && isEmail) {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) => RegisterPassword(email: email.toLowerCase())
@@ -98,7 +103,11 @@ class _RegisterEmailState extends State<RegisterEmail> {
                             );
                         } else {
                           if (mounted) {
-                            setState(() => error = "Please enter a valid email.");
+                            if (!isEmail){
+                              setState(()=> error = "Enter a valid email.");
+                            }else{
+                              setState(() => error = "This email is already in use.");
+                            }
                           }
                         }
                       }),

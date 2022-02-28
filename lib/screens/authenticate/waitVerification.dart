@@ -21,6 +21,8 @@ class _WaitVerificationState extends State<WaitVerification> {
   User? user;
   Timer? timer;
 
+  bool resent = false;
+
   @override
   void initState() {
     print('hi');
@@ -89,19 +91,26 @@ class _WaitVerificationState extends State<WaitVerification> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Didn't get it? ", style: ThemeText.quicksand(
+                  Text( resent != true ? "Didn't get it? ": "Resent email: ", style: ThemeText.quicksand(
                     fontSize: 15,
                     color: Colors.black,
                   )),
                   GestureDetector(
                     onTap: () {
-                      HapticFeedback.heavyImpact();
-                      user!.sendEmailVerification();
+                      if (!resent){
+                        HapticFeedback.heavyImpact();
+                        user!.sendEmailVerification();
+                        setState(() {
+                          resent = true;
+                        });
+                      }
                     },
-                    child: Text("Click here to resend", style: ThemeText.quicksand(
+                    child: Text(
+                      resent != true ? "Click here to resend" : "Check your spam/junk folder.",
+                      style: ThemeText.quicksand(
                       fontSize: 15,
                       color: Colors.black,
-                      decoration: TextDecoration.underline
+                      decoration: resent != true ? TextDecoration.underline : null,
                     ))
                   ),
                 ],
