@@ -45,7 +45,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void initState() {
     handleNewUser();
     setupInteractedMessage();
-    subscribeToDomainTopic();
+    subscribeToDomainTopicAndAllowAlerts();
     getSearchByTrending();
     saveTokenToDatabase();
     tabController = TabController(length: 2, vsync: this);
@@ -138,10 +138,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     }
   }
 
-  void subscribeToDomainTopic() async {
+  void subscribeToDomainTopicAndAllowAlerts() async {
     NotificationSettings settings = await FirebaseMessaging.instance.getNotificationSettings();
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       await FirebaseMessaging.instance.subscribeToTopic(widget.userData.domain.substring(1));
+      await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+        alert: true, // Required to display a heads up notification
+        badge: true,
+        sound: true,
+      );
     }
   }
 
