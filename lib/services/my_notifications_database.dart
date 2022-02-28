@@ -46,4 +46,7 @@ class MyNotificationsDatabaseService {
     return notificationss.map((item) => item!).toList();
   }
 
+  Stream<List<MyNotification?>> numNotificationsStream() {
+    return myNotificationsCollection.where(C.notifiedUserRef, isEqualTo: userRef).orderBy(C.createdAt).snapshots().map((snapshot) => snapshot.docs.map(_myNotificationFromDocument).toList());;
+  }
 }

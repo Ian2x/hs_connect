@@ -5,24 +5,18 @@ import 'package:provider/provider.dart';
 import 'authenticate/preview.dart';
 import 'home/home.dart';
 
-class Wrapper extends StatefulWidget {
+class Wrapper extends StatelessWidget {
   const Wrapper({Key? key}) : super(key: key);
-
-  @override
-  _WrapperState createState() => _WrapperState();
-}
-
-class _WrapperState extends State<Wrapper> {
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User?>(context);
     final userData = Provider.of<UserData?>(context);
 
-    if (user == null || userData == null || user.email==null || !user.email!.endsWith('@ianeric.com')) {
+    if (user == null || userData == null) {
       return PreviewPage();
     } else {
-      return Home(userData: userData);
+      return Home(user: user, userData: userData);
     }
   }
 }

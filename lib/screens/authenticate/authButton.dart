@@ -20,9 +20,9 @@ class AuthButton extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return MyOutlinedButton(
-      padding: EdgeInsets.symmetric(vertical: 9, horizontal: 30),
+      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 29),
       onPressed: onPressed,
-      outlineColor: hasText ? Colors.white : Colors.black54,
+      outlineColor: hasText ? Colors.black : Colors.black54,
       borderRadius: 40,
       backgroundColor: hasText ? Colors.black : Colors.white,
       thickness: 2,

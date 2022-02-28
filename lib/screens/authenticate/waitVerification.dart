@@ -1,18 +1,16 @@
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hs_connect/screens/authenticate/registerUser.dart';
+import 'package:flutter/services.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'dart:async';
-
-import '../../shared/themeManager.dart';
-import '../../shared/widgets/myBackButtonIcon.dart';
+import '../wrapper.dart';
 
 class WaitVerification extends StatefulWidget {
-  final domainEmail;
+  final email;
 
-  const WaitVerification({Key? key, required this.domain, required this.domainEmail}) : super(key: key);
-
-  final String domain;
+  const WaitVerification({Key? key, required this.email}) : super(key: key);
 
   @override
   _WaitVerificationState createState() => _WaitVerificationState();
@@ -22,10 +20,10 @@ class _WaitVerificationState extends State<WaitVerification> {
   final auth = FirebaseAuth.instance;
   User? user;
   Timer? timer;
-  bool emailDeleted = false;
 
   @override
   void initState() {
+    print('hi');
     user = auth.currentUser;
     user!.sendEmailVerification();
 
@@ -48,52 +46,70 @@ class _WaitVerificationState extends State<WaitVerification> {
         resizeToAvoidBottomInset : false,
         backgroundColor: Colors.white,
         appBar: AppBar(
-          leading: myBackButtonIcon(context, overrideColor: ThemeNotifier.lightThemeOnSurface,
-          ),
+          automaticallyImplyLeading: false,
           elevation: 0,
           backgroundColor: Colors.white,
         ),
-        body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 60),
-                Text(
-                  'Click the link in your \nschool email',
-                  style: ThemeText.quicksand(
-                      fontWeight: FontWeight.w700, fontSize: 26, color: Colors.black),
-                ),
-                SizedBox(height: 20),
-                Text("Make sure to check your spam folder.",
-                  style: Theme.of(context).textTheme.subtitle1
-                        ?.copyWith(color: Colors.black, height: 1.5, fontSize: 18)),
-                SizedBox(height: 85),
-                Container(
-                  margin: const EdgeInsets.all(0),
-                  padding: const EdgeInsets.symmetric(horizontal: 15,vertical:30),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black, width: 2),
-                      borderRadius: BorderRadius.circular(15),
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 30.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 60),
+              Text(
+                "We've sent you an email\nto verify your school",
+                style: ThemeText.quicksand(
+                    fontWeight: FontWeight.w700, fontSize: 26, color: Colors.black),
+              ),
+              SizedBox(height: 20),
+              Text("Make sure to check your spam folder.",
+                style: Theme.of(context).textTheme.subtitle1
+                      ?.copyWith(color: Colors.black, height: 1.5, fontSize: 18)),
+              SizedBox(height: 85),
+              Container(
+                margin: EdgeInsets.all(0),
+                padding: EdgeInsets.symmetric(horizontal: 15,vertical:30),
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black, width: 2),
+                    borderRadius: BorderRadius.circular(15),
 
-                  ),
-                  child: Text(
-                    "Email info is only for login and will never be accessible in the app.",
-                    style: ThemeText.quicksand(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 17,
-                      color: Colors.black,
-                      height: 1.5,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
                 ),
-                SizedBox(height: 190),
-              ],
-            ),
+                child: Text(
+                  "Email info is for verification only. We will never release user data.",
+                  style: ThemeText.quicksand(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 17,
+                    color: Colors.black,
+                    height: 1.5,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Spacer(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Didn't get it? ", style: ThemeText.quicksand(
+                    fontSize: 15,
+                    color: Colors.black,
+                  )),
+                  GestureDetector(
+                    onTap: () {
+                      HapticFeedback.heavyImpact();
+                      user!.sendEmailVerification();
+                    },
+                    child: Text("Click here to resend", style: ThemeText.quicksand(
+                      fontSize: 15,
+                      color: Colors.black,
+                      decoration: TextDecoration.underline
+                    ))
+                  ),
+                ],
+              ),
+              SizedBox(height: max(MediaQuery.of(context).padding.bottom, 25))
+            ],
           ),
-        ]));
+        ));
   }
 
   Future<void> checkEmailVerified() async {
@@ -101,9 +117,10 @@ class _WaitVerificationState extends State<WaitVerification> {
     await user!.reload();
     if (user!.emailVerified) {
       timer!.cancel();
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) =>
-              RegisterUser(domain: widget.domain, domainEmail: widget.domainEmail)));
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+              builder: (context) => Wrapper()),
+              (Route<dynamic> route) => false);
     }
   }
 }

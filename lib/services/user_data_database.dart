@@ -17,7 +17,7 @@ class UserDataDatabaseService {
   // collection reference
   static final CollectionReference userDataCollection = FirebaseFirestore.instance.collection(C.userData);
 
-  Future initUserData(String domain, String username, String domainEmail, {String? overrideCounty, String? overrideState, String? overrideCountry}) async {
+  Future initUserData(String domain, String email) async {
     String domainLC = domain.toLowerCase();
     final GroupsDatabaseService _groupDatabaseService = GroupsDatabaseService(currUserRef: currUserRef);
 
@@ -43,14 +43,10 @@ class UserDataDatabaseService {
 
     await currUserRef.set({
       C.fundamentalName: fundamentalName,
-      C.displayedName: username,
-      C.displayedNameLC: username.toLowerCase(),
-      C.loginName: username,
+      C.displayedName: fundamentalName,
+      C.displayedNameLC: fundamentalName,
       C.bio: null,
       C.domain: domainLC,
-      C.overrideCounty: overrideCounty,
-      C.overrideState: overrideState,
-      C.overrideCountry: overrideCountry,
       C.groups: [domainGroupRef],
       C.modGroupRefs: [],
       C.userMessages: [],
@@ -60,7 +56,6 @@ class UserDataDatabaseService {
       C.numReports: 0,
       C.private: false,
       C.notificationsLastViewed: Timestamp.now(),
-      C.recoveryCode: sha1.convert(utf8.encode(domainEmail)).toString(),
       C.blockedUserRefs: [],
       C.blockedPostRefs: []
     });
@@ -105,13 +100,11 @@ class UserDataDatabaseService {
     });
   }
 
-  // get other users from userRef
   Future<UserData?> getUserData({required DocumentReference userRef, bool? noDomainData}) async {
     final snapshot = await userRef.get();
     return await _userDataFromSnapshot(snapshot, overrideUserRef: userRef, noDomainData: noDomainData);
   }
 
-  // home data from snapshot
   Future<UserData?> _userDataFromSnapshot(DocumentSnapshot snapshot, {DocumentReference? overrideUserRef, bool? noDomainData}) async {
     if (snapshot.exists) {
       return await userDataFromSnapshot(snapshot, overrideUserRef != null ? overrideUserRef : currUserRef, noDomainData: noDomainData);
@@ -120,7 +113,6 @@ class UserDataDatabaseService {
     }
   }
 
-  // get home doc stream
   Stream<UserData?> get userData {
     return currUserRef.snapshots().asyncMap((event) => _userDataFromSnapshot(event));
   }

@@ -31,7 +31,6 @@ class UserData {
   final String fundamentalName;
   final String displayedName;
   final String displayedNameLC;
-  final String loginName;
   final String? bio;
   final String domain;
   final List<DocumentReference> groups;
@@ -59,7 +58,6 @@ class UserData {
     required this.fundamentalName,
     required this.displayedName,
     required this.displayedNameLC,
-    required this.loginName,
     required this.bio,
     required this.domain,
     required this.fullDomainName,
@@ -97,7 +95,6 @@ Future<UserData> userDataFromSnapshot(DocumentSnapshot snapshot, DocumentReferen
     fundamentalName: snapshot.get(C.fundamentalName),
     displayedName: snapshot.get(C.displayedName),
     displayedNameLC: snapshot.get(C.displayedNameLC),
-    loginName: snapshot.get(C.loginName),
     bio: snapshot.get(C.bio),
     domain: snapshot.get(C.domain),
     groups: docRefList(snapshot.get(C.groups)),
@@ -112,12 +109,69 @@ Future<UserData> userDataFromSnapshot(DocumentSnapshot snapshot, DocumentReferen
     // extracted data
     fullDomainName: domainData.fullName,
     domainColor: domainData.color != null ? HexColor(domainData.color!) : null,
-    currCounty: snapshot.get(C.overrideCounty) != null ? snapshot.get(C.overrideCounty) : domainData.county,
-    currState: snapshot.get(C.overrideState) != null ? snapshot.get(C.overrideState) : domainData.state,
-    currCountry: snapshot.get(C.overrideCountry) != null ? snapshot.get(C.overrideCountry) : domainData.country,
+    currCounty: domainData.county,
+    currState: domainData.state,
+    currCountry: domainData.country,
     domainImage: domainData.image,
     launchDate: domainData.launchDate,
     blockedPostRefs: docRefList(snapshot.get(C.blockedPostRefs)),
     blockedUserRefs: docRefList(snapshot.get(C.blockedUserRefs))
+  );
+}
+
+class OtherUserData {
+  final DocumentReference userRef;
+  final String fundamentalName;
+  final String displayedName;
+  final String displayedNameLC;
+  final String domain;
+  final List<DocumentReference> groups;
+  final String? profileImageURL;
+  final int score;
+  final bool private;
+  // extracted data
+  final String? fullDomainName;
+  final Color? domainColor;
+  final String? domainImage;
+
+  OtherUserData({
+    required this.userRef,
+    required this.fundamentalName,
+    required this.displayedName,
+    required this.displayedNameLC,
+    required this.domain,
+    required this.fullDomainName,
+    required this.domainColor,
+    required this.domainImage,
+    required this.groups,
+    required this.profileImageURL,
+    required this.score,
+    required this.private,
+  });
+}
+
+Future<OtherUserData> otherUserDataFromSnapshot(DocumentSnapshot snapshot, DocumentReference userRef, {bool? noDomainData}) async {
+
+  final domain = snapshot.get(C.domain);
+  final _domainsData = DomainsDataDatabaseService();
+  DomainData? domainData;
+  if (noDomainData==null || noDomainData==false) {
+    domainData = await _domainsData.getDomainData(domain: domain);
+  }
+  if (domainData==null) domainData = DomainData(county: null, state: null, country: null, fullName: null, color: null, image: null, launchDate: null);
+  return OtherUserData(
+      userRef: userRef,
+      fundamentalName: snapshot.get(C.fundamentalName),
+      displayedName: snapshot.get(C.displayedName),
+      displayedNameLC: snapshot.get(C.displayedNameLC),
+      domain: snapshot.get(C.domain),
+      groups: docRefList(snapshot.get(C.groups)),
+      profileImageURL: snapshot.get(C.profileImageURL),
+      score: snapshot.get(C.score),
+      private: snapshot.get(C.private),
+      // extracted data
+      fullDomainName: domainData.fullName,
+      domainColor: domainData.color != null ? HexColor(domainData.color!) : null,
+      domainImage: domainData.image,
   );
 }

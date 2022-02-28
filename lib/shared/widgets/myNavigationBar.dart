@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/activity/activityPage.dart';
@@ -51,6 +52,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<User?>(context);
     final userData = Provider.of<UserData?>(context);
     final colorScheme = Theme.of(context).colorScheme;
 
@@ -74,12 +76,13 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
               selectedFontSize: 1,
               unselectedFontSize: 1,
               onTap: (int index) async {
-                if (index == 0) {
+                if (index == 0 && user!=null) {
                   if (widget.currentIndex == 0) {
                     Navigator.pushReplacement(
                       context,
                       NoAnimationMaterialPageRoute(
                           builder: (context) => Home(
+                                user: user,
                                 userData: userData,
                               )),
                     );
@@ -89,6 +92,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
                       context,
                       NoAnimationMaterialPageRoute(
                           builder: (context) => Home(
+                            user: user,
                             userData: userData,
                           )),
                     );
