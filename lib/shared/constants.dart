@@ -231,4 +231,5 @@ class C {
   static const dmNotification = 'dmNotification';
   static const otherUserId = 'otherUserId';
   static const notifiedUserRef = 'notifiedUserRef';
+  static const lastPostTime = 'lastPostTime';
 }

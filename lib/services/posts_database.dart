@@ -43,6 +43,8 @@ class PostsDatabaseService {
     // get accessRestriction
     final group = await groupRef.get();
     final accessRestriction = group.get(C.accessRestriction);
+    // update user's last post time
+    currUserRef.update({C.lastPostTime: Timestamp.now()});
 
     final result = await newPostRef
         .set({

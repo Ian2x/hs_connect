@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/widgets/picPickerButton.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:provider/provider.dart';
 import 'package:validators/validators.dart';
 
 import 'groupSelectionSheet.dart';
@@ -21,6 +22,7 @@ import 'groupSelectionSheet.dart';
 const String emptyPollChoiceError = 'Can\'t create a poll with an empty choice';
 const String emptyTitleError = 'Can\'t create a post with an empty title';
 const String badLinkError = 'Please enter a valid URL link';
+const String spamPostError = 'Please wait 2 minutes between posts';
 
 class PostForm extends StatefulWidget {
   final UserData currUserData;
@@ -33,7 +35,6 @@ class PostForm extends StatefulWidget {
 
 class _PostFormState extends State<PostForm> {
   FocusNode optionalTextFocusNode = FocusNode();
-  final _formKey = GlobalKey<FormState>();
 
   void handleError(err) {
     if (mounted) {
@@ -126,296 +127,302 @@ class _PostFormState extends State<PostForm> {
     return Stack(children: [
       SingleChildScrollView(
         physics: BouncingScrollPhysics(),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: <Widget>[
-              SizedBox(height: MediaQuery.of(context).padding.top),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                //Top ROW
-                children: [
-                  SizedBox(width: 10),
-                  TextButton(
-                    child: Text("Cancel",
-                        style: Theme.of(context)
-                            .textTheme
-                            .subtitle1
-                            ?.copyWith(color: colorScheme.onSurface, fontWeight: FontWeight.w600)),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  Spacer(),
-                  TextButton(
-                    onPressed: () => showModalBottomSheet(
-                        context: context,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(20),
-                        )),
-                        builder: (context) => GroupSelectionSheet(
-                            initialSelectedGroup: selectedGroup!,
-                            onSelectGroup: (Group? group) {
-                              if (mounted) {
-                                setState(() {
-                                  selectedGroup = group;
-                                });
-                              }
-                            },
-                            groups: groupChoices!)),
-                    child: Container(
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.fromLTRB(15, 6, 8, 6),
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                              color: colorScheme.surface,
-                              width: 3,
-                            ),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Row(
-                          children: [
-                            Text(selectedGroup!.name, style: Theme.of(context).textTheme.headline6),
-                            Icon(Icons.keyboard_arrow_down_rounded),
-                          ],
-                        )),
-                  ),
-                  Spacer(),
-                  GestureDetector(
-                      onTap: () async {
-                        // check header isn't empty
-                        if (_title.isEmpty) {
+        child: Column(
+          children: <Widget>[
+            SizedBox(height: MediaQuery.of(context).padding.top),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              //Top ROW
+              children: [
+                SizedBox(width: 10),
+                TextButton(
+                  child: Text("Cancel",
+                      style: Theme.of(context)
+                          .textTheme
+                          .subtitle1
+                          ?.copyWith(color: colorScheme.onSurface, fontWeight: FontWeight.w600)),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                Spacer(),
+                TextButton(
+                  onPressed: () => showModalBottomSheet(
+                      context: context,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20),
+                      )),
+                      builder: (context) => GroupSelectionSheet(
+                          initialSelectedGroup: selectedGroup!,
+                          onSelectGroup: (Group? group) {
+                            if (mounted) {
+                              setState(() {
+                                selectedGroup = group;
+                              });
+                            }
+                          },
+                          groups: groupChoices!)),
+                  child: Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.fromLTRB(15, 6, 8, 6),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            color: colorScheme.surface,
+                            width: 3,
+                          ),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Row(
+                        children: [
+                          Text(selectedGroup!.name, style: Theme.of(context).textTheme.headline6),
+                          Icon(Icons.keyboard_arrow_down_rounded),
+                        ],
+                      )),
+                ),
+                Spacer(),
+                GestureDetector(
+                    onTap: () async {
+                      // check header isn't empty
+                      if (_title.isEmpty) {
+                        if (mounted) {
+                          setState(() {
+                            error = emptyTitleError;
+                          });
+                        }
+                        return;
+                      }
+                      // check link is good
+                      if (link != null) {
+                        if (!isURL(link!)) {
                           if (mounted) {
                             setState(() {
-                              error = emptyTitleError;
+                              error = badLinkError;
                             });
                           }
                           return;
                         }
-                        // check link is good
-                        if (link != null) {
-                          if (!isURL(link!)) {
+                      }
+                      // check no empty poll choices
+                      if (poll != null && pollChoices != null) {
+                        for (String choice in pollChoices!) {
+                          if (choice == "") {
                             if (mounted) {
                               setState(() {
-                                error = badLinkError;
+                                error = emptyPollChoiceError;
                               });
                             }
                             return;
                           }
                         }
-                        // check no empty poll choices
-                        if (poll != null && pollChoices != null) {
-                          for (String choice in pollChoices!) {
-                            if (choice == "") {
-                              if (mounted) {
-                                setState(() {
-                                  error = emptyPollChoiceError;
-                                });
-                              }
-                              return;
-                            }
-                          }
-                        }
-                        if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-                          // set to loading screen
-                          if (mounted) {
-                            setState(() => loading = true);
-                          }
-                          // handle image if applicable
-                          String? downloadURL;
-                          if (newFile != null) {
-                            // upload newFile
-                            downloadURL = await _images.uploadImage(file: newFile!);
-                          }
-                          // handle poll if applicable
-                          DocumentReference? pollRef;
-                          if (poll != null && pollChoices != null) {
-                            pollRef = await _polls.newPoll(choices: pollChoices!);
-                          }
-
-                          await PostsDatabaseService(currUserRef: widget.currUserData.userRef).newPost(
-                            title: _title,
-                            text: _text,
-                            tagString: _tag,
-                            media: downloadURL,
-                            pollRef: pollRef,
-                            link: link,
-                            groupRef: selectedGroup!.groupRef,
-                            mature: isMature,
-                            onValue: handleValue,
-                            onError: handleError,
-                          );
-                        }
-                      },
-                      child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: userColor, width: 2),
-                            borderRadius: BorderRadius.circular(25),
-                            color: _title != '' ? userColor : colorScheme.surface,
-                          ),
-                          padding: EdgeInsets.symmetric(vertical: 1.5, horizontal: 6),
-                          child: Row(
-                            children: [
-                              Icon(Icons.add, size: 20, color: _title != '' ? colorScheme.surface : userColor),
-                              SizedBox(width: 2),
-                              FittedBox(
-                                child: Container(
-                                  padding: EdgeInsets.only(bottom: 1, top: 1, right: 5),
-                                  child: Text("Post",
-                                      style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                                          fontWeight: FontWeight.w600,
-                                          color: _title != '' ? colorScheme.surface : userColor),
-                                      maxLines: 1,
-                                      softWrap: false,
-                                      overflow: TextOverflow.fade),
-                                ),
-                              ),
-                            ],
-                          ))),
-                  SizedBox(width: 10),
-                ],
-              ),
-              Divider(height: 4, indent: 0, thickness: 2, color: Theme.of(context).colorScheme.onError),
-              Container(
-                //TextInput Container
-                constraints: BoxConstraints(
-                  minHeight: phoneHeight * 0.75,
-                ),
-                padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                child: Column(children: <Widget>[
-                  error != null
-                      ? FittedBox(
-                          child: Text(error!,
-                              style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.onSurface)))
-                      : Container(),
-                  error != null ? SizedBox(height: 10) : Container(),
-                  TextFormField(
-                    style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
-                    maxLines: null,
-                    autocorrect: true,
-                    textCapitalization: TextCapitalization.sentences,
-                    decoration: InputDecoration(
-                      hintStyle: Theme.of(context)
-                          .textTheme
-                          .headline6
-                          ?.copyWith(fontSize: 18, color: colorScheme.primaryContainer),
-                      border: InputBorder.none,
-                      hintText: "Title",
-                    ),
-                    onChanged: (val) {
-                      setState(() => _title = val);
-                      if (error == emptyTitleError) {
+                      }
+                      // check haven't posted in last 2 minutes
+                      final lastPostCheck = Provider.of<UserData?>(context, listen: false);
+                      if (lastPostCheck != null && lastPostCheck.lastPostTime != null &&
+                          lastPostCheck.lastPostTime!.toDate().compareTo(DateTime.now().subtract(Duration(minutes: 2))) > 0) {
                         if (mounted) {
                           setState(() {
-                            error = null;
+                            error = spamPostError;
                           });
                         }
+                        return;
                       }
-                    },
-                  ),
-                  GestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    onTap: () {
-                      if (!optionalTextFocusNode.hasFocus) {
-                        optionalTextFocusNode.requestFocus();
+                      // set to loading screen
+                      if (mounted) {
+                        setState(() => loading = true);
                       }
+                      // handle image if applicable
+                      String? downloadURL;
+                      if (newFile != null) {
+                        // upload newFile
+                        downloadURL = await _images.uploadImage(file: newFile!);
+                      }
+                      // handle poll if applicable
+                      DocumentReference? pollRef;
+                      if (poll != null && pollChoices != null) {
+                        pollRef = await _polls.newPoll(choices: pollChoices!);
+                      }
+                      await PostsDatabaseService(currUserRef: widget.currUserData.userRef).newPost(
+                        title: _title,
+                        text: _text,
+                        tagString: _tag,
+                        media: downloadURL,
+                        pollRef: pollRef,
+                        link: link,
+                        groupRef: selectedGroup!.groupRef,
+                        mature: isMature,
+                        onValue: handleValue,
+                        onError: handleError,
+                      );
                     },
                     child: Container(
-                      constraints: BoxConstraints(
-                        minHeight: newFile == null ? 492 : 100,
-                      ),
-                      child: Column(
-                        children: [
-                          TextFormField(
-                            style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16),
-                            maxLines: null,
-                            autocorrect: true,
-                            textCapitalization: TextCapitalization.sentences,
-                            decoration: InputDecoration(
-                                hintStyle: Theme.of(context)
-                                    .textTheme
-                                    .bodyText2
-                                    ?.copyWith(fontSize: 16, color: colorScheme.primary),
-                                border: InputBorder.none,
-                                hintText: "Optional text"),
-                            onChanged: (val) => setState(() => _text = val),
-                            focusNode: optionalTextFocusNode,
-                          ),
-                          poll != null ? poll! : Container(),
-                          link != null
-                              ? Container(
-                                  width: MediaQuery.of(context).size.width * 0.9,
-                                  decoration: ShapeDecoration(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      side: BorderSide(
-                                        color: colorScheme.onError,
-                                        width: 1,
-                                      ),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: userColor, width: 2),
+                          borderRadius: BorderRadius.circular(25),
+                          color: _title != '' ? userColor : colorScheme.surface,
+                        ),
+                        padding: EdgeInsets.symmetric(vertical: 1.5, horizontal: 6),
+                        child: Row(
+                          children: [
+                            Icon(Icons.add, size: 20, color: _title != '' ? colorScheme.surface : userColor),
+                            SizedBox(width: 2),
+                            FittedBox(
+                              child: Container(
+                                padding: EdgeInsets.only(bottom: 1, top: 1, right: 5),
+                                child: Text("Post",
+                                    style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                                        fontWeight: FontWeight.w600,
+                                        color: _title != '' ? colorScheme.surface : userColor),
+                                    maxLines: 1,
+                                    softWrap: false,
+                                    overflow: TextOverflow.fade),
+                              ),
+                            ),
+                          ],
+                        ))),
+                SizedBox(width: 10),
+              ],
+            ),
+            Divider(height: 4, indent: 0, thickness: 2, color: Theme.of(context).colorScheme.onError),
+            Container(
+              //TextInput Container
+              constraints: BoxConstraints(
+                minHeight: phoneHeight * 0.75,
+              ),
+              padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+              child: Column(children: <Widget>[
+                error != null
+                    ? FittedBox(
+                        child: Text(error!,
+                            style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.onSurface)))
+                    : Container(),
+                error != null ? SizedBox(height: 10) : Container(),
+                TextFormField(
+                  autofocus: true,
+                  style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
+                  maxLines: null,
+                  autocorrect: true,
+                  textCapitalization: TextCapitalization.sentences,
+                  decoration: InputDecoration(
+                    hintStyle: Theme.of(context)
+                        .textTheme
+                        .headline6
+                        ?.copyWith(fontSize: 18, color: colorScheme.primaryContainer),
+                    border: InputBorder.none,
+                    hintText: "Title",
+                  ),
+                  onChanged: (val) {
+                    setState(() => _title = val);
+                    if (error == emptyTitleError) {
+                      if (mounted) {
+                        setState(() {
+                          error = null;
+                        });
+                      }
+                    }
+                  },
+                ),
+                GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () {
+                    if (!optionalTextFocusNode.hasFocus) {
+                      optionalTextFocusNode.requestFocus();
+                    }
+                  },
+                  child: Container(
+                    constraints: BoxConstraints(
+                      minHeight: newFile == null ? 492 : 100,
+                    ),
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16),
+                          maxLines: null,
+                          autocorrect: true,
+                          textCapitalization: TextCapitalization.sentences,
+                          decoration: InputDecoration(
+                              hintStyle: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2
+                                  ?.copyWith(fontSize: 16, color: colorScheme.primary),
+                              border: InputBorder.none,
+                              hintText: "Optional text"),
+                          onChanged: (val) => setState(() => _text = val),
+                          focusNode: optionalTextFocusNode,
+                        ),
+                        poll != null ? poll! : Container(),
+                        link != null
+                            ? Container(
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                decoration: ShapeDecoration(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                    side: BorderSide(
+                                      color: colorScheme.onError,
+                                      width: 1,
                                     ),
                                   ),
-                                  child: TextFormField(
-                                    style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16),
-                                    decoration: new InputDecoration(
-                                        fillColor: colorScheme.surface,
-                                        filled: true,
-                                        hintText: 'https://website.com',
-                                        isCollapsed: true,
-                                        border: InputBorder.none,
-                                        enabledBorder: InputBorder.none,
-                                        focusedBorder: InputBorder.none,
-                                        hintStyle: Theme.of(context)
-                                            .textTheme
-                                            .bodyText2
-                                            ?.copyWith(fontSize: 16, color: colorScheme.primary),
-                                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                                        suffixIcon: IconButton(
-                                          padding: EdgeInsets.zero,
-                                          constraints: BoxConstraints(),
-                                          onPressed: () {
-                                            if (mounted) {
-                                              setState(() => link = null);
-                                            }
-                                          },
-                                          icon: Icon(Icons.close, size: 20),
-                                        )),
-                                    autocorrect: false,
-                                    onChanged: (val) {
-                                      setState(() => link = val);
-                                      if (error == badLinkError) {
-                                        if (mounted) {
-                                          setState(() {
-                                            error = null;
-                                          });
-                                        }
+                                ),
+                                child: TextFormField(
+                                  style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16),
+                                  decoration: new InputDecoration(
+                                      fillColor: colorScheme.surface,
+                                      filled: true,
+                                      hintText: 'https://website.com',
+                                      isCollapsed: true,
+                                      border: InputBorder.none,
+                                      enabledBorder: InputBorder.none,
+                                      focusedBorder: InputBorder.none,
+                                      hintStyle: Theme.of(context)
+                                          .textTheme
+                                          .bodyText2
+                                          ?.copyWith(fontSize: 16, color: colorScheme.primary),
+                                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                                      suffixIcon: IconButton(
+                                        padding: EdgeInsets.zero,
+                                        constraints: BoxConstraints(),
+                                        onPressed: () {
+                                          if (mounted) {
+                                            setState(() => link = null);
+                                          }
+                                        },
+                                        icon: Icon(Icons.close, size: 20),
+                                      )),
+                                  autocorrect: false,
+                                  onChanged: (val) {
+                                    setState(() => link = val);
+                                    if (error == badLinkError) {
+                                      if (mounted) {
+                                        setState(() {
+                                          error = null;
+                                        });
                                       }
-                                    },
-                                    textAlignVertical: TextAlignVertical.center,
-                                  ),
-                                )
-                              : Container()
-                        ],
-                      ),
+                                    }
+                                  },
+                                  textAlignVertical: TextAlignVertical.center,
+                                ),
+                              )
+                            : Container()
+                      ],
                     ),
                   ),
-                  newFile != null
-                      ? Semantics(
-                          label: 'new_post_pic_image',
-                          child: DeletableImage(
-                              image: Image.file(File(newFile!.path), fit: BoxFit.contain),
-                              onDelete: () {
-                                if (mounted) {
-                                  setState(() => newFile = null);
-                                }
-                              },
-                              maxHeight: 350,
-                              containerWidth: 350),
-                        )
-                      : Container(),
-                ]),
-              ), //
-            ],
-          ),
+                ),
+                newFile != null
+                    ? Semantics(
+                        label: 'new_post_pic_image',
+                        child: DeletableImage(
+                            image: Image.file(File(newFile!.path), fit: BoxFit.contain),
+                            onDelete: () {
+                              if (mounted) {
+                                setState(() => newFile = null);
+                              }
+                            },
+                            maxHeight: 350,
+                            containerWidth: 350),
+                      )
+                    : Container(),
+              ]),
+            ), //
+          ],
         ),
       ),
       Positioned(

@@ -15,7 +15,7 @@ var Filter = require("bad-words");
 
 var badWordsFilter = new Filter({ emptyList: true });
 
-var badWords = ['nigger', 'nigga', 'chink', 'faggot', 'fag', 'sped', 'retard', 'retarded', 'ianbad'];
+var badWords = ['nigger', 'nigga', 'chink', 'faggot', 'fag', 'sped', 'retard', 'retards', 'retarded', 'spic', 'kike', 'zipperhead'];
 
 badWordsFilter.addWords(...badWords);
 

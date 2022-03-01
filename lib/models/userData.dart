@@ -42,6 +42,7 @@ class UserData {
   final int numReports;
   final bool private;
   Timestamp notificationsLastViewed;
+  Timestamp? lastPostTime;
 
   // extracted data
   final String? fullDomainName;
@@ -78,7 +79,8 @@ class UserData {
       required this.notificationsLastViewed,
       required this.launchDate,
       required this.blockedPostRefs,
-      required this.blockedUserRefs});
+      required this.blockedUserRefs,
+      required this.lastPostTime});
 }
 
 Future<UserData> userDataFromSnapshot(DocumentSnapshot snapshot, DocumentReference userRef,
@@ -118,7 +120,8 @@ Future<UserData> userDataFromSnapshot(DocumentSnapshot snapshot, DocumentReferen
       domainImage: domainData.image,
       launchDate: domainData.launchDate,
       blockedPostRefs: docRefList(snapshot.get(C.blockedPostRefs)),
-      blockedUserRefs: docRefList(snapshot.get(C.blockedUserRefs)));
+      blockedUserRefs: docRefList(snapshot.get(C.blockedUserRefs)),
+      lastPostTime: snapshot.get(C.lastPostTime));
 }
 
 class OtherUserData {

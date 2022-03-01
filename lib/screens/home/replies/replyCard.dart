@@ -82,7 +82,8 @@ class _ReplyCardState extends State<ReplyCard> {
     final localCreatorGroupName = creatorGroupName ?? '';
 
     return Container(
-        padding: EdgeInsets.only(left: 15),
+        color: colorScheme.surface,
+        padding: EdgeInsets.only(left: 30, right: 15),
         child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
           Row(
             children: [

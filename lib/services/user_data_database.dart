@@ -63,7 +63,8 @@ class UserDataDatabaseService {
       C.private: false,
       C.notificationsLastViewed: Timestamp.now(),
       C.blockedUserRefs: [],
-      C.blockedPostRefs: []
+      C.blockedPostRefs: [],
+      C.lastPostTime: null,
     });
     // join domain group
     await joinGroup(groupRef: domainGroupRef);
