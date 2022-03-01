@@ -3,43 +3,38 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hs_connect/models/reply.dart';
 import 'package:hs_connect/services/replies_database.dart';
-import 'package:hs_connect/shared/widgets/thick_arrow_icons.dart';
+import 'package:hs_connect/shared/widgets/thickArrowIcons.dart';
 
 class LikeDislikeReply extends StatefulWidget {
   final DocumentReference currUserRef;
   final Reply reply;
   final Color? currUserColor;
 
-  const LikeDislikeReply({Key? key, required this.currUserRef, required this.reply, required this.currUserColor}) : super(key: key);
+  const LikeDislikeReply({Key? key, required this.currUserRef, required this.reply, required this.currUserColor})
+      : super(key: key);
 
   @override
   _LikeDislikeReplyState createState() => _LikeDislikeReplyState();
 }
 
 class _LikeDislikeReplyState extends State<LikeDislikeReply> {
-  bool likeStatus = false;
-  bool dislikeStatus = false;
-  int likeCount = 0;
-  int dislikeCount = 0;
+  late bool likeStatus;
+  late bool dislikeStatus;
+  late int likeCount;
+  late int dislikeCount;
   static const double iconSize = 20;
 
   @override
   void initState() {
-    if (mounted) {
-      setState(() {
-        likeStatus = widget.reply.likes.contains(widget.currUserRef);
-        dislikeStatus = widget.reply.dislikes.contains(widget.currUserRef);
-        likeCount = widget.reply.likes.length;
-        dislikeCount = widget.reply.dislikes.length;
-      });
-    }
+    likeStatus = widget.reply.likes.contains(widget.currUserRef);
+    dislikeStatus = widget.reply.dislikes.contains(widget.currUserRef);
+    likeCount = widget.reply.likes.length;
+    dislikeCount = widget.reply.dislikes.length;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-
-
     final colorScheme = Theme.of(context).colorScheme;
 
     RepliesDatabaseService _replies = RepliesDatabaseService(
@@ -48,12 +43,12 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
         commentRef: widget.reply.commentRef,
         postRef: widget.reply.postRef);
 
-    Color activeColor = widget.currUserColor!=null ? widget.currUserColor! : colorScheme.secondary;
+    Color activeColor = widget.currUserColor ?? colorScheme.secondary;
 
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-            () {
+        () {
           if (likeStatus == true) {
             return IconButton(
               iconSize: iconSize,
@@ -95,12 +90,10 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
           }
         }(),
         SizedBox(width: 2),
-        Text(
-          (likeCount - dislikeCount).toString(),
-          style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 0.8 * iconSize)
-        ),
+        Text((likeCount - dislikeCount).toString(),
+            style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 0.8 * iconSize)),
         SizedBox(width: 2),
-            () {
+        () {
           if (dislikeStatus == true) {
             return IconButton(
               iconSize: iconSize,

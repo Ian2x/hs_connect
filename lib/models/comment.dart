@@ -33,40 +33,21 @@ class Comment {
   });
 }
 
-commentFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
-  final accessRestriction = querySnapshot.get(C.accessRestriction);
-  final temp = Comment(
-      commentRef: querySnapshot.reference,
-      postRef: querySnapshot[C.postRef],
-      groupRef: querySnapshot[C.groupRef],
-      creatorRef: querySnapshot[C.creatorRef],
-      text: querySnapshot[C.text],
-      media: querySnapshot[C.mediaURL],
-      createdAt: querySnapshot[C.createdAt],
-      numReplies: querySnapshot[C.numReplies],
-      accessRestriction: accessRestrictionFromMap(accessRestriction),
-      likes: docRefList(querySnapshot[C.likes]),
-      dislikes: docRefList(querySnapshot[C.dislikes]),
-      numReports: querySnapshot[C.numReports],
-  );
-  return temp;
-}
-
 commentFromSnapshot(DocumentSnapshot snapshot) {
   final accessRestriction = snapshot.get(C.accessRestriction);
   final temp = Comment(
-      commentRef: snapshot.reference,
-      postRef: snapshot[C.postRef],
-      groupRef: snapshot[C.groupRef],
-      creatorRef: snapshot[C.creatorRef],
-      text: snapshot[C.text],
-      media: snapshot[C.mediaURL],
-      createdAt: snapshot[C.createdAt],
-      numReplies: snapshot[C.numReplies],
-      accessRestriction: accessRestrictionFromMap(accessRestriction),
-      likes: docRefList(snapshot[C.likes]),
-      dislikes: docRefList(snapshot[C.dislikes]),
-      numReports: snapshot[C.numReports],
+    commentRef: snapshot.reference,
+    postRef: snapshot[C.postRef],
+    groupRef: snapshot[C.groupRef],
+    creatorRef: snapshot[C.creatorRef],
+    text: snapshot[C.text],
+    media: snapshot[C.mediaURL],
+    createdAt: snapshot[C.createdAt],
+    numReplies: snapshot[C.numReplies],
+    accessRestriction: accessRestrictionFromMap(accessRestriction),
+    likes: docRefList(snapshot[C.likes]),
+    dislikes: docRefList(snapshot[C.dislikes]),
+    numReports: snapshot[C.numReports],
   );
   return temp;
 }

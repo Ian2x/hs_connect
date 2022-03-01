@@ -37,7 +37,9 @@ class _NotificationCardState extends State<NotificationCard> {
   }
 
   void fetchPostGroup() async {
-    if (widget.myNotification.myNotificationType==MyNotificationType.commentVotes || widget.myNotification.myNotificationType==MyNotificationType.postVotes || widget.myNotification.myNotificationType==MyNotificationType.replyVotes) {
+    if (widget.myNotification.myNotificationType == MyNotificationType.commentVotes ||
+        widget.myNotification.myNotificationType == MyNotificationType.postVotes ||
+        widget.myNotification.myNotificationType == MyNotificationType.replyVotes) {
       final postData = await widget.myNotification.parentPostRef.get();
       try {
         final post = postFromSnapshot(postData);
@@ -97,19 +99,13 @@ class _NotificationCardState extends State<NotificationCard> {
               SizedBox(
                   width: 307,
                   child: RichText(
-                    maxLines: 100,
-                    overflow: TextOverflow.ellipsis,
-                    text: TextSpan(
-                      children: [
+                      maxLines: 100,
+                      overflow: TextOverflow.ellipsis,
+                      text: TextSpan(children: [
                         TextSpan(
-                          text: "Convo team: ", style: textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w600)
-                        ),
-                        TextSpan(
-                            text: widget.myNotification.extraData!, style: textTheme.bodyText2
-                        ),
-                      ]
-                    )
-                  )),
+                            text: "Convo team: ", style: textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w600)),
+                        TextSpan(text: widget.myNotification.extraData!, style: textTheme.bodyText2),
+                      ]))),
               Flexible(
                 child: Row(
                   children: [
@@ -146,18 +142,18 @@ class _NotificationCardState extends State<NotificationCard> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => PostPage(
-                            post: post,
-                            group: group,
-                            postLikesManager: PostLikesManager(
-                              likeStatus: post.likes.contains(userData.userRef),
-                              dislikeStatus: post.dislikes.contains(userData.userRef),
-                              likeCount: post.likes.length,
-                              dislikeCount: post.dislikes.length,
-                              onLike: () {},
-                              onUnLike: () {},
-                              onDislike: () {},
-                              onUnDislike: () {},
-                            ))));
+                        post: post,
+                        group: group,
+                        postLikesManager: PostLikesManager(
+                          likeStatus: post.likes.contains(userData.userRef),
+                          dislikeStatus: post.dislikes.contains(userData.userRef),
+                          likeCount: post.likes.length,
+                          dislikeCount: post.dislikes.length,
+                          onLike: () {},
+                          onUnLike: () {},
+                          onDislike: () {},
+                          onUnDislike: () {},
+                        ))));
           } else {
             log('Error fetching group');
             if (mounted) {
@@ -179,7 +175,7 @@ class _NotificationCardState extends State<NotificationCard> {
                   children: <Widget>[
                     ProfileImage(
                       backgroundColor: domainColor,
-                      size:33,
+                      size: 33,
                     ),
                     SizedBox(width: 14),
                     SizedBox(
@@ -190,20 +186,16 @@ class _NotificationCardState extends State<NotificationCard> {
                         text: TextSpan(
                           children: <TextSpan>[
                             TextSpan(
-                                text: widget.myNotification
-                                    .printA(sourceUserName!, postGroupName!),
+                                text: widget.myNotification.printA(sourceUserName!, postGroupName!),
                                 style: textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w600)),
                             TextSpan(
-                                text: widget.myNotification
-                                    .printB(sourceUserName!, postGroupName!),
+                                text: widget.myNotification.printB(sourceUserName!, postGroupName!),
                                 style: textTheme.bodyText2),
                             TextSpan(
-                                text: widget.myNotification
-                                    .printC(sourceUserName!, postGroupName!),
+                                text: widget.myNotification.printC(sourceUserName!, postGroupName!),
                                 style: textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w600)),
                             TextSpan(
-                                text: widget.myNotification
-                                    .printD(sourceUserName!, postGroupName!),
+                                text: widget.myNotification.printD(sourceUserName!, postGroupName!),
                                 style: textTheme.bodyText2),
                           ],
                         ),

@@ -6,7 +6,7 @@ import 'package:hs_connect/screens/home/home.dart';
 import 'package:hs_connect/screens/new/newPost/newPost.dart';
 import 'package:hs_connect/screens/profile/profilePage.dart';
 import 'package:hs_connect/services/my_notifications_database.dart';
-import 'package:hs_connect/shared/widgets/thicker_icons.dart';
+import 'package:hs_connect/shared/widgets/thickerIcons.dart';
 import 'package:provider/provider.dart';
 
 import '../constants.dart';
@@ -67,7 +67,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
     return Stack(
       children: [
         Container(
-          color: userData.domainColor != null ? userData.domainColor! : colorScheme.onSurface,
+          color: userData.domainColor ?? colorScheme.onSurface,
           padding: EdgeInsets.only(top: bottomGradientThickness),
           child: Container(
             color: colorScheme.surface,
@@ -89,7 +89,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
                       NoAnimationMaterialPageRoute(
                           builder: (context) => Home(
                                 user: user,
-                                userData: userData,
+                                currUserData: userData,
                               )),
                     );
                   } else {
@@ -99,7 +99,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
                       NoAnimationMaterialPageRoute(
                           builder: (context) => Home(
                             user: user,
-                            userData: userData,
+                            currUserData: userData,
                           )),
                     );
                   }

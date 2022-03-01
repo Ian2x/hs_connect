@@ -63,12 +63,14 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
     return Scaffold(
       backgroundColor: colorScheme.background,
       appBar: activityAppBar(
-          context: context, isNotifications: isNotifications, tabController: tabController, currUserData: widget.userData),
+          context: context,
+          tabController: tabController,
+          currUserData: widget.userData),
       body: Container(
         color: colorScheme.background,
         child: TabBarView(children: <Widget>[
           NotificationsFeed(currUserData: widget.userData),
-          AllMessagesPage(userData: widget.userData, setNumNotifications: setNumNotifications)
+          AllMessagesPage(currUserData: widget.userData, setNumNotifications: setNumNotifications)
         ], controller: tabController, physics: BouncingScrollPhysics()),
       ),
       bottomNavigationBar: MyNavigationBar(

@@ -151,14 +151,6 @@ class CommentsDatabaseService {
     });
   }
 
-  Comment? _commentFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
-    if (querySnapshot.exists) {
-      return commentFromQuerySnapshot(querySnapshot);
-    } else {
-      return null;
-    }
-  }
-
   Comment? _commentFromSnapshot(DocumentSnapshot snapshot) {
     if (snapshot.exists) {
       return commentFromSnapshot(snapshot);
@@ -175,6 +167,6 @@ class CommentsDatabaseService {
     return commentsCollection
         .where('postRef', isEqualTo: postRef!)
         .snapshots()
-        .map((snapshot) => snapshot.docs.map(_commentFromQuerySnapshot).toList());
+        .map((snapshot) => snapshot.docs.map(_commentFromSnapshot).toList());
   }
 }

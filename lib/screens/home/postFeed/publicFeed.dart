@@ -21,7 +21,7 @@ class PublicFeed extends StatefulWidget {
   _PublicFeedState createState() => _PublicFeedState();
 }
 
-class _PublicFeedState extends State<PublicFeed> with AutomaticKeepAliveClientMixin<PublicFeed>{
+class _PublicFeedState extends State<PublicFeed> with AutomaticKeepAliveClientMixin<PublicFeed> {
   @override
   bool get wantKeepAlive => true;
 
@@ -46,7 +46,7 @@ class _PublicFeedState extends State<PublicFeed> with AutomaticKeepAliveClientMi
   void getShowMaturePosts() async {
     final data = await MyStorageManager.readData('mature');
     if (mounted) {
-      if (data==false) {
+      if (data == false) {
         setState(() => showMaturePosts = false);
       } else {
         setState(() => showMaturePosts = true);
@@ -57,8 +57,10 @@ class _PublicFeedState extends State<PublicFeed> with AutomaticKeepAliveClientMi
   Future<void> _fetchPage(DocumentSnapshot? pageKey) async {
     try {
       DocumentSnapshot? tempKey;
-      List<Post?> tempPosts = await _posts.getGroupPosts([],
-          startingFrom: pageKey, setStartFrom: (DocumentSnapshot ds) {tempKey = ds;}, withPublic: true, byNew: !widget.searchByTrending);
+      List<Post?> tempPosts =
+          await _posts.getGroupPosts([], startingFrom: pageKey, setStartFrom: (DocumentSnapshot ds) {
+        tempKey = ds;
+      }, withPublic: true, byNew: !widget.searchByTrending);
       tempPosts.removeWhere((value) => value == null);
       final newPosts = tempPosts.map((item) => item!).toList();
       final isLastPage = newPosts.length < _pageSize;
@@ -77,38 +79,42 @@ class _PublicFeedState extends State<PublicFeed> with AutomaticKeepAliveClientMi
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    if (widget.isDomain || showMaturePosts==null) return Loading();
+    if (widget.isDomain || showMaturePosts == null) return Loading();
 
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
       padding: EdgeInsets.symmetric(vertical: 3),
       child: RefreshIndicator(
-        onRefresh: () =>
-            Future.sync(
-                  () => _pagingController.refresh(),
-            ),
+        onRefresh: () => Future.sync(
+          () => _pagingController.refresh(),
+        ),
         child: PagedListView<DocumentSnapshot?, Post>(
           pagingController: _pagingController,
           physics: AlwaysScrollableScrollPhysics(),
           padding: EdgeInsets.zero,
           builderDelegate: PagedChildBuilderDelegate<Post>(
             //animateTransitions: true,
-              itemBuilder: (context, post, index) {
-                if ((!(showMaturePosts!) && post.mature) || (widget.currUserData.blockedPostRefs.contains(post.postRef)) || (widget.currUserData.blockedUserRefs.contains(post.creatorRef))) {
-                  return Container();
-                }
-                return Center(
-                    child: PostCard(
-                      post: post,
-                      currUserData: widget.currUserData,
-                    ));
-              },
-              noItemsFoundIndicatorBuilder: (BuildContext context) => Container(
-                  padding: EdgeInsets.only(top: 50),
-                  alignment: Alignment.topCenter,
-                  child: Text("No posts found",
-                      style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.normal, color: colorScheme.onSurface))),
+            itemBuilder: (context, post, index) {
+              if ((!(showMaturePosts!) && post.mature) ||
+                  (widget.currUserData.blockedPostRefs.contains(post.postRef)) ||
+                  (widget.currUserData.blockedUserRefs.contains(post.creatorRef))) {
+                return Container();
+              }
+              return Center(
+                  child: PostCard(
+                post: post,
+                currUserData: widget.currUserData,
+              ));
+            },
+            noItemsFoundIndicatorBuilder: (BuildContext context) => Container(
+                padding: EdgeInsets.only(top: 50),
+                alignment: Alignment.topCenter,
+                child: Text("No posts found",
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline6
+                        ?.copyWith(fontWeight: FontWeight.normal, color: colorScheme.onSurface))),
           ),
         ),
       ),

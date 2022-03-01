@@ -8,26 +8,30 @@ import 'package:hs_connect/shared/widgets/picPickerButton.dart';
 
 typedef VoidFunction = void Function();
 
-typedef VoidGroupParamFunction = void Function (Group?);
+typedef VoidGroupParamFunction = void Function(Group?);
 
-typedef VoidDocParamFunction = void Function (DocumentReference?);
+typedef VoidDocParamFunction = void Function(DocumentReference?);
 
-typedef VoidFileParamFunction = void Function (File?);
+typedef VoidFileParamFunction = void Function(File?);
 
-typedef VoidPollDataParamFunction = void Function (int, String);
+typedef VoidPollDataParamFunction = void Function(int, String);
 
-typedef VoidDocSnapParamFunction = void Function (DocumentSnapshot);
+typedef VoidDocSnapParamFunction = void Function(DocumentSnapshot);
 
 typedef VoidBoolParamFunction = void Function(bool);
 
-typedef VoidOptionalCommentParamFunction = void Function (Comment?);
+typedef VoidOptionalCommentParamFunction = void Function(Comment?);
 
 typedef VoidIntParamFunction = void Function(int);
 
-
-InputDecoration commentReplyInputDecoration({required VoidFunction onPressed, required bool isReply, required bool isFocused, required BuildContext context, required bool hasText, required Color activeColor}) {
+InputDecoration commentReplyInputDecoration(
+    {required VoidFunction onPressed,
+    required bool isReply,
+    required bool isFocused,
+    required BuildContext context,
+    required bool hasText,
+    required Color activeColor}) {
   final colorScheme = Theme.of(context).colorScheme;
-
 
   return InputDecoration(
     fillColor: colorScheme.surface,
@@ -46,22 +50,28 @@ InputDecoration commentReplyInputDecoration({required VoidFunction onPressed, re
     focusedBorder: OutlineInputBorder(
         borderRadius: new BorderRadius.circular(25.7),
         borderSide: new BorderSide(width: 3, color: colorScheme.background)),
-    suffixIcon: isFocused ? Row(mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.min, children: <Widget>[
-      IconButton(
-          icon: Icon(Icons.send),
-          color: hasText? activeColor : colorScheme.primary,
-          iconSize: 16,
-          padding: EdgeInsets.only(left: 5, right: 15),
-          splashColor: Colors.transparent,
-          onPressed: onPressed,
-          constraints: BoxConstraints()),
-    ]) : null,
+    suffixIcon: isFocused
+        ? Row(mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.min, children: <Widget>[
+            IconButton(
+                icon: Icon(Icons.send),
+                color: hasText ? activeColor : colorScheme.primary,
+                iconSize: 16,
+                padding: EdgeInsets.only(left: 5, right: 15),
+                splashColor: Colors.transparent,
+                onPressed: onPressed,
+                constraints: BoxConstraints()),
+          ])
+        : null,
   );
 }
 
-InputDecoration messageInputDecoration({required VoidFunction onPressed, required Function setPic, required BuildContext context, required bool hasText, required bool hasImage, required Color activeColor}) {
-
-
+InputDecoration messageInputDecoration(
+    {required VoidFunction onPressed,
+    required Function setPic,
+    required BuildContext context,
+    required bool hasText,
+    required bool hasImage,
+    required Color activeColor}) {
   final colorScheme = Theme.of(context).colorScheme;
   return InputDecoration(
     hintText: 'Message...',
@@ -71,8 +81,8 @@ InputDecoration messageInputDecoration({required VoidFunction onPressed, require
     labelStyle: Theme.of(context).textTheme.bodyText1,
     contentPadding: EdgeInsets.fromLTRB(20, 14, 0, 14),
     border: new OutlineInputBorder(
-        borderRadius: new BorderRadius.circular(25.7),
-        borderSide: new BorderSide(width: 3, color: colorScheme.background),
+      borderRadius: new BorderRadius.circular(25.7),
+      borderSide: new BorderSide(width: 3, color: colorScheme.background),
     ),
     enabledBorder: new OutlineInputBorder(
         borderRadius: new BorderRadius.circular(25.7),
@@ -81,7 +91,13 @@ InputDecoration messageInputDecoration({required VoidFunction onPressed, require
         borderRadius: new BorderRadius.circular(25.7),
         borderSide: new BorderSide(width: 3, color: colorScheme.background)),
     suffixIcon: Row(mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.min, children: <Widget>[
-      picPickerButton(setPic: setPic, iconSize: 16, context: context, maxWidth: 1200, maxHeight: 1200, color: hasImage ? activeColor : colorScheme.primary),
+      picPickerButton(
+          setPic: setPic,
+          iconSize: 16,
+          context: context,
+          maxWidth: 1200,
+          maxHeight: 1200,
+          color: hasImage ? activeColor : colorScheme.primary),
       IconButton(
           icon: Icon(Icons.send),
           color: hasText ? activeColor : colorScheme.primary,

@@ -4,7 +4,6 @@ import 'package:hs_connect/shared/myStorageManager.dart';
 import 'package:hs_connect/shared/tools/createMaterialColor.dart';
 
 class ThemeNotifier with ChangeNotifier {
-
   static const darkThemeOnSurface = Color(0xffdbdbdb);
   static final darkTheme = ThemeData(
     brightness: Brightness.dark,
@@ -13,7 +12,8 @@ class ThemeNotifier with ChangeNotifier {
     colorScheme: ColorScheme(
       brightness: Brightness.dark,
       background: Color(0xff262626),
-      onSurface: darkThemeOnSurface, //Color(0xffd4d3d3),
+      onSurface: darkThemeOnSurface,
+      //Color(0xffd4d3d3),
       error: Color(0xff4d4d4d),
       primaryContainer: Color(0xffbab9b9),
       secondaryContainer: Color(0xff3f99ee),
@@ -38,16 +38,25 @@ class ThemeNotifier with ChangeNotifier {
     // background
     colorScheme: ColorScheme(
       brightness: Brightness.light,
-      background: Color(0xfff4f4f4), // background grey / light grey
-      onSurface: lightThemeOnSurface, // black
+      background: Color(0xfff4f4f4),
+      // background grey / light grey
+      onSurface: lightThemeOnSurface,
+      // black
       error: Color(0xffb2b2b2),
-      primaryContainer: Color(0xff60676c), // dark grey
-      secondaryContainer: Color(0xff1186f3), // darker secondary blue
-      secondary: Color(0xff2992f4), // secondary blue
-      surface: Color(0xffffffff), // white
-      primary: Color(0xffa1a1a1), // medium grey
-      onError: Color(0xffdbdada), // light medium grey
-      onSecondary: Color(0xffff004d), // secondary red
+      primaryContainer: Color(0xff60676c),
+      // dark grey
+      secondaryContainer: Color(0xff1186f3),
+      // darker secondary blue
+      secondary: Color(0xff2992f4),
+      // secondary blue
+      surface: Color(0xffffffff),
+      // white
+      primary: Color(0xffa1a1a1),
+      // medium grey
+      onError: Color(0xffdbdada),
+      // light medium grey
+      onSecondary: Color(0xffff004d),
+      // secondary red
       onPrimary: Color(0xff000000),
       onBackground: Color(0xff000000),
     ),
@@ -91,7 +100,7 @@ class ThemeNotifier with ChangeNotifier {
       if (value == 'light') {
         this._themeData = lightTheme;
         notifyListeners();
-      } else if (value == 'dark'){
+      } else if (value == 'dark') {
         this._themeData = darkTheme;
         notifyListeners();
       }

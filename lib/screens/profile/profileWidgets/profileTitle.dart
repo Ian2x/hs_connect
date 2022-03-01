@@ -12,25 +12,25 @@ class ProfileTitle extends StatelessWidget {
   final String? otherUserFullDomain;
   final int otherUserScore;
 
-  const ProfileTitle({Key? key,
+  const ProfileTitle({
+    Key? key,
     required this.showMoreHoriz,
     required this.otherUserRef,
     required this.otherUserDomainColor,
     required this.otherUserFundName,
     required this.otherUserFullDomain,
-    required this.otherUserScore,})
-  : super(key: key);
+    required this.otherUserScore,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
             Container(
-              margin: EdgeInsets.symmetric(horizontal:20, vertical: 10),
+              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: ProfileImage(
                 backgroundColor: otherUserDomainColor,
               ),
@@ -42,39 +42,39 @@ class ProfileTitle extends StatelessWidget {
                 Text(
                   otherUserFundName,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headline5?.copyWith(fontWeight:FontWeight.w600, fontSize: 19),
+                  style: Theme.of(context).textTheme.headline5?.copyWith(fontWeight: FontWeight.w600, fontSize: 19),
                 ),
                 SizedBox(height: 5),
-                Text(
-                    otherUserFullDomain! + " ∙ " + otherUserScore.toString() + " Likes",
+                Text(otherUserFullDomain! + " ∙ " + otherUserScore.toString() + " Likes",
                     style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 17)),
               ],
             ),
           ],
         ),
         Spacer(),
-        showMoreHoriz ? Column(
-          children: [
-            IconButton(
-                icon: Icon(Icons.more_horiz, color: Theme.of(context).colorScheme.primaryContainer),
-                constraints: BoxConstraints(),
-                onPressed: () {
-                  showModalBottomSheet(
-                      context: context,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(20),
-                          )),
-                      builder: (context) => ReportSheet(
-                        reportType: ReportType.user,
-                        entityRef: otherUserRef,
-                        entityCreatorRef: otherUserRef,
-                      ));
-                }),
-          ],
-        ) : Container()
+        showMoreHoriz
+            ? Column(
+                children: [
+                  IconButton(
+                      icon: Icon(Icons.more_horiz, color: Theme.of(context).colorScheme.primaryContainer),
+                      constraints: BoxConstraints(),
+                      onPressed: () {
+                        showModalBottomSheet(
+                            context: context,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(20),
+                            )),
+                            builder: (context) => ReportSheet(
+                                  reportType: ReportType.user,
+                                  entityRef: otherUserRef,
+                                  entityCreatorRef: otherUserRef,
+                                ));
+                      }),
+                ],
+              )
+            : Container()
       ],
     );
   }
 }
-

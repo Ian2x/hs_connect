@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/userData.dart';
@@ -16,11 +15,6 @@ class ProfileBody extends StatefulWidget {
 }
 
 class _ProfileBodyState extends State<ProfileBody> {
-  bool isReply = false;
-  DocumentReference? commentRef;
-
-  bool test = false;
-
   List<Post>? _userPosts;
 
   @override
@@ -76,7 +70,6 @@ class _ProfileBodyState extends State<ProfileBody> {
                       textAlign: TextAlign.left),
                 ],
               ),
-
             ],
           ),
         ),
@@ -86,10 +79,9 @@ class _ProfileBodyState extends State<ProfileBody> {
         _userPosts != null && _userPosts!.length != 0
             ? Expanded(
                 child: RefreshIndicator(
-                  onRefresh: () =>
-                      Future.sync(
-                            () => getUserPosts(),
-                      ),
+                  onRefresh: () => Future.sync(
+                    () => getUserPosts(),
+                  ),
                   child: ListView.builder(
                     itemCount: _userPosts?.length,
                     scrollDirection: Axis.vertical,

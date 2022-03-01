@@ -113,13 +113,15 @@ class PostsDatabaseService {
         final delComments = Future(() async {
           final commentsData =
               await FirebaseFirestore.instance.collection(C.comments).where(C.postRef, isEqualTo: postRef).get();
-          final comments = commentsData.docs.map((commentData) => commentFromQuerySnapshot(commentData));
+          final comments = commentsData.docs.map((commentData) => commentFromSnapshot(commentData));
           Future.wait([for (Comment comment in comments) _delCommentHelper(comment, postRef)]);
         });
         // delete post's notifications in parallel
         final delNotifications = Future(() async {
-          final notificationsData =
-              await FirebaseFirestore.instance.collection(C.myNotifications).where(C.parentPostRef, isEqualTo: postRef).get();
+          final notificationsData = await FirebaseFirestore.instance
+              .collection(C.myNotifications)
+              .where(C.parentPostRef, isEqualTo: postRef)
+              .get();
           final notificationsRefs = notificationsData.docs.map((notificationData) => notificationData.reference);
           Future.wait([for (DocumentReference ref in notificationsRefs) ref.delete()]);
         });
@@ -208,15 +210,6 @@ class PostsDatabaseService {
     });
   }
 
-  // home data from snapshot
-  Post? _postFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
-    if (querySnapshot.exists) {
-      return postFromQuerySnapshot(querySnapshot);
-    } else {
-      return null;
-    }
-  }
-
   Post? _postFromSnapshot(DocumentSnapshot snapshot) {
     if (snapshot.exists) {
       return postFromSnapshot(snapshot);
@@ -241,7 +234,10 @@ class PostsDatabaseService {
   }
 
   Future<List<Post?>> getGroupPosts(List<DocumentReference> groupRefs,
-      {DocumentSnapshot? startingFrom, required VoidDocSnapParamFunction setStartFrom, required bool withPublic, required bool byNew}) async {
+      {DocumentSnapshot? startingFrom,
+      required VoidDocSnapParamFunction setStartFrom,
+      required bool withPublic,
+      required bool byNew}) async {
     // add public group
     if (withPublic) {
       groupRefs.add(FirebaseFirestore.instance.collection(C.groups).doc(C.Public));
@@ -249,30 +245,30 @@ class PostsDatabaseService {
     if (startingFrom != null) {
       final data = await postsCollection
           .where(C.groupRef, whereIn: groupRefs)
-          .orderBy(byNew? C.createdAt : C.trendingCreatedAt, descending: true)
+          .orderBy(byNew ? C.createdAt : C.trendingCreatedAt, descending: true)
           .startAfterDocument(startingFrom)
           .limit(nextPostsFetchSize)
           .get();
       if (data.docs.isNotEmpty) {
         setStartFrom(data.docs.last);
       }
-      return data.docs.map(_postFromQuerySnapshot).toList();
+      return data.docs.map(_postFromSnapshot).toList();
     } else {
       final data = await postsCollection
           .where(C.groupRef, whereIn: groupRefs)
-          .orderBy(byNew? C.createdAt : C.trendingCreatedAt, descending: true)
+          .orderBy(byNew ? C.createdAt : C.trendingCreatedAt, descending: true)
           .limit(initialPostsFetchSize)
           .get();
       if (data.docs.isNotEmpty) {
         setStartFrom(data.docs.last);
       }
-      return data.docs.map(_postFromQuerySnapshot).toList();
+      return data.docs.map(_postFromSnapshot).toList();
     }
   }
 
   Future<List<Post?>> getUserPosts() async {
     final snapshot = await postsCollection.where(C.creatorRef, isEqualTo: currUserRef).get();
-    return snapshot.docs.map(_postFromQuerySnapshot).toList();
+    return snapshot.docs.map(_postFromSnapshot).toList();
   }
 
   SearchResult _searchResultFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {

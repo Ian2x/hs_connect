@@ -20,9 +20,9 @@ import 'launchCountdown.dart';
 
 class Home extends StatefulWidget {
   final User user;
-  final UserData userData;
+  final UserData currUserData;
 
-  const Home({Key? key, required this.user, required this.userData}) : super(key: key);
+  const Home({Key? key, required this.user, required this.currUserData}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
@@ -77,7 +77,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             builder: (BuildContext context) {
               final textTheme = Theme.of(context).textTheme;
               final colorScheme = Theme.of(context).colorScheme;
-              String domain = widget.userData.fullDomainName ?? widget.userData.domain;
+              String domain = widget.currUserData.fullDomainName ?? widget.currUserData.domain;
               return AlertDialog(
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
                 contentPadding: EdgeInsets.fromLTRB(20, 0, 20, 30),
@@ -85,8 +85,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 titlePadding: EdgeInsets.fromLTRB(20, 30, 20, 0),
                 title: Text(
                   "You're user number " +
-                      widget.userData.fundamentalName.replaceAll(
-                          RegExp(widget.userData.domain.replaceAll(RegExp(r'(\.com|\.org|\.info|\.edu|\.net)'), '')),
+                      widget.currUserData.fundamentalName.replaceAll(
+                          RegExp(widget.currUserData.domain.replaceAll(RegExp(r'(\.com|\.org|\.info|\.edu|\.net)'), '')),
                           "") +
                       " from " +
                       domain +
@@ -100,8 +100,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   padding: EdgeInsets.fromLTRB(10, 15, 10, 0),
                   alignment: Alignment.topCenter,
                   child: Text(
-                    widget.userData.fundamentalName,
-                    style: textTheme.headline4?.copyWith(fontSize: 24, color: widget.userData.domainColor),
+                    widget.currUserData.fundamentalName,
+                    style: textTheme.headline4?.copyWith(fontSize: 24, color: widget.currUserData.domainColor),
                   ),
                 ),
               );
@@ -114,7 +114,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   void saveTokenToDatabaseHelper(String token) async {
-    widget.userData.userRef.update({
+    widget.currUserData.userRef.update({
       C.tokens: FieldValue.arrayUnion([token])
     });
   }
@@ -141,7 +141,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void subscribeToDomainTopicAndAllowAlerts() async {
     NotificationSettings settings = await FirebaseMessaging.instance.getNotificationSettings();
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      await FirebaseMessaging.instance.subscribeToTopic(widget.userData.domain.substring(1));
+      await FirebaseMessaging.instance.subscribeToTopic(widget.currUserData.domain.substring(1));
       await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
         alert: true, // Required to display a heads up notification
         badge: true,
@@ -177,8 +177,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   post: post,
                   group: group,
                   postLikesManager: PostLikesManager(
-                      likeStatus: post.likes.contains(widget.userData.userRef),
-                      dislikeStatus: post.dislikes.contains(widget.userData.userRef),
+                      likeStatus: post.likes.contains(widget.currUserData.userRef),
+                      dislikeStatus: post.dislikes.contains(widget.currUserData.userRef),
                       likeCount: post.likes.length,
                       dislikeCount: post.dislikes.length,
                       onLike: () {},
@@ -205,7 +205,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           context,
           MaterialPageRoute(
               builder: (context) => MessagesPage(
-                    currUserRef: widget.userData.userRef,
+                    currUserRef: widget.currUserData.userRef,
                     otherUserRef: otherUser.userRef,
                     onUpdateLastMessage: () {},
                     onUpdateLastViewed: () {},
@@ -225,8 +225,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    if (widget.userData.launchDate != null && widget.userData.launchDate!.compareTo(Timestamp.now()) > 0) {
-      return LaunchCountdown(userData: widget.userData);
+    if (widget.currUserData.launchDate != null && widget.currUserData.launchDate!.compareTo(Timestamp.now()) > 0) {
+      return LaunchCountdown(currUserData: widget.currUserData);
     }
 
     return Scaffold(
@@ -241,7 +241,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 SliverPersistentHeader(
                   delegate: HomeAppBar(
                       tabController: tabController,
-                      currUserData: widget.userData,
+                      currUserData: widget.currUserData,
                       isDomain: isDomain,
                       searchByTrending: searchByTrending,
                       toggleSearch: toggleSearch,
@@ -254,13 +254,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             body: TabBarView(
               children: [
                 DomainFeed(
-                  currUserData: widget.userData,
+                  currUserData: widget.currUserData,
                   isDomain: isDomain,
                   searchByTrending: searchByTrending,
                   key: ValueKey<bool>(searchByTrending),
                 ),
                 PublicFeed(
-                  currUserData: widget.userData,
+                  currUserData: widget.currUserData,
                   isDomain: isDomain,
                   searchByTrending: searchByTrending,
                   key: ValueKey<bool>(!searchByTrending),
@@ -274,7 +274,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       ),
       bottomNavigationBar: MyNavigationBar(
         currentIndex: 0,
-        currUserData: widget.userData,
+        currUserData: widget.currUserData,
       ),
       resizeToAvoidBottomInset: false,
     );

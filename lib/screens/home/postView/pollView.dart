@@ -45,20 +45,18 @@ class _PollViewState extends State<PollView> {
 
   @override
   Widget build(BuildContext context) {
-
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
         width: MediaQuery.of(context).size.width * 0.9,
         decoration: ShapeDecoration(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5),
-            side: BorderSide(
-              color: colorScheme.onError,
-              width: 1,
-            ),
-          )
-        ),
+            shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5),
+          side: BorderSide(
+            color: colorScheme.onError,
+            width: 1,
+          ),
+        )),
         padding: EdgeInsets.all(10),
         margin: EdgeInsets.only(top: 10),
         child: ListView.builder(
@@ -85,7 +83,8 @@ class _PollViewState extends State<PollView> {
                     });
                     PollsDatabaseService _polls = PollsDatabaseService();
                     if (!(await _polls.alreadyVoted(pollRef: widget.poll.pollRef, userRef: widget.currUserRef))) {
-                      _polls.vote(pollRef: widget.poll.pollRef, userRef: widget.currUserRef, choice: index, post: widget.post);
+                      _polls.vote(
+                          pollRef: widget.poll.pollRef, userRef: widget.currUserRef, choice: index, post: widget.post);
                     }
                   }
                 });
@@ -114,11 +113,9 @@ class PollChoiceView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
     final colorScheme = Theme.of(context).colorScheme;
 
-    String votePercentage = totalVotes != 0 ? (100*numChoiceVotes/totalVotes).round().toString()+'%' : '0%';
+    String votePercentage = totalVotes != 0 ? (100 * numChoiceVotes / totalVotes).round().toString() + '%' : '0%';
     return GestureDetector(
       onTap: () {
         if (voted == null) {
@@ -143,7 +140,7 @@ class PollChoiceView extends StatelessWidget {
                     animation: true,
                     lineHeight: 32,
                     animationDuration: 700,
-                    percent: totalVotes!=0 ? numChoiceVotes / totalVotes : 0,
+                    percent: totalVotes != 0 ? numChoiceVotes / totalVotes : 0,
                     barRadius: Radius.circular(10),
                     progressColor: colorScheme.primary.withOpacity(0.4),
                   )
@@ -161,9 +158,9 @@ class PollChoiceView extends StatelessWidget {
               child: Container(
                   padding: EdgeInsets.only(top: 7),
                   width: 75,
-                  child: Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
-                    Text(votePercentage + '   |', style: Theme.of(context).textTheme.bodyText2)
-                  ])),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[Text(votePercentage + '   |', style: Theme.of(context).textTheme.bodyText2)])),
             ),
             AnimatedOpacity(
               opacity: voted == index ? 1 : 0,

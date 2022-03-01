@@ -33,7 +33,7 @@ class EnMessages implements LookupMessages {
   String aDay(int hours) => '1d';
 
   @override
-  String days(int days) => '$days'+'d';
+  String days(int days) => '$days' + 'd';
 
   @override
   String aboutAMonth(int days) => '1mo';

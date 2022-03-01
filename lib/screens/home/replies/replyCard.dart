@@ -17,11 +17,13 @@ class ReplyCard extends StatefulWidget {
   final DocumentReference postCreatorRef;
   final Color? groupColor;
 
-  ReplyCard({Key? key,
-    required this.reply,
-    required this.currUserData,
-    required this.postCreatorRef,
-    required this.groupColor}) : super(key: key);
+  ReplyCard(
+      {Key? key,
+      required this.reply,
+      required this.currUserData,
+      required this.postCreatorRef,
+      required this.groupColor})
+      : super(key: key);
 
   @override
   _ReplyCardState createState() => _ReplyCardState();
@@ -40,17 +42,9 @@ class _ReplyCardState extends State<ReplyCard> {
     super.initState();
     // initialize liked/disliked
     if (widget.reply.likes.contains(widget.currUserData.userRef)) {
-      if (mounted) {
-        setState(() {
-          liked = true;
-        });
-      }
+      liked = true;
     } else if (widget.reply.likes.contains(widget.currUserData.userRef)) {
-      if (mounted) {
-        setState(() {
-          disliked = true;
-        });
-      }
+      disliked = true;
     }
     getOtherUserData();
   }
@@ -59,7 +53,8 @@ class _ReplyCardState extends State<ReplyCard> {
     if (widget.reply.creatorRef != null) {
       UserDataDatabaseService _userInfoDatabaseService =
           UserDataDatabaseService(currUserRef: widget.currUserData.userRef);
-      final OtherUserData? fetchUserData = await _userInfoDatabaseService.getOtherUserData(userRef: widget.reply.creatorRef!);
+      final OtherUserData? fetchUserData =
+          await _userInfoDatabaseService.getOtherUserData(userRef: widget.reply.creatorRef!);
       if (mounted) {
         setState(() {
           creatorName = fetchUserData != null ? fetchUserData.fundamentalName : null;
@@ -81,12 +76,10 @@ class _ReplyCardState extends State<ReplyCard> {
 
   @override
   Widget build(BuildContext context) {
-
-
     final colorScheme = Theme.of(context).colorScheme;
 
-    final localCreatorName = creatorName != null ? creatorName! : '';
-    final localCreatorGroupName = creatorGroupName != null ? creatorGroupName! : '';
+    final localCreatorName = creatorName ?? '';
+    final localCreatorGroupName = creatorGroupName ?? '';
 
     return Container(
         padding: EdgeInsets.fromLTRB(17, 0, 0, 0),
@@ -98,16 +91,18 @@ class _ReplyCardState extends State<ReplyCard> {
                 height: 33,
                 alignment: Alignment.centerLeft,
                 child: TextButton(
-                  style: TextButton.styleFrom(
-                      splashFactory: NoSplash.splashFactory, padding: EdgeInsets.zero, alignment: Alignment.centerLeft),
+                    style: TextButton.styleFrom(
+                        splashFactory: NoSplash.splashFactory,
+                        padding: EdgeInsets.zero,
+                        alignment: Alignment.centerLeft),
                     onPressed: () {
                       if (creatorName != null) {
                         showModalBottomSheet(
                             context: context,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(20),
-                                )),
+                              top: Radius.circular(20),
+                            )),
                             builder: (context) => ProfileSheet(
                                   currUserRef: widget.currUserData.userRef,
                                   otherUserScore: creatorScore!,
@@ -118,27 +113,24 @@ class _ReplyCardState extends State<ReplyCard> {
                                 ));
                       }
                     },
-                  child: RichText(text: TextSpan(
-                      children: [
+                    child: RichText(
+                      text: TextSpan(children: [
                         TextSpan(
                             text: localCreatorName + " • ",
-                            style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                                color: colorScheme.primary,
-                                fontSize: commentReplyDetailSize)
-                        ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle2
+                                ?.copyWith(color: colorScheme.primary, fontSize: commentReplyDetailSize)),
                         TextSpan(
                             text: localCreatorGroupName,
                             style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                                color: creatorGroupColor != null ? creatorGroupColor : colorScheme.primary,
-                                fontSize: commentReplyDetailSize)
-                        )
-                      ]
-                  ),
-                  )
-                ),
+                                color: creatorGroupColor ?? colorScheme.primary,
+                                fontSize: commentReplyDetailSize))
+                      ]),
+                    )),
               ),
               Spacer(),
-              widget.reply.creatorRef==widget.postCreatorRef
+              widget.reply.creatorRef == widget.postCreatorRef
                   ? Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(17),
@@ -146,15 +138,17 @@ class _ReplyCardState extends State<ReplyCard> {
                       ),
                       padding: EdgeInsets.fromLTRB(10, 5, 0, 1),
                       margin: EdgeInsets.all(1),
-                      child: Text('Creator', style: Theme.of(context).textTheme.subtitle2?.copyWith(color: widget.groupColor != null ? widget.groupColor : colorScheme.onSurface, fontSize: 12)))
+                      child: Text('Creator',
+                          style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                              color: widget.groupColor ?? colorScheme.onSurface,
+                              fontSize: 12)))
                   : Container(),
             ],
           ),
           SizedBox(height: 4),
           SizedBox(
             width: (MediaQuery.of(context).size.width) * .85,
-            child: Text(widget.reply.text,
-                style: Theme.of(context).textTheme.bodyText1),
+            child: Text(widget.reply.text, style: Theme.of(context).textTheme.bodyText1),
           ),
           SizedBox(height: 7),
           Row(
@@ -167,26 +161,27 @@ class _ReplyCardState extends State<ReplyCard> {
               SizedBox(width: 8),
               widget.reply.creatorRef != null && widget.reply.creatorRef != widget.currUserData.userRef
                   ? Container(
-                height: 30,
-                child: IconButton(
-                  icon: Icon(Icons.more_horiz, size: 20, color: colorScheme.primary),
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.zero,
-                  onPressed: () {
-                    showModalBottomSheet(
-                        context: context,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(20),
-                        )),
-                        builder: (context) => ReportSheet(
-                              reportType: ReportType.reply,
-                              entityRef: widget.reply.commentRef,
-                              entityCreatorRef: widget.reply.creatorRef!,
-                            ));
-                  },
-                ),
-              ) : Container(height: 30),
+                      height: 30,
+                      child: IconButton(
+                        icon: Icon(Icons.more_horiz, size: 20, color: colorScheme.primary),
+                        alignment: Alignment.centerLeft,
+                        padding: EdgeInsets.zero,
+                        onPressed: () {
+                          showModalBottomSheet(
+                              context: context,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(20),
+                              )),
+                              builder: (context) => ReportSheet(
+                                    reportType: ReportType.reply,
+                                    entityRef: widget.reply.commentRef,
+                                    entityCreatorRef: widget.reply.creatorRef!,
+                                  ));
+                        },
+                      ),
+                    )
+                  : Container(height: 30),
               Spacer(),
               widget.reply.creatorRef != null
                   ? LikeDislikeReply(
