@@ -114,7 +114,7 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
 
   @override
   Widget build(BuildContext context) {
-    final userData = Provider.of<UserData?>(context);
+    final userData = Provider.of<UserData?>(context, listen: false);
 
     if (userData == null || _comments == null) {
       return Loading();

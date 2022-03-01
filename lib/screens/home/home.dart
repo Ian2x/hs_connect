@@ -228,50 +228,45 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
     return Scaffold(
       backgroundColor: colorScheme.background,
-      body: Stack(
-        children: <Widget>[
-          NestedScrollView(
-            floatHeaderSlivers: true,
-            controller: scrollController,
-            headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-              return [
-                SliverPersistentHeader(
-                  delegate: HomeAppBar(
-                      tabController: tabController,
-                      currUserData: widget.currUserData,
-                      isDomain: isDomain,
-                      searchByTrending: searchByTrending,
-                      toggleSearch: toggleSearch,
-                      safeAreaHeight: MediaQuery.of(context).padding.top),
-                  pinned: true,
-                  floating: true,
-                ),
-              ];
-            },
-            body: TabBarView(
-              children: [
-                DomainFeed(
+      body: NestedScrollView(
+        floatHeaderSlivers: true,
+        controller: scrollController,
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return [
+            SliverPersistentHeader(
+              delegate: HomeAppBar(
+                  tabController: tabController,
                   currUserData: widget.currUserData,
                   isDomain: isDomain,
                   searchByTrending: searchByTrending,
-                  key: ValueKey<bool>(searchByTrending),
-                ),
-                PublicFeed(
-                  currUserData: widget.currUserData,
-                  isDomain: isDomain,
-                  searchByTrending: searchByTrending,
-                  key: ValueKey<bool>(!searchByTrending),
-                ),
-              ],
-              controller: tabController,
-              physics: AlwaysScrollableScrollPhysics(),
+                  toggleSearch: toggleSearch,
+                  safeAreaHeight: MediaQuery.of(context).padding.top),
+              pinned: true,
+              floating: true,
             ),
-          ),
-        ],
+          ];
+        },
+        body: TabBarView(
+          children: [
+            DomainFeed(
+              currUserData: widget.currUserData,
+              isDomain: isDomain,
+              searchByTrending: searchByTrending,
+              key: ValueKey<bool>(searchByTrending),
+            ),
+            PublicFeed(
+              currUserData: widget.currUserData,
+              isDomain: isDomain,
+              searchByTrending: searchByTrending,
+              key: ValueKey<bool>(!searchByTrending),
+            ),
+          ],
+          controller: tabController,
+          physics: AlwaysScrollableScrollPhysics(),
+        ),
       ),
       bottomNavigationBar: MyNavigationBar(
         currentIndex: 0,
-        currUserData: widget.currUserData,
       ),
       resizeToAvoidBottomInset: false,
     );

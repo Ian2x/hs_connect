@@ -6,6 +6,7 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/my_notifications_database.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 
+import '../../../services/user_data_database.dart';
 import 'notificationCard.dart';
 
 class NotificationsFeed extends StatefulWidget {
@@ -27,6 +28,7 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
   }
 
   Future<void> fetchNotifications() async {
+    UserDataDatabaseService(currUserRef: widget.currUserData.userRef).updateNotificationsLastViewed();
     final notificationss =
         await MyNotificationsDatabaseService(userRef: widget.currUserData.userRef).getNotifications();
     if (mounted) {
@@ -49,7 +51,6 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
       child: ListView.builder(
           itemCount: max(numberNotifications, 1),
           scrollDirection: Axis.vertical,
-          shrinkWrap: true,
           padding: EdgeInsets.zero,
           physics: AlwaysScrollableScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {

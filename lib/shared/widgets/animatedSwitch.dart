@@ -27,7 +27,7 @@ class _AnimatedSwitchState extends State<AnimatedSwitch> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final userData = Provider.of<UserData?>(context);
+    final userData = Provider.of<UserData?>(context, listen: false);
     final onColor = userData?.domainColor ?? colorScheme.secondary.withAlpha(255);
     return GestureDetector(
       onTap: () {
@@ -89,7 +89,7 @@ class _AnimatedSwitchStateSmall extends State<AnimatedSwitchSmall> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final userData = Provider.of<UserData?>(context);
+    final userData = Provider.of<UserData?>(context, listen: false);
     final onColor = userData?.domainColor ?? colorScheme.secondary.withAlpha(255);
     return GestureDetector(
       onTap: () {

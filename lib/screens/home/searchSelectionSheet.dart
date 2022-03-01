@@ -30,7 +30,7 @@ class _SearchSelectionSheetState extends State<SearchSelectionSheet> {
     final colorScheme = Theme.of(context).colorScheme;
 
     final double bottomSpace = max(MediaQuery.of(context).padding.bottom, 25);
-    final userData = Provider.of<UserData?>(context);
+    final userData = Provider.of<UserData?>(context, listen: false);
     final activeColor = userData?.domainColor ?? colorScheme.secondary;
 
     return Container(

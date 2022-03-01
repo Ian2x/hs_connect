@@ -55,7 +55,7 @@ class _DeletePostSheetState extends State<DeletePostSheet> with TickerProviderSt
 
     final colorScheme = Theme.of(context).colorScheme;
 
-    final userData = Provider.of<UserData?>(context);
+    final userData = Provider.of<UserData?>(context, listen: false);
     if (userData == null) return Loading();
 
     final double bottomSpace = max(MediaQuery.of(context).padding.bottom, 5);
