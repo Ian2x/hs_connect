@@ -30,7 +30,11 @@ class RepliesFeed extends StatelessWidget {
           return Container();
         } else {
           final replies = (snapshot.data as List<Reply?>).map((reply) => reply!).toList();
+          if (replies.length == 0) {
+            return Container();
+          }
           return ListView.builder(
+            padding: EdgeInsets.zero,
             physics: NeverScrollableScrollPhysics(),
             itemCount: replies.length,
             scrollDirection: Axis.vertical,
@@ -38,14 +42,14 @@ class RepliesFeed extends StatelessWidget {
             itemBuilder: (BuildContext context, int index) {
               if (userData.blockedUserRefs.contains(replies[index].creatorRef)) {
                 return Container();
+              } else {
+                return ReplyCard(
+                  reply: replies[index],
+                  currUserData: userData,
+                  postCreatorRef: postCreatorRef,
+                  groupColor: groupColor,
+                );
               }
-              return Center(
-                  child: ReplyCard(
-                reply: replies[index],
-                currUserData: userData,
-                postCreatorRef: postCreatorRef,
-                groupColor: groupColor,
-              ));
             },
           );
         }
