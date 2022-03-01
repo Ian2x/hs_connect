@@ -5,6 +5,7 @@ import 'package:hs_connect/screens/profile/profileWidgets/profileImage.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../../../shared/inputDecorations.dart';
 import 'MessagesPage.dart';
@@ -18,9 +19,8 @@ class UMUD {
 
 class AllMessagesPage extends StatefulWidget {
   final UserData currUserData;
-  final VoidIntParamFunction setNumNotifications;
 
-  const AllMessagesPage({Key? key, required this.currUserData, required this.setNumNotifications}) : super(key: key);
+  const AllMessagesPage({Key? key, required this.currUserData}) : super(key: key);
 
   @override
   _AllMessagesPageState createState() => _AllMessagesPageState();
@@ -28,10 +28,11 @@ class AllMessagesPage extends StatefulWidget {
 
 class _AllMessagesPageState extends State<AllMessagesPage> {
   List<UMUD> UMUDcache = [];
+  bool loading = false;
 
   @override
   void initState() {
-    fetchUsers();
+    fetchUsers(widget.currUserData);
     super.initState();
   }
 
@@ -39,8 +40,14 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
     results[index] = await otherUserDataFromSnapshot(await otherUserRef.get(), otherUserRef);
   }
 
-  Future fetchUsers() async {
-    List<UserMessage> tempUMs = widget.currUserData.userMessages;
+  Future fetchUsers(UserData? userData) async {
+    if (userData==null) {
+      return;
+    }
+    if (mounted) {
+      setState(() => loading = true);
+    }
+    List<UserMessage> tempUMs = userData.userMessages;
     List<UMUD> tempUMUDcache = [];
     for (UserMessage UM in tempUMs) {
       tempUMUDcache.add(UMUD(UM: UM, UD: null));
@@ -59,14 +66,9 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
     if (mounted) {
       setState(() {
         UMUDcache = tempUMUDcache;
+        loading = false;
       });
     }
-  }
-
-  void calculateNumUnread() {
-    final num = UMUDcache.where((element) =>
-        element.UM!.lastViewed == null || element.UM!.lastViewed!.compareTo(element.UM!.lastMessage) < 0).length;
-    widget.setNumNotifications(num);
   }
 
   @override
@@ -74,7 +76,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
-    if (UMUDcache.where((UMUD umud) => umud.UM==null || umud.UD==null).length > 0) {
+    if (loading || UMUDcache.where((UMUD umud) => umud.UM==null || umud.UD==null).length > 0) {
       return Loading();
     }
 
@@ -89,12 +91,14 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
     UMUDcache.sort((UMUD a, UMUD b) => b.UM!.lastMessage.compareTo(a.UM!.lastMessage));
 
     return RefreshIndicator(
-      onRefresh: fetchUsers,
+      onRefresh: () {
+        final tempUserData = Provider.of<UserData?>(context, listen: false);
+        return fetchUsers(tempUserData);
+      },
       child: ListView.builder(
           itemCount: UMUDcache.length,
           physics: AlwaysScrollableScrollPhysics(),
           scrollDirection: Axis.vertical,
-          shrinkWrap: true,
           itemBuilder: (BuildContext context, int index) {
             final otherUser = UMUDcache[index].UD!;
             if (widget.currUserData.blockedUserRefs.contains(otherUser.userRef)) {
@@ -123,7 +127,6 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                     UMUDcache[index].UM!.lastViewed = Timestamp.now();
                   });
                 }
-                calculateNumUnread();
               },
               child: Stack(
                 alignment: AlignmentDirectional.centerStart,

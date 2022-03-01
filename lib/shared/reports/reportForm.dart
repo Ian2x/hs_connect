@@ -45,7 +45,7 @@ class _ReportFormState extends State<ReportForm> {
     double phoneHeight = MediaQuery.of(context).size.height;
     double phoneWidth = MediaQuery.of(context).size.width;
 
-    final userData = Provider.of<UserData?>(context);
+    final userData = Provider.of<UserData?>(context, listen: false);
 
     final colorScheme = Theme.of(context).colorScheme;
 

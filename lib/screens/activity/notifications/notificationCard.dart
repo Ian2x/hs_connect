@@ -81,7 +81,7 @@ class _NotificationCardState extends State<NotificationCard> {
 
   @override
   Widget build(BuildContext context) {
-    final userData = Provider.of<UserData?>(context);
+    final userData = Provider.of<UserData?>(context, listen: false);
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 

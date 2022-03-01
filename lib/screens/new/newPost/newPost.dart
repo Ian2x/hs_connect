@@ -9,7 +9,7 @@ class NewPost extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userData = Provider.of<UserData?>(context);
+    final userData = Provider.of<UserData?>(context, listen: false);
 
     if (userData == null) {
       return Loading();
