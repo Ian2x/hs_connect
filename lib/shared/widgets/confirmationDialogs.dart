@@ -6,7 +6,7 @@ confirmationDialog(BuildContext context, {required String content, required Void
   // set up the buttons
   Widget cancelButton = TextButton(
     child: Text("Cancel"),
-    onPressed:  () {
+    onPressed: () {
       Navigator.of(context).pop();
     },
   );

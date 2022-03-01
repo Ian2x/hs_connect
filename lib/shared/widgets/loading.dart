@@ -5,17 +5,17 @@ class Loading extends StatelessWidget {
   final double size;
   final Color? backgroundColor;
   final Color? spinColor;
-  const Loading({Key? key, this.size=50.0, this.backgroundColor, this.spinColor})
-      : super(key: key);
+
+  const Loading({Key? key, this.size = 50.0, this.backgroundColor, this.spinColor}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Container(
-      color: backgroundColor!= null ? backgroundColor : colorScheme.background,
+      color: backgroundColor ?? colorScheme.background,
       child: Center(
         child: SpinKitPulse(
-          color: spinColor != null ? spinColor! : colorScheme.primary,
+          color: spinColor ?? colorScheme.primary,
           size: size,
         ),
       ),

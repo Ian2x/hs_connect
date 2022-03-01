@@ -10,17 +10,18 @@ import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class DomainFeed extends StatefulWidget {
-  final UserData currUser;
+  final UserData currUserData;
   final bool isDomain;
   final bool searchByTrending;
 
-  const DomainFeed({Key? key, required this.currUser, required this.isDomain, required this.searchByTrending}) : super(key: key);
+  const DomainFeed({Key? key, required this.currUserData, required this.isDomain, required this.searchByTrending})
+      : super(key: key);
 
   @override
   _DomainFeedState createState() => _DomainFeedState();
 }
 
-class _DomainFeedState extends State<DomainFeed> with AutomaticKeepAliveClientMixin<DomainFeed>{
+class _DomainFeedState extends State<DomainFeed> with AutomaticKeepAliveClientMixin<DomainFeed> {
   @override
   bool get wantKeepAlive => true;
 
@@ -32,10 +33,9 @@ class _DomainFeedState extends State<DomainFeed> with AutomaticKeepAliveClientMi
 
   bool? showMaturePosts;
 
-
   @override
   void initState() {
-    _posts = PostsDatabaseService(currUserRef: widget.currUser.userRef);
+    _posts = PostsDatabaseService(currUserRef: widget.currUserData.userRef);
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
@@ -46,7 +46,7 @@ class _DomainFeedState extends State<DomainFeed> with AutomaticKeepAliveClientMi
   void getShowMaturePosts() async {
     final data = await MyStorageManager.readData('mature');
     if (mounted) {
-      if (data==false) {
+      if (data == false) {
         setState(() => showMaturePosts = false);
       } else {
         setState(() => showMaturePosts = true);
@@ -58,8 +58,10 @@ class _DomainFeedState extends State<DomainFeed> with AutomaticKeepAliveClientMi
     try {
       DocumentSnapshot? tempKey;
       List<Post?> tempPosts = await _posts.getGroupPosts(
-          [FirebaseFirestore.instance.collection(C.groups).doc(widget.currUser.domain)],
-          startingFrom: pageKey, setStartFrom: (DocumentSnapshot ds) {tempKey = ds;}, withPublic: false, byNew: !widget.searchByTrending);
+          [FirebaseFirestore.instance.collection(C.groups).doc(widget.currUserData.domain)], startingFrom: pageKey,
+          setStartFrom: (DocumentSnapshot ds) {
+        tempKey = ds;
+      }, withPublic: false, byNew: !widget.searchByTrending);
       tempPosts.removeWhere((value) => value == null);
       final newPosts = tempPosts.map((item) => item!).toList();
       final isLastPage = newPosts.length < _pageSize;
@@ -78,37 +80,41 @@ class _DomainFeedState extends State<DomainFeed> with AutomaticKeepAliveClientMi
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    if (!widget.isDomain || showMaturePosts==null) return Loading();
+    if (!widget.isDomain || showMaturePosts == null) return Loading();
 
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
       padding: EdgeInsets.symmetric(vertical: 3),
       child: RefreshIndicator(
-        onRefresh: () =>
-            Future.sync(
-                  () => _pagingController.refresh(),
-            ),
+        onRefresh: () => Future.sync(
+          () => _pagingController.refresh(),
+        ),
         child: PagedListView<DocumentSnapshot?, Post>(
           pagingController: _pagingController,
           physics: AlwaysScrollableScrollPhysics(),
           padding: EdgeInsets.zero,
           builderDelegate: PagedChildBuilderDelegate<Post>(
-              itemBuilder: (context, post, index) {
-                if ((!(showMaturePosts!) && post.mature) || (widget.currUser.blockedPostRefs.contains(post.postRef)) || (widget.currUser.blockedUserRefs.contains(post.creatorRef))) {
-                  return Container();
-                }
-                return Center(
-                    child: PostCard(
-                      post: post,
-                currUser: widget.currUser,
+            itemBuilder: (context, post, index) {
+              if ((!(showMaturePosts!) && post.mature) ||
+                  (widget.currUserData.blockedPostRefs.contains(post.postRef)) ||
+                  (widget.currUserData.blockedUserRefs.contains(post.creatorRef))) {
+                return Container();
+              }
+              return Center(
+                  child: PostCard(
+                post: post,
+                currUserData: widget.currUserData,
               ));
             },
             noItemsFoundIndicatorBuilder: (BuildContext context) => Container(
                 padding: EdgeInsets.only(top: 50),
                 alignment: Alignment.topCenter,
                 child: Text("No posts found",
-                    style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.normal, color: colorScheme.onSurface))),
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline6
+                        ?.copyWith(fontWeight: FontWeight.normal, color: colorScheme.onSurface))),
           ),
         ),
       ),

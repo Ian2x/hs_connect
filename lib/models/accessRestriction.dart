@@ -56,9 +56,8 @@ class AccessRestriction {
 }
 
 AccessRestriction accessRestrictionFromMap(Map map) {
-  final temp = AccessRestriction(
+  return AccessRestriction(
       restriction: map[C.restriction], restrictionType: accessRestrictionTypeFrom(map[C.restrictionType]));
-  return temp;
 }
 
 class Access {
@@ -77,13 +76,13 @@ class Access {
   bool haveAccess(AccessRestriction ar) {
     switch (ar.restrictionType) {
       case AccessRestrictionType.domain:
-        return ar.restriction==this.domain;
+        return ar.restriction == this.domain;
       case AccessRestrictionType.county:
-        return ar.restriction==this.county;
+        return ar.restriction == this.county;
       case AccessRestrictionType.state:
-        return ar.restriction==this.state;
+        return ar.restriction == this.state;
       case AccessRestrictionType.country:
-        return ar.restriction==this.country;
+        return ar.restriction == this.country;
     }
   }
 }

@@ -16,27 +16,38 @@ class MessagesDatabaseService {
 
   static final ImageStorage _images = ImageStorage();
 
-
-  Future _updateUserMessages({required DocumentReference userRef, required DocumentReference otherUserRef, Timestamp? lastMessage, Timestamp? lastViewed}) async {
+  Future _updateUserMessages(
+      {required DocumentReference userRef,
+      required DocumentReference otherUserRef,
+      Timestamp? lastMessage,
+      Timestamp? lastViewed}) async {
     final userData = await userRef.get();
     final userMessages = (userData.get(C.userMessages) as List).map((item) => userMessageFromMap(map: item)).toList();
     // if initiating a message, wait
-    if (userMessages.length==0 && lastMessage==null) return;
+    if (userMessages.length == 0 && lastMessage == null) return;
     Timestamp? newLastMessage = lastMessage;
     Timestamp? newLastViewed = lastViewed;
     userMessages.forEach((UM) {
-      if (UM.otherUserRef==otherUserRef) {
-        if (newLastMessage==null) newLastMessage = UM.lastMessage;
-        else if (newLastMessage!.compareTo(UM.lastMessage)<0) newLastMessage = UM.lastMessage;
-        if (UM.lastViewed!=null) {
-          if (newLastViewed==null) newLastViewed = UM.lastViewed;
-          else if (newLastViewed!.compareTo(UM.lastViewed!)<0) newLastViewed = UM.lastViewed;
+      if (UM.otherUserRef == otherUserRef) {
+        if (newLastMessage == null)
+          newLastMessage = UM.lastMessage;
+        else if (newLastMessage!.compareTo(UM.lastMessage) < 0) newLastMessage = UM.lastMessage;
+        if (UM.lastViewed != null) {
+          if (newLastViewed == null)
+            newLastViewed = UM.lastViewed;
+          else if (newLastViewed!.compareTo(UM.lastViewed!) < 0) newLastViewed = UM.lastViewed;
         }
-        userRef.update({C.userMessages: FieldValue.arrayRemove([UM.asMap()])});
+        userRef.update({
+          C.userMessages: FieldValue.arrayRemove([UM.asMap()])
+        });
         return;
       }
     });
-    userRef.update({C.userMessages: FieldValue.arrayUnion([{C.otherUserRef: otherUserRef, C.lastMessage: newLastMessage, C.lastViewed: newLastViewed}])});
+    userRef.update({
+      C.userMessages: FieldValue.arrayUnion([
+        {C.otherUserRef: otherUserRef, C.lastMessage: newLastMessage, C.lastViewed: newLastViewed}
+      ])
+    });
   }
 
   Future<DocumentReference> newMessage({
@@ -97,7 +108,7 @@ class MessagesDatabaseService {
         .where(C.receiverRef, isEqualTo: currUserRef)
         .snapshots()
         .map((snapshot) => snapshot.docs.map(_messageFromDocument).toList());
-    return Rx.combineLatest2(a,b, (x,y) => (x as List<Message?>) + (y as List<Message?>));
+    return Rx.combineLatest2(a, b, (x, y) => (x as List<Message?>) + (y as List<Message?>));
     // return StreamGroup.merge([a, b]);
   }
 }

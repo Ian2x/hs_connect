@@ -23,9 +23,9 @@ import 'package:hs_connect/shared/widgets/myLinkPreview.dart';
 
 class PostCard extends StatefulWidget {
   final Post post;
-  final UserData currUser;
+  final UserData currUserData;
 
-  PostCard({Key? key, required this.post, required this.currUser}) : super(key: key);
+  PostCard({Key? key, required this.post, required this.currUserData}) : super(key: key);
 
   @override
   _PostCardState createState() => _PostCardState();
@@ -37,19 +37,19 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
   @override
   bool get wantKeepAlive => true;
 
-  String? username;
+  String? creatorName;
   Group? group;
   late bool likeStatus;
   late bool dislikeStatus;
   late int likeCount;
   late int dislikeCount;
-  UserData? fetchUserData;
+  OtherUserData? fetchUserData;
   Poll? poll;
 
   @override
   void initState() {
-    likeStatus = widget.post.likes.contains(widget.currUser.userRef);
-    dislikeStatus = widget.post.dislikes.contains(widget.currUser.userRef);
+    likeStatus = widget.post.likes.contains(widget.currUserData.userRef);
+    dislikeStatus = widget.post.dislikes.contains(widget.currUserData.userRef);
     likeCount = widget.post.likes.length;
     dislikeCount = widget.post.dislikes.length;
     getUserData();
@@ -59,17 +59,19 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
   }
 
   void getUserData() async {
-    UserDataDatabaseService _userDataDatabaseService = UserDataDatabaseService(currUserRef: widget.currUser.userRef);
-    fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.post.creatorRef, noDomainData: true);
+    UserDataDatabaseService _userDataDatabaseService =
+        UserDataDatabaseService(currUserRef: widget.currUserData.userRef);
+    fetchUserData =
+        await _userDataDatabaseService.getOtherUserData(userRef: widget.post.creatorRef, noDomainData: true);
     if (mounted) {
       setState(() {
-        username = fetchUserData != null ? fetchUserData!.fundamentalName : null;
+        creatorName = fetchUserData != null ? fetchUserData!.fundamentalName : null;
       });
     }
   }
 
   void getGroupData() async {
-    GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUser.userRef);
+    GroupsDatabaseService _groups = GroupsDatabaseService(currUserRef: widget.currUserData.userRef);
     final Group? fetchGroup = await _groups.groupFromRef(widget.post.groupRef);
     if (fetchGroup != null) {
       if (mounted) {
@@ -136,10 +138,9 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
   Widget build(BuildContext context) {
     super.build(context);
 
-
     final colorScheme = Theme.of(context).colorScheme;
 
-    if (group == null || username == null) {
+    if (group == null || creatorName == null) {
       return Container();
     }
 
@@ -158,18 +159,18 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => PostPage(
-                      post: widget.post,
-                      group: group!,
-                      creatorData: fetchUserData!,
-                      postLikesManager: postLikesManager)),
+              builder: (context) => PostPage(post: widget.post, group: group!, postLikesManager: postLikesManager)),
         );
       },
       child: Card(
           //if border then ShapeDecoration
           color: colorScheme.surface,
           shape: RoundedRectangleBorder(
-            side: BorderSide(color: widget.post.isFeatured ? (widget.currUser.domainColor!=null ? widget.currUser.domainColor! : colorScheme.primary) : Colors.transparent, width: 1),
+            side: BorderSide(
+                color: widget.post.isFeatured
+                    ? (widget.currUserData.domainColor ?? colorScheme.primary)
+                    : Colors.transparent,
+                width: 1),
             borderRadius: BorderRadius.circular(12),
           ),
           margin: EdgeInsets.fromLTRB(leftRightMargin, 4, leftRightMargin, 4),
@@ -210,7 +211,11 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                               ),
                               padding: EdgeInsets.fromLTRB(14, 2, 14, 3),
                               margin: EdgeInsets.all(1.5),
-                              child: Text('Mature', style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary, fontSize: 12)))
+                              child: Text('Mature',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .subtitle2
+                                      ?.copyWith(color: colorScheme.primary, fontSize: 12)))
                           : Container(),
                       widget.post.isFeatured
                           ? Container(
@@ -220,7 +225,12 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                               ),
                               padding: EdgeInsets.fromLTRB(14, 2, 14, 3),
                               margin: EdgeInsets.all(1.5),
-                              child: Text('Trending', style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 12, color: widget.currUser.domainColor != null ? widget.currUser.domainColor : colorScheme.primary)))
+                              child: Text('Trending',
+                                  style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                                      fontSize: 12,
+                                      color: widget.currUserData.domainColor != null
+                                          ? widget.currUserData.domainColor
+                                          : colorScheme.primary)))
                           : Container(),
                     ],
                   ),
@@ -235,34 +245,36 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                         overflow: TextOverflow.ellipsis, // default is .clip
                         maxLines: 3),
                   ),
-                  widget.post.link != null ? Container(
-                    margin: EdgeInsets.only(top: 10),
-                    child: MyLinkPreview(
-                      enableAnimation: true,
-                      onPreviewDataFetched: (data) {
-                        setState(() => previewData = data);
-                      },
-                      metadataTitleStyle: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.bold),
-                      metadataTextStyle: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 14),
-                      previewData: previewData,
-                      text: widget.post.link!,
-                      textStyle: Theme.of(context).textTheme.subtitle2,
-                      linkStyle: Theme.of(context).textTheme.subtitle2,
-                      width: MediaQuery.of(context).size.width - 2 * leftRightMargin,
-                    ),
-                  ) : Container(),
+                  widget.post.link != null
+                      ? Container(
+                          margin: EdgeInsets.only(top: 10),
+                          child: MyLinkPreview(
+                            enableAnimation: true,
+                            onPreviewDataFetched: (data) {
+                              setState(() => previewData = data);
+                            },
+                            metadataTitleStyle:
+                                Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.bold),
+                            metadataTextStyle: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 14),
+                            previewData: previewData,
+                            text: widget.post.link!,
+                            textStyle: Theme.of(context).textTheme.subtitle2,
+                            linkStyle: Theme.of(context).textTheme.subtitle2,
+                            width: MediaQuery.of(context).size.width - 2 * leftRightMargin,
+                          ),
+                        )
+                      : Container(),
                   widget.post.mediaURL != null
                       ? ExpandableImage(
                           imageURL: widget.post.mediaURL!,
                           containerWidth: MediaQuery.of(context).size.width - 2 * leftRightMargin,
                           maxHeight: 400,
-                          loadingHeight: 400,
                           margin: EdgeInsets.only(top: 10))
                       : Container(),
                   poll != null
                       ? Container(
                           alignment: Alignment.center,
-                          child: PollView(poll: poll!, currUserRef: widget.currUser.userRef, post: widget.post))
+                          child: PollView(poll: poll!, currUserRef: widget.currUserData.userRef, post: widget.post))
                       : Container(),
                   Container(
                     padding: EdgeInsets.fromLTRB(0, 0, 0, 2),
@@ -277,7 +289,7 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                               .subtitle2
                               ?.copyWith(color: colorScheme.primary, fontSize: postCardDetailSize),
                         ),
-                        widget.currUser.userRef != widget.post.creatorRef
+                        widget.currUserData.userRef != widget.post.creatorRef
                             ? IconButton(
                                 constraints: BoxConstraints(),
                                 splashRadius: .1,
@@ -297,18 +309,19 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                                 },
                               )
                             : Container(height: 38),
-                        fetchUserData != null && fetchUserData!.userRef != widget.currUser.userRef
-                            ? DMButton(currUserRef: widget.currUser.userRef,
-                          otherUserRef: fetchUserData!.userRef,
-                          otherUserFundName: fetchUserData!.fundamentalName,
-                        )
+                        fetchUserData != null && fetchUserData!.userRef != widget.currUserData.userRef
+                            ? DMButton(
+                                currUserRef: widget.currUserData.userRef,
+                                otherUserRef: fetchUserData!.userRef,
+                                otherUserFundName: fetchUserData!.fundamentalName,
+                              )
                             : Container(),
                         Spacer(),
                         LikeDislikePost(
-                            currUserRef: widget.currUser.userRef,
-                            post: widget.post,
-                            postLikesManager: postLikesManager,
-                            currUserColor: widget.currUser.domainColor,
+                          currUserRef: widget.currUserData.userRef,
+                          post: widget.post,
+                          postLikesManager: postLikesManager,
+                          currUserColor: widget.currUserData.domainColor,
                         ),
                         SizedBox(width: 1),
                       ],

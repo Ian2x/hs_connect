@@ -6,7 +6,7 @@ import 'package:hs_connect/screens/home/home.dart';
 import 'package:hs_connect/screens/new/newPost/newPost.dart';
 import 'package:hs_connect/screens/profile/profilePage.dart';
 import 'package:hs_connect/services/my_notifications_database.dart';
-import 'package:hs_connect/shared/widgets/thicker_icons.dart';
+import 'package:hs_connect/shared/widgets/thickerIcons.dart';
 import 'package:provider/provider.dart';
 
 import '../constants.dart';
@@ -17,9 +17,9 @@ import 'loading.dart';
 class MyNavigationBar extends StatefulWidget {
   final int currentIndex;
   final UserData currUserData;
-  final bool zeroNotifications;
+  final int? overrideNumNotifications;
 
-  const MyNavigationBar({Key? key, required this.currentIndex, required this.currUserData, this.zeroNotifications = false}) : super(key: key);
+  const MyNavigationBar({Key? key, required this.currentIndex, required this.currUserData, this.overrideNumNotifications}) : super(key: key);
 
   @override
   _MyNavigationBarState createState() => _MyNavigationBarState();
@@ -31,22 +31,24 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
 
   @override
   void initState() {
-    getNumNotifications();
+    if (widget.overrideNumNotifications==null) {
+      getNumNotifications();
+    }
     super.initState();
   }
 
   void getNumNotifications() async {
     final notifications = await MyNotificationsDatabaseService(userRef: widget.currUserData.userRef).getNotifications();
+    final numActivity = notifications
+        .where((element) => element.createdAt.compareTo(widget.currUserData.notificationsLastViewed) > 0)
+        .length;
+    final numMessages = widget.currUserData.userMessages
+        .where((element) =>
+    element.lastViewed == null ||
+        (element.lastViewed != null && element.lastMessage.compareTo(element.lastViewed!) > 0))
+        .length;
     if (mounted) {
       setState(() {
-        final numActivity = widget.zeroNotifications ? 0 : notifications
-            .where((element) => element.createdAt.compareTo(widget.currUserData.notificationsLastViewed) > 0)
-            .length;
-        final numMessages = widget.currUserData.userMessages
-            .where((element) =>
-        element.lastViewed == null ||
-            (element.lastViewed != null && element.lastMessage.compareTo(element.lastViewed!) > 0))
-            .length;
         numNotifications = numActivity + numMessages;
       });
     }
@@ -60,10 +62,12 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
 
     if (loading || userData == null) return Loading();
 
+    final localNumNotifications = widget.overrideNumNotifications ?? numNotifications;
+
     return Stack(
       children: [
         Container(
-          color: userData.domainColor != null ? userData.domainColor! : colorScheme.onSurface,
+          color: userData.domainColor ?? colorScheme.onSurface,
           padding: EdgeInsets.only(top: bottomGradientThickness),
           child: Container(
             color: colorScheme.surface,
@@ -85,7 +89,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
                       NoAnimationMaterialPageRoute(
                           builder: (context) => Home(
                                 user: user,
-                                userData: userData,
+                                currUserData: userData,
                               )),
                     );
                   } else {
@@ -95,7 +99,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
                       NoAnimationMaterialPageRoute(
                           builder: (context) => Home(
                             user: user,
-                            userData: userData,
+                            currUserData: userData,
                           )),
                     );
                   }
@@ -151,7 +155,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
             left: MediaQuery.of(context).size.width * 0.375 + 1.5,
             top: 5.5,
             child: IgnorePointer(
-              child: numNotifications != null && numNotifications != 0
+              child: localNumNotifications != null && localNumNotifications != 0
                   ? Container(
                 height: 20,
                 width: 20,
@@ -168,7 +172,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
                     ),
                     alignment: Alignment.center,
                     child: FittedBox(
-                      child: Text(numNotifications.toString(),
+                      child: Text(localNumNotifications.toString(),
                           style: Theme.of(context).textTheme.subtitle2?.copyWith(color: Colors.white)),
                     )),
               )

@@ -41,7 +41,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
   String? creatorGroup;
   Color? creatorColor;
   Poll? poll;
-  UserData? fetchUserData;
+  OtherUserData? fetchUserData;
 
   @override
   void initState() {
@@ -54,12 +54,12 @@ class _PostTitleCardState extends State<PostTitleCard> {
   void getPostCreatorData() async {
     UserDataDatabaseService _userDataDatabaseService =
         UserDataDatabaseService(currUserRef: widget.currUserData.userRef);
-    fetchUserData = await _userDataDatabaseService.getUserData(userRef: widget.post.creatorRef);
+    fetchUserData = await _userDataDatabaseService.getOtherUserData(userRef: widget.post.creatorRef);
     if (mounted) {
       setState(() {
         creatorName = fetchUserData != null ? fetchUserData!.fundamentalName : null;
         creatorGroup = fetchUserData != null
-            ? (fetchUserData!.fullDomainName != null ? fetchUserData!.fullDomainName : fetchUserData!.domain)
+            ? (fetchUserData!.fullDomainName ?? fetchUserData!.domain)
             : null;
         creatorColor = fetchUserData != null ? fetchUserData!.domainColor : null;
       });
@@ -84,8 +84,8 @@ class _PostTitleCardState extends State<PostTitleCard> {
     PostLikesManager postLikesManager = Provider.of<PostLikesManager>(context);
     final leftRightPadding = 15.0;
 
-    final localCreatorName = creatorName != null ? creatorName! : '';
-    final localCreatorGroup = creatorGroup != null ? creatorGroup! : '';
+    final localCreatorName = creatorName ?? '';
+    final localCreatorGroup = creatorGroup ?? '';
 
     return Container(
       padding: EdgeInsets.fromLTRB(leftRightPadding, 0, leftRightPadding, 10),
@@ -123,7 +123,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
                         TextSpan(text: "from " + localCreatorName + " • "),
                         TextSpan(
                             style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                                color: creatorColor != null ? creatorColor : colorScheme.primary,
+                                color: creatorColor ?? colorScheme.primary,
                                 fontSize: postCardDetailSize + 1),
                             text: localCreatorGroup),
                         TextSpan(text: " • " + convertTime(widget.post.createdAt.toDate()))

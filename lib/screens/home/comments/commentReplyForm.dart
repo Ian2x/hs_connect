@@ -20,7 +20,8 @@ class CommentReplyForm extends StatefulWidget {
   final VoidOptionalCommentParamFunction switchFormBool;
   final FocusNode focusNode;
 
-  CommentReplyForm({Key? key,
+  CommentReplyForm({
+    Key? key,
     required this.currUserRef,
     required this.post,
     required this.isReply,
@@ -62,9 +63,10 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
   @override
   void initState() {
     super.initState();
-    if (mounted) setState(() {
-      _comments = CommentsDatabaseService(currUserRef: widget.currUserRef, postRef: widget.post.postRef);
-    });
+    if (mounted)
+      setState(() {
+        _comments = CommentsDatabaseService(currUserRef: widget.currUserRef, postRef: widget.post.postRef);
+      });
   }
 
   void onSubmit() async {
@@ -83,7 +85,7 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
         }
       }
 
-      if (widget.isReply){
+      if (widget.isReply) {
         widget.switchFormBool(null);
         await RepliesDatabaseService(currUserRef: widget.currUserRef).newReply(
           post: widget.post,
@@ -107,10 +109,8 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
         );
       }
       _formKey.currentState?.reset();
-
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -120,33 +120,33 @@ class _CommentReplyFormState extends State<CommentReplyForm> {
       return Loading();
     }
 
-    return
-      Form(
-        key:_formKey,
-        child: TextFormField(
-          maxLines: null,
-          initialValue: '',
-          focusNode: widget.focusNode,
-          style: Theme.of(context).textTheme.bodyText1,
-          textCapitalization: TextCapitalization.sentences,
-          autocorrect: true,
-          decoration: commentReplyInputDecoration(
-              context: context,
-              isReply: widget.isReply,
-              activeColor: userData.domainColor ?? Theme.of(context).colorScheme.secondary,
-              onPressed: () async {
-                if (_text!=''){
-                  onSubmit();
-                }
-                dismissKeyboard(context);
-              },
-              isFocused: widget.focusNode.hasFocus, hasText: _text!=''),
-          onChanged: (val) {
-            if (mounted) {
-              setState(() => _text = val);
-            }
-          },
-        ),
-      );
+    return Form(
+      key: _formKey,
+      child: TextFormField(
+        maxLines: null,
+        initialValue: '',
+        focusNode: widget.focusNode,
+        style: Theme.of(context).textTheme.bodyText1,
+        textCapitalization: TextCapitalization.sentences,
+        autocorrect: true,
+        decoration: commentReplyInputDecoration(
+            context: context,
+            isReply: widget.isReply,
+            activeColor: userData.domainColor ?? Theme.of(context).colorScheme.secondary,
+            onPressed: () async {
+              if (_text != '') {
+                onSubmit();
+              }
+              dismissKeyboard(context);
+            },
+            isFocused: widget.focusNode.hasFocus,
+            hasText: _text != ''),
+        onChanged: (val) {
+          if (mounted) {
+            setState(() => _text = val);
+          }
+        },
+      ),
+    );
   }
 }

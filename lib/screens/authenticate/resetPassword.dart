@@ -43,37 +43,37 @@ class _ResetPasswordState extends State<ResetPassword> {
             ),
             body: emailSent
                 ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      alignment: Alignment.center,
-                      child: Text(
-                        'Reset email sent',
-                        style: ThemeText.quicksand(fontWeight: FontWeight.w700, fontSize: 26, color: Colors.black),
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Reset email sent',
+                          style: ThemeText.quicksand(fontWeight: FontWeight.w700, fontSize: 26, color: Colors.black),
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 5),
-                    Container(
-                      alignment: Alignment.center,
-                      child: Text(
-                        "Check your inbox.",
-                        style: textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 18, height: 1.3),
-                        textAlign: TextAlign.left,
+                      SizedBox(height: 5),
+                      Container(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Check your inbox.",
+                          style: textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 18, height: 1.3),
+                          textAlign: TextAlign.left,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 100),
-                    Container(
-                      width: 360,
-                      child: AuthButton(
-                          buttonText: "Back",
-                          hasText: true,
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          }),
-                    ),
-                    SizedBox(height: 50),
-                  ],
-                )
+                      SizedBox(height: 100),
+                      Container(
+                        width: 360,
+                        child: AuthButton(
+                            buttonText: "Back",
+                            hasText: true,
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            }),
+                      ),
+                      SizedBox(height: 50),
+                    ],
+                  )
                 : Stack(
                     children: [
                       SingleChildScrollView(

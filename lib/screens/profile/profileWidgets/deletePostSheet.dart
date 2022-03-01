@@ -53,8 +53,6 @@ class _DeletePostSheetState extends State<DeletePostSheet> with TickerProviderSt
   Widget build(BuildContext context) {
     PostsDatabaseService _posts = PostsDatabaseService(currUserRef: widget.currUserRef);
 
-
-
     final colorScheme = Theme.of(context).colorScheme;
 
     final userData = Provider.of<UserData?>(context);
@@ -80,18 +78,16 @@ class _DeletePostSheetState extends State<DeletePostSheet> with TickerProviderSt
             TextButton(
               onPressed: () async {
                 confirmationDialog(context,
-                    content:
-                    "Would you like to delete this post? This action cannot be undone.",
-                    action: () async {
-                      await _posts.deletePost(
-                          postRef: widget.postRef,
-                          userRef: widget.currUserRef,
-                          groupRef: widget.groupRef,
-                          media: widget.media);
-                      widget.onDelete();
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pop();
-                    });
+                    content: "Would you like to delete this post? This action cannot be undone.", action: () async {
+                  await _posts.deletePost(
+                      postRef: widget.postRef,
+                      userRef: widget.currUserRef,
+                      groupRef: widget.groupRef,
+                      media: widget.media);
+                  widget.onDelete();
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                });
               },
               child: Row(
                 children: [

@@ -70,7 +70,7 @@ class ImageStorage {
         [defaultCacheManager.removeFile(imageURL), FirebaseStorage.instance.refFromURL(imageURL).delete()]);
   }
 
-  /*Future uploadProfilePic({required File file, required String? oldImageURL}) async {
+/*Future uploadProfilePic({required File file, required String? oldImageURL}) async {
     SettableMetadata metadata = SettableMetadata(
       customMetadata: <String, String>{
         'uploadedOn': DateTime.now().toString(),

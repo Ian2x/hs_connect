@@ -4,22 +4,26 @@ import 'package:hs_connect/screens/home/searchSelectionSheet.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 
-
-class HomeAppBar extends SliverPersistentHeaderDelegate{
+class HomeAppBar extends SliverPersistentHeaderDelegate {
   static const tabBarHeight = 40.0;
   static const expandedHeight = 69.0;
 
   static const tabBarPadding = EdgeInsets.symmetric(horizontal: 25);
 
   final TabController tabController;
-  final UserData userData;
+  final UserData currUserData;
   final bool isDomain;
   final bool searchByTrending;
   final VoidBoolParamFunction toggleSearch;
   final double safeAreaHeight;
 
-  HomeAppBar({required this.tabController, required this.userData, required this.isDomain,
-    required this.searchByTrending, required this.toggleSearch, required this.safeAreaHeight});
+  HomeAppBar(
+      {required this.tabController,
+      required this.currUserData,
+      required this.isDomain,
+      required this.searchByTrending,
+      required this.toggleSearch,
+      required this.safeAreaHeight});
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
@@ -27,13 +31,12 @@ class HomeAppBar extends SliverPersistentHeaderDelegate{
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
-
     //final safeAreaHeight = MediaQuery.of(context).padding.top;
-    final fullDomainName = userData.fullDomainName != null ? userData.fullDomainName! : userData.domain;
+    final fullDomainName = currUserData.fullDomainName ?? currUserData.domain;
     return Stack(
       children: [
         Positioned(
-          top: - shrinkOffset,
+          top: -shrinkOffset,
           left: 0,
           width: MediaQuery.of(context).size.width,
           child: Container(
@@ -57,13 +60,20 @@ class HomeAppBar extends SliverPersistentHeaderDelegate{
                       controller: tabController,
                       padding: EdgeInsets.zero,
                       indicator: BoxDecoration(
-                        border: Border(bottom: BorderSide(width: 2.5, color: userData.domainColor!=null ? userData.domainColor! : colorScheme.onSurface),
-                        )
-                      ),
+                          border: Border(
+                        bottom: BorderSide(
+                            width: 2.5,
+                            color:
+                                currUserData.domainColor ?? colorScheme.onSurface),
+                      )),
                       indicatorPadding: tabBarPadding,
                       indicatorWeight: 0.001,
-                      labelStyle: textTheme.subtitle2?.copyWith(fontWeight: FontWeight.bold, fontSize: 15, color: colorScheme.onSurface),
-                      unselectedLabelStyle: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.bold, fontSize: 15, color: colorScheme.primary),
+                      labelStyle: textTheme.subtitle2
+                          ?.copyWith(fontWeight: FontWeight.bold, fontSize: 15, color: colorScheme.onSurface),
+                      unselectedLabelStyle: Theme.of(context)
+                          .textTheme
+                          .subtitle2
+                          ?.copyWith(fontWeight: FontWeight.bold, fontSize: 15, color: colorScheme.primary),
                       tabs: <Widget>[
                         Tab(
                             iconMargin: EdgeInsets.zero,
@@ -75,8 +85,7 @@ class HomeAppBar extends SliverPersistentHeaderDelegate{
                                   maxLines: 1,
                                   softWrap: false,
                                   overflow: TextOverflow.ellipsis),
-                            )
-                        ),
+                            )),
                         Tab(
                             iconMargin: EdgeInsets.only(),
                             height: tabBarHeight,
@@ -102,11 +111,17 @@ class HomeAppBar extends SliverPersistentHeaderDelegate{
                               isScrollControlled: true,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(20),
-                                  )),
-                              builder: (context) => SearchSelectionSheet(initialSearchByTrending: searchByTrending, toggleSearch: toggleSearch));
+                                top: Radius.circular(20),
+                              )),
+                              builder: (context) => SearchSelectionSheet(
+                                  initialSearchByTrending: searchByTrending, toggleSearch: toggleSearch));
                         },
-                        child: Row(children: [Icon(Icons.sort_rounded, size: 20), SizedBox(width: 3), Text(searchByTrending ? 'Hot' : 'New', style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 13))])))
+                        child: Row(children: [
+                          Icon(Icons.sort_rounded, size: 20),
+                          SizedBox(width: 3),
+                          Text(searchByTrending ? 'Hot' : 'New',
+                              style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 13))
+                        ])))
               ],
             ),
           ),
@@ -124,4 +139,3 @@ class HomeAppBar extends SliverPersistentHeaderDelegate{
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;
 }
-

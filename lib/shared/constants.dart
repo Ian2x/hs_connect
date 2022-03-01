@@ -32,45 +32,47 @@ class _Gradient extends Color {
 }
 
 class Gradients {
-  static LinearGradient blueRed ({
+  static LinearGradient blueRed({
     AlignmentGeometry begin = Alignment.topLeft,
-    AlignmentGeometry end = Alignment. bottomRight,
+    AlignmentGeometry end = Alignment.bottomRight,
     List<double>? stops,
-  }){
+  }) {
     return LinearGradient(
       begin: begin,
       end: end,
       stops: stops,
-      colors: [ _Gradient.gBlue, _Gradient.gRed],
+      colors: [_Gradient.gBlue, _Gradient.gRed],
     );
   }
-  static LinearGradient blueRedFull ({
+
+  static LinearGradient blueRedFull({
     AlignmentGeometry begin = Alignment.topLeft,
-    AlignmentGeometry end = Alignment. bottomRight,
+    AlignmentGeometry end = Alignment.bottomRight,
     List<double>? stops,
-  }){
+  }) {
     return LinearGradient(
       begin: begin,
       end: end,
       stops: stops,
-      colors: [ _Gradient.gBlueFull, _Gradient.gRedFull],
+      colors: [_Gradient.gBlueFull, _Gradient.gRedFull],
     );
   }
-  static LinearGradient blueRedHorizontal ({
+
+  static LinearGradient blueRedHorizontal({
     AlignmentGeometry begin = Alignment.centerLeft,
     AlignmentGeometry end = Alignment.centerRight,
-  }){
+  }) {
     return LinearGradient(
       begin: begin,
       end: end,
-      colors: [ _Gradient.gBlue, _Gradient.gRed],
+      colors: [_Gradient.gBlue, _Gradient.gRed],
     );
   }
-  static LinearGradient solid ({
-    AlignmentGeometry begin = Alignment.topLeft,
-    AlignmentGeometry end = Alignment. bottomRight,
-    required Color color
-  }){
+
+  static LinearGradient solid(
+      {AlignmentGeometry begin = Alignment.topLeft,
+      AlignmentGeometry end = Alignment.bottomRight,
+      required Color color}) {
     return LinearGradient(
       begin: begin,
       end: end,
@@ -80,8 +82,13 @@ class Gradients {
 }
 
 class ThemeText {
-  static TextStyle quicksand({Color? color, double? fontSize, double? height,
-    TextDecoration? decoration, TextDecorationStyle? decorationStyle, FontWeight? fontWeight}) {
+  static TextStyle quicksand(
+      {Color? color,
+      double? fontSize,
+      double? height,
+      TextDecoration? decoration,
+      TextDecorationStyle? decorationStyle,
+      FontWeight? fontWeight}) {
     return TextStyle(
         color: color,
         fontSize: fontSize,
@@ -89,8 +96,7 @@ class ThemeText {
         decoration: decoration,
         fontWeight: fontWeight,
         fontFamily: "Quicksand",
-        decorationStyle: decorationStyle
-    );
+        decorationStyle: decorationStyle);
   }
 }
 
@@ -212,7 +218,6 @@ class C {
   static const feedbackText = 'feedbackText';
   static const isFeatured = 'isFeatured';
   static const notificationsLastViewed = 'notificationsLastViewed';
-  static const recoveryCode = 'recoveryCode';
   static const type = 'type';
   static const postId = 'postId';
   static const launchDate = 'launchDate';

@@ -10,14 +10,13 @@ class MyNotificationsDatabaseService {
   // collection reference
   static final CollectionReference myNotificationsCollection = FirebaseFirestore.instance.collection(C.myNotifications);
 
-  Future<DocumentReference> newNotification({
-    required DocumentReference parentPostRef,
-    required MyNotificationType myNotificationType,
-    required DocumentReference sourceRef,
-    required DocumentReference sourceUserRef,
-    required DocumentReference notifiedUserRef,
-    required String? extraData
-  }) async {
+  Future<DocumentReference> newNotification(
+      {required DocumentReference parentPostRef,
+      required MyNotificationType myNotificationType,
+      required DocumentReference sourceRef,
+      required DocumentReference sourceUserRef,
+      required DocumentReference notifiedUserRef,
+      required String? extraData}) async {
     final messageRef = await myNotificationsCollection.add({
       C.parentPostRef: parentPostRef,
       C.myNotificationType: myNotificationType.string,
@@ -40,13 +39,19 @@ class MyNotificationsDatabaseService {
   }
 
   Future<List<MyNotification>> getNotifications() async {
-    final querySnapshot = await myNotificationsCollection.where(C.notifiedUserRef, isEqualTo: userRef).orderBy(C.createdAt).get();
+    final querySnapshot =
+        await myNotificationsCollection.where(C.notifiedUserRef, isEqualTo: userRef).orderBy(C.createdAt).get();
     List<MyNotification?> notificationss = querySnapshot.docs.map(_myNotificationFromDocument).toList();
     notificationss.removeWhere((value) => value == null);
     return notificationss.map((item) => item!).toList();
   }
 
   Stream<List<MyNotification?>> numNotificationsStream() {
-    return myNotificationsCollection.where(C.notifiedUserRef, isEqualTo: userRef).orderBy(C.createdAt).snapshots().map((snapshot) => snapshot.docs.map(_myNotificationFromDocument).toList());;
+    return myNotificationsCollection
+        .where(C.notifiedUserRef, isEqualTo: userRef)
+        .orderBy(C.createdAt)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map(_myNotificationFromDocument).toList());
+    ;
   }
 }

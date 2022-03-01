@@ -42,6 +42,7 @@ class UserData {
   final int numReports;
   final bool private;
   Timestamp notificationsLastViewed;
+
   // extracted data
   final String? fullDomainName;
   final Color? domainColor;
@@ -53,70 +54,71 @@ class UserData {
   final List<DocumentReference> blockedPostRefs;
   final List<DocumentReference> blockedUserRefs;
 
-  UserData({
-    required this.userRef,
-    required this.fundamentalName,
-    required this.displayedName,
-    required this.displayedNameLC,
-    required this.bio,
-    required this.domain,
-    required this.fullDomainName,
-    required this.domainColor,
-    required this.currCounty,
-    required this.currState,
-    required this.currCountry,
-    required this.domainImage,
-    required this.groups,
-    required this.modGroupsRefs,
-    required this.userMessages,
-    required this.savedPostsRefs,
-    required this.profileImageURL,
-    required this.score,
-    required this.numReports,
-    required this.private,
-    required this.notificationsLastViewed,
-    required this.launchDate,
-    required this.blockedPostRefs,
-    required this.blockedUserRefs
-  });
+  UserData(
+      {required this.userRef,
+      required this.fundamentalName,
+      required this.displayedName,
+      required this.displayedNameLC,
+      required this.bio,
+      required this.domain,
+      required this.fullDomainName,
+      required this.domainColor,
+      required this.currCounty,
+      required this.currState,
+      required this.currCountry,
+      required this.domainImage,
+      required this.groups,
+      required this.modGroupsRefs,
+      required this.userMessages,
+      required this.savedPostsRefs,
+      required this.profileImageURL,
+      required this.score,
+      required this.numReports,
+      required this.private,
+      required this.notificationsLastViewed,
+      required this.launchDate,
+      required this.blockedPostRefs,
+      required this.blockedUserRefs});
 }
 
-Future<UserData> userDataFromSnapshot(DocumentSnapshot snapshot, DocumentReference userRef, {bool? noDomainData}) async {
-
+Future<UserData> userDataFromSnapshot(DocumentSnapshot snapshot, DocumentReference userRef,
+    {bool? noDomainData}) async {
   final domain = snapshot.get(C.domain);
   final _domainsData = DomainsDataDatabaseService();
   DomainData? domainData;
-  if (noDomainData==null || noDomainData==false) {
+  if (noDomainData == null || noDomainData == false) {
     domainData = await _domainsData.getDomainData(domain: domain);
   }
-  if (domainData==null) domainData = DomainData(county: null, state: null, country: null, fullName: null, color: null, image: null, launchDate: null);
+  if (domainData == null)
+    domainData = DomainData(
+        county: null, state: null, country: null, fullName: null, color: null, image: null, launchDate: null);
   return UserData(
-    userRef: userRef,
-    fundamentalName: snapshot.get(C.fundamentalName),
-    displayedName: snapshot.get(C.displayedName),
-    displayedNameLC: snapshot.get(C.displayedNameLC),
-    bio: snapshot.get(C.bio),
-    domain: snapshot.get(C.domain),
-    groups: docRefList(snapshot.get(C.groups)),
-    modGroupsRefs: docRefList(snapshot.get(C.modGroupRefs)),
-    userMessages: snapshot.get(C.userMessages).map<UserMessage>((userMessage) => userMessageFromMap(map: userMessage)).toList(),
-    savedPostsRefs: docRefList(snapshot.get(C.savedPostsRefs)),
-    profileImageURL: snapshot.get(C.profileImageURL),
-    score: snapshot.get(C.score),
-    numReports: snapshot.get(C.numReports),
-    private: snapshot.get(C.private),
-    notificationsLastViewed: snapshot.get(C.notificationsLastViewed),
-    // extracted data
-    fullDomainName: domainData.fullName,
-    domainColor: domainData.color != null ? HexColor(domainData.color!) : null,
-    currCounty: domainData.county,
-    currState: domainData.state,
-    currCountry: domainData.country,
-    domainImage: domainData.image,
-    launchDate: domainData.launchDate,
-    blockedPostRefs: docRefList(snapshot.get(C.blockedPostRefs)),
-    blockedUserRefs: docRefList(snapshot.get(C.blockedUserRefs))
-  );
+      userRef: userRef,
+      fundamentalName: snapshot.get(C.fundamentalName),
+      displayedName: snapshot.get(C.displayedName),
+      displayedNameLC: snapshot.get(C.displayedNameLC),
+      bio: snapshot.get(C.bio),
+      domain: snapshot.get(C.domain),
+      groups: docRefList(snapshot.get(C.groups)),
+      modGroupsRefs: docRefList(snapshot.get(C.modGroupRefs)),
+      userMessages:
+          snapshot.get(C.userMessages).map<UserMessage>((userMessage) => userMessageFromMap(map: userMessage)).toList(),
+      savedPostsRefs: docRefList(snapshot.get(C.savedPostsRefs)),
+      profileImageURL: snapshot.get(C.profileImageURL),
+      score: snapshot.get(C.score),
+      numReports: snapshot.get(C.numReports),
+      private: snapshot.get(C.private),
+      notificationsLastViewed: snapshot.get(C.notificationsLastViewed),
+      // extracted data
+      fullDomainName: domainData.fullName,
+      domainColor: domainData.color != null ? HexColor(domainData.color!) : null,
+      currCounty: domainData.county,
+      currState: domainData.state,
+      currCountry: domainData.country,
+      domainImage: domainData.image,
+      launchDate: domainData.launchDate,
+      blockedPostRefs: docRefList(snapshot.get(C.blockedPostRefs)),
+      blockedUserRefs: docRefList(snapshot.get(C.blockedUserRefs)));
 }
 
 class OtherUserData {
@@ -129,6 +131,7 @@ class OtherUserData {
   final String? profileImageURL;
   final int score;
   final bool private;
+
   // extracted data
   final String? fullDomainName;
   final Color? domainColor;
@@ -150,28 +153,30 @@ class OtherUserData {
   });
 }
 
-Future<OtherUserData> otherUserDataFromSnapshot(DocumentSnapshot snapshot, DocumentReference userRef, {bool? noDomainData}) async {
-
+Future<OtherUserData> otherUserDataFromSnapshot(DocumentSnapshot snapshot, DocumentReference userRef,
+    {bool? noDomainData}) async {
   final domain = snapshot.get(C.domain);
   final _domainsData = DomainsDataDatabaseService();
   DomainData? domainData;
-  if (noDomainData==null || noDomainData==false) {
+  if (noDomainData == null || noDomainData == false) {
     domainData = await _domainsData.getDomainData(domain: domain);
   }
-  if (domainData==null) domainData = DomainData(county: null, state: null, country: null, fullName: null, color: null, image: null, launchDate: null);
+  if (domainData == null)
+    domainData = DomainData(
+        county: null, state: null, country: null, fullName: null, color: null, image: null, launchDate: null);
   return OtherUserData(
-      userRef: userRef,
-      fundamentalName: snapshot.get(C.fundamentalName),
-      displayedName: snapshot.get(C.displayedName),
-      displayedNameLC: snapshot.get(C.displayedNameLC),
-      domain: snapshot.get(C.domain),
-      groups: docRefList(snapshot.get(C.groups)),
-      profileImageURL: snapshot.get(C.profileImageURL),
-      score: snapshot.get(C.score),
-      private: snapshot.get(C.private),
-      // extracted data
-      fullDomainName: domainData.fullName,
-      domainColor: domainData.color != null ? HexColor(domainData.color!) : null,
-      domainImage: domainData.image,
+    userRef: userRef,
+    fundamentalName: snapshot.get(C.fundamentalName),
+    displayedName: snapshot.get(C.displayedName),
+    displayedNameLC: snapshot.get(C.displayedNameLC),
+    domain: snapshot.get(C.domain),
+    groups: docRefList(snapshot.get(C.groups)),
+    profileImageURL: snapshot.get(C.profileImageURL),
+    score: snapshot.get(C.score),
+    private: snapshot.get(C.private),
+    // extracted data
+    fullDomainName: domainData.fullName,
+    domainColor: domainData.color != null ? HexColor(domainData.color!) : null,
+    domainImage: domainData.image,
   );
 }

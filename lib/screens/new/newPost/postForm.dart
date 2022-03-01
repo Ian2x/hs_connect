@@ -16,7 +16,6 @@ import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:validators/validators.dart';
 
-import '../../../shared/tools/hexColor.dart';
 import 'groupSelectionSheet.dart';
 
 const String emptyPollChoiceError = 'Can\'t create a poll with an empty choice';
@@ -24,9 +23,9 @@ const String emptyTitleError = 'Can\'t create a post with an empty title';
 const String badLinkError = 'Please enter a valid URL link';
 
 class PostForm extends StatefulWidget {
-  final UserData userData;
+  final UserData currUserData;
 
-  const PostForm({Key? key, required this.userData}) : super(key: key);
+  const PostForm({Key? key, required this.currUserData}) : super(key: key);
 
   @override
   _PostFormState createState() => _PostFormState();
@@ -84,15 +83,15 @@ class _PostFormState extends State<PostForm> {
   }
 
   Future getGroupChoices() async {
-    _groups = GroupsDatabaseService(currUserRef: widget.userData.userRef);
-    final nullGroups = await _groups!.getGroups(groupsRefs: widget.userData.groups, withPublic: true);
+    _groups = GroupsDatabaseService(currUserRef: widget.currUserData.userRef);
+    final nullGroups = await _groups!.getGroups(groupsRefs: widget.currUserData.groups, withPublic: true);
     List<Group> groups = [];
     for (Group? group in nullGroups) {
       if (group != null) {
         if (group.accessRestriction.restrictionType == AccessRestrictionType.domain) {
           // replace domain group name with full domain name
-          if (widget.userData.fullDomainName != null) {
-            group.name = widget.userData.fullDomainName!;
+          if (widget.currUserData.fullDomainName != null) {
+            group.name = widget.currUserData.fullDomainName!;
           }
           // make this the default selected group
           if (mounted) {
@@ -121,7 +120,8 @@ class _PostFormState extends State<PostForm> {
       return Loading();
     }
 
-    Color userColor = widget.userData.domainColor != null ? widget.userData.domainColor! : colorScheme.onSurface;
+    Color userColor =
+        widget.currUserData.domainColor != null ? widget.currUserData.domainColor! : colorScheme.onSurface;
 
     return Stack(children: [
       SingleChildScrollView(
@@ -155,15 +155,15 @@ class _PostFormState extends State<PostForm> {
                           top: Radius.circular(20),
                         )),
                         builder: (context) => GroupSelectionSheet(
-                                initialSelectedGroup: selectedGroup!,
-                                onSelectGroup: (Group? group) {
-                                  if (mounted) {
-                                    setState(() {
-                                      selectedGroup = group;
-                                    });
-                                  }
-                                },
-                                groups: groupChoices!)),
+                            initialSelectedGroup: selectedGroup!,
+                            onSelectGroup: (Group? group) {
+                              if (mounted) {
+                                setState(() {
+                                  selectedGroup = group;
+                                });
+                              }
+                            },
+                            groups: groupChoices!)),
                     child: Container(
                         alignment: Alignment.center,
                         padding: EdgeInsets.fromLTRB(15, 6, 8, 6),
@@ -182,97 +182,96 @@ class _PostFormState extends State<PostForm> {
                   ),
                   Spacer(),
                   GestureDetector(
-                    onTap: () async {
-                      // check header isn't empty
-                      if (_title.isEmpty) {
-                        if (mounted) {
-                          setState(() {
-                            error = emptyTitleError;
-                          });
-                        }
-                        return;
-                      }
-                      // check link is good
-                      if (link != null) {
-                        if (!isURL(link!)) {
+                      onTap: () async {
+                        // check header isn't empty
+                        if (_title.isEmpty) {
                           if (mounted) {
                             setState(() {
-                              error = badLinkError;
+                              error = emptyTitleError;
                             });
                           }
                           return;
                         }
-                      }
-                      // check no empty poll choices
-                      if (poll != null && pollChoices != null) {
-                        for (String choice in pollChoices!) {
-                          if (choice == "") {
+                        // check link is good
+                        if (link != null) {
+                          if (!isURL(link!)) {
                             if (mounted) {
                               setState(() {
-                                error = emptyPollChoiceError;
+                                error = badLinkError;
                               });
                             }
                             return;
                           }
                         }
-                      }
-                      if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-                        // set to loading screen
-                        if (mounted) {
-                          setState(() => loading = true);
-                        }
-                        // handle image if applicable
-                        String? downloadURL;
-                        if (newFile != null) {
-                          // upload newFile
-                          downloadURL = await _images.uploadImage(file: newFile!);
-                        }
-                        // handle poll if applicable
-                        DocumentReference? pollRef;
+                        // check no empty poll choices
                         if (poll != null && pollChoices != null) {
-                          pollRef = await _polls.newPoll(choices: pollChoices!);
+                          for (String choice in pollChoices!) {
+                            if (choice == "") {
+                              if (mounted) {
+                                setState(() {
+                                  error = emptyPollChoiceError;
+                                });
+                              }
+                              return;
+                            }
+                          }
                         }
+                        if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+                          // set to loading screen
+                          if (mounted) {
+                            setState(() => loading = true);
+                          }
+                          // handle image if applicable
+                          String? downloadURL;
+                          if (newFile != null) {
+                            // upload newFile
+                            downloadURL = await _images.uploadImage(file: newFile!);
+                          }
+                          // handle poll if applicable
+                          DocumentReference? pollRef;
+                          if (poll != null && pollChoices != null) {
+                            pollRef = await _polls.newPoll(choices: pollChoices!);
+                          }
 
-                        await PostsDatabaseService(currUserRef: widget.userData.userRef).newPost(
-                          title: _title,
-                          text: _text,
-                          tagString: _tag,
-                          media: downloadURL,
-                          pollRef: pollRef,
-                          link: link,
-                          groupRef: selectedGroup!.groupRef,
-                          mature: isMature,
-                          onValue: handleValue,
-                          onError: handleError,
-                        );
-                      }
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: userColor, width: 2),
-                        borderRadius: BorderRadius.circular(25),
-                        color: _title != '' ? userColor:colorScheme.surface,
-                      ),
-                      padding: EdgeInsets.symmetric(vertical: 1.5, horizontal: 6),
-                      child: Row(
-                        children: [
-                          Icon(Icons.add, size: 20, color: _title != '' ? colorScheme.surface : userColor),
-                          SizedBox(width: 2),
-                          FittedBox(
-                            child: Container(
-                              padding: EdgeInsets.only(bottom: 2, right: 5),
-                              child: Text("Post",
-                                  style: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w600,
-                                      color: _title != '' ? colorScheme.surface : userColor),
-                                  maxLines: 1,
-                                  softWrap: false,
-                                  overflow: TextOverflow.fade),
-                            ),
+                          await PostsDatabaseService(currUserRef: widget.currUserData.userRef).newPost(
+                            title: _title,
+                            text: _text,
+                            tagString: _tag,
+                            media: downloadURL,
+                            pollRef: pollRef,
+                            link: link,
+                            groupRef: selectedGroup!.groupRef,
+                            mature: isMature,
+                            onValue: handleValue,
+                            onError: handleError,
+                          );
+                        }
+                      },
+                      child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: userColor, width: 2),
+                            borderRadius: BorderRadius.circular(25),
+                            color: _title != '' ? userColor : colorScheme.surface,
                           ),
-                        ],
-                      )
-                    )
-                  ),
+                          padding: EdgeInsets.symmetric(vertical: 1.5, horizontal: 6),
+                          child: Row(
+                            children: [
+                              Icon(Icons.add, size: 20, color: _title != '' ? colorScheme.surface : userColor),
+                              SizedBox(width: 2),
+                              FittedBox(
+                                child: Container(
+                                  padding: EdgeInsets.only(bottom: 1, top: 1, right: 5),
+                                  child: Text("Post",
+                                      style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                                          fontWeight: FontWeight.w600,
+                                          color: _title != '' ? colorScheme.surface : userColor),
+                                      maxLines: 1,
+                                      softWrap: false,
+                                      overflow: TextOverflow.fade),
+                                ),
+                              ),
+                            ],
+                          ))),
                   SizedBox(width: 10),
                 ],
               ),
@@ -379,8 +378,7 @@ class _PostFormState extends State<PostForm> {
                                             }
                                           },
                                           icon: Icon(Icons.close, size: 20),
-                                        )
-                                    ),
+                                        )),
                                     autocorrect: false,
                                     onChanged: (val) {
                                       setState(() => link = val);
@@ -402,17 +400,17 @@ class _PostFormState extends State<PostForm> {
                   ),
                   newFile != null
                       ? Semantics(
-                    label: 'new_post_pic_image',
-                    child: DeletableImage(
-                        image: Image.file(File(newFile!.path), fit: BoxFit.contain),
-                        onDelete: () {
-                          if (mounted) {
-                            setState(() => newFile = null);
-                          }
-                        },
-                        maxHeight: 350,
-                        containerWidth: 350),
-                  )
+                          label: 'new_post_pic_image',
+                          child: DeletableImage(
+                              image: Image.file(File(newFile!.path), fit: BoxFit.contain),
+                              onDelete: () {
+                                if (mounted) {
+                                  setState(() => newFile = null);
+                                }
+                              },
+                              maxHeight: 350,
+                              containerWidth: 350),
+                        )
                       : Container(),
                 ]),
               ), //
@@ -424,7 +422,7 @@ class _PostFormState extends State<PostForm> {
           bottom: 0,
           left: 0,
           child: Container(
-            color: widget.userData.domainColor != null ? widget.userData.domainColor! : colorScheme.onSurface,
+            color: widget.currUserData.domainColor != null ? widget.currUserData.domainColor! : colorScheme.onSurface,
             padding: EdgeInsets.only(top: bottomGradientThickness),
             width: MediaQuery.of(context).size.width,
             child: Container(
@@ -489,8 +487,7 @@ class _PostFormState extends State<PostForm> {
                       });
                     }
                   },
-                  icon: Icon(Icons.assessment,
-                      size: 30, color: poll == null ? colorScheme.primary : userColor),
+                  icon: Icon(Icons.assessment, size: 30, color: poll == null ? colorScheme.primary : userColor),
                 ),
                 IconButton(
                   onPressed: () {
@@ -502,8 +499,7 @@ class _PostFormState extends State<PostForm> {
                       });
                     }
                   },
-                  icon: Icon(Icons.link_rounded,
-                      size: 30, color: link == null ? colorScheme.primary : userColor),
+                  icon: Icon(Icons.link_rounded, size: 30, color: link == null ? colorScheme.primary : userColor),
                 ),
                 Spacer(),
                 Text("Mature",

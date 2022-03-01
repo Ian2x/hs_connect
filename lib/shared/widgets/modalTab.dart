@@ -16,7 +16,7 @@ class ModalTab extends StatelessWidget {
 
     return Container(
       margin: EdgeInsets.fromLTRB(0, 15, 0,
-          bottomMargin != null ? bottomMargin! : 25),
+          bottomMargin ?? 25),
       height:3,
       width: MediaQuery.of(context).size.width*.1,
       decoration: BoxDecoration(

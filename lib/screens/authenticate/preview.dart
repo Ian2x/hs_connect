@@ -13,7 +13,6 @@ class PreviewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
@@ -31,8 +30,8 @@ class PreviewPage extends StatelessWidget {
               ),
               SizedBox(height: 55),
               Text("convo",
-                  style: textTheme.headline4?.copyWith(color: Colors.black,
-                      fontWeight: FontWeight.bold, fontSize: 33, fontFamily: "Shippori")),
+                  style: textTheme.headline4?.copyWith(
+                      color: Colors.black, fontWeight: FontWeight.bold, fontSize: 33, fontFamily: "Shippori")),
               SizedBox(height: 15),
               Text(
                 "Talk anonymously,",
@@ -52,8 +51,7 @@ class PreviewPage extends StatelessWidget {
                   style: textTheme.headline6?.copyWith(fontWeight: FontWeight.bold, color: Colors.white),
                 ),
                 onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => RegisterEmail()));
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => RegisterEmail()));
                 },
               ),
               SizedBox(height: 15),
@@ -63,8 +61,7 @@ class PreviewPage extends StatelessWidget {
                   style: textTheme.headline6?.copyWith(fontWeight: FontWeight.bold, color: Colors.black),
                 ),
                 onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => SignIn()));
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => SignIn()));
                 },
               ),
               Spacer(),

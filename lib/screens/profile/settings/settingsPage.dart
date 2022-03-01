@@ -30,6 +30,7 @@ class _SettingsPageState extends State<SettingsPage> {
   String _feedbackText = '';
   String? feedbackError;
   bool feedbackLoading = false;
+  final feedbackTextController = TextEditingController();
 
   @override
   void initState() {
@@ -37,6 +38,13 @@ class _SettingsPageState extends State<SettingsPage> {
     getShowMaturePosts();
     super.initState();
   }
+
+  @override
+  void dispose() {
+    feedbackTextController.dispose();
+    super.dispose();
+  }
+
 
   void getShowMaturePosts() async {
     final data = await MyStorageManager.readData('mature');
@@ -225,8 +233,9 @@ class _SettingsPageState extends State<SettingsPage> {
                             ),
                             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                             margin: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-                            child: TextFormField(
+                            child: TextField(
                               style: Theme.of(context).textTheme.subtitle1,
+                              controller: feedbackTextController,
                               maxLines: null,
                               autocorrect: true,
                               decoration: InputDecoration(
@@ -268,7 +277,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   if (mounted) {
                                     setState(() {
                                       feedbackLoading = false;
-                                      _feedbackText = "";
+                                      feedbackTextController.clear();
                                     });
                                   }
                                 }

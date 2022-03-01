@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/userData.dart';
@@ -7,20 +6,15 @@ import 'package:hs_connect/screens/profile/profileWidgets/profileTitle.dart';
 import 'package:hs_connect/services/posts_database.dart';
 
 class ProfileBody extends StatefulWidget {
-  final UserData profileUserData;
+  final UserData currUserData;
 
-  ProfileBody({Key? key, required this.profileUserData}) : super(key: key);
+  ProfileBody({Key? key, required this.currUserData}) : super(key: key);
 
   @override
   _ProfileBodyState createState() => _ProfileBodyState();
 }
 
 class _ProfileBodyState extends State<ProfileBody> {
-  bool isReply = false;
-  DocumentReference? commentRef;
-
-  bool test = false;
-
   List<Post>? _userPosts;
 
   @override
@@ -30,7 +24,7 @@ class _ProfileBodyState extends State<ProfileBody> {
   }
 
   void getUserPosts() async {
-    PostsDatabaseService _posts = PostsDatabaseService(currUserRef: widget.profileUserData.userRef);
+    PostsDatabaseService _posts = PostsDatabaseService(currUserRef: widget.currUserData.userRef);
     List<Post?> tempPosts = await _posts.getUserPosts();
     tempPosts.removeWhere((value) => value == null);
     List<Post> tempTempPosts = tempPosts.map((item) => item!).toList();
@@ -49,11 +43,11 @@ class _ProfileBodyState extends State<ProfileBody> {
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: <Widget>[
         ProfileTitle(
           showMoreHoriz: false,
-          otherUserRef: widget.profileUserData.userRef,
-          otherUserFundName: widget.profileUserData.fundamentalName,
-          otherUserScore: widget.profileUserData.score,
-          otherUserDomainColor: widget.profileUserData.domainColor,
-          otherUserFullDomain: widget.profileUserData.fullDomainName,
+          otherUserRef: widget.currUserData.userRef,
+          otherUserFundName: widget.currUserData.fundamentalName,
+          otherUserScore: widget.currUserData.score,
+          otherUserDomainColor: widget.currUserData.domainColor,
+          otherUserFullDomain: widget.currUserData.fullDomainName,
         ),
         Container(
           padding: EdgeInsets.symmetric(horizontal: 15),
@@ -76,7 +70,6 @@ class _ProfileBodyState extends State<ProfileBody> {
                       textAlign: TextAlign.left),
                 ],
               ),
-
             ],
           ),
         ),
@@ -86,10 +79,9 @@ class _ProfileBodyState extends State<ProfileBody> {
         _userPosts != null && _userPosts!.length != 0
             ? Expanded(
                 child: RefreshIndicator(
-                  onRefresh: () =>
-                      Future.sync(
-                            () => getUserPosts(),
-                      ),
+                  onRefresh: () => Future.sync(
+                    () => getUserPosts(),
+                  ),
                   child: ListView.builder(
                     itemCount: _userPosts?.length,
                     scrollDirection: Axis.vertical,
@@ -100,7 +92,7 @@ class _ProfileBodyState extends State<ProfileBody> {
                         padding: EdgeInsets.fromLTRB(15, 0, 15, 10),
                         child: ProfilePostCard(
                             post: _userPosts![index],
-                            currUserData: widget.profileUserData,
+                            currUserRef: widget.currUserData.userRef,
                             onDelete: () {
                               if (mounted) {
                                 setState(() {

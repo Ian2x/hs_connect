@@ -25,7 +25,6 @@ class _WaitVerificationState extends State<WaitVerification> {
 
   @override
   void initState() {
-    print('hi');
     user = auth.currentUser;
     user!.sendEmailVerification();
 
@@ -43,9 +42,8 @@ class _WaitVerificationState extends State<WaitVerification> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-        resizeToAvoidBottomInset : false,
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -60,21 +58,19 @@ class _WaitVerificationState extends State<WaitVerification> {
               SizedBox(height: 60),
               Text(
                 "We've sent you an email\nto verify your school",
-                style: ThemeText.quicksand(
-                    fontWeight: FontWeight.w700, fontSize: 26, color: Colors.black),
+                style: ThemeText.quicksand(fontWeight: FontWeight.w700, fontSize: 26, color: Colors.black),
               ),
               SizedBox(height: 20),
               Text("Make sure to check your spam folder.",
-                style: Theme.of(context).textTheme.subtitle1
-                      ?.copyWith(color: Colors.black, height: 1.5, fontSize: 18)),
+                  style:
+                      Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black, height: 1.5, fontSize: 18)),
               SizedBox(height: 85),
               Container(
                 margin: EdgeInsets.all(0),
-                padding: EdgeInsets.symmetric(horizontal: 15,vertical:30),
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 30),
                 decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black, width: 2),
-                    borderRadius: BorderRadius.circular(15),
-
+                  border: Border.all(color: Colors.black, width: 2),
+                  borderRadius: BorderRadius.circular(15),
                 ),
                 child: Text(
                   "Email info is for verification only. We will never release user data.",
@@ -91,28 +87,27 @@ class _WaitVerificationState extends State<WaitVerification> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text( resent != true ? "Didn't get it? ": "Resent email: ", style: ThemeText.quicksand(
-                    fontSize: 15,
-                    color: Colors.black,
-                  )),
-                  GestureDetector(
-                    onTap: () {
-                      if (!resent){
-                        HapticFeedback.heavyImpact();
-                        user!.sendEmailVerification();
-                        setState(() {
-                          resent = true;
-                        });
-                      }
-                    },
-                    child: Text(
-                      resent != true ? "Click here to resend" : "Check your spam/junk folder.",
+                  Text(resent != true ? "Didn't get it? " : "Resent email: ",
                       style: ThemeText.quicksand(
-                      fontSize: 15,
-                      color: Colors.black,
-                      decoration: resent != true ? TextDecoration.underline : null,
-                    ))
-                  ),
+                        fontSize: 15,
+                        color: Colors.black,
+                      )),
+                  GestureDetector(
+                      onTap: () {
+                        if (!resent) {
+                          HapticFeedback.heavyImpact();
+                          user!.sendEmailVerification();
+                          setState(() {
+                            resent = true;
+                          });
+                        }
+                      },
+                      child: Text(resent != true ? "Click here to resend" : "Check your spam/junk folder.",
+                          style: ThemeText.quicksand(
+                            fontSize: 15,
+                            color: Colors.black,
+                            decoration: resent != true ? TextDecoration.underline : null,
+                          ))),
                 ],
               ),
               SizedBox(height: max(MediaQuery.of(context).padding.bottom, 25))
@@ -126,10 +121,8 @@ class _WaitVerificationState extends State<WaitVerification> {
     await user!.reload();
     if (user!.emailVerified) {
       timer!.cancel();
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-              builder: (context) => Wrapper()),
-              (Route<dynamic> route) => false);
+      Navigator.of(context)
+          .pushAndRemoveUntil(MaterialPageRoute(builder: (context) => Wrapper()), (Route<dynamic> route) => false);
     }
   }
 }

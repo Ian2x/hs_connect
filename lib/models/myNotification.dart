@@ -107,6 +107,7 @@ class MyNotification {
         return 'Trending: ';
     }
   }
+
   String printB(String sourceUserName, String postGroupName) {
     switch (myNotificationType) {
       case MyNotificationType.commentToPost:
@@ -127,6 +128,7 @@ class MyNotification {
         return '';
     }
   }
+
   String printC(String sourceUserName, String postGroupName) {
     switch (myNotificationType) {
       case MyNotificationType.commentToPost:
@@ -147,6 +149,7 @@ class MyNotification {
         return '';
     }
   }
+
   String printD(String sourceUserDisplayedName, String postGroupName) {
     switch (myNotificationType) {
       case MyNotificationType.commentToPost:
@@ -179,7 +182,7 @@ class MyNotification {
       case MyNotificationType.fromMe:
         return '';
       case MyNotificationType.featuredPost:
-        return extraData!=null ? extraData! : 'ummm something went wrong :/';
+        return extraData ?? 'ummm something went wrong :/';
     }
   }
 }
@@ -197,12 +200,11 @@ MyNotification myNotificationFromMap({required Map map}) {
 
 MyNotification myNotificationFromSnapshot(DocumentSnapshot snapshot) {
   return MyNotification(
-    parentPostRef: snapshot.get(C.parentPostRef),
-    myNotificationType: myNotificationTypeFrom(snapshot.get(C.myNotificationType)),
-    sourceRef: snapshot.get(C.sourceRef),
-    sourceUserRef: snapshot.get(C.sourceUserRef),
-    notifiedUserRef: snapshot.get(C.notifiedUserRef),
-    createdAt: snapshot.get(C.createdAt),
-    extraData: snapshot.get(C.extraData)
-  );
+      parentPostRef: snapshot.get(C.parentPostRef),
+      myNotificationType: myNotificationTypeFrom(snapshot.get(C.myNotificationType)),
+      sourceRef: snapshot.get(C.sourceRef),
+      sourceUserRef: snapshot.get(C.sourceUserRef),
+      notifiedUserRef: snapshot.get(C.notifiedUserRef),
+      createdAt: snapshot.get(C.createdAt),
+      extraData: snapshot.get(C.extraData));
 }

@@ -60,11 +60,13 @@ class PollsDatabaseService {
   }
 
   Future<void> vote(
-      {required DocumentReference pollRef, required DocumentReference userRef, required int choice, required Post post}) async {
+      {required DocumentReference pollRef,
+      required DocumentReference userRef,
+      required int choice,
+      required Post post}) async {
     // boost post trending
-    post.postRef.update({
-      C.trendingCreatedAt: newTrendingCreatedAt(post.trendingCreatedAt.toDate(), trendingPollVoteBoost)
-    });
+    post.postRef
+        .update({C.trendingCreatedAt: newTrendingCreatedAt(post.trendingCreatedAt.toDate(), trendingPollVoteBoost)});
     await pollRef.update({
       choice.toString(): FieldValue.arrayUnion([userRef])
     });

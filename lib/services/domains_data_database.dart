@@ -17,8 +17,7 @@ class DomainsDataDatabaseService {
           fullName: documentSnapshot.get(C.fullName),
           color: documentSnapshot.get(C.color),
           image: documentSnapshot.get(C.image),
-          launchDate: documentSnapshot.get(C.launchDate)
-      );
+          launchDate: documentSnapshot.get(C.launchDate));
     } else {
       return null;
     }

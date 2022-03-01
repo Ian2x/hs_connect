@@ -27,7 +27,6 @@ class ReportSheet extends StatefulWidget {
 class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin {
   static const double iconSize = 20;
   late AnimationController controller;
-  bool disposeController = true;
 
   @override
   void initState() {

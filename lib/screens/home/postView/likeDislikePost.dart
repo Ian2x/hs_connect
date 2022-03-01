@@ -5,7 +5,7 @@ import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/postLikesManager.dart';
 import 'package:hs_connect/services/posts_database.dart';
 
-import 'package:hs_connect/shared/widgets/thick_arrow_icons.dart';
+import 'package:hs_connect/shared/widgets/thickArrowIcons.dart';
 
 const double postIconSizeStateless = 20;
 const double postIconSizeStateful = 22;
@@ -16,22 +16,24 @@ class LikeDislikePost extends StatelessWidget {
   final PostLikesManager postLikesManager;
   final Color? currUserColor;
 
-
-  const LikeDislikePost({Key? key, required this.currUserRef, required this.post, required this.postLikesManager, required this.currUserColor})
+  const LikeDislikePost(
+      {Key? key,
+      required this.currUserRef,
+      required this.post,
+      required this.postLikesManager,
+      required this.currUserColor})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme
-        .of(context)
-        .colorScheme;
+    final colorScheme = Theme.of(context).colorScheme;
 
     PostsDatabaseService _posts = PostsDatabaseService(currUserRef: currUserRef, postRef: post.postRef);
-    Color activeColor = currUserColor!=null ? currUserColor! : colorScheme.secondary;
+    Color activeColor = currUserColor ?? colorScheme.secondary;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-            () {
+        () {
           if (postLikesManager.likeStatus == true) {
             return IconButton(
               iconSize: postIconSizeStateless,
@@ -66,14 +68,11 @@ class LikeDislikePost extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 9),
             child: Text(
               (postLikesManager.likeCount - postLikesManager.dislikeCount).toString(),
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .subtitle1?.copyWith(fontSize: 0.8 * postIconSizeStateless),
+              style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 0.8 * postIconSizeStateless),
             ),
           ),
         ),
-            () {
+        () {
           if (postLikesManager.dislikeStatus == true) {
             return IconButton(
               iconSize: postIconSizeStateless,
@@ -107,7 +106,6 @@ class LikeDislikePost extends StatelessWidget {
   }
 }
 
-
 class LikeDislikePostStateful extends StatefulWidget {
   final DocumentReference currUserRef;
   final Post post;
@@ -115,7 +113,11 @@ class LikeDislikePostStateful extends StatefulWidget {
   final Color? currUserColor;
 
   const LikeDislikePostStateful(
-      {Key? key, required this.currUserRef, required this.post, required this.postLikesManager, required this.currUserColor})
+      {Key? key,
+      required this.currUserRef,
+      required this.post,
+      required this.postLikesManager,
+      required this.currUserColor})
       : super(key: key);
 
   @override
@@ -123,38 +125,32 @@ class LikeDislikePostStateful extends StatefulWidget {
 }
 
 class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
-  bool likeStatus = false;
-  bool dislikeStatus = false;
-  int likeCount = 0;
-  int dislikeCount = 0;
+  late bool likeStatus;
+  late bool dislikeStatus;
+  late int likeCount;
+  late int dislikeCount;
 
   @override
   void initState() {
-    if (mounted) {
-      setState(() {
-        likeStatus = widget.postLikesManager.likeStatus;
-        dislikeStatus = widget.postLikesManager.dislikeStatus;
-        likeCount = widget.postLikesManager.likeCount;
-        dislikeCount = widget.postLikesManager.dislikeCount;
-      });
-    }
+    likeStatus = widget.postLikesManager.likeStatus;
+    dislikeStatus = widget.postLikesManager.dislikeStatus;
+    likeCount = widget.postLikesManager.likeCount;
+    dislikeCount = widget.postLikesManager.dislikeCount;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme
-        .of(context)
-        .colorScheme;
+    final colorScheme = Theme.of(context).colorScheme;
 
     PostsDatabaseService _posts = PostsDatabaseService(currUserRef: widget.currUserRef, postRef: widget.post.postRef);
 
-    Color activeColor = widget.currUserColor!=null ? widget.currUserColor! : colorScheme.secondary;
+    Color activeColor = widget.currUserColor ?? colorScheme.secondary;
     return Container(
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-              () {
+          () {
             if (likeStatus == true) {
               return IconButton(
                 iconSize: postIconSizeStateful,
@@ -199,12 +195,9 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
           }(),
           Text(
             (likeCount - dislikeCount).toString(),
-            style: Theme
-                .of(context)
-                .textTheme
-                .subtitle1?.copyWith(fontSize: 0.8 * postIconSizeStateful),
+            style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 0.8 * postIconSizeStateful),
           ),
-              () {
+          () {
             if (dislikeStatus == true) {
               return IconButton(
                 iconSize: postIconSizeStateful,
@@ -247,7 +240,6 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
               );
             }
           }(),
-
         ],
       ),
     );

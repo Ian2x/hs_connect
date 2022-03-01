@@ -22,19 +22,17 @@ class MessagesFeed extends StatefulWidget {
 }
 
 class _MessagesFeedState extends State<MessagesFeed> {
-
   @override
   void dispose() {
     widget.onUpdateLastViewed();
     MessagesDatabaseService _messages =
-        new MessagesDatabaseService(currUserRef: widget.currUserRef, otherUserRef: widget.otherUserRef);
+        MessagesDatabaseService(currUserRef: widget.currUserRef, otherUserRef: widget.otherUserRef);
     _messages.updateLastViewed(widget.currUserRef, widget.otherUserRef);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-
     MessagesDatabaseService _messages =
         new MessagesDatabaseService(currUserRef: widget.currUserRef, otherUserRef: widget.otherUserRef);
     return StreamBuilder(

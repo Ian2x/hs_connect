@@ -1,13 +1,9 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:crypto/crypto.dart';
 import 'package:hs_connect/models/accessRestriction.dart';
 import 'package:hs_connect/models/searchResult.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/services/groups_database.dart';
 import 'package:hs_connect/shared/constants.dart';
-import 'package:tuple/tuple.dart';
 
 class UserDataDatabaseService {
   DocumentReference currUserRef;
@@ -31,15 +27,25 @@ class UserDataDatabaseService {
 
     // assign fundamental name
     final int fundamentalNumber = (await domainGroupRef.get()).get(C.numMembers) + 1;
-    final String fundamentalName = domainLC.replaceAll(RegExp(r'(\.com|\.org|\.info|\.edu|\.net)'), '') + fundamentalNumber.toString();
+    final String fundamentalName =
+        domainLC.replaceAll(RegExp(r'(\.com|\.org|\.info|\.edu|\.net)'), '') + fundamentalNumber.toString();
 
     // Create domainsData if not already created
     final domainsDataRef = FirebaseFirestore.instance.collection(C.domainsData).doc(domainLC);
     domainsDataRef.get().then((doc) => {
-      if (!doc.exists) {
-        domainsDataRef.set({C.color: null, C.country: null, C.county: null, C.fullName: null, C.state: null, C.image: null, C.launchDate: null})
-      }
-    });
+          if (!doc.exists)
+            {
+              domainsDataRef.set({
+                C.color: null,
+                C.country: null,
+                C.county: null,
+                C.fullName: null,
+                C.state: null,
+                C.image: null,
+                C.launchDate: null
+              })
+            }
+        });
 
     await currUserRef.set({
       C.fundamentalName: fundamentalName,
@@ -83,8 +89,7 @@ class UserDataDatabaseService {
     return await currUserRef.update({C.notificationsLastViewed: Timestamp.now()});
   }
 
-  Future<void> joinGroup(
-      {required DocumentReference groupRef}) async {
+  Future<void> joinGroup({required DocumentReference groupRef}) async {
     groupRef.update({C.numMembers: FieldValue.increment(1)});
     final result = await currUserRef.update({
       C.groups: FieldValue.arrayUnion([groupRef])
@@ -92,29 +97,40 @@ class UserDataDatabaseService {
     return result;
   }
 
-  Future<void> leaveGroup(
-      {required DocumentReference userRef, required DocumentReference groupRef}) async {
+  Future<void> leaveGroup({required DocumentReference userRef, required DocumentReference groupRef}) async {
     groupRef.update({C.numMembers: FieldValue.increment(-1)});
     return await userRef.update({
       C.groups: FieldValue.arrayRemove([groupRef])
     });
   }
 
-  Future<UserData?> getUserData({required DocumentReference userRef, bool? noDomainData}) async {
-    final snapshot = await userRef.get();
-    return await _userDataFromSnapshot(snapshot, overrideUserRef: userRef, noDomainData: noDomainData);
+  Stream<UserData?> get userData {
+    return currUserRef.snapshots().asyncMap((event) => _userDataFromSnapshot(event));
   }
 
-  Future<UserData?> _userDataFromSnapshot(DocumentSnapshot snapshot, {DocumentReference? overrideUserRef, bool? noDomainData}) async {
+  Future<UserData?> _userDataFromSnapshot(DocumentSnapshot snapshot,
+      {DocumentReference? overrideUserRef, bool? noDomainData}) async {
     if (snapshot.exists) {
-      return await userDataFromSnapshot(snapshot, overrideUserRef != null ? overrideUserRef : currUserRef, noDomainData: noDomainData);
+      return await userDataFromSnapshot(snapshot, overrideUserRef ?? currUserRef,
+          noDomainData: noDomainData);
     } else {
       return null;
     }
   }
 
-  Stream<UserData?> get userData {
-    return currUserRef.snapshots().asyncMap((event) => _userDataFromSnapshot(event));
+  Future<OtherUserData?> getOtherUserData({required DocumentReference userRef, bool? noDomainData}) async {
+    final snapshot = await userRef.get();
+    return await _otherUserDataFromSnapshot(snapshot, overrideUserRef: userRef, noDomainData: noDomainData);
+  }
+
+  Future<OtherUserData?> _otherUserDataFromSnapshot(DocumentSnapshot snapshot,
+      {DocumentReference? overrideUserRef, bool? noDomainData}) async {
+    if (snapshot.exists) {
+      return await otherUserDataFromSnapshot(snapshot, overrideUserRef != null ? overrideUserRef : currUserRef,
+          noDomainData: noDomainData);
+    } else {
+      return null;
+    }
   }
 
   SearchResult _streamResultFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {

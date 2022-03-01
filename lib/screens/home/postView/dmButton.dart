@@ -1,26 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/screens/activity/Messages/messagesPage.dart';
-import 'package:hs_connect/shared/widgets/chat_icons.dart';
+import 'package:hs_connect/shared/widgets/chatIcons.dart';
 
 class DMButton extends StatelessWidget {
   final DocumentReference? otherUserRef;
   final DocumentReference currUserRef;
   final String otherUserFundName;
 
-  const DMButton({Key? key, required this.otherUserRef,
+  const DMButton({
+    Key? key,
+    required this.otherUserRef,
     required this.currUserRef,
     required this.otherUserFundName,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
-
-
     return IconButton(
       constraints: BoxConstraints(),
-      padding: EdgeInsets.only(top: 5, right: 10,bottom:5),
+      padding: EdgeInsets.only(top: 5, right: 10, bottom: 5),
       onPressed: () {
         if (otherUserRef != null && otherUserRef != currUserRef) {
           Navigator.push(

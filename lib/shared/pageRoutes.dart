@@ -21,7 +21,7 @@ class MyTransparentRoute extends PageRoute<void> {
   MyTransparentRoute({
     required this.builder,
     RouteSettings? settings,
-  })  : super(settings: settings, fullscreenDialog: false);
+  }) : super(settings: settings, fullscreenDialog: false);
 
   final WidgetBuilder builder;
 
@@ -41,8 +41,7 @@ class MyTransparentRoute extends PageRoute<void> {
   Duration get transitionDuration => Duration(milliseconds: 350);
 
   @override
-  Widget buildPage(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation) {
+  Widget buildPage(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
     final result = builder(context);
     return FadeTransition(
       opacity: Tween<double>(begin: 0, end: 1).animate(animation),

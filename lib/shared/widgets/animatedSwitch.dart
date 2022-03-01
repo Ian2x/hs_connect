@@ -7,6 +7,7 @@ import '../inputDecorations.dart';
 class AnimatedSwitch extends StatefulWidget {
   final bool initialState;
   final VoidFunction onToggle;
+
   const AnimatedSwitch({Key? key, required this.initialState, required this.onToggle}) : super(key: key);
 
   @override
@@ -25,14 +26,13 @@ class _AnimatedSwitchState extends State<AnimatedSwitch> {
 
   @override
   Widget build(BuildContext context) {
-
     final colorScheme = Theme.of(context).colorScheme;
     final userData = Provider.of<UserData?>(context);
     final onColor = userData?.domainColor ?? colorScheme.secondary.withAlpha(255);
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         if (mounted) {
-          setState((){
+          setState(() {
             isEnabled = !isEnabled;
           });
         }
@@ -69,6 +69,7 @@ class _AnimatedSwitchState extends State<AnimatedSwitch> {
 class AnimatedSwitchSmall extends StatefulWidget {
   final bool initialState;
   final VoidFunction onToggle;
+
   const AnimatedSwitchSmall({Key? key, required this.initialState, required this.onToggle}) : super(key: key);
 
   @override
@@ -91,9 +92,9 @@ class _AnimatedSwitchStateSmall extends State<AnimatedSwitchSmall> {
     final userData = Provider.of<UserData?>(context);
     final onColor = userData?.domainColor ?? colorScheme.secondary.withAlpha(255);
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         if (mounted) {
-          setState((){
+          setState(() {
             isEnabled = !isEnabled;
           });
         }
