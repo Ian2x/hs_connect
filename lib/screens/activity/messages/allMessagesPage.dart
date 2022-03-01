@@ -27,22 +27,11 @@ class AllMessagesPage extends StatefulWidget {
 }
 
 class _AllMessagesPageState extends State<AllMessagesPage> {
-  List<UserMessage>? UMs;
-  List<OtherUserData>? otherUsers;
   List<UMUD> UMUDcache = [];
 
   @override
   void initState() {
-    List<UserMessage> tempUMs = widget.currUserData.userMessages;
-    if (mounted) {
-      setState(() {
-        for (UserMessage UM in tempUMs) {
-          UMUDcache.add(UMUD(UM: UM, UD: null));
-        }
-        UMs = tempUMs;
-      });
-    }
-    fetchUsers(tempUMs);
+    fetchUsers();
     super.initState();
   }
 
@@ -50,21 +39,26 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
     results[index] = await otherUserDataFromSnapshot(await otherUserRef.get(), otherUserRef);
   }
 
-  Future fetchUsers(List<UserMessage> UMs) async {
-    List<OtherUserData?> tempOtherUsers = List.filled(UMs.length, null);
-    await Future.wait([for (int i = 0; i < UMs.length; i++) _fetchUsersHelper(UMs[i].otherUserRef, i, tempOtherUsers)]);
+  Future fetchUsers() async {
+    List<UserMessage> tempUMs = widget.currUserData.userMessages;
+    List<UMUD> tempUMUDcache = [];
+    for (UserMessage UM in tempUMs) {
+      tempUMUDcache.add(UMUD(UM: UM, UD: null));
+    }
+    List<OtherUserData?> tempOtherUsers = List.filled(tempUMs.length, null);
+    await Future.wait([for (int i = 0; i < tempUMs.length; i++) _fetchUsersHelper(tempUMs[i].otherUserRef, i, tempOtherUsers)]);
     List<OtherUserData> tempTempOtherUsers = [];
     for (int i = 0; i < tempOtherUsers.length; i++) {
       if (tempOtherUsers[i] != null) tempTempOtherUsers.add(tempOtherUsers[i]!);
     }
+    if (tempTempOtherUsers.length == tempUMs.length) {
+      for (int i = 0; i < tempTempOtherUsers.length; i++) {
+        tempUMUDcache[i].UD = tempTempOtherUsers[i];
+      }
+    }
     if (mounted) {
       setState(() {
-        if (tempTempOtherUsers.length == UMs.length) {
-          for (int i = 0; i < tempTempOtherUsers.length; i++) {
-            UMUDcache[i].UD = tempTempOtherUsers[i];
-          }
-          otherUsers = tempTempOtherUsers;
-        }
+        UMUDcache = tempUMUDcache;
       });
     }
   }
@@ -80,11 +74,11 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
-    if (UMs == null || otherUsers == null) {
+    if (UMUDcache.where((UMUD umud) => umud.UM==null || umud.UD==null).length > 0) {
       return Loading();
     }
 
-    if (otherUsers!.length == 0) {
+    if (UMUDcache.length == 0) {
       return Container(
           padding: EdgeInsets.only(top: 50),
           alignment: Alignment.topCenter,
@@ -94,90 +88,93 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
     // sorted by latest first
     UMUDcache.sort((UMUD a, UMUD b) => b.UM!.lastMessage.compareTo(a.UM!.lastMessage));
 
-    return ListView.builder(
-        itemCount: UMUDcache.length,
-        physics: BouncingScrollPhysics(),
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemBuilder: (BuildContext context, int index) {
-          final otherUser = UMUDcache[index].UD!;
-          if (widget.currUserData.blockedUserRefs.contains(otherUser.userRef)) {
-            return Container();
-          }
-          final updateLastMessage = () {
-            UMUDcache[index].UM!.lastMessage = Timestamp.now();
-          };
-          final updateLastViewed = () {
-            UMUDcache[index].UM!.lastViewed = Timestamp.now();
-          };
-          return GestureDetector(
-            onTap: () async {
-              final _ = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => MessagesPage(
-                            currUserRef: widget.currUserData.userRef,
-                            otherUserRef: otherUser.userRef,
-                            otherUserFundName: otherUser.fundamentalName,
-                            onUpdateLastMessage: updateLastMessage,
-                            onUpdateLastViewed: updateLastViewed,
-                          )));
-              if (mounted) {
-                setState(() {
-                  UMUDcache[index].UM!.lastViewed = Timestamp.now();
-                });
-              }
-              calculateNumUnread();
-            },
-            child: Stack(
-              alignment: AlignmentDirectional.centerStart,
-              children: <Widget>[
-                Container(
-                    margin: EdgeInsets.only(top: index == 0 ? 4.5 : 2, bottom: index == UMUDcache.length - 1 ? 2.5 : 0),
-                    padding: EdgeInsets.fromLTRB(20, 13, 14, 15),
-                    color: colorScheme.surface,
-                    child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
-                      ProfileImage(backgroundColor: otherUser.domainColor, size: 33),
-                      SizedBox(width: 14),
-                      Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-                        Text(otherUser.fundamentalName,
-                            style: textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold)),
-                        SizedBox(height: 4),
-                        Text(otherUser.fullDomainName ?? otherUser.domain,
-                            style: textTheme.bodyText2?.copyWith(
-                                color: otherUser.domainColor ?? colorScheme.primary))
-                      ]),
-                      Flexible(
-                          child: Column(children: <Widget>[
-                        Row(children: <Widget>[
-                          Spacer(),
-                          isToday(UMUDcache[index].UM!.lastMessage.toDate())
-                              ? Text(DateFormat.jm().format(UMUDcache[index].UM!.lastMessage.toDate()),
-                                  style: textTheme.bodyText2?.copyWith(color: colorScheme.primary))
-                              : Text(DateFormat.yMd().format(UMUDcache[index].UM!.lastMessage.toDate()),
-                                  style: textTheme.bodyText2?.copyWith(color: colorScheme.primary))
-                        ])
-                      ]))
-                    ])),
-                (UMUDcache[index].UM!.lastViewed == null ||
-                        UMUDcache[index].UM!.lastViewed!.compareTo(UMUDcache[index].UM!.lastMessage) < 0)
-                    ? Container(
-                        width: 10,
-                        height: 10,
-                        margin: EdgeInsets.only(
-                            top: index == 0 ? 4.5 : 2, left: 6, bottom: index == UMUDcache.length - 1 ? 2.5 : 0),
-                        decoration: BoxDecoration(
-                          color: (UMUDcache[index].UM!.lastViewed == null ||
-                                  UMUDcache[index].UM!.lastViewed!.compareTo(UMUDcache[index].UM!.lastMessage) < 0)
-                              ? colorScheme.secondary
-                              : Colors.green,
-                          shape: BoxShape.circle,
-                        ),
-                      )
-                    : Container()
-              ],
-            ),
-          );
-        });
+    return RefreshIndicator(
+      onRefresh: fetchUsers,
+      child: ListView.builder(
+          itemCount: UMUDcache.length,
+          physics: AlwaysScrollableScrollPhysics(),
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemBuilder: (BuildContext context, int index) {
+            final otherUser = UMUDcache[index].UD!;
+            if (widget.currUserData.blockedUserRefs.contains(otherUser.userRef)) {
+              return Container();
+            }
+            final updateLastMessage = () {
+              UMUDcache[index].UM!.lastMessage = Timestamp.now();
+            };
+            final updateLastViewed = () {
+              UMUDcache[index].UM!.lastViewed = Timestamp.now();
+            };
+            return GestureDetector(
+              onTap: () async {
+                final _ = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MessagesPage(
+                              currUserRef: widget.currUserData.userRef,
+                              otherUserRef: otherUser.userRef,
+                              otherUserFundName: otherUser.fundamentalName,
+                              onUpdateLastMessage: updateLastMessage,
+                              onUpdateLastViewed: updateLastViewed,
+                            )));
+                if (mounted) {
+                  setState(() {
+                    UMUDcache[index].UM!.lastViewed = Timestamp.now();
+                  });
+                }
+                calculateNumUnread();
+              },
+              child: Stack(
+                alignment: AlignmentDirectional.centerStart,
+                children: <Widget>[
+                  Container(
+                      margin: EdgeInsets.only(top: index == 0 ? 4.5 : 2, bottom: index == UMUDcache.length - 1 ? 2.5 : 0),
+                      padding: EdgeInsets.fromLTRB(20, 13, 14, 15),
+                      color: colorScheme.surface,
+                      child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
+                        ProfileImage(backgroundColor: otherUser.domainColor, size: 33),
+                        SizedBox(width: 14),
+                        Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+                          Text(otherUser.fundamentalName,
+                              style: textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold)),
+                          SizedBox(height: 4),
+                          Text(otherUser.fullDomainName ?? otherUser.domain,
+                              style: textTheme.bodyText2?.copyWith(
+                                  color: otherUser.domainColor ?? colorScheme.primary))
+                        ]),
+                        Flexible(
+                            child: Column(children: <Widget>[
+                          Row(children: <Widget>[
+                            Spacer(),
+                            isToday(UMUDcache[index].UM!.lastMessage.toDate())
+                                ? Text(DateFormat.jm().format(UMUDcache[index].UM!.lastMessage.toDate()),
+                                    style: textTheme.bodyText2?.copyWith(color: colorScheme.primary))
+                                : Text(DateFormat.yMd().format(UMUDcache[index].UM!.lastMessage.toDate()),
+                                    style: textTheme.bodyText2?.copyWith(color: colorScheme.primary))
+                          ])
+                        ]))
+                      ])),
+                  (UMUDcache[index].UM!.lastViewed == null ||
+                          UMUDcache[index].UM!.lastViewed!.compareTo(UMUDcache[index].UM!.lastMessage) < 0)
+                      ? Container(
+                          width: 10,
+                          height: 10,
+                          margin: EdgeInsets.only(
+                              top: index == 0 ? 4.5 : 2, left: 6, bottom: index == UMUDcache.length - 1 ? 2.5 : 0),
+                          decoration: BoxDecoration(
+                            color: (UMUDcache[index].UM!.lastViewed == null ||
+                                    UMUDcache[index].UM!.lastViewed!.compareTo(UMUDcache[index].UM!.lastMessage) < 0)
+                                ? colorScheme.secondary
+                                : Colors.green,
+                            shape: BoxShape.circle,
+                          ),
+                        )
+                      : Container()
+                ],
+              ),
+            );
+          }),
+    );
   }
 }

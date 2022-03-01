@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/myNotification.dart';
 import 'package:hs_connect/models/userData.dart';
@@ -24,7 +26,7 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
     super.initState();
   }
 
-  void fetchNotifications() async {
+  Future<void> fetchNotifications() async {
     final notificationss =
         await MyNotificationsDatabaseService(userRef: widget.currUserData.userRef).getNotifications();
     if (mounted) {
@@ -42,35 +44,37 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
 
     int numberNotifications = notifications!.length;
 
-    if (numberNotifications == 0) {
-      return Container(
-          padding: EdgeInsets.only(top: 50),
-          alignment: Alignment.topCenter,
-          child: Text("No notifications",
-              style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.normal)));
-    }
-
-    return ListView.builder(
-        itemCount: numberNotifications,
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        padding: EdgeInsets.zero,
-        physics: BouncingScrollPhysics(),
-        itemBuilder: (BuildContext context, int index) {
-          int trueIndex = numberNotifications - index - 1;
-          if (widget.currUserData.blockedUserRefs.contains(notifications![trueIndex].sourceUserRef)) {
-            return Container();
-          }
-          if (trueIndex == numberNotifications - 1) {
-            return Container(
-                padding: EdgeInsets.only(top: 2.5), child: NotificationCard(myNotification: notifications![trueIndex]));
-          } else if (trueIndex == 0) {
-            return Container(
-                padding: EdgeInsets.only(bottom: 2.5),
-                child: NotificationCard(myNotification: notifications![trueIndex]));
-          } else {
-            return NotificationCard(myNotification: notifications![trueIndex]);
-          }
-        });
+    return RefreshIndicator(
+      onRefresh: fetchNotifications,
+      child: ListView.builder(
+          itemCount: max(numberNotifications, 1),
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          padding: EdgeInsets.zero,
+          physics: AlwaysScrollableScrollPhysics(),
+          itemBuilder: (BuildContext context, int index) {
+            if (numberNotifications == 0) {
+              return Container(
+                  padding: EdgeInsets.only(top: 50),
+                  alignment: Alignment.topCenter,
+                  child: Text("No notifications",
+                      style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.normal)));
+            }
+            int trueIndex = numberNotifications - index - 1;
+            if (widget.currUserData.blockedUserRefs.contains(notifications![trueIndex].sourceUserRef)) {
+              return Container();
+            }
+            if (trueIndex == numberNotifications - 1) {
+              return Container(
+                  padding: EdgeInsets.only(top: 2.5), child: NotificationCard(myNotification: notifications![trueIndex]));
+            } else if (trueIndex == 0) {
+              return Container(
+                  padding: EdgeInsets.only(bottom: 2.5),
+                  child: NotificationCard(myNotification: notifications![trueIndex]));
+            } else {
+              return NotificationCard(myNotification: notifications![trueIndex]);
+            }
+          }),
+    );
   }
 }

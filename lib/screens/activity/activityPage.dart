@@ -5,6 +5,7 @@ import 'package:hs_connect/screens/activity/notifications/notificationsFeed.dart
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
 
+import '../../shared/widgets/loading.dart';
 import 'activityAppBar.dart';
 
 class ActivityPage extends StatefulWidget {
@@ -62,17 +63,27 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
 
     return Scaffold(
       backgroundColor: colorScheme.background,
-      appBar: activityAppBar(
-          context: context,
-          tabController: tabController,
-          currUserData: widget.userData),
-      body: Container(
-        color: colorScheme.background,
-        child: TabBarView(children: <Widget>[
-          NotificationsFeed(currUserData: widget.userData),
-          AllMessagesPage(currUserData: widget.userData, setNumNotifications: setNumNotifications)
-        ], controller: tabController, physics: BouncingScrollPhysics()),
-      ),
+      appBar: activityAppBar(context: context, tabController: tabController, currUserData: widget.userData),
+      body: StreamBuilder(
+          stream: UserDataDatabaseService(currUserRef: widget.userData.userRef).userData,
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (!snapshot.hasData) {
+              return Loading();
+            } else {
+              UserData? streamData = (snapshot.data as UserData?);
+              if (streamData == null) {
+                return Container();
+              } else {
+                return Container(
+                  color: colorScheme.background,
+                  child: TabBarView(children: <Widget>[
+                    NotificationsFeed(currUserData: streamData),
+                    AllMessagesPage(currUserData: streamData, setNumNotifications: setNumNotifications)
+                  ], controller: tabController, physics: BouncingScrollPhysics()),
+                );
+              }
+            }
+          }),
       bottomNavigationBar: MyNavigationBar(
         currentIndex: 1,
         currUserData: widget.userData,
