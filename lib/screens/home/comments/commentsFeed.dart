@@ -13,6 +13,15 @@ import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
+class ReplyToNotifier extends ChangeNotifier {
+  int? commentIndex;
+
+  void setIndex(int? newIndex) {
+    commentIndex = newIndex;
+    notifyListeners();
+  }
+}
+
 class CommentsFeed extends StatefulWidget {
   final Post post;
   final Group group;
@@ -84,59 +93,67 @@ class _CommentsFeedState extends State<CommentsFeed> {
               comments.sort((a, b) {
                 return a.createdAt.compareTo(b.createdAt);
               });
-              return GestureDetector(
-                onVerticalDragDown: (DragDownDetails ddd) {
-                  dismissKeyboard(context);
-                  setState(() {
-                    isReply = false;
-                    comment = null;
-                  });
-                },
-                onHorizontalDragUpdate: (details) {
-                  if (details.delta.dx > 15) {
-                    Navigator.of(context).pop();
-                  }
-                },
-                child: Container(
-                  color: Colors.transparent,
-                  constraints: BoxConstraints(
-                    minHeight: MediaQuery.of(context).size.height,
-                  ),
-                  alignment: Alignment.topCenter,
-                  child: ScrollablePositionedList.builder(
-                    itemCount: comments.length + 3,
-                    itemScrollController: itemScrollController,
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    physics: BouncingScrollPhysics(),
-                    itemBuilder: (BuildContext context, int index) {
-                      if (index == 0) {
-                        return PostTitleCard(
-                          post: widget.post,
-                          group: widget.group,
-                          currUserData: userData,
-                        );
-                      } else if (index == 1) {
-                        return Divider(thickness: 3, color: colorScheme.background, height: 3);
-                      } else if (index == comments.length + 2) {
-                        return Container(height: 80 + keyboardHeight + MediaQuery.of(context).padding.bottom);
-                      } else {
-                        if (userData.blockedUserRefs.contains(comments[index - 2].creatorRef)) {
-                          return Container();
-                        }
-                        return CommentCard(
-                          focusKeyboard: () {
-                            myFocusNode.requestFocus();
-                            itemScrollController.scrollTo(index: index, duration: Duration(milliseconds: 250));
-                          },
-                          switchFormBool: switchFormBool,
-                          comment: comments[index - 2],
-                          currUserData: userData,
-                          postCreatorRef: widget.post.creatorRef,
-                          groupColor: groupColor,
-                        );
+              return ChangeNotifierProvider(
+                create: (context) => ReplyToNotifier(),
+                child: Consumer<ReplyToNotifier>(
+                  builder: (context, replyToNotifier, _) => GestureDetector(
+                    onVerticalDragDown: (DragDownDetails ddd) {
+                      dismissKeyboard(context);
+                      replyToNotifier.setIndex(null);
+                      setState(() {
+                        isReply = false;
+                        comment = null;
+                      });
+                    },
+                    onHorizontalDragUpdate: (details) {
+                      if (details.delta.dx > 15) {
+                        Navigator.of(context).pop();
                       }
                     },
+                    child: Container(
+                      color: Colors.transparent,
+                      constraints: BoxConstraints(
+                        minHeight: MediaQuery.of(context).size.height,
+                      ),
+                      alignment: Alignment.topCenter,
+                      child: ScrollablePositionedList.builder(
+                        itemCount: comments.length + 3,
+                        itemScrollController: itemScrollController,
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        physics: BouncingScrollPhysics(),
+                        itemBuilder: (BuildContext context, int index) {
+                          if (index == 0) {
+                            return PostTitleCard(
+                              post: widget.post,
+                              group: widget.group,
+                              currUserData: userData,
+                            );
+                          } else if (index == 1) {
+                            return Divider(thickness: 3, color: colorScheme.background, height: 3);
+                          } else if (index == comments.length + 2) {
+                            return Container(height: 80 + keyboardHeight + MediaQuery.of(context).padding.bottom);
+                          } else {
+                            if (userData.blockedUserRefs.contains(comments[index - 2].creatorRef)) {
+                              return Container();
+                            }
+                            return CommentCard(
+                              focusKeyboard: () {
+                                replyToNotifier.setIndex(index);
+                                myFocusNode.requestFocus();
+                                itemScrollController.scrollTo(index: index, duration: Duration(milliseconds: 250));
+                              },
+                              switchFormBool: switchFormBool,
+                              comment: comments[index - 2],
+                              currUserData: userData,
+                              postCreatorRef: widget.post.creatorRef,
+                              groupColor: groupColor,
+                              index: index
+                            );
+                          }
+                        },
+                      ),
+                    ),
                   ),
                 ),
               );
