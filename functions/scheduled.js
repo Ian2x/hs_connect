@@ -56,14 +56,13 @@ exports.cleanMessages = functions.pubsub.schedule('every 120 minutes').onRun((co
     return null;
 });
 
-exports.cleanUnverifiedUsers = functions.pubsub.schedule('every 30 minutes').onRun((context) => {
+exports.cleanUnverifiedUsers = functions.pubsub.schedule('every 60 minutes').onRun((context) => {
     const users = []
     const listAllUsers = (nextPageToken) => {
         // List batch of users, 1000 at a time.
         return admin.auth().listUsers(1000, nextPageToken).then((listUsersResult) => {
             listUsersResult.users.forEach((userRecord) => {
                 users.push(userRecord)
-                userRecord.metadata.creationTime
             });
             if (listUsersResult.pageToken) {
                 // List next batch of users.
@@ -75,12 +74,10 @@ exports.cleanUnverifiedUsers = functions.pubsub.schedule('every 30 minutes').onR
     };
     // Start listing users from the beginning, 1000 at a time.
     await listAllUsers();
-    const unVerifiedUsers = users.filter((user) => !user.emailVerified && Date.parse(user.metadata.creationTime) Date.now()).map((user) => user.uid)
+    const unVerifiedUsers = users.filter((user) => !user.emailVerified && Math.abs(Date.parse(user.metadata.creationTime) - Date.now()) > 1000 * 60 * 30).map((user) => user.uid)
 
     //DELETING USERS
     return admin.auth().deleteUsers(unVerifiedUsers).then((deleteUsersResult) => {
-        console.log(`Successfully deleted ${deleteUsersResult.successCount} users`);
-        console.log(`Failed to delete ${deleteUsersResult.failureCount} users`);
         deleteUsersResult.errors.forEach((err) => {
             console.log(err.error.toJSON());
         });

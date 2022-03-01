@@ -11,6 +11,7 @@ import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:provider/provider.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class CommentsFeed extends StatefulWidget {
   final Post post;
@@ -27,6 +28,8 @@ class _CommentsFeedState extends State<CommentsFeed> {
   Comment? comment;
 
   late FocusNode myFocusNode;
+  final ItemScrollController itemScrollController = ItemScrollController();
+
 
   @override
   void initState() {
@@ -60,6 +63,12 @@ class _CommentsFeedState extends State<CommentsFeed> {
         CommentsDatabaseService(currUserRef: userData.userRef, postRef: widget.post.postRef);
 
     Color? groupColor = widget.group.hexColor != null ? HexColor(widget.group.hexColor!) : null;
+    final windowInsets = WidgetsBinding.instance?.window.viewInsets.bottom;
+    final devicePixelRatio = WidgetsBinding.instance?.window.devicePixelRatio;
+    double keyboardHeight = 0;
+    if (windowInsets != null && devicePixelRatio != null) {
+      keyboardHeight = windowInsets / devicePixelRatio;
+    }
 
     return Stack(
       children: [
@@ -91,10 +100,11 @@ class _CommentsFeedState extends State<CommentsFeed> {
                 },
                 child: Container(
                   constraints: BoxConstraints(
-                    minHeight: MediaQuery.of(context).size.height * .75,
+                    minHeight: MediaQuery.of(context).size.height,
                   ),
-                  child: ListView.builder(
+                  child: ScrollablePositionedList.builder(
                     itemCount: comments.length + 3,
+                    itemScrollController: itemScrollController,
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     physics: BouncingScrollPhysics(),
@@ -108,7 +118,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
                       } else if (index == 1) {
                         return Divider(thickness: 3, color: colorScheme.background, height: 3);
                       } else if (index == comments.length + 2) {
-                        return SizedBox(height: 130);
+                        return Container(height: 80 + keyboardHeight);
                       } else {
                         if (userData.blockedUserRefs.contains(comments[index - 2].creatorRef)) {
                           return Container();
@@ -116,6 +126,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
                         return CommentCard(
                           focusKeyboard: () {
                             myFocusNode.requestFocus();
+                            itemScrollController.scrollTo(index: index, duration: Duration(milliseconds: 500));
                           },
                           switchFormBool: switchFormBool,
                           comment: comments[index - 2],

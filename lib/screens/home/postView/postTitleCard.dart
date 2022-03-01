@@ -197,7 +197,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
                   margin: EdgeInsets.only(top: 10),
                   child: ExpandableImage(
                       imageURL: widget.post.mediaURL!,
-                      maxHeight: 450,
+                      maxHeight: (MediaQuery.of(context).size.width - 2 * leftRightPadding) * 4 / 3,
                       containerWidth: MediaQuery.of(context).size.width - 2 * leftRightPadding),
                 )
               : Container(),
