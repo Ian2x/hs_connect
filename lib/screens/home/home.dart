@@ -165,10 +165,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   Future openMessagePost(RemoteMessage message) async {
     Post post =
         postFromSnapshot(await FirebaseFirestore.instance.collection(C.posts).doc(message.data[C.postId]).get());
-    final data = await waitConcurrently(groupFromSnapshot(await post.groupRef.get()),
-        userDataFromSnapshot(await post.creatorRef.get(), post.creatorRef));
-    Group? group = data.item1;
-    UserData creatorData = data.item2;
+    Group? group = await groupFromSnapshot(await post.groupRef.get());
     if (group != null) {
       Navigator.push(
           context,
