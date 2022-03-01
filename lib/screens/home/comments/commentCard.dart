@@ -86,7 +86,7 @@ class _CommentCardState extends State<CommentCard> {
     final localCreatorName = creatorName ?? '';
     final localCreatorGroupName = creatorDomainName ?? '';
     return Container(
-        padding: EdgeInsets.fromLTRB(17, 0, 17, 0),
+        padding: EdgeInsets.symmetric(horizontal: 15),
         child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
           Row(
             children: [
@@ -211,11 +211,11 @@ class _CommentCardState extends State<CommentCard> {
             ],
           ),
           SizedBox(height: 4),
+          Divider(thickness: 3, color: colorScheme.background, height: 0),
           RepliesFeed(
               commentRef: widget.comment.commentRef,
               groupColor: widget.groupColor,
               postCreatorRef: widget.postCreatorRef),
-          Divider(thickness: 3, color: colorScheme.background, height: 0),
         ]));
   }
 }

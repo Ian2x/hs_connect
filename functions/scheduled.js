@@ -56,7 +56,7 @@ exports.cleanMessages = functions.pubsub.schedule('every 120 minutes').onRun((co
     return null;
 });
 
-exports.cleanUnverifiedUsers = functions.pubsub.schedule('every 60 minutes').onRun((context) => {
+exports.cleanUnverifiedUsers = functions.pubsub.schedule('every 60 minutes').onRun(async (context) => {
     const users = []
     const listAllUsers = (nextPageToken) => {
         // List batch of users, 1000 at a time.
