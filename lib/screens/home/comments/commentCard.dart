@@ -11,6 +11,9 @@ import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/reports/reportSheet.dart';
+import 'package:provider/provider.dart';
+
+import 'commentsFeed.dart';
 
 class CommentCard extends StatefulWidget {
   final Comment comment;
@@ -19,6 +22,7 @@ class CommentCard extends StatefulWidget {
   final VoidFunction focusKeyboard;
   final DocumentReference postCreatorRef;
   final Color? groupColor;
+  final int index;
 
   CommentCard(
       {Key? key,
@@ -27,7 +31,8 @@ class CommentCard extends StatefulWidget {
       required this.comment,
       required this.currUserData,
       required this.postCreatorRef,
-      required this.groupColor})
+      required this.groupColor,
+      required this.index})
       : super(key: key);
 
   @override
@@ -41,9 +46,6 @@ class _CommentCardState extends State<CommentCard> {
   Color? creatorGroupColor;
   String? creatorDomainName;
   int? creatorScore;
-  bool replySubject = false;
-
-
 
   @override
   void initState() {
@@ -67,9 +69,7 @@ class _CommentCardState extends State<CommentCard> {
         setState(() {
           creatorName = fetchUserData != null ? fetchUserData.fundamentalName : null;
           creatorScore = fetchUserData != null ? fetchUserData.score : null;
-          creatorDomainName = fetchUserData != null
-              ? (fetchUserData.fullDomainName ?? fetchUserData.domain)
-              : null;
+          creatorDomainName = fetchUserData != null ? (fetchUserData.fullDomainName ?? fetchUserData.domain) : null;
           creatorGroupColor = fetchUserData != null ? fetchUserData.domainColor : null;
         });
       }
@@ -88,16 +88,18 @@ class _CommentCardState extends State<CommentCard> {
 
     final localCreatorName = creatorName ?? '';
     final localCreatorGroupName = creatorDomainName ?? '';
-    return Column(
-      children: [
-        Container(
-          color: replySubject != false ? colorScheme.background : null,
-          padding: EdgeInsets.symmetric(horizontal: 15),
-            child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+    return Consumer<ReplyToNotifier>(builder: (context, replyToNotifier, _) {
+      return Column(
+        children: [
+          Container(
+            color: replyToNotifier.commentIndex == widget.index ? colorScheme.background : null,
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            child:
+                Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
               Row(
                 children: [
                   Container(
-                    padding: EdgeInsets.fromLTRB(5.0,0.0,10.0,0.0),
+                    padding: EdgeInsets.fromLTRB(5.0, 0.0, 10.0, 0.0),
                     alignment: Alignment.centerLeft,
                     height: 33,
                     child: TextButton(
@@ -134,8 +136,7 @@ class _CommentCardState extends State<CommentCard> {
                             TextSpan(
                                 text: localCreatorGroupName,
                                 style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                                    color: creatorGroupColor ?? colorScheme.primary,
-                                    fontSize: commentReplyDetailSize))
+                                    color: creatorGroupColor ?? colorScheme.primary, fontSize: commentReplyDetailSize))
                           ]),
                         )),
                   ),
@@ -146,9 +147,10 @@ class _CommentCardState extends State<CommentCard> {
                           padding: EdgeInsets.fromLTRB(10, 5, 0, 1),
                           margin: EdgeInsets.all(1),
                           child: Text('Creator',
-                              style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                                  color: widget.groupColor ?? colorScheme.onSurface,
-                                  fontSize: 12)))
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2
+                                  ?.copyWith(color: widget.groupColor ?? colorScheme.onSurface, fontSize: 12)))
                       : Container(),
                 ],
               ),
@@ -194,14 +196,16 @@ class _CommentCardState extends State<CommentCard> {
                     height: 30,
                     child: TextButton(
                         style: TextButton.styleFrom(
-                            splashFactory: NoSplash.splashFactory, padding: EdgeInsets.zero, alignment: Alignment.center),
+                            splashFactory: NoSplash.splashFactory,
+                            padding: EdgeInsets.zero,
+                            alignment: Alignment.center),
                         child: Text("Reply",
                             style: Theme.of(context).textTheme.bodyText2?.copyWith(
                                 color: colorScheme.onSurface,
                                 fontWeight: FontWeight.w600,
                                 fontSize: commentReplyDetailSize + 1.5)),
                         onPressed: () {
-                          replySubject=true;
+                          replyToNotifier.setIndex(widget.index);
                           widget.focusKeyboard();
                           widget.switchFormBool(widget.comment);
                         }),
@@ -217,14 +221,14 @@ class _CommentCardState extends State<CommentCard> {
               ),
               SizedBox(height: 4),
               Divider(thickness: 3, color: colorScheme.background, height: 0),
-            ]),),
-        RepliesFeed(
-            commentRef: widget.comment.commentRef,
-            groupColor: widget.groupColor,
-            postCreatorRef: widget.postCreatorRef),
-      ],
-    );
+            ]),
+          ),
+          RepliesFeed(
+              commentRef: widget.comment.commentRef,
+              groupColor: widget.groupColor,
+              postCreatorRef: widget.postCreatorRef),
+        ],
+      );
+    });
   }
 }
-
-
