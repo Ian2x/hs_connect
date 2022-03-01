@@ -94,12 +94,10 @@ class _CommentCardState extends State<CommentCard> {
           Container(
             color: replyToNotifier.commentIndex == widget.index ? colorScheme.background : null,
             padding: EdgeInsets.symmetric(horizontal: 15),
-            child:
-                Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+            child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
               Row(
                 children: [
                   Container(
-                    padding: EdgeInsets.fromLTRB(5.0, 0.0, 10.0, 0.0),
                     alignment: Alignment.centerLeft,
                     height: 33,
                     child: TextButton(
@@ -196,9 +194,7 @@ class _CommentCardState extends State<CommentCard> {
                     height: 30,
                     child: TextButton(
                         style: TextButton.styleFrom(
-                            splashFactory: NoSplash.splashFactory,
-                            padding: EdgeInsets.zero,
-                            alignment: Alignment.center),
+                            splashFactory: NoSplash.splashFactory, padding: EdgeInsets.zero, alignment: Alignment.center),
                         child: Text("Reply",
                             style: Theme.of(context).textTheme.bodyText2?.copyWith(
                                 color: colorScheme.onSurface,

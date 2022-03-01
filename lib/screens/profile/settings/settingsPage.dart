@@ -276,6 +276,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   });
                                   if (mounted) {
                                     setState(() {
+                                      _feedbackText = "";
                                       feedbackLoading = false;
                                       feedbackTextController.clear();
                                     });
