@@ -17,11 +17,10 @@ class UMUD {
 }
 
 class AllMessagesPage extends StatefulWidget {
-  final UserData userData;
+  final UserData currUserData;
   final VoidIntParamFunction setNumNotifications;
 
-
-  const AllMessagesPage({Key? key, required this.userData, required this.setNumNotifications}) : super(key: key);
+  const AllMessagesPage({Key? key, required this.currUserData, required this.setNumNotifications}) : super(key: key);
 
   @override
   _AllMessagesPageState createState() => _AllMessagesPageState();
@@ -34,7 +33,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
 
   @override
   void initState() {
-    List<UserMessage> tempUMs = widget.userData.userMessages;
+    List<UserMessage> tempUMs = widget.currUserData.userMessages;
     if (mounted) {
       setState(() {
         for (UserMessage UM in tempUMs) {
@@ -71,7 +70,8 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
   }
 
   void calculateNumUnread() {
-    final num = UMUDcache.where((element) => element.UM!.lastViewed == null || element.UM!.lastViewed!.compareTo(element.UM!.lastMessage) < 0).length;
+    final num = UMUDcache.where((element) =>
+        element.UM!.lastViewed == null || element.UM!.lastViewed!.compareTo(element.UM!.lastMessage) < 0).length;
     widget.setNumNotifications(num);
   }
 
@@ -88,8 +88,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
       return Container(
           padding: EdgeInsets.only(top: 50),
           alignment: Alignment.topCenter,
-          child: Text("No messages :/",
-              style: textTheme.headline6?.copyWith(fontWeight: FontWeight.normal)));
+          child: Text("No messages :/", style: textTheme.headline6?.copyWith(fontWeight: FontWeight.normal)));
     }
 
     // sorted by latest first
@@ -102,7 +101,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
         shrinkWrap: true,
         itemBuilder: (BuildContext context, int index) {
           final otherUser = UMUDcache[index].UD!;
-          if (widget.userData.blockedUserRefs.contains(otherUser.userRef)) {
+          if (widget.currUserData.blockedUserRefs.contains(otherUser.userRef)) {
             return Container();
           }
           final updateLastMessage = () {
@@ -117,7 +116,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => MessagesPage(
-                            currUserRef: widget.userData.userRef,
+                            currUserRef: widget.currUserData.userRef,
                             otherUserRef: otherUser.userRef,
                             otherUserFundName: otherUser.fundamentalName,
                             onUpdateLastMessage: updateLastMessage,
@@ -134,8 +133,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
               alignment: AlignmentDirectional.centerStart,
               children: <Widget>[
                 Container(
-                    margin: EdgeInsets.only(
-                        top: index == 0 ? 4.5 : 2, bottom: index == UMUDcache.length - 1 ? 2.5 : 0),
+                    margin: EdgeInsets.only(top: index == 0 ? 4.5 : 2, bottom: index == UMUDcache.length - 1 ? 2.5 : 0),
                     padding: EdgeInsets.fromLTRB(20, 13, 14, 15),
                     color: colorScheme.surface,
                     child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
@@ -145,8 +143,9 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                         Text(otherUser.fundamentalName,
                             style: textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold)),
                         SizedBox(height: 4),
-                        Text(otherUser.fullDomainName != null ? otherUser.fullDomainName! : otherUser.domain,
-                            style: textTheme.bodyText2?.copyWith(color: otherUser.domainColor!=null ? otherUser.domainColor! : colorScheme.primary))
+                        Text(otherUser.fullDomainName ?? otherUser.domain,
+                            style: textTheme.bodyText2?.copyWith(
+                                color: otherUser.domainColor ?? colorScheme.primary))
                       ]),
                       Flexible(
                           child: Column(children: <Widget>[
@@ -166,16 +165,15 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                         width: 10,
                         height: 10,
                         margin: EdgeInsets.only(
-                            top: index == 0 ? 4.5 : 2,
-                            left: 6,
-                            bottom: index == UMUDcache.length - 1 ? 2.5 : 0),
+                            top: index == 0 ? 4.5 : 2, left: 6, bottom: index == UMUDcache.length - 1 ? 2.5 : 0),
                         decoration: BoxDecoration(
                           color: (UMUDcache[index].UM!.lastViewed == null ||
-                              UMUDcache[index].UM!.lastViewed!.compareTo(UMUDcache[index].UM!.lastMessage) < 0)
-                              ? colorScheme.secondary : Colors.green,
+                                  UMUDcache[index].UM!.lastViewed!.compareTo(UMUDcache[index].UM!.lastMessage) < 0)
+                              ? colorScheme.secondary
+                              : Colors.green,
                           shape: BoxShape.circle,
                         ),
-                )
+                      )
                     : Container()
               ],
             ),

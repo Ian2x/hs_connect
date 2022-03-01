@@ -5,7 +5,8 @@ import 'package:hs_connect/shared/tools/helperFunctions.dart';
 class Poll {
   final DocumentReference pollRef;
   final List<String> choices; // [a,b,c,d]
-  final Map<int, List<DocumentReference>> votes; // {0: [userRef1, userRef2], 1: [], 2: [userRef3, userRef4, userRef5], 3: [userRef6]}
+  final Map<int, List<DocumentReference>>
+      votes; // {0: [userRef1, userRef2], 1: [], 2: [userRef3, userRef4, userRef5], 3: [userRef6]}
 
   Poll({
     required this.pollRef,

@@ -7,7 +7,6 @@ import 'package:hs_connect/screens/home/comments/commentCard.dart';
 import 'package:hs_connect/screens/home/comments/commentReplyForm.dart';
 import 'package:hs_connect/screens/home/postView/postTitleCard.dart';
 import 'package:hs_connect/services/comments_database.dart';
-import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
@@ -60,7 +59,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
     CommentsDatabaseService _comments =
         CommentsDatabaseService(currUserRef: userData.userRef, postRef: widget.post.postRef);
 
-    Color? groupColor = widget.group.hexColor!=null ? HexColor(widget.group.hexColor!) : null;
+    Color? groupColor = widget.group.hexColor != null ? HexColor(widget.group.hexColor!) : null;
 
     return Stack(
       children: [
@@ -77,58 +76,58 @@ class _CommentsFeedState extends State<CommentsFeed> {
               comments.sort((a, b) {
                 return a.createdAt.compareTo(b.createdAt);
               });
-                return GestureDetector(
-                  onVerticalDragDown: (DragDownDetails ddd) {
-                    dismissKeyboard(context);
-                    setState(() {
-                      isReply = false;
-                      comment = null;
-                    });
-                  },
-                  onPanUpdate: (details) {
-                    if (details.delta.dx > 15) {
-                      Navigator.of(context).pop();
-                    }
-                  },
-                  child: Container(
-                    constraints: BoxConstraints(
-                        minHeight: MediaQuery.of(context).size.height*.75,
-                    ),
-                    child: ListView.builder(
-                      itemCount: comments.length + 3,
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      physics: BouncingScrollPhysics(),
-                      itemBuilder: (BuildContext context, int index) {
-                        if (index == 0) {
-                          return PostTitleCard(
-                            post: widget.post,
-                            group: widget.group,
-                            currUserData: userData,
-                          );
-                        } else if (index == 1) {
-                          return Divider(thickness: 3, color: colorScheme.background, height: 3);
-                        } else if (index == comments.length + 2) {
-                          return SizedBox(height: 130);
-                        } else {
-                          if (userData.blockedUserRefs.contains(comments[index - 2].creatorRef)) {
-                            return Container();
-                          }
-                          return CommentCard(
-                            focusKeyboard: () {
-                              myFocusNode.requestFocus();
-                            },
-                            switchFormBool: switchFormBool,
-                            comment: comments[index - 2],
-                            currUserData: userData,
-                            postCreatorRef: widget.post.creatorRef,
-                            groupColor: groupColor,
-                          );
-                        }
-                      },
-                    ),
+              return GestureDetector(
+                onVerticalDragDown: (DragDownDetails ddd) {
+                  dismissKeyboard(context);
+                  setState(() {
+                    isReply = false;
+                    comment = null;
+                  });
+                },
+                onPanUpdate: (details) {
+                  if (details.delta.dx > 15) {
+                    Navigator.of(context).pop();
+                  }
+                },
+                child: Container(
+                  constraints: BoxConstraints(
+                    minHeight: MediaQuery.of(context).size.height * .75,
                   ),
-                );
+                  child: ListView.builder(
+                    itemCount: comments.length + 3,
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    physics: BouncingScrollPhysics(),
+                    itemBuilder: (BuildContext context, int index) {
+                      if (index == 0) {
+                        return PostTitleCard(
+                          post: widget.post,
+                          group: widget.group,
+                          currUserData: userData,
+                        );
+                      } else if (index == 1) {
+                        return Divider(thickness: 3, color: colorScheme.background, height: 3);
+                      } else if (index == comments.length + 2) {
+                        return SizedBox(height: 130);
+                      } else {
+                        if (userData.blockedUserRefs.contains(comments[index - 2].creatorRef)) {
+                          return Container();
+                        }
+                        return CommentCard(
+                          focusKeyboard: () {
+                            myFocusNode.requestFocus();
+                          },
+                          switchFormBool: switchFormBool,
+                          comment: comments[index - 2],
+                          currUserData: userData,
+                          postCreatorRef: widget.post.creatorRef,
+                          groupColor: groupColor,
+                        );
+                      }
+                    },
+                  ),
+                ),
+              );
             }
           },
         ),
@@ -147,7 +146,8 @@ class _CommentsFeedState extends State<CommentsFeed> {
                   ),
                 ],
               ),
-              padding: EdgeInsets.fromLTRB(10, 10, 10, MediaQuery.of(context).padding.bottom>10 ? MediaQuery.of(context).padding.bottom : 10),
+              padding: EdgeInsets.fromLTRB(
+                  10, 10, 10, MediaQuery.of(context).padding.bottom > 10 ? MediaQuery.of(context).padding.bottom : 10),
               child: CommentReplyForm(
                   focusNode: myFocusNode,
                   currUserRef: userData.userRef,

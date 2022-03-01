@@ -3,7 +3,7 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/profile/profileBody.dart';
 import 'package:hs_connect/screens/profile/settings/settingsPage.dart';
 import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
-import 'package:hs_connect/shared/widgets/thicker_icons.dart';
+import 'package:hs_connect/shared/widgets/thickerIcons.dart';
 
 class ProfilePage extends StatelessWidget {
   final UserData currUserData;
@@ -16,7 +16,7 @@ class ProfilePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+          automaticallyImplyLeading: false,
           backgroundColor: colorScheme.surface,
           actions: [
             IconButton(

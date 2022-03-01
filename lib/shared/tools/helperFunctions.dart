@@ -25,7 +25,7 @@ List<MyNotification> myNotificationList(dynamic input) {
 bool isToday(DateTime dt) {
   final now = DateTime.now();
   final today = DateTime(now.year, now.month, now.day);
-  return today==DateTime(dt.year, dt.month, dt.day);
+  return today == DateTime(dt.year, dt.month, dt.day);
 }
 
 void dismissKeyboard(context) {
@@ -36,24 +36,21 @@ void dismissKeyboard(context) {
 }
 
 DateTime newTrendingCreatedAt(DateTime currTrendingCreatedAt, double trendingBoost) {
-  return currTrendingCreatedAt.add(((DateTime.now().add(Duration(days: 1))).difference(currTrendingCreatedAt))*trendingBoost);
+  return currTrendingCreatedAt
+      .add(((DateTime.now().add(Duration(days: 1))).difference(currTrendingCreatedAt)) * trendingBoost);
 }
 
 DateTime undoNewTrendingCreatedAt(DateTime currTrendingCreatedAt, double trendingBoost) {
   final double trendingBoostFactor = trendingBoost / (1 - trendingBoost);
-  return currTrendingCreatedAt.subtract(((DateTime.now().add(Duration(days: 1))).difference(currTrendingCreatedAt))*trendingBoostFactor);
+  return currTrendingCreatedAt
+      .subtract(((DateTime.now().add(Duration(days: 1))).difference(currTrendingCreatedAt)) * trendingBoostFactor);
 }
 
-
-Future<Tuple2<T1, T2>> waitConcurrently<T1, T2>(
-    Future<T1> future1, Future<T2> future2) async {
+Future<Tuple2<T1, T2>> waitConcurrently<T1, T2>(Future<T1> future1, Future<T2> future2) async {
   late T1 result1;
   late T2 result2;
 
-  await Future.wait([
-    future1.then((value) => result1 = value),
-    future2.then((value) => result2 = value)
-  ]);
+  await Future.wait([future1.then((value) => result1 = value), future2.then((value) => result2 = value)]);
 
   return Future.value(Tuple2(result1, result2));
 }
@@ -67,7 +64,7 @@ Future<void> openLink(LinkableElement link) async {
 }
 
 String? httpsLink(String? link) {
-  if (link!=null) {
+  if (link != null) {
     if (link.startsWith(RegExp("http|https|ftp"))) {
       return link;
     } else {

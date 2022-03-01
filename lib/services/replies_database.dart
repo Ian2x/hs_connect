@@ -16,7 +16,6 @@ class RepliesDatabaseService {
   DocumentReference? commentRef;
   DocumentReference? replyRef;
 
-
   RepliesDatabaseService({required this.currUserRef, this.commentRef, this.postRef, this.replyRef});
 
   static final ImageStorage _images = ImageStorage();
@@ -45,27 +44,28 @@ class RepliesDatabaseService {
           extraData: text);
     }
     // update other repliers' activity
-    repliesCollection.where(C.commentRef, isEqualTo: commentRef).get().then(
-        (QuerySnapshot QS) {
-          final replies = QS.docs.map((QDS) =>_replyFromQuerySnapshot(QDS)).toList();
-          List<DocumentReference> notified = [];
-          for (Reply? r in replies) {
-            if (r!=null) {
-              // check not updating nobody, not updating self, not updating if already updating for comment, and not updating for multiple replies
-              if (r.creatorRef!=null && r.creatorRef!=currUserRef && r.creatorRef != commentCreatorRef && !notified.contains(r.creatorRef)) {
-                notified.add(r.creatorRef!);
-                MyNotificationsDatabaseService(userRef: currUserRef).newNotification(
-                    parentPostRef: post.postRef,
-                    myNotificationType: MyNotificationType.replyToReply,
-                    sourceRef: newReplyRef,
-                    sourceUserRef: currUserRef,
-                    notifiedUserRef: r.creatorRef!,
-                    extraData: text);
-              }
-            }
+    repliesCollection.where(C.commentRef, isEqualTo: commentRef).get().then((QuerySnapshot QS) {
+      final replies = QS.docs.map((QDS) => _replyFromQuerySnapshot(QDS)).toList();
+      List<DocumentReference> notified = [];
+      for (Reply? r in replies) {
+        if (r != null) {
+          // check not updating nobody, not updating self, not updating if already updating for comment, and not updating for multiple replies
+          if (r.creatorRef != null &&
+              r.creatorRef != currUserRef &&
+              r.creatorRef != commentCreatorRef &&
+              !notified.contains(r.creatorRef)) {
+            notified.add(r.creatorRef!);
+            MyNotificationsDatabaseService(userRef: currUserRef).newNotification(
+                parentPostRef: post.postRef,
+                myNotificationType: MyNotificationType.replyToReply,
+                sourceRef: newReplyRef,
+                sourceUserRef: currUserRef,
+                notifiedUserRef: r.creatorRef!,
+                extraData: text);
           }
         }
-    );
+      }
+    });
     // update post's numReplies and score
     post.postRef.update({
       C.numReplies: FieldValue.increment(1),
@@ -127,12 +127,14 @@ class RepliesDatabaseService {
       C.dislikes: FieldValue.arrayRemove([currUserRef]),
       C.likes: FieldValue.arrayUnion([currUserRef])
     });
-    if (likeCount==1 || likeCount==10 || likeCount==20 || likeCount==50 || likeCount==100) {
+    if (likeCount == 1 || likeCount == 10 || likeCount == 20 || likeCount == 50 || likeCount == 100) {
       bool update = true;
       final notifications = await MyNotificationsDatabaseService(userRef: replyCreatorRef).getNotifications();
 
       for (MyNotification MN in notifications) {
-        if (MN.sourceRef == replyRef! && MN.myNotificationType==MyNotificationType.replyVotes && MN.extraData==likeCount.toString()) {
+        if (MN.sourceRef == replyRef! &&
+            MN.myNotificationType == MyNotificationType.replyVotes &&
+            MN.extraData == likeCount.toString()) {
           update = false;
           break;
         }

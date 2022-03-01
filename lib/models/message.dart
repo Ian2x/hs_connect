@@ -19,7 +19,7 @@ class Message {
     required this.isMedia,
     required this.createdAt,
     required this.numReports,
-    this.timeMessage=false,
+    this.timeMessage = false,
   });
 }
 

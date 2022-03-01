@@ -12,7 +12,9 @@ class GroupSelectionSheet extends StatefulWidget {
   final Group initialSelectedGroup;
   final VoidGroupParamFunction onSelectGroup;
 
-  const GroupSelectionSheet({Key? key, required this.groups, required this.initialSelectedGroup, required this.onSelectGroup}) : super(key: key);
+  const GroupSelectionSheet(
+      {Key? key, required this.groups, required this.initialSelectedGroup, required this.onSelectGroup})
+      : super(key: key);
 
   @override
   _GroupSelectionSheetState createState() => _GroupSelectionSheetState();
@@ -29,8 +31,6 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
 
   @override
   Widget build(BuildContext context) {
-
-
     final colorScheme = Theme.of(context).colorScheme;
     final double bottomSpace = max(MediaQuery.of(context).padding.bottom, 25);
     final userData = Provider.of<UserData?>(context);
@@ -49,8 +49,7 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Pick a circle",
-                      style: Theme.of(context).textTheme.headline6),
+                  Text("Pick a circle", style: Theme.of(context).textTheme.headline6),
                 ],
               );
             } else {
@@ -76,34 +75,41 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
                               style: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w500)),
                           group.name == "Public"
                               ? Column(
-                                children: [
-                                  SizedBox(height:5),
-                                  Text("Anyone can see", style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary)),
-                                  SizedBox(height:2),
-                                ],
-                              )
+                                  children: [
+                                    SizedBox(height: 5),
+                                    Text("Anyone can see",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle2
+                                            ?.copyWith(color: colorScheme.primary)),
+                                    SizedBox(height: 2),
+                                  ],
+                                )
                               : Container(),
                           group.accessRestriction.restrictionType == AccessRestrictionType.domain
                               ? Column(
-                                children: [
-                                  SizedBox(height:5),
-                                  Text("Only for your school", style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary)),
-                                  SizedBox(height:2),
-                                ],
-                              )
+                                  children: [
+                                    SizedBox(height: 5),
+                                    Text("Only for your school",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle2
+                                            ?.copyWith(color: colorScheme.primary)),
+                                    SizedBox(height: 2),
+                                  ],
+                                )
                               : Container()
                         ],
                       ),
                       Spacer(),
                       ConstrainedBox(
                           constraints: BoxConstraints(maxHeight: 40),
-                          child:
-                          Checkbox(
+                          child: Checkbox(
                             value: selectedGroup == widget.groups[index - 1],
                             shape: CircleBorder(),
                             activeColor: activeColor,
                             onChanged: (bool? value) {
-                              if (value==true) {
+                              if (value == true) {
                                 if (mounted) {
                                   setState(() {
                                     selectedGroup = widget.groups[index - 1];
@@ -112,8 +118,7 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
                                 widget.onSelectGroup(widget.groups[index - 1]);
                               }
                             },
-                          )
-                      )
+                          ))
                     ]),
                   ],
                 ),

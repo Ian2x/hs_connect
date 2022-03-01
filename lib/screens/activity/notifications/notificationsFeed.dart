@@ -25,7 +25,8 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
   }
 
   void fetchNotifications() async {
-    final notificationss = await MyNotificationsDatabaseService(userRef: widget.currUserData.userRef).getNotifications();
+    final notificationss =
+        await MyNotificationsDatabaseService(userRef: widget.currUserData.userRef).getNotifications();
     if (mounted) {
       setState(() {
         notifications = notificationss;
@@ -35,7 +36,6 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
 
   @override
   Widget build(BuildContext context) {
-
     if (notifications == null) {
       return Loading();
     }
@@ -61,10 +61,9 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
           if (widget.currUserData.blockedUserRefs.contains(notifications![trueIndex].sourceUserRef)) {
             return Container();
           }
-          if (trueIndex == numberNotifications-1) {
+          if (trueIndex == numberNotifications - 1) {
             return Container(
-                padding: EdgeInsets.only(top: 2.5),
-                child: NotificationCard(myNotification: notifications![trueIndex]));
+                padding: EdgeInsets.only(top: 2.5), child: NotificationCard(myNotification: notifications![trueIndex]));
           } else if (trueIndex == 0) {
             return Container(
                 padding: EdgeInsets.only(bottom: 2.5),

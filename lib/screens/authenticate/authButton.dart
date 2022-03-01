@@ -2,41 +2,45 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 
-import 'package:hs_connect/shared/widgets/myOutlinedButton.dart';
-
 class AuthButton extends StatelessWidget {
   final String buttonText;
   final VoidFunction onPressed;
   final bool hasText;
-  final double? width;
 
-  const AuthButton({Key? key, required this.buttonText,
+  const AuthButton({
+    Key? key,
+    required this.buttonText,
     required this.onPressed,
     required this.hasText,
-    this.width,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
-    return MyOutlinedButton(
-      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 29),
-      onPressed: onPressed,
-      outlineColor: hasText ? Colors.black : Colors.black54,
-      borderRadius: 40,
-      backgroundColor: hasText ? Colors.black : Colors.white,
-      thickness: 2,
+    return GestureDetector(
+      onTap: onPressed,
       child: Container(
-        alignment: Alignment.center,
-        child: Text(
-          buttonText,
-          softWrap: false,
-          overflow: TextOverflow.ellipsis,
-          style: ThemeText.quicksand(
-              fontWeight: FontWeight.w600, fontSize: 18,
-              color: hasText ? Colors.white : Colors.black54),
-        ),
-      ),
+          decoration: BoxDecoration(
+            color: hasText ? Colors.black : Colors.black54,
+            borderRadius: BorderRadius.circular(40),
+          ),
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 29),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(38),
+              color: hasText ? Colors.black : Colors.white,
+            ),
+            margin: EdgeInsets.all(2),
+            child: Container(
+              alignment: Alignment.center,
+              child: Text(
+                buttonText,
+                softWrap: false,
+                overflow: TextOverflow.ellipsis,
+                style: ThemeText.quicksand(
+                    fontWeight: FontWeight.w600, fontSize: 18, color: hasText ? Colors.white : Colors.black54),
+              ),
+            ),
+          )),
     );
   }
 }

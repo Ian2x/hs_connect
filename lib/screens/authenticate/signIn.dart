@@ -23,7 +23,6 @@ class _SignInState extends State<SignIn> {
   final AuthService _auth = AuthService();
   bool loading = false;
   bool passwordHidden = true;
-  bool termsAccepted = true;
 
   // text field state
   String email = '';
@@ -32,7 +31,6 @@ class _SignInState extends State<SignIn> {
   String? error;
 
   String authError = "Invalid username and password";
-  String termsError = "Must read and agree to policies/terms";
 
   @override
   Widget build(BuildContext context) {
@@ -109,15 +107,14 @@ class _SignInState extends State<SignIn> {
                   ),
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) => ResetPassword())
-                      );
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => ResetPassword()));
                     },
                     child: Text(
                       "Forgot password?",
-                      style:
-                      Theme.of(context).textTheme.subtitle1?.copyWith(color: authPrimaryTextColor, fontSize: 14, height: 1.3),
+                      style: Theme.of(context)
+                          .textTheme
+                          .subtitle1
+                          ?.copyWith(color: authPrimaryTextColor, fontSize: 14, height: 1.3),
                       textAlign: TextAlign.center,
                     ),
                   ),

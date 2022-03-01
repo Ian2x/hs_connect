@@ -10,14 +10,13 @@ class PostLikesManager {
   VoidFunction onDislike;
   VoidFunction onUnDislike;
 
-  PostLikesManager({
-    required this.likeStatus,
-    required this.dislikeStatus,
-    required this.likeCount,
-    required this.dislikeCount,
-    required this.onLike,
-    required this.onUnLike,
-    required this.onDislike,
-    required this.onUnDislike
-  });
+  PostLikesManager(
+      {required this.likeStatus,
+      required this.dislikeStatus,
+      required this.likeCount,
+      required this.dislikeCount,
+      required this.onLike,
+      required this.onUnLike,
+      required this.onDislike,
+      required this.onUnDislike});
 }

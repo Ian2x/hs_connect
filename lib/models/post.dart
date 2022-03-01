@@ -3,7 +3,7 @@ import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'accessRestriction.dart';
 
-enum Tag { Relationships, Parties, Memes, Classes, Advice, College, Confession}
+enum Tag { Relationships, Parties, Memes, Classes, Advice, College, Confession }
 
 extension TagExtension on Tag {
   String get string {
@@ -27,7 +27,7 @@ extension TagExtension on Tag {
 }
 
 Tag? tagFrom(String? tag) {
-  if (tag==null || tag=='') return null;
+  if (tag == null || tag == '') return null;
   switch (tag) {
     case C.Relationships:
       return Tag.Relationships;
@@ -70,58 +70,27 @@ class Post {
   final bool mature;
   final String? link;
 
-  Post({
-    required this.postRef,
-    required this.groupRef,
-    required this.creatorRef,
-    required this.title,
-    required this.titleLC,
-    required this.text,
-    required this.mediaURL,
-    required this.createdAt,
-    required this.trendingCreatedAt,
-    required this.numComments,
-    required this.numReplies,
-    required this.accessRestriction,
-    required this.likes,
-    required this.dislikes,
-    required this.numReports,
-    required this.pollRef,
-    required this.tag,
-    required this.isFeatured,
-    required this.mature,
-    required this.link
-  });
-}
-
-postFromQuerySnapshot(QueryDocumentSnapshot querySnapshot) {
-  final accessRestriction = querySnapshot[C.accessRestriction];
-  String? localLink;
-  try {
-    localLink = querySnapshot[C.link];
-  } catch (e) {}
-  return Post(
-    postRef: querySnapshot.reference,
-    groupRef: querySnapshot[C.groupRef],
-    creatorRef: querySnapshot[C.creatorRef],
-    title: querySnapshot[C.title],
-    titleLC: querySnapshot[C.titleLC],
-    text: querySnapshot[C.text],
-    mediaURL: querySnapshot[C.mediaURL],
-    createdAt: querySnapshot[C.createdAt],
-    trendingCreatedAt: querySnapshot[C.trendingCreatedAt],
-    numComments: querySnapshot[C.numComments],
-    numReplies: querySnapshot[C.numReplies],
-    accessRestriction: accessRestrictionFromMap(accessRestriction),
-    likes: docRefList(querySnapshot[C.likes]),
-    dislikes: docRefList(querySnapshot[C.dislikes]),
-    numReports: querySnapshot[C.numReports],
-    pollRef: querySnapshot[C.pollRef],
-    tag: tagFrom(querySnapshot[C.tag]),
-    isFeatured: querySnapshot[C.isFeatured],
-    mature: querySnapshot[C.mature],
-    link: localLink
-  );
+  Post(
+      {required this.postRef,
+      required this.groupRef,
+      required this.creatorRef,
+      required this.title,
+      required this.titleLC,
+      required this.text,
+      required this.mediaURL,
+      required this.createdAt,
+      required this.trendingCreatedAt,
+      required this.numComments,
+      required this.numReplies,
+      required this.accessRestriction,
+      required this.likes,
+      required this.dislikes,
+      required this.numReports,
+      required this.pollRef,
+      required this.tag,
+      required this.isFeatured,
+      required this.mature,
+      required this.link});
 }
 
 Post postFromSnapshot(DocumentSnapshot snapshot) {
@@ -132,25 +101,24 @@ Post postFromSnapshot(DocumentSnapshot snapshot) {
     localLink = snapshot[C.link];
   } catch (e) {}
   return Post(
-    postRef: snapshot.reference,
-    groupRef: snapshot[C.groupRef],
-    creatorRef: snapshot[C.creatorRef],
-    title: snapshot[C.title],
-    titleLC: snapshot[C.titleLC],
-    text: snapshot[C.text],
-    mediaURL: snapshot[C.mediaURL],
-    createdAt: snapshot[C.createdAt],
-    trendingCreatedAt: snapshot[C.trendingCreatedAt],
-    numComments: snapshot[C.numComments],
-    numReplies: snapshot[C.numReplies],
-    accessRestriction: accessRestrictionFromMap(accessRestriction),
-    likes: docRefList(snapshot[C.likes]),
-    dislikes: docRefList(snapshot[C.dislikes]),
-    numReports: snapshot[C.numReports],
-    pollRef: snapshot[C.pollRef],
-    tag: tagFrom(snapshot[C.tag]),
-    isFeatured: snapshot[C.isFeatured],
-    mature: snapshot[C.mature],
-    link: localLink
-  );
+      postRef: snapshot.reference,
+      groupRef: snapshot[C.groupRef],
+      creatorRef: snapshot[C.creatorRef],
+      title: snapshot[C.title],
+      titleLC: snapshot[C.titleLC],
+      text: snapshot[C.text],
+      mediaURL: snapshot[C.mediaURL],
+      createdAt: snapshot[C.createdAt],
+      trendingCreatedAt: snapshot[C.trendingCreatedAt],
+      numComments: snapshot[C.numComments],
+      numReplies: snapshot[C.numReplies],
+      accessRestriction: accessRestrictionFromMap(accessRestriction),
+      likes: docRefList(snapshot[C.likes]),
+      dislikes: docRefList(snapshot[C.dislikes]),
+      numReports: snapshot[C.numReports],
+      pollRef: snapshot[C.pollRef],
+      tag: tagFrom(snapshot[C.tag]),
+      isFeatured: snapshot[C.isFeatured],
+      mature: snapshot[C.mature],
+      link: localLink);
 }

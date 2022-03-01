@@ -20,11 +20,8 @@ class CountAtTime {
 }
 
 CountAtTime countAtTimeFromMap({required Map map}) {
-  return CountAtTime(
-      count: map[C.count], time: map[C.time]);
+  return CountAtTime(count: map[C.count], time: map[C.time]);
 }
-
-
 
 class Group {
   final DocumentReference groupRef;
@@ -87,18 +84,20 @@ Future<Group?> groupFromSnapshot(DocumentSnapshot snapshot) async {
     final accessRestrictionData = snapshot.get(C.accessRestriction);
     final accessRestriction = accessRestrictionFromMap(accessRestrictionData);
     DomainData? domainData;
-    if (accessRestriction.restrictionType==AccessRestrictionType.domain) {
+    if (accessRestriction.restrictionType == AccessRestrictionType.domain) {
       final _domainsData = DomainsDataDatabaseService();
       domainData = await _domainsData.getDomainData(domain: snapshot.get(C.name));
     }
-    if (domainData==null) domainData = DomainData(county: null, state: null, country: null, fullName: null, color: null, image: null, launchDate: null);
+    if (domainData == null)
+      domainData = DomainData(
+          county: null, state: null, country: null, fullName: null, color: null, image: null, launchDate: null);
     final temp = Group(
       groupRef: snapshot.reference,
       creatorRef: snapshot.get(C.creatorRef),
       moderatorRefs: docRefList(snapshot.get(C.moderatorRefs)),
-      name: domainData.fullName!=null ? domainData.fullName : snapshot.get(C.name),
+      name: domainData.fullName ?? snapshot.get(C.name),
       nameLC: snapshot.get(C.nameLC),
-      image: domainData.image!=null ? domainData.image : snapshot.get(C.image),
+      image: domainData.image ?? snapshot.get(C.image),
       description: snapshot.get(C.description),
       accessRestriction: accessRestriction,
       createdAt: snapshot.get(C.createdAt),
@@ -107,7 +106,7 @@ Future<Group?> groupFromSnapshot(DocumentSnapshot snapshot) async {
       numMembers: snapshot.get(C.numMembers),
       membersOverTime: countAtTimeList(snapshot.get(C.membersOverTime)),
       numReports: snapshot.get(C.numReports),
-      hexColor: domainData.color!=null ? domainData.color : snapshot.get(C.hexColor),
+      hexColor: domainData.color ?? snapshot.get(C.hexColor),
     );
     return temp;
   } else {

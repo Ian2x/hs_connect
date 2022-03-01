@@ -34,8 +34,6 @@ class _NewPollState extends State<NewPoll> {
 
   @override
   Widget build(BuildContext context) {
-
-
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(

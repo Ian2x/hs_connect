@@ -5,9 +5,9 @@ import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 
 class LaunchCountdown extends StatefulWidget {
-  final UserData userData;
+  final UserData currUserData;
 
-  const LaunchCountdown({Key? key, required this.userData}) : super(key: key);
+  const LaunchCountdown({Key? key, required this.currUserData}) : super(key: key);
 
   @override
   _LaunchCountdownState createState() => _LaunchCountdownState();
@@ -34,8 +34,8 @@ class _LaunchCountdownState extends State<LaunchCountdown> {
     final textTheme = Theme.of(context).textTheme;
 
     String groupName =
-        widget.userData.fullDomainName != null ? widget.userData.fullDomainName! : widget.userData.domain;
-    Color groupColor = widget.userData.domainColor ?? Colors.blue;
+        widget.currUserData.fullDomainName ?? widget.currUserData.domain;
+    Color groupColor = widget.currUserData.domainColor ?? Colors.blue;
     return Scaffold(
         backgroundColor: Colors.white,
         body: Container(
@@ -56,25 +56,23 @@ class _LaunchCountdownState extends State<LaunchCountdown> {
                     Text("Convo will launch at " + groupName + " on:",
                         style: textTheme.headline6?.copyWith(color: Colors.black), textAlign: TextAlign.center),
                     SizedBox(height: 10),
-                    Text(DateFormat('EEEEEEEEE, MMMM d').format(widget.userData.launchDate!.toDate()),
-                        style: textTheme.headline6?.copyWith(color: Colors.black.withOpacity(0.65)), textAlign: TextAlign.center),
+                    Text(DateFormat('EEEEEEEEE, MMMM d').format(widget.currUserData.launchDate!.toDate()),
+                        style: textTheme.headline6?.copyWith(color: Colors.black.withOpacity(0.65)),
+                        textAlign: TextAlign.center),
                     SizedBox(height: 130),
                     GestureDetector(
-                      onTap: () {
-                        if (shareURL != null) {
-                          Share.share(shareURL!);
-                        }
-                      },
-                      child: Container(
-                        padding: EdgeInsets.fromLTRB(95, 10, 95, 10),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(30),
-                          border: Border.all(color: groupColor, width: 1.5)
-                        ),
-                        child: Text('Share', style: textTheme.headline6?.copyWith(color: groupColor))
-                      )
-                    ),
+                        onTap: () {
+                          if (shareURL != null) {
+                            Share.share(shareURL!);
+                          }
+                        },
+                        child: Container(
+                            padding: EdgeInsets.fromLTRB(95, 10, 95, 10),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(30),
+                                border: Border.all(color: groupColor, width: 1.5)),
+                            child: Text('Share', style: textTheme.headline6?.copyWith(color: groupColor)))),
                   ]))),
         ));
   }

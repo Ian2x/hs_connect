@@ -47,7 +47,7 @@ class GroupsDatabaseService {
       return docs.docs.first.reference;
     } else {
       DocumentReference newGroupRef;
-      if (accessRestriction.restrictionType==AccessRestrictionType.domain) {
+      if (accessRestriction.restrictionType == AccessRestrictionType.domain) {
         newGroupRef = groupsCollection.doc(name);
       } else {
         newGroupRef = groupsCollection.doc();
@@ -75,9 +75,14 @@ class GroupsDatabaseService {
           .catchError(onError);
       if (creatorRef != null) {
         // set creator as group's creator and moderator
-        newGroupRef.update({C.creatorRef: creatorRef, C.moderatorRefs: FieldValue.arrayUnion([creatorRef])});
+        newGroupRef.update({
+          C.creatorRef: creatorRef,
+          C.moderatorRefs: FieldValue.arrayUnion([creatorRef])
+        });
         // set group as one of user's modGroups
-        creatorRef.update({C.modGroupRefs: FieldValue.arrayUnion([newGroupRef])});
+        creatorRef.update({
+          C.modGroupRefs: FieldValue.arrayUnion([newGroupRef])
+        });
         // have creator join group
         UserDataDatabaseService _users = UserDataDatabaseService(currUserRef: creatorRef);
         await _users.joinGroup(groupRef: newGroupRef);
@@ -102,13 +107,13 @@ class GroupsDatabaseService {
 
   // preserves order and adds on public group at end
   Future<List<Group?>> getGroups({required List<DocumentReference> groupsRefs, required bool withPublic}) async {
-    int listLength = withPublic ? groupsRefs.length+1 : groupsRefs.length;
+    int listLength = withPublic ? groupsRefs.length + 1 : groupsRefs.length;
     Future<Group?>? publicGroupData;
     if (withPublic) {
       publicGroupData = getGroup(groupsCollection.doc(C.Public));
     }
     List<Group?> results = List.filled(listLength, null);
-    await Future.wait([for (int i=0; i<groupsRefs.length; i++) _getGroupsHelper(groupsRefs[i], i, results)]);
+    await Future.wait([for (int i = 0; i < groupsRefs.length; i++) _getGroupsHelper(groupsRefs[i], i, results)]);
     if (withPublic) {
       final publicGroup = await publicGroupData;
       results[groupsRefs.length] = publicGroup;

@@ -16,7 +16,7 @@ class Wrapper extends StatelessWidget {
     if (user == null || userData == null) {
       return PreviewPage();
     } else {
-      return Home(user: user, userData: userData);
+      return Home(user: user, currUserData: userData);
     }
   }
 }
