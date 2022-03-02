@@ -82,7 +82,7 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
     }
   }
 
-  void getPoll() async {
+  Future<void> getPoll() async {
     if (widget.post.pollRef != null) {
       PollsDatabaseService _polls = PollsDatabaseService(pollRef: widget.post.pollRef!);
       final tempPoll = await _polls.getPoll();
@@ -155,12 +155,18 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
         dislikeCount: dislikeCount);
 
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
+      onTap: () async {
+        await Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => PostPage(post: widget.post, group: group!, postLikesManager: postLikesManager)),
         );
+        if (widget.post.pollRef != null) {
+          if (mounted) {
+            setState(() => poll = null);
+          }
+          await getPoll();
+        }
       },
       child: Card(
           //if border then ShapeDecoration

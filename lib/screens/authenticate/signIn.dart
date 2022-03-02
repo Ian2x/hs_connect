@@ -134,7 +134,6 @@ class _SignInState extends State<SignIn> {
                         setState(() => loading = true);
                       }
                       dynamic result = await _auth.signIn(email, password);
-                      print(result);
                       if (!(result is User?)) {
                         if (mounted) {
                           setState(() {

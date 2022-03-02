@@ -17,6 +17,7 @@ import 'package:hs_connect/shared/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:validators/validators.dart';
 
+import '../../../shared/widgets/myDivider.dart';
 import 'groupSelectionSheet.dart';
 
 const String emptyPollChoiceError = 'Can\'t create a poll with an empty choice';
@@ -282,7 +283,7 @@ class _PostFormState extends State<PostForm> {
                 SizedBox(width: 10),
               ],
             ),
-            Divider(height: 4, indent: 0, thickness: 2, color: Theme.of(context).colorScheme.onError),
+            MyDivider(),
             Container(
               //TextInput Container
               constraints: BoxConstraints(

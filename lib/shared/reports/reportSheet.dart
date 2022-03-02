@@ -129,9 +129,11 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
                   content:
                   "Would you like to block this user and all their content? This action cannot be undone.",
                   action: () async {
-                    await userData.userRef.update({
-                      C.blockedUserRefs: FieldValue.arrayUnion([widget.entityCreatorRef])
-                    });
+                    if (widget.entityCreatorRef!=userData.userRef) {
+                      await userData.userRef.update({
+                        C.blockedUserRefs: FieldValue.arrayUnion([widget.entityCreatorRef])
+                      });
+                    }
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();
                   });
