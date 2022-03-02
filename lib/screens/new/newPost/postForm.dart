@@ -122,7 +122,7 @@ class _PostFormState extends State<PostForm> {
     }
 
     Color userColor =
-        widget.currUserData.domainColor != null ? widget.currUserData.domainColor! : colorScheme.onSurface;
+        widget.currUserData.domainColor ?? colorScheme.onSurface;
 
     return Stack(children: [
       SingleChildScrollView(
@@ -429,7 +429,7 @@ class _PostFormState extends State<PostForm> {
           bottom: 0,
           left: 0,
           child: Container(
-            color: widget.currUserData.domainColor != null ? widget.currUserData.domainColor! : colorScheme.onSurface,
+            color: widget.currUserData.domainColor ?? colorScheme.onSurface,
             padding: EdgeInsets.only(top: bottomGradientThickness),
             width: MediaQuery.of(context).size.width,
             child: Container(

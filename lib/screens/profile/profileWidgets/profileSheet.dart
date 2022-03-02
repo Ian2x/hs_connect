@@ -71,7 +71,7 @@ class _ProfileSheetState extends State<ProfileSheet> with TickerProviderStateMix
             ProfileTitle(
               showMoreHoriz: !isOwn,
               otherUserRef: widget.otherUserRef,
-              otherUserDomainColor: widget.otherUserDomainColor!,
+              otherUserDomainColor: widget.otherUserDomainColor,
               otherUserFullDomain: widget.otherUserFullDomain,
               otherUserFundName: widget.otherUserFundName,
               otherUserScore: widget.otherUserScore,
