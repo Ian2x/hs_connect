@@ -106,7 +106,7 @@ class _CommentCardState extends State<CommentCard> {
                             padding: EdgeInsets.zero,
                             alignment: Alignment.centerLeft),
                         onPressed: () {
-                          if (creatorName != null) {
+                          if (creatorName != null && creatorScore != null && widget.comment.creatorRef != null) {
                             showModalBottomSheet(
                                 context: context,
                                 shape: RoundedRectangleBorder(

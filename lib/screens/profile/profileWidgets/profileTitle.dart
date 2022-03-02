@@ -9,7 +9,7 @@ class ProfileTitle extends StatelessWidget {
   final DocumentReference otherUserRef;
   final Color? otherUserDomainColor;
   final String otherUserFundName;
-  final String? otherUserFullDomain;
+  final String otherUserFullDomain;
   final int otherUserScore;
 
   const ProfileTitle({
@@ -45,7 +45,7 @@ class ProfileTitle extends StatelessWidget {
                   style: Theme.of(context).textTheme.headline5?.copyWith(fontWeight: FontWeight.w600, fontSize: 19),
                 ),
                 SizedBox(height: 5),
-                Text(otherUserFullDomain! + " ∙ " + otherUserScore.toString() + " Likes",
+                Text(otherUserFullDomain + " ∙ " + otherUserScore.toString() + " Likes",
                     style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 17)),
               ],
             ),

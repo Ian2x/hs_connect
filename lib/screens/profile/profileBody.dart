@@ -47,7 +47,7 @@ class _ProfileBodyState extends State<ProfileBody> {
           otherUserFundName: widget.currUserData.fundamentalName,
           otherUserScore: widget.currUserData.score,
           otherUserDomainColor: widget.currUserData.domainColor,
-          otherUserFullDomain: widget.currUserData.fullDomainName,
+          otherUserFullDomain: widget.currUserData.fullDomainName ?? widget.currUserData.domain,
         ),
         Container(
           padding: EdgeInsets.symmetric(horizontal: 15),

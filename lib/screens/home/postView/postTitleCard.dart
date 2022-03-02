@@ -105,7 +105,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
                         )),
                         builder: (context) => ProfileSheet(
                               currUserRef: widget.currUserData.userRef,
-                              otherUserFullDomain: fetchUserData!.fullDomainName!,
+                              otherUserFullDomain: fetchUserData!.fullDomainName ?? fetchUserData!.domain,
                               otherUserRef: fetchUserData!.userRef,
                               otherUserDomainColor: fetchUserData!.domainColor,
                               otherUserFundName: fetchUserData!.fundamentalName,
