@@ -45,7 +45,7 @@ exports.postModerator = functions.firestore
         // Run moderation checks on on the post and moderate if needed.
         const moderatedTitle = moderateMessage(post.title);
         var moderatedText;
-        if (post.hasOwnProperty('text') && post.text != "") {
+        if (post.hasOwnProperty('text') && post.text.trim() != "") {
             moderatedText = moderateMessage(post.text);
         } else {
             moderatedText = post.text;

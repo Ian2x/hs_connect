@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:hs_connect/screens/home/postView/postPage.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/myStorageManager.dart';
-import 'package:hs_connect/shared/tools/helperFunctions.dart';
+import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
 import 'homeAppBar.dart';
 import 'launchCountdown.dart';
@@ -65,7 +65,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       WidgetsBinding.instance?.addPostFrameCallback((_) {
         Navigator.pushReplacement(
             context,
-            MaterialPageRoute(
+            NoAnimationMaterialPageRoute(
                 builder: (context) => WaitVerification(email: widget.user.email!)));
       });
     } else {
