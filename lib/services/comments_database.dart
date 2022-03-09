@@ -45,7 +45,7 @@ class CommentsDatabaseService {
     // update post's commentsRefs and trendingCreatedAt
     post.postRef.update({
       C.numComments: FieldValue.increment(1),
-      C.trendingCreatedAt: newTrendingCreatedAt(post.trendingCreatedAt.toDate(), trendingCommentBoost)
+      C.trendingCreatedAt: newTrendingCreatedAt(post.trendingCreatedAt.toDate(), post.createdAt.toDate(), trendingCommentBoost)
     });
 
     // get accessRestriction

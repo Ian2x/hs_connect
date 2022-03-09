@@ -152,7 +152,7 @@ class PostsDatabaseService {
     // update creator's likeCount
     post.creatorRef.update({C.score: FieldValue.increment(1)});
     // remove dislike if disliked, like post, and adjust trendingCreatedAt
-    final newTCA = newTrendingCreatedAt(post.trendingCreatedAt.toDate(), trendingPostLikeBoost);
+    final newTCA = newTrendingCreatedAt(post.trendingCreatedAt.toDate(), post.createdAt.toDate(), trendingPostLikeBoost);
     post.trendingCreatedAt = Timestamp.fromDate(newTCA);
     await post.postRef.update({
       C.dislikes: FieldValue.arrayRemove([currUserRef]),
@@ -187,7 +187,7 @@ class PostsDatabaseService {
     // update creator's likeCount
     post.creatorRef.update({C.score: FieldValue.increment(-1)});
     // remove like and adjust trendingCreatedAt
-    final newTCA = undoNewTrendingCreatedAt(post.trendingCreatedAt.toDate(), trendingPostLikeBoost);
+    final newTCA = undoNewTrendingCreatedAt(post.trendingCreatedAt.toDate(), post.createdAt.toDate(), trendingPostLikeBoost);
     post.trendingCreatedAt = Timestamp.fromDate(newTCA);
     await post.postRef.update({
       C.likes: FieldValue.arrayRemove([currUserRef]),

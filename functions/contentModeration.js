@@ -43,14 +43,15 @@ exports.postModerator = functions.firestore
         const post = snap.data();
 
         // Run moderation checks on on the post and moderate if needed.
-        const moderatedTitle = moderateMessage(post.title);
-        var moderatedText;
-        if (post.hasOwnProperty('text') && post.text.trim() != "") {
+        var moderatedTitle = post.title;
+        try {
+            moderatedTitle = moderateMessage(post.title);
+        } catch (error) {}
+        var moderatedText = post.text;
+        try {
             moderatedText = moderateMessage(post.text);
-        } else {
-            moderatedText = post.text;
-        }
-
+        } catch (error) {}
+        
         if (post.title != moderatedTitle || post.text != moderatedText) {
             return snap.ref.update({
                 title: moderatedTitle,
@@ -69,7 +70,10 @@ exports.commentModerator = functions.firestore
         const comment = snap.data();
 
         // Run moderation checks on on the comment and moderate if needed.
-        const moderatedText = moderateMessage(comment.text);
+        var moderatedText = comment.text;
+        try {
+            moderatedText = moderateMessage(comment.text);
+        } catch (error) {}
         if (comment.text != moderatedText) {
             return snap.ref.update({
                 text: moderatedText,
@@ -86,7 +90,10 @@ exports.repliesModerator = functions.firestore
         const reply = snap.data();
 
         // Run moderation checks on on the comment and moderate if needed.
-        const moderatedText = moderateMessage(reply.text);
+        var moderatedText = reply.text;
+        try {
+            moderatedText = moderateMessage(reply.text);
+        } catch (error) {}
         if (reply.text != moderatedText) {
             return snap.ref.update({
                 text: moderatedText,
