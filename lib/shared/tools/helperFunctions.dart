@@ -37,13 +37,13 @@ void dismissKeyboard(context) {
 
 DateTime newTrendingCreatedAt(DateTime currTrendingCreatedAt, DateTime createdAt, double trendingBoost) {
   return currTrendingCreatedAt
-      .add(((createdAt.add(Duration(days: 2))).difference(currTrendingCreatedAt)) * trendingBoost);
+      .add(((createdAt.add(Duration(hours: 36))).difference(currTrendingCreatedAt)) * trendingBoost);
 }
 
 DateTime undoNewTrendingCreatedAt(DateTime currTrendingCreatedAt, DateTime createdAt, double trendingBoost) {
   final double trendingBoostFactor = trendingBoost / (1 - trendingBoost);
   return currTrendingCreatedAt
-      .subtract(((createdAt.add(Duration(days: 2))).difference(currTrendingCreatedAt)) * trendingBoostFactor);
+      .subtract(((createdAt.add(Duration(hours: 36))).difference(currTrendingCreatedAt)) * trendingBoostFactor);
 }
 
 Future<Tuple2<T1, T2>> waitConcurrently<T1, T2>(Future<T1> future1, Future<T2> future2) async {

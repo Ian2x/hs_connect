@@ -25,11 +25,6 @@ class UserDataDatabaseService {
         description: 'Default group for ' + domainLC,
         creatorRef: null);
 
-    // assign fundamental name
-    final int fundamentalNumber = (await domainGroupRef.get()).get(C.numMembers) + 1;
-    final String fundamentalName =
-        domainLC.replaceAll(RegExp(r'(\.com|\.org|\.info|\.edu|\.net)'), '') + fundamentalNumber.toString();
-
     // Create domainsData if not already created
     final domainsDataRef = FirebaseFirestore.instance.collection(C.domainsData).doc(domainLC);
     domainsDataRef.get().then((doc) => {
@@ -46,6 +41,11 @@ class UserDataDatabaseService {
               })
             }
         });
+
+    // assign fundamental name
+    final int fundamentalNumber = (await domainGroupRef.get()).get(C.numMembers) + 1;
+    final String fundamentalName =
+        domainLC.replaceAll(RegExp(r'(\.com|\.org|\.info|\.edu|\.net)'), '') + fundamentalNumber.toString();
 
     await currUserRef.set({
       C.fundamentalName: fundamentalName,
