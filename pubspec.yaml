@@ -59,6 +59,9 @@ dependencies:
   validators: ^3.0.0
   email_validator: ^2.0.1
   scrollable_positioned_list: ^0.2.3
+  intl_phone_number_input: ^0.7.0+2
+  cloud_functions: ^3.2.10
+  dropdown_search: ^2.0.1
 
 flutter_native_splash:
   color: "#ffffff"

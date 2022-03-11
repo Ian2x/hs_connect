@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hs_connect/services/user_data_database.dart';
 import 'package:hs_connect/shared/constants.dart';
@@ -12,7 +13,7 @@ class AuthService {
   }
 
   // register with username & password
-  Future<dynamic> registerUser(String email, String password, String domain) async {
+  Future<dynamic> registerEmailUser(String email, String password, String domain) async {
     try {
       UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(email: email, password: password);
@@ -22,7 +23,20 @@ class AuthService {
       // create a document for the home with the uid
       final _userDataDatabaseService =
           UserDataDatabaseService(currUserRef: FirebaseFirestore.instance.collection(C.userData).doc(user.uid));
-      await _userDataDatabaseService.initUserData(domain, email);
+      await _userDataDatabaseService.initUserData(domain);
+      return user;
+    } catch (e) {
+      return e;
+    }
+  }
+
+  // register with username & password
+  Future<dynamic> registerPhoneUserData(User user, String domain) async {
+    try {
+      // create a document for the home with the uid
+      final _userDataDatabaseService =
+      UserDataDatabaseService(currUserRef: FirebaseFirestore.instance.collection(C.userData).doc(user.uid));
+      await _userDataDatabaseService.initUserData(domain);
       return user;
     } catch (e) {
       return e;
@@ -49,8 +63,27 @@ class AuthService {
     }
   }
 
+  Future<bool> checkIfNumberInUse(String phoneNumber) async {
+    try {
+      final HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('checkIfPhoneExists');
+      dynamic resp = await callable.call({'phone': phoneNumber});
+      if (resp.data) {
+        // user exists
+        return true;
+      } else {
+        // Return false because email address is not in use
+        return false;
+      }
+    } catch (error) {
+      print(error);
+      // Handle error
+      // ...
+      return true;
+    }
+  }
+
   // sign in with username & password
-  Future<dynamic> signIn(String email, String password) async {
+  Future<dynamic> signInWithEmail(String email, String password) async {
     try {
       UserCredential userCredential =
           await _auth.signInWithEmailAndPassword(email: email, password: password);

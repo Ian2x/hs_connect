@@ -61,55 +61,46 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   void handleNewUser() async {
-    if (FirebaseAuth.instance.currentUser?.emailVerified == false) {
+    dynamic showSignUp = await MyStorageManager.readData('showSignUp');
+    if (showSignUp == true) {
       WidgetsBinding.instance?.addPostFrameCallback((_) {
-        Navigator.pushReplacement(
-            context,
-            NoAnimationMaterialPageRoute(
-                builder: (context) => WaitVerification(email: widget.user.email!)));
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            final textTheme = Theme.of(context).textTheme;
+            final colorScheme = Theme.of(context).colorScheme;
+            String domain = widget.currUserData.fullDomainName ?? widget.currUserData.domain;
+            return AlertDialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
+              contentPadding: EdgeInsets.fromLTRB(20, 0, 20, 30),
+              backgroundColor: colorScheme.surface,
+              titlePadding: EdgeInsets.fromLTRB(20, 30, 20, 0),
+              title: Text(
+                "You're user number " +
+                    widget.currUserData.fundamentalName.replaceAll(
+                        RegExp(widget.currUserData.domain.replaceAll(RegExp(r'(\.com|\.org|\.info|\.edu|\.net)'), '')),
+                        "") +
+                    " from " +
+                    domain +
+                    ". We gave you the name:",
+                textAlign: TextAlign.center,
+                style: textTheme.headline6?.copyWith(fontSize: 18),
+              ),
+              content: Container(
+                width: 100,
+                height: 50,
+                padding: EdgeInsets.fromLTRB(10, 15, 10, 0),
+                alignment: Alignment.topCenter,
+                child: Text(
+                  widget.currUserData.fundamentalName,
+                  style: textTheme.headline4?.copyWith(fontSize: 24, color: widget.currUserData.domainColor),
+                ),
+              ),
+            );
+          },
+        );
       });
-    } else {
-      dynamic showSignUp = await MyStorageManager.readData('showSignUp');
-      if (showSignUp == true) {
-        WidgetsBinding.instance?.addPostFrameCallback((_) {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              final textTheme = Theme.of(context).textTheme;
-              final colorScheme = Theme.of(context).colorScheme;
-              String domain = widget.currUserData.fullDomainName ?? widget.currUserData.domain;
-              return AlertDialog(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
-                contentPadding: EdgeInsets.fromLTRB(20, 0, 20, 30),
-                backgroundColor: colorScheme.surface,
-                titlePadding: EdgeInsets.fromLTRB(20, 30, 20, 0),
-                title: Text(
-                  "You're user number " +
-                      widget.currUserData.fundamentalName.replaceAll(
-                          RegExp(widget.currUserData.domain.replaceAll(RegExp(r'(\.com|\.org|\.info|\.edu|\.net)'), '')),
-                          "") +
-                      " from " +
-                      domain +
-                      ". We gave you the name:",
-                  textAlign: TextAlign.center,
-                  style: textTheme.headline6?.copyWith(fontSize: 18),
-                ),
-                content: Container(
-                  width: 100,
-                  height: 50,
-                  padding: EdgeInsets.fromLTRB(10, 15, 10, 0),
-                  alignment: Alignment.topCenter,
-                  child: Text(
-                    widget.currUserData.fundamentalName,
-                    style: textTheme.headline4?.copyWith(fontSize: 24, color: widget.currUserData.domainColor),
-                  ),
-                ),
-              );
-            },
-          );
-        });
-        MyStorageManager.deleteData('showSignUp');
-      }
+      MyStorageManager.deleteData('showSignUp');
     }
   }
 

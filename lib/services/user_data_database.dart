@@ -13,7 +13,7 @@ class UserDataDatabaseService {
   // collection reference
   static final CollectionReference userDataCollection = FirebaseFirestore.instance.collection(C.userData);
 
-  Future initUserData(String domain, String email) async {
+  Future initUserData(String domain) async {
     String domainLC = domain.toLowerCase();
     final GroupsDatabaseService _groupDatabaseService = GroupsDatabaseService(currUserRef: currUserRef);
 
