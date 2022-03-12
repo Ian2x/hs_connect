@@ -114,7 +114,7 @@ class _RegisterPasswordState extends State<RegisterPassword> {
                           }
                           final tempIndex = widget.email.lastIndexOf('@');
                           final domain = widget.email.substring(tempIndex);
-                          dynamic result = await _auth.registerUser(widget.email, password, domain);
+                          dynamic result = await _auth.registerEmailUser(widget.email, password, domain);
                           if (result is User?) {
                             await MyStorageManager.saveData('showSignUp', true);
                           } else if (result is FirebaseAuthException) {

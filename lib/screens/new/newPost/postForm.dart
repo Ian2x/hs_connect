@@ -17,12 +17,14 @@ import 'package:hs_connect/shared/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:validators/validators.dart';
 
+import '../../../shared/widgets/myDivider.dart';
 import 'groupSelectionSheet.dart';
 
 const String emptyPollChoiceError = 'Can\'t create a poll with an empty choice';
 const String emptyTitleError = 'Can\'t create a post with an empty title';
 const String badLinkError = 'Please enter a valid URL link';
-const String spamPostError = 'Please wait 2 minutes between posts';
+const String spamPostError = 'Please wait 1 minute between posts';
+
 
 class PostForm extends StatefulWidget {
   final UserData currUserData;
@@ -215,10 +217,9 @@ class _PostFormState extends State<PostForm> {
                           }
                         }
                       }
-                      // check haven't posted in last 2 minutes
                       final lastPostCheck = Provider.of<UserData?>(context, listen: false);
                       if (lastPostCheck != null && lastPostCheck.lastPostTime != null &&
-                          lastPostCheck.lastPostTime!.toDate().compareTo(DateTime.now().subtract(Duration(minutes: 2))) > 0) {
+                          lastPostCheck.lastPostTime!.toDate().compareTo(DateTime.now().subtract(Duration(minutes: 1))) > 0) {
                         if (mounted) {
                           setState(() {
                             error = spamPostError;
@@ -282,7 +283,7 @@ class _PostFormState extends State<PostForm> {
                 SizedBox(width: 10),
               ],
             ),
-            Divider(height: 4, indent: 0, thickness: 2, color: Theme.of(context).colorScheme.onError),
+            MyDivider(),
             Container(
               //TextInput Container
               constraints: BoxConstraints(

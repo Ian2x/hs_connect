@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 // trendingCreatedAt factors
-const trendingCommentBoost = 0.08;
-const trendingReplyBoost = 0.1;
-const trendingPostLikeBoost = 0.04;
-const trendingPollVoteBoost = 0.06;
+const trendingCommentBoost = 0.02;
+const trendingReplyBoost = 0.02667;
+const trendingPostLikeBoost = 0.01333;
+const trendingPollVoteBoost = 0.00667;
 
 const initialPostsFetchSize = 20;
 const nextPostsFetchSize = 20;

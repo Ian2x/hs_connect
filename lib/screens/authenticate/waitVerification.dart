@@ -4,11 +4,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
 import 'dart:async';
+import '../../services/auth.dart';
 import '../wrapper.dart';
 
 class WaitVerification extends StatefulWidget {
-  final email;
+  final String email;
 
   const WaitVerification({Key? key, required this.email}) : super(key: key);
 
@@ -47,6 +49,11 @@ class _WaitVerificationState extends State<WaitVerification> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           automaticallyImplyLeading: false,
+          leading: myBackButtonIcon(context, onPressed: () async {
+            await AuthService().signOut();
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => Wrapper()), (Route<dynamic> route) => false);
+          }),
           elevation: 0,
           backgroundColor: Colors.white,
         ),
@@ -56,8 +63,8 @@ class _WaitVerificationState extends State<WaitVerification> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 60),
-              Text(
-                "We've sent you an email\nto verify your school",
+              Text(user != null && user!.email != null ?
+                "We've sent an email to " + user!.email! + " to verify your school" : "We've sent an email to verify your school",
                 style: ThemeText.quicksand(fontWeight: FontWeight.w700, fontSize: 26, color: Colors.black),
               ),
               SizedBox(height: 20),

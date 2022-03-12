@@ -6,6 +6,9 @@ import 'package:hs_connect/screens/authenticate/registerEmail.dart';
 import 'package:hs_connect/screens/authenticate/signIn.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'chooseSchool.dart';
+import 'registerNumber.dart';
+
 class PreviewPage extends StatelessWidget {
   const PreviewPage({
     Key? key,
@@ -51,7 +54,7 @@ class PreviewPage extends StatelessWidget {
                   style: textTheme.headline6?.copyWith(fontWeight: FontWeight.bold, color: Colors.white),
                 ),
                 onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => RegisterEmail()));
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => ChooseSchool()));
                 },
               ),
               SizedBox(height: 15),

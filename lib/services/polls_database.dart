@@ -66,7 +66,7 @@ class PollsDatabaseService {
       required Post post}) async {
     // boost post trending
     post.postRef
-        .update({C.trendingCreatedAt: newTrendingCreatedAt(post.trendingCreatedAt.toDate(), trendingPollVoteBoost)});
+        .update({C.trendingCreatedAt: newTrendingCreatedAt(post.trendingCreatedAt.toDate(), post.createdAt.toDate(), trendingPollVoteBoost)});
     await pollRef.update({
       choice.toString(): FieldValue.arrayUnion([userRef])
     });

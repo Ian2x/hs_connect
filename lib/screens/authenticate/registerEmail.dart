@@ -73,7 +73,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                     )),
                 SizedBox(height: 20),
                 Container(
-                  padding: EdgeInsets.only(left: 20),
+                  padding: EdgeInsets.only(left: 20, right: 20),
                   alignment: Alignment.topLeft,
                   child: Text(
                     error ?? "We'll send you an email to verify your school.",
@@ -103,7 +103,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                       if (!isEmail) {
                         setState(() => error = "Enter a valid email.");
                       } else {
-                        setState(() => error = "This email is already in use.");
+                        setState(() => error = "This email is taken. If you made this account, login instead.");
                       }
                     }
                   }

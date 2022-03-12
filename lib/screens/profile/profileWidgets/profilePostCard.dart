@@ -143,7 +143,7 @@ class _ProfilePostCardState extends State<ProfilePostCard> {
                 child: Row(
                   children: [
                     buildGroupCircle(
-                        groupImage: group!.image, context: context, size: 20, backgroundColor: colorScheme.background),
+                        groupImage: group!.image, context: context, size: 20, backgroundColor: colorScheme.surface),
                     SizedBox(width: 5),
                     Text(group!.name,
                         style: Theme.of(context).textTheme.subtitle2?.copyWith(

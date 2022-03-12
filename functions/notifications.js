@@ -62,11 +62,23 @@ function notificationBody(notification) {
         case "replyToComment":
             return notification.extraData;
         case "replyVotes":
-            return "Your reply got " + notification.extraData + " likes!";
+            if (notification.extraData=="1") {
+                return "Your reply got " + notification.extraData + " like!";
+            } else {
+                return "Your reply got " + notification.extraData + " likes!";
+            }
         case "commentVotes":
-            return "Your comment got " + notification.extraData + " likes!";
+            if (notification.extraData=="1") {
+                return "Your comment got " + notification.extraData + " like!";
+            } else {
+                return "Your comment got " + notification.extraData + " likes!";
+            }
         case "postVotes":
-            return "Your post got " + notification.extraData + " likes!";
+            if (notification.extraData=="1") {
+                return "Your post got " + notification.extraData + " like!";
+            } else {
+                return "Your post got " + notification.extraData + " likes!";
+            }
         case "fromMe":
             return notification.extraData;
         case "featuredPost":

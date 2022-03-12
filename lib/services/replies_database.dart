@@ -69,7 +69,7 @@ class RepliesDatabaseService {
     // update post's numReplies and score
     post.postRef.update({
       C.numReplies: FieldValue.increment(1),
-      C.trendingCreatedAt: newTrendingCreatedAt(post.trendingCreatedAt.toDate(), trendingReplyBoost)
+      C.trendingCreatedAt: newTrendingCreatedAt(post.trendingCreatedAt.toDate(), post.createdAt.toDate(), trendingReplyBoost)
     });
     // get accessRestriction
     final group = await groupRef.get();

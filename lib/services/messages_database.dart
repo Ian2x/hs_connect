@@ -27,6 +27,7 @@ class MessagesDatabaseService {
     if (userMessages.length == 0 && lastMessage == null) return;
     Timestamp? newLastMessage = lastMessage;
     Timestamp? newLastViewed = lastViewed;
+    // find and delete old version
     userMessages.forEach((UM) {
       if (UM.otherUserRef == otherUserRef) {
         if (newLastMessage == null)
@@ -43,11 +44,13 @@ class MessagesDatabaseService {
         return;
       }
     });
-    userRef.update({
-      C.userMessages: FieldValue.arrayUnion([
-        {C.otherUserRef: otherUserRef, C.lastMessage: newLastMessage, C.lastViewed: newLastViewed}
-      ])
-    });
+    if (newLastMessage != null) {
+      userRef.update({
+        C.userMessages: FieldValue.arrayUnion([
+          {C.otherUserRef: otherUserRef, C.lastMessage: newLastMessage, C.lastViewed: newLastViewed}
+        ])
+      });
+    }
   }
 
   Future<DocumentReference> newMessage({
