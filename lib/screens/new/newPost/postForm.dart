@@ -25,6 +25,7 @@ const String emptyTitleError = 'Can\'t create a post with an empty title';
 const String badLinkError = 'Please enter a valid URL link';
 const String spamPostError = 'Please wait 1 minute between posts';
 
+
 class PostForm extends StatefulWidget {
   final UserData currUserData;
 
@@ -216,7 +217,6 @@ class _PostFormState extends State<PostForm> {
                           }
                         }
                       }
-                      // check haven't posted in last 1 minutes
                       final lastPostCheck = Provider.of<UserData?>(context, listen: false);
                       if (lastPostCheck != null && lastPostCheck.lastPostTime != null &&
                           lastPostCheck.lastPostTime!.toDate().compareTo(DateTime.now().subtract(Duration(minutes: 1))) > 0) {
