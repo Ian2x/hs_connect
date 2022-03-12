@@ -19,7 +19,7 @@ class NewPost extends StatelessWidget {
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: Container(
         constraints: BoxConstraints.expand(),
-        child: PostForm(currUserData: userData),
+        child: Container()//PostForm(currUserData: userData),
       ),
     );
   }

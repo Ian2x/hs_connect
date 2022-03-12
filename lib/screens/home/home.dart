@@ -15,6 +15,7 @@ import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/myStorageManager.dart';
 import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
+import '../new/newPost/postForm.dart';
 import 'homeAppBar.dart';
 import 'launchCountdown.dart';
 
@@ -30,8 +31,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   bool isDomain = true;
-  late TabController tabController;
-  ScrollController scrollController = ScrollController();
   bool searchByTrending = true;
 
   void toggleSearch(bool newSearchByTrending) {
@@ -48,15 +47,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     subscribeToDomainTopicAndAllowAlerts();
     getSearchByTrending();
     saveTokenToDatabase();
-    tabController = TabController(length: 2, vsync: this);
-    tabController.addListener(() {
-      if (mounted) {
-        setState(() {
-          isDomain = tabController.index == 0;
-        });
-      }
-      scrollController.jumpTo(0);
-    });
     super.initState();
   }
 
@@ -76,13 +66,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               backgroundColor: colorScheme.surface,
               titlePadding: EdgeInsets.fromLTRB(20, 30, 20, 0),
               title: Text(
-                "You're user number " +
+                "Hey! You're user " +
                     widget.currUserData.fundamentalName.replaceAll(
                         RegExp(widget.currUserData.domain.replaceAll(RegExp(r'(\.com|\.org|\.info|\.edu|\.net)'), '')),
                         "") +
                     " from " +
                     domain +
-                    ". We gave you the name:",
+                    ", so we gave you the name:",
                 textAlign: TextAlign.center,
                 style: textTheme.headline6?.copyWith(fontSize: 18),
               ),
@@ -121,10 +111,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void getSearchByTrending() async {
     final data = await MyStorageManager.readData('searchByTrending');
     if (mounted) {
-      if (data == false) {
-        setState(() => searchByTrending = false);
-      } else {
+      if (data == true) {
         setState(() => searchByTrending = true);
+      } else {
+        setState(() => searchByTrending = false);
       }
     }
   }
@@ -203,13 +193,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   @override
-  void dispose() {
-    tabController.dispose();
-    scrollController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
@@ -219,14 +202,28 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
     return Scaffold(
       backgroundColor: colorScheme.background,
+      floatingActionButton: IconButton(
+        icon: Container(
+            alignment: Alignment.center,
+            decoration: ShapeDecoration(shape: CircleBorder(), color: colorScheme.onSurface),
+            child: Icon(Icons.add_rounded, color: colorScheme.surface, size: 35)),
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+        onPressed: () {
+          final topPadding = MediaQuery.of(context).padding.top;
+          showModalBottomSheet(
+              context: context,
+              builder: (BuildContext context) {
+                return PostForm(currUserData: widget.currUserData, topPadding: topPadding);
+              },
+              isScrollControlled: true);
+        },
+      ),
       body: NestedScrollView(
         floatHeaderSlivers: true,
-        controller: scrollController,
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [
             SliverPersistentHeader(
               delegate: HomeAppBar(
-                  tabController: tabController,
                   currUserData: widget.currUserData,
                   isDomain: isDomain,
                   searchByTrending: searchByTrending,
@@ -237,27 +234,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             ),
           ];
         },
-        body: TabBarView(
-          children: [
-            DomainFeed(
-              currUserData: widget.currUserData,
-              isDomain: isDomain,
-              searchByTrending: searchByTrending,
-              key: ValueKey<bool>(searchByTrending),
-            ),
-            PublicFeed(
-              currUserData: widget.currUserData,
-              isDomain: isDomain,
-              searchByTrending: searchByTrending,
-              key: ValueKey<bool>(!searchByTrending),
-            ),
-          ],
-          controller: tabController,
-          physics: AlwaysScrollableScrollPhysics(),
+        body: DomainFeed(
+          currUserData: widget.currUserData,
+          isDomain: isDomain,
+          searchByTrending: searchByTrending,
+          key: ValueKey<bool>(searchByTrending),
         ),
-      ),
-      bottomNavigationBar: MyNavigationBar(
-        currentIndex: 0,
       ),
       resizeToAvoidBottomInset: false,
     );

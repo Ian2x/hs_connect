@@ -12,7 +12,7 @@ PreferredSizeWidget activityAppBar(
   final safeAreaHeight = MediaQuery.of(context).padding.top;
 
   return PreferredSize(
-      preferredSize: Size.fromHeight(HomeAppBar.expandedHeight + 0.5),
+      preferredSize: Size.fromHeight(70 + 0.5),
       child: Container(
         padding: EdgeInsets.only(top: safeAreaHeight),
         color: colorScheme.surface,
@@ -29,7 +29,7 @@ PreferredSizeWidget activityAppBar(
                     bottom: BorderSide(
                         width: 2.0,
                         color: currUserData.domainColor ?? colorScheme.onSurface))),
-            indicatorPadding: HomeAppBar.tabBarPadding,
+            indicatorPadding: EdgeInsets.only(bottom: 1),
             indicatorWeight: 0.001,
             labelStyle:
                 textTheme.subtitle2?.copyWith(fontWeight: FontWeight.bold, fontSize: 15, color: colorScheme.onSurface),
@@ -40,14 +40,14 @@ PreferredSizeWidget activityAppBar(
                   iconMargin: EdgeInsets.zero,
                   height: HomeAppBar.tabBarHeight,
                   child: Container(
-                    padding: HomeAppBar.tabBarPadding,
+                    padding: EdgeInsets.only(bottom: 1),
                     child: Text('Notifications', maxLines: 1, softWrap: false, overflow: TextOverflow.fade),
                   )),
               Tab(
                   iconMargin: EdgeInsets.only(),
                   height: HomeAppBar.tabBarHeight,
                   icon: Container(
-                    padding: HomeAppBar.tabBarPadding,
+                    padding: EdgeInsets.only(bottom: 1),
                     child: Text("Messages", maxLines: 1, softWrap: false, overflow: TextOverflow.fade),
                   ))
             ],

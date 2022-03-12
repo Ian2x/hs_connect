@@ -57,7 +57,7 @@ class _ChooseSchoolState extends State<ChooseSchool> {
                       List<String> domainOptions = snapshot.data;
                       domainOptions.sort();
                       return Container(
-                        padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                         child: DropdownSearch<String>(
                           mode: Mode.MENU,
                           items: domainOptions,
@@ -76,11 +76,14 @@ class _ChooseSchoolState extends State<ChooseSchool> {
                                 child: Text(s, style: textTheme.headline5?.copyWith(color: Colors.black87)));
                           },
                           dropdownBuilder: (context, selectedItem) {
-                            return Text(selectedItem ?? "@school.edu",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: textTheme.headline4
-                                    ?.copyWith(color: selectedItem == null ? authHintTextColor : Colors.black));
+                            return Container(
+                              padding: EdgeInsets.only(left: 10),
+                              child: Text(selectedItem ?? "@school.edu",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: textTheme.headline4
+                                      ?.copyWith(color: selectedItem == null ? authHintTextColor : Colors.black)),
+                            );
                           },
                         ),
                       );

@@ -86,24 +86,18 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
                       NoAnimationMaterialPageRoute(builder: (context) => ProfilePage(currUserData: userData)),
                     );
                   }
-                } else if (index == 3) {
-                  Navigator.push(
-                    context,
-                    NoAnimationMaterialPageRoute(builder: (context) => NewPost()),
-                  );
                 }
               },
               items: <BottomNavigationBarItem>[
                 BottomNavigationBarItem(label: '', icon: Icon(Thicker.home_square, size: 25)),
                 BottomNavigationBarItem(label: '', icon: Icon(Thicker.notification, size: 25)),
                 BottomNavigationBarItem(label: '', icon: Icon(Thicker.profile_1, size: 20)),
-                BottomNavigationBarItem(label: '', icon: Icon(Thicker.add_1, size: 25)),
               ],
             ),
           ),
         ),
         Positioned(
-            left: MediaQuery.of(context).size.width * 0.375 + 1.5,
+            left: MediaQuery.of(context).size.width * 0.5 + 1.5,
             top: 5.5,
             child: IgnorePointer(
               child: FutureBuilder(
