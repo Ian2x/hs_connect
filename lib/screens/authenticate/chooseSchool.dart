@@ -57,9 +57,9 @@ class _ChooseSchoolState extends State<ChooseSchool> {
                       List<String> domainOptions = snapshot.data;
                       domainOptions.sort();
                       return Container(
-                        padding: EdgeInsets.fromLTRB(20, 0, 5, 0),
+                        padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
                         child: DropdownSearch<String>(
-                          mode: Mode.DIALOG,
+                          mode: Mode.MENU,
                           items: domainOptions,
                           onChanged: (String? s) {
                             if (mounted) {
@@ -71,66 +71,67 @@ class _ChooseSchoolState extends State<ChooseSchool> {
                             border: InputBorder.none,
                           ),
                           popupItemBuilder: (context, s, bool) {
-                            return Container(padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10), child: Text(s, style: textTheme.subtitle1?.copyWith(color: Colors.black)));
+                            return Container(
+                                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                child: Text(s, style: textTheme.headline5?.copyWith(color: Colors.black87)));
                           },
                           dropdownBuilder: (context, selectedItem) {
-                            return Text(selectedItem ?? "@school.edu", style: textTheme.headline5?.copyWith(color: selectedItem == null ? Colors.grey : Colors.black));
+                            return Text(selectedItem ?? "@school.edu",
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: textTheme.headline4
+                                    ?.copyWith(color: selectedItem == null ? authHintTextColor : Colors.black));
                           },
                         ),
                       );
                     } else {
-                      return Container(padding: EdgeInsets.all(21), child: SpinKitThreeBounce(size: 30.0, color: Colors.black));
+                      return Container(
+                          padding: EdgeInsets.all(21), child: SpinKitThreeBounce(size: 30.0, color: Colors.black));
                     }
                   },
                 ),
+                SizedBox(height: 20),
                 Container(
                   padding: EdgeInsets.only(left: 20, right: 20),
                   alignment: Alignment.topLeft,
-                  child: Row(
-                    children: [
-                      Text(
-                        "Don't see your school? ",
-                        style: textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 15, height: 1.3),
-                        textAlign: TextAlign.left,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              final textTheme = Theme.of(context).textTheme;
-                              return AlertDialog(
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
-                                contentPadding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-                                backgroundColor: Colors.white,
-                                titlePadding: EdgeInsets.fromLTRB(20, 20, 20, 0),
-                                title: Text(
-                                  "Sorry :(",
-                                  textAlign: TextAlign.center,
-                                  style: textTheme.headline6?.copyWith(fontSize: 22, color: Colors.black),
-                                ),
-                                content: Container(
-                                  height: 90,
-                                  alignment: Alignment.topCenter,
-                                  child: Text(
-                                    "So far, we've only expanded to these schools. If you'd like to see Convo at your school, please contact us at:\nteam@getconvo.app",
-                                    style: textTheme.headline4?.copyWith(fontSize: 15, color: Colors.black), textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              );
-                            },
+                  child: GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          final textTheme = Theme.of(context).textTheme;
+                          return AlertDialog(
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
+                            contentPadding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+                            backgroundColor: Colors.white,
+                            titlePadding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+                            title: Text(
+                              "Sorry :(",
+                              textAlign: TextAlign.center,
+                              style: textTheme.headline6?.copyWith(fontSize: 22, color: Colors.black),
+                            ),
+                            content: Container(
+                              height: 130,
+                              alignment: Alignment.topCenter,
+                              child: Text(
+                                "So far, we've only expanded to these schools. If you'd like to see Convo at your school, please contact us at:\nteam@getconvo.app",
+                                style: textTheme.headline4?.copyWith(fontSize: 18, color: Colors.black),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
                           );
                         },
-                        child: Text(
-                          "Click here.",
-                          style: textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 15, height: 1.3, decoration: TextDecoration.underline),
-                          textAlign: TextAlign.left,
-                        ),
-                      ),
-                    ],
+                      );
+                    },
+                    child: Text(
+                      "Don't see your school?",
+                      style: textTheme.subtitle1?.copyWith(
+                          color: authPrimaryTextColor, fontSize: 15, height: 1.3, decoration: TextDecoration.underline),
+                      textAlign: TextAlign.left,
+                    ),
                   ),
                 ),
-                SizedBox(height: 160)
+                SizedBox(height: 150)
               ],
             ),
           ),
@@ -143,7 +144,8 @@ class _ChooseSchoolState extends State<ChooseSchool> {
                 hasText: selectedDomain != null,
                 onPressed: () async {
                   if (selectedDomain != null) {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => RegisterNumber(domain: selectedDomain!)));
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) => RegisterNumber(domain: selectedDomain!)));
                   }
                 }),
           )

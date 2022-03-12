@@ -74,7 +74,7 @@ exports.cleanUnverifiedUsers = functions.pubsub.schedule('every 60 minutes').onR
     };
     // Start listing users from the beginning, 1000 at a time.
     await listAllUsers();
-    const unVerifiedUsers = users.filter((user) => !user.emailVerified && Math.abs(Date.parse(user.metadata.creationTime) - Date.now()) > 1000 * 60 * 30).map((user) => user.uid)
+    const unVerifiedUsers = users.filter((user) => !user.emailVerified && user.phoneNumber==null && Math.abs(Date.parse(user.metadata.creationTime) - Date.now()) > 1000 * 60 * 30).map((user) => user.uid)
 
     //DELETING USERS
     return admin.auth().deleteUsers(unVerifiedUsers).then((deleteUsersResult) => {
