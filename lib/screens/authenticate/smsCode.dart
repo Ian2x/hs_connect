@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -131,25 +133,37 @@ class _SMSCodeState extends State<SMSCode> {
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
                     'Verification Code:',
-                    style: ThemeText.quicksand(fontWeight: FontWeight.w700, fontSize: 26, color: Colors.black),
+                    style: ThemeText.quicksand(fontWeight: FontWeight.w700, fontSize: 30, color: Colors.black),
                     textAlign: TextAlign.center,
                   ),
                 ),
                 Container(
                     alignment: Alignment.center,
-                    padding: EdgeInsets.fromLTRB(20, 15, 20, 0),
+                    width: 185,
+                    padding: EdgeInsets.symmetric(vertical: 20),
                     child: TextField(
                       autocorrect: false,
-                      style: textTheme.headline6?.copyWith(color: authPrimaryTextColor, fontSize: 30),
+                      style: TextStyle(fontFamily: "Inter", fontSize: 35, color: authPrimaryTextColor, fontFeatures: [
+                        FontFeature.tabularFigures()
+                      ]),
                       maxLines: null,
-                      textAlign: TextAlign.center,
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(6),
                       ],
                       keyboardType: TextInputType.number,
+                      //textAlign: TextAlign.center,
+                      autofocus: true,
                       decoration: InputDecoration(
-                          hintStyle: textTheme.headline6?.copyWith(color: authHintTextColor, fontSize: 30),
-                          border: InputBorder.none,
+                          hintStyle: TextStyle(fontFamily: "Inter", fontSize: 35, color: authHintTextColor, fontFeatures: [
+                            FontFeature.tabularFigures()
+                          ]),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(width: 1, color: authHintTextColor),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(width: 1, color: authHintTextColor),
+                          ),
+                          contentPadding: EdgeInsets.fromLTRB(20, 7, 0, 7),
                           hintText: "000000"),
                       onChanged: (value) {
                         if (mounted) {
@@ -160,13 +174,13 @@ class _SMSCodeState extends State<SMSCode> {
                       },
                     )
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 5),
                 Container(
                   padding: EdgeInsets.only(left: 20, right: 20),
                   alignment: Alignment.center,
                   child: Text(
                     error ?? "We've sent a verification code.",
-                    style: textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 14, height: 1.3),
+                    style: textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 17, height: 1.3),
                     textAlign: TextAlign.center,
                   ),
                 ),

@@ -85,6 +85,7 @@ class _CommentCardState extends State<CommentCard> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
     final localCreatorName = creatorName ?? '';
     final localCreatorGroupName = creatorDomainName ?? '';
@@ -127,14 +128,13 @@ class _CommentCardState extends State<CommentCard> {
                           text: TextSpan(children: [
                             TextSpan(
                                 text: localCreatorName + " • ",
-                                style: Theme.of(context)
-                                    .textTheme
+                                style: textTheme
                                     .subtitle2
-                                    ?.copyWith(color: colorScheme.primary, fontSize: commentReplyDetailSize)),
+                                    ?.copyWith(color: colorScheme.primary)),
                             TextSpan(
                                 text: localCreatorGroupName,
-                                style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                                    color: creatorGroupColor ?? colorScheme.primary, fontSize: commentReplyDetailSize))
+                                style: textTheme.subtitle2?.copyWith(
+                                    color: creatorGroupColor ?? colorScheme.primary))
                           ]),
                         )),
                   ),
@@ -145,26 +145,24 @@ class _CommentCardState extends State<CommentCard> {
                           padding: EdgeInsets.fromLTRB(10, 5, 0, 1),
                           margin: EdgeInsets.all(1),
                           child: Text('Creator',
-                              style: Theme.of(context)
-                                  .textTheme
+                              style: textTheme
                                   .subtitle2
-                                  ?.copyWith(color: widget.groupColor ?? colorScheme.onSurface, fontSize: 12)))
+                                  ?.copyWith(color: widget.groupColor ?? colorScheme.onSurface)))
                       : Container(),
                 ],
               ),
               SizedBox(height: 4),
               SizedBox(
                 width: (MediaQuery.of(context).size.width) * .85,
-                child: Text(widget.comment.text, style: Theme.of(context).textTheme.bodyText1),
+                child: Text(widget.comment.text, style: textTheme.bodyText1?.copyWith(fontSize: 20)),
               ),
               SizedBox(height: 7),
               Row(
                 children: [
                   Text(convertTime(widget.comment.createdAt.toDate()),
-                      style: Theme.of(context)
-                          .textTheme
+                      style: textTheme
                           .subtitle2
-                          ?.copyWith(color: colorScheme.primary, fontSize: commentReplyDetailSize)),
+                          ?.copyWith(color: colorScheme.primary)),
                   SizedBox(width: 8),
                   widget.comment.creatorRef != null && widget.comment.creatorRef != widget.currUserData.userRef
                       ? Container(
@@ -196,10 +194,10 @@ class _CommentCardState extends State<CommentCard> {
                         style: TextButton.styleFrom(
                             splashFactory: NoSplash.splashFactory, padding: EdgeInsets.zero, alignment: Alignment.center),
                         child: Text("Reply",
-                            style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                            style: textTheme.bodyText2?.copyWith(
+                                fontSize: 15,
                                 color: colorScheme.onSurface,
-                                fontWeight: FontWeight.w600,
-                                fontSize: commentReplyDetailSize + 1.5)),
+                                fontWeight: FontWeight.w600)),
                         onPressed: () {
                           replyToNotifier.setIndex(widget.index);
                           widget.focusKeyboard();

@@ -7,8 +7,8 @@ import 'package:hs_connect/services/posts_database.dart';
 
 import 'package:hs_connect/shared/widgets/thickArrowIcons.dart';
 
-const double postIconSizeStateless = 20;
-const double postIconSizeStateful = 22;
+const double postIconSizeStateless = 23;
+const double postIconSizeStateful = 24;
 
 class LikeDislikePost extends StatelessWidget {
   final DocumentReference currUserRef;
@@ -68,7 +68,7 @@ class LikeDislikePost extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 9),
             child: Text(
               (postLikesManager.likeCount - postLikesManager.dislikeCount).toString(),
-              style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 0.8 * postIconSizeStateless),
+              style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 19),
             ),
           ),
         ),
@@ -195,7 +195,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
           }(),
           Text(
             (likeCount - dislikeCount).toString(),
-            style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 0.8 * postIconSizeStateful),
+            style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 19),
           ),
           () {
             if (dislikeStatus == true) {

@@ -34,7 +34,7 @@ class _SearchSelectionSheetState extends State<SearchSelectionSheet> {
     final activeColor = userData?.domainColor ?? colorScheme.secondary;
 
     return Container(
-        height: 176 + bottomSpace,
+        height: 193 + bottomSpace,
         padding: EdgeInsets.fromLTRB(25, 25, 25, bottomSpace),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -46,6 +46,7 @@ class _SearchSelectionSheetState extends State<SearchSelectionSheet> {
                 Text("Filter your feed by:", style: Theme.of(context).textTheme.headline6),
               ],
             ),
+            SizedBox(height: 5),
             GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: () {
@@ -65,10 +66,10 @@ class _SearchSelectionSheetState extends State<SearchSelectionSheet> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('Hot',
-                                style: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w500)),
+                                style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.w500)),
                             SizedBox(height: 5),
                             Text("Show trending posts",
-                                style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary)),
+                                style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.primary)),
                             SizedBox(height: 2)
                           ],
                         ),
@@ -113,10 +114,10 @@ class _SearchSelectionSheetState extends State<SearchSelectionSheet> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('New',
-                                style: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w500)),
+                                style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.w500)),
                             SizedBox(height: 5),
                             Text("Show the newest posts",
-                                style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary)),
+                                style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.primary)),
                             SizedBox(height: 2)
                           ],
                         ),

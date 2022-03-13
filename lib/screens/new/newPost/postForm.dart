@@ -36,7 +36,7 @@ class PostForm extends StatefulWidget {
 }
 
 class _PostFormState extends State<PostForm> {
-  FocusNode optionalTextFocusNode = FocusNode();
+  FocusNode titleFocusNode = FocusNode();
 
   void handleError(err) {
     if (mounted) {
@@ -81,7 +81,7 @@ class _PostFormState extends State<PostForm> {
   @override
   void dispose() {
     // Clean up the focus node when the Form is disposed.
-    optionalTextFocusNode.dispose();
+    titleFocusNode.dispose();
     super.dispose();
   }
 
@@ -118,6 +118,7 @@ class _PostFormState extends State<PostForm> {
   Widget build(BuildContext context) {
     double phoneHeight = MediaQuery.of(context).size.height;
     final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
     if (groupChoices == null || selectedGroup == null || loading) {
       return Loading();
@@ -136,17 +137,17 @@ class _PostFormState extends State<PostForm> {
               mainAxisAlignment: MainAxisAlignment.center,
               //Top ROW
               children: [
-                SizedBox(width: 10),
+                SizedBox(width: 12),
                 TextButton(
                   child: Text("Cancel",
-                      style: Theme.of(context)
-                          .textTheme
+                      style: textTheme
                           .subtitle1
                           ?.copyWith(color: colorScheme.onSurface, fontWeight: FontWeight.w600)),
                   onPressed: () {
                     Navigator.pop(context);
                   },
                 ),
+                SizedBox(width: 12),
                 Spacer(),
                 TextButton(
                   onPressed: () => showModalBottomSheet(
@@ -176,7 +177,7 @@ class _PostFormState extends State<PostForm> {
                           borderRadius: BorderRadius.circular(10)),
                       child: Row(
                         children: [
-                          Text(selectedGroup!.name, style: Theme.of(context).textTheme.headline6),
+                          Text(selectedGroup!.name, style: textTheme.headline6),
                           Icon(Icons.keyboard_arrow_down_rounded),
                         ],
                       )),
@@ -269,8 +270,8 @@ class _PostFormState extends State<PostForm> {
                             FittedBox(
                               child: Container(
                                 padding: EdgeInsets.only(bottom: 1, top: 1, right: 5),
-                                child: Text("Post",
-                                    style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                                child: Text("Send",
+                                    style: textTheme.subtitle1?.copyWith(
                                         fontWeight: FontWeight.w600,
                                         color: _title != '' ? colorScheme.surface : userColor),
                                     maxLines: 1,
@@ -284,144 +285,119 @@ class _PostFormState extends State<PostForm> {
               ],
             ),
             MyDivider(),
-            Container(
-              //TextInput Container
-              constraints: BoxConstraints(
-                minHeight: phoneHeight * 0.75,
-              ),
-              padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-              child: Column(children: <Widget>[
-                error != null
-                    ? FittedBox(
-                        child: Text(error!,
-                            style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.onSurface)))
-                    : Container(),
-                error != null ? SizedBox(height: 10) : Container(),
-                TextFormField(
-                  autofocus: true,
-                  style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
-                  maxLines: null,
-                  autocorrect: true,
-                  textCapitalization: TextCapitalization.sentences,
-                  decoration: InputDecoration(
-                    hintStyle: Theme.of(context)
-                        .textTheme
-                        .headline6
-                        ?.copyWith(fontSize: 18, color: colorScheme.primaryContainer),
-                    border: InputBorder.none,
-                    hintText: "Title",
-                  ),
-                  onChanged: (val) {
-                    setState(() => _title = val);
-                    if (error == emptyTitleError) {
-                      if (mounted) {
-                        setState(() {
-                          error = null;
-                        });
-                      }
-                    }
-                  },
+            GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () {
+                if (!titleFocusNode.hasFocus) {
+                  titleFocusNode.requestFocus();
+                }
+              },
+              child: Container(
+                constraints: BoxConstraints(
+                  minHeight: phoneHeight * 0.75,
                 ),
-                GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onTap: () {
-                    if (!optionalTextFocusNode.hasFocus) {
-                      optionalTextFocusNode.requestFocus();
-                    }
-                  },
-                  child: Container(
-                    constraints: BoxConstraints(
-                      minHeight: newFile == null ? 492 : 100,
+                padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                child: Column(children: <Widget>[
+                  error != null
+                      ? FittedBox(
+                          child: Text(error!,
+                              style: textTheme.subtitle2?.copyWith(color: colorScheme.onSurface)))
+                      : Container(),
+                  error != null ? SizedBox(height: 10) : Container(),
+                  TextFormField(
+                    autofocus: true,
+                    style: Theme.of(context).textTheme.headline5,
+                    maxLines: null,
+                    autocorrect: true,
+                    focusNode: titleFocusNode,
+                    textCapitalization: TextCapitalization.sentences,
+                    decoration: InputDecoration(
+                      hintStyle: textTheme
+                          .headline5
+                          ?.copyWith(color: colorScheme.primaryContainer),
+                      border: InputBorder.none,
+                      hintText: "What's up?",
                     ),
-                    child: Column(
-                      children: [
-                        TextFormField(
-                          style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16),
-                          maxLines: null,
-                          autocorrect: true,
-                          textCapitalization: TextCapitalization.sentences,
-                          decoration: InputDecoration(
-                              hintStyle: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2
-                                  ?.copyWith(fontSize: 16, color: colorScheme.primary),
-                              border: InputBorder.none,
-                              hintText: "Optional text"),
-                          onChanged: (val) => setState(() => _text = val),
-                          focusNode: optionalTextFocusNode,
-                        ),
-                        poll != null ? poll! : Container(),
-                        link != null
-                            ? Container(
-                                width: MediaQuery.of(context).size.width * 0.9,
-                                decoration: ShapeDecoration(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5),
-                                    side: BorderSide(
-                                      color: colorScheme.onError,
-                                      width: 1,
-                                    ),
-                                  ),
-                                ),
-                                child: TextFormField(
-                                  style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16),
-                                  decoration: new InputDecoration(
-                                      fillColor: colorScheme.surface,
-                                      filled: true,
-                                      hintText: 'https://website.com',
-                                      isCollapsed: true,
-                                      border: InputBorder.none,
-                                      enabledBorder: InputBorder.none,
-                                      focusedBorder: InputBorder.none,
-                                      hintStyle: Theme.of(context)
-                                          .textTheme
-                                          .bodyText2
-                                          ?.copyWith(fontSize: 16, color: colorScheme.primary),
-                                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                                      suffixIcon: IconButton(
-                                        padding: EdgeInsets.zero,
-                                        constraints: BoxConstraints(),
-                                        onPressed: () {
-                                          if (mounted) {
-                                            setState(() => link = null);
-                                          }
-                                        },
-                                        icon: Icon(Icons.close, size: 20),
-                                      )),
-                                  autocorrect: false,
-                                  onChanged: (val) {
-                                    setState(() => link = val);
-                                    if (error == badLinkError) {
-                                      if (mounted) {
-                                        setState(() {
-                                          error = null;
-                                        });
-                                      }
+                    onChanged: (val) {
+                      setState(() => _title = val);
+                      if (error == emptyTitleError) {
+                        if (mounted) {
+                          setState(() {
+                            error = null;
+                          });
+                        }
+                      }
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  poll != null ? poll! : Container(),
+                  link != null
+                      ? Container(
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          decoration: ShapeDecoration(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              side: BorderSide(
+                                color: colorScheme.onError,
+                                width: 1,
+                              ),
+                            ),
+                          ),
+                          child: TextFormField(
+                            style: textTheme.bodyText2?.copyWith(fontSize: 16),
+                            decoration: new InputDecoration(
+                                fillColor: colorScheme.surface,
+                                filled: true,
+                                hintText: 'https://website.com',
+                                isCollapsed: true,
+                                border: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                hintStyle: textTheme
+                                    .bodyText2
+                                    ?.copyWith(fontSize: 16, color: colorScheme.primary),
+                                contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                                suffixIcon: IconButton(
+                                  padding: EdgeInsets.zero,
+                                  constraints: BoxConstraints(),
+                                  onPressed: () {
+                                    if (mounted) {
+                                      setState(() => link = null);
                                     }
                                   },
-                                  textAlignVertical: TextAlignVertical.center,
-                                ),
-                              )
-                            : Container()
-                      ],
-                    ),
-                  ),
-                ),
-                newFile != null
-                    ? Semantics(
-                        label: 'new_post_pic_image',
-                        child: DeletableImage(
-                            image: Image.file(File(newFile!.path), fit: BoxFit.contain),
-                            onDelete: () {
-                              if (mounted) {
-                                setState(() => newFile = null);
+                                  icon: Icon(Icons.close, size: 20),
+                                )),
+                            autocorrect: false,
+                            onChanged: (val) {
+                              setState(() => link = val);
+                              if (error == badLinkError) {
+                                if (mounted) {
+                                  setState(() {
+                                    error = null;
+                                  });
+                                }
                               }
                             },
-                            maxHeight: 350,
-                            containerWidth: 350),
-                      )
-                    : Container(),
-              ]),
+                            textAlignVertical: TextAlignVertical.center,
+                          ),
+                        )
+                      : Container(),
+                  newFile != null
+                      ? Semantics(
+                          label: 'new_post_pic_image',
+                          child: DeletableImage(
+                              image: Image.file(File(newFile!.path), fit: BoxFit.contain),
+                              onDelete: () {
+                                if (mounted) {
+                                  setState(() => newFile = null);
+                                }
+                              },
+                              maxHeight: 350,
+                              containerWidth: 350),
+                        )
+                      : Container(),
+                ]),
+              ),
             ), //
           ],
         ),
@@ -511,8 +487,7 @@ class _PostFormState extends State<PostForm> {
                 ),
                 Spacer(),
                 Text("Mature",
-                    style: Theme.of(context)
-                        .textTheme
+                    style: textTheme
                         .subtitle1
                         ?.copyWith(color: colorScheme.primary, fontWeight: FontWeight.w500)),
                 SizedBox(width: 10),

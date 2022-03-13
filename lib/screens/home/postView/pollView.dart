@@ -57,7 +57,7 @@ class _PollViewState extends State<PollView> {
             width: 1,
           ),
         )),
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.all(6),
         margin: EdgeInsets.only(top: 10),
         child: ListView.builder(
           itemCount: widget.poll.choices.length,
@@ -136,17 +136,17 @@ class PollChoiceView extends StatelessWidget {
             (voted != null)
                 ? LinearPercentIndicator(
                     padding: EdgeInsets.zero,
-                    backgroundColor: colorScheme.surface,
+                    backgroundColor: colorScheme.background,
                     animation: true,
-                    lineHeight: 32,
+                    lineHeight: 36,
                     animationDuration: 700,
                     percent: totalVotes != 0 ? numChoiceVotes / totalVotes : 0,
                     barRadius: Radius.circular(10),
                     progressColor: colorScheme.primary.withOpacity(0.4),
                   )
-                : Container(height: 32),
+                : Container(height: 36),
             AnimatedPositioned(
-                child: Text(text, style: Theme.of(context).textTheme.bodyText2),
+                child: Text(text, style: Theme.of(context).textTheme.bodyText1),
                 top: 7,
                 left: voted != null ? 86 : 10,
                 duration: Duration(milliseconds: 400),
@@ -160,7 +160,7 @@ class PollChoiceView extends StatelessWidget {
                   width: 75,
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[Text(votePercentage + '   |', style: Theme.of(context).textTheme.bodyText2)])),
+                      children: <Widget>[Text(votePercentage + '   |', style: Theme.of(context).textTheme.bodyText1)])),
             ),
             AnimatedOpacity(
               opacity: voted == index ? 1 : 0,

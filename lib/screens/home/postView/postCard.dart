@@ -1,3 +1,4 @@
+import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:hs_connect/models/group.dart';
@@ -21,6 +22,8 @@ import 'package:hs_connect/shared/tools/hexColor.dart';
 import 'package:hs_connect/shared/widgets/expandableImage.dart';
 import 'package:hs_connect/shared/widgets/myLinkPreview.dart';
 
+import '../../../shared/widgets/chatIcons.dart';
+
 class PostCard extends StatefulWidget {
   final Post post;
   final UserData currUserData;
@@ -32,12 +35,12 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<PostCard> {
-  static const leftRightMargin = 8.0;
+  static const leftRightMargin = 10.0;
 
   @override
   bool get wantKeepAlive => true;
 
-  String? creatorName;
+  String? creatorImage;
   Group? group;
   late bool likeStatus;
   late bool dislikeStatus;
@@ -62,10 +65,10 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
     UserDataDatabaseService _userDataDatabaseService =
         UserDataDatabaseService(currUserRef: widget.currUserData.userRef);
     fetchUserData =
-        await _userDataDatabaseService.getOtherUserData(userRef: widget.post.creatorRef, noDomainData: true);
+        await _userDataDatabaseService.getOtherUserData(userRef: widget.post.creatorRef, noDomainData: false);
     if (mounted) {
       setState(() {
-        creatorName = fetchUserData != null ? fetchUserData!.fundamentalName : null;
+        creatorImage = fetchUserData != null ? fetchUserData!.domainImage : null;
       });
     }
   }
@@ -139,8 +142,9 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
     super.build(context);
 
     final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
-    if (group == null || creatorName == null) {
+    if (group == null) {
       return Container();
     }
 
@@ -154,6 +158,7 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
         likeCount: likeCount,
         dislikeCount: dislikeCount);
 
+    final contentWidth = MediaQuery.of(context).size.width - 2 * leftRightMargin - 12;
     return GestureDetector(
       onTap: () async {
         await Navigator.push(
@@ -168,138 +173,75 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
           await getPoll();
         }
       },
-      child: Card(
-          //if border then ShapeDecoration
-          color: colorScheme.surface,
-          shape: RoundedRectangleBorder(
-            side: BorderSide(
-                color: widget.post.isFeatured
-                    ? (widget.currUserData.domainColor ?? colorScheme.primary)
-                    : Colors.transparent,
-                width: 1),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          margin: EdgeInsets.fromLTRB(leftRightMargin, 4, leftRightMargin, 4),
-          elevation: 0,
-          child: Container(
-              padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+      child: Stack(
+        children: [
+          Bubble(
+              margin: BubbleEdges.fromLTRB(leftRightMargin + 12, 8, leftRightMargin, 8),
+              color: colorScheme.background,
+              padding: BubbleEdges.all(0),
+              // nip: widget.post.creatorRef != widget.currUserData.userRef ? BubbleNip.leftBottom : BubbleNip.rightBottom,
+              elevation: 0,
+              radius: Radius.circular(11),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      SizedBox(width: 10),
-                      buildGroupCircle(
-                          groupImage: group != null ? group!.image : null,
-                          size: 21,
-                          context: context,
-                          backgroundColor: colorScheme.surface),
-                      SizedBox(width: 5),
-                      Text(
-                        group!.name,
-                        style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                            color: group!.hexColor != null ? HexColor(group!.hexColor!) : colorScheme.primary,
-                            fontSize: postCardDetailSize),
-                      ),
-                      Text(
-                        " • " + convertTime(widget.post.createdAt.toDate()),
-                        style: Theme.of(context)
-                            .textTheme
-                            .subtitle2
-                            ?.copyWith(color: colorScheme.primary, fontSize: postCardDetailSize),
-                      ),
-                      Spacer(),
-                      widget.post.mature && !widget.post.isFeatured
-                          ? Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(17),
-                                color: Theme.of(context).colorScheme.surface,
-                              ),
-                              padding: EdgeInsets.fromLTRB(14, 2, 14, 3),
-                              margin: EdgeInsets.all(1.5),
-                              child: Text('Mature',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .subtitle2
-                                      ?.copyWith(color: colorScheme.primary, fontSize: 12)))
-                          : Container(),
-                      widget.post.isFeatured
-                          ? Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(17),
-                                color: Theme.of(context).colorScheme.surface,
-                              ),
-                              padding: EdgeInsets.fromLTRB(14, 2, 14, 3),
-                              margin: EdgeInsets.all(1.5),
-                              child: Text('Trending',
-                                  style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                                      fontSize: 12,
-                                      color: widget.currUserData.domainColor != null
-                                          ? widget.currUserData.domainColor
-                                          : colorScheme.primary)))
-                          : Container(),
-                    ],
-                  ),
-                  SizedBox(height: 10),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    padding: EdgeInsets.fromLTRB(18, 13, 18, 0),
                     child: Text(widget.post.title,
-                        style: Theme.of(context).textTheme.headline6?.copyWith(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
+                        style: textTheme.headline6?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
                         overflow: TextOverflow.ellipsis, // default is .clip
                         maxLines: 3),
                   ),
+                  SizedBox(height: 5),
                   widget.post.link != null
                       ? Container(
                           margin: EdgeInsets.only(top: 10),
                           child: MyLinkPreview(
-                            enableAnimation: true,
-                            onPreviewDataFetched: (data) {
-                              setState(() => previewData = data);
-                            },
-                            metadataTitleStyle:
-                                Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.bold),
-                            metadataTextStyle: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 14),
-                            previewData: previewData,
-                            text: widget.post.link!,
-                            textStyle: Theme.of(context).textTheme.subtitle2,
-                            linkStyle: Theme.of(context).textTheme.subtitle2,
-                            width: MediaQuery.of(context).size.width - 2 * leftRightMargin,
-                          ),
+                              enableAnimation: true,
+                              onPreviewDataFetched: (data) {
+                                setState(() => previewData = data);
+                              },
+                              metadataTitleStyle: textTheme.subtitle1?.copyWith(fontWeight: FontWeight.bold),
+                              metadataTextStyle: textTheme.subtitle1?.copyWith(fontSize: 14),
+                              previewData: previewData,
+                              text: widget.post.link!,
+                              textStyle: textTheme.subtitle2,
+                              linkStyle: textTheme.subtitle2,
+                              width: contentWidth),
                         )
                       : Container(),
                   widget.post.mediaURL != null
                       ? ExpandableImage(
                           imageURL: widget.post.mediaURL!,
-                          containerWidth: MediaQuery.of(context).size.width - 2 * leftRightMargin,
-                          maxHeight: (MediaQuery.of(context).size.width - 2 * leftRightMargin) * 4 / 3,
+                          containerWidth: contentWidth,
+                          maxHeight: contentWidth * 4 / 3,
                           margin: EdgeInsets.only(top: 10))
                       : Container(),
                   poll != null
                       ? Container(
                           alignment: Alignment.center,
+                          width: contentWidth,
                           child: PollView(poll: poll!, currUserRef: widget.currUserData.userRef, post: widget.post))
                       : Container(),
                   Container(
-                    padding: EdgeInsets.fromLTRB(0, 0, 0, 2),
+                    padding: EdgeInsets.fromLTRB(18, 0, 5, 0),
                     child: Row(
-                      //Icon Row
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(width: 10),
                         Text(
-                          (widget.post.numComments + widget.post.numReplies).toString() + " Comments",
-                          style: Theme.of(context)
-                              .textTheme
-                              .subtitle2
-                              ?.copyWith(color: colorScheme.primary, fontSize: postCardDetailSize),
+                          (widget.post.numComments + widget.post.numReplies).toString(),
+                          style: textTheme.headline6,
                         ),
+                        SizedBox(width: 7),
+                        Icon(Icons.chat_bubble_outline_rounded, size: 21),
+                        SizedBox(width: 15),
                         widget.currUserData.userRef != widget.post.creatorRef
                             ? IconButton(
                                 constraints: BoxConstraints(),
                                 splashRadius: .1,
-                                icon: Icon(Icons.more_horiz, size: 20, color: colorScheme.primary),
+                                icon: Icon(Icons.more_horiz, size: 21),
                                 onPressed: () {
                                   showModalBottomSheet(
                                       context: context,
@@ -314,27 +256,32 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                                           ));
                                 },
                               )
-                            : Container(height: 38),
-                        fetchUserData != null && fetchUserData!.userRef != widget.currUserData.userRef
-                            ? DMButton(
-                                currUserRef: widget.currUserData.userRef,
-                                otherUserRef: fetchUserData!.userRef,
-                                otherUserFundName: fetchUserData!.fundamentalName,
-                              )
                             : Container(),
                         Spacer(),
-                        LikeDislikePost(
-                          currUserRef: widget.currUserData.userRef,
-                          post: widget.post,
-                          postLikesManager: postLikesManager,
-                          currUserColor: widget.currUserData.domainColor,
+                        Container(
+                          child: LikeDislikePost(
+                            currUserRef: widget.currUserData.userRef,
+                            post: widget.post,
+                            postLikesManager: postLikesManager,
+                            currUserColor: widget.currUserData.domainColor,
+                          ),
                         ),
-                        SizedBox(width: 1),
                       ],
                     ),
                   )
                 ], //Column Children ARRAY
-              ))),
+              )),
+          Positioned(
+            left: 0,
+            top: 18,
+            child: buildGroupCircle(
+                groupImage: creatorImage,
+                size: 17,
+                context: context,
+                backgroundColor: colorScheme.surface),
+          )
+        ],
+      ),
     );
   }
 }

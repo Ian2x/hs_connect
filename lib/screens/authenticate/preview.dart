@@ -26,32 +26,32 @@ class PreviewPage extends StatelessWidget {
           color: Colors.white,
           child: Column(
             children: [
-              SizedBox(height: 180),
+              SizedBox(height: 160),
               SizedBox(
-                height: 75,
+                height: 85,
                 child: Image.asset('assets/Splash2.png'),
               ),
-              SizedBox(height: 55),
+              SizedBox(height: 45),
               Text("convo",
                   style: textTheme.headline4?.copyWith(
-                      color: Colors.black, fontWeight: FontWeight.bold, fontSize: 33, fontFamily: "Shippori")),
-              SizedBox(height: 15),
+                      color: Colors.black, fontWeight: FontWeight.bold, fontSize: 40, fontFamily: "Shippori")),
+              SizedBox(height: 25),
               Text(
                 "Talk anonymously,",
-                style: textTheme.subtitle1?.copyWith(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 20),
+                style: textTheme.subtitle1?.copyWith(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 23),
               ),
               SizedBox(height: 4),
               Text(
                 "Talk openly",
-                style: textTheme.subtitle1?.copyWith(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 20),
+                style: textTheme.subtitle1?.copyWith(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 23),
               ),
-              SizedBox(height: 100),
+              SizedBox(height: 85),
               ActionChip(
                 padding: EdgeInsets.fromLTRB(60, 15, 60, 15),
                 backgroundColor: Colors.black,
                 label: Text(
                   'Sign up',
-                  style: textTheme.headline6?.copyWith(fontWeight: FontWeight.bold, color: Colors.white),
+                  style: textTheme.headline5?.copyWith(fontWeight: FontWeight.bold, color: Colors.white),
                 ),
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => ChooseSchool()));
@@ -61,7 +61,7 @@ class PreviewPage extends StatelessWidget {
               TextButton(
                 child: Text(
                   "Login",
-                  style: textTheme.headline6?.copyWith(fontWeight: FontWeight.bold, color: Colors.black),
+                  style: textTheme.headline5?.copyWith(fontWeight: FontWeight.bold, color: Colors.black),
                 ),
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => SignIn()));

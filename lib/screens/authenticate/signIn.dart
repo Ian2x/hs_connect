@@ -5,6 +5,7 @@ import 'package:hs_connect/screens/authenticate/smsCode.dart';
 import 'package:hs_connect/screens/wrapper.dart';
 import 'package:hs_connect/services/auth.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/themeManager.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
@@ -44,9 +45,9 @@ class _SignInState extends State<SignIn> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          leading: !isLoading ? myBackButtonIcon(context, overrideColor: ThemeNotifier.lightThemeOnSurface) : null,
+          leading: myBackButtonIcon(context, overrideColor: Colors.black),
           automaticallyImplyLeading: false,
-          actions: [
+          actions: !isLoading ? [
             Container(
               padding: EdgeInsets.only(right: 5),
               child: TextButton(
@@ -64,10 +65,10 @@ class _SignInState extends State<SignIn> {
                   }
                 },
                 child: Text(withPhone ? "Email login" : "Phone login",
-                    style: textTheme.subtitle2?.copyWith(color: Colors.black)),
+                    style: textTheme.subtitle1?.copyWith(color: Colors.black)),
               ),
             )
-          ],
+          ] : null,
           elevation: 0,
           backgroundColor: Colors.white,
         ),
@@ -83,53 +84,56 @@ class _SignInState extends State<SignIn> {
     return Stack(children: [
       SingleChildScrollView(
         child: Column(children: [
-          SizedBox(height: 60),
+          SizedBox(height: 45),
           Text(
             'Login',
-            style: ThemeText.quicksand(fontWeight: FontWeight.w700, fontSize: 28, color: Colors.black),
+            style: ThemeText.quicksand(fontWeight: FontWeight.w700, fontSize: 38, color: Colors.black),
           ),
           SizedBox(height: 10),
           Text(
             error ?? "",
-            style: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 14, height: 1.3),
+            style: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 16, height: 1.3),
             textAlign: TextAlign.center,
           ),
-          InternationalPhoneNumberInput(
-            onInputChanged: (PhoneNumber number) {
-              if (mounted) {
-                setState(() {
-                  phoneNumber = number.phoneNumber;
-                });
-              }
-              if (error != null) {
-                error = null;
-              }
-            },
-            onInputValidated: (bool value) {
-              if (mounted) {
-                setState(() => numberValidated = value);
-              }
-            },
-            selectorConfig: SelectorConfig(
-                selectorType: PhoneInputSelectorType.DIALOG,
-                showFlags: false,
-                leadingPadding: 0.0,
-                trailingSpace: false),
-            ignoreBlank: false,
-            textStyle: textTheme.headline6?.copyWith(color: Colors.black),
-            selectorTextStyle: textTheme.headline6?.copyWith(color: Colors.black),
-            formatInput: false,
-            initialValue: initial,
-            keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
-            //inputBorder: OutlineInputBorder(gapPadding: 0.0),
-          ),
-          SizedBox(height: 20),
           Container(
-            padding: EdgeInsets.only(left: 20, right: 20),
+            padding: EdgeInsets.fromLTRB(10, 0, 20, 0),
+            child: InternationalPhoneNumberInput(
+              onInputChanged: (PhoneNumber number) {
+                if (mounted) {
+                  setState(() {
+                    phoneNumber = number.phoneNumber;
+                  });
+                }
+                if (error != null) {
+                  error = null;
+                }
+              },
+              onInputValidated: (bool value) {
+                if (mounted) {
+                  setState(() => numberValidated = value);
+                }
+              },
+              selectorConfig: SelectorConfig(
+                  selectorType: PhoneInputSelectorType.DIALOG,
+                  showFlags: false,
+                  leadingPadding: 0.0,
+                  trailingSpace: false),
+              ignoreBlank: false,
+              inputDecoration: InputDecoration(enabledBorder: UnderlineInputBorder(borderSide: BorderSide(width: 2, color: authHintTextColor)), focusedBorder: UnderlineInputBorder(borderSide: BorderSide(width: 2, color: authHintTextColor))),
+              textStyle: textTheme.headline5?.copyWith(fontSize: 28, color: authPrimaryTextColor, letterSpacing: 2.5),
+              selectorTextStyle: textTheme.headline5?.copyWith(fontSize: 28, color: authPrimaryTextColor, letterSpacing: 2.5),
+              formatInput: false,
+              initialValue: initial,
+              keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
+            ),
+          ),
+          SizedBox(height: 30),
+          Container(
+            padding: EdgeInsets.only(left: 30, right: 30),
             alignment: Alignment.center,
             child: Text(
               "We'll send a verification text. Standard rates apply.",
-              style: textTheme.subtitle1?.copyWith(color: authPrimaryTextColor, fontSize: 14, height: 1.3),
+              style: textTheme.subtitle1?.copyWith(color: authPrimaryTextColor, fontSize: 16, height: 1.3),
               textAlign: TextAlign.center,
             ),
           ),
@@ -156,15 +160,17 @@ class _SignInState extends State<SignIn> {
                 bool inUse = await _auth.checkIfNumberInUse(phoneNumber!);
                 if (inUse) {
                   // push smsCode page
-                  Navigator.of(context).push(MaterialPageRoute(
+                  await Navigator.of(context).push(NoAnimationMaterialPageRoute(
                       builder: (context) => SMSCode(phoneNumber: phoneNumber!, domain: "IRRELEVANT", signUp: false)));
                 } else {
                   if (mounted) {
                     setState(() {
                       error = "This number is not recognized";
-                      isLoading = false;
                     });
                   }
+                }
+                if (mounted) {
+                  setState(() => isLoading = false);
                 }
               }
             }
@@ -179,15 +185,15 @@ class _SignInState extends State<SignIn> {
     return Stack(children: [
       SingleChildScrollView(
         child: Column(children: [
-          SizedBox(height: 60),
+          SizedBox(height: 45),
           Text(
             'Login',
-            style: ThemeText.quicksand(fontWeight: FontWeight.w700, fontSize: 28, color: Colors.black),
+            style: ThemeText.quicksand(fontWeight: FontWeight.w700, fontSize: 38, color: Colors.black),
           ),
           SizedBox(height: 10),
           Text(
             error ?? "",
-            style: textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 14, height: 1.3),
+            style: textTheme.subtitle1?.copyWith(color: Colors.black, fontSize: 16, height: 1.3),
             textAlign: TextAlign.center,
           ),
           Container(
@@ -196,10 +202,10 @@ class _SignInState extends State<SignIn> {
               children: [
                 TextField(
                     autocorrect: false,
-                    style: textTheme.headline6?.copyWith(color: authPrimaryTextColor),
+                    style: textTheme.headline5?.copyWith(color: authPrimaryTextColor),
                     maxLines: null,
                     decoration: InputDecoration(
-                        hintStyle: textTheme.headline6?.copyWith(color: authHintTextColor),
+                        hintStyle: textTheme.headline5?.copyWith(color: authHintTextColor),
                         border: InputBorder.none,
                         hintText: "Email"),
                     onChanged: (val) {
@@ -211,9 +217,9 @@ class _SignInState extends State<SignIn> {
                 SizedBox(height: 10),
                 TextField(
                     autocorrect: false,
-                    style: textTheme.headline6?.copyWith(color: authPrimaryTextColor),
+                    style: textTheme.headline5?.copyWith(color: authPrimaryTextColor),
                     decoration: InputDecoration(
-                        hintStyle: textTheme.headline6?.copyWith(color: authHintTextColor),
+                        hintStyle: textTheme.headline5?.copyWith(color: authHintTextColor),
                         border: InputBorder.none,
                         suffixIcon: IconButton(
                           icon: passwordHidden ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
@@ -242,7 +248,7 @@ class _SignInState extends State<SignIn> {
             },
             child: Text(
               "Forgot password?",
-              style: textTheme.subtitle1?.copyWith(color: authPrimaryTextColor, fontSize: 14, height: 1.3),
+              style: textTheme.subtitle1?.copyWith(color: authPrimaryTextColor, fontSize: 16, height: 1.3),
               textAlign: TextAlign.center,
             ),
           ),
@@ -271,7 +277,7 @@ class _SignInState extends State<SignIn> {
                 }
               } else {
                 Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => Wrapper()), (Route<dynamic> route) => false);
+                    NoAnimationMaterialPageRoute(builder: (context) => Wrapper()), (Route<dynamic> route) => false);
               }
             }
             dismissKeyboard(context);

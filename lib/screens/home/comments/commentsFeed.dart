@@ -132,7 +132,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
                             } else if (index == 1) {
                               return Divider(thickness: 3, color: colorScheme.background, height: 3);
                             } else if (index == comments.length + 2) {
-                              return Container(height: 80 + keyboardHeight + MediaQuery.of(context).padding.bottom);
+                              return Container(height: 85 + keyboardHeight + MediaQuery.of(context).padding.bottom);
                             } else {
                               if (userData.blockedUserRefs.contains(comments[index - 2].creatorRef)) {
                                 return Container();

@@ -77,6 +77,7 @@ class _ReplyCardState extends State<ReplyCard> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
     final localCreatorName = creatorName ?? '';
     final localCreatorGroupName = creatorGroupName ?? '';
@@ -117,15 +118,13 @@ class _ReplyCardState extends State<ReplyCard> {
                       text: TextSpan(children: [
                         TextSpan(
                             text: localCreatorName + " • ",
-                            style: Theme.of(context)
-                                .textTheme
+                            style: textTheme
                                 .subtitle2
-                                ?.copyWith(color: colorScheme.primary, fontSize: commentReplyDetailSize)),
+                                ?.copyWith(color: colorScheme.primary)),
                         TextSpan(
                             text: localCreatorGroupName,
-                            style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                                color: creatorGroupColor ?? colorScheme.primary,
-                                fontSize: commentReplyDetailSize))
+                            style: textTheme.subtitle2?.copyWith(
+                                color: creatorGroupColor ?? colorScheme.primary))
                       ]),
                     )),
               ),
@@ -139,16 +138,15 @@ class _ReplyCardState extends State<ReplyCard> {
                       padding: EdgeInsets.fromLTRB(10, 5, 0, 1),
                       margin: EdgeInsets.all(1),
                       child: Text('Creator',
-                          style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                              color: widget.groupColor ?? colorScheme.onSurface,
-                              fontSize: 12)))
+                          style: textTheme.subtitle2?.copyWith(
+                              color: widget.groupColor ?? colorScheme.onSurface)))
                   : Container(),
             ],
           ),
           SizedBox(height: 4),
           SizedBox(
             width: (MediaQuery.of(context).size.width) * .85,
-            child: Text(widget.reply.text, style: Theme.of(context).textTheme.bodyText1),
+            child: Text(widget.reply.text, style: textTheme.bodyText1?.copyWith(fontSize: 20)),
           ),
           SizedBox(height: 7),
           Row(
@@ -157,7 +155,7 @@ class _ReplyCardState extends State<ReplyCard> {
                   style: Theme.of(context)
                       .textTheme
                       .subtitle2
-                      ?.copyWith(color: colorScheme.primary, fontSize: commentReplyDetailSize)),
+                      ?.copyWith(color: colorScheme.primary)),
               SizedBox(width: 8),
               widget.reply.creatorRef != null && widget.reply.creatorRef != widget.currUserData.userRef
                   ? Container(

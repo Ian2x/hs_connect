@@ -23,8 +23,9 @@ class AuthButton extends StatelessWidget {
             color: hasText ? Colors.black : Colors.black54,
             borderRadius: BorderRadius.circular(40),
           ),
+          margin: EdgeInsets.only(bottom: 10),
           child: Container(
-            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 29),
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 29),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(38),
               color: hasText ? Colors.black : Colors.white,

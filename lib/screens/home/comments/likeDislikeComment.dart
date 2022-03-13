@@ -18,7 +18,7 @@ class LikeDislikeComment extends StatefulWidget {
 }
 
 class _LikeDislikeCommentState extends State<LikeDislikeComment> {
-  static const double iconSize = 20;
+  static const double iconSize = 22;
   late bool likeStatus;
   late bool dislikeStatus;
   late int likeCount;
