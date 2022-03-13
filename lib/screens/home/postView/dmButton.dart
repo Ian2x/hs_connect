@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:hs_connect/screens/activity/Messages/messagesPage.dart';
-import 'package:hs_connect/shared/widgets/chatIcons.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 class DMButton extends StatelessWidget {
   final DocumentReference? otherUserRef;
@@ -34,7 +34,7 @@ class DMButton extends StatelessWidget {
                       )));
         }
       },
-      icon: Icon(Chat.chat_bubble, size: 18, color: Theme.of(context).colorScheme.primary),
+      icon: Icon(Icons.create, size: 20),
     );
   }
 }

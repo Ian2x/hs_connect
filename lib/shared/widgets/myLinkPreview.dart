@@ -220,7 +220,7 @@ class _MyLinkPreviewState extends State<MyLinkPreview> with SingleTickerProvider
       child: Container(
         width: widget.width,
         decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
+            color: Theme.of(context).colorScheme.background,
             border: Border.all(width: 1, color: Theme.of(context).colorScheme.onError)),
         padding: isMinimized ? null : EdgeInsets.symmetric(vertical: 10),
         child: Column(

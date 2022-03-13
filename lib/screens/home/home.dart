@@ -6,16 +6,14 @@ import 'package:hs_connect/models/post.dart';
 import 'package:hs_connect/models/postLikesManager.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/activity/messages/messagesPage.dart';
-import 'package:hs_connect/screens/authenticate/waitVerification.dart';
 import 'package:hs_connect/screens/home/postFeed/domainFeed.dart';
 import 'package:hs_connect/screens/home/postFeed/publicFeed.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/screens/home/postView/postPage.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/myStorageManager.dart';
-import 'package:hs_connect/shared/pageRoutes.dart';
 import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
-import '../new/newPost/postForm.dart';
+import '../new/newPost/newPost.dart';
 import 'homeAppBar.dart';
 import 'launchCountdown.dart';
 
@@ -201,23 +199,22 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     }
 
     return Scaffold(
-      backgroundColor: colorScheme.background,
-      floatingActionButton: IconButton(
-        icon: Container(
-            alignment: Alignment.center,
-            decoration: ShapeDecoration(shape: CircleBorder(), color: colorScheme.onSurface),
-            child: Icon(Icons.add_rounded, color: colorScheme.surface, size: 35)),
-        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-        onPressed: () {
-          final topPadding = MediaQuery.of(context).padding.top;
-          showModalBottomSheet(
-              context: context,
-              builder: (BuildContext context) {
-                return PostForm(currUserData: widget.currUserData, topPadding: topPadding);
-              },
-              isScrollControlled: true);
-        },
-      ),
+      backgroundColor: colorScheme.surface,
+      floatingActionButton: GestureDetector(
+          onTap: () async {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(fullscreenDialog: true, builder: (context) => NewPost()),
+            );
+          },
+          child: Container(
+              height: 40,
+              width: 50,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: widget.currUserData.domainColor ?? colorScheme.onSurface,
+                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
+              child: Icon(Icons.add_rounded, color: colorScheme.surface, size: 26))),
       body: NestedScrollView(
         floatHeaderSlivers: true,
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -226,6 +223,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               delegate: HomeAppBar(
                   currUserData: widget.currUserData,
                   isDomain: isDomain,
+                  toggleFeed: () {
+                    if (mounted) {
+                      setState(() => isDomain = !isDomain);
+                    }
+                  },
                   searchByTrending: searchByTrending,
                   toggleSearch: toggleSearch,
                   safeAreaHeight: MediaQuery.of(context).padding.top),
@@ -234,12 +236,21 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             ),
           ];
         },
-        body: DomainFeed(
-          currUserData: widget.currUserData,
-          isDomain: isDomain,
-          searchByTrending: searchByTrending,
-          key: ValueKey<bool>(searchByTrending),
-        ),
+        body: isDomain
+            ? DomainFeed(
+                currUserData: widget.currUserData,
+                isDomain: isDomain,
+                searchByTrending: searchByTrending,
+                key: ValueKey<bool>(searchByTrending),
+              )
+            : PublicFeed(
+                currUserData: widget.currUserData,
+                isDomain: isDomain,
+                searchByTrending: searchByTrending,
+                key: ValueKey<bool>(!searchByTrending)),
+      ),
+      bottomNavigationBar: MyNavigationBar(
+        currentIndex: 0,
       ),
       resizeToAvoidBottomInset: false,
     );

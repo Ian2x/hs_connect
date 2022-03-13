@@ -39,7 +39,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
     return Stack(
       children: [
         Container(
-          color: userData.domainColor ?? colorScheme.onSurface,
+          color: colorScheme.primary,
           padding: EdgeInsets.only(top: bottomGradientThickness),
           child: Container(
             color: colorScheme.surface,
@@ -51,6 +51,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
               showUnselectedLabels: false,
               currentIndex: widget.currentIndex,
               selectedItemColor: colorScheme.onSurface,
+              unselectedItemColor: colorScheme.primary,
               selectedFontSize: 1,
               unselectedFontSize: 1,
               onTap: (int index) async {

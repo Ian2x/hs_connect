@@ -6,14 +6,14 @@ Widget buildGroupCircle(
     required double size,
     required BuildContext context,
     required Color backgroundColor,
-    required}) {
+    bool noBorder = false}) {
   return Container(
     height: size,
     width: size,
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(100),
       color: backgroundColor,
-      border: Border.all(color: Theme.of(context).colorScheme.primary, width: 0.15),
+      border: noBorder ? null : Border.all(color: Theme.of(context).colorScheme.primary, width: 0.15),
     ),
     alignment: Alignment.center,
     child: Container(

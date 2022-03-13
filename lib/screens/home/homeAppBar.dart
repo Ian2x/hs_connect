@@ -3,22 +3,25 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/searchSelectionSheet.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 
+import '../../shared/widgets/buildGroupCircle.dart';
+
 class HomeAppBar extends SliverPersistentHeaderDelegate {
-  static const tabBarHeight = 40.0;
-  static const expandedHeight = 60.0;
+  static const expandedHeight = 50.0;
 
   final UserData currUserData;
   final bool isDomain;
   final bool searchByTrending;
   final VoidBoolParamFunction toggleSearch;
   final double safeAreaHeight;
+  final VoidFunction toggleFeed;
 
   HomeAppBar(
       {required this.currUserData,
       required this.isDomain,
       required this.searchByTrending,
       required this.toggleSearch,
-      required this.safeAreaHeight});
+      required this.safeAreaHeight,
+      required this.toggleFeed});
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
@@ -39,21 +42,29 @@ class HomeAppBar extends SliverPersistentHeaderDelegate {
             padding: EdgeInsets.only(top: safeAreaHeight),
             child: Stack(
               children: [
-                Container(
-                  padding: EdgeInsets.fromLTRB(10,10,10,10),
-                  child: Text(fullDomainName,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline4
-                          ?.copyWith(fontSize: 18, fontWeight: FontWeight.w600),
-                      textAlign: TextAlign.center,
-                      maxLines: 1,
-                      softWrap: false,
-                      overflow: TextOverflow.ellipsis),
+                GestureDetector(
+                  onTap: toggleFeed,
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(15,13,0,50),
+                    child: Row(
+                      children: [
+                        /*buildGroupCircle(
+                            groupImage: isDomain ? currUserData.domainImage : null, size: 27, context: context, backgroundColor: colorScheme.surface),*/
+                        SizedBox(width: 10),
+                        Text(isDomain ? fullDomainName : "Public",
+                            style: textTheme.headline6,
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            softWrap: false,
+                            overflow: TextOverflow.ellipsis),
+                        Icon(Icons.arrow_drop_down)
+                      ],
+                    ),
+                  ),
                 ),
                 Positioned(
                     right: 10,
-                    top: 5,
+                    top: 13,
                     child: GestureDetector(
                         onTap: () {
                           showModalBottomSheet(
@@ -66,12 +77,7 @@ class HomeAppBar extends SliverPersistentHeaderDelegate {
                               builder: (context) => SearchSelectionSheet(
                                   initialSearchByTrending: searchByTrending, toggleSearch: toggleSearch));
                         },
-                        child: Row(children: [
-                          Icon(Icons.sort_rounded, size: 20),
-                          SizedBox(width: 3),
-                          Text(searchByTrending ? 'Hot' : 'New',
-                              style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 13))
-                        ])))
+                        child: Icon(Icons.sort_rounded, size: 25)))
               ],
             ),
           ),

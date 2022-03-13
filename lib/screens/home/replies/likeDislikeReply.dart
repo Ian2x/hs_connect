@@ -22,7 +22,7 @@ class _LikeDislikeReplyState extends State<LikeDislikeReply> {
   late bool dislikeStatus;
   late int likeCount;
   late int dislikeCount;
-  static const double iconSize = 20;
+  static const double iconSize = 22;
 
   @override
   void initState() {

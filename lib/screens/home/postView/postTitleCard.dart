@@ -82,13 +82,15 @@ class _PostTitleCardState extends State<PostTitleCard> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     PostLikesManager postLikesManager = Provider.of<PostLikesManager>(context);
-    final leftRightPadding = 15.0;
+    final leftPadding = 15.0;
+    final rightPadding = 5.0;
 
     final localCreatorName = creatorName ?? '';
     final localCreatorGroup = creatorGroup ?? '';
+    final contentWidth = MediaQuery.of(context).size.width - 2 * leftPadding;
 
     return Container(
-      padding: EdgeInsets.fromLTRB(leftRightPadding, 0, leftRightPadding, 10),
+      padding: EdgeInsets.fromLTRB(leftPadding, 0, rightPadding, 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -117,14 +119,13 @@ class _PostTitleCardState extends State<PostTitleCard> {
                   text: TextSpan(
                       style: Theme.of(context)
                           .textTheme
-                          .subtitle2
-                          ?.copyWith(color: colorScheme.primary, fontSize: postCardDetailSize + 1),
+                          .subtitle1
+                          ?.copyWith(color: colorScheme.primary),
                       children: [
                         TextSpan(text: "from " + localCreatorName + " • "),
                         TextSpan(
-                            style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                                color: creatorColor ?? colorScheme.primary,
-                                fontSize: postCardDetailSize + 1),
+                            style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                                color: creatorColor ?? colorScheme.primary),
                             text: localCreatorGroup),
                         TextSpan(text: " • " + convertTime(widget.post.createdAt.toDate()))
                       ]),
@@ -142,7 +143,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
             widget.post.creatorRef != widget.currUserData.userRef
                 ? IconButton(
                     icon: Icon(Icons.more_horiz),
-                    iconSize: 20,
+                    iconSize: 21,
                     color: colorScheme.primary,
                     onPressed: () {
                       showModalBottomSheet(
@@ -163,15 +164,8 @@ class _PostTitleCardState extends State<PostTitleCard> {
           SelectableLinkify(
               text: widget.post.title,
               onOpen: openLink,
-              style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18)),
+              style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 21)),
           SizedBox(height: 12),
-          widget.post.text != null && widget.post.text != ""
-              ? SelectableLinkify(
-                  text: widget.post.text!,
-                  onOpen: openLink,
-                  style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16, height: 1.3),
-                )
-              : Container(),
           widget.post.link != null
               ? Container(
                   margin: EdgeInsets.only(top: 10),
@@ -188,7 +182,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
                     text: widget.post.link!,
                     textStyle: Theme.of(context).textTheme.subtitle2,
                     linkStyle: Theme.of(context).textTheme.subtitle2,
-                    width: MediaQuery.of(context).size.width - 2 * leftRightPadding,
+                    width: contentWidth,
                   ),
                 )
               : Container(),
@@ -197,21 +191,21 @@ class _PostTitleCardState extends State<PostTitleCard> {
                   margin: EdgeInsets.only(top: 10),
                   child: ExpandableImage(
                       imageURL: widget.post.mediaURL!,
-                      maxHeight: (MediaQuery.of(context).size.width - 2 * leftRightPadding) * 4 / 3,
-                      containerWidth: MediaQuery.of(context).size.width - 2 * leftRightPadding),
-                )
+                      maxHeight: contentWidth * 4 / 3,
+                      containerWidth: contentWidth,
+                ))
               : Container(),
           poll != null
-              ? PollView(poll: poll!, currUserRef: widget.currUserData.userRef, post: widget.post)
+              ? Container(width: contentWidth, child: PollView(poll: poll!, currUserRef: widget.currUserData.userRef, post: widget.post))
               : Container(),
-          SizedBox(height: 17),
+          SizedBox(height: 10),
           Row(
             children: [
               Text(
                 widget.post.numComments + widget.post.numReplies < 2
                     ? 'Comments'
                     : (widget.post.numComments + widget.post.numReplies).toString() + ' Comments',
-                style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 16),
+                style: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w600),
               ),
               Spacer(),
               LikeDislikePostStateful(
