@@ -11,11 +11,11 @@ class ThemeNotifier with ChangeNotifier {
     // background
     colorScheme: ColorScheme(
       brightness: Brightness.dark,
-      background: Color(0xff262626),
+      background: Color(0xff292929),
       onSurface: darkThemeOnSurface,
       //Color(0xffd4d3d3),
       error: Color(0xff4d4d4d),
-      primaryContainer: Color(0xffbab9b9),
+      primaryContainer: Color(0xff8f8e8e),
       secondaryContainer: Color(0xff3f99ee),
       secondary: Color(0xff2992f4),
       surface: Color(0xff131313),
@@ -43,7 +43,7 @@ class ThemeNotifier with ChangeNotifier {
       onSurface: lightThemeOnSurface,
       // black
       error: Color(0xffb2b2b2),
-      primaryContainer: Color(0xff60676c),
+      primaryContainer: Color(0xffd7d7d7),
       // dark grey
       secondaryContainer: Color(0xff1186f3),
       // darker secondary blue
