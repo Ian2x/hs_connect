@@ -52,6 +52,6 @@ class MyNotificationsDatabaseService {
         .orderBy(C.createdAt)
         .snapshots()
         .map((snapshot) => snapshot.docs.map(_myNotificationFromDocument).toList());
-    ;
+
   }
 }

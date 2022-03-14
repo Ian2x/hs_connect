@@ -92,6 +92,9 @@ flutter:
     - family: Thicker
       fonts:
         - asset: assets/icons/Thicker.ttf
+    - family: Message2
+      fonts:
+        - asset: assets/icons/Message2.ttf
     - family: ThickArrow
       fonts:
         - asset: assets/icons/ThickArrow.ttf

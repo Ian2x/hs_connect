@@ -99,19 +99,21 @@ class _ExpandableImageState extends State<ExpandableImage> {
             width: widget.containerWidth,
             constraints: BoxConstraints(maxHeight: widget.maxHeight),
             margin: widget.margin,
-            color: Colors.black,
-            child: CachedNetworkImage(
-              imageUrl: widget.imageURL,
-              fit: BoxFit.contain,
-              fadeInDuration: Duration(milliseconds: 1500),
-              fadeInCurve: Curves.easeInExpo,
-              placeholder: (context, url) => Container(
-                  height: 300,
-                  width: widget.containerWidth,
-                  color: Colors.black,
-                  child: Loading(
-                    backgroundColor: Colors.black,
-                  )),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: CachedNetworkImage(
+                imageUrl: widget.imageURL,
+                fit: BoxFit.contain,
+                fadeInDuration: Duration(milliseconds: 1500),
+                fadeInCurve: Curves.easeInExpo,
+                placeholder: (context, url) => Container(
+                    height: 300,
+                    width: widget.containerWidth,
+                    color: Colors.black,
+                    child: Loading(
+                      backgroundColor: Colors.black,
+                    )),
+              ),
             )),
       ),
     );

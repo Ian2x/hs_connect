@@ -101,11 +101,10 @@ class _DomainFeedState extends State<DomainFeed> with AutomaticKeepAliveClientMi
                   (widget.currUserData.blockedUserRefs.contains(post.creatorRef))) {
                 return Container();
               }
-              return Center(
-                  child: PostCard(
+              return PostCard(
                 post: post,
                 currUserData: widget.currUserData,
-              ));
+              );
             },
             noItemsFoundIndicatorBuilder: (BuildContext context) => Container(
                 padding: EdgeInsets.only(top: 50),
