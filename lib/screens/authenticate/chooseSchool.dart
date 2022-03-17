@@ -79,7 +79,6 @@ class _ChooseSchoolState extends State<ChooseSchool> {
                             if (mounted) {
                               setState(() => selectedDomain = s?.item1);
                             }
-                            print(selectedDomain);
                           },
                           popupBackgroundColor: Colors.white,
                           dropdownSearchDecoration: InputDecoration(
