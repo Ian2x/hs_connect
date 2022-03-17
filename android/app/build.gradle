@@ -81,4 +81,7 @@ dependencies {
     // Declare the dependency for the Firebase Authentication library
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-auth-ktx'
+
+    // For https://stackoverflow.com/questions/65490555/this-request-is-missing-a-valid-app-identifier-meaning-that-neither-safetynet-c
+    implementation 'androidx.browser:browser:1.4.0'
 }

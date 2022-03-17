@@ -35,13 +35,11 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
     final colorScheme = Theme.of(context).colorScheme;
     final userData = Provider.of<UserData?>(context);
 
-    if (userData == null) return Loading();
-
     return Scaffold(
-      backgroundColor: colorScheme.background,
+      backgroundColor: colorScheme.surface,
       appBar: activityAppBar(context: context, tabController: tabController, currUserData: userData),
-      body: Container(
-        color: colorScheme.background,
+      body: userData == null ? Loading() : Container(
+        color: colorScheme.surface,
         child: TabBarView(children: <Widget>[
           NotificationsFeed(currUserData: userData),
           AllMessagesPage(currUserData: userData)

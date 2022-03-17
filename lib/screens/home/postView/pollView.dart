@@ -51,14 +51,14 @@ class _PollViewState extends State<PollView> {
         width: MediaQuery.of(context).size.width * 0.9,
         decoration: ShapeDecoration(
             shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(8),
           side: BorderSide(
             color: colorScheme.onError,
             width: 1,
           ),
         )),
         padding: EdgeInsets.all(6),
-        margin: EdgeInsets.only(top: 10),
+        margin: EdgeInsets.only(top: 3),
         child: ListView.builder(
           itemCount: widget.poll.choices.length,
           shrinkWrap: true,
@@ -114,6 +114,7 @@ class PollChoiceView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
     String votePercentage = totalVotes != 0 ? (100 * numChoiceVotes / totalVotes).round().toString() + '%' : '0%';
     return GestureDetector(
@@ -146,8 +147,8 @@ class PollChoiceView extends StatelessWidget {
                   )
                 : Container(height: 36),
             AnimatedPositioned(
-                child: Text(text, style: Theme.of(context).textTheme.bodyText1),
-                top: 7,
+                child: Text(text, style: textTheme.bodyText2),
+                top: 8,
                 left: voted != null ? 86 : 10,
                 duration: Duration(milliseconds: 400),
                 curve: Curves.linear),
@@ -156,21 +157,21 @@ class PollChoiceView extends StatelessWidget {
               duration: const Duration(milliseconds: 600),
               curve: Curves.easeIn,
               child: Container(
-                  padding: EdgeInsets.only(top: 7),
+                  padding: EdgeInsets.only(top: 8),
                   width: 75,
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[Text(votePercentage + '   |', style: Theme.of(context).textTheme.bodyText1)])),
+                      children: <Widget>[Text(votePercentage + '   |', style: textTheme.bodyText2)])),
             ),
             AnimatedOpacity(
               opacity: voted == index ? 1 : 0,
               duration: const Duration(milliseconds: 600),
               curve: Curves.easeIn,
               child: Container(
-                  padding: EdgeInsets.fromLTRB(0, 4, 8, 0),
+                  padding: EdgeInsets.fromLTRB(0, 6, 8, 0),
                   alignment: Alignment.centerRight,
                   width: double.infinity,
-                  child: Icon(Icons.check_circle_outline_sharp, size: 23, color: colorScheme.primaryContainer)),
+                  child: Icon(Icons.check_circle_outline_sharp, size: 23, color: colorScheme.primary)),
             )
           ])),
     );

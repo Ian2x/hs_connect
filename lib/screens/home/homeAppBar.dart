@@ -63,21 +63,34 @@ class HomeAppBar extends SliverPersistentHeaderDelegate {
                   ),
                 ),
                 Positioned(
-                    right: 10,
-                    top: 13,
-                    child: GestureDetector(
-                        onTap: () {
-                          showModalBottomSheet(
-                              context: context,
-                              isScrollControlled: true,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(20),
-                              )),
-                              builder: (context) => SearchSelectionSheet(
-                                  initialSearchByTrending: searchByTrending, toggleSearch: toggleSearch));
-                        },
-                        child: Icon(Icons.sort_rounded, size: 25)))
+                    right: 15,
+                    top: 14,
+                    child: Container(
+                      padding: EdgeInsets.fromLTRB(10, 2, 10, 4),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: currUserData.domainColor ?? colorScheme.primary
+                      ),
+                      child: GestureDetector(
+                          onTap: () {
+                            showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(12),
+                                )),
+                                builder: (context) => SearchSelectionSheet(
+                                    initialSearchByTrending: searchByTrending, toggleSearch: toggleSearch));
+                          },
+                          child: Row(
+                            children: [
+                              Text(searchByTrending ? "Hottest" : "Newest", style: textTheme.headline6?.copyWith(fontSize: 17, color: colorScheme.brightness == Brightness.light ? colorScheme.surface : colorScheme.onSurface)),
+                              SizedBox(width: 5),
+                              Icon(Icons.sort_rounded, size: 22, color: colorScheme.brightness == Brightness.light ? colorScheme.surface : colorScheme.onSurface),
+                            ],
+                          )),
+                    ))
               ],
             ),
           ),

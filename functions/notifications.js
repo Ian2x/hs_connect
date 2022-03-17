@@ -16,9 +16,9 @@ async function notificationTitle(notification) {
         case "commentToPost":
             var sourceUser = await realRef(notification.sourceUserRef).get();
             if (!sourceUser.exists) {
-                return "Someone commented on your post";
+                return "Someone commented on your message";
             } else {
-                return sourceUser.get("fundamentalName") + " commented on your post:";
+                return sourceUser.get("fundamentalName") + " commented on your message:";
             }
         case "replyToReply":
             var sourceUser = await realRef(notification.sourceUserRef).get();
@@ -43,7 +43,7 @@ async function notificationTitle(notification) {
         case "fromMe":
             return "The team at convo have a message:";
         case "featuredPost":
-            return "Featured post:";
+            return "Featured message:";
         default:
             return "[Error: unknown notification]";
     }
@@ -75,9 +75,9 @@ function notificationBody(notification) {
             }
         case "postVotes":
             if (notification.extraData=="1") {
-                return "Your post got " + notification.extraData + " like!";
+                return "Your message got " + notification.extraData + " like!";
             } else {
-                return "Your post got " + notification.extraData + " likes!";
+                return "Your message got " + notification.extraData + " likes!";
             }
         case "fromMe":
             return notification.extraData;

@@ -32,7 +32,6 @@ class DeletePostSheet extends StatefulWidget {
 }
 
 class _DeletePostSheetState extends State<DeletePostSheet> with TickerProviderStateMixin {
-  static const double iconSize = 20;
   late AnimationController controller;
   bool disposeController = true;
 
@@ -91,11 +90,11 @@ class _DeletePostSheetState extends State<DeletePostSheet> with TickerProviderSt
               },
               child: Row(
                 children: [
-                  Icon(Icons.delete_rounded, color: colorScheme.primary, size: iconSize),
+                  Icon(Icons.delete_rounded, color: colorScheme.primary),
                   SizedBox(width: 20),
                   Text(
                     "Delete",
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.primaryContainer),
+                    style: Theme.of(context).textTheme.headline6?.copyWith(color: colorScheme.primary),
                   ),
                 ],
               ),

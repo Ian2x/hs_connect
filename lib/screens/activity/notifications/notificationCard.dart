@@ -91,9 +91,11 @@ class _NotificationCardState extends State<NotificationCard> {
 
     if (widget.myNotification.myNotificationType == MyNotificationType.fromMe) {
       return Container(
-          margin: EdgeInsets.only(top: 2.5),
+          decoration: BoxDecoration(
+              color: colorScheme.surface,
+              border: Border(top: BorderSide(color: colorScheme.background, width: 2.5))
+          ),
           padding: EdgeInsets.fromLTRB(14, 13, 14, 15),
-          color: colorScheme.surface,
           child: Row(
             children: [
               SizedBox(
@@ -121,10 +123,12 @@ class _NotificationCardState extends State<NotificationCard> {
 
     if (userData == null || sourceUserName == null || postGroupName == null) {
       return Container(
-          margin: EdgeInsets.only(top: 2.5),
+          decoration: BoxDecoration(
+              color: colorScheme.surface,
+              border: Border(top: BorderSide(color: colorScheme.background, width: 2.5))
+          ),
           padding: EdgeInsets.fromLTRB(14, 13, 14, 15),
           height: 60,
-          color: colorScheme.surface,
           child: loading ? Loading(backgroundColor: Colors.transparent) : null);
     }
 
@@ -164,9 +168,11 @@ class _NotificationCardState extends State<NotificationCard> {
           }
         },
         child: Container(
-            margin: EdgeInsets.only(top: 2.5),
             padding: EdgeInsets.fromLTRB(14, 13, 14, 15),
-            color: colorScheme.surface,
+            decoration: BoxDecoration(
+                color: colorScheme.surface,
+                border: Border(top: BorderSide(color: colorScheme.background, width: 2.5))
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -187,13 +193,13 @@ class _NotificationCardState extends State<NotificationCard> {
                           children: <TextSpan>[
                             TextSpan(
                                 text: widget.myNotification.printA(sourceUserName!, postGroupName!),
-                                style: textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w600)),
+                                style: textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold)),
                             TextSpan(
                                 text: widget.myNotification.printB(sourceUserName!, postGroupName!),
                                 style: textTheme.bodyText2),
                             TextSpan(
                                 text: widget.myNotification.printC(sourceUserName!, postGroupName!),
-                                style: textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w600)),
+                                style: textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold)),
                             TextSpan(
                                 text: widget.myNotification.printD(sourceUserName!, postGroupName!),
                                 style: textTheme.bodyText2),

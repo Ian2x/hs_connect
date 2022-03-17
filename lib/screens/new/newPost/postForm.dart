@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:hs_connect/models/accessRestriction.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/userData.dart';
@@ -11,6 +12,7 @@ import 'package:hs_connect/shared/widgets/animatedSwitch.dart';
 import 'package:hs_connect/shared/widgets/deletableImage.dart';
 import 'package:hs_connect/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:hs_connect/shared/widgets/myLinkPreview.dart';
 import 'package:hs_connect/shared/widgets/picPickerButton.dart';
 import 'package:hs_connect/services/posts_database.dart';
 import 'package:hs_connect/shared/constants.dart';
@@ -24,7 +26,6 @@ const String emptyPollChoiceError = 'Can\'t create a poll with an empty choice';
 const String emptyTitleError = 'Can\'t create a post with an empty title';
 const String badLinkError = 'Please enter a valid URL link';
 const String spamPostError = 'Please wait 1 minute between posts';
-
 
 class PostForm extends StatefulWidget {
   final UserData currUserData;
@@ -53,6 +54,7 @@ class _PostFormState extends State<PostForm> {
   File? newFile;
   Widget? poll;
   String? link;
+  PreviewData? previewData;
   List<String>? pollChoices;
 
   // form values
@@ -124,8 +126,7 @@ class _PostFormState extends State<PostForm> {
       return Loading();
     }
 
-    Color userColor =
-        widget.currUserData.domainColor ?? colorScheme.onSurface;
+    Color userColor = widget.currUserData.domainColor ?? colorScheme.onSurface;
 
     return Stack(children: [
       SingleChildScrollView(
@@ -140,9 +141,7 @@ class _PostFormState extends State<PostForm> {
                 SizedBox(width: 12),
                 TextButton(
                   child: Text("Cancel",
-                      style: textTheme
-                          .subtitle1
-                          ?.copyWith(color: colorScheme.onSurface, fontWeight: FontWeight.w600)),
+                      style: textTheme.subtitle1?.copyWith(color: colorScheme.onSurface)),
                   onPressed: () {
                     Navigator.pop(context);
                   },
@@ -219,8 +218,12 @@ class _PostFormState extends State<PostForm> {
                         }
                       }
                       final lastPostCheck = Provider.of<UserData?>(context, listen: false);
-                      if (lastPostCheck != null && lastPostCheck.lastPostTime != null &&
-                          lastPostCheck.lastPostTime!.toDate().compareTo(DateTime.now().subtract(Duration(minutes: 1))) > 0) {
+                      if (lastPostCheck != null &&
+                          lastPostCheck.lastPostTime != null &&
+                          lastPostCheck.lastPostTime!
+                                  .toDate()
+                                  .compareTo(DateTime.now().subtract(Duration(minutes: 1))) >
+                              0) {
                         if (mounted) {
                           setState(() {
                             error = spamPostError;
@@ -272,7 +275,6 @@ class _PostFormState extends State<PostForm> {
                                 padding: EdgeInsets.only(bottom: 1, top: 1, right: 5),
                                 child: Text("Send",
                                     style: textTheme.subtitle1?.copyWith(
-                                        fontWeight: FontWeight.w600,
                                         color: _title != '' ? colorScheme.surface : userColor),
                                     maxLines: 1,
                                     softWrap: false,
@@ -300,8 +302,7 @@ class _PostFormState extends State<PostForm> {
                 child: Column(children: <Widget>[
                   error != null
                       ? FittedBox(
-                          child: Text(error!,
-                              style: textTheme.subtitle2?.copyWith(color: colorScheme.onSurface)))
+                          child: Text(error!, style: textTheme.subtitle2?.copyWith(color: colorScheme.onSurface)))
                       : Container(),
                   error != null ? SizedBox(height: 10) : Container(),
                   TextFormField(
@@ -312,9 +313,7 @@ class _PostFormState extends State<PostForm> {
                     focusNode: titleFocusNode,
                     textCapitalization: TextCapitalization.sentences,
                     decoration: InputDecoration(
-                      hintStyle: textTheme
-                          .headline5
-                          ?.copyWith(color: colorScheme.primaryContainer),
+                      hintStyle: textTheme.headline5?.copyWith(color: colorScheme.primary),
                       border: InputBorder.none,
                       hintText: "What's up?",
                     ),
@@ -336,7 +335,7 @@ class _PostFormState extends State<PostForm> {
                           width: MediaQuery.of(context).size.width * 0.9,
                           decoration: ShapeDecoration(
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
+                              borderRadius: BorderRadius.circular(8),
                               side: BorderSide(
                                 color: colorScheme.onError,
                                 width: 1,
@@ -345,24 +344,25 @@ class _PostFormState extends State<PostForm> {
                           ),
                           child: TextFormField(
                             style: textTheme.bodyText2?.copyWith(fontSize: 16),
-                            decoration: new InputDecoration(
-                                fillColor: colorScheme.surface,
+                            decoration: InputDecoration(
+                                fillColor: Colors.transparent,
                                 filled: true,
                                 hintText: 'https://website.com',
                                 isCollapsed: true,
                                 border: InputBorder.none,
                                 enabledBorder: InputBorder.none,
                                 focusedBorder: InputBorder.none,
-                                hintStyle: textTheme
-                                    .bodyText2
-                                    ?.copyWith(fontSize: 16, color: colorScheme.primary),
+                                hintStyle: textTheme.bodyText2?.copyWith(fontSize: 16, color: colorScheme.primary),
                                 contentPadding: EdgeInsets.symmetric(horizontal: 10),
                                 suffixIcon: IconButton(
                                   padding: EdgeInsets.zero,
                                   constraints: BoxConstraints(),
                                   onPressed: () {
                                     if (mounted) {
-                                      setState(() => link = null);
+                                      setState(() {
+                                        link = null;
+                                        previewData = null;
+                                      });
                                     }
                                   },
                                   icon: Icon(Icons.close, size: 20),
@@ -382,6 +382,23 @@ class _PostFormState extends State<PostForm> {
                           ),
                         )
                       : Container(),
+                  link != null && isURL(link) ? Container(
+                    padding: EdgeInsets.only(top: 10),
+                    child: MyLinkPreview(
+                        enableAnimation: true,
+                        onPreviewDataFetched: (data) {
+                          if (mounted) {
+                            setState(() => previewData = data);
+                          }
+                        },
+                        metadataTitleStyle: textTheme.subtitle1?.copyWith(fontWeight: FontWeight.bold),
+                        metadataTextStyle: textTheme.subtitle1?.copyWith(fontSize: 14),
+                        previewData: previewData,
+                        text: link!,
+                        textStyle: textTheme.subtitle2,
+                        linkStyle: textTheme.subtitle2,
+                        width: MediaQuery.of(context).size.width - 40),
+                  ) : Container(),
                   newFile != null
                       ? Semantics(
                           label: 'new_post_pic_image',
@@ -405,103 +422,105 @@ class _PostFormState extends State<PostForm> {
       Positioned(
           bottom: 0,
           left: 0,
-          child: Container(
-            color: widget.currUserData.domainColor ?? colorScheme.onSurface,
-            padding: EdgeInsets.only(top: bottomGradientThickness),
-            width: MediaQuery.of(context).size.width,
-            child: Container(
-              color: colorScheme.surface,
-              padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
-              child: Row(children: <Widget>[
-                SizedBox(width: 10),
-                picPickerButton(
-                    iconSize: 30,
-                    color: newFile == null ? colorScheme.primary : userColor,
-                    setPic: ((File? f) {
+          child: Column(
+            children: [
+              Container(width: MediaQuery.of(context).size.width, child: MyDivider()),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                color: colorScheme.surface,
+                padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+                child: Row(children: <Widget>[
+                  SizedBox(width: 10),
+                  picPickerButton(
+                      iconSize: 30,
+                      color: newFile == null ? colorScheme.primary : userColor,
+                      setPic: ((File? f) {
+                        if (mounted) {
+                          setState(() {
+                            newFile = f;
+                            poll = null;
+                            link = null;
+                            previewData = null;
+                          });
+                        }
+                      }),
+                      context: context,
+                      maxHeight: 1200,
+                      maxWidth: 1200),
+                  SizedBox(width: 2),
+                  IconButton(
+                    onPressed: () {
                       if (mounted) {
                         setState(() {
-                          newFile = f;
-                          poll = null;
+                          pollChoices = [];
+                          pollChoices!.add('');
+                          pollChoices!.add('');
+                          poll = NewPoll(onDeletePoll: () {
+                            if (mounted) {
+                              setState(() {
+                                poll = null;
+                                pollChoices = null;
+                                if (error == emptyPollChoiceError) {
+                                  error = null;
+                                }
+                              });
+                            }
+                          }, onUpdatePoll: (int index, String newChoice) {
+                            if (mounted) {
+                              setState(() {
+                                pollChoices![index] = newChoice;
+                                if (error == emptyPollChoiceError) {
+                                  for (String choice in pollChoices!) {
+                                    if (choice == '') return;
+                                  }
+                                }
+                                error = null;
+                              });
+                            }
+                          }, onAddPollChoice: () {
+                            if (mounted) {
+                              setState(() {
+                                pollChoices!.add('');
+                              });
+                            }
+                          });
+                          newFile = null;
                           link = null;
+                          previewData = null;
                         });
                       }
-                    }),
-                    context: context,
-                    maxHeight: 1200,
-                    maxWidth: 1200),
-                SizedBox(width: 2),
-                IconButton(
-                  onPressed: () {
-                    if (mounted) {
-                      setState(() {
-                        pollChoices = [];
-                        pollChoices!.add('');
-                        pollChoices!.add('');
-                        poll = NewPoll(onDeletePoll: () {
-                          if (mounted) {
-                            setState(() {
-                              poll = null;
-                              pollChoices = null;
-                              if (error == emptyPollChoiceError) {
-                                error = null;
-                              }
-                            });
-                          }
-                        }, onUpdatePoll: (int index, String newChoice) {
-                          if (mounted) {
-                            setState(() {
-                              pollChoices![index] = newChoice;
-                              if (error == emptyPollChoiceError) {
-                                for (String choice in pollChoices!) {
-                                  if (choice == '') return;
-                                }
-                              }
-                              error = null;
-                            });
-                          }
-                        }, onAddPollChoice: () {
-                          if (mounted) {
-                            setState(() {
-                              pollChoices!.add('');
-                            });
-                          }
+                    },
+                    icon: Icon(Icons.assessment, size: 30, color: poll == null ? colorScheme.primary : userColor),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      if (mounted) {
+                        setState(() {
+                          link = '';
+                          previewData = null;
+                          newFile = null;
+                          poll = null;
                         });
-                        newFile = null;
-                        link = null;
-                      });
-                    }
-                  },
-                  icon: Icon(Icons.assessment, size: 30, color: poll == null ? colorScheme.primary : userColor),
-                ),
-                IconButton(
-                  onPressed: () {
-                    if (mounted) {
-                      setState(() {
-                        link = '';
-                        newFile = null;
-                        poll = null;
-                      });
-                    }
-                  },
-                  icon: Icon(Icons.link_rounded, size: 30, color: link == null ? colorScheme.primary : userColor),
-                ),
-                Spacer(),
-                Text("Mature",
-                    style: textTheme
-                        .subtitle1
-                        ?.copyWith(color: colorScheme.primary, fontWeight: FontWeight.w500)),
-                SizedBox(width: 10),
-                AnimatedSwitchSmall(
-                  initialState: isMature,
-                  onToggle: () {
-                    if (mounted) {
-                      setState(() => isMature = !isMature);
-                    }
-                  },
-                ),
-                SizedBox(width: 10),
-              ]),
-            ),
+                      }
+                    },
+                    icon: Icon(Icons.link_rounded, size: 30, color: link == null ? colorScheme.primary : userColor),
+                  ),
+                  Spacer(),
+                  Text("Mature",
+                      style: textTheme.subtitle1?.copyWith(color: colorScheme.primary)),
+                  SizedBox(width: 10),
+                  AnimatedSwitchSmall(
+                    initialState: isMature,
+                    onToggle: () {
+                      if (mounted) {
+                        setState(() => isMature = !isMature);
+                      }
+                    },
+                  ),
+                  SizedBox(width: 10),
+                ]),
+              ),
+            ],
           )),
     ]);
   }

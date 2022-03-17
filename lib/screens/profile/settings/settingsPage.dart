@@ -119,7 +119,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         height: 55,
                         alignment: Alignment.center,
                         child: Row(children: [
-                          Text("Show mature posts", style: textTheme.subtitle1),
+                          Text("Show mature", style: textTheme.subtitle1),
                           Spacer(),
                           showMaturePosts != null
                               ? AnimatedSwitch(
@@ -258,7 +258,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                           width: 1,
                                           color: _feedbackText != "" ? colorScheme.onSurface : colorScheme.primary)),
                                   child: Text("Submit",
-                                      style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                                      style: Theme.of(context).textTheme.subtitle1?.copyWith(
                                           color: _feedbackText != "" ? colorScheme.surface : colorScheme.primary))),
                               onPressed: () async {
                                 // check feedback isn't empty

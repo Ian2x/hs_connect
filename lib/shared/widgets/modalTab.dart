@@ -12,7 +12,7 @@ class ModalTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    Color color= Theme.of(context).colorScheme.primaryContainer;
+    Color color= Theme.of(context).colorScheme.primary;
 
     return Container(
       margin: EdgeInsets.fromLTRB(0, 15, 0,

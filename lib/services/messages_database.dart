@@ -30,13 +30,18 @@ class MessagesDatabaseService {
     // find and delete old version
     userMessages.forEach((UM) {
       if (UM.otherUserRef == otherUserRef) {
-        if (newLastMessage == null)
+        if (newLastMessage == null) {
           newLastMessage = UM.lastMessage;
-        else if (newLastMessage!.compareTo(UM.lastMessage) < 0) newLastMessage = UM.lastMessage;
+        } else if (newLastMessage!.compareTo(UM.lastMessage) < 0) {
+          newLastMessage = UM.lastMessage;
+        }
         if (UM.lastViewed != null) {
-          if (newLastViewed == null)
+          if (newLastViewed == null) {
             newLastViewed = UM.lastViewed;
-          else if (newLastViewed!.compareTo(UM.lastViewed!) < 0) newLastViewed = UM.lastViewed;
+          }
+          else if (newLastViewed!.compareTo(UM.lastViewed!) < 0) {
+            newLastViewed = UM.lastViewed;
+          }
         }
         userRef.update({
           C.userMessages: FieldValue.arrayRemove([UM.asMap()])

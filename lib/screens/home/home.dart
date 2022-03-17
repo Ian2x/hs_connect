@@ -30,6 +30,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   bool isDomain = true;
   bool searchByTrending = true;
+  ScrollController scrollController = ScrollController();
 
   void toggleSearch(bool newSearchByTrending) {
     if (mounted) {
@@ -45,7 +46,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     subscribeToDomainTopicAndAllowAlerts();
     getSearchByTrending();
     saveTokenToDatabase();
+    updateAnalytics();
     super.initState();
+  }
+
+  void updateAnalytics() async {
+    await widget.currUserData.userRef.update({"lastHomeView": Timestamp.now()});
   }
 
   void handleNewUser() async {
@@ -59,7 +65,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             final colorScheme = Theme.of(context).colorScheme;
             String domain = widget.currUserData.fullDomainName ?? widget.currUserData.domain;
             return AlertDialog(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
               contentPadding: EdgeInsets.fromLTRB(20, 0, 20, 30),
               backgroundColor: colorScheme.surface,
               titlePadding: EdgeInsets.fromLTRB(20, 30, 20, 0),
@@ -191,6 +197,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
@@ -208,15 +220,16 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             );
           },
           child: Container(
-              height: 40,
-              width: 50,
+              height: 45,
+              width: 55,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                  color: widget.currUserData.domainColor ?? colorScheme.onSurface,
+                  color: widget.currUserData.domainColor ?? colorScheme.primary,
                   borderRadius: BorderRadius.all(Radius.circular(10.0))),
-              child: Icon(Icons.add_rounded, color: colorScheme.surface, size: 26))),
+              child: Icon(Icons.add_rounded, color: colorScheme.brightness == Brightness.light ? colorScheme.surface : colorScheme.onSurface, size: 26))),
       body: NestedScrollView(
         floatHeaderSlivers: true,
+        controller: scrollController,
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [
             SliverPersistentHeader(
@@ -251,7 +264,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       ),
       bottomNavigationBar: MyNavigationBar(
         currentIndex: 0,
+        scrollController: scrollController,
       ),
+      extendBody: true,
       resizeToAvoidBottomInset: false,
     );
   }

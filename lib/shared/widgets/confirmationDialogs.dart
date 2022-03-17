@@ -16,6 +16,7 @@ confirmationDialog(BuildContext context, {required String content, required Void
   );
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
     title: Text("Are you sure?"),
     content: Text(content),
     actions: [

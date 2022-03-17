@@ -56,7 +56,7 @@ class _RegisterNumberState extends State<RegisterNumber> {
                         padding: EdgeInsets.symmetric(horizontal: 20),
                         child: Text(
                           'Your phone number is...',
-                          style: ThemeText.quicksand(fontWeight: FontWeight.w700, fontSize: 26, color: Colors.black),
+                          style: ThemeText.quicksand(fontWeight: FontWeight.w700, fontSize: 29, color: Colors.black),
                         ),
                       ),
                       SizedBox(height: 20),

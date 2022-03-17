@@ -12,7 +12,7 @@ class Loading extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Container(
-      color: backgroundColor ?? colorScheme.background,
+      color: backgroundColor ?? colorScheme.surface,
       child: Center(
         child: SpinKitPulse(
           color: spinColor ?? colorScheme.primary,

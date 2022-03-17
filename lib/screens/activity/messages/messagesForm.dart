@@ -92,7 +92,7 @@ class _MessagesFormState extends State<MessagesForm> {
             textCapitalization: TextCapitalization.sentences,
             keyboardType: TextInputType.multiline,
             maxLines: null,
-            style: Theme.of(context).textTheme.subtitle1,
+            style: Theme.of(context).textTheme.bodyText1,
             controller: textController,
             decoration: messageInputDecoration(
                 context: context,

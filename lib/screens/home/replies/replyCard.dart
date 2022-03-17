@@ -5,7 +5,6 @@ import 'package:hs_connect/models/report.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileSheet.dart';
 import 'package:hs_connect/services/user_data_database.dart';
-import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/reports/reportSheet.dart';
 
@@ -146,7 +145,7 @@ class _ReplyCardState extends State<ReplyCard> {
           SizedBox(height: 4),
           SizedBox(
             width: (MediaQuery.of(context).size.width) * .85,
-            child: Text(widget.reply.text, style: textTheme.bodyText1?.copyWith(fontSize: 20)),
+            child: Text(widget.reply.text, style: textTheme.bodyText1?.copyWith(fontSize: 18)),
           ),
           SizedBox(height: 7),
           Row(

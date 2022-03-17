@@ -12,7 +12,6 @@ import 'package:hs_connect/screens/home/postView/pollView.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/profileSheet.dart';
 import 'package:hs_connect/services/polls_database.dart';
 import 'package:hs_connect/services/user_data_database.dart';
-import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/tools/convertTime.dart';
 import 'package:hs_connect/shared/tools/helperFunctions.dart';
 import 'package:hs_connect/shared/widgets/expandableImage.dart';
@@ -81,6 +80,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
     PostLikesManager postLikesManager = Provider.of<PostLikesManager>(context);
     final leftPadding = 15.0;
     final rightPadding = 5.0;
@@ -117,14 +117,13 @@ class _PostTitleCardState extends State<PostTitleCard> {
                 },
                 child: RichText(
                   text: TextSpan(
-                      style: Theme.of(context)
-                          .textTheme
+                      style: textTheme
                           .subtitle1
                           ?.copyWith(color: colorScheme.primary),
                       children: [
-                        TextSpan(text: "from " + localCreatorName + " • "),
+                        TextSpan(text: localCreatorName + " • "),
                         TextSpan(
-                            style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                            style: textTheme.subtitle1?.copyWith(
                                 color: creatorColor ?? colorScheme.primary),
                             text: localCreatorGroup),
                         TextSpan(text: " • " + convertTime(widget.post.createdAt.toDate()))
@@ -134,10 +133,9 @@ class _PostTitleCardState extends State<PostTitleCard> {
             widget.post.mature
                 ? Text(
                     "Mature",
-                    style: Theme.of(context)
-                        .textTheme
-                        .subtitle2
-                        ?.copyWith(color: colorScheme.primary, fontSize: postCardDetailSize + 1),
+                    style: textTheme
+                        .subtitle1
+                        ?.copyWith(color: colorScheme.primary),
                   )
                 : Container(),
             widget.post.creatorRef != widget.currUserData.userRef
@@ -164,7 +162,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
           SelectableLinkify(
               text: widget.post.title,
               onOpen: openLink,
-              style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 21)),
+              style: textTheme.headline6?.copyWith(fontSize: 21)),
           SizedBox(height: 12),
           widget.post.link != null
               ? Container(
@@ -176,12 +174,12 @@ class _PostTitleCardState extends State<PostTitleCard> {
                         setState(() => previewData = data);
                       }
                     },
-                    metadataTitleStyle: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.bold),
-                    metadataTextStyle: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 14),
+                    metadataTitleStyle: textTheme.subtitle1?.copyWith(fontWeight: FontWeight.bold),
+                    metadataTextStyle: textTheme.subtitle1?.copyWith(fontSize: 14),
                     previewData: previewData,
                     text: widget.post.link!,
-                    textStyle: Theme.of(context).textTheme.subtitle2,
-                    linkStyle: Theme.of(context).textTheme.subtitle2,
+                    textStyle: textTheme.subtitle2,
+                    linkStyle: textTheme.subtitle2,
                     width: contentWidth,
                   ),
                 )
@@ -205,7 +203,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
                 widget.post.numComments + widget.post.numReplies < 2
                     ? 'Comments'
                     : (widget.post.numComments + widget.post.numReplies).toString() + ' Comments',
-                style: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w600),
+                style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
               ),
               Spacer(),
               LikeDislikePostStateful(
