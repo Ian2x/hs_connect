@@ -25,7 +25,6 @@ class ReportSheet extends StatefulWidget {
 }
 
 class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin {
-  static const double iconSize = 20;
   late AnimationController controller;
 
   @override
@@ -58,7 +57,7 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
             ? 187 + bottomSpace
             : 139 + bottomSpace,
       ),
-      padding: EdgeInsets.fromLTRB(13, 5, 0, bottomSpace),
+      padding: EdgeInsets.fromLTRB(13, 5, 13, bottomSpace),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -77,15 +76,14 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
             },
             child: Row(
               children: [
-                Icon(Icons.flag, color: colorScheme.primary, size: iconSize),
+                Icon(Icons.flag, color: colorScheme.primary),
                 SizedBox(width: 20),
                 Text(
                   "Report " + widget.reportType.string,
                   style: Theme
                       .of(context)
                       .textTheme
-                      .subtitle1
-                      ?.copyWith(color: colorScheme.primaryContainer),
+                      .headline6?.copyWith(color: colorScheme.primary),
                 ),
               ],
             ),
@@ -107,15 +105,14 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
               },
               child: Row(
                 children: [
-                  Icon(Icons.remove_circle_rounded, color: colorScheme.primary, size: iconSize),
+                  Icon(Icons.remove_circle_rounded, color: colorScheme.primary),
                   SizedBox(width: 20),
                   Text(
                     "Hide post",
                     style: Theme
                         .of(context)
                         .textTheme
-                        .subtitle1
-                        ?.copyWith(color: colorScheme.primaryContainer),
+                        .headline6?.copyWith(color: colorScheme.primary),
                   ),
                 ],
               ),
@@ -140,15 +137,14 @@ class _ReportSheetState extends State<ReportSheet> with TickerProviderStateMixin
             },
             child: Row(
               children: [
-                Icon(Icons.no_accounts_rounded, color: colorScheme.primary, size: iconSize),
+                Icon(Icons.no_accounts_rounded, color: colorScheme.primary),
                 SizedBox(width: 20),
                 Text(
                   "Block user",
                   style: Theme
                       .of(context)
                       .textTheme
-                      .subtitle1
-                      ?.copyWith(color: colorScheme.primaryContainer),
+                      .headline6?.copyWith(color: colorScheme.primary),
                 ),
               ],
             ),

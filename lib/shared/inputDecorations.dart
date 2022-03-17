@@ -74,7 +74,7 @@ InputDecoration messageInputDecoration(
     required Color activeColor}) {
   final colorScheme = Theme.of(context).colorScheme;
   return InputDecoration(
-    hintText: 'Message...',
+    hintText: 'Chat...',
     fillColor: colorScheme.surface,
     filled: true,
     hintStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: colorScheme.primary),

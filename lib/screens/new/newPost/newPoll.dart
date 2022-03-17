@@ -104,12 +104,12 @@ class _NewPollState extends State<NewPoll> {
                         inputFormatters: [
                           LengthLimitingTextInputFormatter(25),
                         ],
-                        style: Theme.of(context).textTheme.subtitle2,
+                        style: Theme.of(context).textTheme.bodyText2,
                         maxLines: 1,
                         decoration: InputDecoration(
                             suffixText: '${choicesLengths[trueIndex].toString()}/${25.toString()}',
-                            suffixStyle: Theme.of(context).textTheme.subtitle2,
-                            hintStyle: Theme.of(context).textTheme.subtitle1,
+                            suffixStyle: Theme.of(context).textTheme.bodyText2,
+                            hintStyle: Theme.of(context).textTheme.bodyText2,
                             border: InputBorder.none,
                             hintText: "Option " + (trueIndex + 1).toString()),
                         validator: (val) {

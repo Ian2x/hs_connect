@@ -115,11 +115,13 @@ class _MyLinkPreviewState extends State<MyLinkPreview> with SingleTickerProvider
   void didUpdateWidget(covariant MyLinkPreview oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (!isFetchingPreviewData && widget.previewData == null) {
+    final bool diffLink = oldWidget.text!=widget.text;
+
+    if (!isFetchingPreviewData && (widget.previewData == null || diffLink)) {
       _fetchData(widget.text);
     }
 
-    if (widget.previewData != null && oldWidget.previewData == null && mounted) {
+    if (widget.previewData != null && (oldWidget.previewData == null || diffLink) && mounted) {
       setState(() {
         shouldAnimate = true;
       });
@@ -221,19 +223,23 @@ class _MyLinkPreviewState extends State<MyLinkPreview> with SingleTickerProvider
         width: widget.width,
         decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.background,
+            borderRadius: BorderRadius.circular(8),
             border: Border.all(width: 1, color: Theme.of(context).colorScheme.onError)),
         padding: isMinimized ? null : EdgeInsets.symmetric(vertical: 10),
-        child: Column(
-          children: [
-            if (widget.header != null)
-              Text(
-                widget.header!,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: widget.headerStyle,
-              ),
-            if (child != null) shouldAnimate ? _animated(child) : child,
-          ],
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Column(
+            children: [
+              if (widget.header != null)
+                Text(
+                  widget.header!,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: widget.headerStyle,
+                ),
+              if (child != null) shouldAnimate ? _animated(child) : child,
+            ],
+          ),
         ),
       ),
     );

@@ -68,7 +68,7 @@ class LikeDislikePost extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 9),
             child: Text(
               (postLikesManager.likeCount - postLikesManager.dislikeCount).toString(),
-              style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 19),
+              style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 17),
             ),
           ),
         ),

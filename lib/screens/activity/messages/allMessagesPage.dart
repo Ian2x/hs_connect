@@ -84,7 +84,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
       return Container(
           padding: EdgeInsets.only(top: 50),
           alignment: Alignment.topCenter,
-          child: Text("No messages :/", style: textTheme.headline6?.copyWith(fontWeight: FontWeight.normal)));
+          child: Text("No chats :/", style: textTheme.headline6));
     }
 
     // sorted by latest first
@@ -132,15 +132,21 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                 alignment: AlignmentDirectional.centerStart,
                 children: <Widget>[
                   Container(
-                      margin: EdgeInsets.only(top: index == 0 ? 4.5 : 2, bottom: index == UMUDcache.length - 1 ? 2.5 : 0),
+                      // margin: EdgeInsets.only(top: index == 0 ? 4.5 : 2, bottom: index == UMUDcache.length - 1 ? 2.5 : 0),
+                      decoration: BoxDecoration(
+                          color: colorScheme.surface,
+                          border: Border(
+                              bottom: BorderSide(color: colorScheme.background, width: 2.5),
+                              top: index == 0 ? BorderSide(color: colorScheme.background, width: 2.5) : BorderSide.none
+                          )
+                      ),
                       padding: EdgeInsets.fromLTRB(20, 13, 14, 15),
-                      color: colorScheme.surface,
                       child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
                         ProfileImage(backgroundColor: otherUser.domainColor, size: 33),
                         SizedBox(width: 14),
                         Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                           Text(otherUser.fundamentalName,
-                              style: textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold)),
+                              style: textTheme.bodyText2),
                           SizedBox(height: 4),
                           Text(otherUser.fullDomainName ?? otherUser.domain,
                               style: textTheme.bodyText2?.copyWith(
@@ -152,9 +158,9 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                             Spacer(),
                             isToday(UMUDcache[index].UM!.lastMessage.toDate())
                                 ? Text(DateFormat.jm().format(UMUDcache[index].UM!.lastMessage.toDate()),
-                                    style: textTheme.bodyText2?.copyWith(color: colorScheme.primary))
+                                    style: textTheme.subtitle2?.copyWith(color: colorScheme.primary))
                                 : Text(DateFormat.yMd().format(UMUDcache[index].UM!.lastMessage.toDate()),
-                                    style: textTheme.bodyText2?.copyWith(color: colorScheme.primary))
+                                    style: textTheme.subtitle2?.copyWith(color: colorScheme.primary))
                           ])
                         ]))
                       ])),

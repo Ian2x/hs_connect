@@ -40,6 +40,7 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     if (notifications == null) {
       return Loading();
     }
@@ -59,18 +60,17 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
                   padding: EdgeInsets.only(top: 50),
                   alignment: Alignment.topCenter,
                   child: Text("No notifications",
-                      style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.normal)));
+                      style: Theme.of(context).textTheme.headline6));
             }
             int trueIndex = numberNotifications - index - 1;
             if (widget.currUserData.blockedUserRefs.contains(notifications![trueIndex].sourceUserRef)) {
               return Container();
             }
-            if (trueIndex == numberNotifications - 1) {
+            if (trueIndex == 0) {
               return Container(
-                  padding: EdgeInsets.only(top: 2.5), child: NotificationCard(myNotification: notifications![trueIndex]));
-            } else if (trueIndex == 0) {
-              return Container(
-                  padding: EdgeInsets.only(bottom: 2.5),
+                  decoration: BoxDecoration(
+                      color: colorScheme.surface,
+                      border: Border(bottom: BorderSide(color: colorScheme.background, width: 2.5))),
                   child: NotificationCard(myNotification: notifications![trueIndex]));
             } else {
               return NotificationCard(myNotification: notifications![trueIndex]);

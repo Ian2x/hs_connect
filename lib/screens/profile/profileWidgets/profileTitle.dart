@@ -24,6 +24,9 @@ class ProfileTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -42,11 +45,24 @@ class ProfileTitle extends StatelessWidget {
                 Text(
                   otherUserFundName,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headline5?.copyWith(fontWeight: FontWeight.w600, fontSize: 19),
+                  style: textTheme.headline5?.copyWith(fontWeight: FontWeight.w600),
                 ),
-                SizedBox(height: 5),
-                Text(otherUserFullDomain + " ∙ " + otherUserScore.toString() + " Likes",
-                    style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 17)),
+                SizedBox(height: 3),
+                Row(
+                  children: [
+                    Text(otherUserFullDomain,
+                        style: textTheme.headline6),
+                    SizedBox(width: 15),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(10, 2, 10, 4),
+                      decoration: BoxDecoration(
+                        color: otherUserDomainColor ?? colorScheme.primary,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(otherUserScore.toString() + " Likes", style: textTheme.headline6?.copyWith(color: colorScheme.brightness==Brightness.light ? colorScheme.surface : null))
+                    )
+                  ]
+                ),
               ],
             ),
           ],
@@ -56,7 +72,7 @@ class ProfileTitle extends StatelessWidget {
             ? Column(
                 children: [
                   IconButton(
-                      icon: Icon(Icons.more_horiz, color: Theme.of(context).colorScheme.primaryContainer),
+                      icon: Icon(Icons.more_horiz, color: Theme.of(context).colorScheme.primary),
                       constraints: BoxConstraints(),
                       onPressed: () {
                         showModalBottomSheet(

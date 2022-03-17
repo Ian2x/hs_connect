@@ -2,23 +2,22 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/activity/activityPage.dart';
-import 'package:hs_connect/screens/new/newPost/newPost.dart';
 import 'package:hs_connect/screens/profile/profilePage.dart';
 import 'package:hs_connect/services/my_notifications_database.dart';
 import 'package:hs_connect/shared/widgets/thickerIcons.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/myNotification.dart';
-import '../constants.dart';
 import '../pageRoutes.dart';
 
 import 'loading.dart';
 
 class MyNavigationBar extends StatefulWidget {
   final int currentIndex;
+  final ScrollController? scrollController;
 
   const MyNavigationBar(
-      {Key? key, required this.currentIndex})
+      {Key? key, required this.currentIndex, this.scrollController})
       : super(key: key);
 
   @override
@@ -39,62 +38,58 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
     return Stack(
       children: [
         Container(
-          color: colorScheme.primary,
-          padding: EdgeInsets.only(top: bottomGradientThickness),
-          child: Container(
-            color: colorScheme.surface,
-            height: 45 + MediaQuery.of(context).padding.bottom,
-            child: BottomNavigationBar(
-              backgroundColor: colorScheme.surface,
-              type: BottomNavigationBarType.fixed,
-              showSelectedLabels: false,
-              showUnselectedLabels: false,
-              currentIndex: widget.currentIndex,
-              selectedItemColor: colorScheme.onSurface,
-              unselectedItemColor: colorScheme.primary,
-              selectedFontSize: 1,
-              unselectedFontSize: 1,
-              onTap: (int index) async {
-                if (index == 0 && user != null) {
-                  if (widget.currentIndex == 0) {
-                    // Do nothing
-                  } else {
-                    Navigator.pop(context);
-                  }
-                } else if (index == 1) {
-                  if (widget.currentIndex == 0) {
-                    Navigator.push(
-                      context,
-                      NoAnimationMaterialPageRoute(
-                          builder: (context) => ActivityPage()),
-                    );
-                  } else {
-                    Navigator.pushReplacement(
-                      context,
-                      NoAnimationMaterialPageRoute(
-                          builder: (context) => ActivityPage()),
-                    );
-                  }
-                } else if (index == 2) {
-                  if (widget.currentIndex == 0) {
-                    Navigator.push(
-                      context,
-                      NoAnimationMaterialPageRoute(builder: (context) => ProfilePage(currUserData: userData)),
-                    );
-                  } else {
-                    Navigator.pushReplacement(
-                      context,
-                      NoAnimationMaterialPageRoute(builder: (context) => ProfilePage(currUserData: userData)),
-                    );
-                  }
+          color: colorScheme.surface,
+          height: 45 + MediaQuery.of(context).padding.bottom,
+          child: BottomNavigationBar(
+            backgroundColor: colorScheme.surface,
+            type: BottomNavigationBarType.fixed,
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            currentIndex: widget.currentIndex,
+            selectedItemColor: colorScheme.onSurface,
+            unselectedItemColor: colorScheme.primary,
+            selectedFontSize: 1,
+            unselectedFontSize: 1,
+            onTap: (int index) async {
+              if (index == 0 && user != null) {
+                if (widget.currentIndex == 0) {
+                  widget.scrollController?.animateTo(0, duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
+                } else {
+                  Navigator.pop(context);
                 }
-              },
-              items: <BottomNavigationBarItem>[
-                BottomNavigationBarItem(label: '', icon: Icon(Thicker.home_square, size: 25)),
-                BottomNavigationBarItem(label: '', icon: Icon(Thicker.notification, size: 25)),
-                BottomNavigationBarItem(label: '', icon: Icon(Thicker.profile_1, size: 20)),
-              ],
-            ),
+              } else if (index == 1) {
+                if (widget.currentIndex == 0) {
+                  Navigator.push(
+                    context,
+                    NoAnimationMaterialPageRoute(
+                        builder: (context) => ActivityPage()),
+                  );
+                } else {
+                  Navigator.pushReplacement(
+                    context,
+                    NoAnimationMaterialPageRoute(
+                        builder: (context) => ActivityPage()),
+                  );
+                }
+              } else if (index == 2) {
+                if (widget.currentIndex == 0) {
+                  Navigator.push(
+                    context,
+                    NoAnimationMaterialPageRoute(builder: (context) => ProfilePage(currUserData: userData)),
+                  );
+                } else {
+                  Navigator.pushReplacement(
+                    context,
+                    NoAnimationMaterialPageRoute(builder: (context) => ProfilePage(currUserData: userData)),
+                  );
+                }
+              }
+            },
+            items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(label: '', icon: Icon(Thicker.home_square, size: 25)),
+              BottomNavigationBarItem(label: '', icon: Icon(Thicker.notification, size: 25)),
+              BottomNavigationBarItem(label: '', icon: Icon(Thicker.profile_1, size: 20)),
+            ],
           ),
         ),
         Positioned(

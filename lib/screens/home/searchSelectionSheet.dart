@@ -66,9 +66,9 @@ class _SearchSelectionSheetState extends State<SearchSelectionSheet> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('Hot',
-                                style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.w500)),
+                                style: Theme.of(context).textTheme.headline6),
                             SizedBox(height: 5),
-                            Text("Show trending posts",
+                            Text("Show popular messages",
                                 style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.primary)),
                             SizedBox(height: 2)
                           ],
@@ -114,9 +114,9 @@ class _SearchSelectionSheetState extends State<SearchSelectionSheet> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('New',
-                                style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.w500)),
+                                style: Theme.of(context).textTheme.headline6),
                             SizedBox(height: 5),
-                            Text("Show the newest posts",
+                            Text("Show the newest messages",
                                 style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.primary)),
                             SizedBox(height: 2)
                           ],

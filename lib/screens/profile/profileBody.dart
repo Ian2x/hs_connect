@@ -50,26 +50,15 @@ class _ProfileBodyState extends State<ProfileBody> {
           otherUserFullDomain: widget.currUserData.fullDomainName ?? widget.currUserData.domain,
         ),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 15),
+          padding: EdgeInsets.fromLTRB(20, 30, 20, 0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 30),
-              Row(
-                children: [
-                  SizedBox(width: 5),
-                  Text("Your Posts",
-                      style: Theme.of(context).textTheme.headline5?.copyWith(fontSize: 22), textAlign: TextAlign.left),
-                ],
-              ),
-              SizedBox(height: 10),
-              Row(
-                children: [
-                  SizedBox(width: 5),
-                  Text("Visible to only you",
-                      style: Theme.of(context).textTheme.subtitle2?.copyWith(color: colorScheme.primary),
-                      textAlign: TextAlign.left),
-                ],
-              ),
+              Text("Your Messages",
+                  style: Theme.of(context).textTheme.headline6),
+              SizedBox(height: 7),
+              Text("Visible to only you",
+                  style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.primary)),
             ],
           ),
         ),
@@ -89,7 +78,7 @@ class _ProfileBodyState extends State<ProfileBody> {
                     physics: BouncingScrollPhysics(),
                     itemBuilder: (BuildContext context, int index) {
                       return Container(
-                        padding: EdgeInsets.fromLTRB(15, 0, 15, 10),
+                        padding: EdgeInsets.fromLTRB(15, 0, 15, 15),
                         child: ProfilePostCard(
                             post: _userPosts![index],
                             currUserRef: widget.currUserData.userRef,
@@ -111,8 +100,8 @@ class _ProfileBodyState extends State<ProfileBody> {
                 height: 90,
                 child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Text(
-                    "You have no posts \n Only you can see these",
-                    style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.normal),
+                    "You have no messages",
+                    style: Theme.of(context).textTheme.headline5,
                     textAlign: TextAlign.center,
                   ),
                 ]))

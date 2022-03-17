@@ -154,7 +154,7 @@ class _CommentCardState extends State<CommentCard> {
               SizedBox(height: 4),
               SizedBox(
                 width: (MediaQuery.of(context).size.width) * .85,
-                child: Text(widget.comment.text, style: textTheme.bodyText1?.copyWith(fontSize: 20)),
+                child: Text(widget.comment.text, style: textTheme.bodyText1?.copyWith(fontSize: 18)),
               ),
               SizedBox(height: 7),
               Row(
@@ -194,10 +194,8 @@ class _CommentCardState extends State<CommentCard> {
                         style: TextButton.styleFrom(
                             splashFactory: NoSplash.splashFactory, padding: EdgeInsets.zero, alignment: Alignment.center),
                         child: Text("Reply",
-                            style: textTheme.bodyText2?.copyWith(
-                                fontSize: 15,
-                                color: colorScheme.onSurface,
-                                fontWeight: FontWeight.w600)),
+                            style: textTheme.subtitle2?.copyWith(
+                                color: colorScheme.onSurface)),
                         onPressed: () {
                           replyToNotifier.setIndex(widget.index);
                           widget.focusKeyboard();

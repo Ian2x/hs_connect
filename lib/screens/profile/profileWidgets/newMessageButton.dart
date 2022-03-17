@@ -57,8 +57,8 @@ class _NewMessageButtonState extends State<NewMessageButton> {
           children: [
             SizedBox(width: 15),
             Text(
-              "Message...",
-              style: Theme.of(context).textTheme.subtitle1!.copyWith(fontSize: 14),
+              "Chat...",
+              style: Theme.of(context).textTheme.bodyText1,
             ),
           ],
         ),

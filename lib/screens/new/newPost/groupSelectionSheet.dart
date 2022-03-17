@@ -32,12 +32,13 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
     final double bottomSpace = max(MediaQuery.of(context).padding.bottom, 25);
     final userData = Provider.of<UserData?>(context, listen: false);
     final activeColor = userData?.domainColor ?? colorScheme.secondary;
 
     return Container(
-        height: 167 + bottomSpace,
+        height: 185 + bottomSpace,
         padding: EdgeInsets.fromLTRB(25, 25, 25, bottomSpace),
         child: ListView.builder(
           itemCount: widget.groups.length + 1,
@@ -49,7 +50,7 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Pick a circle", style: Theme.of(context).textTheme.headline6),
+                  Text("Who can view?", style: textTheme.headline6),
                 ],
               );
             } else {
@@ -72,15 +73,14 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(group.name,
-                              style: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w500)),
+                              style: textTheme.headline6),
                           group.name == "Public"
                               ? Column(
                                   children: [
                                     SizedBox(height: 5),
                                     Text("Anyone can see",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle2
+                                        style: textTheme
+                                            .subtitle1
                                             ?.copyWith(color: colorScheme.primary)),
                                     SizedBox(height: 2),
                                   ],
@@ -91,9 +91,8 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
                                   children: [
                                     SizedBox(height: 5),
                                     Text("Only for your school",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle2
+                                        style: textTheme
+                                            .subtitle1
                                             ?.copyWith(color: colorScheme.primary)),
                                     SizedBox(height: 2),
                                   ],

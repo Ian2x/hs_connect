@@ -47,7 +47,7 @@ class _ChooseSchoolState extends State<ChooseSchool> {
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
                     "Your school is...",
-                    style: ThemeText.quicksand(fontWeight: FontWeight.w700, fontSize: 30, color: Colors.black),
+                    style: ThemeText.quicksand(fontWeight: FontWeight.w700, fontSize: 29, color: Colors.black),
                   ),
                 ),
                 FutureBuilder(
@@ -60,6 +60,7 @@ class _ChooseSchoolState extends State<ChooseSchool> {
                         padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                         child: DropdownSearch<String>(
                           mode: Mode.MENU,
+                          popupElevation: 2,
                           items: domainOptions,
                           onChanged: (String? s) {
                             if (mounted) {
@@ -93,7 +94,7 @@ class _ChooseSchoolState extends State<ChooseSchool> {
                     }
                   },
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 15),
                 Container(
                   padding: EdgeInsets.only(left: 20, right: 20),
                   alignment: Alignment.topLeft,

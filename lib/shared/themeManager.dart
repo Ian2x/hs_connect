@@ -4,21 +4,21 @@ import 'package:hs_connect/shared/myStorageManager.dart';
 import 'package:hs_connect/shared/tools/createMaterialColor.dart';
 
 class ThemeNotifier with ChangeNotifier {
-  static const darkThemeOnSurface = Color(0xffdbdbdb);
+  static const darkThemeOnSurface = Color(0xffffffff); // DBDBDBFF
   static final darkTheme = ThemeData(
     brightness: Brightness.dark,
     backgroundColor: Color(0xff262626),
     // background
     colorScheme: ColorScheme(
       brightness: Brightness.dark,
-      background: Color(0xff292929),
+      background: Color(0xff242424),
       onSurface: darkThemeOnSurface,
       //Color(0xffd4d3d3),
       error: Color(0xff4d4d4d),
-      primaryContainer: Color(0xff8f8e8e),
+      primaryContainer: Color(0xff818181),
       secondaryContainer: Color(0xff3f99ee),
       secondary: Color(0xff2992f4),
-      surface: Color(0xff131313),
+      surface: Color(0xff0c0c0c),
       primary: Color(0xffa1a1a1),
       onError: Color(0xff353636),
       onSecondary: Color(0xffff004d),
@@ -76,12 +76,12 @@ class ThemeNotifier with ChangeNotifier {
     subtitle1: TextStyle(
       fontFamily: "Quicksand",
       fontSize: 16,
-      fontWeight: FontWeight.w500,
+      fontWeight: FontWeight.w600, // boosted form w500
       letterSpacing: 0.15,
     ),
     subtitle2: TextStyle(fontFamily: "Quicksand", fontSize: 14, fontWeight: FontWeight.w600, letterSpacing: 0.1),
-    bodyText1: TextStyle(fontFamily: "Quicksand", fontSize: 16, fontWeight: FontWeight.w500, letterSpacing: 0.5),
-    bodyText2: TextStyle(fontFamily: "Quicksand", fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 0.25),
+    bodyText1: TextStyle(fontFamily: "Quicksand", fontSize: 16, fontWeight: FontWeight.w600, letterSpacing: 0.5), // boosted from w500
+    bodyText2: TextStyle(fontFamily: "Quicksand", fontSize: 14, fontWeight: FontWeight.w600, letterSpacing: 0.25), // boosted from w500
     button: TextStyle(fontFamily: "Quicksand", fontSize: 14, fontWeight: FontWeight.w600, letterSpacing: 1.25),
     caption: TextStyle(fontFamily: "Quicksand", fontSize: 12, fontWeight: FontWeight.w500, letterSpacing: 0.4),
     overline: TextStyle(fontFamily: "Quicksand", fontSize: 10, fontWeight: FontWeight.w500, letterSpacing: 1.5),

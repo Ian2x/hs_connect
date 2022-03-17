@@ -13,7 +13,7 @@ Widget buildGroupCircle(
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(100),
       color: backgroundColor,
-      border: noBorder ? null : Border.all(color: Theme.of(context).colorScheme.primary, width: 0.15),
+      border: noBorder ? null : Border.all(color: Theme.of(context).colorScheme.primaryContainer, width: 2),
     ),
     alignment: Alignment.center,
     child: Container(

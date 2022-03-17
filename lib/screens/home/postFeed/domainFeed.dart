@@ -86,6 +86,7 @@ class _DomainFeedState extends State<DomainFeed> with AutomaticKeepAliveClientMi
 
     return Container(
       padding: EdgeInsets.symmetric(vertical: 3),
+      margin: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
       child: RefreshIndicator(
         onRefresh: () => Future.sync(
           () => _pagingController.refresh(),
@@ -109,11 +110,11 @@ class _DomainFeedState extends State<DomainFeed> with AutomaticKeepAliveClientMi
             noItemsFoundIndicatorBuilder: (BuildContext context) => Container(
                 padding: EdgeInsets.only(top: 50),
                 alignment: Alignment.topCenter,
-                child: Text("No posts found",
+                child: Text("No messages found",
                     style: Theme.of(context)
                         .textTheme
                         .headline6
-                        ?.copyWith(fontWeight: FontWeight.normal, color: colorScheme.onSurface))),
+                        ?.copyWith(color: colorScheme.onSurface))),
           ),
         ),
       ),

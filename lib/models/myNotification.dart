@@ -121,7 +121,7 @@ class MyNotification {
       case MyNotificationType.commentVotes:
         return 'Your comment in ';
       case MyNotificationType.postVotes:
-        return 'Your post in ';
+        return 'Your message in ';
       case MyNotificationType.fromMe:
         return '';
       case MyNotificationType.featuredPost:
@@ -153,7 +153,7 @@ class MyNotification {
   String printD(String sourceUserDisplayedName, String postGroupName) {
     switch (myNotificationType) {
       case MyNotificationType.commentToPost:
-        return ' commented on your post: ' + extraData!;
+        return ' commented on your message: ' + extraData!;
       case MyNotificationType.replyToReply:
         return ' replied after you: ' + extraData!;
       case MyNotificationType.replyToComment:

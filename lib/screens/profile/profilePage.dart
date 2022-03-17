@@ -20,7 +20,7 @@ class ProfilePage extends StatelessWidget {
           backgroundColor: colorScheme.surface,
           actions: [
             IconButton(
-                icon: Icon(Thicker.settings_1, color: colorScheme.primaryContainer),
+                icon: Icon(Thicker.settings_1),
                 onPressed: () {
                   Navigator.push(
                       context,

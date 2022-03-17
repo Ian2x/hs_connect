@@ -47,7 +47,7 @@ class PreviewPage extends StatelessWidget {
               ),
               SizedBox(height: 85),
               ActionChip(
-                padding: EdgeInsets.fromLTRB(60, 15, 60, 15),
+                padding: EdgeInsets.fromLTRB(55, 12, 55, 12),
                 backgroundColor: Colors.black,
                 label: Text(
                   'Sign up',

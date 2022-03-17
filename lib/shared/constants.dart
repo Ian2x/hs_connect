@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
 // trendingCreatedAt factors
-const trendingCommentBoost = 0.02;
-const trendingReplyBoost = 0.02667;
-const trendingPostLikeBoost = 0.01333;
-const trendingPollVoteBoost = 0.00667;
+const trendingCommentBoost = 0.03;
+const trendingReplyBoost = 0.04;
+const trendingPostLikeBoost = 0.02;
+const trendingPollVoteBoost = 0.01;
+const maxTrendingHours = 36;
 
 const initialPostsFetchSize = 20;
 const nextPostsFetchSize = 20;
 
 const defaultGroupPic = AssetImage('assets/Splash2.png');
 
-const bottomGradientThickness = 1.3;
-const topGradientThickness = 2.0;
+const bottomGradientThickness = 1.0;
 
 const authHintTextColor = Color(0xffdbdada);
 const authPrimaryTextColor = Color(0xFFa1a1a1);
