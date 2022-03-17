@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hs_connect/screens/authenticate/registerNumber.dart';
 import 'package:hs_connect/services/domains_data_database.dart';
+import 'package:tuple/tuple.dart';
 
 import '../../shared/constants.dart';
 import '../../shared/widgets/myBackButtonIcon.dart';
@@ -51,21 +52,34 @@ class _ChooseSchoolState extends State<ChooseSchool> {
                   ),
                 ),
                 FutureBuilder(
-                  future: DomainsDataDatabaseService().getAllDomains(),
+                  future: DomainsDataDatabaseService().getAllDomains2(),
                   builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                     if (snapshot.hasData) {
-                      List<String> domainOptions = snapshot.data;
-                      domainOptions.sort();
+                      List<Tuple2<String, String?>> domainOptions = snapshot.data;
+                      domainOptions.sort((a, b) {
+                        if (a.item2 != b.item2) {
+                          if (a.item2==null) {
+                            return 1;
+                          } else if (b.item2==null) {
+                            return -1;
+                          } else {
+                            return a.item2!.compareTo(b.item2!);
+                          }
+                        } else {
+                          return a.item1.compareTo(b.item1);
+                        }
+                      });
                       return Container(
                         padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                        child: DropdownSearch<String>(
+                        child: DropdownSearch<Tuple2<String, String?>>(
                           mode: Mode.MENU,
                           popupElevation: 2,
                           items: domainOptions,
-                          onChanged: (String? s) {
+                          onChanged: (Tuple2<String, String?>? s) {
                             if (mounted) {
-                              setState(() => selectedDomain = s);
+                              setState(() => selectedDomain = s?.item1);
                             }
+                            print(selectedDomain);
                           },
                           popupBackgroundColor: Colors.white,
                           dropdownSearchDecoration: InputDecoration(
@@ -73,13 +87,21 @@ class _ChooseSchoolState extends State<ChooseSchool> {
                           ),
                           popupItemBuilder: (context, s, bool) {
                             return Container(
-                                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                                child: Text(s, style: textTheme.headline5?.copyWith(color: Colors.black87)));
+                              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                              alignment: Alignment.centerLeft,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(s.item2 ?? s.item1, style: textTheme.headline5?.copyWith(color: Colors.black87)),
+                                  Text(s.item1, style: textTheme.subtitle2?.copyWith(color: Colors.black87))
+                                ],
+                              ),
+                            );
                           },
                           dropdownBuilder: (context, selectedItem) {
                             return Container(
                               padding: EdgeInsets.only(left: 10),
-                              child: Text(selectedItem ?? "@school.edu",
+                              child: Text(selectedItem?.item2 ?? selectedItem?.item1 ?? "@school.edu",
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: textTheme.headline4
