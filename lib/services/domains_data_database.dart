@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:hs_connect/models/domainData.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:tuple/tuple.dart';
 
 class DomainsDataDatabaseService {
   // collection reference
@@ -25,13 +26,28 @@ class DomainsDataDatabaseService {
   }
 
   Future<List<String>> getAllDomains() async {
-
     try {
       final HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('queryForDomains');
       dynamic resp = await callable.call();
 
       if (resp.data is List) {
         return (resp.data as List).map((item) => item as String).toList();
+      } else {
+        return [];
+      }
+    } catch (error) {
+      print(error);
+      return [];
+    }
+    // return (await domainsDataDatabaseCollection.get()).docs.map((qds) => qds.id).toList();
+  }
+  Future<List<Tuple2<String, String?>>> getAllDomains2() async {
+    try {
+      final HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('queryForDomains2');
+      dynamic resp = await callable.call();
+
+      if (resp.data is List) {
+        return (resp.data as List).map((item) => Tuple2(item[0] as String, item[1] as String?)).toList();
       } else {
         return [];
       }

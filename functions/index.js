@@ -23,3 +23,11 @@ exports.queryForDomains = functions.https.onCall(async (data, context) => {
     });
     return domainsData.docs.map((qds) => qds.id);
 })
+
+exports.queryForDomains2 = functions.https.onCall(async (data, context) => {
+    const db = admin.firestore();
+    const domainsData = await db.collection('domainsData').get().catch(function(error) {
+        return [];
+    });
+    return domainsData.docs.map((qds) => [qds.id, qds.get("fullName")]);
+})
