@@ -116,7 +116,7 @@ class _ChooseSchoolState extends State<ChooseSchool> {
                     }
                   },
                 ),
-                SizedBox(height: 15),
+                SizedBox(height: 10),
                 Container(
                   padding: EdgeInsets.only(left: 20, right: 20),
                   alignment: Alignment.topLeft,
