@@ -37,7 +37,7 @@ class ProfilePage extends StatelessWidget {
         currUserData: currUserData,
       ),
       bottomNavigationBar: MyNavigationBar(
-        currentIndex: 2,
+        currentIndex: 3,
       ),
     );
   }
