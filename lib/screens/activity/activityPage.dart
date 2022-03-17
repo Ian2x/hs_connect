@@ -46,7 +46,7 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
         ], controller: tabController, physics: AlwaysScrollableScrollPhysics()),
       ),
       bottomNavigationBar: MyNavigationBar(
-        currentIndex: 1,
+        currentIndex: 2,
       ),
     );
   }

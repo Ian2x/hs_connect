@@ -83,7 +83,7 @@ class LikeDislikePost extends StatelessWidget {
               onPressed: () {
                 HapticFeedback.heavyImpact();
                 postLikesManager.onUnDislike();
-                _posts.unDislikePost();
+                _posts.unDislikePost(post);
               },
             );
           } else {
@@ -96,7 +96,7 @@ class LikeDislikePost extends StatelessWidget {
               onPressed: () {
                 HapticFeedback.heavyImpact();
                 postLikesManager.onDislike();
-                _posts.dislikePost();
+                _posts.dislikePost(post);
               },
             );
           }
@@ -214,7 +214,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
                       dislikeStatus = false;
                     });
                   }
-                  _posts.unDislikePost();
+                  _posts.unDislikePost(widget.post);
                 },
               );
             } else {
@@ -235,7 +235,7 @@ class _LikeDislikePostStatefulState extends State<LikeDislikePostStateful> {
                       likeStatus = false;
                     });
                   }
-                  _posts.dislikePost();
+                  _posts.dislikePost(widget.post);
                 },
               );
             }
