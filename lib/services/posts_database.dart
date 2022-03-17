@@ -195,20 +195,28 @@ class PostsDatabaseService {
     });
   }
 
-  Future dislikePost() async {
+  Future dislikePost(Post post) async {
     // remove like if liked, dislike post, and +1 to score
+    final newTCA = newTrendingCreatedAt(post.trendingCreatedAt.toDate(), post.createdAt.toDate(), trendingPostDislikeBoost);
+    post.trendingCreatedAt = Timestamp.fromDate(newTCA);
+
     await postRef!.update({
       C.likes: FieldValue.arrayRemove([currUserRef]),
       C.dislikes: FieldValue.arrayUnion([currUserRef]),
-      C.score: FieldValue.increment(1)
+      C.score: FieldValue.increment(1),
+      C.trendingCreatedAt: newTCA
     });
   }
 
-  Future unDislikePost() async {
+  Future unDislikePost(Post post) async {
     // remove like and -1 to score
+    final newTCA = undoNewTrendingCreatedAt(post.trendingCreatedAt.toDate(), post.createdAt.toDate(), trendingPostDislikeBoost);
+    post.trendingCreatedAt = Timestamp.fromDate(newTCA);
+
     await postRef!.update({
       C.dislikes: FieldValue.arrayRemove([currUserRef]),
-      C.score: FieldValue.increment(-1)
+      C.score: FieldValue.increment(-1),
+      C.trendingCreatedAt: newTCA
     });
   }
 

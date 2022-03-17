@@ -37,17 +37,11 @@ void dismissKeyboard(context) {
 }
 
 DateTime newTrendingCreatedAt(DateTime currTrendingCreatedAt, DateTime createdAt, double trendingBoost) {
-  if ((createdAt.add(Duration(hours: maxTrendingHours))).difference(currTrendingCreatedAt).isNegative) {
-    return currTrendingCreatedAt;
-  }
   return currTrendingCreatedAt
       .add(((createdAt.add(Duration(hours: maxTrendingHours))).difference(currTrendingCreatedAt)) * trendingBoost);
 }
 
 DateTime undoNewTrendingCreatedAt(DateTime currTrendingCreatedAt, DateTime createdAt, double trendingBoost) {
-  if ((createdAt.add(Duration(hours: maxTrendingHours))).difference(currTrendingCreatedAt).isNegative) {
-    return currTrendingCreatedAt;
-  }
   final double trendingBoostFactor = trendingBoost / (1 - trendingBoost);
   return currTrendingCreatedAt
       .subtract(((createdAt.add(Duration(hours: maxTrendingHours))).difference(currTrendingCreatedAt)) * trendingBoostFactor);
