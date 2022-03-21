@@ -4,6 +4,8 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../services/auth.dart';
+
 class LaunchCountdown extends StatefulWidget {
   final UserData currUserData;
 
@@ -62,9 +64,8 @@ class _LaunchCountdownState extends State<LaunchCountdown> {
                     SizedBox(height: 130),
                     GestureDetector(
                         onTap: () {
-                          if (shareURL != null) {
-                            Share.share(shareURL!);
-                          }
+                          final _auth = AuthService();
+                          _auth.signOut();
                         },
                         child: Container(
                             padding: EdgeInsets.fromLTRB(95, 10, 95, 10),
@@ -72,7 +73,7 @@ class _LaunchCountdownState extends State<LaunchCountdown> {
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(30),
                                 border: Border.all(color: groupColor, width: 1.5)),
-                            child: Text('Share', style: textTheme.headline6?.copyWith(color: groupColor)))),
+                            child: Text('SIGN OUT', style: textTheme.headline6?.copyWith(color: groupColor)))),
                   ]))),
         ));
   }

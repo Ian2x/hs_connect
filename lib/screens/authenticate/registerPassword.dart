@@ -6,6 +6,7 @@ import 'package:hs_connect/shared/widgets/myBackButtonIcon.dart';
 import '../../services/auth.dart';
 import '../../shared/myStorageManager.dart';
 import '../../shared/widgets/loading.dart';
+import '../wrapper.dart';
 import 'authButton.dart';
 
 class RegisterPassword extends StatefulWidget {
@@ -22,7 +23,7 @@ class _RegisterPasswordState extends State<RegisterPassword> {
 
   // text field state
   String password = '';
-  bool passwordHidden = true;
+  bool passwordHidden = false;
   bool loading = false;
   String? error;
 
@@ -117,6 +118,8 @@ class _RegisterPasswordState extends State<RegisterPassword> {
                           dynamic result = await _auth.registerEmailUser(widget.email, password, domain);
                           if (result is User?) {
                             await MyStorageManager.saveData('showSignUp', true);
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(builder: (context) => Wrapper()), (Route<dynamic> route) => false);
                           } else if (result is FirebaseAuthException) {
                             if (mounted) {
                               setState(() {

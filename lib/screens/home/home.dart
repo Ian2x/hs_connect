@@ -10,6 +10,7 @@ import 'package:hs_connect/screens/home/postFeed/domainFeed.dart';
 import 'package:hs_connect/screens/home/postFeed/publicFeed.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/screens/home/postView/postPage.dart';
+import 'package:hs_connect/services/auth.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/myStorageManager.dart';
 import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
@@ -214,10 +215,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       backgroundColor: colorScheme.surface,
       floatingActionButton: GestureDetector(
           onTap: () async {
-            await Navigator.push(
-              context,
-              MaterialPageRoute(fullscreenDialog: true, builder: (context) => NewPost()),
-            );
+            final _auth = AuthService();
+            _auth.signOut();
           },
           child: Container(
               height: 45,
@@ -226,7 +225,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               decoration: BoxDecoration(
                   color: widget.currUserData.domainColor ?? colorScheme.primary,
                   borderRadius: BorderRadius.all(Radius.circular(10.0))),
-              child: Icon(Icons.add_rounded, color: colorScheme.brightness == Brightness.light ? colorScheme.surface : colorScheme.onSurface, size: 26))),
+              child: Text("SIGN OUT"))),
       body: NestedScrollView(
         floatHeaderSlivers: true,
         controller: scrollController,

@@ -13,6 +13,7 @@ class Wrapper extends StatelessWidget {
     final user = Provider.of<User?>(context);
     final userData = Provider.of<UserData?>(context);
 
+
     if (user == null || userData == null) {
       return PreviewPage();
     } else {
