@@ -30,7 +30,7 @@ class LikeDislikePost extends StatelessWidget {
 
     PostsDatabaseService _posts = PostsDatabaseService(currUserRef: currUserRef, postRef: post.postRef);
     Color activeColor = currUserColor ?? colorScheme.secondary;
-    return Row(
+    return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         () {
@@ -38,7 +38,7 @@ class LikeDislikePost extends StatelessWidget {
             return IconButton(
               iconSize: postIconSizeStateless,
               splashColor: Colors.transparent,
-              padding: EdgeInsets.all(9),
+              padding: EdgeInsets.symmetric(vertical:2, horizontal: 8),
               constraints: BoxConstraints(),
               icon: Icon(ThickArrow.angle_up_icon, color: activeColor),
               onPressed: () {
@@ -51,7 +51,7 @@ class LikeDislikePost extends StatelessWidget {
             return IconButton(
               iconSize: postIconSizeStateless,
               splashColor: Colors.transparent,
-              padding: EdgeInsets.all(9),
+              padding: EdgeInsets.symmetric(vertical:2, horizontal: 8),
               constraints: BoxConstraints(),
               icon: Icon(ThickArrow.angle_up_icon),
               onPressed: () {
@@ -62,14 +62,11 @@ class LikeDislikePost extends StatelessWidget {
             );
           }
         }(),
-        GestureDetector(
-          onTap: () {},
-          child: Container(
-            padding: EdgeInsets.symmetric(vertical: 9),
-            child: Text(
-              (postLikesManager.likeCount - postLikesManager.dislikeCount).toString(),
-              style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 17),
-            ),
+        Container(
+          padding: EdgeInsets.symmetric(vertical: 0),
+          child: Text(
+            (postLikesManager.likeCount - postLikesManager.dislikeCount).toString(),
+            style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 20),
           ),
         ),
         () {
@@ -77,7 +74,7 @@ class LikeDislikePost extends StatelessWidget {
             return IconButton(
               iconSize: postIconSizeStateless,
               splashColor: Colors.transparent,
-              padding: EdgeInsets.all(9),
+              padding: EdgeInsets.symmetric(vertical:2, horizontal: 8),
               constraints: BoxConstraints(),
               icon: Icon(ThickArrow.angle_down_icon, color: activeColor),
               onPressed: () {
@@ -90,7 +87,7 @@ class LikeDislikePost extends StatelessWidget {
             return IconButton(
               iconSize: postIconSizeStateless,
               splashColor: Colors.transparent,
-              padding: EdgeInsets.all(9),
+              padding: EdgeInsets.symmetric(vertical:2, horizontal: 8),
               constraints: BoxConstraints(),
               icon: Icon(ThickArrow.angle_down_icon),
               onPressed: () {

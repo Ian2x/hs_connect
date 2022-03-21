@@ -31,7 +31,7 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<PostCard> {
-  static const leftRightMargin = 15.0;
+  static const leftRightMargin = 5.0;
 
   @override
   bool get wantKeepAlive => true;
@@ -135,7 +135,7 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
 
   @override
   Widget build(BuildContext context) {
-    final leftColumn = 41.0;
+    final leftColumn = 43.0;
     super.build(context);
 
     final colorScheme = Theme.of(context).colorScheme;
@@ -174,9 +174,9 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
       child: Stack(
         children: [
           Bubble(
-            margin: BubbleEdges.fromLTRB(leftRightMargin, 6, leftRightMargin, 9),
+            margin: BubbleEdges.fromLTRB(leftRightMargin, 6, leftRightMargin-5, 6),
             color: colorScheme.background,
-            padding: BubbleEdges.fromLTRB(3, 0, 3, 6),
+            padding: BubbleEdges.fromLTRB(3, 0, 28, 10),
             // nip: widget.post.creatorRef != widget.currUserData.userRef ? BubbleNip.leftBottom : BubbleNip.rightBottom,
             elevation: 0,
             radius: Radius.circular(12),
@@ -184,7 +184,7 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  padding: EdgeInsets.fromLTRB(leftColumn, 8, 18, 0),
+                  padding: EdgeInsets.fromLTRB(leftColumn, 8, 9, 0),
                   child: Text(widget.post.title,
                       style: textTheme.headline6,
                       overflow: TextOverflow.ellipsis, // default is .clip
@@ -214,7 +214,7 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                         imageURL: widget.post.mediaURL!,
                         containerWidth: contentWidth,
                         maxHeight: contentWidth * 4 / 3,
-                        margin: EdgeInsets.fromLTRB(leftColumn, 8, 10, 0),
+                        margin: EdgeInsets.fromLTRB(leftColumn, 8, 12, 0),
                       )
                     : Container(),
                 poll != null
@@ -225,7 +225,7 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                         child: PollView(poll: poll!, currUserRef: widget.currUserData.userRef, post: widget.post))
                     : Container(),
                 Container(
-                  margin: EdgeInsets.fromLTRB(leftColumn, 5, 5, 0),
+                  margin: EdgeInsets.fromLTRB(leftColumn, 20, 5, 5),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -275,14 +275,6 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                         style: textTheme.headline6?.copyWith(fontSize: 17),
                       ),
                       Spacer(),
-                      Container(
-                        child: LikeDislikePost(
-                          currUserRef: widget.currUserData.userRef,
-                          post: widget.post,
-                          postLikesManager: postLikesManager,
-                          currUserColor: widget.currUserData.domainColor,
-                        ),
-                      ),
                     ],
                   ),
                 )
@@ -290,11 +282,21 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
             ),
           ),
           Positioned(
-            left: 25.5,
+            left: 12.5,
             top: 17.5,
             child: buildGroupCircle(
-                groupImage: creatorImage, size: 25, context: context, backgroundColor: colorScheme.background),
-          )
+                groupImage: creatorImage, size: 28, context: context, backgroundColor: colorScheme.background),
+          ),
+          Positioned(
+            right:0,
+            top:12.5,
+            child: LikeDislikePost(
+              currUserRef: widget.currUserData.userRef,
+              post: widget.post,
+              postLikesManager: postLikesManager,
+              currUserColor: widget.currUserData.domainColor,
+            ),
+          ),
         ],
       ),
     );
