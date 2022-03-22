@@ -130,7 +130,7 @@ class _CommentsFeedState extends State<CommentsFeed> {
                                 currUserData: userData,
                               );
                             } else if (index == 1) {
-                              return Divider(thickness: 3, color: colorScheme.background, height: 3);
+                              return Divider(thickness: 1, height: 1);
                             } else if (index == comments.length + 2) {
                               return Container(height: 85 + keyboardHeight + MediaQuery.of(context).padding.bottom);
                             } else {

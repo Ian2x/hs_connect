@@ -32,6 +32,7 @@ class _NewMessageButtonState extends State<NewMessageButton> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -51,14 +52,14 @@ class _NewMessageButtonState extends State<NewMessageButton> {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(60)),
-          color: Theme.of(context).colorScheme.onError,
+          border: Border.all(color: colorScheme.primaryContainer, width: 1)
         ),
         child: Row(
           children: [
             SizedBox(width: 15),
             Text(
               "Chat...",
-              style: Theme.of(context).textTheme.bodyText1,
+              style: Theme.of(context).textTheme.bodyText1?.copyWith(color: colorScheme.primary),
             ),
           ],
         ),

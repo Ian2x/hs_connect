@@ -190,7 +190,7 @@ class _ReplyCardState extends State<ReplyCard> {
             ],
           ),
           SizedBox(height: 4),
-          Divider(thickness: 3, color: colorScheme.background, height: 0),
+          Divider(thickness: 1, height: 1),
         ]));
   }
 }

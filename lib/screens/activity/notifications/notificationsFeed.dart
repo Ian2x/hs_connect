@@ -67,11 +67,12 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
               return Container();
             }
             if (trueIndex == 0) {
-              return Container(
-                  decoration: BoxDecoration(
-                      color: colorScheme.surface,
-                      border: Border(bottom: BorderSide(color: colorScheme.background, width: 2.5))),
-                  child: NotificationCard(myNotification: notifications![trueIndex]));
+              return Column(
+                children: [
+                  NotificationCard(myNotification: notifications![trueIndex]),
+                  Divider(height: 0.5)
+                ],
+              );
             } else {
               return NotificationCard(myNotification: notifications![trueIndex]);
             }

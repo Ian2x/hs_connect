@@ -163,7 +163,7 @@ class _PostTitleCardState extends State<PostTitleCard> {
               text: widget.post.title,
               onOpen: openLink,
               style: textTheme.headline6?.copyWith(fontSize: 21)),
-          SizedBox(height: 12),
+          SizedBox(height: 6),
           widget.post.link != null
               ? Container(
                   margin: EdgeInsets.only(top: 10),

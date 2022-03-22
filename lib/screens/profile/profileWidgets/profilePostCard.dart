@@ -1,4 +1,3 @@
-import 'package:bubble/bubble.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/models/group.dart';
@@ -7,7 +6,6 @@ import 'package:hs_connect/models/postLikesManager.dart';
 import 'package:hs_connect/screens/home/postView/postPage.dart';
 import 'package:hs_connect/screens/profile/profileWidgets/deletePostSheet.dart';
 import 'package:hs_connect/services/groups_database.dart';
-import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 import 'package:hs_connect/shared/widgets/buildGroupCircle.dart';
 
@@ -101,12 +99,14 @@ class _ProfilePostCardState extends State<ProfilePostCard> with AutomaticKeepAli
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
+    final leftColumn = 40.0;
+    final rightColumn = 20.0;
+
     if (group == null) {
       return Container(
           height: 102,
           padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
           decoration: ShapeDecoration(
-            color: colorScheme.background,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
                 side: BorderSide(
@@ -133,80 +133,78 @@ class _ProfilePostCardState extends State<ProfilePostCard> with AutomaticKeepAli
                   builder: (context) =>
                       PostPage(post: widget.post, group: group!, postLikesManager: postLikesManager)));
         },
-        child: Stack(children: [
-          Bubble(
-            padding: BubbleEdges.fromLTRB(40, 6, 13, 11),
-            color: colorScheme.background,
-            elevation: 0,
-            radius: Radius.circular(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(widget.post.title,
-                    style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 17),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 3),
-                SizedBox(height: 9),
-                Row(
+        child: Column(
+          children: [
+            Container(padding: EdgeInsets.only(left: 18, right: 18), child: Divider(height: 1, thickness: 1)),
+            Stack(children: [
+              Container(
+                padding: EdgeInsets.fromLTRB(leftColumn, 7, rightColumn, 11),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                        padding: EdgeInsets.symmetric(horizontal: 11, vertical: 2),
-                        decoration:
-                            BoxDecoration(color: colorScheme.primaryContainer, borderRadius: BorderRadius.circular(8)),
-                        child: Row(
-                          children: [
-                            Text(
-                              (widget.post.numComments + widget.post.numReplies).toString(),
-                              style: textTheme.headline6?.copyWith(fontSize: 15),
-                            ),
-                            SizedBox(width: 7),
-                            Icon(Message2.message2, size: 14),
-                            Row(
+                    Text(widget.post.title,
+                        style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 16),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 3),
+                    SizedBox(height: 9),
+                    Row(
+                      children: [
+                        Container(
+                            padding: EdgeInsets.symmetric(horizontal: 11, vertical: 2),
+                            decoration:
+                                BoxDecoration(color: colorScheme.primaryContainer, borderRadius: BorderRadius.circular(8)),
+                            child: Row(
                               children: [
-                                SizedBox(width: 12),
-                                IconButton(
-                                  constraints: BoxConstraints(),
-                                  splashRadius: .1,
-                                  padding: EdgeInsets.zero,
-                                  icon: Icon(Icons.more_horiz, size: 19),
-                                  onPressed: () {
-                                    showModalBottomSheet(
-                                        context: context,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.vertical(
-                                          top: Radius.circular(20),
-                                        )),
-                                        builder: (context) => DeletePostSheet(
-                                            currUserRef: widget.currUserRef,
-                                            postUserRef: widget.post.creatorRef,
-                                            groupRef: widget.post.groupRef,
-                                            postRef: widget.post.postRef,
-                                            media: widget.post.mediaURL,
-                                            onDelete: widget.onDelete));
-                                  },
+                                Text(
+                                  (widget.post.numComments + widget.post.numReplies).toString(),
+                                  style: textTheme.headline6?.copyWith(fontSize: 15),
                                 ),
+                                SizedBox(width: 7),
+                                Icon(Message2.message2, size: 14),
                               ],
-                            )
-                          ],
-                        )),
-                    SizedBox(width: 10),
-                    Text(
-                      convertTime(widget.post.createdAt.toDate()),
-                      style: textTheme.headline6?.copyWith(fontSize: 15),
+                            )),
+                        SizedBox(width: 10),
+                        Text(
+                          convertTime(widget.post.createdAt.toDate()),
+                          style: textTheme.headline6?.copyWith(fontSize: 15),
+                        ),
+                        SizedBox(width: 10),
+                        IconButton(
+                          constraints: BoxConstraints(),
+                          splashRadius: .1,
+                          padding: EdgeInsets.zero,
+                          icon: Icon(Icons.more_horiz, size: 19),
+                          onPressed: () {
+                            showModalBottomSheet(
+                                context: context,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(20),
+                                    )),
+                                builder: (context) => DeletePostSheet(
+                                    currUserRef: widget.currUserRef,
+                                    postUserRef: widget.post.creatorRef,
+                                    groupRef: widget.post.groupRef,
+                                    postRef: widget.post.postRef,
+                                    media: widget.post.mediaURL,
+                                    onDelete: widget.onDelete));
+                          },
+                        ),
+                        Spacer(),
+                        Text((likeCount - dislikeCount).toString() + " Likes",
+                            style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 15)),
+                      ],
                     ),
-                    Spacer(),
-                    Text((likeCount - dislikeCount).toString() + " Likes",
-                        style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 15)),
                   ],
                 ),
-              ],
-            ),
-          ),
-          Positioned(
-              left: 10,
-              top: 8.5,
-              child: buildGroupCircle(
-                  groupImage: group!.image, context: context, size: 20, backgroundColor: colorScheme.background)),
-        ]));
+              ),
+              Positioned(
+                  left: 9,
+                  top: 8,
+                  child: buildGroupCircle(
+                      groupImage: group!.image, context: context, size: 24)),
+            ]),
+          ],
+        ));
   }
 }
