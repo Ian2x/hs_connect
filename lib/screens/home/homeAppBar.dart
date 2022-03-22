@@ -46,7 +46,7 @@ class HomeAppBar extends SliverPersistentHeaderDelegate {
                     children: [
                       SizedBox(width: 10),
                       Text("Convo",
-                          style: TextStyle(fontFamily: "Shippori", fontSize: 18),
+                          style: TextStyle(fontFamily: "Shippori", fontSize: 20),
                           textAlign: TextAlign.center,
                           maxLines: 1,
                           softWrap: false,
