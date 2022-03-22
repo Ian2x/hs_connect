@@ -5,15 +5,14 @@ Widget buildGroupCircle(
     {required String? groupImage,
     required double size,
     required BuildContext context,
-    required Color backgroundColor,
-    bool noBorder = false}) {
+    Color? backgroundColor}) {
   return Container(
     height: size,
     width: size,
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(100),
-      color: backgroundColor,
-      border: noBorder ? null : Border.all(color: Theme.of(context).colorScheme.primaryContainer, width: 2),
+      color: backgroundColor ?? Theme.of(context).colorScheme.background,
+      border: Border.all(color: Colors.black, width: 0.05)
     ),
     alignment: Alignment.center,
     child: Container(

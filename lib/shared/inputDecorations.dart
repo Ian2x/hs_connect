@@ -40,16 +40,16 @@ InputDecoration commentReplyInputDecoration(
     hintStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: colorScheme.primary),
     labelStyle: Theme.of(context).textTheme.bodyText1,
     contentPadding: EdgeInsets.fromLTRB(20, 14, 0, 14),
-    border: new OutlineInputBorder(
-      borderRadius: new BorderRadius.circular(25.7),
-      borderSide: new BorderSide(width: 3, color: colorScheme.background),
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(25.7),
+      borderSide: BorderSide(width: 1, color: colorScheme.primaryContainer),
     ),
-    enabledBorder: new OutlineInputBorder(
-        borderRadius: new BorderRadius.circular(25.7),
-        borderSide: new BorderSide(width: 3, color: colorScheme.background)),
+    enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(25.7),
+        borderSide: BorderSide(width: 1, color: colorScheme.primaryContainer)),
     focusedBorder: OutlineInputBorder(
-        borderRadius: new BorderRadius.circular(25.7),
-        borderSide: new BorderSide(width: 3, color: colorScheme.background)),
+        borderRadius: BorderRadius.circular(25.7),
+        borderSide: BorderSide(width: 1, color: colorScheme.primaryContainer)),
     suffixIcon: isFocused
         ? Row(mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.min, children: <Widget>[
             IconButton(
@@ -80,16 +80,16 @@ InputDecoration messageInputDecoration(
     hintStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: colorScheme.primary),
     labelStyle: Theme.of(context).textTheme.bodyText1,
     contentPadding: EdgeInsets.fromLTRB(20, 14, 0, 14),
-    border: new OutlineInputBorder(
-      borderRadius: new BorderRadius.circular(25.7),
-      borderSide: new BorderSide(width: 3, color: colorScheme.background),
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(25.7),
+      borderSide: BorderSide(width: 1, color: colorScheme.primaryContainer),
     ),
-    enabledBorder: new OutlineInputBorder(
-        borderRadius: new BorderRadius.circular(25.7),
-        borderSide: new BorderSide(width: 3, color: colorScheme.background)),
+    enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(25.7),
+        borderSide: BorderSide(width: 1, color: colorScheme.primaryContainer)),
     focusedBorder: OutlineInputBorder(
-        borderRadius: new BorderRadius.circular(25.7),
-        borderSide: new BorderSide(width: 3, color: colorScheme.background)),
+        borderRadius: BorderRadius.circular(25.7),
+        borderSide: BorderSide(width: 1, color: colorScheme.primaryContainer)),
     suffixIcon: Row(mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.min, children: <Widget>[
       picPickerButton(
           setPic: setPic,

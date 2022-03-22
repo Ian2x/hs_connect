@@ -7,7 +7,7 @@ import 'package:hs_connect/services/posts_database.dart';
 
 import 'package:hs_connect/shared/widgets/thickArrowIcons.dart';
 
-const double postIconSizeStateless = 23;
+const double postIconSizeStateless = 26;
 const double postIconSizeStateful = 24;
 
 class LikeDislikePost extends StatelessWidget {
@@ -38,7 +38,7 @@ class LikeDislikePost extends StatelessWidget {
             return IconButton(
               iconSize: postIconSizeStateless,
               splashColor: Colors.transparent,
-              padding: EdgeInsets.symmetric(vertical:2, horizontal: 8),
+              padding: EdgeInsets.symmetric(vertical:0, horizontal: 8),
               constraints: BoxConstraints(),
               icon: Icon(ThickArrow.angle_up_icon, color: activeColor),
               onPressed: () {
@@ -51,7 +51,7 @@ class LikeDislikePost extends StatelessWidget {
             return IconButton(
               iconSize: postIconSizeStateless,
               splashColor: Colors.transparent,
-              padding: EdgeInsets.symmetric(vertical:2, horizontal: 8),
+              padding: EdgeInsets.symmetric(vertical:0, horizontal: 8),
               constraints: BoxConstraints(),
               icon: Icon(ThickArrow.angle_up_icon),
               onPressed: () {
@@ -74,7 +74,7 @@ class LikeDislikePost extends StatelessWidget {
             return IconButton(
               iconSize: postIconSizeStateless,
               splashColor: Colors.transparent,
-              padding: EdgeInsets.symmetric(vertical:2, horizontal: 8),
+              padding: EdgeInsets.symmetric(vertical:0, horizontal: 8),
               constraints: BoxConstraints(),
               icon: Icon(ThickArrow.angle_down_icon, color: activeColor),
               onPressed: () {
@@ -87,7 +87,7 @@ class LikeDislikePost extends StatelessWidget {
             return IconButton(
               iconSize: postIconSizeStateless,
               splashColor: Colors.transparent,
-              padding: EdgeInsets.symmetric(vertical:2, horizontal: 8),
+              padding: EdgeInsets.symmetric(vertical:0, horizontal: 8),
               constraints: BoxConstraints(),
               icon: Icon(ThickArrow.angle_down_icon),
               onPressed: () {

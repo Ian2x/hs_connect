@@ -63,8 +63,6 @@ class _ProfileBodyState extends State<ProfileBody> {
           ),
         ),
         SizedBox(height: 15),
-        Divider(color: colorScheme.background, thickness: 3, height: 0),
-        SizedBox(height: 15),
         _userPosts != null && _userPosts!.length != 0
             ? Expanded(
                 child: RefreshIndicator(
@@ -77,34 +75,54 @@ class _ProfileBodyState extends State<ProfileBody> {
                     shrinkWrap: true,
                     physics: BouncingScrollPhysics(),
                     itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                        padding: EdgeInsets.fromLTRB(15, 0, 15, 15),
-                        child: ProfilePostCard(
-                            post: _userPosts![index],
-                            currUserRef: widget.currUserData.userRef,
-                            onDelete: () {
-                              if (mounted) {
-                                setState(() {
-                                  List<Post> copy = new List<Post>.from(_userPosts!);
-                                  copy.removeAt(index);
-                                  _userPosts = copy;
-                                });
-                              }
-                            }),
-                      );
+                      if (index + 1 == _userPosts?.length) {
+                        return Column(
+                          children: [
+                            ProfilePostCard(
+                                post: _userPosts![index],
+                                currUserRef: widget.currUserData.userRef,
+                                onDelete: () {
+                                  if (mounted) {
+                                    setState(() {
+                                      List<Post> copy = new List<Post>.from(_userPosts!);
+                                      copy.removeAt(index);
+                                      _userPosts = copy;
+                                    });
+                                  }
+                                }),
+                            Container(padding: EdgeInsets.only(left: 18, right: 18), child: Divider(height: 1, thickness: 1)),
+                            SizedBox(height: 5)
+                          ],
+                        );
+                      }
+                      return ProfilePostCard(
+                          post: _userPosts![index],
+                          currUserRef: widget.currUserData.userRef,
+                          onDelete: () {
+                            if (mounted) {
+                              setState(() {
+                                List<Post> copy = new List<Post>.from(_userPosts!);
+                                copy.removeAt(index);
+                                _userPosts = copy;
+                              });
+                            }
+                          });
                     },
                   ),
                 ),
               )
-            : Container(
-                height: 90,
-                child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Text(
-                    "You have no messages",
-                    style: Theme.of(context).textTheme.headline5,
-                    textAlign: TextAlign.center,
-                  ),
-                ]))
+            : Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(width: MediaQuery.of(context).size.width, child: Divider(height: 1, thickness: 1)),
+                SizedBox(height: 30),
+                Text(
+                  "You have no messages",
+                  style: Theme.of(context).textTheme.headline5,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            )
       ]),
     );
   }

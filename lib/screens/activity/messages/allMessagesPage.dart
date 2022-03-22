@@ -136,8 +136,8 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                       decoration: BoxDecoration(
                           color: colorScheme.surface,
                           border: Border(
-                              bottom: BorderSide(color: colorScheme.background, width: 2.5),
-                              top: index == 0 ? BorderSide(color: colorScheme.background, width: 2.5) : BorderSide.none
+                              bottom: BorderSide(color: colorScheme.primaryContainer, width: 0.5),
+                              top: index == 0 ? BorderSide(color: colorScheme.primaryContainer, width: 0.5) : BorderSide.none
                           )
                       ),
                       padding: EdgeInsets.fromLTRB(20, 13, 14, 15),

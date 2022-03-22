@@ -212,7 +212,7 @@ class _CommentCardState extends State<CommentCard> {
                 ],
               ),
               SizedBox(height: 4),
-              Divider(thickness: 3, color: colorScheme.background, height: 0),
+              Divider(thickness: 1, height: 1),
             ]),
           ),
           RepliesFeed(

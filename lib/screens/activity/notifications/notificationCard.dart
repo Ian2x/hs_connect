@@ -93,7 +93,7 @@ class _NotificationCardState extends State<NotificationCard> {
       return Container(
           decoration: BoxDecoration(
               color: colorScheme.surface,
-              border: Border(top: BorderSide(color: colorScheme.background, width: 2.5))
+              border: Border(top: BorderSide(color: colorScheme.primaryContainer, width: 0.5))
           ),
           padding: EdgeInsets.fromLTRB(14, 13, 14, 15),
           child: Row(
@@ -124,11 +124,10 @@ class _NotificationCardState extends State<NotificationCard> {
     if (userData == null || sourceUserName == null || postGroupName == null) {
       return Container(
           decoration: BoxDecoration(
-              color: colorScheme.surface,
-              border: Border(top: BorderSide(color: colorScheme.background, width: 2.5))
+              border: Border(top: BorderSide(color: colorScheme.primaryContainer, width: 0.5))
           ),
           padding: EdgeInsets.fromLTRB(14, 13, 14, 15),
-          height: 60,
+          height: 65,
           child: loading ? Loading(backgroundColor: Colors.transparent) : null);
     }
 
@@ -167,58 +166,56 @@ class _NotificationCardState extends State<NotificationCard> {
             }
           }
         },
-        child: Container(
-            padding: EdgeInsets.fromLTRB(14, 13, 14, 15),
-            decoration: BoxDecoration(
-                color: colorScheme.surface,
-                border: Border(top: BorderSide(color: colorScheme.background, width: 2.5))
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    ProfileImage(
-                      backgroundColor: domainColor,
-                      size: 33,
-                    ),
-                    SizedBox(width: 14),
-                    SizedBox(
-                      width: 260,
-                      child: RichText(
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                        text: TextSpan(
-                          children: <TextSpan>[
-                            TextSpan(
-                                text: widget.myNotification.printA(sourceUserName!, postGroupName!),
-                                style: textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold)),
-                            TextSpan(
-                                text: widget.myNotification.printB(sourceUserName!, postGroupName!),
-                                style: textTheme.bodyText2),
-                            TextSpan(
-                                text: widget.myNotification.printC(sourceUserName!, postGroupName!),
-                                style: textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold)),
-                            TextSpan(
-                                text: widget.myNotification.printD(sourceUserName!, postGroupName!),
-                                style: textTheme.bodyText2),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Flexible(
-                      child: Row(
-                        children: [
-                          Spacer(),
-                          Text(convertTime(widget.myNotification.createdAt.toDate()),
-                              style: textTheme.subtitle2?.copyWith(color: colorScheme.primary))
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Divider(height: 0.5),
+            Container(
+              padding: EdgeInsets.fromLTRB(14, 13, 14, 15),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  ProfileImage(
+                    backgroundColor: domainColor,
+                    size: 33,
+                  ),
+                  SizedBox(width: 14),
+                  SizedBox(
+                    width: 260,
+                    child: RichText(
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      text: TextSpan(
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: widget.myNotification.printA(sourceUserName!, postGroupName!),
+                              style: textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold)),
+                          TextSpan(
+                              text: widget.myNotification.printB(sourceUserName!, postGroupName!),
+                              style: textTheme.bodyText2),
+                          TextSpan(
+                              text: widget.myNotification.printC(sourceUserName!, postGroupName!),
+                              style: textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold)),
+                          TextSpan(
+                              text: widget.myNotification.printD(sourceUserName!, postGroupName!),
+                              style: textTheme.bodyText2),
                         ],
                       ),
                     ),
-                  ],
-                ),
-              ],
-            )));
+                  ),
+                  Flexible(
+                    child: Row(
+                      children: [
+                        Spacer(),
+                        Text(convertTime(widget.myNotification.createdAt.toDate()),
+                            style: textTheme.subtitle2?.copyWith(color: colorScheme.primary))
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ));
   }
 }

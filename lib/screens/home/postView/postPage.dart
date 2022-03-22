@@ -28,7 +28,7 @@ class PostPage extends StatelessWidget {
             children: [
               buildGroupCircle(
                   groupImage: group.image, size: 27, context: context, backgroundColor: colorScheme.surface),
-              SizedBox(width: 8),
+              SizedBox(width: 3),
               Flexible(child: Text(group.name, overflow: TextOverflow.ellipsis)),
             ],
           ),
