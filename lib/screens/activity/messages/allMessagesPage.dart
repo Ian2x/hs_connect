@@ -37,11 +37,15 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
   }
 
   Future _fetchUsersHelper(DocumentReference otherUserRef, int index, List<OtherUserData?> results) async {
-    results[index] = await otherUserDataFromSnapshot(await otherUserRef.get(), otherUserRef);
+    try {
+      results[index] = await otherUserDataFromSnapshot(await otherUserRef.get(), otherUserRef);
+    } catch (e) {
+      results[index] = null;
+    }
   }
 
   Future fetchUsers(UserData? userData) async {
-    if (userData==null) {
+    if (userData == null) {
       return;
     }
     if (mounted) {
@@ -53,10 +57,11 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
       tempUMUDcache.add(UMUD(UM: UM, UD: null));
     }
     List<OtherUserData?> tempOtherUsers = List.filled(tempUMs.length, null);
-    await Future.wait([for (int i = 0; i < tempUMs.length; i++) _fetchUsersHelper(tempUMs[i].otherUserRef, i, tempOtherUsers)]);
-    List<OtherUserData> tempTempOtherUsers = [];
+    await Future.wait(
+        [for (int i = 0; i < tempUMs.length; i++) _fetchUsersHelper(tempUMs[i].otherUserRef, i, tempOtherUsers)]);
+    List<OtherUserData?> tempTempOtherUsers = [];
     for (int i = 0; i < tempOtherUsers.length; i++) {
-      if (tempOtherUsers[i] != null) tempTempOtherUsers.add(tempOtherUsers[i]!);
+      tempTempOtherUsers.add(tempOtherUsers[i]);
     }
     if (tempTempOtherUsers.length == tempUMs.length) {
       for (int i = 0; i < tempTempOtherUsers.length; i++) {
@@ -76,7 +81,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
-    if (loading || UMUDcache.where((UMUD umud) => umud.UM==null || umud.UD==null).length > 0) {
+    if (loading) {
       return Loading();
     }
 
@@ -88,7 +93,17 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
     }
 
     // sorted by latest first
-    UMUDcache.sort((UMUD a, UMUD b) => b.UM!.lastMessage.compareTo(a.UM!.lastMessage));
+    UMUDcache.sort((UMUD a, UMUD b) {
+      if (a.UM == null) {
+        if (b.UM == null) {
+          return 0;
+        }
+        return 1;
+      } else if (b.UM == null) {
+        return -1;
+      }
+      return b.UM!.lastMessage.compareTo(a.UM!.lastMessage);
+    });
 
     return RefreshIndicator(
       onRefresh: () {
@@ -100,6 +115,9 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
           physics: AlwaysScrollableScrollPhysics(),
           scrollDirection: Axis.vertical,
           itemBuilder: (BuildContext context, int index) {
+            if (UMUDcache[index].UD==null || UMUDcache[index].UM == null) {
+              return Container();
+            }
             final otherUser = UMUDcache[index].UD!;
             if (widget.currUserData.blockedUserRefs.contains(otherUser.userRef)) {
               return Container();
@@ -137,20 +155,18 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
                           color: colorScheme.surface,
                           border: Border(
                               bottom: BorderSide(color: colorScheme.primaryContainer, width: 0.5),
-                              top: index == 0 ? BorderSide(color: colorScheme.primaryContainer, width: 0.5) : BorderSide.none
-                          )
-                      ),
+                              top: index == 0
+                                  ? BorderSide(color: colorScheme.primaryContainer, width: 0.5)
+                                  : BorderSide.none)),
                       padding: EdgeInsets.fromLTRB(20, 13, 14, 15),
                       child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
                         ProfileImage(backgroundColor: otherUser.domainColor, size: 33),
                         SizedBox(width: 14),
                         Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-                          Text(otherUser.fundamentalName,
-                              style: textTheme.bodyText2),
+                          Text(otherUser.fundamentalName, style: textTheme.bodyText2),
                           SizedBox(height: 4),
                           Text(otherUser.fullDomainName ?? otherUser.domain,
-                              style: textTheme.bodyText2?.copyWith(
-                                  color: otherUser.domainColor ?? colorScheme.primary))
+                              style: textTheme.bodyText2?.copyWith(color: otherUser.domainColor ?? colorScheme.primary))
                         ]),
                         Flexible(
                             child: Column(children: <Widget>[
