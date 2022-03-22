@@ -7,7 +7,7 @@ import 'package:hs_connect/models/postLikesManager.dart';
 import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/activity/messages/messagesPage.dart';
 import 'package:hs_connect/screens/home/postFeed/domainFeed.dart';
-import 'package:hs_connect/screens/home/postFeed/publicFeed.dart';
+import 'package:hs_connect/screens/home/postFeed/mergeFeed.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/screens/home/postView/postPage.dart';
 import 'package:hs_connect/shared/constants.dart';
@@ -28,7 +28,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
-  bool isDomain = true;
+  bool isDomain = false;
   bool searchByTrending = true;
   ScrollController scrollController = ScrollController();
 
@@ -256,7 +256,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 searchByTrending: searchByTrending,
                 key: ValueKey<bool>(searchByTrending),
               )
-            : PublicFeed(
+            : MergeFeed(
                 currUserData: widget.currUserData,
                 isDomain: isDomain,
                 searchByTrending: searchByTrending,

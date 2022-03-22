@@ -11,6 +11,7 @@ class ImageStorage {
   ImageStorage();
 
   static final Reference imagesRef = FirebaseStorage.instance.ref().child(C.images);
+  static final Reference sharesRef = FirebaseStorage.instance.ref().child(C.shares);
   static final Reference profilePicsRef = FirebaseStorage.instance.ref().child(C.profilePics);
 
   static final defaultCacheManager = DefaultCacheManager();
@@ -57,6 +58,22 @@ class ImageStorage {
     );
 
     final snapshot = await imagesRef.child(Uuid().v4()).putFile(file, metadata).onError((error, stackTrace) {
+      return Future.error(error!);
+    });
+    final downloadURL = await snapshot.ref.getDownloadURL();
+    // store into cache
+    defaultCacheManager.putFile(downloadURL, await file.readAsBytes(), fileExtension: 'jpeg');
+    return downloadURL;
+  }
+
+  Future uploadShare({required File file}) async {
+    SettableMetadata metadata = SettableMetadata(
+      customMetadata: <String, String>{
+        'uploadedOn': DateTime.now().toString(),
+      },
+    );
+
+    final snapshot = await sharesRef.child(Uuid().v4()).putFile(file, metadata).onError((error, stackTrace) {
       return Future.error(error!);
     });
     final downloadURL = await snapshot.ref.getDownloadURL();

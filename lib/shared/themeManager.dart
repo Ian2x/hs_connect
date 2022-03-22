@@ -13,7 +13,6 @@ class ThemeNotifier with ChangeNotifier {
       brightness: Brightness.dark,
       background: Color(0xff242424),
       onSurface: darkThemeOnSurface,
-      //Color(0xffd4d3d3),
       error: Color(0xff4d4d4d),
       primaryContainer: Color(0xff818181),
       secondaryContainer: Color(0xff3f99ee),
@@ -22,6 +21,7 @@ class ThemeNotifier with ChangeNotifier {
       primary: Color(0xffa1a1a1),
       onError: Color(0xff353636),
       onSecondary: Color(0xffff004d),
+      onPrimaryContainer: Color(0xffcecece),
       onPrimary: Color(0xff000000),
       onBackground: Color(0xff000000),
     ),
@@ -39,24 +39,16 @@ class ThemeNotifier with ChangeNotifier {
     colorScheme: ColorScheme(
       brightness: Brightness.light,
       background: Color(0xfff4f4f4),
-      // background grey / light grey
       onSurface: lightThemeOnSurface,
-      // black
       error: Color(0xffb2b2b2),
       primaryContainer: Color(0xffd7d7d7),
-      // dark grey
       secondaryContainer: Color(0xff1186f3),
-      // darker secondary blue
       secondary: Color(0xff2992f4),
-      // secondary blue
       surface: Color(0xffffffff),
-      // white
       primary: Color(0xffa1a1a1),
-      // medium grey
       onError: Color(0xffdbdada),
-      // light medium grey
       onSecondary: Color(0xffff004d),
-      // secondary red
+      onPrimaryContainer: Color(0xff6f6f6f),
       onPrimary: Color(0xff000000),
       onBackground: Color(0xff000000),
     ),

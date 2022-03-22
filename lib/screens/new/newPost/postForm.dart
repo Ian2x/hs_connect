@@ -98,6 +98,8 @@ class _PostFormState extends State<PostForm> {
           if (widget.currUserData.fullDomainName != null) {
             group.name = widget.currUserData.fullDomainName!;
           }
+        } else if (group.accessRestriction.restrictionType == AccessRestrictionType.country &&
+            group.accessRestriction.restriction == C.public) {
           // make this the default selected group
           if (mounted) {
             setState(() {
@@ -108,7 +110,18 @@ class _PostFormState extends State<PostForm> {
         groups.add(group);
       }
     }
-    groups.sort((a, b) => a.name.compareTo(b.name));
+    groups.sort((a, b) {
+      if (a.accessRestriction.restrictionType == AccessRestrictionType.country && a.accessRestriction.restriction == C.public) {
+        if (b.accessRestriction.restrictionType == AccessRestrictionType.country && b.accessRestriction.restriction == C.public) {
+          return 0;
+        }
+        return -1;
+      }
+      if (b.accessRestriction.restrictionType == AccessRestrictionType.country && b.accessRestriction.restriction == C.public) {
+        return 1;
+      }
+      return a.name.compareTo(b.name);
+    });
     if (mounted) {
       setState(() {
         groupChoices = groups;
@@ -140,8 +153,7 @@ class _PostFormState extends State<PostForm> {
               children: [
                 SizedBox(width: 12),
                 TextButton(
-                  child: Text("Cancel",
-                      style: textTheme.subtitle1?.copyWith(color: colorScheme.onSurface)),
+                  child: Text("Cancel", style: textTheme.subtitle1?.copyWith(color: colorScheme.onSurface)),
                   onPressed: () {
                     Navigator.pop(context);
                   },
@@ -274,8 +286,8 @@ class _PostFormState extends State<PostForm> {
                               child: Container(
                                 padding: EdgeInsets.only(bottom: 1, top: 1, right: 5),
                                 child: Text("Send",
-                                    style: textTheme.subtitle1?.copyWith(
-                                        color: _title != '' ? colorScheme.surface : userColor),
+                                    style: textTheme.subtitle1
+                                        ?.copyWith(color: _title != '' ? colorScheme.surface : userColor),
                                     maxLines: 1,
                                     softWrap: false,
                                     overflow: TextOverflow.fade),
@@ -382,23 +394,25 @@ class _PostFormState extends State<PostForm> {
                           ),
                         )
                       : Container(),
-                  link != null && isURL(link) ? Container(
-                    padding: EdgeInsets.only(top: 10),
-                    child: MyLinkPreview(
-                        enableAnimation: true,
-                        onPreviewDataFetched: (data) {
-                          if (mounted) {
-                            setState(() => previewData = data);
-                          }
-                        },
-                        metadataTitleStyle: textTheme.subtitle1?.copyWith(fontWeight: FontWeight.bold),
-                        metadataTextStyle: textTheme.subtitle1?.copyWith(fontSize: 14),
-                        previewData: previewData,
-                        text: link!,
-                        textStyle: textTheme.subtitle2,
-                        linkStyle: textTheme.subtitle2,
-                        width: MediaQuery.of(context).size.width - 40),
-                  ) : Container(),
+                  link != null && isURL(link)
+                      ? Container(
+                          padding: EdgeInsets.only(top: 10),
+                          child: MyLinkPreview(
+                              enableAnimation: true,
+                              onPreviewDataFetched: (data) {
+                                if (mounted) {
+                                  setState(() => previewData = data);
+                                }
+                              },
+                              metadataTitleStyle: textTheme.subtitle1?.copyWith(fontWeight: FontWeight.bold),
+                              metadataTextStyle: textTheme.subtitle1?.copyWith(fontSize: 14),
+                              previewData: previewData,
+                              text: link!,
+                              textStyle: textTheme.subtitle2,
+                              linkStyle: textTheme.subtitle2,
+                              width: MediaQuery.of(context).size.width - 40),
+                        )
+                      : Container(),
                   newFile != null
                       ? Semantics(
                           label: 'new_post_pic_image',
@@ -506,8 +520,7 @@ class _PostFormState extends State<PostForm> {
                     icon: Icon(Icons.link_rounded, size: 30, color: link == null ? colorScheme.primary : userColor),
                   ),
                   Spacer(),
-                  Text("Mature",
-                      style: textTheme.subtitle1?.copyWith(color: colorScheme.primary)),
+                  Text("Mature", style: textTheme.subtitle1?.copyWith(color: colorScheme.primary)),
                   SizedBox(width: 10),
                   AnimatedSwitchSmall(
                     initialState: isMature,
