@@ -1,9 +1,13 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/myNotification.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/shared/constants.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:tuple/tuple.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -43,8 +47,8 @@ DateTime newTrendingCreatedAt(DateTime currTrendingCreatedAt, DateTime createdAt
 
 DateTime undoNewTrendingCreatedAt(DateTime currTrendingCreatedAt, DateTime createdAt, double trendingBoost) {
   final double trendingBoostFactor = trendingBoost / (1 - trendingBoost);
-  return currTrendingCreatedAt
-      .subtract(((createdAt.add(Duration(hours: maxTrendingHours))).difference(currTrendingCreatedAt)) * trendingBoostFactor);
+  return currTrendingCreatedAt.subtract(
+      ((createdAt.add(Duration(hours: maxTrendingHours))).difference(currTrendingCreatedAt)) * trendingBoostFactor);
 }
 
 Future<Tuple2<T1, T2>> waitConcurrently<T1, T2>(Future<T1> future1, Future<T2> future2) async {
@@ -74,4 +78,13 @@ String? httpsLink(String? link) {
   } else {
     return null;
   }
+}
+
+Future<String> writeToFile(ByteData data) async {
+  final buffer = data.buffer;
+  Directory tempDir = await getTemporaryDirectory();
+  String tempPath = tempDir.path;
+  var filePath = tempPath + '/share.jpg'; // file_01.tmp is dump file, can be anything
+  await File(filePath).writeAsBytes(buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
+  return filePath;
 }

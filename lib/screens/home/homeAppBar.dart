@@ -3,8 +3,6 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/searchSelectionSheet.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 
-import '../../shared/widgets/buildGroupCircle.dart';
-
 class HomeAppBar extends SliverPersistentHeaderDelegate {
   static const expandedHeight = 50.0;
 
@@ -42,24 +40,18 @@ class HomeAppBar extends SliverPersistentHeaderDelegate {
             padding: EdgeInsets.only(top: safeAreaHeight),
             child: Stack(
               children: [
-                GestureDetector(
-                  onTap: toggleFeed,
-                  child: Container(
-                    padding: EdgeInsets.fromLTRB(15,13,0,50),
-                    child: Row(
-                      children: [
-                        /*buildGroupCircle(
-                            groupImage: isDomain ? currUserData.domainImage : null, size: 27, context: context, backgroundColor: colorScheme.surface),*/
-                        SizedBox(width: 10),
-                        Text(isDomain ? fullDomainName : "Public",
-                            style: textTheme.headline6,
-                            textAlign: TextAlign.center,
-                            maxLines: 1,
-                            softWrap: false,
-                            overflow: TextOverflow.ellipsis),
-                        Icon(Icons.arrow_drop_down)
-                      ],
-                    ),
+                Container(
+                  padding: EdgeInsets.fromLTRB(15,13,0,50),
+                  child: Row(
+                    children: [
+                      SizedBox(width: 10),
+                      Text("Convo",
+                          style: TextStyle(fontFamily: "Shippori", fontSize: 18),
+                          textAlign: TextAlign.center,
+                          maxLines: 1,
+                          softWrap: false,
+                          overflow: TextOverflow.ellipsis),
+                    ],
                   ),
                 ),
                 Positioned(

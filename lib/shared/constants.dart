@@ -233,4 +233,5 @@ class C {
   static const otherUserId = 'otherUserId';
   static const notifiedUserRef = 'notifiedUserRef';
   static const lastPostTime = 'lastPostTime';
+  static const shares = 'shares';
 }
