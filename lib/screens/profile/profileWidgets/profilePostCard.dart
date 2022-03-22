@@ -104,19 +104,16 @@ class _ProfilePostCardState extends State<ProfilePostCard> with AutomaticKeepAli
 
     if (group == null) {
       return Container(
-          height: 102,
-          padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-          decoration: ShapeDecoration(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-                side: BorderSide(
-                  color: colorScheme.background,
-                  width: 1.5,
-                )),
-          ));
+          height: 80,
+          alignment: Alignment.topCenter,
+          padding: EdgeInsets.only(left: 18, right: 18),
+          child: Divider(height: 1, thickness: 1),
+
+      );
     }
 
     return GestureDetector(
+        behavior: HitTestBehavior.translucent,
         onTap: () {
           final postLikesManager = PostLikesManager(
               onLike: onLike,
@@ -138,7 +135,7 @@ class _ProfilePostCardState extends State<ProfilePostCard> with AutomaticKeepAli
             Container(padding: EdgeInsets.only(left: 18, right: 18), child: Divider(height: 1, thickness: 1)),
             Stack(children: [
               Container(
-                padding: EdgeInsets.fromLTRB(leftColumn, 7, rightColumn, 11),
+                padding: EdgeInsets.fromLTRB(leftColumn, 11, rightColumn, 14),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -199,8 +196,8 @@ class _ProfilePostCardState extends State<ProfilePostCard> with AutomaticKeepAli
                 ),
               ),
               Positioned(
-                  left: 9,
-                  top: 8,
+                  left: 9.5,
+                  top: 14,
                   child: buildGroupCircle(
                       groupImage: group!.image, context: context, size: 24)),
             ]),

@@ -396,7 +396,7 @@ class _PostFormState extends State<PostForm> {
                       : Container(),
                   link != null && isURL(link)
                       ? Container(
-                          padding: EdgeInsets.only(top: 10),
+                          padding: EdgeInsets.only(top: 10, bottom: 60),
                           child: MyLinkPreview(
                               enableAnimation: true,
                               onPreviewDataFetched: (data) {
