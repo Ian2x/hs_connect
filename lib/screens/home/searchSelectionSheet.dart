@@ -50,6 +50,54 @@ class _SearchSelectionSheetState extends State<SearchSelectionSheet> {
             GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: () {
+                  if (searchByTrending && mounted) {
+                    widget.toggleSearch(false);
+                    setState(() {
+                      searchByTrending = false;
+                    });
+                  }
+                },
+                child: Column(
+                  children: [
+                    Divider(),
+                    Row(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('New',
+                                style: Theme.of(context).textTheme.headline6),
+                            SizedBox(height: 5),
+                            Text("Show the newest messages",
+                                style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.primary)),
+                            SizedBox(height: 2)
+                          ],
+                        ),
+                        Spacer(),
+                        ConstrainedBox(
+                            constraints: BoxConstraints(maxHeight: 40),
+                            child: Checkbox(
+                              value: !searchByTrending,
+                              shape: CircleBorder(),
+                              activeColor: activeColor,
+                              onChanged: (bool? value) {
+                                if (value == true) {
+                                  if (searchByTrending && mounted) {
+                                    widget.toggleSearch(false);
+                                    setState(() {
+                                      searchByTrending = false;
+                                    });
+                                  }
+                                }
+                              },
+                            ))
+                      ],
+                    )
+                  ],
+                )),
+            GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: () {
                   if (!searchByTrending && mounted) {
                     widget.toggleSearch(true);
                     setState(() {
@@ -95,54 +143,6 @@ class _SearchSelectionSheetState extends State<SearchSelectionSheet> {
                     )
                   ],
                 )),
-            GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTap: () {
-                  if (searchByTrending && mounted) {
-                    widget.toggleSearch(false);
-                    setState(() {
-                      searchByTrending = false;
-                    });
-                  }
-                },
-                child: Column(
-                  children: [
-                    Divider(),
-                    Row(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('New',
-                                style: Theme.of(context).textTheme.headline6),
-                            SizedBox(height: 5),
-                            Text("Show the newest messages",
-                                style: Theme.of(context).textTheme.subtitle1?.copyWith(color: colorScheme.primary)),
-                            SizedBox(height: 2)
-                          ],
-                        ),
-                        Spacer(),
-                        ConstrainedBox(
-                            constraints: BoxConstraints(maxHeight: 40),
-                            child: Checkbox(
-                              value: !searchByTrending,
-                              shape: CircleBorder(),
-                              activeColor: activeColor,
-                              onChanged: (bool? value) {
-                                if (value == true) {
-                                  if (searchByTrending && mounted) {
-                                    widget.toggleSearch(false);
-                                    setState(() {
-                                      searchByTrending = false;
-                                    });
-                                  }
-                                }
-                              },
-                            ))
-                      ],
-                    )
-                  ],
-                ))
           ],
         ));
   }

@@ -39,7 +39,7 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<PostCard> {
-  static const leftRightMargin = 5.0;
+  static const leftRightMargin = 6.0;
   final GlobalKey shareKey = GlobalKey();
 
   @override
@@ -161,9 +161,10 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
 
   @override
   Widget build(BuildContext context) {
-    final leftColumn = 43.0;
-    final rightColumn = 28.0;
     super.build(context);
+
+    final leftColumn = 40.0;
+    final rightColumn = 40.0;
 
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
@@ -182,7 +183,7 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
         likeCount: likeCount,
         dislikeCount: dislikeCount);
 
-    final contentWidth = MediaQuery.of(context).size.width - 2 * leftRightMargin - 9;
+    final contentWidth = MediaQuery.of(context).size.width - 2 * leftRightMargin - leftColumn - rightColumn;
 
     return GestureDetector(
       onTap: () async {
@@ -200,28 +201,164 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
       },
       child: RepaintBoundary(
         key: shareKey,
-        child: Stack(
+        child: /*Bubble(
+          margin: BubbleEdges.fromLTRB(leftRightMargin, 6, leftRightMargin, 6),
+          color: colorScheme.background,
+          padding: BubbleEdges.fromLTRB(10, 10, 5, 10),
+          // nip: widget.post.creatorRef != widget.currUserData.userRef ? BubbleNip.leftBottom : BubbleNip.rightBottom,
+          elevation: 0,
+          radius: Radius.circular(12),
+          child: Column(
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  buildGroupCircle(
+                      groupImage: creatorImage, size: 28, context: context, backgroundColor: colorScheme.background),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(widget.post.title,
+                          style: textTheme.headline6,
+                          overflow: TextOverflow.ellipsis, // default is .clip
+                          maxLines: 8),
+                      widget.post.link != null
+                          ? Container(
+                        margin: EdgeInsets.only(top: 8),
+                        child: MyLinkPreview(
+                            enableAnimation: true,
+                            onPreviewDataFetched: (data) {
+                              if (mounted) {
+                                setState(() => previewData = data);
+                              }
+                            },
+                            metadataTitleStyle: textTheme.subtitle1?.copyWith(fontWeight: FontWeight.bold),
+                            metadataTextStyle: textTheme.subtitle1?.copyWith(fontSize: 14),
+                            previewData: previewData,
+                            text: widget.post.link!,
+                            textStyle: textTheme.subtitle2,
+                            linkStyle: textTheme.subtitle2,
+                            width: contentWidth),
+                      )
+                          : Container(),
+                      widget.post.mediaURL != null
+                          ? ExpandableImage(
+                        imageURL: widget.post.mediaURL!,
+                        containerWidth: contentWidth,
+                        maxHeight: contentWidth * 4 / 3,
+                        margin: EdgeInsets.only(top: 8),
+                      )
+                          : Container(),
+                      poll != null
+                          ? Container(
+                          margin: EdgeInsets.only(top: 8),
+                          alignment: Alignment.center,
+                          width: contentWidth,
+                          child: PollView(poll: poll!, currUserRef: widget.currUserData.userRef, post: widget.post))
+                          : Container(),
+                    ]
+                  ),
+                  Spacer(),
+                  LikeDislikePost(
+                    currUserRef: widget.currUserData.userRef,
+                    post: widget.post,
+                    postLikesManager: postLikesManager,
+                    currUserColor: widget.currUserData.domainColor,
+                  ),
+                ]
+              ),
+              Row(
+                children: [
+                  SizedBox(width: 20),
+                  Container(
+                      padding: EdgeInsets.symmetric(horizontal: 13, vertical: 3),
+                      decoration: BoxDecoration(
+                          color: colorScheme.primaryContainer, borderRadius: BorderRadius.circular(8)),
+                      child: Row(
+                        children: [
+                          Text(
+                            (widget.post.numComments + widget.post.numReplies).toString(),
+                            style: textTheme.headline6?.copyWith(fontSize: 17),
+                          ),
+                          SizedBox(width: 7),
+                          Icon(Message2.message2, size: 16),
+                          widget.currUserData.userRef != widget.post.creatorRef
+                              ? Row(
+                            children: [
+                              SizedBox(width: 15),
+                              IconButton(
+                                constraints: BoxConstraints(),
+                                splashRadius: .1,
+                                padding: EdgeInsets.zero,
+                                icon: Icon(Icons.more_horiz, size: 21),
+                                onPressed: () {
+                                  showModalBottomSheet(
+                                      context: context,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(20),
+                                          )),
+                                      builder: (context) => ReportSheet(
+                                        reportType: ReportType.post,
+                                        entityRef: widget.post.postRef,
+                                        entityCreatorRef: widget.post.creatorRef,
+                                      ));
+                                },
+                              ),
+                            ],
+                          )
+                              : Container(),
+                        ],
+                      )),
+                  SizedBox(width: 11),
+                  Text(
+                    convertTime(widget.post.createdAt.toDate()),
+                    style: textTheme.headline6?.copyWith(fontSize: 17),
+                  ),
+                  Spacer(),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(10, 2, 10, 4),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: widget.currUserData.domainColor ?? colorScheme.primary
+                    ),
+                    child: GestureDetector(
+                        onTap: () async {
+                          await share();
+                        },
+                        child: Row(
+                          children: [
+                            Icon(Icons.ios_share_rounded, size: 18, color: colorScheme.brightness == Brightness.light ? colorScheme.surface : colorScheme.onSurface),
+                            SizedBox(width: 5),
+                            Text("Share", style: textTheme.headline6?.copyWith(fontSize: 17, color: colorScheme.brightness == Brightness.light ? colorScheme.surface : colorScheme.onSurface)),
+                          ],
+                        )),
+                  ),
+                ],
+              )
+            ],
+          ),
+        )*/
+
+        Stack(
           children: [
             Bubble(
               margin: BubbleEdges.fromLTRB(leftRightMargin, 6, leftRightMargin, 6),
               color: colorScheme.background,
-              padding: BubbleEdges.fromLTRB(leftColumn, 0, rightColumn, 10),
+              padding: BubbleEdges.fromLTRB(leftColumn, 10, rightColumn, 10),
               // nip: widget.post.creatorRef != widget.currUserData.userRef ? BubbleNip.leftBottom : BubbleNip.rightBottom,
               elevation: 0,
               radius: Radius.circular(12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    padding: EdgeInsets.fromLTRB(0, 8, 9, 0),
-                    child: Text(widget.post.title,
-                        style: textTheme.headline6,
-                        overflow: TextOverflow.ellipsis, // default is .clip
-                        maxLines: 8),
-                  ),
+                  Text(widget.post.title,
+                      style: textTheme.headline6,
+                      overflow: TextOverflow.ellipsis, // default is .clip
+                      maxLines: 8),
                   widget.post.link != null
                       ? Container(
-                          margin: EdgeInsets.fromLTRB(0, 5, 10, 0),
+                          margin: EdgeInsets.only(top: 8),
                           child: MyLinkPreview(
                               enableAnimation: true,
                               onPreviewDataFetched: (data) {
@@ -243,18 +380,18 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                           imageURL: widget.post.mediaURL!,
                           containerWidth: contentWidth,
                           maxHeight: contentWidth * 4 / 3,
-                          margin: EdgeInsets.fromLTRB(0, 8, 12, 0),
+                          margin: EdgeInsets.only(top: 8),
                         )
                       : Container(),
                   poll != null
                       ? Container(
-                          margin: EdgeInsets.fromLTRB(0, 5, 10, 0),
+                          margin: EdgeInsets.only(top: 8),
                           alignment: Alignment.center,
                           width: contentWidth,
                           child: PollView(poll: poll!, currUserRef: widget.currUserData.userRef, post: widget.post))
                       : Container(),
                   Container(
-                    margin: EdgeInsets.fromLTRB(0, 20, 5, 5),
+                    margin: EdgeInsets.only(top: 15, bottom: 5),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -305,7 +442,7 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                         ),
                         Spacer(),
                         Container(
-                          padding: EdgeInsets.fromLTRB(10, 2, 10, 4),
+                          padding: EdgeInsets.fromLTRB(10, 3, 10, 6),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(8),
                               color: widget.currUserData.domainColor ?? colorScheme.primary
@@ -335,8 +472,8 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                   groupImage: creatorImage, size: 28, context: context, backgroundColor: colorScheme.background),
             ),
             Positioned(
-              right:0,
-              top:12.5,
+              right:5,
+              top:10,
               child: LikeDislikePost(
                 currUserRef: widget.currUserData.userRef,
                 post: widget.post,

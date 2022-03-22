@@ -48,7 +48,7 @@ class ThemeNotifier with ChangeNotifier {
       primary: Color(0xffa1a1a1),
       onError: Color(0xffdbdada),
       onSecondary: Color(0xffff004d),
-      onPrimaryContainer: Color(0xff6f6f6f),
+      onPrimaryContainer: Color(0xff5e5e5e),
       onPrimary: Color(0xff000000),
       onBackground: Color(0xff000000),
     ),
