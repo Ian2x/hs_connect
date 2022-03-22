@@ -3,6 +3,7 @@ import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
+import 'package:hs_connect/models/accessRestriction.dart';
 import 'package:hs_connect/models/group.dart';
 import 'package:hs_connect/models/poll.dart';
 import 'package:hs_connect/models/post.dart';
@@ -161,12 +162,22 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
     final leftColumn = 50.0;
     final rightColumn = 45.0;
 
+    double specialPadding =0;
+
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
     if (group == null) {
       return Container();
     }
+
+    if (widget.post.accessRestriction.restrictionType == AccessRestrictionType.domain
+        || widget.post.isFeatured
+    ){
+      specialPadding=20;
+    }
+
+
 
     final postLikesManager = PostLikesManager(
         onLike: onLike,
@@ -207,6 +218,35 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      widget.post.isFeatured != false ?
+                      Row(
+                        children: [
+                          Text(widget.post.title,
+                              style: textTheme.headline6?.copyWith(
+                                color: widget.currUserData.domainColor ?? colorScheme.primary,
+                                fontSize:14,
+                                fontWeight:FontWeight.w500,
+                                ),
+                              ),
+                          Icon(Icons.local_fire_department, color: widget.currUserData.domainColor ?? colorScheme.primary),
+                        ],
+                      ): Container(),
+                      widget.post.accessRestriction.restrictionType == AccessRestrictionType.domain ?
+                      Row(
+                        children: [
+                          Text(group!.name,
+                              style: textTheme.headline6?.copyWith(
+                                color: widget.currUserData.domainColor ?? colorScheme.primary,
+                                fontSize:14,
+                                fontWeight:FontWeight.w500,
+                                ),
+                              ),
+                          Icon(Icons.lock, color: widget.currUserData.domainColor ?? colorScheme.primary,
+                            size:14,
+                          ),
+                        ],
+                      ): Container(),
+                      specialPadding != 0 ? SizedBox(height:5):Container(),
                       Text(widget.post.title,
                           style: textTheme.headline6,
                           overflow: TextOverflow.ellipsis, // default is .clip
@@ -321,13 +361,13 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
                 ),
                 Positioned(
                   left: 11,
-                  top: 20,
+                  top: 20+specialPadding,
                   child: buildGroupCircle(
                       groupImage: creatorImage, size: 30, context: context),
                 ),
                 Positioned(
                   right:3,
-                  top: 10,
+                  top: 10 + specialPadding,
                   child: LikeDislikePost(
                     currUserRef: widget.currUserData.userRef,
                     post: widget.post,
