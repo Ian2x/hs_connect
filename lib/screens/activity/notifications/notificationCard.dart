@@ -90,45 +90,48 @@ class _NotificationCardState extends State<NotificationCard> {
     }
 
     if (widget.myNotification.myNotificationType == MyNotificationType.fromMe) {
-      return Container(
-          decoration: BoxDecoration(
-              color: colorScheme.surface,
-              border: Border(top: BorderSide(color: colorScheme.primaryContainer, width: 0.5))
-          ),
-          padding: EdgeInsets.fromLTRB(14, 13, 14, 15),
-          child: Row(
-            children: [
-              SizedBox(
-                  width: 307,
-                  child: RichText(
-                      maxLines: 100,
-                      overflow: TextOverflow.ellipsis,
-                      text: TextSpan(children: [
-                        TextSpan(
-                            text: "Convo team: ", style: textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w600)),
-                        TextSpan(text: widget.myNotification.extraData!, style: textTheme.bodyText2),
-                      ]))),
-              Flexible(
-                child: Row(
-                  children: [
-                    Spacer(),
-                    Text(convertTime(widget.myNotification.createdAt.toDate()),
-                        style: textTheme.subtitle2?.copyWith(color: colorScheme.primary))
-                  ],
-                ),
-              ),
-            ],
-          ));
+      return Column(
+        children: [
+          Divider(height: 0.5),
+          Container(
+              padding: EdgeInsets.fromLTRB(14, 13, 14, 15),
+              child: Row(
+                children: [
+                  SizedBox(
+                      width: 307,
+                      child: RichText(
+                          maxLines: 100,
+                          overflow: TextOverflow.ellipsis,
+                          text: TextSpan(children: [
+                            TextSpan(
+                                text: "Convo team: ", style: textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w600)),
+                            TextSpan(text: widget.myNotification.extraData!, style: textTheme.bodyText2),
+                          ]))),
+                  Flexible(
+                    child: Row(
+                      children: [
+                        Spacer(),
+                        Text(convertTime(widget.myNotification.createdAt.toDate()),
+                            style: textTheme.subtitle2?.copyWith(color: colorScheme.primary))
+                      ],
+                    ),
+                  ),
+                ],
+              )),
+        ],
+      );
     }
 
     if (userData == null || sourceUserName == null || postGroupName == null) {
-      return Container(
-          decoration: BoxDecoration(
-              border: Border(top: BorderSide(color: colorScheme.primaryContainer, width: 0.5))
-          ),
-          padding: EdgeInsets.fromLTRB(14, 13, 14, 15),
-          height: 65,
-          child: loading ? Loading(backgroundColor: Colors.transparent) : null);
+      return Column(
+        children: [
+          Divider(height: 0.5),
+          Container(
+              padding: EdgeInsets.fromLTRB(14, 13, 14, 15),
+              height: 65,
+              child: loading ? Loading(backgroundColor: Colors.transparent) : null),
+        ],
+      );
     }
 
     return GestureDetector(

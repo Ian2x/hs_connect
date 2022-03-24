@@ -41,9 +41,9 @@ async function notificationTitle(notification) {
         case "postVotes":
             return "";
         case "fromMe":
-            return "The team at convo have a message:";
+            return "The team at convo:";
         case "featuredPost":
-            return "Featured message:";
+            return "Trending:";
         default:
             return "[Error: unknown notification]";
     }

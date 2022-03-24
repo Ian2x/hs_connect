@@ -84,7 +84,7 @@ Future<String> writeToFile(ByteData data) async {
   final buffer = data.buffer;
   Directory tempDir = await getTemporaryDirectory();
   String tempPath = tempDir.path;
-  var filePath = tempPath + '/share.jpg'; // file_01.tmp is dump file, can be anything
+  var filePath = tempPath + '/share.png';
   await File(filePath).writeAsBytes(buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
   return filePath;
 }

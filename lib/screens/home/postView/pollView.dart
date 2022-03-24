@@ -127,7 +127,7 @@ class PollChoiceView extends StatelessWidget {
           margin: EdgeInsets.all(5),
           decoration: ShapeDecoration(
               shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(11),
             side: BorderSide(
               color: colorScheme.onError,
               width: 1,

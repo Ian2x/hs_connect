@@ -22,6 +22,7 @@ import 'package:validators/validators.dart';
 import '../../../shared/widgets/myDivider.dart';
 import 'groupSelectionSheet.dart';
 
+
 const String emptyPollChoiceError = 'Can\'t create a poll with an empty choice';
 const String emptyTitleError = 'Can\'t create a post with an empty title';
 const String badLinkError = 'Please enter a valid URL link';
@@ -29,8 +30,10 @@ const String spamPostError = 'Please wait 1 minute between posts';
 
 class PostForm extends StatefulWidget {
   final UserData currUserData;
+  final String? initialURL;
+  final File? initialImage;
 
-  const PostForm({Key? key, required this.currUserData}) : super(key: key);
+  const PostForm({Key? key, required this.currUserData, this.initialURL, this.initialImage}) : super(key: key);
 
   @override
   _PostFormState createState() => _PostFormState();
@@ -51,7 +54,7 @@ class _PostFormState extends State<PostForm> {
     Navigator.pop(context);
   }
 
-  File? newFile;
+  File? image;
   Widget? poll;
   String? link;
   PreviewData? previewData;
@@ -77,6 +80,8 @@ class _PostFormState extends State<PostForm> {
   @override
   void initState() {
     getGroupChoices();
+    link = widget.initialURL;
+    image = widget.initialImage;
     super.initState();
   }
 
@@ -249,9 +254,9 @@ class _PostFormState extends State<PostForm> {
                       }
                       // handle image if applicable
                       String? downloadURL;
-                      if (newFile != null) {
+                      if (image != null) {
                         // upload newFile
-                        downloadURL = await _images.uploadImage(file: newFile!);
+                        downloadURL = await _images.uploadImage(file: image!);
                       }
                       // handle poll if applicable
                       DocumentReference? pollRef;
@@ -379,6 +384,7 @@ class _PostFormState extends State<PostForm> {
                                   },
                                   icon: Icon(Icons.close, size: 20),
                                 )),
+                            initialValue: link,
                             autocorrect: false,
                             onChanged: (val) {
                               setState(() => link = val);
@@ -413,14 +419,14 @@ class _PostFormState extends State<PostForm> {
                               width: MediaQuery.of(context).size.width - 40),
                         )
                       : Container(),
-                  newFile != null
+                  image != null
                       ? Semantics(
                           label: 'new_post_pic_image',
                           child: DeletableImage(
-                              image: Image.file(File(newFile!.path), fit: BoxFit.contain),
+                              image: Image.file(File(image!.path), fit: BoxFit.contain),
                               onDelete: () {
                                 if (mounted) {
-                                  setState(() => newFile = null);
+                                  setState(() => image = null);
                                 }
                               },
                               maxHeight: 350,
@@ -447,11 +453,11 @@ class _PostFormState extends State<PostForm> {
                   SizedBox(width: 10),
                   picPickerButton(
                       iconSize: 30,
-                      color: newFile == null ? colorScheme.primary : userColor,
+                      color: image == null ? colorScheme.primary : userColor,
                       setPic: ((File? f) {
                         if (mounted) {
                           setState(() {
-                            newFile = f;
+                            image = f;
                             poll = null;
                             link = null;
                             previewData = null;
@@ -498,7 +504,7 @@ class _PostFormState extends State<PostForm> {
                               });
                             }
                           });
-                          newFile = null;
+                          image = null;
                           link = null;
                           previewData = null;
                         });
@@ -512,7 +518,7 @@ class _PostFormState extends State<PostForm> {
                         setState(() {
                           link = '';
                           previewData = null;
-                          newFile = null;
+                          image = null;
                           poll = null;
                         });
                       }

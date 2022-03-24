@@ -72,8 +72,14 @@ class _GroupSelectionSheetState extends State<GroupSelectionSheet> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(group.name,
-                              style: textTheme.headline6),
+                          Row(
+                            children: [
+                              Text(group.name,
+                                  style: textTheme.headline6),
+                              group.accessRestriction.restrictionType == AccessRestrictionType.domain ? SizedBox(width: 3) : Container(),
+                              group.accessRestriction.restrictionType == AccessRestrictionType.domain ? Icon(Icons.lock, size: 14) : Container()
+                            ],
+                          ),
                           group.name == "Public"
                               ? Column(
                                   children: [
