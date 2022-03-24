@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -13,9 +15,12 @@ import 'package:hs_connect/screens/home/postView/postPage.dart';
 import 'package:hs_connect/shared/constants.dart';
 import 'package:hs_connect/shared/myStorageManager.dart';
 import 'package:hs_connect/shared/widgets/myNavigationBar.dart';
+import 'package:validators/validators.dart';
 import '../new/newPost/newPost.dart';
 import 'homeAppBar.dart';
 import 'launchCountdown.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+
 
 class Home extends StatefulWidget {
   final User user;
@@ -32,6 +37,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   bool searchByTrending = true;
   ScrollController scrollController = ScrollController();
 
+  StreamSubscription? _intentDataStreamSubscriptionImage;
+  StreamSubscription? _intentDataStreamSubscriptionURL;
+
   void toggleSearch(bool newSearchByTrending) {
     if (mounted) {
       MyStorageManager.saveData('searchByTrending', newSearchByTrending);
@@ -47,7 +55,52 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     getSearchByTrending();
     saveTokenToDatabase();
     updateAnalytics();
+    handleShare();
     super.initState();
+  }
+
+  void handleShare() {
+    // For sharing images coming from outside the app while the app is in the memory
+    _intentDataStreamSubscriptionImage =
+        ReceiveSharingIntent.getMediaStream().listen((List<SharedMediaFile> value) {
+          if (value.isNotEmpty) {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) =>
+                    NewPost(initialImage: File(value[0].path))));
+          }
+        }, onError: (err) {
+          print("getIntentDataStream error: $err");
+        });
+
+    // For sharing images coming from outside the app while the app is closed
+    ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile> value) {
+      if (value.isNotEmpty) {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+                NewPost(initialImage: File(value[0].path))));
+      }
+    });
+
+    // For sharing or opening urls/text coming from outside the app while the app is in the memory
+    _intentDataStreamSubscriptionURL =
+        ReceiveSharingIntent.getTextStream().listen((String value) {
+          if (isURL(value)) {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) =>
+                    NewPost(initialURL: value)));
+          }
+        }, onError: (err) {
+          print("getLinkStream error: $err");
+        });
+
+    // For sharing or opening urls/text coming from outside the app while the app is closed
+    ReceiveSharingIntent.getInitialText().then((String? value) {
+      if (isURL(value)) {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+                NewPost(initialURL: value)));
+      }
+    });
   }
 
   void updateAnalytics() async {
@@ -199,6 +252,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   void dispose() {
     scrollController.dispose();
+    _intentDataStreamSubscriptionImage?.cancel();
+    _intentDataStreamSubscriptionURL?.cancel();
     super.dispose();
   }
 

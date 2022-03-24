@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 // trendingCreatedAt factors
-const trendingCommentBoost = 0.10;
-const trendingReplyBoost = 0.12;
-const trendingPostLikeBoost = 0.06;
-const trendingPostDislikeBoost = -0.08;
-const trendingPollVoteBoost = 0.02;
+const trendingCommentBoost = 0.20;
+const trendingReplyBoost = 0.25;
+const trendingPostLikeBoost = 0.08;
+const trendingPostDislikeBoost = -0.12;
+const trendingPollVoteBoost = 0.05;
 const maxTrendingHours = 36;
 
 const initialPostsFetchSize = 20;

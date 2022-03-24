@@ -149,37 +149,36 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
               child: Stack(
                 alignment: AlignmentDirectional.centerStart,
                 children: <Widget>[
-                  Container(
-                      // margin: EdgeInsets.only(top: index == 0 ? 4.5 : 2, bottom: index == UMUDcache.length - 1 ? 2.5 : 0),
-                      decoration: BoxDecoration(
-                          color: colorScheme.surface,
-                          border: Border(
-                              bottom: BorderSide(color: colorScheme.primaryContainer, width: 0.5),
-                              top: index == 0
-                                  ? BorderSide(color: colorScheme.primaryContainer, width: 0.5)
-                                  : BorderSide.none)),
-                      padding: EdgeInsets.fromLTRB(20, 13, 14, 15),
-                      child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
-                        ProfileImage(backgroundColor: otherUser.domainColor, size: 33),
-                        SizedBox(width: 14),
-                        Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-                          Text(otherUser.fundamentalName, style: textTheme.bodyText2),
-                          SizedBox(height: 4),
-                          Text(otherUser.fullDomainName ?? otherUser.domain,
-                              style: textTheme.bodyText2?.copyWith(color: otherUser.domainColor ?? colorScheme.primary))
-                        ]),
-                        Flexible(
-                            child: Column(children: <Widget>[
-                          Row(children: <Widget>[
-                            Spacer(),
-                            isToday(UMUDcache[index].UM!.lastMessage.toDate())
-                                ? Text(DateFormat.jm().format(UMUDcache[index].UM!.lastMessage.toDate()),
-                                    style: textTheme.subtitle2?.copyWith(color: colorScheme.primary))
-                                : Text(DateFormat.yMd().format(UMUDcache[index].UM!.lastMessage.toDate()),
-                                    style: textTheme.subtitle2?.copyWith(color: colorScheme.primary))
-                          ])
-                        ]))
-                      ])),
+                  Column(
+                    children: [
+                      index == 0 ? Divider(height: 0.5) : Container(),
+                      Container(
+                          // margin: EdgeInsets.only(top: index == 0 ? 4.5 : 2, bottom: index == UMUDcache.length - 1 ? 2.5 : 0),
+                          padding: EdgeInsets.fromLTRB(20, 13, 14, 15),
+                          child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
+                            ProfileImage(backgroundColor: otherUser.domainColor, size: 33),
+                            SizedBox(width: 14),
+                            Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+                              Text(otherUser.fundamentalName, style: textTheme.bodyText2),
+                              SizedBox(height: 4),
+                              Text(otherUser.fullDomainName ?? otherUser.domain,
+                                  style: textTheme.bodyText2?.copyWith(color: otherUser.domainColor ?? colorScheme.primary))
+                            ]),
+                            Flexible(
+                                child: Column(children: <Widget>[
+                              Row(children: <Widget>[
+                                Spacer(),
+                                isToday(UMUDcache[index].UM!.lastMessage.toDate())
+                                    ? Text(DateFormat.jm().format(UMUDcache[index].UM!.lastMessage.toDate()),
+                                        style: textTheme.subtitle2?.copyWith(color: colorScheme.primary))
+                                    : Text(DateFormat.yMd().format(UMUDcache[index].UM!.lastMessage.toDate()),
+                                        style: textTheme.subtitle2?.copyWith(color: colorScheme.primary))
+                              ])
+                            ]))
+                          ])),
+                      Divider(height: 0.5)
+                    ],
+                  ),
                   (UMUDcache[index].UM!.lastViewed == null ||
                           UMUDcache[index].UM!.lastViewed!.compareTo(UMUDcache[index].UM!.lastMessage) < 0)
                       ? Container(

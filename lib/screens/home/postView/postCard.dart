@@ -1,5 +1,5 @@
+import 'dart:io';
 import 'dart:ui' as ui;
-import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
@@ -141,16 +141,18 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
     RenderObject? boundary = shareKey.currentContext?.findRenderObject();
     if (boundary.runtimeType == RenderRepaintBoundary) {
       RenderRepaintBoundary boundary2 = boundary as RenderRepaintBoundary;
-      if (boundary2.debugNeedsPaint) {
+      /*if (boundary2.debugNeedsPaint) {
         await Future.delayed(const Duration(milliseconds: 20));
         return share();
-      }
+      }*/
       final image = await boundary2.toImage(pixelRatio: 4);
       final bytes = await image.toByteData(format: ui.ImageByteFormat.png);
       if (bytes != null) {
         final filePath = await writeToFile(bytes);
-        // final shareURL = await ImageStorage().uploadShare(file: file);
-        Share.shareFiles([filePath]);
+        final box = shareKey.currentContext?.findRenderObject() as RenderBox?;
+        await Share.shareFiles([filePath], sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
+        final dir = Directory(filePath);
+        dir.deleteSync(recursive: true);
       }
     }
   }

@@ -70,7 +70,7 @@ class _NotificationsFeedState extends State<NotificationsFeed> {
               return Column(
                 children: [
                   NotificationCard(myNotification: notifications![trueIndex]),
-                  Divider(height: 0.5)
+                  Divider(height: 0.5),
                 ],
               );
             } else {
