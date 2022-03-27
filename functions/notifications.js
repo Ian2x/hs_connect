@@ -150,7 +150,7 @@ exports.dmNotification = functions.firestore
                 const payload = {
                     tokens: tokens,
                     notification: {
-                        title: "New message from " + sender.get("fundamentalName"),
+                        title: "New chat from " + sender.get("fundamentalName"),
                         body: body,
                     },
                     data: {
