@@ -1,4 +1,3 @@
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:hs_connect/screens/authenticate/registerPassword.dart';
 import 'package:hs_connect/shared/constants.dart';
@@ -94,7 +93,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                 hasText: email != "",
                 onPressed: () async {
                   bool inUse = await _auth.checkIfEmailInUse(email); //returns true if Used
-                  bool isEmail = EmailValidator.validate(email) && email != "";
+                  bool isEmail = true; //EmailValidator.validate(email) && email != "";
                   if (!inUse && isEmail) {
                     Navigator.of(context)
                         .push(MaterialPageRoute(builder: (context) => RegisterPassword(email: email.toLowerCase())));

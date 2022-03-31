@@ -63,30 +63,16 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
                   Navigator.push(
                     context,
                     NoAnimationMaterialPageRoute(
-                        builder: (context) => DiscoverPage()),
+                        builder: (context) => ActivityPage()),
                   );
                 } else {
                   Navigator.pushReplacement(
                     context,
                     NoAnimationMaterialPageRoute(
-                        builder: (context) => DiscoverPage()),
+                        builder: (context) => ActivityPage()),
                   );
                 }
               } else if (index == 2) {
-                if (widget.currentIndex == 0) {
-                  Navigator.push(
-                    context,
-                    NoAnimationMaterialPageRoute(
-                        builder: (context) => ActivityPage()),
-                  );
-                } else {
-                  Navigator.pushReplacement(
-                    context,
-                    NoAnimationMaterialPageRoute(
-                        builder: (context) => ActivityPage()),
-                  );
-                }
-              } else if (index == 3) {
                 if (widget.currentIndex == 0) {
                   Navigator.push(
                     context,
@@ -102,14 +88,14 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
             },
             items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(label: '', icon: Icon(Thicker.home_square, size: 25)),
-              BottomNavigationBarItem(label: '', icon: Icon(Icons.search_rounded, size: 30)),
+              // BottomNavigationBarItem(label: '', icon: Icon(Icons.search_rounded, size: 30)),
               BottomNavigationBarItem(label: '', icon: Icon(Thicker.notification, size: 25)),
               BottomNavigationBarItem(label: '', icon: Icon(Thicker.profile_1, size: 20)),
             ],
           ),
         ),
         Positioned(
-            left: MediaQuery.of(context).size.width * 0.625 + 1.5,
+            left: MediaQuery.of(context).size.width * 0.5 + 1.5,
             top: 5.5,
             child: IgnorePointer(
               child: FutureBuilder(
