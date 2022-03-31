@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hs_connect/models/comment.dart';
 import 'package:hs_connect/models/myNotification.dart';
@@ -183,6 +185,41 @@ class PostsDatabaseService {
     }
   }
 
+  Future forceLikePost(Post post, int likeCount) async {
+    // update creator's likeCount
+    post.creatorRef.update({C.score: FieldValue.increment(1)});
+    // like post and adjust trendingCreatedAt
+    final newTCA = newTrendingCreatedAt(post.trendingCreatedAt.toDate(), post.createdAt.toDate(), trendingPostLikeBoost);
+    post.trendingCreatedAt = Timestamp.fromDate(newTCA);
+    final docId = "fake" + Random().nextInt(99999).toString();
+    await post.postRef.update({
+      C.likes: FieldValue.arrayUnion([FirebaseFirestore.instance.collection('fake').doc(docId)]),
+      C.trendingCreatedAt: newTCA,
+    });
+    // send notification if applicable
+    if (likeCount == 1 || likeCount == 10 || likeCount == 20 || likeCount == 50 || likeCount == 100) {
+      bool update = true;
+      final notifications = await MyNotificationsDatabaseService(userRef: post.creatorRef).getNotifications();
+      for (MyNotification MN in notifications) {
+        if (MN.sourceRef == post.postRef &&
+            MN.myNotificationType == MyNotificationType.postVotes &&
+            MN.extraData == likeCount.toString()) {
+          update = false;
+          break;
+        }
+      }
+      if (update) {
+        MyNotificationsDatabaseService(userRef: currUserRef).newNotification(
+            parentPostRef: post.postRef,
+            myNotificationType: MyNotificationType.postVotes,
+            sourceRef: post.postRef,
+            sourceUserRef: currUserRef,
+            notifiedUserRef: post.creatorRef,
+            extraData: likeCount.toString());
+      }
+    }
+  }
+
   Future unLikePost(Post post) async {
     // update creator's likeCount
     post.creatorRef.update({C.score: FieldValue.increment(-1)});
@@ -196,26 +233,36 @@ class PostsDatabaseService {
   }
 
   Future dislikePost(Post post) async {
-    // remove like if liked, dislike post, and +1 to score
+    // remove like if liked, dislike post
     final newTCA = newTrendingCreatedAt(post.trendingCreatedAt.toDate(), post.createdAt.toDate(), trendingPostDislikeBoost);
     post.trendingCreatedAt = Timestamp.fromDate(newTCA);
 
     await postRef!.update({
       C.likes: FieldValue.arrayRemove([currUserRef]),
       C.dislikes: FieldValue.arrayUnion([currUserRef]),
-      C.score: FieldValue.increment(1),
+      C.trendingCreatedAt: newTCA
+    });
+  }
+
+  Future forceDislikePost(Post post) async {
+    // remove like if liked, dislike post
+    final newTCA = newTrendingCreatedAt(post.trendingCreatedAt.toDate(), post.createdAt.toDate(), trendingPostDislikeBoost);
+    post.trendingCreatedAt = Timestamp.fromDate(newTCA);
+    final docId = "fake" + Random().nextInt(99999).toString();
+
+    await postRef!.update({
+      C.dislikes: FieldValue.arrayUnion([FirebaseFirestore.instance.collection('fake').doc(docId)]),
       C.trendingCreatedAt: newTCA
     });
   }
 
   Future unDislikePost(Post post) async {
-    // remove like and -1 to score
+    // remove like
     final newTCA = undoNewTrendingCreatedAt(post.trendingCreatedAt.toDate(), post.createdAt.toDate(), trendingPostDislikeBoost);
     post.trendingCreatedAt = Timestamp.fromDate(newTCA);
 
     await postRef!.update({
       C.dislikes: FieldValue.arrayRemove([currUserRef]),
-      C.score: FieldValue.increment(-1),
       C.trendingCreatedAt: newTCA
     });
   }

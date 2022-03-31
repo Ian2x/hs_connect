@@ -33,35 +33,18 @@ class LikeDislikePost extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        () {
-          if (postLikesManager.likeStatus == true) {
-            return IconButton(
-              iconSize: postIconSizeStateless,
-              splashColor: Colors.transparent,
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              constraints: BoxConstraints(),
-              icon: Icon(ThickArrow.angle_up_icon, color: activeColor),
-              onPressed: () {
-                HapticFeedback.heavyImpact();
-                postLikesManager.onUnLike();
-                _posts.unLikePost(post);
-              },
-            );
-          } else {
-            return IconButton(
-              iconSize: postIconSizeStateless,
-              splashColor: Colors.transparent,
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              constraints: BoxConstraints(),
-              icon: Icon(ThickArrow.angle_up_icon),
-              onPressed: () {
-                HapticFeedback.heavyImpact();
-                postLikesManager.onLike();
-                _posts.likePost(post, postLikesManager.likeCount + 1); // because postLikesManager.likeCount is behind
-              },
-            );
-          }
-        }(),
+        IconButton(
+          iconSize: postIconSizeStateless,
+          splashColor: Colors.transparent,
+          padding: EdgeInsets.symmetric(horizontal: 8),
+          constraints: BoxConstraints(),
+          icon: Icon(Icons.plus_one_rounded, color: activeColor),
+          onPressed: () {
+            HapticFeedback.heavyImpact();
+            _posts.forceLikePost(post, postLikesManager.likeCount - postLikesManager.dislikeCount + 1);
+            postLikesManager.onLike();
+          },
+        ),
         GestureDetector(
           onTap: () {},
           child: Container(
@@ -73,35 +56,18 @@ class LikeDislikePost extends StatelessWidget {
             ),
           ),
         ),
-        () {
-          if (postLikesManager.dislikeStatus == true) {
-            return IconButton(
-              iconSize: postIconSizeStateless,
-              splashColor: Colors.transparent,
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              constraints: BoxConstraints(),
-              icon: Icon(ThickArrow.angle_down_icon, color: activeColor),
-              onPressed: () {
-                HapticFeedback.heavyImpact();
-                postLikesManager.onUnDislike();
-                _posts.unDislikePost(post);
-              },
-            );
-          } else {
-            return IconButton(
-              iconSize: postIconSizeStateless,
-              splashColor: Colors.transparent,
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              constraints: BoxConstraints(),
-              icon: Icon(ThickArrow.angle_down_icon),
-              onPressed: () {
-                HapticFeedback.heavyImpact();
-                postLikesManager.onDislike();
-                _posts.dislikePost(post);
-              },
-            );
-          }
-        }(),
+        IconButton(
+          iconSize: postIconSizeStateless,
+          splashColor: Colors.transparent,
+          padding: EdgeInsets.symmetric(horizontal: 8),
+          constraints: BoxConstraints(),
+          icon: Icon(Icons.exposure_minus_1_rounded, color: activeColor),
+          onPressed: () {
+            HapticFeedback.heavyImpact();
+            _posts.forceDislikePost(post);
+            postLikesManager.onDislike();
+          },
+        ),
       ],
     );
   }

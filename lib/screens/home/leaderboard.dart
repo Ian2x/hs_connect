@@ -58,14 +58,19 @@ class _LeaderBoardState extends State<LeaderBoard> with TickerProviderStateMixin
               shrinkWrap: true,
               itemCount: localLeaders.length,
               itemBuilder: (BuildContext context, int index) {
+                String rank = (index + 1).toString() + ".";
+                String name = localLeaders[index].fundamentalName;
+                if (index==0) name += " 🏆"; // 🥇🥈🥉
+                if (index==1) name += " 🥈";
+                if (index==2) name += " 🥉";
                 return Column(
                   children: [
                     Container(padding: EdgeInsets.only(left: 0), child: Divider(height: 1, thickness: 1)),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 25, vertical: 13),
                       child: Row(children: [
-                        SizedBox(width: 40, child: Text((index + 1).toString() + ".", style: textTheme.subtitle1)),
-                        Text(localLeaders[index].fundamentalName, style: textTheme.subtitle1),
+                        SizedBox(width: 45, child: Text(rank, style: textTheme.subtitle1)),
+                        Text(name, style: textTheme.subtitle1),
                         Spacer(),
                         Text(localLeaders[index].score.toString() + " likes", style: textTheme.subtitle1),
                       ]),
@@ -105,58 +110,72 @@ class _LeaderBoardState extends State<LeaderBoard> with TickerProviderStateMixin
           ),
         ),
         backgroundColor: colorScheme.surface,
-        body: Container(
-          height: MediaQuery.of(context).size.height,
-          child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-            SizedBox(
-              height: 35,
-              child: TabBar(
-                controller: _tabController,
-                padding: EdgeInsets.zero,
-                indicator: BoxDecoration(
-                    border: Border(
-                        bottom:
-                            BorderSide(width: 2.0, color: widget.currUserData.domainColor ?? colorScheme.onSurface))),
-                indicatorPadding: EdgeInsets.only(bottom: 1),
-                indicatorWeight: 0.001,
-                labelStyle: textTheme.subtitle1?.copyWith(color: colorScheme.onSurface),
-                unselectedLabelStyle: textTheme.subtitle1?.copyWith(color: colorScheme.primary),
-                tabs: [
-                  Tab(
-                    icon: Text(widget.currUserData.fullDomainName ?? widget.currUserData.domain,
-                        style: textTheme.headline6),
+        body: Stack(
+          children: [
+            Container(
+              height: MediaQuery.of(context).size.height,
+              child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                SizedBox(
+                  height: 35,
+                  child: TabBar(
+                    controller: _tabController,
+                    padding: EdgeInsets.zero,
+                    indicator: BoxDecoration(
+                        border: Border(
+                            bottom:
+                                BorderSide(width: 2.0, color: widget.currUserData.domainColor ?? colorScheme.onSurface))),
+                    indicatorPadding: EdgeInsets.only(bottom: 1),
+                    indicatorWeight: 0.001,
+                    labelStyle: textTheme.subtitle1?.copyWith(color: colorScheme.onSurface),
+                    unselectedLabelStyle: textTheme.subtitle1?.copyWith(color: colorScheme.primary),
+                    tabs: [
+                      Tab(
+                        icon: Text(widget.currUserData.fullDomainName ?? widget.currUserData.domain,
+                            style: textTheme.headline6),
+                      ),
+                      Tab(
+                        icon: Text("Global", style: textTheme.headline6),
+                      ),
+                    ],
                   ),
-                  Tab(
-                    icon: Text("Global", style: textTheme.headline6),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 500,
-              child: TabBarView(
-                controller: _tabController,
-                children: [leaderboardsTable(context, true), leaderboardsTable(context, false)],
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 17),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: widget.currUserData.domainColor ?? colorScheme.primary),
-                  alignment: Alignment.center,
-                  child: Text("Your likes: " + widget.userLikes.toString(),
-                      style: textTheme.headline6?.copyWith(
-                          color: colorScheme.brightness == Brightness.light
-                              ? colorScheme.surface
-                              : colorScheme.onSurface)),
                 ),
-              ],
-            )
-          ]),
+                SizedBox(
+                  height: 500,
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: [leaderboardsTable(context, true), leaderboardsTable(context, false)],
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(top: 20),
+                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 17),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: widget.currUserData.domainColor ?? colorScheme.primary),
+                      alignment: Alignment.center,
+                      child: Text("Your likes: " + widget.userLikes.toString(),
+                          style: textTheme.headline6?.copyWith(
+                              color: colorScheme.brightness == Brightness.light
+                                  ? colorScheme.surface
+                                  : colorScheme.onSurface)),
+                    ),
+                  ],
+                )
+              ]),
+            ),
+            GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onPanUpdate: (details) {
+                  if (details.delta.dx > 15) {
+                    Navigator.of(context).pop();
+                  }
+                },
+                child: Container(height: MediaQuery.of(context).size.height, width: MediaQuery.of(context).size.width)
+            ),
+          ],
         ));
   }
 }

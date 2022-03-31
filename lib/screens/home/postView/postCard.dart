@@ -97,45 +97,25 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
     }
   }
 
-  void onLike() {
+  void onLikeAlt() {
     if (mounted) {
       setState(() {
         likeCount += 1;
-        if (dislikeStatus == true) dislikeCount -= 1;
-        likeStatus = true;
-        dislikeStatus = false;
       });
     }
   }
 
-  void onUnLike() {
-    if (mounted) {
-      setState(() {
-        likeCount -= 1;
-        likeStatus = false;
-      });
-    }
-  }
+  void onUnLike() {}
 
-  void onDislike() {
+  void onDislikeAlt() {
     if (mounted) {
       setState(() {
         dislikeCount += 1;
-        if (likeStatus == true) likeCount -= 1;
-        dislikeStatus = true;
-        likeStatus = false;
       });
     }
   }
 
-  void onUnDislike() {
-    if (mounted) {
-      setState(() {
-        dislikeCount -= 1;
-        dislikeStatus = false;
-      });
-    }
-  }
+  void onUnDislike() {}
 
   Future<void> share() async {
     RenderObject? boundary = shareKey.currentContext?.findRenderObject();
@@ -178,9 +158,9 @@ class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin<
     }
 
     final postLikesManager = PostLikesManager(
-        onLike: onLike,
+        onLike: onLikeAlt,
         onUnLike: onUnLike,
-        onDislike: onDislike,
+        onDislike: onDislikeAlt,
         onUnDislike: onUnDislike,
         likeStatus: likeStatus,
         dislikeStatus: dislikeStatus,
