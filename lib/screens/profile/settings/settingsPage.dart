@@ -68,9 +68,10 @@ class _SettingsPageState extends State<SettingsPage> {
           appBar: AppBar(
             backgroundColor: colorScheme.surface,
             title: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(width: 85),
                 Text("Settings"),
+                SizedBox(width: 55),
               ],
             ),
             elevation: 0,
@@ -201,10 +202,11 @@ class _SettingsPageState extends State<SettingsPage> {
                               content: "You may need to reload your app afterwards to complete the logout process.",
                               action: () async {
                             HapticFeedback.heavyImpact();
-                            Navigator.of(context).pop();
-                            Navigator.of(context).pop();
                             await AuthService().signOut();
-                          });
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                            });
                         },
                         child: Container(
                           height: 55,

@@ -112,8 +112,7 @@ class UserDataDatabaseService {
   Future<UserData?> _userDataFromSnapshot(DocumentSnapshot snapshot,
       {DocumentReference? overrideUserRef, bool? noDomainData}) async {
     if (snapshot.exists) {
-      return await userDataFromSnapshot(snapshot, overrideUserRef ?? currUserRef,
-          noDomainData: noDomainData);
+      return await userDataFromSnapshot(snapshot, overrideUserRef ?? currUserRef, noDomainData: noDomainData);
     } else {
       return null;
     }
@@ -150,5 +149,13 @@ class UserDataDatabaseService {
         .where(C.displayedNameLC, isLessThan: searchKeyLC + 'z')
         .snapshots()
         .map((snapshot) => snapshot.docs.map(_streamResultFromQuerySnapshot).toList());
+  }
+
+  Future<List<OtherUserData>> getLeaderboard({bool fromSchool = false, String schoolDomain = ''}) async {
+    final snapshot = fromSchool
+        ? await userDataCollection.where('domain', isEqualTo: schoolDomain).orderBy('score', descending: true).limit(10).get()
+        : await userDataCollection.orderBy('score', descending: true).limit(10).get();
+    final temp = await Future.wait(snapshot.docs.map(_otherUserDataFromSnapshot));
+    return temp.whereType<OtherUserData>().toList();
   }
 }

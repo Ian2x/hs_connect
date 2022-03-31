@@ -129,6 +129,7 @@ class _AllMessagesPageState extends State<AllMessagesPage> {
               UMUDcache[index].UM!.lastViewed = Timestamp.now();
             };
             return GestureDetector(
+              behavior: HitTestBehavior.translucent,
               onTap: () async {
                 final _ = await Navigator.push(
                     context,

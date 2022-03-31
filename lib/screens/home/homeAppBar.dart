@@ -3,6 +3,8 @@ import 'package:hs_connect/models/userData.dart';
 import 'package:hs_connect/screens/home/searchSelectionSheet.dart';
 import 'package:hs_connect/shared/inputDecorations.dart';
 
+import 'leaderboard.dart';
+
 class HomeAppBar extends SliverPersistentHeaderDelegate {
   static const expandedHeight = 50.0;
 
@@ -41,7 +43,7 @@ class HomeAppBar extends SliverPersistentHeaderDelegate {
             child: Stack(
               children: [
                 Container(
-                  padding: EdgeInsets.fromLTRB(15,13,0,50),
+                  padding: EdgeInsets.fromLTRB(15, 13, 0, 50),
                   child: Row(
                     children: [
                       SizedBox(width: 10),
@@ -55,14 +57,30 @@ class HomeAppBar extends SliverPersistentHeaderDelegate {
                   ),
                 ),
                 Positioned(
+                  right: 135,
+                  top: 14,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LeaderBoard(userLikes: currUserData.score, currUserData: currUserData,)),
+                      );
+                    },
+                    child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        decoration:
+                            BoxDecoration(color: colorScheme.primaryContainer, borderRadius: BorderRadius.circular(8)),
+                        child: Icon(Icons.emoji_events_rounded, size: 20)),
+                  ),
+                ),
+                Positioned(
                     right: 15,
                     top: 14,
                     child: Container(
                       padding: EdgeInsets.fromLTRB(10, 2, 10, 4),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: currUserData.domainColor ?? colorScheme.primary
-                      ),
+                          borderRadius: BorderRadius.circular(10),
+                          color: currUserData.domainColor ?? colorScheme.primary),
                       child: GestureDetector(
                           onTap: () {
                             showModalBottomSheet(
@@ -77,9 +95,18 @@ class HomeAppBar extends SliverPersistentHeaderDelegate {
                           },
                           child: Row(
                             children: [
-                              Text(searchByTrending ? "Hottest" : "Newest", style: textTheme.headline6?.copyWith(fontSize: 17, color: colorScheme.brightness == Brightness.light ? colorScheme.surface : colorScheme.onSurface)),
+                              Text(searchByTrending ? "Hottest" : "Newest",
+                                  style: textTheme.headline6?.copyWith(
+                                      fontSize: 17,
+                                      color: colorScheme.brightness == Brightness.light
+                                          ? colorScheme.surface
+                                          : colorScheme.onSurface)),
                               SizedBox(width: 5),
-                              Icon(Icons.sort_rounded, size: 22, color: colorScheme.brightness == Brightness.light ? colorScheme.surface : colorScheme.onSurface),
+                              Icon(Icons.sort_rounded,
+                                  size: 22,
+                                  color: colorScheme.brightness == Brightness.light
+                                      ? colorScheme.surface
+                                      : colorScheme.onSurface),
                             ],
                           )),
                     ))
