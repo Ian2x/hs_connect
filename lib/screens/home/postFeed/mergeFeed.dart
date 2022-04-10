@@ -58,9 +58,9 @@ class _MergeFeedState extends State<MergeFeed> with AutomaticKeepAliveClientMixi
     try {
       DocumentSnapshot? tempKey;
       List<Post?> tempPosts =
-      await _posts.getGroupPosts([FirebaseFirestore.instance.collection(C.groups).doc(widget.currUserData.domain)], startingFrom: pageKey, setStartFrom: (DocumentSnapshot ds) {
+      await _posts.getAllPosts(startingFrom: pageKey, setStartFrom: (DocumentSnapshot ds) {
         tempKey = ds;
-      }, withPublic: true, byNew: !widget.searchByTrending);
+      }, byNew: !widget.searchByTrending);
       tempPosts.removeWhere((value) => value == null);
       final newPosts = tempPosts.map((item) => item!).toList();
       final isLastPage = newPosts.length < _pageSize;

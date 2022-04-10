@@ -323,6 +323,32 @@ class PostsDatabaseService {
     }
   }
 
+  Future<List<Post?>> getAllPosts(
+      {DocumentSnapshot? startingFrom,
+        required VoidDocSnapParamFunction setStartFrom,
+        required bool byNew}) async {
+    if (startingFrom != null) {
+      final data = await postsCollection
+          .orderBy(byNew ? C.createdAt : C.trendingCreatedAt, descending: true)
+          .startAfterDocument(startingFrom)
+          .limit(nextPostsFetchSize)
+          .get();
+      if (data.docs.isNotEmpty) {
+        setStartFrom(data.docs.last);
+      }
+      return data.docs.map(_postFromSnapshot).toList();
+    } else {
+      final data = await postsCollection
+          .orderBy(byNew ? C.createdAt : C.trendingCreatedAt, descending: true)
+          .limit(initialPostsFetchSize)
+          .get();
+      if (data.docs.isNotEmpty) {
+        setStartFrom(data.docs.last);
+      }
+      return data.docs.map(_postFromSnapshot).toList();
+    }
+  }
+
   Future<List<Post?>> getUserPosts() async {
     final snapshot = await postsCollection.where(C.creatorRef, isEqualTo: currUserRef).get();
     return snapshot.docs.map(_postFromSnapshot).toList();
